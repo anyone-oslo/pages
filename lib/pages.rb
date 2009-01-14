@@ -1,4 +1,4 @@
-module Backstage
+module Pages
 	def self.config( key, value=nil )
 		key = key.to_s
 		@@config ||= {}
@@ -50,8 +50,5 @@ module ActionController
 end
 	
 
-require 'backstage/acts_as_textable'
-require 'backstage/application_controller'
-require 'backstage/string_translator'
-require 'backstage/awstats'
+%w{acts_as_textable application_controller string_translator awstats}.each{|l| require "pages/#{l}"}
 

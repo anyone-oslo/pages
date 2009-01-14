@@ -1,6 +1,6 @@
 %w( rubygems open-uri hpricot ).each{ |lib| require lib }
 
-class BackstageStats
+class Pages::AWStats
 	
 	attr_accessor :domain, :script, :month, :year
 	attr_reader   :last_update, :unique_visitors, :pages, :hits, :visits_per_day, :bandwidth

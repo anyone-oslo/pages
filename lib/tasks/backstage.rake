@@ -1,11 +1,11 @@
-namespace :backstage do
+namespace :pages do
 	
 	desc "Patch routes for Rails 2.0"
 	task :patch_routes => :environment do
 		require 'routepatcher'
 		dir = File.join(File.dirname(__FILE__),'..','..','..','..','..')
 		patcher = RoutePatcher.new( dir )
-		patcher.register_prefix( [ 'admin', 'backstage' ] )
+		patcher.register_prefix( [ 'admin', 'pages' ] )
 		patcher.patch!
 	end
 
@@ -64,7 +64,7 @@ namespace :backstage do
 		plugins = Rails.plugins.select{|p| p.latest_migration}
 		plugins_migrated = 0
 		plugins.each do |plugin|
-			if plugin.name =~ /^backstage/ && plugin.latest_migration != Engines::Plugin::Migrator.current_version(plugin)
+			if (plugin.name =~ /^pages/ || plugin.name =~ /^backstage/) && plugin.latest_migration != Engines::Plugin::Migrator.current_version(plugin)
 				puts "Generating migrations for plugin #{plugin.name}..."
 				`script/generate plugin_migration #{plugin.name}`
 				plugins_migrated += 1

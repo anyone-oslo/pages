@@ -1,8 +1,8 @@
-module Backstage
+module Pages
 	class ApplicationController < ActionController::Base
 		
 		# Actions added to the SKIP_FILTERS array will be bypassed by filters. 
-		# Useful for actions that don't rely on Backstage.
+		# Useful for actions that don't rely on Pages.
 		SKIP_FILTERS = [:render_dynamic_image]
 
 		before_filter :authenticate,               :except => SKIP_FILTERS
@@ -63,7 +63,7 @@ module Backstage
 			# This method is automatically run from a before_filter.
 			def load_account
 				if @account = Account.find_or_create
-					Backstage.config(:site_name, @account.name)
+					Pages.config(:site_name, @account.name)
 				end
 			end
 			

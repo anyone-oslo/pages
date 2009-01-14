@@ -1,4 +1,4 @@
-class Backstage::StringTranslator
+class Pages::StringTranslator
 	
 	@@cached_partials = {}
 	
