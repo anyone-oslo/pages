@@ -1,7 +1,7 @@
 <%
 	page_title       "Editing “" + @page.name.to_s + "”"
 	page_description "Editing " + [@page.ancestors,@page].flatten.map{ |a| link_to a.name, edit_admin_page_path( :id => a, :language => @language ) }.join( " &raquo; " )
-	if Pages.config( :localizations )
+	if PagesCore.config( :localizations )
 		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator ) 
 	end
 %>
@@ -79,7 +79,7 @@
 				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
 			</p>
 		<% end %>
-		<% if @page.image && Pages.config( :page_image_is_linkable ) %>
+		<% if @page.image && PagesCore.config( :page_image_is_linkable ) %>
 			<%= labelled_field f.text_field( :image_link ), "Image link <small>(including http://)</small>", 
 				:errors      => @page.errors[:image_link]
 			%>
@@ -108,7 +108,7 @@
 	
 
 	<%# #### ADDITIONAL IMAGES #### %>
-	<% if Pages.config( :page_additional_images ) %>
+	<% if PagesCore.config( :page_additional_images ) %>
 		<% content_tab "Additional images" do %>
 			<% unless @page.images.empty? %>
 				<table class="list images_list">
@@ -139,7 +139,7 @@
 
 
 	<%# #### FILES #### %>
-	<% if Pages.config( :page_files ) %>
+	<% if PagesCore.config( :page_files ) %>
 		<% content_tab "Files" do %>
 			<% if @page.files? %>
 				<ul id="filelist">
@@ -247,7 +247,7 @@
 </div>
 
 <%# #### UPLOAD FILE #### %>
-<% if Pages.config( :page_files ) %>
+<% if PagesCore.config( :page_files ) %>
 	<div id="new-file" class="page_new_file">
 		<h2>Upload new file</h2>
 		<% form_for( ( @new_file = PageFile.new ), :url => admin_page_files_path( @language, @page ), :html => { :multipart => true } ) do |f| %>

@@ -3,7 +3,7 @@ class PagesController < ApplicationController
 	include ApplicationHelper
 	
 	def send_cache_headers
-		if Pages.config( :http_caching )
+		if PagesCore.config( :http_caching )
 			cache_time = 2.minutes
 			response.headers['Cache-Control'] = "max-age: #{cache_time.to_s}, must-revalidate"
 			response.headers['Expires']       = ( Time.now + cache_time ).to_formatted_s( :rfc822 )
@@ -23,7 +23,7 @@ class PagesController < ApplicationController
 		remote_ip = request.env["REMOTE_ADDR"]
 		@comment = PageComment.new( params[:page_comment].merge( { :remote_ip => remote_ip, :page_id => @page.id } ) )
 		if @page.comments_allowed?
-			if Pages.config( :recaptcha ) && !verify_recaptcha
+			if PagesCore.config( :recaptcha ) && !verify_recaptcha
 				render_page
 			else
 				@comment.save

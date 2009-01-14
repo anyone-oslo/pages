@@ -1,4 +1,4 @@
-module Pages
+module PagesCore
 	module ActsAsTextable
 	
 		class << self
@@ -32,7 +32,7 @@ module Pages
 
 			# Returns true if this page has the named textbit
 			def has_field?( name, options={} )
-				return true if( Pages::ActsAsTextable.textable_fields[ self.class ].include? name )
+				return true if( PagesCore::ActsAsTextable.textable_fields[ self.class ].include? name )
 				( self.fields.include? name.to_s ) ? true : false
 			end
 
@@ -93,7 +93,7 @@ module Pages
 
 			# Returns an array with the names of all text blocks excluding special fields.
 			def fields
-				self.textbits.collect {|tb| tb.name }.uniq.compact.reject {|name| Pages::ActsAsTextable.textable_fields[ self.class ].include? name }
+				self.textbits.collect {|tb| tb.name }.uniq.compact.reject {|name| PagesCore::ActsAsTextable.textable_fields[ self.class ].include? name }
 			end
 
 			# Returns an array with the names of all text blocks.
@@ -104,7 +104,7 @@ module Pages
 			# Returns an array with the names of all text blocks with the given 
 			# language code.
 			def fields_for_languague( language )
-				self.textbits.collect {|tb| tb.name if tb.language == language.to_s }.uniq.compact.reject {|name| Pages::ActsAsTextable.textable_fields[ self.class ].include? name }
+				self.textbits.collect {|tb| tb.name if tb.language == language.to_s }.uniq.compact.reject {|name| PagesCore::ActsAsTextable.textable_fields[ self.class ].include? name }
 			end
 
 
@@ -144,7 +144,7 @@ module Pages
 			def add_language( language )
 				language = language.to_s
 				fields = self.all_fields
-				fields = fields.concat( Pages::ActsAsTextable.textable_fields[ self.class ] ) if fields.empty?
+				fields = fields.concat( PagesCore::ActsAsTextable.textable_fields[ self.class ] ) if fields.empty?
 				fields.each do |name|
 					tb = get_textbit( name, { :language => language } )
 				end
@@ -189,11 +189,11 @@ module ActiveRecord
 			unless fields.kind_of? Enumerable
 				fields = [fields]
 			end
-			include Pages::ActsAsTextable::Model
-			self.class.send( :include, Pages::ActsAsTextable::Model::ClassMethods )
+			include PagesCore::ActsAsTextable::Model
+			self.class.send( :include, PagesCore::ActsAsTextable::Model::ClassMethods )
 			has_many :textbits, :as => :textable, :dependent => :destroy, :order => "name"
 			after_save :save_textbits
-			Pages::ActsAsTextable.textable_fields[ self ] = fields.map{ |f| f.to_s }
+			PagesCore::ActsAsTextable.textable_fields[ self ] = fields.map{ |f| f.to_s }
 			before_validation do |textable|
 				invalid_textbits = textable.textbits.select{ |tb| !tb.valid? }
 				unless invalid_textbits.empty?

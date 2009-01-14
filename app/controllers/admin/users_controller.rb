@@ -42,7 +42,7 @@ class Admin::UsersController < Admin::AdminController
 			if user = User.find_by_username_or_email( params[:username] )
 				new_password = user.generate_new_password
 				user.save
-				AdminMailer.deliver_new_password( :user => user, :site_name => Pages.config( :site_name ), :password => new_password, :login_url => url_for( :controller => 'admin/pages', :action => :index, :only_path => false ) )
+				AdminMailer.deliver_new_password( :user => user, :site_name => PagesCore.config( :site_name ), :password => new_password, :login_url => url_for( :controller => 'admin/pages', :action => :index, :only_path => false ) )
 				flash[:notice] = "A new password has been sent to your email address"
 				redirect_to "/admin" and return
 			end
@@ -65,7 +65,7 @@ class Admin::UsersController < Admin::AdminController
 		@user = User.new( params[:user] )
 		@user.creator  = @current_user
 		if @user.save
-			AdminMailer.deliver_new_user( :user => @user, :site_name => Pages.config( :site_name ), :login_url => url_for( :controller => 'admin/pages', :action => :index, :only_path => false ) )
+			AdminMailer.deliver_new_user( :user => @user, :site_name => PagesCore.config( :site_name ), :login_url => url_for( :controller => 'admin/pages', :action => :index, :only_path => false ) )
 			flash[:notice] = "#{@user.realname} has been invited."
 			redirect_to :action => :index
 		else
@@ -99,7 +99,7 @@ class Admin::UsersController < Admin::AdminController
 			if ( params[:user][:username] && params[:user][:username] != original_username ) || ( params[:user][:password] && !params[:user][:password].blank? )
 				AdminMailer.deliver_user_changed( 
 					:user       => @user, 
-					:site_name  => Pages.config( :site_name ), 
+					:site_name  => PagesCore.config( :site_name ), 
 					:login_url  => url_for( :controller => 'admin/pages', :action => :index, :only_path => false ),
 					:updated_by => @current_user
 				)

@@ -8,7 +8,7 @@ class Partial < ActiveRecord::Base
 	class << self
 		attr_accessor :allowed_names
 		def allowed_names
-			@allowed_names = Pages.config :partials
+			@allowed_names = PagesCore.config :partials
 			@allowed_names ||= []
 		end
 		def names

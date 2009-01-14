@@ -1,4 +1,4 @@
-module Pages
+module PagesCore
 	def self.config( key, value=nil )
 		key = key.to_s
 		@@config ||= {}
@@ -50,5 +50,5 @@ module ActionController
 end
 	
 
-%w{acts_as_textable application_controller string_translator awstats}.each{|l| require "pages/#{l}"}
+%w{acts_as_textable application_controller string_translator awstats}.each{|l| require "pages_core/#{l}"}
 

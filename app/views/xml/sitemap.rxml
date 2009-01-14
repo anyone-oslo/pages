@@ -19,7 +19,7 @@ end
 
 xml.sitemap do
 
-	xml.title    Pages.config :site_name
+	xml.title    PagesCore.config :site_name
 	xml.language @language
 	
 	unless @rss_feeds.empty?

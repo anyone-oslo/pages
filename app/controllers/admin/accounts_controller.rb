@@ -10,7 +10,7 @@ class Admin::AccountsController < Admin::AdminController
 	def edit
 		@database_size = @account.database_size
 		@domain        = @account.domain || request.domain.gsub( /^www\./, '' )
-		@stats         = Pages::AWStats.new( @domain )
+		@stats         = PagesCore::AWStats.new( @domain )
 		@plans         = YAML.load( URI.parse( "http://pages.manualdesign.no/plans/" ).read ) rescue []
 		@plan          = @plans.select{ |p| p[:key] == @account.plan }.first
 	end

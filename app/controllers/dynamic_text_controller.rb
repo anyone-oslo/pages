@@ -5,7 +5,7 @@ require 'RMagick'
 # Setup:
 # Put your fonts in /fonts. Set up the text formats in config/initializers/pages.rb:
 #
-#   module Pages::DynamicText
+#   module PagesCore::DynamicText
 #     TEXT_FORMATS = {
 #       :menu => {
 #         :font             => 'PLAST28_.ttf',
@@ -46,7 +46,7 @@ class DynamicTextController < ApplicationController
 
     def show
         text = params[:text]
-        text_format = Pages::DynamicText::TEXT_FORMATS[params[:text_format].to_sym]
+        text_format = PagesCore::DynamicText::TEXT_FORMATS[params[:text_format].to_sym]
         font_path = File.join(File.dirname(__FILE__), '../../../../../fonts', text_format[:font])
 
         text_image = render_dynamic_text(text, text_format) do |img|

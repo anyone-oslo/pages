@@ -1,4 +1,4 @@
-class Pages::StringTranslator
+class PagesCore::StringTranslator
 	
 	@@cached_partials = {}
 	

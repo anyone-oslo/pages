@@ -17,10 +17,10 @@
 	%>
 	<%= labelled_field text_field_tag( "subject", "", :size => 60 ), "Subject" %>
 	<%= labelled_field text_area_tag( "message", "", :size => "60x20" ), "Message" %>
-	<% if Pages.config(:newsletter_template) %>
+	<% if PagesCore.config(:newsletter_template) %>
 		<%= labelled_field select_tag( "template", options_for_select(Mailing.templates) ), "Template" %>
 	<% end %>
-	<% if Pages.config(:newsletter_image) %>
+	<% if PagesCore.config(:newsletter_image) %>
 		<%= labelled_field file_field_tag("image"), "Image" %>
 	<% end %>
 

@@ -1,8 +1,8 @@
-module Pages
+module PagesCore
 	class ApplicationController < ActionController::Base
 		
 		# Actions added to the SKIP_FILTERS array will be bypassed by filters. 
-		# Useful for actions that don't rely on Pages.
+		# Useful for actions that don't rely on PagesCore.
 		SKIP_FILTERS = [:render_dynamic_image]
 
 		before_filter :authenticate,               :except => SKIP_FILTERS
@@ -63,7 +63,7 @@ module Pages
 			# This method is automatically run from a before_filter.
 			def load_account
 				if @account = Account.find_or_create
-					Pages.config(:site_name, @account.name)
+					PagesCore.config(:site_name, @account.name)
 				end
 			end
 			

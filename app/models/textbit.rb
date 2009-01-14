@@ -22,7 +22,7 @@ class Textbit < ActiveRecord::Base
 	
 	validate do |textbit|
 		if !textbit[:filter] || textbit[:filter].blank?
-			textbit.filter = Pages.config( :text_filter ).to_s
+			textbit.filter = PagesCore.config( :text_filter ).to_s
 		end
 	end
 	
@@ -56,7 +56,7 @@ class Textbit < ActiveRecord::Base
 	end
 	
 	def filter
-		( self[:filter] && !self[:filter].blank? ) ? self[:filter] : Backstage.config( :text_filter ).to_s
+		( self[:filter] && !self[:filter].blank? ) ? self[:filter] : PagesCore.config( :text_filter ).to_s
 	end
 	
 	

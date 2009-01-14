@@ -10,7 +10,7 @@ require 'session_cleaner'
 require 'apparat'
 require 'language'
 require 'mumbojumbo'
-require 'pages'
+require 'pages_core'
 require 'iconv'
 require 'enumerable'
 require 'feed_builder'
@@ -29,7 +29,7 @@ if defined?(Mongrel)
 end
 
 MumboJumbo.load_languages!
-MumboJumbo.translators << Backstage::StringTranslator
+MumboJumbo.translators << PagesCore::StringTranslator
 
 Mime::Type.register "application/rss+xml", 'rss'
 
