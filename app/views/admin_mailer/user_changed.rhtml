@@ -1,9 +1,9 @@
 Hi, <%= @user.realname %>!
 
 <% if @updated_by == @user -%>
-This is just a reminder that you have edited your Backstage account on <%= @site_name %>.
+This is just a reminder that you have edited your Pages account on <%= @site_name %>.
 <% else -%>
-Your Backstage account on <%= @site_name %> was edited by <%= @updated_by.realname %>. 
+Your Pages account on <%= @site_name %> was edited by <%= @updated_by.realname %>. 
 <% end -%>
 
 <% if !@user.is_activated? -%>

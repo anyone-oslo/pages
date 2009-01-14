@@ -1,2 +1,2 @@
 # This file is not loaded by Engines. 
-# Look in vendor/plugins/backstage/lib/backstage/application_controller.rb
+# Look in vendor/plugins/pages/lib/pages/application_controller.rb

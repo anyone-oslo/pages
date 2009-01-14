@@ -73,7 +73,7 @@ module Admin::AdminHelper
 	
 	def header_tabs( options={} )
 		options = {
-			:class => :backstage
+			:class => :pages
 		}.merge(options)
 		menu_items = @admin_menu.select{ |i| i[:class] == options[:class] }
 		if menu_items.length > 0
@@ -140,7 +140,7 @@ module Admin::AdminHelper
 		end
 	end
 	
-	def backstage_button_to(name, options = {}, html_options = {})
+	def pages_button_to(name, options = {}, html_options = {})
 		html_options = html_options.stringify_keys
 		convert_boolean_attributes!(html_options, %w( disabled ))
 

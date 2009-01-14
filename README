@@ -1,7 +1,7 @@
 
 == Dependencies ==
 
-Backstage requires Rails > 2.0. Additionally, the following gems are required and can be 
+Pages requires Rails > 2.0. Additionally, the following gems are required and can be 
 installed from Rubyforge:
 
 acts_as_ferret, BlueCloth, enumerable_mapper, ferret, hpricot, lame_encoder, mp3info, 
@@ -18,8 +18,8 @@ These plugins are required:
 	acts_as_tree        http://dev.rubyonrails.com/svn/rails/plugins/acts_as_tree
 	engines             http://svn.rails-engines.org/engines/trunk
 	dynamic_image       http://svn.manualdesign.no/svn/backstage/plugins/dynamic_image/trunk
-	backstage           http://svn.manualdesign.no/svn/backstage/plugins/backstage/trunk
+	pages               http://svn.manualdesign.no/svn/backstage/plugins/pages/trunk
 
 Some Backstage-plugins provide additional functionality, but are not required:
-	backstage_gallery   http://svn.manualdesign.no/svn/backstage/plugins/backstage_gallery/trunk
+	pages_gallery       http://svn.manualdesign.no/svn/backstage/plugins/pages_gallery/trunk
 	backstage_festival  http://svn.manualdesign.no/svn/backstage/plugins/backstage_festival/trunk

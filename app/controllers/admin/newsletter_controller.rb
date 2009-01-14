@@ -69,7 +69,7 @@ class Admin::NewsletterController < Admin::AdminController
 	end
 
 	def compose
-        @sender = Backstage.config(:default_sender) || "#{@current_user.realname} <#{@current_user.email}>"
+        @sender = Pages.config(:default_sender) || "#{@current_user.realname} <#{@current_user.email}>"
 		@groups = @groups.collect do |group|
 			args = { :distinct => true }
 			args[:conditions] = group[:conditions] if group[:conditions]

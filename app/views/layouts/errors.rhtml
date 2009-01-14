@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= @page_title || "We're sorry" %></title>
-	<%= stylesheet_link_tag "errors", :plugin => 'backstage' %>
+	<%= stylesheet_link_tag "errors", :plugin => 'pages' %>
 </head>
 <body>
 	<div id="content">
@@ -14,7 +14,7 @@
 		<% end -%>
 		<%= yield %>
 		<p class="footer">
-			This site is powered by <%= link_to "Backstage CMS", "http://backstage.manualdesign.no" %>, a Manual design product.
+			This site is powered by <%= link_to "Pages", "http://pages.manualdesign.no" %>, a Manual design product.
 		</p>
 	</content>
 </body>

@@ -23,14 +23,14 @@ class AdminMailer < ActionMailer::Base
 	# end
 	
 	def new_user( options=Hash.new )
-		options[:subject]    = "#{options[:site_name]} has invited you Backstage"
+		options[:subject]    = "#{options[:site_name]} has invited you to Pages"
 		options[:recipients] = options[:user].email
 		options[:body] = { :user => options[:user], :site_name => options[:site_name], :login_url => options[:login_url] }
 		self.generic_mailer( options )
 	end
 	
 	def user_changed( options=Hash.new )
-		options[:subject]    = "Your Backstage account on #{options[:site_name]} has been edited"
+		options[:subject]    = "Your Pages account on #{options[:site_name]} has been edited"
 		options[:recipients] = options[:user].email
 		options[:body]       = options
 		self.generic_mailer( options )
@@ -45,7 +45,7 @@ class AdminMailer < ActionMailer::Base
 	
 	def error_report( options={} )
 		mailer_options = {}
-		mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Backstage] "
+		mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Pages] "
 		mailer_options[:subject]   += "Error: #{options[:error_report][:message][0..80]}" rescue "Unknown error"
 		mailer_options[:recipients] = "system+error@manualdesign.no"
 		mailer_options[:body]       = options

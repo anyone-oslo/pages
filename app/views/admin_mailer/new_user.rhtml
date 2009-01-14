@@ -1,9 +1,9 @@
 Welcome, <%= @user.realname %>!
 
 <% if @user.creator -%>
-<%= @user.creator.realname %> has invited you Backstage on <%= @site_name %>.
+<%= @user.creator.realname %> has invited you to Pages on <%= @site_name %>.
 <% else -%>
-You have been invited Backstage on <%= @site_name %>.
+You have been invited to Pages on <%= @site_name %>.
 <% end -%>
 
 Your login credentials are provided below, you can log in by clicking this link: <%= @login_url %>

@@ -62,8 +62,8 @@
 //
 //	Configuration
 //
-var fileLoadingImage = "/plugin_assets/backstage/images/admin/lightbox-loading.gif";		
-var fileBottomNavCloseImage = "/plugin_assets/backstage/images/admin/lightbox-closelabel.gif";
+var fileLoadingImage = "/plugin_assets/pages/images/admin/lightbox-loading.gif";		
+var fileBottomNavCloseImage = "/plugin_assets/pages/images/admin/lightbox-closelabel.gif";
 
 var overlayOpacity = 0.8;	// controls transparency of shadow overlay
 

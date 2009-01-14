@@ -17,7 +17,7 @@ class Account < ActiveRecord::Base
 			unless account
 				account_holder = User.find( :first ) rescue nil
 				if account_holder
-					account = Account.create( :name => Backstage.config( :site_name ), :account_holder => account_holder )
+					account = Account.create( :name => Pages.config( :site_name ), :account_holder => account_holder )
 				end
 			end
 			account

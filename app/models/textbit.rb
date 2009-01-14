@@ -22,7 +22,7 @@ class Textbit < ActiveRecord::Base
 	
 	validate do |textbit|
 		if !textbit[:filter] || textbit[:filter].blank?
-			textbit.filter = Backstage.config( :text_filter ).to_s
+			textbit.filter = Pages.config( :text_filter ).to_s
 		end
 	end
 	

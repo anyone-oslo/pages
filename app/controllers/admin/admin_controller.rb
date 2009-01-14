@@ -22,10 +22,10 @@ class Admin::AdminController < ApplicationController
 
 	# Builds the admin menu tabs.
 	def build_admin_tabs
-		register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :backstage, { :skip_actions => ['news'] }
-		register_menu_item "News", hash_for_news_admin_pages_path({:language => @language}), :backstage, { :only_actions => ['news'] }
+		register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages, { :skip_actions => ['news'] }
+		register_menu_item "News", hash_for_news_admin_pages_path({:language => @language}), :pages, { :only_actions => ['news'] }
 
-		#register_menu_item "Partials", hash_for_admin_partials_path( { :language => @language } ), :backstage
+		#register_menu_item "Partials", hash_for_admin_partials_path( { :language => @language } ), :pages
 		#register_menu_item( "Account", hash_for_admin_accounts_path, :account ) if @current_user && ( @current_user.account_holder? || @current_user.is_special? )
 		register_menu_item "Users",  hash_for_admin_users_path, :account
 	end

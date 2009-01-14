@@ -17,7 +17,7 @@
 				<small class="status">(<%= page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)</small>
 			</em>
 		<% end %>
-		<%= image_tag( "feed-icon-14x14.png", :size=>"10x10", :plugin => :backstage ) if page.feed_enabled? %>
+		<%= image_tag( "feed-icon-14x14.png", :size=>"10x10", :plugin => :pages ) if page.feed_enabled? %>
 		<div class="actions">
 			&mdash;
 			<%= link_to "Edit", edit_admin_page_url( @language, page ) %> /

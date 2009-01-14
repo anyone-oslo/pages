@@ -8,7 +8,7 @@ class ErrorsController < ApplicationController
 		@error_report = session[:error_report]
 		@from         = params[:email]
 		@description  = params[:description]
-		@site_name    = Backstage.config :site_name
+		@site_name    = Pages.config :site_name
 		AdminMailer.deliver_error_report( :error_report => @error_report, :from => @from, :description => @description, :site_name => @site_name )
 	end
 	

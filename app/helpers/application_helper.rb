@@ -4,7 +4,7 @@ module ApplicationHelper
 	include VideoHelper
 	
 	def feed_tags
-		Page.enabled_feeds( @language ).map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{Backstage.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
+		Page.enabled_feeds( @language ).map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{Pages.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
 	end
 
 	def i18n( string )
@@ -24,7 +24,7 @@ module ApplicationHelper
 		options[:charset] ||= "utf-8"
 		language_definition = Language.definition( options[:language] ).iso639_1 || "en"
 		unless options.has_key?( :title )
-			options[:title] = Backstage.config( :site_name )
+			options[:title] = Pages.config( :site_name )
 			if @page_title
 				options[:title] += " - #{@page_title}"
 			end

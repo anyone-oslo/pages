@@ -67,7 +67,7 @@ class Admin::FilesController < Admin::AdminController
 
 	def edit
 		@image = Image.find(params[:id])
-		@image_formats = BackstageEngine.config :image_formats
+		@image_formats = Pages.config :image_formats
 		render_without_layout if request.xhr?
 	end
 	
