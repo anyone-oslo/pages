@@ -1,0 +1,97 @@
+<%
+	page_title       "Editing user: #{@user.realname}"
+	if @user == @current_user
+		page_description "You are editing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
+	else
+		page_description "You are editing " + link_to( "#{@user.realname}", admin_user_path( @user ) ) + "'s profile."
+	end
+	page_description_links link_to( "View all users", admin_users_path )
+%>
+
+<% sidebar do %>
+	<h2>Changing login details</h2>
+	<p>
+		A notification will be sent by email if the username or password fields are changed.
+	</p>
+	<% if @user != @current_user && @user.is_deletable? %>
+		<h2>Preventing access</h2>
+		<p>
+			Unchecking the <cite>This account is activated</cite> box will effectively disable 
+			logins.
+		</p>
+	<% end %>
+<% end %>
+
+
+<% form_for 'user', @user, :url => { :action => :update }, :html => { :method => :put, :multipart => true } do |f| %>
+
+	<%= f.hidden_field :is_admin %>
+
+
+	<h2>Account details</h2>
+	<%= labelled_field f.text_field( :realname ), "Name", 
+		:errors => @user.errors[:realname] 
+	%>
+	<%= labelled_field f.text_field( :email ), "Email address", 
+		:errors => @user.errors[:email] 
+	%>
+	<%= labelled_field f.text_field( :mobile ), "Mobile", 
+		:errors => @user.errors[:mobile] 
+	%>
+	<%= labelled_field f.text_field( :web_link ), "Web site", 
+		:errors => @user.errors[:web_link] 
+	%>
+	
+
+	<h2>Picture</h2>
+	<% if @user.image %>
+		<p id="user-image-info">
+			<%= (@user==@current_user) ? "You already have" : "#{@user.realname} already has" %> a profile picture. You can 
+		<%= link_to_remote "delete it", { 
+				:url      => delete_image_admin_user_path( @user ), 
+				:update   => 'user-image-info', :method => :delete,
+				:complete => "new Effect.Highlight('user-image-info');",
+				:confirm  => "Are you sure? There is no undo."
+			}, :class => :delete %>, 
+		or upload a new file below to replace it.
+		</p>
+	<% end %>
+	<%= labelled_field f.file_field( :image ), "Image file", 
+		:errors => @user.errors[:image] 
+	%>
+
+
+	<h2>Login options</h2>
+	<%= labelled_field f.text_field( :username ), "Username", 
+		:errors => @user.errors[:username] 
+	%>
+	<%= labelled_field f.text_field( :password ), "New password", 
+		:description => "Leave the field blank if you do not wish to change the password. " + link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
+		:errors => @user.errors[:password] 
+	%>
+	<% unless @user == @current_user || !@user.is_deletable? %>
+	<div class="field">
+		<%= f.check_box :is_activated %> The user account is activated<br />
+	</div>
+	<% end %>
+	
+
+	<p>
+		<%= submit_tag "Save", :class=> :button %>
+	</p>
+
+<% end %>
+
+<script type="text/javascript">
+	function random_password()
+	{
+		var password = "";
+		var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
+		var len = Math.round( Math.random() * 3) + 4;
+		for( var a = 0; a < len; a++ )
+		{
+			password += pool[Math.floor( Math.random() * pool.length )];
+		}
+		return password;
+	}
+</script>

@@ -1,0 +1,70 @@
+.edit_page {
+	padding-top: 1px;
+}
+
+.edit_page input.text, .edit_page textarea {
+	width: 100%;
+}
+
+.edit_page input.page_title {
+	font-weight: bold;
+	font-size: 1.4em;
+	color: #222;
+}
+
+#documentPreview {
+	position: absolute;
+	top: 64px;
+	left: 24px;
+	right: 300px;
+	background: #eee;
+	border: 1px solid #ccc;
+	padding: 24px;
+	padding-top: 0;
+	padding-bottom: 48px;
+	font-family: Georgia, serif;
+	font-size: 1.2em;
+	color: #222;
+	line-height: 1.4;
+}
+
+#documentPreview .titleBar {
+	padding: 3px 24px;
+	background: #ddd;
+	color: #666;
+	margin: 0 -24px 24px -24px;
+	font-style: italic;
+}
+
+#documentPreview .postimage {
+	float: right;
+	margin: 0 0 24px 24px;
+	border: 1px solid #aaa;
+}
+
+
+.page_new_image, .page_new_file {
+	position: absolute;
+	top: 120px;
+	left: 48px;
+	border: 1px solid #cdc;
+	background: #f8fff8;
+}
+
+.page_new_image h2, .page_new_file h2 {
+	margin: 1em 24px;
+}
+
+
+.edit_page .images_list .thumbnail {
+	padding: 0;
+	width: 124px;
+}
+
+#filelist {
+	list-style-type: none;
+	margin-left: 0; margin-right: 0; padding: 0;
+}
+#filelist {
+	
+}

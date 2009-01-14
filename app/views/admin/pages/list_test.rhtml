@@ -1,0 +1,109 @@
+<% 
+	@page_title = 'Pages' 
+	lists = []
+%>
+
+<style type="text/css">
+	table.pages_index {
+		
+	}
+	.pages_index .root th {
+		font-size: 1.0em;
+		font-weight: bold;
+		background: #444;
+		padding: 0;
+		width: 10%;
+		vertical-align: bottom;
+	}
+	.pages_index .root th a, .pages_index .root th a:visited {
+		display: block;
+		color: #fff;
+		padding: 4px 8px;
+		padding-right: 32px;
+	}
+	.pages_index .root th a:hover {
+		background: #666;
+	}
+	.pages_index .root th.draft a {
+		/*
+		color: #ddd;
+		background: #666;
+		*/
+	}
+	.pages_index .list ul {
+		margin: 0; padding: 0;
+		list-style-type: none;
+	}
+	.pages_index .list li {
+		background: transparent;
+		border-bottom: 1px solid #ddd;
+		padding: 0;
+	}
+	.pages_index .list td {
+		vertical-align: top;
+		font-size: 0.9em;
+	}
+	
+	.pages_index .list li a, .pages_index .list li a:visited {
+		color: #333;
+		font-weight: bold;
+		display: block;
+		padding: 4px;
+		padding-right: 16px;
+	}
+	.pages_index .list li a:hover {
+		background: #e0e8ef;
+	}
+	
+	.pages_index .list li.new {
+		background: #ddffdd;
+		border-bottom: 0;
+		font-size: 0.85em;
+	}
+	.pages_index .list li.new a, .pages_index .list li.new a:visited {
+		color: #262;
+		padding: 2px 4px;
+	}
+	.pages_index .list li.new a:hover {
+		background: #cceecc;
+	}
+	
+	.pages_index .list li.draft a {
+		color: #666;
+		font-weight: normal;
+		font-style: italic;
+	}
+</style>
+
+<div class="taskbar">
+	<div class="taskbar_group">
+		<h2>Tasks</h2>
+	</div>
+</div>
+
+<table class="pages_index">
+	<tr class="root">
+		<% @root_pages.each do |rp| %>
+			<th class="<%= rp.status_label.downcase %>"><%= link_to rp.name, edit_admin_page_url( rp ) %></th>
+		<% end %>
+	</tr>
+	<tr class="list">
+		<% @root_pages.each do |rp| %>
+			<td>
+				<ul id="root-<%= rp.id %>-pages">
+					<% pages = rp.pages( :show_drafts => true, :show_hidden => true ) %>
+					<% if pages && pages.length > 0 %>
+							<% rp.pages( :show_drafts => true, :show_hidden => true ).each do |p| %>
+								<li class="<%= p.status_label.downcase %>"><%= link_to p.name, edit_admin_page_url( rp ), :onclick => 'return false;' %></li>
+							<% end %>
+					<% else %>
+					<% end %>
+					<li class="new"><%= link_to "+ Ny side her", new_admin_page_url( :parent => rp ) %></li>
+				</ul>
+				<% lists << 'root-'+rp.id.to_s+'-pages' %>
+			</td>
+		<% end %>
+	</tr>
+</table>
+
+<%= lists.map{ |list| sortable_element list, :complete => visual_effect( :highlight, 'list' ), :constraint => false, :containment => lists }.join( "\n" ) %>

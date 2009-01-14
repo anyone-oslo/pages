@@ -1,0 +1,52 @@
+<%
+	page_title "Create new page"
+	page_description "You are creating a new page"
+
+	@url_options = { :action => :new }
+	@url_options[:parent] = @page.parent if @page.parent
+%>
+
+
+<%# PAGE EDITING ####################################################################################################### %>
+
+	<div id="content">
+		
+	<% form_for :page, @page, :url => admin_pages_url, :html => { :id => 'page_edit_form', :class => 'edit_page', :method => :post } do |f| %>
+		
+		<%= f.hidden_field 'parent_page_id' if @page.parent %>
+		<%= hidden_field_tag 'language', @language %>
+	
+		<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Enter a title for the new page", 
+			:errors      => @page.errors[:name],
+			:description => "This is the name of the page, and it will also be the name of the link to this page."
+		%>
+		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
+			:errors      => @page.errors[:template],
+			:description => "Choose the template you would like to use for the new page."
+		%>
+		<%= labelled_field f.text_area( :body ), "Body", 
+			:errors      => @page.errors[:body]
+		%>
+		<%= labelled_field f.text_area( :excerpt, :rows => 5 ), "Teaser", 
+			:errors      => @page.errors[:excerpt]
+		%>
+		<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
+			:errors      => @page.errors[:status]
+		%>
+		<p>
+			<%= submit_tag "Save" %>
+		</p>
+
+	
+	<% end %>
+
+	</div>
+
+<%# JAVASCRIPT ######################################################################################################### %>
+
+
+<script type="text/javascript">
+
+	<%= render :partial => 'javascripts' %>
+
+</script>

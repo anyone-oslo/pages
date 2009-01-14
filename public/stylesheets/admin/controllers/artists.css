@@ -1,0 +1,94 @@
+
+tr.ok {
+	background:  #ffe;
+}
+tr.published {
+	background:  #ffc;
+}
+
+.fieldgroup {
+	clear: both;
+}
+
+.field {
+	float: left;
+	margin-right: 8px;
+	margin-bottom:  8px;
+}
+.field label {
+	padding:  4px 6px;
+	display:  block;
+}
+
+.artistform .invite {
+	margin-top:  32px;
+}
+
+.artistform h2 {
+	border-bottom:  1px solid #ccc;
+	padding-bottom:  6px;
+}
+
+.artistform .h2button {
+	margin-top:  5px;
+	float:  right;
+}
+
+.upload {
+	background:  #ffe;
+	border:  1px solid #ccc;
+	padding:  8px;
+	margin:  -9px 0 8px 0;
+}
+.upload h3 {
+	background: #eed;
+	padding:  8px; margin: -8px -8px 4px -8px;
+	font-size:  1em;
+	color: #442;
+}
+#songlist li {
+	cursor:  pointer;
+	padding:  2px 0;
+}
+
+#images {
+	margin-bottom: 12px;
+}
+#images div.image {
+	float: left;
+	margin: 0 2px 2px 0;
+	padding: 0 4px 2px 4px;
+	color: #aaa;
+}
+#images div.image:hover {
+	background:  #cef;
+}
+#images div.image img {
+	margin: 0 -4px;
+}
+#images .actions {
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.help {
+	margin: 8px 0;
+	padding:  8px;
+	margin-left:  12px;
+	background:  #ffe;
+	border:  1px solid #eed;
+	float: right;
+}
+
+#new_artist {
+	background:  #ffe;
+	border:  1px solid #ccc;
+	margin:  -33px -32px 32px -32px;
+	padding:  8px 32px;
+}
+#new_artist h3 {
+	background: #eed;
+	padding:  8px 32px; margin: -8px -32px 4px -32px;
+	font-size:  1em;
+	color: #442;
+}

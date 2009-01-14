@@ -1,0 +1,40 @@
+<%
+	page_title       "Mailing status"
+	page_description "Status of all mailings"
+%>
+
+<style type="text/css" media="screen">
+	.warning { color: #b00; }
+</style>
+
+<% sidebar do %>
+	<%= render :partial => 'sidebar' %>
+<% end %>
+
+<table class="list mailing_list">
+	<tr>
+		<th>To</th>
+		<th>From</th>
+		<th>Subject</th>
+		<th>Sent</th>
+		<th>Status</th>
+	</tr>
+	<% if @pending && @pending.length > 0 %>
+		<% @pending.each do |m| %><tr>
+			<td><%= h(m.recipients) %></td>
+			<td><%= h(m.sender) %></td>
+			<td><%= h(m.subject) %></td>
+			<td><%= formatted_time m.created_at %></td>
+			<td><em>Pending</em></td>
+		</tr><% end %>
+	<% end %>
+	<% if @failed && @failed.length > 0 %>
+		<% @failed.each do |m| %><tr>
+			<td><%= h(m.recipients) %></td>
+			<td><%= h(m.sender) %></td>
+			<td><%= h(m.subject) %></td>
+			<td><%= formatted_time m.created_at %></td>
+			<td><strong class="warning">Failed</strong></td>
+		</tr><% end %>
+	<% end %>
+</table>

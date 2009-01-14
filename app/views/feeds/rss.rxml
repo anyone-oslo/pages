@@ -1,0 +1,23 @@
+converter = Iconv.new( @encoding + "//TRANSLIT", 'utf-8' )
+
+xml << "<?xml version=\"1.0\" encoding=\"" + @encoding.upcase + "\"?>\n"
+xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
+	xml.channel do
+		xml.title( converter.iconv( [Backstage.config( :site_name ), @page.name.to_s].join( ": " ) ) )
+		xml.link(url_for( :controller => 'pages', :action => 'index', :only_path => false ))
+		xml.description "Recent items"
+		xml.language Language.definition( @page.working_language ).iso639_1
+		xml.generator "Backstage"
+		xml.ttl "40"
+		for item in @page.pages
+			xml.item do
+				xml.title       { xml.cdata! converter.iconv(item.name.to_s) }
+				xml.link        page_url( item, :only_path => false )
+				xml.description { xml.cdata! converter.iconv( item.extended? ? item.excerpt.to_s : item.body.to_s ) }
+				xml.guid        page_url( item, :only_path => false )
+				xml.pubDate     item.published_at.to_formatted_s( :rfc822 )
+				xml.tag!("dc:creator", converter.iconv( item.author.realname ) )
+			end
+		end
+	end
+end

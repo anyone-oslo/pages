@@ -1,0 +1,20 @@
+<%
+	@page_title = "Oh dear.."
+%>
+<p>
+	Something went terribly wrong. Of course, this shouldn't happen, and we'd really appreciate it if you 
+	could click the button below to notify us about the problem.
+</p>
+<p>
+	Please include your email address if you'd like to hear back from us.
+</p>
+
+<form action="/errors/report" method="post">
+	<h4>Your email address <em>(optional)</em></h4>
+	<p>
+		<input name="email" type="text" class="text" />
+	</p>
+	<p>
+		<input type="submit" value="Send error report" />
+	</p>
+</form>

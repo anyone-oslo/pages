@@ -1,0 +1,71 @@
+body {
+	background:          #f8f6ed url(../images/errors/background.gif) repeat-x;
+	margin:              0;
+	padding:             0;
+	border:              0;
+	font-family:         Georgia, Times, serif;
+	font-size:           14px;
+	color:               #000;
+	line-height:         1.4;
+}
+
+#content {
+	width:               500px;
+	margin:              100px auto;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, form {
+	margin:              0 0 16px 0;
+}
+
+h4 {
+	margin-bottom:       0;
+	font-size:           1em;
+	font-weight:         bold;
+}
+
+ul {
+	list-style-type:     disc;
+	list-style-position: inside;
+	padding:             0;
+}
+ul li {
+	margin:              0;
+	padding:             0;
+}
+
+h1 {
+	font-weight:         normal;
+	color:               #cf4907;
+	margin-left:         -30px;
+	font-size:           30px;
+	font-style:          italic;
+}
+
+p.footer {
+	margin-top:          64px;
+	font-size:           12px;
+	color:               #868686;
+}
+
+input.text, textarea {
+	background:          #fff url(../images/errors/input_bg.gif) repeat-x;
+	border:              2px solid #c4c2bb;
+	color:               #666561;
+	font-family:         Georgia, Times, serif;
+	font-size:           14px;
+	padding:             3px 8px;
+	width:               490px;
+}
+input.with_button {
+	width:               400px;
+	margin-right:        4px;
+}
+
+a, a:visited {
+	color:               #0751b6;
+	text-decoration:     underline;
+}
+a:hover {
+	color:               #042d65;
+}

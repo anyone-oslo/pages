@@ -1,0 +1,148 @@
+<%
+	page_title "Pages"
+	page_description "Viewing pages"
+	if Backstage.config( :localizations )
+		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
+	end
+%>
+
+<style type="text/css">
+	.morepages {
+		clear: both;
+	}
+	.morepages .morepageslink {
+		margin-left: 32px;
+		font-size: 0.9em;
+		margin-bottom: 1em;
+		font-weight: bold;
+		display: block;
+	}
+	.pagelist {
+		float: left;
+	}
+	.pagelist .page {
+		border: 1px solid transparent;
+		padding: 3px 8px !important;
+	}
+	.pagelist ul {
+		overflow: auto;
+		border-left: 1px dotted #ccc !important;
+		margin-left: 12px !important;
+		padding-left: 8px !important
+	}
+	.pagelist ul .page {
+	}
+	.pagelist .page:hover {
+		background: #ffd;
+		border: 1px solid #dda;
+	}
+	.pagelist .page:hover .status {
+		display: none;
+	}
+	.pagelist .page a.page_name, .pagelist .page a.page_name:visited {
+		text-decoration: none;
+		color: #222;
+	}
+	.pagelist .page a.page_name:hover {
+		text-decoration: underline;
+	}
+</style>
+
+<% sidebar do %>
+	<h2>Adding pages</h2>
+	<p>
+		Click here to create a new page at the root level.
+		<%= button_to "New page", new_admin_page_path( :language => @language ), :method => :get %>
+	</p>
+	<h2>Categories</h2>
+	<% if @categories && @categories.length > 0 %>
+		<ul>
+			<% @categories.each do |category| %>
+				<li><%= category.name %> (<%= link_to "Delete", admin_category_path(category), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo." %>)</li>
+			<% end %>
+		</ul>
+	<% else %>
+		<p>No categories added yet.</p>
+	<% end %>
+		<div id="new-category">
+			<% form_for([:admin, Category.new]) do |f| %>
+				<p>
+					<label><strong>New category</strong></label>
+					<%= f.text_field :name %>
+					<%= submit_tag "Save" %>
+				</p>
+			<% end %>
+		</div>
+		<div id="new-category-button">
+			<p><%= button_to_function "Add a new category", 'toggleNewCategory();' %></p>
+		</div>
+<% end %>
+
+<div class="content">
+	<% if @root_pages.length < 1 -%>
+		<p>No pages found</p>
+	<% else -%>
+		<ul class="pagelist">
+			<% @root_pages.each do |page| -%>
+				<%= render :partial => "pagelisting", :locals => { :page => page } %>
+			<% end -%>
+		</ul>
+	<% end -%>
+</div>
+
+
+<script type="text/javascript">
+
+	// Parse the page list
+	var pages = Array();
+	var divs = document.getElementsByTagName( "div" );
+	for( var a = 0; a < divs.length; a++ )
+	{
+		var page = divs[a];
+		if( page.id && page.id.match( /^pagelisting_[\d]+$/ ) )
+		{
+			page.page_id = page.id.match( /^pagelisting_[\d]+$/ )[1];
+			var subdivs = page.getElementsByTagName( "div" );
+			for( var b = 0; b < subdivs.length; b++ )
+			{
+				if( Element.hasClassName( subdivs[b], "actions" ) )
+				{
+					page.actions = subdivs[b];
+				}
+			}
+			page.actions.style.visibility = "hidden";
+			
+			page.onmouseover = function ()
+			{
+				Element.addClassName( this, "hover" );
+				this.actions.style.visibility = "visible";
+			}
+			page.onmouseout = function ()
+			{
+				Element.removeClassName( this, "hover" );
+				this.actions.style.visibility = "hidden";
+			}
+			
+			pages.push( page );
+		}
+	}
+	
+	/* broken in internet explorer
+	var morepagelinks = $$(".morepageslink");
+	morepagelinks.each( function( link ) {
+		link.innerContainer = link.parentNode.select('.morepagescontainer')[0];
+		Element.hide( link.innerContainer );
+	} ); */
+	
+	function expand_more_pages( link ) {
+		Element.show( link.innerContainer );
+		Element.hide( link );
+	}
+	
+	function toggleNewCategory(){
+		Element.toggle('new-category');
+		Element.toggle('new-category-button');
+	}
+	Element.hide('new-category');
+	
+</script>

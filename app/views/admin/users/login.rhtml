@@ -1,0 +1,64 @@
+<%
+	page_title       "Log in"
+	page_description "Please enter your username and password to log in"
+	add_body_class "login"
+-%>
+
+<% sidebar do -%>
+	<h2>Did you forget your password?</h2>
+	<div id="forgot-password-primer">
+		<p>
+			Don't worry, it happens. <%= link_to_function "Click here", "Element.show('forgot-password-form');Element.hide('forgot-password-primer')" %> to make a new one.
+		</p>
+	</div>
+	<div id="forgot-password-form">
+		<%= form_tag( { :controller => :users, :action => :new_password } ) %>
+			<p>
+				Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
+			</p>
+			<p>
+				<%= text_field_tag :username, '', :size => 22 %>
+				<%= submit_tag "Find" %>
+			</p>
+		</form>
+	</div>
+	<h2>Please note</h2>
+	<p>
+		Microsoft Internet Explorer is currently not supported. We recommend using <strong>Safari</strong> or 
+		<a href="http://www.mozilla.com/" target="_blank"><strong>Firefox</strong></a>, a free, fast and secure alternative.
+	</p>
+	<p>
+		<a href="http://getfirefox.com/"
+		title="Get Firefox - The Browser, Reloaded."><img
+		src="http://www.mozilla.org/products/firefox/buttons/firefox_80x15.png"
+		width="80" height="15" border="0" alt="Get Firefox"></a>
+	</p>
+	<p>
+		Please make sure Javascript and cookies are enabled if you experience problems logging in or using Backstage.
+	</p>
+<% end -%>
+
+<%= form_tag %>
+
+<table>
+	<tr>
+		<td>Username:</td>
+		<td><%= text_field_tag :login_username %></td>
+	</tr>
+	<tr>
+		<td>Password:</td>
+		<td><%= password_field_tag :login_password %></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<button type="submit">Log in</button>
+		</td>
+	</tr>
+</table>
+
+</form>
+
+<script type="text/javascript">
+	Element.hide( "forgot-password-form" );
+</script>

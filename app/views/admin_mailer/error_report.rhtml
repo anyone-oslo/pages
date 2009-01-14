@@ -1,0 +1,21 @@
+Message:       <%= @error_report[:message] %>
+Requested URL: <%= @error_report[:url] %>
+Timestamp:     <%= @error_report[:timestamp].to_s %>
+
+Reported by:   <%= @from %>
+Reported at:   <%= Time.now.to_s %>
+
+Description of error:
+<%= ( @description && !@description.empty? ) ? @description : "None" %>
+
+Params:
+<%= @error_report[:params].inspect %>
+
+Session data:
+<%= @error_report[:session].reject{ |k,v| k == :error_report }.inspect %>
+
+Environment:
+<%= @error_report[:env].map{ |key,value| "#{key}: #{value}" }.join( "\n" ) %>
+
+Backtrace:
+<%= @error_report[:backtrace].join("\n") %>

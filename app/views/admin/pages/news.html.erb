@@ -1,0 +1,34 @@
+<%
+	page_title "News"
+	page_description "Viewing news items"
+	if Backstage.config( :localizations )
+		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
+	end
+%>
+
+<% sidebar do %>
+	<h2>Sections</h2>
+	<p>
+		<% @news_pages.each do |news_page| %>
+			<%= link_to_unless((@section_id == news_page.id.to_s), page_name(news_page, :include_parents => true), news_admin_pages_path(:section => news_page.id)) %><br />
+		<% end %>
+		<%= link_to_unless((@section_id == "all"), "All sections", news_admin_pages_path(:section => "all")) %><br />
+	</p>
+<% end %>
+
+<% if @news_items.length > 0 %>
+	<table class="list news_item_list">
+		<tr>
+			<th>Name</th>
+			<th>Published</th>
+			<th>Section</th>
+		</tr>
+		<% @news_items.each do |page| %><tr>
+			<td><strong><%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'page_name') %></strong></td>
+			<td><%= smart_time page.published_at, :skip_prefix => true %></td>
+			<td><%= link_to( page_name(page.parent, :include_parents => true), news_admin_pages_path(:section => page.parent.id)) %></td>
+		</tr><% end %>
+	</table>
+<% else %>
+	<div class="content"><p>No news items have been posted yet.</p></div>
+<% end %>

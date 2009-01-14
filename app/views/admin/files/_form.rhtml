@@ -1,0 +1,20 @@
+<%= error_messages_for 'image' %>
+
+<p><label for="image_folder">Name</label><br/>
+<%= text_field 'image', 'name'  %></p>
+
+<p><label for="image_byline">Byline</label><br/>
+<%= text_field 'image', 'byline'  %></p>
+
+<p><label for="image_description">Description</label><br/>
+<%= text_area 'image', 'description'  %></p>
+
+<p><label for="image_imagefile">File</label><br/>
+<%= file_field("image", "imagefile") %>
+
+<p>
+	<label>..or get from URL</label><br />
+	<%= text_field_tag 'url', "", :size => 32 %></p>
+</p>
+
+

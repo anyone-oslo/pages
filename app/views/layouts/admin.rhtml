@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<title>Backstage<% if @page_title %> : <%= @page_title %><% end %></title>
+
+    <link rel="shortcut icon" href="/plugin_assets/backstage/images/favicon.gif?" type="image/gif" />
+    <link rel="icon"          href="/plugin_assets/backstage/images/favicon.gif?" type="image/gif" />
+
+	<%#= javascript_include_tag ['prototype', 'effects', 'dragdrop', 'controls', 'swfobject'] %>
+	<!-- ^ BREAKS 2.0.2 compability ... -->
+	<%= javascript_include_tag "prototype" %>
+	<%= javascript_include_tag "effects" %>
+	<%= javascript_include_tag "dragdrop" %>
+	<%= javascript_include_tag "controls" %>
+	<%= javascript_include_tag "swfobject" %>
+	<!-- END long ass circumvention -->
+	<%= javascript_include_tag "lightbox", :plugin => 'backstage' %>
+
+	<% %w{livepipe cookie event_behavior hotkey selection selectmultiple tabs textarea window}.each do |lp_lib| %>
+		<%= javascript_include_tag "livepipe/#{lp_lib}", :plugin => 'backstage' %>
+	<% end %>
+
+	<%= stylesheet_link_tag "admin", :plugin => 'backstage' %>
+
+	<!--
+	<% if @admin_stylesheets -%>
+		<% @admin_stylesheets.each do |stylesheet| -%>
+			<%= stylesheet_link_tag "/plugin_assets/backstage/stylesheets/"+stylesheet %>
+		<% end -%>
+	<% end -%>
+	-->
+
+</head>
+<body class="<%= body_classes %>">
+	<div id="header">
+		<div id="logo">
+			<%= link_to image_tag( "/plugin_assets/backstage/images/admin/logo.jpg" ), '/admin' %>
+		</div>
+		<div id="site-name">
+			<h1><%= Backstage.config :site_name %></h1>
+		</div>
+		<% if @current_user -%>
+			<div class="user">
+				<%= [
+						"Hello, " + link_to( @current_user.realname, admin_user_url( @current_user ) ),
+						link_to( "Log out", logout_admin_users_path )
+					].join( link_separator )
+				%>
+			</div>
+		<% end -%>
+		<div class="tabs">
+			<% if @current_user && @admin_menu -%>
+				<%= header_tabs :class => :backstage -%>
+				<%= header_tabs :class => :backstage_plugins -%>
+				<%= header_tabs :class => :custom -%>
+				<%= header_tabs :class => :account -%>
+			<% end -%>
+		</div>
+	</div>
+
+	<% if flash[:error] -%>
+		<div id="flash-error">
+			<%= flash[:error] %>
+		</div>
+	<% end -%>
+
+	<% if flash[:notice] -%>
+		<div id="flash-notice">
+			<%= flash[:notice] %>
+		</div>
+	<% end -%>
+
+	<% if @sidebar && !@sidebar.empty? -%>
+		<div id="sidebar">
+			<%= @sidebar %>
+		</div>
+	<% end %>
+
+	<div id="main">
+		<% if @page_description || @content_tabs %>
+			<div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+				<% if @page_description_links -%>
+				<div class="links"><%= @page_description_links %></div>
+				<% end %>
+				<h3><%= @page_description || @page_title %></h3>
+				<% if @content_tabs %>
+					<ul id="content-tabs">
+						<%= @content_tabs.map{ |t| "<li id=\"content-tab-link-#{t[:key]}\">" + link_to_function( t[:name], "showContentTab('#{t[:key]}')" ) + "</li>" }.join %>
+					</ul>
+				<% end %>
+			</div>
+		<% end %>
+
+
+		<%= yield %>
+
+	</div>
+	
+	
+	<%= render :partial => 'js/admin' %>
+	<% if @content_tabs %>
+		<script type="text/javascript">
+			enableContentTabs( new Array( <%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ") %> ) );
+		</script>
+	<% end %>
+</body>
+</html>
+
+
+

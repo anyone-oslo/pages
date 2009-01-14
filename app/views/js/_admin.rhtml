@@ -1,0 +1,75 @@
+<script type="text/javascript">
+
+	/* Browser sniffing */
+	if( navigator ) {
+		Array( "WebKit", "Gecko", "Firefox").each( function( agent ) {
+			if( navigator.userAgent.match( new RegExp( agent + "\\/[\\d]+", 'i' ) ) ) {
+				Element.classNames( document.body ).add( agent.toLowerCase() );
+			}
+		} );
+		if( navigator.userAgent.match("MSIE") ) {
+			Element.classNames( document.body ).add('msie');
+		}
+		if( navigator.userAgent.match("MSIE 7") ) {
+			Element.classNames( document.body ).add('msie7');
+		}
+	}
+
+	/* Sidebar magic */
+	if( $( 'sidebar' ) ) {
+		Element.classNames( document.body ).add( 'with_sidebar' );
+		/*
+		var sidebar = $( 'sidebar' );
+		if( sidebar.parentNode != document.body ) {
+			sidebar.parentNode.removeChild( sidebar );
+			document.body.appendChild( sidebar );
+		}
+		*/
+	}
+
+	/* Add proper classes on inputs */
+	function applyInputStyles( inputs ) {
+		for( var a in inputs )
+		{
+			if( typeof inputs[a].type != "undefined" )
+			{
+				Element.classNames( inputs[a] ).add( "input_"+inputs[a].type );
+			}
+		}
+	}
+	applyInputStyles( document.getElementsByTagName( "input" ) );
+
+	/* Button styles */
+	function applyButtonStyles( buttons ) {
+		Array.from( buttons ).each( function( button ) {
+			button.innerHTML = '<div class="inner">' + button.innerHTML.strip() + '</div>';
+		} );
+	}
+	applyButtonStyles( document.getElementsByTagName( "button" ) );
+	
+
+	/* Show a content tab */
+	function showContentTab( tab_id ) {
+		for( var a=0; a < window.contentTabs.length; a++ ) {
+			Element.hide( window.contentTabs[a] );
+			Element.removeClassName( $('content-tab-link-'+window.contentTabs[a].tab_id), 'current' );
+		}
+		Element.show( "content-tab-"+tab_id );
+		Element.addClassName( $('content-tab-link-'+tab_id), 'current' );
+	}
+	
+	/* Load the tabs */
+	function enableContentTabs( tab_ids ) {
+		window.contentTabs = new Array();
+		for( var a = 0; a < tab_ids.length; a++ ) {
+			window.contentTabs[a] = $( 'content-tab-'+tab_ids[a] );
+			window.contentTabs[a].tab_id = tab_ids[a];
+		}
+		<% if @show_tab %>
+			showContentTab( '<%= @show_tab %>' );
+		<% else %>
+			showContentTab( tab_ids[0] );
+		<% end %>
+	}
+
+</script>

@@ -1,0 +1,404 @@
+<%
+	page_title       "Editing “" + @page.name.to_s + "”"
+	page_description "Editing " + [@page.ancestors,@page].flatten.map{ |a| link_to a.name, edit_admin_page_path( :id => a, :language => @language ) }.join( " &raquo; " )
+	if Backstage.config( :localizations )
+		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator ) 
+	end
+%>
+
+
+
+<%# #### SIDEBAR ########################################################### %>
+
+<% sidebar do %>
+	<h2>About this page</h2>
+	<p>
+		This page was last modified <%= time_ago_in_words @page.updated_at %> ago by 
+		<%= link_to @page.author.realname, admin_user_path( @page.author ) %>.
+	</p>
+	
+	<!--
+	<h2>Formatting tips</h2>
+	<p>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
+		labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+		nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
+		velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+		sunt in culpa qui officia deserunt mollit anim id est laborum.
+	</p>
+	
+	<h2>Your pages</h2>
+	-->
+<% end %>
+
+
+
+<%# #### EDIT AREA ######################################################### %>
+
+<% form_for 'page', @page, :url => admin_page_url( :id => @page, :language => @language ), :html => { :class => :edit_page, :id => 'page-form', :method => :put, :multipart => true } do |f| %>
+
+
+	<%# #### CONTENT #### %>
+	<% content_tab "Content" do %>
+		<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title", 
+			:errors      => @page.errors[:name],
+			:description => "This is the name of the page, and it will also be the name of the link to this page."
+		%>
+		<%= labelled_field f.text_field( :headline, :class => 'text page_title' ), "Headline", 
+			:errors      => @page.errors[:headline],
+			:description => "Optional, use if the headline should differ from the page name."
+		%>
+		<%= labelled_field f.text_area( :body, :id => 'compose-body' ), "Body", 
+			:errors      => @page.errors[:body]
+		%>
+		<%= labelled_field f.text_area( :excerpt, :rows => 5, :id => 'compose-teaser' ), "Teaser", 
+			:errors      => @page.errors[:excerpt]
+		%>
+		<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
+			:errors      => @page.errors[:status]
+		%>
+	<% end %>
+	<%= content_tab "Content" %>
+	
+
+	<%# #### PRESENTATION #### %>
+	<% content_tab "Presentation" do %>
+		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
+			:errors      => @page.errors[:template]
+		%>
+		<%= labelled_field f.file_field( :image ), "Image", 
+			:errors      => @page.errors[:template],
+			:description => "The template you have selected allows you to attach an image, which will be scaled and positioned to fit the design."
+		%>
+		<%= labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Caption" %>
+		<% if @page.image %>
+			<p>
+				<%= dynamic_image_tag @page.image, :size => '400x300', :crop => false %>
+			</p>
+			<p>
+				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
+			</p>
+		<% end %>
+		<% if @page.image && Backstage.config( :page_image_is_linkable ) %>
+			<%= labelled_field f.text_field( :image_link ), "Image link <small>(including http://)</small>", 
+				:errors      => @page.errors[:image_link]
+			%>
+		<% end %>
+	<% end %>
+	<%= content_tab "Presentation" %>
+	
+	<%# #### CATEGORIZATION #### %>
+	<% content_tab "Categorization" do %>
+		<h3>Categories</h3>
+		<% if @categories.length > 0 %>
+			<p>
+				<% @categories.each do |category| %>
+					<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.include?(category) ? true : false) %><strong><%= category.name %></strong><br />
+				<% end %>
+			</p>
+		<% else %>
+			<p>No categories have been added yet.</p>
+		<% end %>
+		<%= labelled_field f.text_field( :tag_list, :class => 'text' ), "Tags", 
+			:errors      => @page.errors[:tag_list]
+		%>
+	<% end %>
+	<%= content_tab "Categorization" %>
+	
+	
+
+	<%# #### ADDITIONAL IMAGES #### %>
+	<% if Backstage.config( :page_additional_images ) %>
+		<% content_tab "Additional images" do %>
+			<% unless @page.images.empty? %>
+				<table class="list images_list">
+					<tr>
+						<th>Image</th>
+						<th>Title</th>
+						<th>Byline</th>
+						<th></th>
+					</tr>
+					<% @page.images.each do |image| %><tr>
+						<td class="thumbnail"><%= dynamic_image_tag image, :size => '100x100' %></td>
+						<td><strong><%= image.name %></strong></td>
+						<td><%= image.byline %></td>
+						<td>
+							<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => image, :language => @language, :show_tab => 'additional images' ), :class => :delete, :confirm => 'Are you sure?' %>
+						</td>
+					</tr><% end %>
+				</table>
+			<% else %>
+				<p>No images added yet.</p>
+			<% end %>
+			<p>
+				<%= link_to_function "Add image", "Element.show('new-image');", :class => :create %>
+			</p>
+		<% end %>
+		<%= content_tab "Additional images" %>
+	<% end %>
+
+
+	<%# #### FILES #### %>
+	<% if Backstage.config( :page_files ) %>
+		<% content_tab "Files" do %>
+			<% if @page.files? %>
+				<ul id="filelist">
+					<% @page.files.each do |file| %>
+						<li id="file_<%= file.id %>">
+							<%= image_tag 'admin/drag-handle.gif', :class => :handle, :plugin => :backstage %>
+							<strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %> 
+							(<%= link_to "Delete", admin_page_file_path( @language, @page, file ), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
+						</li>
+					<% end %>
+				</ul>
+				<%= sortable_element 'filelist', :url => reorder_admin_page_files_path( @language, @page ), :handle => 'handle' %>
+			<% else %>
+				<p>No files added yet.</p>
+			<% end %>
+			<p>
+				<%= link_to_function "Add new file", "Element.show('new-file');", :class => :create %>
+			</p>
+		<% end %>
+		<%= content_tab "Files" %>
+	<% end %>
+
+
+	<%# #### COMMENTS #### %>
+	<% content_tab "Comments" do %>
+		<%= labelled_field f.check_box( :comments_allowed ), "Comments allowed", 
+			:errors      => @page.errors[:comments_allowed],
+			:check_box_description => "Comments are allowed on this page"
+		%>
+		<% if @page.comments.count > 0 %>
+			<table class="list comments_list">
+				<% @page.comments.each do |c| %>
+					<tr>
+						<td>
+							<strong><%= c.name %></strong><br />
+							<% if c.email? %><%= mail_to c.email, c.email %><br /><% end %>
+							<% if c.url? %><%= link_to c.url, c.url %><br /><% end %>
+						</td>
+						<td><%= c.body %></td>
+						<td>
+							<%= time_ago_in_words c.created_at %> ago<br />
+							from <%= c.remote_ip %>
+						</td>
+						<td>
+							<%= link_to "Delete", delete_comment_admin_page_url( :id => @page, :comment_id => c, :language => @language ), :confirm => 'Are you sure?', :class => :delete %>
+						</td>
+					</tr>
+				<% end %>
+			</table>
+		<% else %>
+			<p>No comments added.</p>
+		<% end %>
+	<% end %>
+	<%= content_tab "Comments" %>
+	
+
+	<%# #### ADVANCED OPTIONS #### %>
+	<% content_tab "Options" do %>
+		<%= labelled_field (
+				f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+			), 
+			"Published", 
+			:errors      => @page.errors[:published_at]
+		%>
+		<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
+			:errors      => @page.errors[:content_order]
+		%>
+		<p class="field">
+			<label>Options</label>
+			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
+			<%= f.check_box(:news_page) %> This is a news page<br />
+		</p>
+		<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
+			:errors      => @page.errors[:redirect_to]
+		%>
+	<% end %>
+	<%= content_tab "Options" %>
+	
+	<div class="buttons">
+		<%= button_to_function "Preview formatting", 'showPreview()' %>
+		<%= backstage_button_to "Save changes" %>
+	</div>
+
+
+<% end %>
+
+<%# #### UPLOAD IMAGE #### %>
+<div id="new-image" class="page_new_image">
+	<h2>Upload new image</h2>
+	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
+		<%= labelled_field f.file_field( :imagefile ), "File", 
+			:errors      => @new_image.errors[:imagefile]
+		%>
+		<%= labelled_field f.text_field( :name, :size => 48 ), "Title", 
+			:errors      => @new_image.errors[:name]
+		%>
+		<%= labelled_field f.text_field( :byline, :size => 48 ), "Byline", 
+			:errors      => @new_image.errors[:byline]
+		%>
+		<p>
+			<%= submit_tag "Upload" %> or 
+			<%= link_to_function "Cancel", "Element.hide('new-image');", :class => :cancel %>
+		</p>
+	<% end %>
+</div>
+
+<%# #### UPLOAD FILE #### %>
+<% if Backstage.config( :page_files ) %>
+	<div id="new-file" class="page_new_file">
+		<h2>Upload new file</h2>
+		<% form_for( ( @new_file = PageFile.new ), :url => admin_page_files_path( @language, @page ), :html => { :multipart => true } ) do |f| %>
+			<%= labelled_field f.text_field( :name, :size => 48 ), "Name", 
+				:errors      => @new_file.errors[:name]
+			%>
+			<%= labelled_field f.text_field( :description, :size => 48 ), "Description", 
+				:errors      => @new_file.errors[:name]
+			%>
+			<%= labelled_field f.file_field( :file ), "File", 
+				:errors      => @new_file.errors[:file]
+			%>
+			<p>
+				<%= submit_tag "Upload" %> or <%= link_to_function "Cancel", "Element.hide('new-file');", :class => :cancel %>
+			</p>
+		<% end %>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+
+	function hidePreview() {
+		if( window.documentPreview ) {
+			document.body.removeChild( window.documentPreview );
+			window.documentPreview = false;
+		}
+	}
+
+	function showPreview() {
+		var url = "<%= preview_admin_page_url( :id => @page, :language => @language ) %>";
+		new Ajax.Request( url, {
+			method:     'post',
+			parameters: Form.serialize( 'page-form', true ),
+			onSuccess: function( transport ) {
+				hidePreview();
+				window.documentPreview = document.createElement( "div" );
+				window.documentPreview.id = "documentPreview";
+				window.documentPreview.innerHTML = transport.responseText;
+				document.body.appendChild( window.documentPreview );
+				Element.hide( window.documentPreview );
+				Effect.Appear( window.documentPreview, { duration: 0.6 } );
+			}
+		});
+	}
+	
+	Element.hide( 'new-image' );
+	if( $('new-file') ) {
+		Element.hide( 'new-file' );
+	}
+
+	// Apply magic to compose textarea
+	function applyTextarea(textareaId, toolbarId) {
+		var textarea = new Control.TextArea(textareaId, toolbarId);  
+		var toolbar = new Control.TextArea.ToolBar(textarea);  
+		toolbar.container.id = toolbarId; //for css styles  
+
+		// buttons
+		// http://textism.com/tools/textile/
+		toolbar.addButton('Bold',function(){  
+		    this.wrapSelection('*','*');  
+		},{  
+		    id: toolbarId+'-bold_button'  
+		});  
+
+		toolbar.addButton('Italics',function(){  
+		    this.wrapSelection('_','_');  
+		},{  
+		    id: toolbarId+'-italics_button'  
+		});  
+
+		toolbar.addButton('Header 2',function(){  
+		    var selection = this.getSelection();
+		    this.replaceSelection("h2. "+selection+"\n");
+		},{  
+		    id: toolbarId+'-h2_button'  
+		});
+		toolbar.addButton('Header 3',function(){  
+		    var selection = this.getSelection();
+		    this.replaceSelection("h3. "+selection+"\n");
+		},{  
+		    id: toolbarId+'-h3_button'  
+		});  
+		toolbar.addButton('Header 4',function(){  
+		    var selection = this.getSelection();
+		    this.replaceSelection("h4. "+selection+"\n");
+		},{  
+		    id: toolbarId+'-h4_button'  
+		});  
+
+
+		toolbar.addButton('Link',function(){  
+		    var selection = this.getSelection();
+		    var response = prompt('Enter link URL','');  
+		    this.replaceSelection(
+				'"' + (selection == '' ? "Link text" : selection) + '":' + 
+				(response == '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
+			);
+		},{  
+		    id: toolbarId+'-link_button'  
+		});
+		
+		toolbar.addButton('Mail',function(){  
+		    var selection = this.getSelection();
+		    var response = prompt('Enter mail address','');  
+		    this.replaceSelection(
+				'"' + (selection == '' ? "Link text" : selection) + '":mailto:' + 
+				(response == '' ? 'support@manualdesign.no' : response)
+			);
+		},{  
+		    id: toolbarId+'-mail_button'  
+		});
+
+		toolbar.addButton('Image',function(){  
+		    var selection = this.getSelection();  
+			if( selection == '') {
+			    var response = prompt('Enter image URL',''); 
+			    if(response == null)  
+			        return;  
+				this.replaceSelection('!'+response+'!');
+			} else {
+				this.replaceSelection('!'+selection+'!');
+			}
+		},{  
+		    id: toolbarId+'-image_button'  
+		});  
+
+		//toolbar.addButton('Unordered List',function(event){  
+		//    this.collectFromEachSelectedLine(function(line){  
+		//        return event.shiftKey ? (line.match(/^\*{2,}/) ? line.replace(/^\*/,'') : line.replace(/^\*\s/,'')) : (line.match(/\*+\s/) ? '*' : '* ') + line;  
+		//    });  
+		//},{  
+		//    id: 'compose_unordered_list_button'  
+		//});  
+
+		
+		//toolbar.addButton('Ordered List',function(event){  
+		//    var i = 0;  
+		//    this.collectFromEachSelectedLine(function(line){  
+		//        if(!line.match(/^\s+$/)){  
+		//            ++i;  
+		//            return event.shiftKey ? line.replace(/^\d+\.\s/,'') : (line.match(/\d+\.\s/) ? '' : i + '. ') + line;  
+		//        }  
+		//    });  
+		//},{  
+		//    id: 'compose_ordered_list_button'  
+		//});  
+
+
+	}
+
+	applyTextarea('compose-body', 'compose-body-toolbar');
+	applyTextarea('compose-teaser', 'compose-teaser-toolbar');
+
+</script>

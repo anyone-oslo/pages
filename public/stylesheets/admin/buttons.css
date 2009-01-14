@@ -1,0 +1,36 @@
+button {
+	background:    transparent url(../../images/admin/button-left.gif) no-repeat;
+	padding:       0;
+	border:        0;
+	height:        21px;
+	font-size:     11px;
+	color:         #fff;
+	text-shadow:   0 0 0 #000;
+	-moz-opacity:  0.9999;
+}
+
+button .inner {
+	background:    transparent url(../../images/admin/button-right.gif) top right no-repeat;
+	margin-left:   16px;
+	padding:       3px 16px 0 0;
+	height:        18px;
+	cursor:        pointer;
+}
+.firefox button .inner {
+	margin-left:   9px;
+	padding-right: 12px;
+}
+
+
+button:hover {
+	background:    transparent url(../../images/admin/button-left-hover.gif) top left no-repeat;
+}
+button:hover .inner {
+	background:    transparent url(../../images/admin/button-right-hover.gif) top right no-repeat;
+}
+
+form.button-to {
+	display:       inline;
+	margin:        0;
+	padding:       0;
+}

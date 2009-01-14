@@ -1,0 +1,53 @@
+#main form {
+	margin:        16px 32px;
+}
+
+form .field {
+	margin:        16px 0;
+	padding:       0;
+}
+
+form .field label {
+	display:       block;
+	padding:       0;
+	margin:        0 0 4px 0;
+	font-weight:   bold;
+	font-size:     1.1em;
+	color:         #444;
+}
+.msie7 form .field label {
+	height:        1em;
+}
+form .field .description {
+	color:         #444;
+	margin:        0 0 6px 0;
+}
+form .field_with_errors {
+	background:    #fff0f3;
+	border-top:    1px solid #ffd0d3;
+	border-bottom: 1px solid #ffd0d3;
+	margin:        0 -32px -1px -32px;
+	padding:       12px 32px 16px 32px;
+}
+form .field_with_errors label {
+	color:         #c00007;
+}
+
+.fieldWithErrors {
+	display:       table;
+	padding:       1px;
+	padding-right: 22px;
+	background:    transparent url(../../images/admin/warning-icon.gif) right 5px no-repeat;
+}
+.fieldWithErrors input, .fieldWithErrors textarea {
+}
+
+
+textarea, input.text {
+	border:        1px solid #d4d4d4;
+	background:    #fff url(../../images/admin/formelement-bg.gif) repeat-x;
+	padding:       6px 8px;
+	line-height:   1.45;
+	font-family:   "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif;
+	font-size:     1em;
+}

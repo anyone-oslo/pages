@@ -1,0 +1,28 @@
+a, a:visited {
+	color: #1d7195;
+	text-decoration: underline;
+}
+a:hover {
+	color: #193443;
+}
+
+a.create, a.create:visited {
+	color: #008800;
+}
+a.create:hover {
+	color: #004400;
+}
+
+
+a.cancel, a.cancel:visited {
+	color: #dd0000;
+}
+a.cancel:hover {
+	color: #880000;
+}
+a.delete, a.delete:visited {
+	color: #dd0000;
+}
+a.delete:hover {
+	color: #880000;
+}

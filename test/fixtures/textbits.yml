@@ -1,0 +1,74 @@
+front_1:
+    id: 1
+    textable_type: Page
+    textable_id: 1
+    name: body
+    language: eng
+    filter: textile
+    body: English
+front_2:
+    id: 2
+    textable_type: Page
+    textable_id: 1
+    name: body
+    language: nor
+    filter: textile
+    body: Norsk
+front_3:
+    id: 3
+    textable_type: Page
+    textable_id: 1
+    name: sidebar
+    language: eng
+    filter: textile
+    body: English sidebar
+front_4:
+    id: 4
+    textable_type: Page
+    textable_id: 1
+    name: name
+    language: eng
+    body: Home
+front_5:
+    id: 5
+    textable_type: Page
+    textable_id: 1
+    name: name
+    language: nor
+    body: Hjem
+news_1:
+    id: 6
+    textable_type: Page
+    textable_id: 2
+    name: name
+    language: eng
+    body: News
+news_2:
+    id: 7
+    textable_type: Page
+    textable_id: 2
+    name: name
+    language: swahili
+    body: News in swahili
+news_3:
+    id: 8
+    textable_type: Page
+    textable_id: 2
+    name: slug
+    language: eng
+    body: latest-news
+news_item_1:
+    id: 9
+    textable_type: Page
+    textable_id: 3
+    name: name
+    language: eng
+    body: First post
+news_item_2:
+    id: 10
+    textable_type: Page
+    textable_id: 3
+    name: body
+    language: eng
+    body: "This is the first post.\nIt has several lines."
+    filter: textile

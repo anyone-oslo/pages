@@ -1,0 +1,18 @@
+#adminbar
+{
+	font-family: verdana;
+	background: #012;
+	padding: 14px 32px;
+	color: #def;
+	font-size: 10px;
+}
+#adminbar .logout
+{
+	float: right;
+}
+#adminbar a, #adminbar a:visited {
+	color: #8ac;
+}
+#adminbar a:hover {
+	color: #fff;
+}

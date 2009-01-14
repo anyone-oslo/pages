@@ -1,0 +1,18 @@
+.sortable_images {
+	
+}
+.sortable_images .image {
+	border: 1px solid #ddd;
+	float: left;
+	margin: 0 8px 8px 0;
+	padding: 8px;
+	text-align: center;
+}
+.sortable_images .image img {
+	border: 1px solid #ddd;
+	margin-bottom: 2px;
+}
+.sortable_images .image:first-child {
+	border: 1px solid #aa8;
+	background: #ffe;
+}

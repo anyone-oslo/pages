@@ -1,0 +1,42 @@
+<% 
+	page_title "Your account details"
+	page_description "You are editing your account details"
+%>
+
+<% form_for 'account', @account, :url => admin_account_path( @account ), :html => { :method => :put } do |f| -%>
+	<%= labelled_field f.text_field( :name, :rows => 5 ), "Site name", 
+		:errors => @account.errors[:name] 
+	%>
+	<%= labelled_field f.select( :account_holder_id, User.admin_users.collect {|u| [ u.realname, u.id ] } ), "Account holder", 
+		:errors => @account.errors[:account_holder_id] 
+	%>
+	<%= labelled_field f.text_area( :billing_address, :rows => 5 ), "Billing address", 
+		:errors => @account.errors[:billing_address] 
+	%>
+	<p>
+		<button type="submit">Save changes</button>
+	</p>
+<% end -%>
+
+<div class="content">
+	<h2>Statistics</h2>
+	<table>
+		<tr>
+			<th>Storage used</th>
+			<td><%= number_to_human_size @database_size %></td>
+			<td><%= number_to_percentage (@database_size.to_f/@plan[:storage].to_f*100), :precision => 2 %></td>
+		</tr>
+		<tr>
+			<th>Bandwidth used this month</th>
+			<td><%= number_to_human_size @stats.bandwidth %></td>
+			<td><%= number_to_percentage (@stats.bandwidth.to_f/@plan[:bandwidth].to_f*100), :precision => 2 %></td>
+		</tr>
+		<tr>
+			<th>Estimated bandwidth usage</th>
+			<td><%= number_to_human_size @stats.projected_bandwidth %></td>
+			<td><%= number_to_percentage (@stats.projected_bandwidth.to_f/@plan[:bandwidth].to_f*100), :precision => 2 %></td>
+		</tr>
+	</table>
+
+</div>
+

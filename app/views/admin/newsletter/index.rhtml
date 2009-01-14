@@ -1,0 +1,30 @@
+<%
+	page_title       "Newsletter subscribers"
+	page_description "Viewing newsletter subscribers"
+%>
+
+<% sidebar do %>
+	<%= render :partial => 'sidebar' %>
+<% end %>
+
+<% if @subscribers && @subscribers.length > 0 %>
+	<table class="list mail_subscribers_list">
+		<tr>
+			<th><%= link_to_unless( (@sort_by=='email'), "Email",     { :sort_by => :email } ) %></th>
+			<th><%= link_to_unless( (@sort_by=='date'),  "Signed up", { :sort_by => :date } ) %></th>
+			<th><%= link_to_unless( (@sort_by=='group'), "Group",     { :sort_by => :group } ) %></th>
+			<th></th>
+		</tr>
+		<% @subscribers.each do |subscriber| %><tr>
+			<td><%= subscriber.email %></td>
+			<td><%= subscriber.created_at.to_formatted_s( :short ) %></td>
+			<td><%= subscriber.group %></td>
+			<td>
+				<%= link_to "Delete", { :action => :destroy, :id => subscriber }, :class => :delete, :confirm => 'Are you sure? There is no undo.' %>
+			</td>
+		</tr><% end %>
+	</table>
+<% else %>
+	<div class="content"><p>No subscribers added yet.</p></div>
+<% end %>
+

@@ -1,0 +1,53 @@
+<%
+	page_title       "Users"
+	page_description "Viewing all users"
+%>
+
+
+<% sidebar do %>
+	<p>
+		<%= backstage_button_to "Invite someone Backstage", new_admin_user_path %>
+	</p>
+<% end %>
+
+
+<table class="list">
+	<tr>
+		<th>Name</th>
+		<th>Last seen</th>
+		<th></th>
+	</tr>
+<% @users.each do |user| -%>
+	<tr class="<%= 
+		classes = []
+		#classes << "active" if user.account_holder? 
+		classes << "disabled" unless user.is_activated? 
+		classes.join( " " )
+	 %>">
+		<td>
+			<strong><%= link_to user.realname, admin_user_url( user ) %></strong>
+			<% if user.editable_by? @current_user %>
+				(<%= link_to "edit", edit_admin_user_url( user ), :class => :edit %>)
+			<% end %>
+		</td>
+		<td>
+			<% if user.is_online? -%>
+				<strong>Online now</strong>
+			<% elsif user.last_login_at -%>
+				<%= time_ago_in_words( user.last_login_at ) %> ago
+			<% else %>
+				Not logged in yet
+			<% end -%>
+		</td>
+		<td class="note">
+			<%= 
+				notes = []
+				notes << "Account holder" if user.account_holder? 
+				notes << "Deactivated" unless user.is_activated? 
+				notes.join( ", " )
+			%>
+		</td>
+	</tr>
+<% end -%>
+</table>
+

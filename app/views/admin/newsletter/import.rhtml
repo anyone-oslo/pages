@@ -1,0 +1,17 @@
+<%
+	page_title       "Importing subscribers"
+	page_description "You are importing subscribers", :create
+%>
+
+<% sidebar do %>
+	<%= render :partial => 'sidebar' %>
+<% end %>
+
+
+<% form_for 'subscriber', ( @new_subscriber ||= MailSubscriber.new ), :url => { :action => :create } do |f| %>
+	<%= labelled_field f.text_area( :email, :rows => 20 ), 'Email addresses', :description => 'Please enter one address per line', :errors => @new_subscriber.errors[:email] %>
+	<%= labelled_field f.select( :group, MailSubscriber.groups ), 'Select existing group', :errors => @new_subscriber.errors[:group] %>
+	<%= labelled_field text_field_tag( :new_group ), '..or create a new group' %>
+	<%= %>
+	<p><%= submit_tag "Import" %></p>
+<% end %>

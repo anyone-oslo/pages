@@ -1,0 +1,61 @@
+<div class="textile_help textile text">
+  <div>
+    There are many formatting codes available for use in Backstage. Backstage uses the Textile formatting language, for a full reference, see <a href="http://hobix.com/textile/">the official Textile webpages</a>. Below are some of the common formatting options.</div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+
+        <th>What you write</th>
+        <th>What it displays</th>
+      </tr>
+    </thead>
+    <tbody> 
+	    <tr class="odd">
+        <td class="label">Heading 1 (h1 .. h6)</td>
+				<td class="textile_input">h1. Heading 1/</td>
+		    <td class="textile_result"><h1>Heading 1</h1></td>
+		  </tr>
+	 		<tr class="even">
+        <td class="label">Heading 6</th>
+        <td class="textile_input">h6. Heading 2</td>
+        <td class="textile_result"><h6>Heading 2</h6></td>
+      </tr>	 		   
+      <tr class="odd">
+        <td class="label">Link</td>
+        <td class="textile_input">"link text":http://manualdesign.no/</td>
+        <td class="textile_result"><a href="http://manualdesign.no/">tekst</a></td>
+      </tr>
+      <tr class="even">
+        <td class="label">Bilde</td>
+        <td class="textile_input">!http://example.com/image.png!</td>
+        <td class="textile_result"><%= image_tag 'textile_example.png', :plugin => :backstage %></td>
+      </tr>
+      <tr class="odd">
+        <td class="label">Italic</td>
+        <td class="textile_input">_text_</td>
+        <td class="textile_result"><em>text</em></td>
+      </tr>
+      <tr class="even">
+        <td class="label">Bold</td>
+        <td class="textile_input">*text*</td>
+        <td class="textile_result"><strong>text</strong></td>
+      </tr>
+      <tr class="odd">
+        <td class="label">Bulleted Lists</td>
+        <td class="textile_input">* An item<br/>* Another item</td>
+        <td class="textile_result"><ul><li>An item</li><li>Another item</li></ul></td>
+      </tr>
+      <tr class="even">
+        <td class="label">Numbered Lists</td>
+        <td class="textile_input"># An item<br/># Another item</td>
+        <td class="textile_result"><ol><li>An item</li><li>Another item</li></ol></td>
+      </tr>
+      <tr class="odd">
+        <td class="label">Cite</td>
+        <td class="textile_input">bq. Cited text</td>
+        <td class="textile_result"><blockquote>Cited text</blockquote></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

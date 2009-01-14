@@ -1,0 +1,27 @@
+gallerist:
+    id: 1
+    username: melvin
+    realname: Kjell Mardon Gunnvaldsen
+    hashed_password: <%= Digest::SHA1.hexdigest("snerken") %>
+    is_activated: 1
+    is_admin: 1
+inge:
+    id: 2
+    username: inge
+    realname: Inge Jørgensen
+    email: inge@manualdesign.no
+    hashed_password: <%= Digest::SHA1.hexdigest "ingepassord" %>
+    is_admin: 1
+thomas:
+    id: 3
+    created_by: 2
+    username: thomas
+    realname: Thomas Knutstad
+    email: thomas@manualdesign.no
+    hashed_password: <%= Digest::SHA1.hexdigest "manual" %>
+    is_admin: 1
+dummy:
+    id: 4
+    created_by: 2
+    username: dummy
+    realname: Dummy User
