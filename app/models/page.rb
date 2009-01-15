@@ -92,7 +92,7 @@ class Page < ActiveRecord::Base
 				conditions = "parent_page_id IN (" + parent_ids.join(", ") + ")"
 			elsif options[:parent]
 				parent_id = options[:parent]
-				parent_id = parent_id.kind_of?(Page)
+				parent_id = parent.id if parent_id.kind_of?(Page)
 				conditions = "parent_page_id = #{parent_id}"
 			else
 				conditions = "parent_page_id IS NULL"
