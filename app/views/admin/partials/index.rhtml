@@ -18,7 +18,7 @@
 			<td>
 				<div id="partial-<%= partial.id %>">
 					<div class="actions">
-						<%= link_to "Edit" %>
+						<%= link_to "Edit", edit_admin_partial_path(@language, partial) %>
 					</div>
 					<%= partial.to_s %>
 				</div>
