@@ -18,7 +18,7 @@ class Page < ActiveRecord::Base
 	acts_as_list :scope => :parent_page
 	acts_as_tree :order => :position, :foreign_key => :parent_page_id
 
-	acts_as_textable [ "name", "body", "excerpt", "headline" ], :allow_any => true
+	acts_as_textable [ "name", "body", "excerpt", "headline", "boxout" ], :allow_any => true
 
 	has_and_belongs_to_many :categories, :join_table => :pages_categories
 
