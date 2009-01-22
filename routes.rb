@@ -10,7 +10,7 @@ connect 'pages/:language/search',                 :controller => 'pages', :actio
 page    'pages/:language/:id',                    :controller => 'pages', :action => 'show'
 page    'pages/:language/:id.rss',                :controller => 'pages', :action => 'show', :format => 'rss'
 
-connect 'pages/:language/:id/:page',              :controller => 'pages', :action => 'show'
+connect 'pages/:language/:id/:page',              :controller => 'pages', :action => 'show', :requirements => { :page => /[\d]+/ }
 
 connect ':language/pages/:page_id/files/:id',     :controller => 'page_files', :action => 'show'
 
