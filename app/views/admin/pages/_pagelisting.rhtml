@@ -40,7 +40,7 @@
 			<% end %></ul>
 			<!-- this seriously needs to be rewritten -->
 			<div class="morepages">
-				<%= link_to_function "See all #{subpages.length - 10} pages", "alert('We are working on it!');", :class => "morepageslink" %>
+				<%= link_to_function "All #{subpages.length} pages", "alert('We are working on it!');", :class => "morepageslink" %>
 			</div>
 		<% else %>
 			<ul><% subpages.each do |subpage| %>
