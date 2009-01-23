@@ -40,9 +40,7 @@
 			<% end %></ul>
 			<!-- this seriously needs to be rewritten -->
 			<div class="morepages">
-				There are <%= subpages.length - 10 %> more pages, we are working on a way to show them
-				without delaying the system.
-				</div>
+				<%= link_to_function "See all #{subpages.length - 10} pages", "alert('We are working on it!');", :class => "morepageslink" %>
 			</div>
 		<% else %>
 			<ul><% subpages.each do |subpage| %>
