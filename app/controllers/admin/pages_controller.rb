@@ -143,6 +143,16 @@ class Admin::PagesController < Admin::AdminController
 		end
 		redirect_to edit_admin_page_url( :language => @language, :id => @page, :show_tab => 'presentation' )
 	end
+	
+	def update_image_caption
+		@image = Image.find(params[:image_id]) rescue nil
+		if @image
+			@image.update_attribute(:byline, params[:caption])
+			render :text => @image.byline
+		else
+			render :text => "ERROR! Could not update caption."
+		end
+	end
 
 	def destroy
 		@page = Page.find( params[:id] )

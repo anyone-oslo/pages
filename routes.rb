@@ -32,7 +32,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:controller  => 'admin/pages', 
 		:path_prefix => 'admin/:language',
 		:collection  => { :list => :any, :list_test => :any, :fragment => :any, :new => :any, :news => :any },
-		:member      => { :delete_language => :any, :add_language => :any, :preview => :any, :delete_comment => :any, :add_image => :post, :delete_image => :any, :delete_presentation_image => :any }
+		:member      => { :delete_language => :any, :add_language => :any, :preview => :any, :delete_comment => :any, :add_image => :post, :delete_image => :any, :delete_presentation_image => :any, :update_image_caption => :any }
 	)
 	admin.resources(
 		:page_files,

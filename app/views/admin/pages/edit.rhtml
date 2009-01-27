@@ -114,14 +114,25 @@
 				<table class="list images_list">
 					<tr>
 						<th>Image</th>
-						<th>Title</th>
-						<th>Byline</th>
+						<!--<th>Title</th>-->
+						<th>Caption</th>
 						<th></th>
 					</tr>
 					<% @page.images.each do |image| %><tr>
 						<td class="thumbnail"><%= dynamic_image_tag image, :size => '100x100' %></td>
-						<td><strong><%= image.name %></strong></td>
-						<td><%= image.byline %></td>
+						<!--<td><strong><%= image.name %></strong></td>-->
+						<td>
+							<div id="image-caption-<%= image.id %>"><%= image.byline %></div>
+							<script type="text/javascript">
+								new Ajax.InPlaceEditor(
+									'image-caption-'+<%= image.id %>, 
+									"<%= url_for(:controller => 'admin/pages', :action => 'update_image_caption', :id => @page) %>",
+									{
+										callback: function(form, value) { return 'image_id='+<%= image.id %>+'&caption=' + encodeURIComponent(value) }
+									}
+								);
+							</script>
+						</td>
 						<td>
 							<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => image, :language => @language, :show_tab => 'additional images' ), :class => :delete, :confirm => 'Are you sure?' %>
 						</td>
@@ -130,6 +141,9 @@
 			<% else %>
 				<p>No images added yet.</p>
 			<% end %>
+			<p>
+				Click on the caption text to edit it.
+			</p>
 			<p>
 				<%= link_to_function "Add image", "Element.show('new-image');", :class => :create %>
 			</p>
@@ -233,10 +247,10 @@
 		<%= labelled_field f.file_field( :imagefile ), "File", 
 			:errors      => @new_image.errors[:imagefile]
 		%>
-		<%= labelled_field f.text_field( :name, :size => 48 ), "Title", 
+		<%# labelled_field f.text_field( :name, :size => 48 ), "Title", 
 			:errors      => @new_image.errors[:name]
 		%>
-		<%= labelled_field f.text_field( :byline, :size => 48 ), "Byline", 
+		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption", 
 			:errors      => @new_image.errors[:byline]
 		%>
 		<p>
