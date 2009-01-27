@@ -122,7 +122,7 @@
 						<td class="thumbnail"><%= dynamic_image_tag image, :size => '100x100' %></td>
 						<!--<td><strong><%= image.name %></strong></td>-->
 						<td>
-							<div id="image-caption-<%= image.id %>"><%= image.byline %></div>
+							<div id="image-caption-<%= image.id %>"><%= ( image.byline? ) image.byline : "<em>No caption</em>" %></div>
 							<script type="text/javascript">
 								new Ajax.InPlaceEditor(
 									'image-caption-'+<%= image.id %>, 
