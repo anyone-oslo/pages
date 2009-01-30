@@ -74,6 +74,16 @@ class Page < ActiveRecord::Base
 		def expire_pages_cache!
 			@@cached_pages = {}
 		end
+		
+		def last_commented(options={})
+			options[:limit] ||= 20
+			Page.find_by_sql("SELECT p.* FROM pages p, page_comments c WHERE c.page_id = p.id GROUP BY c.page_id ORDER BY c.created_at DESC LIMIT #{options[:limit]}")
+		end
+		
+		def most_commented(options={})
+			options[:limit] ||= 20
+			Page.find_by_sql("SELECT p.*, COUNT(c.id) as comments_count FROM pages p, page_comments c WHERE c.page_id = p.id GROUP BY c.page_id ORDER BY comments_count DESC LIMIT #{options[:limit]}")
+		end
 
 
 		# Get a collection of pages based on certain criteria
