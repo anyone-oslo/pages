@@ -30,12 +30,12 @@ class Admin::PagesController < Admin::AdminController
 
 	def index
 		@root_pages = Page.root_pages( 
-			:show_drafts        => true, 
-			:show_hidden        => true, 
-			:show_all_languages => true, 
-			:language           => @language 
+			:drafts        => true, 
+			:hidden        => true, 
+			:all_languages => true, 
+			:language      => @language 
 		)
-		@all_pages = Page.get_pages(:language => @language, :show_drafts => true, :show_hidden => true, :show_all_languages => true, :skip_parent => true)
+		@all_pages = Page.get_pages(:language => @language, :drafts => true, :hidden => true, :all_languages => true, :skip_parent => true)
 	end
 	
 	def news
@@ -43,9 +43,9 @@ class Admin::PagesController < Admin::AdminController
 		@news_pages = Page.news_pages(:language => @language)
 		@news_items = Page.get_news(
 			:language => @language, 
-			:show_drafts => true, 
-			:show_hidden => true, 
-			:show_all_languages => true,
+			:drafts => true, 
+			:hidden => true, 
+			:all_languages => true,
 			:parent => (@section_id.to_s =~ /^[\d]+$/) ? @section_id : @news_pages
 		)
 	end

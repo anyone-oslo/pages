@@ -9,40 +9,31 @@ class Page < ActiveRecord::Base
 	serialize :redirect_to
 	
 	# Relations
-	#belongs_to   :parent_page, :class_name => "Page"
 	belongs_to   :author, :class_name => "User", :foreign_key => :user_id
-	belongs_to_image   :image
-	
+	has_and_belongs_to_many :categories, :join_table => :pages_categories
+
+	belongs_to_image        :image
 	has_and_belongs_to_many :images
+
+	has_many :comments, :class_name => 'PageComment', :dependent => :destroy
+	has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
 
 	acts_as_list :scope => :parent_page
 	acts_as_tree :order => :position, :foreign_key => :parent_page_id
 
 	acts_as_textable [ "name", "body", "excerpt", "headline", "boxout" ], :allow_any => true
-
-	has_and_belongs_to_many :categories, :join_table => :pages_categories
-
-	has_many :comments, :class_name => 'PageComment', :dependent => :destroy
-	has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
-	
 	acts_as_taggable
 	
+	# Page status labels
 	STATUS_LABELS = [ "Draft", "Reviewed", "Published", "Hidden", "Deleted" ]
 	
 	@@available_templates_cached = nil
-	@@cached_pages = {}
 	
 	validate do |page|
 		page.errors.add( :name, 'must have a title' ) if page.name.empty? # and !page.deleted?
 		page.template ||= page.default_template
-		#if page.slug.empty?
-		#	page.slug = Unicode::normalize_KD(page.name.to_s+"-").downcase.gsub(/[^a-z0-9\s_-]+/,'').gsub(/[\s_-]+/,'-')[0..-2]
-		#end
 	end
 	
-	before_save    { |page| Page.expire_pages_cache! }
-	before_create  { |page| Page.expire_pages_cache! }
-	before_destroy { |page| Page.expire_pages_cache! }
 	before_save    { |page| page.published_at = Time.now unless page.published_at? }
 	
 	acts_as_ferret :fields => { :names_for_search => { :boost => 2 }, :content_for_search => {} }
@@ -51,52 +42,99 @@ class Page < ActiveRecord::Base
 
 	class << self
 		
-		def hash_to_key( hash )
-			array = hash.stringify_keys.to_a.sort{ |a,b| a.first <=> b.first }
-			key   = array.to_s
-		end
-
-		def get_cached_pages( options )
-			return false
-			key = self.hash_to_key( options )
-			if @@cached_pages.kind_of?( Hash ) && @@cached_pages.has_key?( key )
-				@@cached_pages[key]
-			else 
-				nil
-			end
-		end
-		
-		def set_cached_pages( options, pages )
-			key = self.hash_to_key( options )
-			@@cached_pages[key] = pages
-		end
-		
-		def expire_pages_cache!
-			@@cached_pages = {}
-		end
-		
+		# Finds pages with comments, ordered by date of last comment.
+		#
+		# === Parameters
+		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned. 
+		#
+		# Example:
+		#   Page.last_commented(:limit => 10)
 		def last_commented(options={})
-			options[:limit] ||= 20
-			Page.find_by_sql("SELECT p.* FROM pages p, page_comments c WHERE c.page_id = p.id AND p.status = 2 GROUP BY c.page_id ORDER BY c.created_at DESC LIMIT #{options[:limit]}")
+			find_query = "SELECT p.* FROM pages p, page_comments c 
+			              WHERE c.page_id = p.id AND p.status = 2 
+			              GROUP BY c.page_id ORDER BY c.created_at DESC"
+			find_query << " LIMIT #{options[:limit]}" if options[:limit]
+			Page.find_by_sql(find_query)
 		end
-		
+	
+		# Finds pages with comments, ordered by number of comments.
+		#
+		# === Parameters
+		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned. 
+		#
+		# Example:
+		#   Page.most_commented(:limit => 10)
 		def most_commented(options={})
-			options[:limit] ||= 20
-			Page.find_by_sql("SELECT p.*, COUNT(c.id) as comments_count FROM pages p, page_comments c WHERE c.page_id = p.id AND p.status = 2 GROUP BY c.page_id ORDER BY comments_count DESC LIMIT #{options[:limit]}")
+			find_query = "SELECT p.*, COUNT(c.id) as comments_count FROM pages p, page_comments c 
+			              WHERE c.page_id = p.id AND p.status = 2 
+			              GROUP BY c.page_id ORDER BY comments_count DESC"
+			find_query << " LIMIT #{options[:limit]}" if options[:limit]
+			Page.find_by_sql(find_query)
 		end
 
-
-		# Get a collection of pages based on certain criteria
-		def get_pages( options={} )
-			options[:show_all]     ||= false
-			options[:show_deleted] ||= options[:show_all]
-			options[:show_hidden]  ||= options[:show_all]
-			options[:show_drafts]  ||= options[:show_all]
-			options[:show_all_languages] ||= false
+		# Finds pages based on the given criteria. Only published pages are loaded by default, this can be overridden by passing the
+		# <tt>:drafts</tt>, <tt>:hidden</tt>, <tt>:deleted</tt> and/or <tt>:all</tt> parameters.
+		#
+		# The pages will have <tt>working_language</tt> set if <tt>:language</tt> is given, this is probably what you'll want to do.
+		# Only pages with translations for the given language will be returned unless <tt>:all_languages => true</tt> is specified.
+		#
+		# Usually, you'll want to load pages from the context of their parent, this is what <tt>Page.root_pages</tt> and <tt>Page#pages</tt> do.
+		#
+		# === Parameters
+		# * <tt>:drafts</tt>           - Include drafts.
+		# * <tt>:hidden</tt>           - Include hidden pages.
+		# * <tt>:deleted</tt>          - Include deleted pages.
+		# * <tt>:all</tt>              - Include all of the above.
+		# * <tt>:language</tt>         - Load only pages translated into this language.
+		# * <tt>:all_languages</tt>    - Load all pages regardless of language.
+		# * <tt>:order</tt>            - Sorting criteria, defaults to 'position'.
+		# * <tt>:parent(s)</tt>        - Parent page. Can be an id, a Page or a collection of both. If parent is <tt>:root</tt>, pages at the root level will be loaded.
+		# * <tt>:paginate</tt>         - Paginates results. Takes a hash with the format: {:page => 1, :per_page => 20}
+		# * <tt>:category</tt>         - Loads only pages within the given category.
+		# * <tt>:published_after</tt>  - Loads only pages published after this date.
+		# * <tt>:published_before</tt> - Loads only pages published before this date.
+		# * <tt>:published_within</tt> - Loads pages published within this range.
+		#
+		# Examples:
+		#   Page.get_pages(:parent => :root)
+		#   Page.get_pages(:parent => :root, :hidden => true, :drafts => true)
+		#   Page.get_pages(:parent => Page.find_by_template('news'), :published_after => 14.days.ago)
+		#   Page.get_pages(:parents => Page.news_pages, :category => Category.find_by_name('music'))
+		#
+		# == Pagination
+		#
+		# The results can be paginated by setting the <tt>:paginate</tt> parameter in the form of 
+		# <tt>{:page => page_number, :per_page => items_per_page }</tt>. The result set has a few methods injected
+		# to make views easier to write and more readable.
+		#
+		# Example:
+		#   news_posts = Page.get_pages(:parent => Page.find_by_template('news'), :paginate => {:page => 3, :per_page => 10})
+		#   news_posts.paginated? # => true
+		#   news_posts.pages # => 11
+		#   news_posts.current_page # => 3
+		#   news_posts.previous_page # => 2
+		#   news_posts.last_page => 11
+		def get_pages(options={})
+			options.symbolize_keys!
+			# Clean up depreceated options
+			options.keys.each do |key|
+				if key.to_s =~ /^show_/
+					new_key = key.to_s.gsub(/^show_/,'').to_sym
+					logger.warn "DEPRECEATED: Option :#{key} is deprecated, use :#{new_key}"
+					options[new_key] = options[key]
+				end
+			end
+			options[:all]     ||= false
+			options[:deleted] ||= options[:all]
+			options[:hidden]  ||= options[:all]
+			options[:drafts]  ||= options[:all]
+			options[:all_languages] ||= false
 			options[:order]        ||= "position"
 
-			if options[:skip_parent]
-				conditions = "true"
+			options[:parent] = options[:parents] if options[:parents]
+
+			if options[:parent] && options[:parent] == :root
+				conditions = "parent_page_id IS NULL"
 			elsif options[:parent] && options[:parent].kind_of?(Enumerable)
 				parent_ids = options[:parent].map{|p| p.kind_of?(Page) ? p.id : p}
 				conditions = "parent_page_id IN (" + parent_ids.join(", ") + ")"
@@ -105,91 +143,107 @@ class Page < ActiveRecord::Base
 				parent_id = parent.id if parent_id.kind_of?(Page)
 				conditions = "parent_page_id = #{parent_id}"
 			else
-				conditions = "parent_page_id IS NULL"
+				conditions = "true"
 			end
 
-			unless options[:show_all] || options[:show_deleted] || options[:show_hidden] || options[:show_drafts]
+			unless options[:all] || options[:deleted] || options[:hidden] || options[:drafts]
 				conditions << " AND status = 2"
 			else
-				conditions << " AND status < 4"   unless options[:show_deleted]
-				conditions << " AND status != 3"  unless options[:show_hidden]
-				conditions << " AND status >= 2"  unless options[:show_drafts]
+				conditions << " AND status < 4"   unless options[:deleted]
+				conditions << " AND status != 3"  unless options[:hidden]
+				conditions << " AND status >= 2"  unless options[:drafts]
+			end
+		
+			if options[:published_within]
+				options[:published_before] = options[:published_within].last
+				options[:published_after]  = options[:published_within].first
+			end
+			if options[:published_before] || options[:published_after]
+				conditions = [conditions]
+				if options[:published_before]
+					conditions.first << " AND published_at <= ?"
+					conditions << options[:published_before]
+				end
+				if options[:published_after]
+					conditions.first << " AND published_at >= ?"
+					conditions << options[:published_after]
+				end
 			end
 
 			# Prepend 'pages.' to order clauses to disambigue the query.
 			options[:order] = options[:order].split( /,[\s]*/ ).map{ |c| (c =~ /^pages\./ ) ? c : "pages."+c }.join(", ")
-			
-			# Try the cache first
-			unless pages = self.get_cached_pages( options )
+		
+			find_opts = {
+				:conditions => conditions, 
+				:order => options[:order], 
+				:include => [:textbits,:categories]
+			}
 
-				find_opts = {
-					:conditions => conditions, 
-					:order => options[:order], 
-					:include => [:textbits]
-				}
-
-				pages = Page.find(:all, find_opts)
-				
-				# Check for languages and remap the collection
-				pages = pages.collect do |page|
-					if options[:language]
-						if options[:show_all_languages] || page.languages.include?( options[:language] )
-							page.working_language = options[:language]
-							page
-						else
-							nil
-						end
-					else
-						page
-					end
-				end.compact
-
-                # Paginate pages
-				if options[:paginate]
-					options[:paginate][:page] ||= 1
-					options[:paginate][:page] = options[:paginate][:page].to_i
-					options[:paginate][:page] = 1 if options[:paginate][:page] < 1
-                    pagination_count = (pages.length.to_f / options[:paginate][:per_page]).ceil
-
-                    start_index = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
-                    end_index = start_index + options[:paginate][:per_page]
-                    pages = pages[start_index...end_index]
-
-					#unless options[:paginate][:page] >= 1 && options[:paginate][:page] <= pagination_count
-					#	options[:paginate][:page] = 1
-					#end
-				end
-
-				# Add pagination methods to the collection
-				# TODO: Make a module for this
-				class << pages
-					attr_reader :paginated, :current_page, :pages, :per_page
-					def set_pagination( paginated=false, current_page=1, pages=1, per_page=nil )
-						@paginated, @current_page, @pages, @per_page = paginated, current_page.to_i, pages.to_i, per_page.to_i
-					end
-					def paginated?;    (@paginated) ? true : false; end
-					def next_page;     (@current_page < @pages) ? ( @current_page + 1 ) : nil; end
-					def previous_page; (@current_page > 1) ? ( @current_page - 1 ) : nil; end
-					def last_page;     @pages; end
-					def first_page;    1; end
-				end
-
-				if options[:paginate] && pagination_count > 0
-					pages.set_pagination( true, options[:paginate][:page], pagination_count, options[:paginate][:per_page] )
-				else
-					pages.set_pagination
-				end
-				
-				self.set_cached_pages( options, pages )
+			pages = Page.find(:all, find_opts)
+		
+			if options[:category]
+				pages = pages.select{|p| p.categories.include?(options[:category])}
 			end
+		
+			# Check for languages and remap the collection
+			pages = pages.collect do |page|
+				if options[:language]
+					if options[:all_languages] || page.languages.include?( options[:language] )
+						page.working_language = options[:language]
+						page
+					else
+						nil
+					end
+				else
+					page
+				end
+			end.compact
+
+			# Paginate pages
+			if options[:paginate]
+				options[:paginate][:page] ||= 1
+				options[:paginate][:page] = options[:paginate][:page].to_i
+				options[:paginate][:page] = 1 if options[:paginate][:page] < 1
+				pagination_count = (pages.length.to_f / options[:paginate][:per_page]).ceil
+
+				start_index = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
+				end_index = start_index + options[:paginate][:per_page]
+				pages = pages[start_index...end_index]
+			end
+
+			# Add pagination methods to the collection
+			# TODO: Make a module for this
+			class << pages
+				attr_reader :paginated, :current_page, :pages, :per_page
+				def set_pagination(paginated=false, current_page=1, pages=1, per_page=nil)
+					@paginated, @current_page, @pages, @per_page = paginated, current_page.to_i, pages.to_i, per_page.to_i
+				end
+				def paginated?;    (@paginated) ? true : false; end
+				def next_page;     (@current_page < @pages) ? ( @current_page + 1 ) : nil; end
+				def previous_page; (@current_page > 1) ? ( @current_page - 1 ) : nil; end
+				def last_page;     @pages; end
+				def first_page;    1; end
+			end
+
+			if options[:paginate] && pagination_count > 0
+				pages.set_pagination(true, options[:paginate][:page], pagination_count, options[:paginate][:per_page])
+			else
+				pages.set_pagination
+			end
+		
 			pages
 		end
 
-		# Get a collection of pages at root level
-		def root_pages( options={} )
-			Page.get_pages( options )
+		# Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
+		def root_pages(options={})
+			options[:parent] ||= :root
+			Page.get_pages(options)
 		end
-		
+	
+		# Finds all news pages (pages with the news_page bit on).
+		#
+		# === Parameters
+		# * <tt>:language</tt> - String to set as working language for the resulting pages.
 		def news_pages(options={})
 			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'id ASC')
 			if options[:language]
@@ -197,13 +251,14 @@ class Page < ActiveRecord::Base
 			end
 			ps
 		end
-		
+	
+		# Finds news items (which are pages where the parent is flagged as news_page). See <tt>Page.get_pages</tt> for more info on the options.
 		def get_news(options={})
 			options[:parent] ||= Page.news_pages
 			options[:order] ||= "published_at DESC"
 			Page.get_pages(options)
 		end
-		
+	
 
 		# Find a page by slug and language
 		def find_by_slug_and_language( slug, language )
@@ -225,7 +280,7 @@ class Page < ActiveRecord::Base
 
 			( page ) ? page.translate( language ) : nil
 		end
-		
+	
 		# Convert a string to an URL friendly slug
 		def string_to_slug( string )
 			#slug = (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv string.gsub( /[Øø]/, "oe" ).gsub( /[Åå]/, "aa" ) ).downcase
@@ -244,12 +299,15 @@ class Page < ActiveRecord::Base
 
 	# ---- INSTANCE METHODS ---------------------------------------------------
 	
-	alias_method :acts_as_tree_parent, :parent
+	self.send :alias_method, :acts_as_tree_parent, :parent 
+
+	# Get this page's parent page.
 	def parent
 		parent_page = acts_as_tree_parent
 		parent_page.working_language = self.working_language if parent_page && parent_page.kind_of?(Page)
 		parent_page
 	end
+	alias_method :parent_page, :parent
 	
 	def tag_list=( tag_list )
 		tag_with( tag_list )
@@ -343,6 +401,27 @@ class Page < ActiveRecord::Base
 		options[:order]    ||= self.content_order
 		options[:language] ||= self.working_language if self.working_language
 		Page.get_pages( options )
+	end
+	
+	# Count subpages by year and month
+	def pages_count_by_year_and_month(options={})
+		if options[:category]
+			pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
+			                     FROM pages p, pages_categories c
+			                     WHERE c.category_id = #{options[:category].id} AND c.page_id = p.id AND p.parent_page_id = #{self.id} AND p.status = 2 
+			                     GROUP BY year, month"
+		else
+			pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
+			                     FROM pages p 
+			                     WHERE p.parent_page_id = #{self.id} AND p.status = 2 
+			                     GROUP BY year, month"
+		end
+		pages_count = ActiveSupport::OrderedHash.new
+		ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
+			year, month, page_count = row.mapped.to_i
+			(pages_count[year] ||= ActiveSupport::OrderedHash.new)[month] = page_count
+		end
+		pages_count
 	end
 	
 

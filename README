@@ -1,17 +1,83 @@
 
-== Dependencies ==
+= Documentation starting points
 
-Pages requires Rails > 2.0. Additionally, the following gems are required and can be 
+== Helpers
+
+* ApplicationHelper - Global helpers
+* VideoHelper - Helpers for video embeds
+* Admin::AdminHelper - Helpers for Admin modules
+
+== Models
+
+Account, Category, Event, Feed, FeedItem, Imageset, MailSubscriber, Mailing, Mailout, 
+Page, PageComment, PageFile, Partial, SetImage, SmsSubscriber, Tag, Tagging, Textbit, 
+User and UserLogin.
+
+== Mailers
+
+AdminMailer and Notifications.
+
+== Controllers
+
+*Global*
+
+* PagesCore::ApplicationController - All controllers inherit this. Provides authentication and error handling.
+* ErrorsController - Renders error messages
+
+*Frontend*
+
+* FeedsController
+* PagesController 
+* PageFilesController
+* XmlController - Legacy controller. The Flash API uses this.
+
+*Admin*
+
+* Admin::AdminController - Abstract controller for all Admin:: controllers.
+* Admin::AccountsController
+* Admin::CategoriesController
+* Admin::FilesController
+* Admin::NewsletterController
+* Admin::PageFilesController
+* Admin::PagesController
+* Admin::PartialsController
+* Admin::UsersController
+
+*Libraries*
+
+* Apparat - SMS service interface
+* FeedBuilder - Creates RSS 2.0 feeds
+* Language - Languages support
+* MumboJumbo - Internationalization of strings
+* PagesCore - Core libraries for Pages
+* Postnummer - Norwegian postal codes
+
+
+
+= Installation
+
+== Dependencies
+
+Pages requires Rails > 2.0. The following gems are required and can be 
 installed from Rubyforge:
 
-acts_as_ferret, BlueCloth, enumerable_mapper, ferret, hpricot, lame_encoder, mp3info, 
-RedCloth, simple-rss, uuidtools, vector2d
+* acts_as_ferret
+* BlueCloth
+* enumerable_mapper
+* ferret
+* hpricot 
+* lame_encoder 
+* mp3info
+* RedCloth
+* simple-rss
+* uuidtools 
+* vector2d
 	
-Additionally, the manual_support gem is required, and can be downloaded from:
+Additionally, the <tt>manual_support</tt> gem is required. This can be downloaded from:
 http://svn.manualdesign.no/svn/backstage/gems/manual_support/trunk/
 
 
-== Dependencies: Plugins ==
+=== Plugins
 
 These plugins are required:
 	acts_as_list        http://dev.rubyonrails.com/svn/rails/plugins/acts_as_list

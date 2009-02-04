@@ -2,7 +2,7 @@
 	if page.news_page?
 		subpages = []
 	else
-		subpages = page.pages( :show_drafts => true, :show_hidden => true, :show_all_languages => true )
+		subpages = page.pages( :drafts => true, :hidden => true, :all_languages => true )
 	end
 	page_classes = ['page']
 	page_classes << 'page_without_language' unless page.name?
