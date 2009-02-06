@@ -13,6 +13,7 @@ module PagesCore
 	config :page_additional_files,  false
     config :newsletter_template,    false
 	config :newsletter_image,       false
+	config :page_cache,             false
 end
 
 module ActionController
