@@ -3,10 +3,10 @@ class PagesController < ApplicationController
 	include ApplicationHelper
 	
 	def send_cache_headers
-		if PagesCore.config( :http_caching )
+		if PagesCore.config(:http_caching)
 			cache_time = 2.minutes
 			response.headers['Cache-Control'] = "max-age: #{cache_time.to_s}, must-revalidate"
-			response.headers['Expires']       = ( Time.now + cache_time ).to_formatted_s( :rfc822 )
+			response.headers['Expires']       = (Time.now + cache_time).to_formatted_s(:rfc822)
 		end
 	end
 	before_filter :send_cache_headers
@@ -15,22 +15,23 @@ class PagesController < ApplicationController
 
 	before_filter :find_page, :only => [ :show ]
 	
+	# Add a comment to a page. Recaptcha is performed if PagesCore.config(:recaptcha) is set.
 	def add_comment
-		@page = Page.find( params[:id] ) rescue nil
+		@page = Page.find(params[:id]) rescue nil
 		unless @page
 			redirect_to "/" and return
 		end
 		remote_ip = request.env["REMOTE_ADDR"]
-		@comment = PageComment.new( params[:page_comment].merge( { :remote_ip => remote_ip, :page_id => @page.id } ) )
+		@comment = PageComment.new(params[:page_comment].merge({:remote_ip => remote_ip, :page_id => @page.id}))
 		if @page.comments_allowed?
-			if PagesCore.config( :recaptcha ) && !verify_recaptcha
+			if PagesCore.config(:recaptcha) && !verify_recaptcha
 				render_page
 			else
 				@comment.save
-				redirect_to page_url( @page ) and return
+				redirect_to page_url(@page) and return
 			end
 		else
-			redirect_to page_url( @page ) and return
+			redirect_to page_url(@page) and return
 		end
 	end
 
@@ -49,6 +50,7 @@ class PagesController < ApplicationController
 		end
 	end
 	
+	# Search pages
 	def search
         @search_query = params[:q] || ""
         normalized_query = @search_query.split(/\s+/).map{|p| "*#{p}*"}.join(' ')
@@ -66,7 +68,7 @@ class PagesController < ApplicationController
 				end
 			end
 			format.rss do
-				@encoding = ( params[:encoding] ||= "UTF-8" ).downcase
+				@encoding = (params[:encoding] ||= "UTF-8").downcase
 				@page.working_language = @language || Language.default
 				@page_title ||= @page.name.to_s
 				response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
@@ -79,11 +81,11 @@ class PagesController < ApplicationController
 		if params[:root_id]
 			page = Page.find( params[:root_id] ) rescue nil
 			if page
-				@pages = page.pages( :language => @language )
+				@pages = page.pages(:language => @language)
 			end
 		end
 		unless @pages
-			@pages = Page.root_pages( :language => @language )
+			@pages = Page.root_pages(:language => @language)
 		end
 		render :layout => false
 	end
@@ -93,29 +95,24 @@ class PagesController < ApplicationController
 	protected
 
 		before_filter :load_root_pages
-		#def load_pages
-		#	@root_pages = Page.root_pages( :language => @language )
-		#	@rss_feeds = Page.find( :all, :conditions => 'feed_enabled = 1 AND status = 2' ).collect{ |p| p.working_language = @language; p }
-		#end
 		
 		def find_page
 			unless @page
 				if params[:id]
-					@page = Page.find( params[:id] ) rescue nil
-					@page ||= Page.find_by_slug_and_language( params[:id], @language )
+					@page = Page.find(params[:id]) rescue nil
+					@page ||= Page.find_by_slug_and_language(params[:id], @language)
 				end
 			end
 		end
 	
 		def render_page
-			
 			@page.working_language = @language || Language.default
 
 			if @page.redirects?
-				redirect_to( @page.redirect_to_options( { :language => @language } ) ) and return
+				redirect_to(@page.redirect_to_options({:language => @language})) and return
 			end
 
-			@root_subpages = @page.root_page.pages( :language => @language )
+			@root_subpages = @page.root_page.pages(:language => @language)
 			
 			@page_title ||= @page.name.to_s
 
@@ -134,16 +131,4 @@ class PagesController < ApplicationController
 				render :template => "pages/#{template}"
 			end
 		end
-
-		# Redirect to the first root page if no page is given.
-		#def no_page_given
-		#	# redirect to first page
-		#	if @page = Page.root_pages.first
-		#		@page.working_language = @language
-		#		redirect_to :slug => @page.slug.to_s, :language => @language, :action => :index
-		#	else
-		#		render :text => "No pages have been created yet."
-		#	end
-		#end
-	
 end

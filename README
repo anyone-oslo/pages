@@ -80,9 +80,11 @@ http://svn.manualdesign.no/svn/backstage/gems/manual_support/trunk/
 === Plugins
 
 These plugins are required:
-	acts_as_list        http://dev.rubyonrails.com/svn/rails/plugins/acts_as_list
-	acts_as_tree        http://dev.rubyonrails.com/svn/rails/plugins/acts_as_tree
-	engines             http://svn.rails-engines.org/engines/trunk
+	acts_as_list        http://svn.manualdesign.no/svn/backstage/resourced-plugins/acts_as_list
+	acts_as_tree        http://svn.manualdesign.no/svn/backstage/resourced-plugins/acts_as_tree
+	engines             http://svn.manualdesign.no/svn/backstage/resourced-plugins/engines
+	recaptcha           http://svn.manualdesign.no/svn/backstage/resourced-plugins/recaptcha
+	thinking-sphinx     http://svn.manualdesign.no/svn/backstage/resourced-plugins/thinking-sphinx
 	dynamic_image       http://svn.manualdesign.no/svn/backstage/plugins/dynamic_image/trunk
 	pages               http://svn.manualdesign.no/svn/backstage/plugins/pages/trunk
 

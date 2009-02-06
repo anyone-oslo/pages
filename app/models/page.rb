@@ -543,6 +543,7 @@ class Page < ActiveRecord::Base
 
 	# Returns boolean true if page has a valid redirect
 	def redirects?
+		return false if self.redirect_to == "0"
 		return true if self.redirect_to.kind_of? String and !self.redirect_to.strip.empty?
 		return true if self.redirect_to.kind_of? Hash   and !self.redirect_to.empty?
 		return false

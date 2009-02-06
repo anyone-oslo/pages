@@ -54,7 +54,7 @@ class Admin::AdminController < ApplicationController
 
 	# Get name of class with in lowercase, with underscores.
 	def self.underscore
-		Inflector.underscore( self.to_s ).split( /\// ).last
+		ActiveSupport::Inflector.underscore( self.to_s ).split( /\// ).last
 	end
 
 	# Register a menu item (for extending with custom controllers
