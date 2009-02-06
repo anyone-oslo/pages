@@ -139,7 +139,10 @@ class PagesController < ApplicationController
 		# Cache pages by hand. This is dirty, but it works.
 		def cache_page_request
 			if PagesCore.config(:page_cache) && @page && @language
-				request_path = url_for( :controller => 'pages', :action => :show, :id => @page, :language => @language, :only_path => true ) 
+				request_options = {:controller => 'pages', :action => :show, :id => @page, :language => @language, :only_path => true}
+				request_options[:page] = params[:page] if params[:page]
+				request_options[:category_name] = params[:category_name] if params[:category_name]
+				request_path = url_for(request_options) 
 				request_path += ".#{params[:format]}" if params[:format]
 				self.class.cache_page response.body, request_path
 			end

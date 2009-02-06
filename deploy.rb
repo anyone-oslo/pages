@@ -38,12 +38,12 @@ namespace :pages do
 
 	desc "Create shared directories"
 	task :create_shared_dirs, :roles => [:web,:app] do
-		run "mkdir #{deploy_to}/#{shared_dir}/cache"
-		run "mkdir #{deploy_to}/#{shared_dir}/public_cache"
-		run "mkdir #{deploy_to}/#{shared_dir}/sockets"
-		run "mkdir #{deploy_to}/#{shared_dir}/sessions"
-		run "mkdir #{deploy_to}/#{shared_dir}/index"
-		run "mkdir #{deploy_to}/#{shared_dir}/sphinx"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/cache"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/public_cache"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/sockets"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/sessions"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/index"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/sphinx"
 	end
 
 	desc "Fix permissions"
