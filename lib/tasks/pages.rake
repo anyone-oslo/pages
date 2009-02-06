@@ -89,6 +89,11 @@ namespace :pages do
 			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.2.2'" do
 				abort "\nRails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
 			end
+			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
+				puts "config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
+			end
+			
+			#config.action_view.cache_template_loading
 			if !File.exists?('app/views/pages/templates')
 				puts "Page template dir not found, moving old templates..."
 				`svn mkdir app/views/pages/templates`
