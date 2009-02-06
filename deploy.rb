@@ -43,7 +43,7 @@ namespace :pages do
 		run "mkdir #{deploy_to}/#{shared_dir}/sockets"
 		run "mkdir #{deploy_to}/#{shared_dir}/sessions"
 		run "mkdir #{deploy_to}/#{shared_dir}/index"
-		run "mkdir #{deploy_to}/#{shared_dir}/medieinformasjon" # FJ specific
+		run "mkdir #{deploy_to}/#{shared_dir}/sphinx"
 	end
 
 	desc "Fix permissions"
@@ -60,6 +60,7 @@ namespace :pages do
 		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
 		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
 		run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
+		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
 		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
 	end
 end

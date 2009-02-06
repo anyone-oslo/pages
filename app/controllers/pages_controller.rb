@@ -1,6 +1,10 @@
 class PagesController < ApplicationController
 
 	include ApplicationHelper
+
+	if PagesCore.config(:page_cache)
+		caches_page :index
+	end
 	
 	def send_cache_headers
 		if PagesCore.config(:http_caching)
