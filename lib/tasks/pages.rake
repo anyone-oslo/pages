@@ -71,7 +71,7 @@ namespace :pages do
 						unless file_content == patched_file_content
 							puts "Patching file #{path}.."
 							updated_files << path
-							File.open(path, 'w') {|fh| fh.write(patched_file_content) }
+							File.open(path, 'w') {|fh| fh.write(patched_file_content)}
 						end
 					end
 				end
@@ -80,7 +80,7 @@ namespace :pages do
 				end
 			end
 			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.2.2'" do
-				abort "\nRails gem version updated to newest, stopping. Please rerun this task to complete."
+				abort "\nRails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
 			end
 		end
 
