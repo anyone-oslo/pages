@@ -65,7 +65,22 @@ namespace :pages do
 	end
 end
 
+namespace :cache do
+	"Do not flush the page cache on reload"
+	task :keep do
+	    set :flush_cache, false
+	end
+
+	desc "Flush the page cache"
+	task :flush, :roles => :app do
+	    if flush_cache
+	        run "cd #{deploy_to}/#{current_dir} && rake pages:cache:sweep RAILS_ENV=production"
+	    end
+	end
+end
+
 after "deploy:setup",    "pages:create_shared_dirs"
 after "deploy:symlink",  "pages:fix_permissions"
 after "deploy:symlink",  "pages:create_symlinks"
+after "deploy:restart",  "cache:flush"
 before "deploy:migrate", "deploy:fix_plugin_migrations"
