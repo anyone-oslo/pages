@@ -1,11 +1,11 @@
-set :remote_host, "server.manualdesign.no" unless variables[:remote_host]
-set :remote_user, "rails" unless variables[:remote_user]
+set :remote_host, "server.manualdesign.no"
+set :remote_user, "rails"
 
-set :runner,      remote_user unless variables[:runner]
-set :user,        remote_user unless variables[:user]
+set :runner,      remote_user
+set :user,        remote_user
 set :use_sudo,    false
-set :deploy_to,   "/var/www/#{application}" unless variables[:deploy_to]
-set :web_server,  :apache2 unless variables[:web_server]
+set :deploy_to,   "/var/www/#{application}"
+set :web_server,  :apache2
 
 set :repository,  "http://svn.manualdesign.no/svn/backstage/sites/#{application}/trunk"
 set :scm, :subversion
@@ -30,7 +30,7 @@ namespace :deploy do
 
 	desc "Update plugin migrations"
 	task :fix_plugin_migrations, :roles => [:db] do
-		run "cd #{deploy_to}/#{current_dir} && rake pages:update:fix_plugin_migrations"
+		run "cd #{release_path} && rake pages:update:fix_plugin_migrations RAILS_ENV=production --trace"
 	end
 end
 
