@@ -126,9 +126,9 @@ class PagesController < ApplicationController
 			end
 			
 			if @disable_layout
-				render :template => "pages/#{template}", :layout => false
+				render :template => "pages/templates/#{template}", :layout => false
 			else
-				render :template => "pages/#{template}"
+				render :template => "pages/templates/#{template}"
 			end
 		end
 end

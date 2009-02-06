@@ -36,7 +36,19 @@ class Page < ActiveRecord::Base
 	
 	before_save    { |page| page.published_at = Time.now unless page.published_at? }
 	
-	acts_as_ferret :fields => { :names_for_search => { :boost => 2 }, :content_for_search => {} }
+	# fuck a ferret
+	#acts_as_ferret :fields => { :names_for_search => { :boost => 2 }, :content_for_search => {} }
+	
+	# define_index do
+	# 	# fields
+	# 	#indexes [author.realname, author.email], :as => author_name
+	# 	
+	# 	# attributes
+	# 	has published_at, status, user_id, template, parent_page_id
+	# 
+	# 	#set_property :delta => true
+	# end
+	
 
 	# ---- CLASS METHODS ------------------------------------------------------
 
@@ -352,8 +364,8 @@ class Page < ActiveRecord::Base
 			logger.info "caching templates"
 			locations = 
 			[
-				File.join(File.dirname(__FILE__), '../views/pages'),
-				File.join(File.dirname(__FILE__), '../../../../../app/views/pages')
+				File.join(File.dirname(__FILE__), '../views/pages/templates'),
+				File.join(File.dirname(__FILE__), '../../../../../app/views/pages/templates')
 			]
 			templates = locations.collect do |location|
 				Dir.entries( location ).select { |f| File.file?( File.join( location, f ) ) and !f.match( /^_/ ) } if File.exists? location

@@ -57,6 +57,18 @@ class User < ActiveRecord::Base
 		user.web_link = "http://"+user.web_link if user.web_link? and !( user.web_link =~ /^[\w]+:\/\// )
 		user.is_admin = true if user.is_super_admin?
 	end
+	
+	# define_index do
+	# 	# fields
+	# 	indexes username, realname, email, mobile
+	# 
+	# 	# attributes
+	# 	has :last_login_at, :type => :datetime
+	# 	has :created_at, :type => :datetime
+	# 	has "is_activated = 1", :type => :boolean, :as => :is_activated
+	# 	
+	# 	#set_property :delta => true
+	# end
 
 	class << self # -- Class methods ------------------------------------------
 	

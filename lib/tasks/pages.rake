@@ -62,17 +62,24 @@ namespace :pages do
 		desc "Patch files"
 		task :files do
 			require 'find'
+			def find_files(file_expression)
+				paths = []
+				Find.find(".") do |path|
+					if path.gsub(/^\.?\/?/,'') =~ file_expression && !(path =~ /\.svn/)
+						paths << path
+					end
+				end
+				paths
+			end
 			def patch_files(file_expression, expression, sub)
 				updated_files = []
-				Find.find(".") do |path|
-					if path.gsub(/^\.?\/?/,'') =~ file_expression
-						file_content = File.read(path)
-						patched_file_content = file_content.gsub(expression, sub)
-						unless file_content == patched_file_content
-							puts "Patching file #{path}.."
-							updated_files << path
-							File.open(path, 'w') {|fh| fh.write(patched_file_content)}
-						end
+				find_files(file_expression).each do |path|
+					file_content = File.read(path)
+					patched_file_content = file_content.gsub(expression, sub)
+					unless file_content == patched_file_content
+						puts "Patching file #{path}.."
+						updated_files << path
+						File.open(path, 'w') {|fh| fh.write(patched_file_content)}
 					end
 				end
 				if updated_files.length > 0
@@ -81,6 +88,18 @@ namespace :pages do
 			end
 			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.2.2'" do
 				abort "\nRails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
+			end
+			if !File.exists?('app/views/pages/templates')
+				puts "Page template dir not found, moving old templates..."
+				`svn mkdir app/views/pages/templates`
+				find_files(%r%^app/views/pages/[\w\d\-_]+\.[\w\d\-_\.]+%).each do |path|
+					new_path = path.split('/')
+					filename = new_path.pop
+					new_path << 'templates'
+					new_path << filename
+					new_path = new_path.join('/')
+					`svn mv #{path} #{new_path}`
+				end
 			end
 		end
 
