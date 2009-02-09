@@ -1,5 +1,5 @@
 module PagesCore
-	def self.config( key, value=nil )
+	def self.config(key, value=nil)
 		key = key.to_s
 		@@config ||= {}
 		@@config[key] = value if value != nil
@@ -50,8 +50,19 @@ module ActionController
 	end
 end
 	
+require "pages_core/acts_as_textable"
+require "pages_core/methoded_hash"
+require "pages_core/cache_sweeper"
+require "pages_core/application_controller"
+require "pages_core/string_translator"
+require "pages_core/string_extensions"
+require "pages_core/array_extensions"
+require "pages_core/awstats"
 
-%w{acts_as_textable application_controller string_translator string_extensions array_extensions awstats}.each{|l| require "pages_core/#{l}"}
+
+
+
+
 
 
 
