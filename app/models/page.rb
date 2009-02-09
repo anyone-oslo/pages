@@ -30,7 +30,7 @@ class Page < ActiveRecord::Base
 	@@available_templates_cached = nil
 	
 	validate do |page|
-		page.errors.add( :name, 'must have a title' ) if page.name.empty? # and !page.deleted?
+		#page.errors.add( :name, 'must have a title' ) if page.name.empty? # and !page.deleted?
 		page.template ||= page.default_template
 	end
 	
