@@ -73,7 +73,17 @@ class Admin::PagesController < Admin::AdminController
 	def create
 		@page = Page.new.translate( @language )
 		@page.author = @current_user
-		if @page.update_attributes( params[:page] )
+		textbit_attributes = {}
+		[:name, :body, :excerpt, :headline].each do |attrib|
+			if params[:page].has_key?(attrib)
+				textbit_attributes[attrib] = params[:page][attrib] 
+				params[:page].delete(attrib)
+			end
+		end
+		if @page.update_attributes(params[:page])
+			textbit_attributes.each do |attrib,value|
+				@page.update_attribute(attrib, value)
+			end
 			redirect_to edit_admin_page_url( @language, @page )
 		else
 			render :action => :new
@@ -98,7 +108,17 @@ class Admin::PagesController < Admin::AdminController
 		if params[:page].has_key? :image
 			params[:page].delete( :image ) if params[:page][:image].blank?
 		end	
+		textbit_attributes = {}
+		[:name, :body, :excerpt, :headline].each do |attrib|
+			if params[:page].has_key?(attrib)
+				textbit_attributes[attrib] = params[:page][attrib] 
+				params[:page].delete(attrib)
+			end
+		end
 		if @page.update_attributes( params[:page] )
+			textbit_attributes.each do |attrib,value|
+				@page.update_attribute(attrib, value)
+			end
 		    if params[:category] && params[:category].length > 0
 			    @page.categories = params[:category].map{|k,v| Category.find(k.to_i)}
 		    else
