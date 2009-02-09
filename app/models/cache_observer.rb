@@ -2,7 +2,11 @@ class CacheObserver < ActiveRecord::Observer
 	observe PagesCore::CacheSweeper.config.observe
 
 	def clean_cache_for(record)
-		swept_files = PagesCore::CacheSweeper.sweep!
+		if record.kind_of?(Image)
+			swept_files = PagesCore::CacheSweeper.sweep_image!(record)
+		else
+			swept_files = PagesCore::CacheSweeper.sweep!
+		end
 		record.logger.info "Cleaning cache for #{record.class} ##{record.id}, #{swept_files.length} files deleted." if record.respond_to?(:logger)
 	end
 
