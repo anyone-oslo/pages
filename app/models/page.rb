@@ -387,8 +387,8 @@ class Page < ActiveRecord::Base
 		parent_template = parent.template.split(/_/).reject { |w| reject_words.include? w }.join( " " )
 		
 		tpl = Page.available_templates.select{ |t| t.match( Regexp.new( '^'+Regexp.quote( parent_template )+'_?(post|page|subpage|item)' ) ) }.first rescue nil
-		unless tpl and parent_template == Inflector::singularize( parent_template )
-			tpl = Page.available_templates.select{ |t| t.match( Regexp.new( '^'+Regexp.quote( Inflector::singularize( parent_template ) ) ) ) }.first rescue nil
+		unless tpl and parent_template == ActiveSupport::Inflector::singularize( parent_template )
+			tpl = Page.available_templates.select{ |t| t.match( Regexp.new( '^'+Regexp.quote( ActiveSupport::Inflector::singularize( parent_template ) ) ) ) }.first rescue nil
 		end
 		tpl ||= "index"
 	end
