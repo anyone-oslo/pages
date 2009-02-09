@@ -325,6 +325,18 @@ class Page < ActiveRecord::Base
 		tag_with( tag_list )
 	end
 
+	self.send :alias_method, :acts_as_tree_ancestors, :ancestors 
+	
+	# Finds this page's ancestors
+	def ancestors
+		ancestors = self.acts_as_tree_ancestors
+		if self.working_language
+			ancestors = ancestors.map{|a| a.translate(self.working_language) }
+		end
+		ancestors
+	end
+	
+
 	def is_ancestor?( page )
 		page.ancestors.include?( self )
 	end
