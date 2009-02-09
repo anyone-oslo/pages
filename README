@@ -73,9 +73,6 @@ installed from Rubyforge:
 * uuidtools 
 * vector2d
 	
-Additionally, the <tt>manual_support</tt> gem is required. This can be downloaded from:
-http://svn.manualdesign.no/svn/backstage/gems/manual_support/trunk/
-
 
 === Plugins
 

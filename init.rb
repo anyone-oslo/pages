@@ -1,6 +1,6 @@
 # Gem dependencies
 gem 'vector2d'
-require 'manual_support'
+#require 'manual_support'
 
 require 'digest/sha1'
 require 'enumerable_mapper'

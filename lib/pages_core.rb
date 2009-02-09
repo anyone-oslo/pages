@@ -51,5 +51,7 @@ module ActionController
 end
 	
 
-%w{acts_as_textable application_controller string_translator awstats}.each{|l| require "pages_core/#{l}"}
+%w{acts_as_textable application_controller string_translator string_extensions array_extensions awstats}.each{|l| require "pages_core/#{l}"}
+
+
 
