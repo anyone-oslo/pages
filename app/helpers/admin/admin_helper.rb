@@ -15,6 +15,24 @@ module Admin::AdminHelper
 		end
 		html
 	end
+	
+	def admin_javascript_tags
+		output = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
+
+		controller_name    = controller.class.to_s.demodulize
+		action_name        = params[:action]
+		controller_script = controller.class.to_s.underscore
+
+		if File.exists?(File.join(File.dirname(__FILE__), "../../../public/javascripts/#{controller_script}.js"))
+			output += "\t"+javascript_include_tag(controller_script, :plugin => 'pages') + "\n"
+			output += "<script type=\"text/javascript\">"
+			output += "  Admin.controller = Admin.#{controller_name};";
+			output += "  Admin.action     = \"#{action_name}\"";
+			output += "</script>"
+		end
+		
+		output
+	end
 
 	# Generate HTML for a field, with label and optionally description and errors.
 	#

@@ -102,9 +102,6 @@ class Admin::PagesController < Admin::AdminController
 	def edit
 		@authors = User.find( :all )
 		@new_image ||= Image.new
-		if params[:show_tab]
-			@show_tab = params[:show_tab]
-		end
 	end
 
 	def preview
@@ -153,7 +150,7 @@ class Admin::PagesController < Admin::AdminController
 
 	def add_image
 		@page.images.create( params[:image] )
-		redirect_to edit_admin_page_url( :language => @language, :id => @page, :show_tab => 'additional images' )
+		redirect_to edit_admin_page_url( :language => @language, :id => @page, :anchor => 'additional_images' )
 	end
 	
 	def delete_image
@@ -162,7 +159,7 @@ class Admin::PagesController < Admin::AdminController
 			@page.images.delete( @image )
 			@image.destroy
 		end
-		redirect_to edit_admin_page_url( :language => @language, :id => @page, :show_tab => 'additional images' )
+		redirect_to edit_admin_page_url( :language => @language, :id => @page, :anchor => 'additional_images' )
 	end
 	
 	def delete_presentation_image
@@ -170,7 +167,7 @@ class Admin::PagesController < Admin::AdminController
 			@page.image.destroy
 			flash[:notice] = "Image deleted"
 		end
-		redirect_to edit_admin_page_url( :language => @language, :id => @page, :show_tab => 'presentation' )
+		redirect_to edit_admin_page_url( :language => @language, :id => @page, :anchor => 'presentation' )
 	end
 	
 	def update_image_caption
@@ -203,7 +200,7 @@ class Admin::PagesController < Admin::AdminController
 			@comment.destroy
 			flash[:notice] = "Comment deleted"
 		end
-		redirect_to edit_admin_page_url( :language => @language, :id => @page, :show_tab => 'comments' )
+		redirect_to edit_admin_page_url( :language => @language, :id => @page, :anchor => 'comments' )
 	end
 	
 

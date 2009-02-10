@@ -1,5 +1,8 @@
 var PagesAdmin = {
 
+	controller : false,
+	action : false,
+
 	sniffBrowser : function() {
 		if(navigator) {
 			jQuery.each(Array("WebKit","Gecko","Firefox"), function(){
@@ -35,8 +38,19 @@ var PagesAdmin = {
 		if(PagesAdmin.contentTabs) {
 			PagesAdmin.contentTabs.init();
 		}
+		
+		// Call the controller action
+		if(PagesAdmin.controller) {
+			if(PagesAdmin.controller.init){
+				PagesAdmin.controller.init();
+			}
+			if(PagesAdmin.action && PagesAdmin.controller[PagesAdmin.action]) {
+				PagesAdmin.controller[PagesAdmin.action]();
+			}
+		}
 	}
 }
+var Admin = PagesAdmin;
 
 PagesAdmin.contentTabs = {
 
