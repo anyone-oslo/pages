@@ -17,16 +17,20 @@ module ApplicationHelper
 		end
 	end
 	
-	def head_tag( options={}, &block )
+	def head_tag(options={}, &block)
 
 		# Get options
 		options[:language] ||= @language
 		options[:charset] ||= "utf-8"
 		language_definition = Language.definition( options[:language] ).iso639_1 || "en"
 		unless options.has_key?( :title )
-			options[:title] = PagesCore.config( :site_name )
+			options[:title] = PagesCore.config(:site_name)
 			if @page_title
-				options[:title] += " - #{@page_title}"
+				if options[:prepend_page_title]
+					options[:title] = "#{@page_title} - #{options[:title]}"
+				else
+					options[:title] += " - #{@page_title}"
+				end
 			end
 		end
 		
@@ -37,14 +41,27 @@ module ApplicationHelper
 		output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\"/>\n"
 		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\"/>\n"
 		output += "	<title>#{options[:title]}</title>\n"
-		output += indent( javascript_include_tag( *options[:javascript] ), 1 ) + "\n" if options.has_key? :javascript
-		output += indent( stylesheet_link_tag( *options[:stylesheet] ), 1 ) + "\n"    if options.has_key? :stylesheet
-		output += indent( feed_tags, 1 ) if options[:feed_tags]
+		output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
+		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
+		output += indent(feed_tags, 1) if options[:feed_tags]
+		output += "\n"
+		if page = @page
+			unless page.excerpt_or_body.to_s.empty?
+				output += "\t<meta name=\"description\" content=\""+h(page.excerpt_or_body.to_s)+"\"/>\n"
+			end
+			if page.image
+				# Facebook likes this
+				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
+			end
+			if page.tags?
+				output += "\t<meta name=\"keywords\" content=\""+page.tag_list+"\" />"
+			end
+		end
 		output += capture( &block ) if block_given?
 		output += "</head>\n"
 
 		# Inject HTML
-		concat( output, block.binding )
+		concat(output)
 		return ""
 	end
 	

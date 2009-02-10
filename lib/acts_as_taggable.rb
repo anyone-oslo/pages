@@ -50,7 +50,12 @@ module ActiveRecord
         end
 
         def tag_list
-          tags.collect { |tag| tag.name.include?(" ") ? "'#{tag.name}'" : tag.name }.join(" ")
+          #tags.collect { |tag| tag.name.include?(" ") ? "'#{tag.name}'" : tag.name }.join(", ")
+          tags.map{|t| t.name }.join(", ")
+        end
+
+        def tags?
+	      (self.taggings.count > 0) ? true : false
         end
       end
     end
