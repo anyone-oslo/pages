@@ -15,8 +15,9 @@ module PagesCore
 		if RAILS_ENV == "development"
 			# Hooks for development mode
 			def development_hooks
+				# Mirror plugin assets on each request in development mode
 				Rails.plugins.each do |plugin|
-					#plugin.mirror_public_assets
+					Engines::Assets.mirror_files_for(plugin)
 				end
 			end
 			before_filter :development_hooks

@@ -66,8 +66,6 @@
 			</span>
 		</p>
 	<% end %>
-	<%= content_tab "Content" %>
-	
 
 	<%# #### PRESENTATION #### %>
 	<% content_tab "Presentation" do %>
@@ -92,9 +90,7 @@
 				:errors      => @page.errors[:image_link]
 			%>
 		<% end %>
-
 	<% end %>
-	<%= content_tab "Presentation" %>
 	
 	<%# #### CATEGORIZATION #### %>
 	<% content_tab "Categorization" do %>
@@ -112,9 +108,6 @@
 			:errors      => @page.errors[:tag_list]
 		%>
 	<% end %>
-	<%= content_tab "Categorization" %>
-	
-	
 
 	<%# #### ADDITIONAL IMAGES #### %>
 	<% if PagesCore.config( :page_additional_images ) %>
@@ -157,7 +150,6 @@
 				<%= link_to_function "Add image", "Element.show('new-image');", :class => :create %>
 			</p>
 		<% end %>
-		<%= content_tab "Additional images" %>
 	<% end %>
 
 
@@ -182,7 +174,6 @@
 				<%= link_to_function "Add new file", "Element.show('new-file');", :class => :create %>
 			</p>
 		<% end %>
-		<%= content_tab "Files" %>
 	<% end %>
 
 
@@ -216,7 +207,6 @@
 			<p>No comments added.</p>
 		<% end %>
 	<% end %>
-	<%= content_tab "Comments" %>
 	
 
 	<%# #### ADVANCED OPTIONS #### %>
@@ -239,7 +229,6 @@
 			:errors      => @page.errors[:redirect_to]
 		%>
 	<% end %>
-	<%= content_tab "Options" %>
 	
 	<div class="buttons">
 		<%= button_to_function "Preview formatting", 'showPreview()' %>

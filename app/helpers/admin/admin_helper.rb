@@ -126,12 +126,15 @@ module Admin::AdminHelper
 		if block_given?
 			tab = {
 				:name    => name.to_s.humanize,
-				:key     => name.to_s.underscore,
+				:key     => name.to_s.underscore.gsub(/[\s]+/, '_'),
 				:options => options,
-				:content => capture( &block )
+				:content => capture(&block)
 			}
 			@content_tabs << tab
-			tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">#{tab[:content]}</div>"
+			tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">"
+			tab_output += "<a name=\"#{tab[:key]}\"></a>"
+			tab_output += tab[:content]
+			tab_output += "</div>"
 			concat(tab_output)
 		else
 			#    tab = @content_tabs.select{ |t| t[:key] == name.to_s.underscore }.first

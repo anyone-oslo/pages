@@ -29,7 +29,7 @@ module ApplicationHelper
 				if options[:prepend_page_title]
 					options[:title] = "#{@page_title} - #{options[:title]}"
 				else
-					options[:title] += " - #{@page_title}"
+					options[:title] = "#{options[:title]} - #{@page_title}"
 				end
 			end
 		end
@@ -41,7 +41,17 @@ module ApplicationHelper
 		output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\"/>\n"
 		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\"/>\n"
 		output += "	<title>#{options[:title]}</title>\n"
-		output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
+		#output += "\t"+javascript_include_tag(
+		if options.has_key?(:javascript)
+			options[:javascript].each do |js|
+				if js.kind_of?(Array)
+					output += "\t" + javascript_include_tag(js.first, js.last) + "\n"
+				else
+					output += "\t" + javascript_include_tag(js) + "\n"
+				end
+			end
+		end
+		#output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
 		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
 		output += indent(feed_tags, 1) if options[:feed_tags]
 		output += "\n"
