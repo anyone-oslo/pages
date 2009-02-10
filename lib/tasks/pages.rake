@@ -1,14 +1,5 @@
 namespace :pages do
 	
-	desc "Patch routes for Rails 2.0"
-	task :patch_routes => :environment do
-		require 'routepatcher'
-		dir = File.join(File.dirname(__FILE__),'..','..','..','..','..')
-		patcher = RoutePatcher.new( dir )
-		patcher.register_prefix( [ 'admin', 'pages' ] )
-		patcher.patch!
-	end
-
 	desc "Deliver mailing queue"
 	task :deliver_mailings => :environment do
 		puts "Delivering mailings"
@@ -27,29 +18,18 @@ namespace :pages do
 		Feed.refresh_feeds
 	end
 	
+	desc "Autopublish due pages"
+	task :autopublish => :environment do
+		published = Page.autopublish!
+		puts "Autopublished #{published.length} pages"
+	end
+	
 	desc "Perform routine maintenance"
-	task :maintenance => [ :clean_sessions, :refresh_feeds, :deliver_mailings ] do
-	end
-	
-	desc "Pack application for transporting (clear unnecessary files, dump schema)"
-	task :pack => :environment do
-		Rake::Task["log:clear"].invoke
-		Rake::Task["tmp:clear"].invoke
-		Rake::Task["doc:clobber_app"].invoke
-		Rake::Task["doc:clobber_rails"].invoke
-		Rake::Task["doc:clobber_plugins"].invoke
-		Rake::Task["db:schema:dump"].invoke
-	end
-	
-	desc "Unpack application (generate documentation)"
-	task :unpack => :environment do
-		Rake::Task["doc:app"].invoke
-		Rake::Task["doc:plugins"].invoke
+	task :maintenance => [:autopublish, :clean_sessions, :refresh_feeds, :deliver_mailings] do
 	end
 	
 	desc "Migration status"
 	task :migration_status => :environment do
-		
 		puts "Plugins:"
 		plugins = Rails.plugins.select{ |p| p.latest_migration }
 		longest_name = plugins.mapped.name.sort{|a,b| a.length <=> b.length }.last.length + 1
@@ -135,6 +115,15 @@ namespace :pages do
 				`svn -q add db/migrate/*`
 				puts "\nNew migrations added, now run rake db:migrate"
 			end
+		end
+
+		desc "Patch routes for Rails 2.0"
+		task :patch_routes => :environment do
+			require 'routepatcher'
+			dir = File.join(File.dirname(__FILE__),'..','..','..','..','..')
+			patcher = RoutePatcher.new( dir )
+			patcher.register_prefix( [ 'admin', 'pages' ] )
+			patcher.patch!
 		end
 	end 
 

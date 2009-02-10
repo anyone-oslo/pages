@@ -32,10 +32,18 @@ class Admin::PagesController < Admin::AdminController
 		@root_pages = Page.root_pages( 
 			:drafts        => true, 
 			:hidden        => true, 
-			:all_languages => true, 
+			:all_languages => true,
+			:autopublish   => true,
 			:language      => @language 
 		)
-		@all_pages = Page.get_pages(:language => @language, :drafts => true, :hidden => true, :all_languages => true, :skip_parent => true)
+		@all_pages = Page.get_pages(
+			:language => @language, 
+			:drafts => true, 
+			:hidden => true, 
+			:all_languages => true, 
+			:skip_parent => true, 
+			:autopublish => true
+		)
 	end
 	
 	def news
@@ -46,6 +54,7 @@ class Admin::PagesController < Admin::AdminController
 			:drafts => true, 
 			:hidden => true, 
 			:all_languages => true,
+			:autopublish => true,
 			:parent => (@section_id.to_s =~ /^[\d]+$/) ? @section_id : @news_pages
 		)
 	end

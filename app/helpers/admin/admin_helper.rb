@@ -132,7 +132,7 @@ module Admin::AdminHelper
 			}
 			@content_tabs << tab
 			tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">#{tab[:content]}</div>"
-			concat(tab_output, block.binding)
+			concat(tab_output)
 		else
 			#    tab = @content_tabs.select{ |t| t[:key] == name.to_s.underscore }.first
     		#    "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">#{tab[:content]}</div>"

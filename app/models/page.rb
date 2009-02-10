@@ -54,6 +54,17 @@ class Page < ActiveRecord::Base
 
 	class << self
 		
+		# Finds pages due for auto publishing and publishes them.
+		def autopublish!(options={})
+			options[:fuzziness] ||= 1.minute
+			publish_timestamp = Time.now + options[:fuzziness]
+			pages = self.find(:all, :conditions => ['autopublish = 1 AND autopublish_at < ?', publish_timestamp])
+			pages.each do |p|
+				p.update_attribute(:autopublish, false)
+			end
+			pages
+		end
+		
 		# Finds pages with comments, ordered by date of last comment.
 		#
 		# === Parameters
@@ -96,6 +107,7 @@ class Page < ActiveRecord::Base
 		# * <tt>:drafts</tt>           - Include drafts.
 		# * <tt>:hidden</tt>           - Include hidden pages.
 		# * <tt>:deleted</tt>          - Include deleted pages.
+		# * <tt>:autopublish</tt>      - Include autopublish pages
 		# * <tt>:all</tt>              - Include all of the above.
 		# * <tt>:language</tt>         - Load only pages translated into this language.
 		# * <tt>:all_languages</tt>    - Load all pages regardless of language.
@@ -136,12 +148,13 @@ class Page < ActiveRecord::Base
 					options[new_key] = options[key]
 				end
 			end
-			options[:all]     ||= false
-			options[:deleted] ||= options[:all]
-			options[:hidden]  ||= options[:all]
-			options[:drafts]  ||= options[:all]
+			options[:all]           ||= false
+			options[:deleted]       ||= options[:all]
+			options[:hidden]        ||= options[:all]
+			options[:drafts]        ||= options[:all]
+			options[:autopublish]   ||= options[:all]
 			options[:all_languages] ||= false
-			options[:order]        ||= "position"
+			options[:order]         ||= "position"
 
 			options[:parent] = options[:parents] if options[:parents]
 
@@ -165,6 +178,7 @@ class Page < ActiveRecord::Base
 				conditions << " AND status != 3"  unless options[:hidden]
 				conditions << " AND status >= 2"  unless options[:drafts]
 			end
+			conditions << " AND autopublish = 0" unless options[:autopublish]
 		
 			if options[:published_within]
 				options[:published_before] = options[:published_within].last
@@ -611,6 +625,11 @@ class Page < ActiveRecord::Base
 		end
 	end
 	
+	# Is this page published?
+	def published?
+		(self.status == 2 && !self.autopublish?) ? true : false
+	end
+
     def names_for_search
         self.textbits.select{ |tb| tb.name == "name" }.map{ |tb| tb.to_s }.join("\n")
     end
