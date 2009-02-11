@@ -49,10 +49,10 @@
 			:errors      => @page.errors[:headline],
 			:description => "Optional, use if the headline should differ from the page name."
 		%>
-		<%= labelled_field f.text_area( :body, :id => 'compose-body' ), "Body", 
+		<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => :rich), "Body", 
 			:errors      => @page.errors[:body]
 		%>
-		<%= labelled_field f.text_area( :excerpt, :rows => 5, :id => 'compose-teaser' ), "Teaser", 
+		<%= labelled_field f.text_area(:excerpt, :rows => 5, :id => 'compose-teaser', :class => :rich), "Teaser", 
 			:errors      => @page.errors[:excerpt]
 		%>
 		<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
@@ -72,19 +72,19 @@
 		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
 			:errors      => @page.errors[:template]
 		%>
-		<%= labelled_field f.file_field( :image ), "Image", 
-			:errors      => @page.errors[:template],
-			:description => "The template you have selected allows you to attach an image, which will be scaled and positioned to fit the design."
-		%>
-		<%= labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Caption" %>
 		<% if @page.image %>
 			<p>
-				<%= dynamic_image_tag @page.image, :size => '400x300', :crop => false %>
+				<%= editable_dynamic_image_tag(@page.image, :size => '400x300', :crop => false) %>
 			</p>
 			<p>
 				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
 			</p>
 		<% end %>
+		<%= labelled_field f.file_field( :image ), "Image", 
+			:errors      => @page.errors[:template],
+			:description => "The template you have selected allows you to attach an image, which will be scaled and positioned to fit the design."
+		%>
+		<%= labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Caption" %>
 		<% if @page.image && PagesCore.config( :page_image_is_linkable ) %>
 			<%= labelled_field f.text_field( :image_link ), "Image link <small>(including http://)</small>", 
 				:errors      => @page.errors[:image_link]
@@ -278,156 +278,3 @@
 		<% end %>
 	</div>
 <% end %>
-
-<script type="text/javascript">
-
-	function hidePreview() {
-		if( window.documentPreview ) {
-			document.body.removeChild( window.documentPreview );
-			window.documentPreview = false;
-		}
-	}
-
-	function showPreview() {
-		var url = "<%= preview_admin_page_url( :id => @page, :language => @language ) %>";
-		new Ajax.Request( url, {
-			method:     'post',
-			parameters: Form.serialize( 'page-form', true ),
-			onSuccess: function( transport ) {
-				hidePreview();
-				window.documentPreview = document.createElement( "div" );
-				window.documentPreview.id = "documentPreview";
-				window.documentPreview.innerHTML = transport.responseText;
-				document.body.appendChild( window.documentPreview );
-				Element.hide( window.documentPreview );
-				Effect.Appear( window.documentPreview, { duration: 0.6 } );
-			}
-		});
-	}
-	
-	Element.hide( 'new-image' );
-	if( $('new-file') ) {
-		Element.hide( 'new-file' );
-	}
-	
-	function checkAutopublishOptions(elmnt) {
-		if($('page_status').value == 2) {
-			Element.show('page_autopublish_field');
-		} else {
-			Element.hide('page_autopublish_field');
-		}
-		if($('page_autopublish').checked) {
-			Element.show($('page_autopublish_options'));
-		} else {
-			Element.hide($('page_autopublish_options'));
-		}
-	}
-	checkAutopublishOptions();
-
-	$('page_autopublish').observe('click', function(e){ checkAutopublishOptions(); });
-	$('page_status').observe('change', function(e){ checkAutopublishOptions(); });
-
-	// Apply magic to compose textarea
-	function applyTextarea(textareaId, toolbarId) {
-		var textarea = new Control.TextArea(textareaId, toolbarId);  
-		var toolbar = new Control.TextArea.ToolBar(textarea);  
-		toolbar.container.id = toolbarId; //for css styles  
-
-		// buttons
-		// http://textism.com/tools/textile/
-		toolbar.addButton('Bold',function(){  
-		    this.wrapSelection('*','*');  
-		},{  
-		    id: toolbarId+'-bold_button'  
-		});  
-
-		toolbar.addButton('Italics',function(){  
-		    this.wrapSelection('_','_');  
-		},{  
-		    id: toolbarId+'-italics_button'  
-		});  
-
-		toolbar.addButton('Header 2',function(){  
-		    var selection = this.getSelection();
-		    this.replaceSelection("h2. "+selection+"\n");
-		},{  
-		    id: toolbarId+'-h2_button'  
-		});
-		toolbar.addButton('Header 3',function(){  
-		    var selection = this.getSelection();
-		    this.replaceSelection("h3. "+selection+"\n");
-		},{  
-		    id: toolbarId+'-h3_button'  
-		});  
-		toolbar.addButton('Header 4',function(){  
-		    var selection = this.getSelection();
-		    this.replaceSelection("h4. "+selection+"\n");
-		},{  
-		    id: toolbarId+'-h4_button'  
-		});  
-
-
-		toolbar.addButton('Link',function(){  
-		    var selection = this.getSelection();
-		    var response = prompt('Enter link URL','');  
-		    this.replaceSelection(
-				'"' + (selection == '' ? "Link text" : selection) + '":' + 
-				(response == '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
-			);
-		},{  
-		    id: toolbarId+'-link_button'  
-		});
-		
-		toolbar.addButton('Mail',function(){  
-		    var selection = this.getSelection();
-		    var response = prompt('Enter mail address','');  
-		    this.replaceSelection(
-				'"' + (selection == '' ? "Link text" : selection) + '":mailto:' + 
-				(response == '' ? 'support@manualdesign.no' : response)
-			);
-		},{  
-		    id: toolbarId+'-mail_button'  
-		});
-
-		toolbar.addButton('Image',function(){  
-		    var selection = this.getSelection();  
-			if( selection == '') {
-			    var response = prompt('Enter image URL',''); 
-			    if(response == null)  
-			        return;  
-				this.replaceSelection('!'+response+'!');
-			} else {
-				this.replaceSelection('!'+selection+'!');
-			}
-		},{  
-		    id: toolbarId+'-image_button'  
-		});  
-
-		//toolbar.addButton('Unordered List',function(event){  
-		//    this.collectFromEachSelectedLine(function(line){  
-		//        return event.shiftKey ? (line.match(/^\*{2,}/) ? line.replace(/^\*/,'') : line.replace(/^\*\s/,'')) : (line.match(/\*+\s/) ? '*' : '* ') + line;  
-		//    });  
-		//},{  
-		//    id: 'compose_unordered_list_button'  
-		//});  
-
-		
-		//toolbar.addButton('Ordered List',function(event){  
-		//    var i = 0;  
-		//    this.collectFromEachSelectedLine(function(line){  
-		//        if(!line.match(/^\s+$/)){  
-		//            ++i;  
-		//            return event.shiftKey ? line.replace(/^\d+\.\s/,'') : (line.match(/\d+\.\s/) ? '' : i + '. ') + line;  
-		//        }  
-		//    });  
-		//},{  
-		//    id: 'compose_ordered_list_button'  
-		//});  
-
-
-	}
-
-	applyTextarea('compose-body', 'compose-body-toolbar');
-	applyTextarea('compose-teaser', 'compose-teaser-toolbar');
-
-</script>

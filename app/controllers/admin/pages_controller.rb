@@ -212,16 +212,6 @@ class Admin::PagesController < Admin::AdminController
 	end
 
 
-	def add_language
-		@page = Page.find( params[:id] )
-		if params[:language]
-			@page.add_language( params[:language] )
-			redirect_to :action => :edit, :id => @page, :language => params[:language]
-		end
-		@all_languages = Language.codes_and_names.collect {|lang| [lang[:name], lang[:code]] }
-		@application_languages = Textbit.languages.collect { |code| [ Language.name_for_code( code ), code ] }
-	end
-
 	def reorder
 		if params[:direction] == "up"
 			@page.move_higher

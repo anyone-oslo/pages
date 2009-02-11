@@ -1,3 +1,46 @@
+/* pages/index */
+.morepages {
+	clear: both;
+}
+.morepages .morepageslink {
+	margin-left: 32px;
+	font-size: 0.9em;
+	margin-bottom: 1em;
+	font-weight: bold;
+	display: block;
+}
+.pagelist {
+	float: left;
+}
+.pagelist .page {
+	border: 1px solid transparent;
+	padding: 3px 8px !important;
+}
+.pagelist ul {
+	overflow: auto;
+	border-left: 1px dotted #ccc !important;
+	margin-left: 12px !important;
+	padding-left: 8px !important
+}
+.pagelist ul .page {
+}
+.pagelist .page:hover {
+	background: #ffd;
+	border: 1px solid #dda;
+}
+.pagelist .page:hover .status {
+	display: none;
+}
+.pagelist .page a.page_name, .pagelist .page a.page_name:visited {
+	text-decoration: none;
+	color: #222;
+}
+.pagelist .page a.page_name:hover {
+	text-decoration: underline;
+}
+
+
+/* pages/edit */
 .edit_page {
 	padding-top: 1px;
 }

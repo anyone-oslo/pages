@@ -16,6 +16,13 @@ module Admin::AdminHelper
 		html
 	end
 	
+	# Generates tags for an editable dynamic image.
+	def editable_dynamic_image_tag(image, options={})
+		options[:class] ||= ""
+		options[:class] = (options[:class] + " editable").strip
+		link_to(dynamic_image_tag(image, options), admin_image_path(), :class => 'editableImage')
+	end
+
 	def admin_javascript_tags
 		output = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
 
