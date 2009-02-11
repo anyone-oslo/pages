@@ -35,7 +35,9 @@ Admin.PagesController = {
 		}
 
 		window.showPreview = function() {
-			var url = "<%= preview_admin_page_url( :id => @page, :language => @language ) %>";
+			alert("We're working on it");
+			/*
+			var url = document.location.toString().replace('/edit', '/preview');
 			new Ajax.Request( url, {
 				method:     'post',
 				parameters: Form.serialize( 'page-form', true ),
@@ -49,12 +51,11 @@ Admin.PagesController = {
 					Effect.Appear( window.documentPreview, { duration: 0.6 } );
 				}
 			});
+			*/
 		}
 
-		Element.hide( 'new-image' );
-		if( $('new-file') ) {
-			Element.hide( 'new-file' );
-		}
+		jQuery('#new-image').hide();
+		jQuery('#new-file').hide();
 
 		window.checkAutopublishOptions = function(elmnt) {
 			if($('page_status').value == 2) {

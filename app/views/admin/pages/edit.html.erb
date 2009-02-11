@@ -49,10 +49,10 @@
 			:errors      => @page.errors[:headline],
 			:description => "Optional, use if the headline should differ from the page name."
 		%>
-		<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => :rich), "Body", 
+		<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => 'rich'), "Body", 
 			:errors      => @page.errors[:body]
 		%>
-		<%= labelled_field f.text_area(:excerpt, :rows => 5, :id => 'compose-teaser', :class => :rich), "Teaser", 
+		<%= labelled_field f.text_area(:excerpt, :rows => 5, :id => 'compose-teaser', :class => 'rich'), "Teaser", 
 			:errors      => @page.errors[:excerpt]
 		%>
 		<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
@@ -74,7 +74,7 @@
 		%>
 		<% if @page.image %>
 			<p>
-				<%= editable_dynamic_image_tag(@page.image, :size => '400x300', :crop => false) %>
+				<%= dynamic_image_tag(@page.image, :size => '300x200') %>
 			</p>
 			<p>
 				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>

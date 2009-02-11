@@ -20,6 +20,10 @@ resources :page_files, :path_prefix => '/:language/pages/:page_id'
 
 # Resources for admin
 with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
+	admin.resources(
+		:images,
+		:controller => 'admin/images'
+	)
 	admin.resources( 
 		:users,    
 		:controller => 'admin/users', 

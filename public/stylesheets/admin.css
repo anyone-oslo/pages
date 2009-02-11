@@ -8,6 +8,7 @@
 @import url(admin/lightbox.css);
 @import url(admin/sortable_images.css);
 @import url(admin/textarea.css);
+@import url(admin/editable_image.css);
 @import url(admin/controllers/pages.css);
 
 body {
@@ -15,6 +16,9 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
+}
+body html {
+	min-height: 100%;
 }
 
 #main {
@@ -53,7 +57,6 @@ body {
 	color:           #779CB3;
 	margin:          0 4px;
 }
-
 
 
 
