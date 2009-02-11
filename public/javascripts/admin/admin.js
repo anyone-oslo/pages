@@ -50,7 +50,7 @@ function jRichTextArea(textArea, options){
 
 	// Default options
 	settings = jQuery.extend({
-	     class: "richTextToolbar"
+	     className: "richTextToolbar"
 	}, options);
 	
 	this.toolbar = {
@@ -61,15 +61,15 @@ function jRichTextArea(textArea, options){
 		addButton : function(name, callback, options) {
 			// Default options
 			settings = jQuery.extend({
-			     class: name.replace(/[\s]+/, '')+"Button"
+			     className: name.replace(/[\s]+/, '')+"Button"
 			}, options);
 			var li = document.createElement("li");
 			var a = document.createElement("a");
 			a.title = name;
 			a.textArea = this.textArea;
-			callback.this = this;
+			//callback.this = this;
 			jQuery(a).click(callback);
-			jQuery(a).addClass(settings.class);
+			jQuery(a).addClass(settings.className);
 			jQuery(li).append(a).appendTo(this.listElement);
 			this.buttons.push(li);
 			return this;
@@ -77,7 +77,7 @@ function jRichTextArea(textArea, options){
 		create : function() {
 			if(!this.listElement) {
 				this.listElement = document.createElement("ul");
-				jQuery(this.listElement).addClass(this.settings.class);
+				jQuery(this.listElement).addClass(this.settings.className);
 				jQuery(this.listElement).insertBefore(this.textArea);
 			}
 		}
@@ -349,7 +349,6 @@ PagesAdmin.contentTabs = {
 
 	tabs : new Array(),
 	ids : new Array(),
-	default : false,
 
 	show : function(tab_id) {
 		var tabs = PagesAdmin.contentTabs.tabs;
