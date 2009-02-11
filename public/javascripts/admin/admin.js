@@ -155,6 +155,7 @@ function EditableImage(link, options){
 				.append("<input type=\"button\" id=\"editableImageEditorClose\" value=\"Cancel\" />")
 
 			this.previewURL = this.linkedImage.src.replace(this.linkedImage.src.match(/([\d]*x[\d]*)/)[1], 'original/'+this.settings.width+'x');
+			this.previewURL = this.previewURL.replace(/([\?\d])*$/, '');
 
 			var binding = this;
 			jQuery('#editableImageEditorImage').each(function(){
