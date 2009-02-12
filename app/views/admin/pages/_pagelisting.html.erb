@@ -35,8 +35,8 @@
 			<li>News items</li>
 		</ul>
 	<% elsif subpages.length > 0 %>
-		<% if subpages.length > 13 %>
-			<ul><% subpages[0...10].each do |subpage| %>
+		<% if subpages.length > 23 %>
+			<ul><% subpages[0...20].each do |subpage| %>
 				<%= render :partial => "pagelisting", :locals => { :page => subpage } %>
 			<% end %></ul>
 			<!-- this seriously needs to be rewritten -->
