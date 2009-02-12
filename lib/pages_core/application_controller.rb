@@ -11,7 +11,10 @@ module PagesCore
 		after_filter  :set_headers,                :except => SKIP_FILTERS
 		after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
 		after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
-
+		
+		before_filter :set_process_title
+		after_filter  :unset_process_title
+		
 		if RAILS_ENV == "development"
 			# Hooks for development mode
 			def development_hooks
@@ -24,6 +27,20 @@ module PagesCore
 		end
 
 		protected
+		
+			def set_process_title
+				@@default_process_title ||= $0
+				@@number_of_requests ||= 0
+				@@number_of_requests += 1
+				rpath = request.env['REQUEST_PATH'] rescue nil
+				rpath ||= "Unknown"
+				$0 = "#{@@default_process_title} Handling: #{rpath} (#{@@number_of_requests} reqs)"
+			end
+			
+			def unset_process_title
+				set_process_title
+				$0 = "#{@@default_process_title} Idle (#{@@number_of_requests} reqs)"
+			end
 		
 			# Loads @root_pages and @rss_feeds. To automatically load these in your own controllers, 
 			# add the following line to your controller definition:

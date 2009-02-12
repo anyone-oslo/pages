@@ -24,9 +24,9 @@ end
 
 ActiveRecord::Base.send(:include, ActiveRecord::Acts::Taggable)
 
-if defined?(Mongrel)
-  require "mongrel_proctitle"
-end
+#if defined?(Mongrel)
+#  require "mongrel_proctitle"
+#end
 
 MumboJumbo.load_languages!
 MumboJumbo.translators << PagesCore::StringTranslator

@@ -52,7 +52,6 @@ module ActionController
 	# Monkey patch for fixing file upload breakage
 	class CgiResponse  
 		def out_with_espipe(*args)  
-			File.open(File.join(File.dirname(__FILE__), '../../../../log/cgiresponse.log'), 'a'){|fh| fh.write("out_with_espipe called\n")}
 			begin  
 				out_without_espipe(*args)  
 			rescue Errno::ESPIPE => exception  
