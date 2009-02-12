@@ -32,14 +32,12 @@ module PagesCore
 				@@default_process_title ||= $0
 				@@number_of_requests ||= 0
 				@@number_of_requests += 1
-				rpath = request.env['REQUEST_PATH'] rescue nil
-				rpath ||= "Unknown"
-				$0 = "#{@@default_process_title} Handling: #{rpath} (#{@@number_of_requests} reqs)"
+				$0 = "#{@@default_process_title}: Handling #{request.path} (#{@@number_of_requests} reqs)"
 			end
 			
 			def unset_process_title
 				set_process_title
-				$0 = "#{@@default_process_title} Idle (#{@@number_of_requests} reqs)"
+				$0 = "#{@@default_process_title}: Idle (#{@@number_of_requests} reqs)"
 			end
 		
 			# Loads @root_pages and @rss_feeds. To automatically load these in your own controllers, 
