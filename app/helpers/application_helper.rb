@@ -22,6 +22,7 @@ module ApplicationHelper
 		# Get options
 		options[:language] ||= @language
 		options[:charset] ||= "utf-8"
+		options[:author] ||= "Manual design (manualdesign.no)"
 		language_definition = Language.definition( options[:language] ).iso639_1 || "en"
 		unless options.has_key?( :title )
 			options[:title] = PagesCore.config(:site_name)
@@ -38,8 +39,9 @@ module ApplicationHelper
 		output  = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
 		output += "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language_definition}\" lang=\"#{language_definition}\">\n"
 		output += "<head>\n"
-		output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\"/>\n"
-		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\"/>\n"
+		output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\" />\n"
+		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
+		output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		output += "	<title>#{options[:title]}</title>\n"
 		#output += "\t"+javascript_include_tag(
 		if options.has_key?(:javascript)
@@ -56,16 +58,28 @@ module ApplicationHelper
 		output += indent(feed_tags, 1) if options[:feed_tags]
 		output += "\n"
 		if page = @page
-			unless page.excerpt_or_body.to_s.empty?
-				output += "\t<meta name=\"description\" content=\""+h(page.excerpt_or_body.to_s)+"\"/>\n"
+		    # META description
+		    if @meta_description
+		        options[:meta_description] = @meta_description
+	        elsif !page.excerpt.to_s.empty?
+	            options[:meta_description] = page.excerpt.to_s
+            end
+		    if options[:meta_description]
+				output += "\t<meta name=\"description\" content=\"#{options[:meta_description]}\" />\n"
+			end
+			# META keywords
+		    if @meta_keywords
+		        options[:meta_keywords] = @meta_keywords
+	        elsif !page.tags?
+	            options[:meta_keywords] = page.tag_list
+            end
+		    if options[:meta_keywords]
+				output += "\t<meta name=\"keywords\" content=\"#{options[:meta_keywords]}\" />\n"
 			end
 			if page.image
 				# Facebook likes this
 				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
-			end
-			if page.tags?
-				output += "\t<meta name=\"keywords\" content=\""+page.tag_list+"\" />"
-			end
+			end	
 		end
 		output += capture( &block ) if block_given?
 		output += "</head>\n"
