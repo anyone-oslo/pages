@@ -55,7 +55,7 @@ module ActionController
 			begin  
 				out_without_espipe(*args)  
 			rescue Errno::ESPIPE => exception  
-				File.open(File.join(File.dirname(__FILE__), '../../../../log/cgiresponse.log'), 'a'){|fh| fh.write(exception.to_s)}
+				File.open(File.join(File.dirname(__FILE__), '../../../../log/cgiresponse.log'), 'a'){|fh| fh.write(exception.to_s)} rescue nil
 				begin  
 					message    = exception.to_s + "\r\n" + exception.backtrace.join("\r\n")
 					RAILS_DEFAULT_LOGGER.fatal(message)  
