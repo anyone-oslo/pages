@@ -176,6 +176,28 @@ module PagesCore
 					super
 				end
 			end
+			
+			def update_attributes(attributes)
+				attributes = attributes.dup
+				attributes.each do |attribute, value|
+					if has_field?(attribute)
+						attributes.delete(attribute)
+						set_textbit_body(attribute, value)
+					end
+				end
+				super(attributes)
+			end
+
+			def update_attributes!(attributes)
+				attributes = attributes.dup
+				attributes.each do |attribute, value|
+					if has_field?(attribute)
+						attributes.delete(attribute)
+						set_textbit_body(attribute, value)
+					end
+				end
+				super(attributes)
+			end
 
 		end
 	end
