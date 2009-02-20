@@ -103,7 +103,7 @@ class Admin::PagesController < Admin::AdminController
 	def update
 		params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 		if @page.update_attributes( params[:page] )
-			@page.categories = (params[:category] && params[:category].length > 0) ? [] : params[:category].map{|k,v| Category.find(k.to_i)}
+			@page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
 		    if params[:page_image_description]
 		        begin
 		            @page.image.update_attribute(:description, params[:page_image_description])
