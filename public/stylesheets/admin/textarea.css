@@ -1,3 +1,6 @@
+textarea.rich {
+	width: 100%;
+}
 .richTextToolbar {  
     position:relative;  
     list-style:none;  
@@ -47,3 +50,4 @@
 .richTextToolbar .Heading3Button { background-position: 0 -255px; } 
 .richTextToolbar .Heading4Button { background-position: 0 -272px; } 
 .richTextToolbar .EmailButton { background-position: 0 -323px; }
+

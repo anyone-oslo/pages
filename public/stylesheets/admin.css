@@ -1,3 +1,5 @@
+@import url(jquery-smoothness/ui.all.css);
+
 @import url(admin/header.css);
 @import url(admin/sidebar.css);
 @import url(admin/buttons.css);

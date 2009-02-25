@@ -8,24 +8,4 @@
 	We apologize for the inconvenience.
 </p>
 
-<h4>Please try one of the following options:</h4>
-<ul>
-	<li>Check the Web address you’ve entered to make sure if it’s correct.</li>
-	<li>Go back to the <%= link_to "Home page", "/" %> and try finding the information you are looking for.</li>
-	<li>Click the Back button to try another link.</li>
-	<li>Try searching this site using <%= link_to "Google", "http://www.google.com/" %> for the information you want:</li>
-</ul>
-
-<form action="http://www.google.com/search" method="get" onSubmit="googleSearch( this );">
-	<input name="q" type="hidden" />
-	<input name="qinput" type="text" class="text with_button" />
-	<input type="submit" value="Search" />
-</form> 
-
-<script type="text/javascript">
-	function googleSearch( form ) {
-		var domainroot = "<%= request.env['HTTP_HOST'] %>";
-		var query = "site:" + domainroot + " " + form.qinput.value
-		form.q.value = query;
-	}
-</script>
+<%= render :partial => 'errors/generic_help' %>
