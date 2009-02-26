@@ -1,4 +1,4 @@
-class FeedsController < ApplicationController
+class FeedsController < FrontendController
 	
 	def rss
 		@page = Page.find_by_slug_and_language( params[:slug], params[:language] )

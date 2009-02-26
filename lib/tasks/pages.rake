@@ -72,6 +72,9 @@ namespace :pages do
 			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
 				puts "config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
 			end
+			patch_files %r%^app/controllers/[\w\d\-_]*_controller\.rb%, /< ApplicationController/, "< FrontendController" do |files|
+				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
+			end
 			
 			#config.action_view.cache_template_loading
 			if !File.exists?('app/views/pages/templates')

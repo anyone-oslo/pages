@@ -20,7 +20,7 @@ require 'RMagick'
 # Usage:
 #   image_tag(dynamic_text_path(:text => "Menu item", :format => :menu), :alt => "Menu item")
 #
-class DynamicTextController < ApplicationController
+class DynamicTextController < FrontendController
 
     session :off
     caches_page :show

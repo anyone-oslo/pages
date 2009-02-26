@@ -1,4 +1,4 @@
-class PageFilesController < ApplicationController
+class PageFilesController < FrontendController
 
 	#caches_page :show
 
