@@ -18,6 +18,13 @@ role :db,  remote_host, :primary => true
 
 namespace :deploy do
 
+	desc "Setup, configure the web server and deploy the application"
+	task :cold, :roles => [:web] do
+		sudo "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
+		sudo "a2ensite #{application}"
+		run "cd #{deploy_to}/#{current_dir} && rake db:create RAILS_ENV=production"
+	end
+
 	desc "Restart application"
 	task :restart, :roles => :app do
 		run "touch #{current_path}/tmp/restart.txt"
@@ -66,7 +73,7 @@ namespace :pages do
 end
 
 namespace :cache do
-	"Do not flush the page cache on reload"
+	desc "Do not flush the page cache on reload"
 	task :keep do
 	    set :flush_cache, false
 	end
@@ -84,3 +91,7 @@ after "deploy:symlink",  "pages:fix_permissions"
 after "deploy:symlink",  "pages:create_symlinks"
 after "deploy:restart",  "cache:flush"
 before "deploy:migrate", "deploy:fix_plugin_migrations"
+
+before "deploy:cold", "deploy:setup"
+before "deploy:cold", "deploy"
+after "deploy:cold", "deploy:reload_webserver"

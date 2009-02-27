@@ -113,6 +113,9 @@ namespace :pages do
 			puts "\nrake db:create\nrake pages:update"
 			puts
 		end
+		puts "When you're ready to deploy for the first time, run this command to set up the database and apache config:"
+		puts "\ncap deploy:cold"
+		puts
 	end
 
 	namespace :update do
