@@ -62,7 +62,7 @@ namespace :pages do
 		
 		puts "!!! WARNING !!!"
 		puts "This will overwrite the application controller and several configuration files."
-		print "Continue?"
+		print "Continue? "
 		
 		exit unless STDIN.readline.downcase =~ /^y/
 		puts
@@ -92,11 +92,28 @@ namespace :pages do
 				File.open(target_path, 'w+'){|fh| fh.write template.result}
 			end
 		end
-		puts "Creating development database and migrations..."
-		`rake db:create`
-		`script/generate plugin_migration pages`
-		`svn add db/migrate/*`
-		`rake db:migrate`
+		print "Create and migrate database? "
+		if STDIN.readline.downcase =~ /^y/ 
+			puts "Creating development database and migrations..."
+			`rake db:create`
+			`script/generate plugin_migration pages`
+			`svn add db/migrate/*`
+			`rake db:migrate`
+			puts "Starting server..."
+			new_thread = Thread.new do
+				sleep(5)
+				`open http://localhost:3000/admin`
+			end
+			`ruby script/server`
+			new_thread.join
+			puts "\n"
+			puts "All done."
+		else
+			puts "\nAll done. To set up the database and create the migrations, do:"
+			puts "\nrake db:create\nrake pages:update"
+			puts "\nand follow the instructions."
+			puts
+		end
 	end
 
 	namespace :update do
