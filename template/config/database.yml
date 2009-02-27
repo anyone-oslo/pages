@@ -1,0 +1,20 @@
+development:
+  adapter:  mysql
+  database: <%= @database_development %>
+  username: root
+  password: 
+  host:     localhost
+
+test:
+  adapter:  mysql
+  database: <%= @database_test %>
+  username: root
+  password:
+  host:     localhost
+
+production:
+  adapter:  mysql
+  database: <%= @database_production %>
+  username: rails
+  password: ***REMOVED***
+  host:     server.manualdesign.no

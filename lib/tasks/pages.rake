@@ -1,3 +1,4 @@
+require 'find'
 namespace :pages do
 	
 	desc "Deliver mailing queue"
@@ -38,10 +39,69 @@ namespace :pages do
 		end
 	end
 	
+	desc "Install pages"
+	task :install do
+		require 'erb'
+
+		def get_input(label, default_value=nil)
+			if default_value
+				print "#{label} [#{default_value}]: "
+			else
+				print "#{label}: "
+			end
+			default_value ||= ""
+			input = STDIN.readline.strip
+			(input.strip.empty?) ? default_value : input
+		end
+		def generate_key(length)
+			pool = [0..9,'a'..'z','A'..'Z'].map{|r| r.to_a}.flatten
+			(0...length).to_a.map { pool[rand(pool.length)].to_s }.join
+		end
+
+		puts "Installing Pages..\n\n"
+		
+		puts "!!! WARNING !!!"
+		puts "This will overwrite the application controller and several configuration files."
+		print "Continue?"
+		
+		exit unless STDIN.readline.downcase =~ /^y/
+		puts
+		
+		@site_name        = get_input("Name of site (ie: My Awesome Site)", "My Awesome Site")
+		@site_domain      = get_input("Domain", @site_name.downcase.gsub(/[^\w\d]/,'')+".no")
+		@app_name         = get_input("App name", @site_domain.gsub(/\.[\w]+$/, ''))
+		@mail_sender      = get_input("Mail sender", "#{@site_name} <no-reply@#{@site_domain}>")
+		@default_language = get_input("Default language", "English")
+		
+		puts
+		
+		@database_production  = get_input("Production database", "#{@app_name}")
+		@database_development = get_input("Development database", "#{@app_name}_dev")
+		@database_test        = get_input("Test database", "#{@app_name}_test")
+		
+		@forgery_secret = generate_key(34)
+		@session_secret = generate_key(128)
+		
+		puts "\nGenerating files..."
+		template_path = File.join(File.dirname(__FILE__), '../../template')
+		Find.find(template_path) do |path|
+			if File.file?(path)
+				file_path = path.gsub(Regexp.new("^#{Regexp.escape(template_path)}/?"),'')
+				template = ERB.new(File.read(path))
+				target_path = File.join(RAILS_ROOT, file_path)
+				File.open(target_path, 'w+'){|fh| fh.write template.result}
+			end
+		end
+		puts "Creating development database and migrations..."
+		`rake db:create`
+		`script/generate plugin_migration pages`
+		`svn add db/migrate/*`
+		`rake db:migrate`
+	end
+
 	namespace :update do
 		desc "Patch files"
 		task :files do
-			require 'find'
 			def find_files(file_expression)
 				paths = []
 				Find.find(".") do |path|
