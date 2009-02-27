@@ -60,14 +60,13 @@ namespace :pages do
 
 		puts "Installing Pages..\n\n"
 		
-		puts "!!! WARNING !!!"
-		puts "This will overwrite the application controller and several configuration files."
+		puts "!!! WARNING !!! This will overwrite the application controller and several configuration files."
 		print "Continue? "
 		
 		exit unless STDIN.readline.downcase =~ /^y/
 		puts
 		
-		@site_name        = get_input("Name of site (ie: My Awesome Site)", "My Awesome Site")
+		@site_name        = get_input("Name of site (ie: My Awesome Site)")
 		@site_domain      = get_input("Domain", @site_name.downcase.gsub(/[^\w\d]/,'')+".no")
 		@app_name         = get_input("App name", @site_domain.gsub(/\.[\w]+$/, ''))
 		@mail_sender      = get_input("Mail sender", "#{@site_name} <no-reply@#{@site_domain}>")
@@ -85,6 +84,7 @@ namespace :pages do
 		puts "\nGenerating files..."
 		template_path = File.join(File.dirname(__FILE__), '../../template')
 		Find.find(template_path) do |path|
+			Find.prune if path =~ /\.svn/
 			if File.file?(path)
 				file_path = path.gsub(Regexp.new("^#{Regexp.escape(template_path)}/?"),'')
 				template = ERB.new(File.read(path))
@@ -94,7 +94,7 @@ namespace :pages do
 		end
 		print "Create and migrate database? "
 		if STDIN.readline.downcase =~ /^y/ 
-			puts "Creating development database and migrations..."
+			puts "Creating development database and migrations (this might take a while)..."
 			`rake db:create`
 			`script/generate plugin_migration pages`
 			`svn add db/migrate/*`
@@ -109,9 +109,8 @@ namespace :pages do
 			puts "\n"
 			puts "All done."
 		else
-			puts "\nAll done. To set up the database and create the migrations, do:"
+			puts "\nAll done. To set up the database and create the migrations, run the following commands and follow the instructions:"
 			puts "\nrake db:create\nrake pages:update"
-			puts "\nand follow the instructions."
 			puts
 		end
 	end
