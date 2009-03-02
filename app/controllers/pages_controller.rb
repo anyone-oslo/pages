@@ -75,6 +75,7 @@ class PagesController < FrontendController
 				@encoding = (params[:encoding] ||= "UTF-8").downcase
 				@page.working_language = @language || Language.default
 				@page_title ||= @page.name.to_s
+				@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})
 				response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
 				render :template => 'feeds/rss', :layout => false
 			end
@@ -116,8 +117,6 @@ class PagesController < FrontendController
 				redirect_to(@page.redirect_to_options({:language => @language})) and return
 			end
 
-			@root_subpages = @page.root_page.pages(:language => @language)
-			
 			@page_title ||= @page.name.to_s
 
 			# Call template methods

@@ -95,6 +95,101 @@ class Page < ActiveRecord::Base
 			Page.find_by_sql(find_query)
 		end
 
+		def get_pages_options(options={})
+			options.symbolize_keys!
+
+			# Clean up depreceated options
+			options.keys.each do |key|
+				if key.to_s =~ /^show_/
+					new_key = key.to_s.gsub(/^show_/,'').to_sym
+					logger.warn "DEPRECEATED: Option :#{key} is deprecated, use :#{new_key}"
+					options[new_key] = options[key]
+				end
+			end
+
+			options[:all]           ||= false
+			options[:deleted]       ||= options[:all]
+			options[:hidden]        ||= options[:all]
+			options[:drafts]        ||= options[:all]
+			options[:autopublish]   ||= options[:all]
+			options[:all_languages] ||= false
+			options[:order]         ||= "position"
+			options[:parent]        = options[:parents] if options[:parents]
+			options[:include]       ||= [:textbits, :categories, :image, :author]
+			
+			find_options = {
+				:conditions => [[]]
+			}
+
+			# Ordering subpages
+			#options[:order] = options[:order].split( /,[\s]*/ ).map{ |c| (c =~ /^pages\./ ) ? c : "pages."+c }.join(", ")
+			find_options[:order] = options[:order]
+			
+			# Parent check
+			if options[:parent] && options[:parent] == :root
+				find_options[:conditions].first << "parent_page_id IS NULL"
+			elsif options[:parent] && options[:parent].kind_of?(Enumerable)
+				parent_ids = options[:parent].map{|p| p.kind_of?(Page) ? p.id : p}
+				find_options[:conditions].first << "parent_page_id IN (" + parent_ids.join(", ") + ")"
+			elsif options[:parent]
+				parent_id = options[:parent]
+				parent_id = parent_id.id if parent_id.kind_of?(Page)
+				find_options[:conditions].first << "parent_page_id = #{parent_id}"
+			end
+
+			# Status check
+			unless options[:all] || options[:deleted] || options[:hidden] || options[:drafts]
+				find_options[:conditions].first << "status = 2"
+			else
+				find_options[:conditions].first << "status < 4"   unless options[:deleted]
+				find_options[:conditions].first << "status != 3"  unless options[:hidden]
+				find_options[:conditions].first << "status >= 2"  unless options[:drafts]
+			end
+			find_options[:conditions].first << "autopublish = 0" unless options[:autopublish]
+		
+			# Date limit check
+			if options[:published_within]
+				options[:published_before] = options[:published_within].last
+				options[:published_after]  = options[:published_within].first
+			end
+			if options[:published_before] || options[:published_after]
+				if options[:published_before]
+					find_options[:conditions].first << "published_at <= ?"
+					find_options[:conditions] << options[:published_before]
+				end
+				if options[:published_after]
+					find_options[:conditions].first << " AND published_at >= ?"
+					find_options[:conditions] << options[:published_after]
+				end
+			end
+			
+			# Language check
+			if options[:language] && !options[:all_languages]
+				find_options[:joins] ||= ""
+				options[:language] = options[:language].to_s
+				raise "Not a valid language code" unless options[:language] =~ /^[\w]{2,3}$/
+				find_options[:joins] += "JOIN `textbits` ON `textbits`.textable_type = \"Page\" AND `textbits`.textable_id = `pages`.id AND `textbits`.language = '#{options[:language]}' "
+				find_options[:group] = "`pages`.id"
+			end
+			
+			# Category check
+			if options[:category]
+				find_options[:joins] ||= ""
+				# Multiple categories
+				if options[:category].kind_of?(Enumerable)
+					find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id IN ("+(options[:category].map{|c| c.kind_of?(Category) ? c.id : c}.join(", "))+")"
+				else
+					find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id = "+options[:category].kind_of?(Category) ? options[:category].id : options[:category]
+				end
+				
+			end
+			
+			# Map conditions to string
+			conditions = find_options[:conditions].first.join(" AND ")
+			find_options[:conditions][0] = conditions
+			[options, find_options]
+		end
+
 		# Finds pages based on the given criteria. Only published pages are loaded by default, this can be overridden by passing the
 		# <tt>:drafts</tt>, <tt>:hidden</tt>, <tt>:deleted</tt> and/or <tt>:all</tt> parameters.
 		#
@@ -115,6 +210,7 @@ class Page < ActiveRecord::Base
 		# * <tt>:parent(s)</tt>        - Parent page. Can be an id, a Page or a collection of both. If parent is <tt>:root</tt>, pages at the root level will be loaded.
 		# * <tt>:paginate</tt>         - Paginates results. Takes a hash with the format: {:page => 1, :per_page => 20}
 		# * <tt>:category</tt>         - Loads only pages within the given category.
+		# * <tt>:include</tt>          - Which relationships to include (Default: :textbits, :categories, :image, :author)
 		# * <tt>:published_after</tt>  - Loads only pages published after this date.
 		# * <tt>:published_before</tt> - Loads only pages published before this date.
 		# * <tt>:published_within</tt> - Loads pages published within this range.
@@ -139,103 +235,27 @@ class Page < ActiveRecord::Base
 		#   news_posts.previous_page # => 2
 		#   news_posts.last_page => 11
 		def get_pages(options={})
-			options.symbolize_keys!
-			# Clean up depreceated options
-			options.keys.each do |key|
-				if key.to_s =~ /^show_/
-					new_key = key.to_s.gsub(/^show_/,'').to_sym
-					logger.warn "DEPRECEATED: Option :#{key} is deprecated, use :#{new_key}"
-					options[new_key] = options[key]
-				end
-			end
-			options[:all]           ||= false
-			options[:deleted]       ||= options[:all]
-			options[:hidden]        ||= options[:all]
-			options[:drafts]        ||= options[:all]
-			options[:autopublish]   ||= options[:all]
-			options[:all_languages] ||= false
-			options[:order]         ||= "position"
+			options, find_options = get_pages_options(options)
 
-			options[:parent] = options[:parents] if options[:parents]
-
-			if options[:parent] && options[:parent] == :root
-				conditions = "parent_page_id IS NULL"
-			elsif options[:parent] && options[:parent].kind_of?(Enumerable)
-				parent_ids = options[:parent].map{|p| p.kind_of?(Page) ? p.id : p}
-				conditions = "parent_page_id IN (" + parent_ids.join(", ") + ")"
-			elsif options[:parent]
-				parent_id = options[:parent]
-				parent_id = parent.id if parent_id.kind_of?(Page)
-				conditions = "parent_page_id = #{parent_id}"
-			else
-				conditions = "true"
-			end
-
-			unless options[:all] || options[:deleted] || options[:hidden] || options[:drafts]
-				conditions << " AND status = 2"
-			else
-				conditions << " AND status < 4"   unless options[:deleted]
-				conditions << " AND status != 3"  unless options[:hidden]
-				conditions << " AND status >= 2"  unless options[:drafts]
-			end
-			conditions << " AND autopublish = 0" unless options[:autopublish]
-		
-			if options[:published_within]
-				options[:published_before] = options[:published_within].last
-				options[:published_after]  = options[:published_within].first
-			end
-			if options[:published_before] || options[:published_after]
-				conditions = [conditions]
-				if options[:published_before]
-					conditions.first << " AND published_at <= ?"
-					conditions << options[:published_before]
-				end
-				if options[:published_after]
-					conditions.first << " AND published_at >= ?"
-					conditions << options[:published_after]
-				end
-			end
-
-			# Prepend 'pages.' to order clauses to disambigue the query.
-			options[:order] = options[:order].split( /,[\s]*/ ).map{ |c| (c =~ /^pages\./ ) ? c : "pages."+c }.join(", ")
-		
-			find_opts = {
-				:conditions => conditions, 
-				:order => options[:order], 
-				:include => [:textbits,:categories]
-			}
-
-			pages = Page.find(:all, find_opts)
-		
-			if options[:category]
-				pages = pages.select{|p| p.categories.include?(options[:category])}
-			end
-		
-			# Check for languages and remap the collection
-			pages = pages.collect do |page|
-				if options[:language]
-					if options[:all_languages] || page.languages.include?( options[:language] )
-						page.working_language = options[:language]
-						page
-					else
-						nil
-					end
-				else
-					page
-				end
-			end.compact
-
-			# Paginate pages
+			# Pagination
+			pagination_options = {}
 			if options[:paginate]
+				pages_count = Page.count_pages(options, find_options)
 				options[:paginate][:page] ||= 1
 				options[:paginate][:page] = options[:paginate][:page].to_i
 				options[:paginate][:page] = 1 if options[:paginate][:page] < 1
-				pagination_count = (pages.length.to_f / options[:paginate][:per_page]).ceil
+				pagination_count = (pages_count.to_f / options[:paginate][:per_page]).ceil
 
-				start_index = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
-				end_index = start_index + options[:paginate][:per_page]
-				pages = pages[start_index...end_index]
+				pagination_options[:offset] = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
+				pagination_options[:limit]  = options[:paginate][:per_page]
 			end
+
+			# Find the pages
+			find_options[:include] = options[:include] if options[:include]
+			pages = Page.find(:all, find_options.merge(pagination_options))
+
+			# Set working language
+			pages = pages.map{|p| p.working_language = options[:language]; p} if options[:language]
 
 			# Add pagination methods to the collection
 			# TODO: Make a module for this
@@ -251,6 +271,7 @@ class Page < ActiveRecord::Base
 				def first_page;    1; end
 			end
 
+			
 			if options[:paginate] && pagination_count > 0
 				pages.set_pagination(true, options[:paginate][:page], pagination_count, options[:paginate][:per_page])
 			else
@@ -258,6 +279,85 @@ class Page < ActiveRecord::Base
 			end
 		
 			pages
+		end
+		
+		def count_pages(options={}, find_options=nil)
+			unless find_options
+				options, find_options = get_pages_options(options)
+			end
+
+			# Count all pages
+			count_options = find_options.dup
+			count_options.delete(:group)
+			count_options[:select] = "DISTINCT `pages`.id"
+			Page.count(:all, count_options)
+		end
+
+		# Count subpages by year and month.
+		def count_pages_by_year_and_month(options={})
+			options[:all]           ||= false
+			options[:deleted]       ||= options[:all]
+			options[:hidden]        ||= options[:all]
+			options[:drafts]        ||= options[:all]
+			options[:autopublish]   ||= options[:all]
+
+			query = {
+				:select   => "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count",
+				:from     => "FROM pages p",
+				:where    => [],
+				:group_by => "GROUP BY year, month"
+			}
+
+			# Join tables if a category is provided
+			if options[:category]
+				query[:from]   = "FROM pages p, pages_categories c "
+				query[:where] << "c.category_id = #{options[:category].id} AND c.page_id = p.id"
+			end
+
+			# Parent(s)
+			if options[:parent] && options[:parent] == :root
+				query[:where] << "p.parent_page_id IS NULL"
+			elsif options[:parent] && options[:parent].kind_of?(Enumerable)
+				parent_ids = options[:parent].map{|p| p.kind_of?(Page) ? p.id : p}
+				query[:where] <<  "p.parent_page_id IN (" + parent_ids.join(", ") + ")"
+			elsif options[:parent]
+				parent_id = options[:parent]
+				parent_id = parent_id.id if parent_id.kind_of?(Page)
+				query[:where] <<  "p.parent_page_id = #{parent_id}"
+			end
+
+			# Page status
+			unless options[:all] || options[:deleted] || options[:hidden] || options[:drafts]
+				query[:where] << "status = 2"
+			else
+				query[:where] << "status < 4"   unless options[:deleted]
+				query[:where] << "status != 3"  unless options[:hidden]
+				query[:where] << "status >= 2"  unless options[:drafts]
+			end
+			query[:where] << "autopublish = 0" unless options[:autopublish]
+
+			# Construct the query
+			if query[:where].length > 0
+				pages_count_query = [
+					query[:select],
+					query[:from],
+					"WHERE "+query[:where].join(" AND "),
+					query[:group_by]
+				].join(" ")
+			else
+				pages_count_query = [
+					query[:select],
+					query[:from],
+					query[:group_by]
+				].join(" ")
+			end
+			
+			pages_count = ActiveSupport::OrderedHash.new
+			ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
+				year, month, page_count = row.mapped.to_i
+				(pages_count[year] ||= ActiveSupport::OrderedHash.new)[month] = page_count
+			end
+			pages_count
 		end
 
 		# Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
@@ -271,7 +371,7 @@ class Page < ActiveRecord::Base
 		# === Parameters
 		# * <tt>:language</tt> - String to set as working language for the resulting pages.
 		def news_pages(options={})
-			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'id ASC')
+			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'created_at ASC')
 			if options[:language]
 				ps = ps.map{|p| p.working_language = options[:language]; p}
 			end
@@ -441,26 +541,43 @@ class Page < ActiveRecord::Base
 		Page.get_pages( options )
 	end
 	
-	# Count subpages by year and month
-	def pages_count_by_year_and_month(options={})
-		if options[:category]
-			pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
-			                     FROM pages p, pages_categories c
-			                     WHERE c.category_id = #{options[:category].id} AND c.page_id = p.id AND p.parent_page_id = #{self.id} AND p.status = 2 
-			                     GROUP BY year, month"
-		else
-			pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
-			                     FROM pages p 
-			                     WHERE p.parent_page_id = #{self.id} AND p.status = 2 
-			                     GROUP BY year, month"
-		end
-		pages_count = ActiveSupport::OrderedHash.new
-		ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
-			year, month, page_count = row.mapped.to_i
-			(pages_count[year] ||= ActiveSupport::OrderedHash.new)[month] = page_count
-		end
-		pages_count
+	# Count subpages
+	def count_pages(options={})
+		options[:parent]   ||= self.id
+		options[:order]    ||= self.content_order
+		options[:language] ||= self.working_language if self.working_language
+		Page.count_pages(options)
 	end
+	alias_method :pages_count, :count_pages
+	
+	# Count subpages by year and month
+	def count_pages_by_year_and_month(options={})
+		options = options.dup
+		options[:parent] ||= self
+		Page.count_pages_by_year_and_month(options)
+	end
+	alias_method :pages_count_by_year_and_month, :count_pages_by_year_and_month
+
+	# # Count subpages by year and month
+	# def pages_count_by_year_and_month(options={})
+	# 	if options[:category]
+	# 		pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
+	# 		                     FROM pages p, pages_categories c
+	# 		                     WHERE c.category_id = #{options[:category].id} AND c.page_id = p.id AND p.parent_page_id = #{self.id} AND p.status = 2 
+	# 		                     GROUP BY year, month"
+	# 	else
+	# 		pages_count_query = "SELECT YEAR(p.published_at) AS year, MONTH(p.published_at) AS month, COUNT(p.id) AS page_count 
+	# 		                     FROM pages p 
+	# 		                     WHERE p.parent_page_id = #{self.id} AND p.status = 2 
+	# 		                     GROUP BY year, month"
+	# 	end
+	# 	pages_count = ActiveSupport::OrderedHash.new
+	# 	ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
+	# 		year, month, page_count = row.mapped.to_i
+	# 		(pages_count[year] ||= ActiveSupport::OrderedHash.new)[month] = page_count
+	# 	end
+	# 	pages_count
+	# end
 	
 
 	# Get this page's root page.

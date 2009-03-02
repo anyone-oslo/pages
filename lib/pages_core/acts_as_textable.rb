@@ -13,34 +13,37 @@ module PagesCore
 			
 			# Class methods for <tt>acts_as_textable</tt> models
 			module ClassMethods
-				def languages( options={} )
-					options = { :type => self.to_s }.merge( options )
-					Textbit.languages( options )
+				def languages(options={})
+					options = {:type => self.to_s}.merge(options)
+					Textbit.languages(options)
 				end
 				def fields( options={} )
-					options = { :type => self.to_s }.merge( options )
+					options = {:type => self.to_s}.merge(options)
 					Textbit.fields( options )
 				end
 			end
 			
-			def working_language=( language )
+			# Set the working language
+			def working_language=(language)
 				@working_language = language.to_s
 			end
+
+			# Get the working language
 			def working_language
 				@working_language ||= Language.default
 			end
 
 			# Returns true if this page has the named textbit
-			def has_field?( name, options={} )
-				return true if( PagesCore::ActsAsTextable.textable_fields[ self.class ].include? name )
-				( self.fields.include? name.to_s ) ? true : false
+			def has_field?(name, options={})
+				return true if( PagesCore::ActsAsTextable.textable_fields[self.class].include?(name))
+				(self.fields.include?(name.to_s)) ? true : false
 			end
 
 
 			# Get the textbit with specified name (and optional language), create and add it if necessary
-			def get_textbit( name, options={} )
+			def get_textbit(name, options={})
 				name = name.to_s
-				options[:language] ||= ( @working_language || Language.default )
+				options[:language] ||= self.working_language
 				self.textbits.each do |tb|
 					if( tb.name == name && tb.language == options[:language].to_s )
 						return tb
@@ -48,9 +51,9 @@ module PagesCore
 				end
 
 				# Create new textbit if necessary
-				textbit ||= Textbit.new( :name => name, :textable => self, :language => options[:language].to_s )
+				textbit ||= Textbit.new(:name => name, :textable => self, :language => options[:language].to_s)
 				if textbit.new_record?
-					self.textbits.push textbit
+					self.textbits.push(textbit)
 				end
 				textbit
 			end
@@ -86,9 +89,9 @@ module PagesCore
 			end
 			
 			def field_has_language?( name, language=nil )
-				language ||= @working_language
+				language ||= self.working_language
 				language = language.to_s
-				( self.languages_for_field( name ).include?( language.to_s ) ) ? true : false
+				(self.languages_for_field( name ).include?(language.to_s)) ? true : false
 			end
 
 			# Returns an array with the names of all text blocks excluding special fields.
@@ -152,12 +155,12 @@ module PagesCore
 			end
 		
 			# Get a translated version of this page
-			def translate( language )
+			def translate(language)
 				language = language.to_s
 				#self.add_language( language )
 				dupe = self.dup
 				dupe.working_language = language
-				( block_given? ) ? ( yield dupe ) : dupe
+				(block_given?) ? (yield dupe) : dupe
 			end
 
 			# Enable virtual setters and getters for existing (and enforced) textbits
@@ -165,12 +168,12 @@ module PagesCore
 				name,type = method_name.to_s.match( /(.*?)([\?=]?)$/ )[1..2]
 				if has_field? name
 					case type
-						when "?"
-							field_has_language? name
-						when "="
-							set_textbit_body( name, args.first )
-						else
-							get_textbit( name )
+					when "?"
+						field_has_language?(name)
+					when "="
+						set_textbit_body(name, args.first)
+					else
+						get_textbit(name)
 					end
 				else
 					super
