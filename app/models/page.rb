@@ -179,7 +179,7 @@ class Page < ActiveRecord::Base
 				if options[:category].kind_of?(Enumerable)
 					find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id IN ("+(options[:category].map{|c| c.kind_of?(Category) ? c.id : c}.join(", "))+")"
 				else
-					find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id = "+options[:category].kind_of?(Category) ? options[:category].id : options[:category]
+					find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id = "+(options[:category].kind_of?(Category) ? options[:category].id : options[:category]).to_s
 				end
 				
 			end
