@@ -76,6 +76,7 @@ require "pages_core/string_translator"
 require "pages_core/string_extensions"
 require "pages_core/array_extensions"
 require "pages_core/awstats"
+require "pages_core/paginates"
 
 
 
