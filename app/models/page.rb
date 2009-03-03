@@ -158,7 +158,7 @@ class Page < ActiveRecord::Base
 					find_options[:conditions] << options[:published_before]
 				end
 				if options[:published_after]
-					find_options[:conditions].first << " AND published_at >= ?"
+					find_options[:conditions].first << "published_at >= ?"
 					find_options[:conditions] << options[:published_after]
 				end
 			end
