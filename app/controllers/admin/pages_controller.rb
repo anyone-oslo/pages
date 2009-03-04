@@ -82,7 +82,7 @@ class Admin::PagesController < Admin::AdminController
 		@published_range = (starts_at = DateTime.new(@year, @month, 1))...(starts_at.end_of_month)
 
 		# And grab the pages
-		@news_items = Page.get_pages(count_options.merge({:published_within => @published_range}), :order => 'published_at DESC')
+		@news_items = Page.get_pages(count_options.merge({:published_within => @published_range, :order => 'published_at DESC'}))
 	end
 
 	def list
