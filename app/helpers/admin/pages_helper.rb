@@ -15,7 +15,7 @@ module Admin::PagesHelper
 		end
 	end
 	
-	def page_name( page, options={} )
+	def page_name(page, options={})
 		page_name_cache[options] ||= {}
 
 		if page_name_cache[options][page.id]
@@ -25,8 +25,8 @@ module Admin::PagesHelper
 			page_names = (options[:include_parents]) ? [page.ancestors, page].flatten : [page]
 
 			p_name = page_names.map do |p|
-				if p.name?
-					p.name.to_s
+				if p.dup.name?
+					p.dup.name.to_s
 				elsif p.translate(Language.default).name?
 					"(#{p.translate(Language.default).name.to_s})"
 				else

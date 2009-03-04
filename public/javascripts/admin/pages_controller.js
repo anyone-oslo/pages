@@ -2,7 +2,26 @@ Admin.PagesController = {
 	init : function() {
 	},
 
-	index : function() {
+	applyAutopublishCheck : function() {
+		window.checkAutopublishOptions = function(elmnt) {
+			if($('page_status').value == 2) {
+				Element.show('page_autopublish_field');
+			} else {
+				Element.hide('page_autopublish_field');
+			}
+			if($('page_autopublish').checked) {
+				Element.show($('page_autopublish_options'));
+			} else {
+				Element.hide($('page_autopublish_options'));
+			}
+		}
+		checkAutopublishOptions();
+
+		$('page_autopublish').observe('click', function(e){ checkAutopublishOptions(); });
+		$('page_status').observe('change', function(e){ checkAutopublishOptions(); });
+	},
+
+	index_action : function() {
 
 		// Hover actions on .page .actions
 		jQuery('.page').hover(
@@ -26,7 +45,18 @@ Admin.PagesController = {
 
 	},
 	
-	edit : function() {
+	new_action : function() {
+		this.applyAutopublishCheck();
+	},
+
+	new_news_action : function() {
+		this.applyAutopublishCheck();
+	},
+
+	edit_action : function() {
+		
+		this.applyAutopublishCheck();
+		
 		window.hidePreview = function() {
 			if( window.documentPreview ) {
 				document.body.removeChild( window.documentPreview );
@@ -57,21 +87,5 @@ Admin.PagesController = {
 		jQuery('#new-image').hide();
 		jQuery('#new-file').hide();
 
-		window.checkAutopublishOptions = function(elmnt) {
-			if($('page_status').value == 2) {
-				Element.show('page_autopublish_field');
-			} else {
-				Element.hide('page_autopublish_field');
-			}
-			if($('page_autopublish').checked) {
-				Element.show($('page_autopublish_options'));
-			} else {
-				Element.hide($('page_autopublish_options'));
-			}
-		}
-		checkAutopublishOptions();
-
-		$('page_autopublish').observe('click', function(e){ checkAutopublishOptions(); });
-		$('page_status').observe('change', function(e){ checkAutopublishOptions(); });
 	}
 }

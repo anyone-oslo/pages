@@ -1,19 +1,32 @@
 <%
+	month_names = %w{January February March April May June July August September October November December}
 	page_title "News"
-	page_description "Viewing news items"
+	page_description "News: <em>#{month_names[@month-1]} #{@year}</em>"
 	if PagesCore.config( :localizations )
 		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
 	end
 %>
 
 <% sidebar do %>
-	<h2>Sections</h2>
+	<h2>Create new</h2>
 	<p>
-		<% @news_pages.each do |news_page| %>
-			<%= link_to_unless((@section_id == news_page.id.to_s), page_name(news_page, :include_parents => true), news_admin_pages_path(:section => news_page.id)) %><br />
+		<% form_tag new_news_admin_pages_path, :method => :get do %>
+			In <%= select_tag 'parent', options_from_collection_for_select(@news_pages, 'id', 'name') %>
+			<%= submit_tag "Go", :name => nil %>
 		<% end %>
-		<%= link_to_unless((@section_id == "all"), "All sections", news_admin_pages_path(:section => "all")) %><br />
 	</p>
+	<% @archive_count.reverse.each do |year, months| %>
+		<h2><%= year %><%= ": #{@category.name}" if @category %></h2>
+		<ul>
+			<% months.reverse.each do |month,page_count| %>
+				<li><% if year == @year && month == @month %>
+					<strong><%= month_names[month-1] %></strong> (<%= page_count %>)</strong>
+				<% else %>
+					<%= link_to month_names[month-1], news_admin_pages_path(:language => @language, :month => month, :year => year, :category => ((@category) ? @category.slug : nil)) %> (<%= page_count %>)
+				<% end %></li>
+			<% end %>
+		</ul>
+	<% end %>
 <% end %>
 
 <% if @news_items.length > 0 %>
@@ -21,12 +34,31 @@
 		<tr>
 			<th>Name</th>
 			<th>Published</th>
+			<th>Author</th>
 			<th>Section</th>
 		</tr>
-		<% @news_items.each do |page| %><tr>
-			<td><strong><%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'page_name') %></strong></td>
-			<td><%= smart_time page.published_at, :skip_prefix => true %></td>
-			<td><%= link_to( page_name(page.parent, :include_parents => true), news_admin_pages_path(:section => page.parent.id)) %></td>
+		<% @news_items.each do |page| %><tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : 'nil')].join(' ') %>">
+			<td class="name">
+				<%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'name_link') %>
+				<% if page.autopublish? %>
+					<br /><small>This page will automatically publish <strong><%= smart_time(page.autopublish_at, :always_include_time => true) %></strong></small>
+				<% end %>
+			</td>
+			<td>
+				<% if page.published? %>
+					<%= smart_time(page.published_at, :skip_prefix => true) %>
+				<% else %>
+					<% if page.status_label == 'Published' %>
+						<em>Not published</em>
+					<% else %>
+						<em><%= page.status_label %></em>
+					<% end %>
+				<% end %>
+			</td>
+			<td>
+				<%= link_to page.author.realname, admin_user_path(page.author) %>
+			</td>
+			<td><%= link_to(page_name(page.parent, :include_parents => true), news_admin_pages_path(:section => page.parent.id)) %></td>
 		</tr><% end %>
 	</table>
 <% else %>

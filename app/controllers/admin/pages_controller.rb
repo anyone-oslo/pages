@@ -24,6 +24,15 @@ class Admin::PagesController < Admin::AdminController
 	before_filter :load_categories
 	protected     :load_categories
 	
+	def load_news_pages
+		@news_pages = Page.news_pages(:language => @language)
+		unless @news_pages && @news_pages.length > 0
+			flash[:notice] = "No pages have been flagged as news pages"
+			redirect_to admin_pages_url(:language => @language) and return
+		end
+	end
+	before_filter :load_news_pages, :only => [:news, :new_news]
+	protected     :load_news_pages
 
 
 	# --- COLLECTION ---------------------------------------------------------
@@ -36,27 +45,44 @@ class Admin::PagesController < Admin::AdminController
 			:autopublish   => true,
 			:language      => @language 
 		)
-		@all_pages = Page.get_pages(
-			:language => @language, 
-			:drafts => true, 
-			:hidden => true, 
-			:all_languages => true, 
-			:skip_parent => true, 
-			:autopublish => true
-		)
 	end
 	
 	def news
-		@section_id = persistent_param(:section, "all")
-		@news_pages = Page.news_pages(:language => @language)
-		@news_items = Page.get_news(
-			:language => @language, 
-			:drafts => true, 
-			:hidden => true, 
+		count_options = {
+			:drafts        => true, 
+			:hidden        => true, 
 			:all_languages => true,
-			:autopublish => true,
-			:parent => (@section_id.to_s =~ /^[\d]+$/) ? @section_id : @news_pages
-		)
+			:autopublish   => true,
+			:language      => @language,
+			:parent        => @news_pages
+		}
+
+		# Are we queried by category?
+		if params[:category]
+			@category = Category.find_by_slug(params[:category])
+			unless @category
+				flash[:notice] = "Cannot find that category"
+				redirect_to news_admin_pages_url(:language => @language) and return
+			end
+			count_options[:category] = @category
+		end
+		@archive_count = Page.count_pages_by_year_and_month(count_options)
+		
+		# Set @year and @month from params, default to the last available one
+		@year  = (params[:year]  || @archive_count.keys.last).to_i
+		@month = (params[:month] || @archive_count[@year].keys.last).to_i
+		
+		# Let's check that there's data for the queried @year and @month
+		unless @archive_count[@year] && @archive_count[@year][@month] && @archive_count[@year][@month] > 0
+			flash[:notice] = "No news posted in the given range"
+			redirect_to news_admin_pages_url(:language => @language) and return
+		end
+
+		# Make the range
+		@published_range = (starts_at = DateTime.new(@year, @month, 1))...(starts_at.end_of_month)
+
+		# And grab the pages
+		@news_items = Page.get_pages(count_options.merge({:published_within => @published_range}))
 	end
 
 	def list
@@ -73,16 +99,32 @@ class Admin::PagesController < Admin::AdminController
 	end
 	
 	def new
-		@page = Page.new.translate( @language )
+		@page = Page.new.translate(@language)
 		if params[:parent]
-			@page.parent = Page.find( params[:parent] ) rescue nil
+			@page.parent = Page.find(params[:parent]) rescue nil
+		elsif @news_pages
+			@page.parent = @news_pages.first
 		end
+	end
+	
+	def new_news
+		new
+		render :action => :new
 	end
 
 	def create
 		@page = Page.new.translate( @language )
+		params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 		@page.author = @current_user
 		if @page.update_attributes(params[:page])
+			@page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
+		    if params[:page_image_description]
+		        begin
+		            @page.image.update_attribute(:description, params[:page_image_description])
+		        rescue
+		            # Alert?
+	            end
+	        end
 			redirect_to edit_admin_page_url( @language, @page )
 		else
 			render :action => :new

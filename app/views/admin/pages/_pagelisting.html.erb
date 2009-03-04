@@ -2,9 +2,9 @@
 	if page.news_page?
 		subpages = []
 	else
-		subpages = page.pages( :drafts => true, :hidden => true, :all_languages => true, :autopublish => true )
+		subpages = page.pages(:drafts => true, :hidden => true, :all_languages => true, :autopublish => true)
 	end
-	page_classes = ['page']
+	page_classes = ['page', 'page_listing']
 	page_classes << 'page_without_language' unless page.name?
 -%>
 <li>
@@ -32,21 +32,17 @@
 	</div>
 	<% if page.news_page? %>
 		<ul>
-			<li>News items</li>
+			<li><div class="page_listing">
+				<em>(<%= page.count_pages(:drafts => true, :hidden => true, :all_languages => true, :autopublish => true) %> items)</em>
+				<div class="actions">
+					&mdash;
+					<%= link_to "Create new", new_news_admin_pages_url(:language => @language, :parent => page) %>
+				</div>
+			</div></li>
 		</ul>
 	<% elsif subpages.length > 0 %>
-		<% if subpages.length > 23 %>
-			<ul><% subpages[0...20].each do |subpage| %>
-				<%= render :partial => "pagelisting", :locals => { :page => subpage } %>
-			<% end %></ul>
-			<!-- this seriously needs to be rewritten -->
-			<div class="morepages">
-				<%= link_to_function "All #{subpages.length} pages", "alert('We are working on it!');", :class => "morepageslink" %>
-			</div>
-		<% else %>
-			<ul><% subpages.each do |subpage| %>
-				<%= render :partial => "pagelisting", :locals => { :page => subpage } %>
-			<% end %></ul>
-		<% end %>
+		<ul><% subpages.each do |subpage| %>
+			<%= render :partial => "pagelisting", :locals => { :page => subpage } %>
+		<% end %></ul>
 	<% end %>
 </li>

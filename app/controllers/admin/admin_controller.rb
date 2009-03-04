@@ -3,8 +3,12 @@
 class Admin::AdminController < ApplicationController
 
 	layout "admin"
-	protected
 
+	def redirect
+		redirect_to (Page.news_pages?) ? news_admin_pages_url(:language => @language) : admin_pages_url(:language => @language)
+	end
+
+	protected
 
 	# --- FILTERS ---
 
@@ -22,8 +26,10 @@ class Admin::AdminController < ApplicationController
 
 	# Builds the admin menu tabs.
 	def build_admin_tabs
-		register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages, { :skip_actions => ['news'] }
-		register_menu_item "News", hash_for_news_admin_pages_path({:language => @language}), :pages, { :only_actions => ['news'] }
+		if Page.news_pages?
+			register_menu_item "News", hash_for_news_admin_pages_path({:language => @language}), :pages, { :only_actions => ['news', 'new_news'] }
+		end
+		register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages, { :skip_actions => ['news', 'new_news'] }
 
 		#register_menu_item "Partials", hash_for_admin_partials_path( { :language => @language } ), :pages
 		#register_menu_item( "Account", hash_for_admin_accounts_path, :account ) if @current_user && ( @current_user.account_holder? || @current_user.is_special? )

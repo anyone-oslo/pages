@@ -338,8 +338,8 @@ var PagesAdmin = {
 			if(PagesAdmin.controller.init){
 				PagesAdmin.controller.init();
 			}
-			if(PagesAdmin.action && PagesAdmin.controller[PagesAdmin.action]) {
-				PagesAdmin.controller[PagesAdmin.action]();
+			if(PagesAdmin.action && PagesAdmin.controller[PagesAdmin.action+"_action"]) {
+				PagesAdmin.controller[PagesAdmin.action+"_action"]();
 			}
 		}
 	}

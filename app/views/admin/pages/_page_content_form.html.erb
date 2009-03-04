@@ -1,0 +1,24 @@
+<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title", 
+	:errors      => @page.errors[:name],
+	:description => "This is the name of the page, and it will also be the name of the link to this page."
+%>
+<%= labelled_field f.text_field( :headline, :class => 'text page_title' ), "Headline", 
+	:errors      => @page.errors[:headline],
+	:description => "Optional, use if the headline should differ from the page name."
+%>
+<%= labelled_field f.text_area(:excerpt, :rows => 5, :id => 'compose-teaser', :class => 'rich'), "Teaser", 
+	:errors      => @page.errors[:excerpt]
+%>
+<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => 'rich'), "Body", 
+	:errors      => @page.errors[:body]
+%>
+<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
+	:errors      => @page.errors[:status]
+%>
+<p class="field" id="page_autopublish_field">
+	<label>Auto-publish</label>
+	<%= f.check_box(:autopublish) %>
+	<span id="page_autopublish_options">
+		at <%= f.datetime_select(:autopublish_at, :default => 1.days.from_now, :prompt => true, :minute_step => 15) %>
+	</span>
+</p>

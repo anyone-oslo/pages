@@ -134,6 +134,7 @@ module ApplicationHelper
 	def smart_time( time, options={} )
 		options.symbolize_keys!
 		options[:include_distance] ||= false
+		options[:always_include_time] ||= false
 		
 		if options[:skip_prefix]
 			date_string = ""
@@ -142,11 +143,13 @@ module ApplicationHelper
 		end
 
 		if time.to_date == Time.now.to_date
-			date_string += time.strftime( "%H:%M" )
+			date_string += time.strftime("%H:%M")
 		elsif time.year == Time.now.year
-			date_string += time.strftime( "%b %d" )
+			date_string += time.strftime("%b %d")
+			date_string += time.strftime(" at %H:%M") if options[:always_include_time]
 		else
-			date_string += time.strftime( "%b %d %Y" )
+			date_string += time.strftime("%b %d %Y")
+			date_string += time.strftime(" at %H:%M") if options[:always_include_time]
 			options[:include_distance] = false
 		end
 		

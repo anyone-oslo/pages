@@ -34,12 +34,11 @@
 		width="80" height="15" border="0" alt="Get Firefox"></a>
 	</p>
 	<p>
-		Please make sure Javascript and cookies are enabled if you experience problems logging in or using PagesCore.
+		Please make sure Javascript and cookies are enabled if you experience problems logging in or using Pages.
 	</p>
 <% end -%>
 
-<%= form_tag %>
-
+<% form_tag login_admin_users_path do %>
 <table>
 	<tr>
 		<td>Username:</td>
@@ -56,6 +55,7 @@
 		</td>
 	</tr>
 </table>
+<% end %>
 
 </form>
 

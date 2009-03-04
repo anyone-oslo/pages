@@ -10,7 +10,7 @@
 	<h2>Adding pages</h2>
 	<p>
 		Click here to create a new page at the root level.
-		<%= button_to "New page", new_admin_page_path( :language => @language ), :method => :get %>
+		<%= link_to "New page", new_admin_page_path( :language => @language ) %>
 	</p>
 	<h2>Categories</h2>
 	<% if @categories && @categories.length > 0 %>

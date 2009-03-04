@@ -1,44 +1,48 @@
 <%
-	page_title "Create new page"
-	page_description "You are creating a new page"
+	if @page.parent
+		page_title "#{@page.parent.name} &raquo; New Page"
+		page_description "<em>#{@page.parent.name}</em> &raquo; New Page"
+	else
+		page_title "Create new page"
+		page_description "You are creating a new root page"
+	end
 
 	@url_options = { :action => :new }
 	@url_options[:parent] = @page.parent if @page.parent
 %>
 
+<% sidebar do %>
+<% end %>
 
-<%# PAGE EDITING ####################################################################################################### %>
 
-	<div id="content">
-		
-	<% form_for :page, @page, :url => admin_pages_url, :html => { :id => 'page_edit_form', :class => 'edit_page', :method => :post } do |f| %>
-		
-		<%= f.hidden_field 'parent_page_id' if @page.parent %>
-		<%= hidden_field_tag 'language', @language %>
-	
-		<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Enter a title for the new page", 
-			:errors      => @page.errors[:name],
-			:description => "This is the name of the page, and it will also be the name of the link to this page."
-		%>
-		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
-			:errors      => @page.errors[:template],
-			:description => "Choose the template you would like to use for the new page."
-		%>
-		<%= labelled_field f.text_area( :body ), "Body", 
-			:errors      => @page.errors[:body]
-		%>
-		<%= labelled_field f.text_area( :excerpt, :rows => 5 ), "Teaser", 
-			:errors      => @page.errors[:excerpt]
-		%>
-		<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
-			:errors      => @page.errors[:status]
-		%>
-		<p>
-			<%= submit_tag "Save" %>
+<% form_for :page, @page, :url => admin_pages_url, :html => { :id => 'page_edit_form', :class => 'edit_page', :method => :post, :multipart => true } do |f| %>
+
+	<%= hidden_field_tag 'language', @language %>
+	<%= f.hidden_field 'parent_page_id' if @page.parent %>
+
+	<%= render :partial => 'page_content_form', :locals => {:f => f} %>
+
+	<%# labelled_field f.file_field( :image ), "Image", :errors => @page.errors[:image] %>
+	<%# labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Image caption" %>
+
+	<% if @categories.length > 0 %>
+		<p class="field">
+			<label>Categories</label>
+			<% @categories.each do |category| %>
+				<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.include?(category) ? true : false) %> <%= category.name %>
+			<% end %>
 		</p>
-
-	
+	<% else %>
+		<p>No categories have been added yet.</p>
 	<% end %>
+	<%= labelled_field f.text_field( :tag_list, :class => 'text' ), "Tags", 
+		:errors      => @page.errors[:tag_list]
+	%>
 
-	</div>
+	<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
+		:errors      => @page.errors[:template]
+	%>
 
+	<p><%= submit_tag "Create" %></p>
+	
+<% end %>

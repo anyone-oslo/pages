@@ -266,11 +266,16 @@ class Page < ActiveRecord::Base
 		# === Parameters
 		# * <tt>:language</tt> - String to set as working language for the resulting pages.
 		def news_pages(options={})
-			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'created_at ASC')
+			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'published_at ASC')
 			if options[:language]
 				ps = ps.map{|p| p.working_language = options[:language]; p}
 			end
 			ps
+		end
+		
+		# Are there any news pages?
+		def news_pages?
+			(Page.count(:all, :conditions => ['news_page = 1']) > 0) ? true : false
 		end
 	
 		# Finds news items (which are pages where the parent is flagged as news_page). See <tt>Page.get_pages</tt> for more info on the options.
@@ -423,8 +428,11 @@ class Page < ActiveRecord::Base
 	# Get this page's parent page.
 	def parent
 		parent_page = acts_as_tree_parent
-		parent_page.working_language = self.working_language if parent_page && parent_page.kind_of?(Page)
-		parent_page
+		if parent_page && parent_page.kind_of?(Page)
+			parent_page.translate(self.working_language)
+		else
+			parent_page
+		end
 	end
 	alias_method :parent_page, :parent
 	
@@ -501,13 +509,17 @@ class Page < ActiveRecord::Base
 	end
 	
 	def default_template
-		return nil unless self.parent and self.parent.template
-		reject_words = [ 'index', 'list', 'archive', 'liste', 'arkiv' ]
-		parent_template = parent.template.split(/_/).reject { |w| reject_words.include? w }.join( " " )
-		
-		tpl = Page.available_templates.select{ |t| t.match( Regexp.new( '^'+Regexp.quote( parent_template )+'_?(post|page|subpage|item)' ) ) }.first rescue nil
-		unless tpl and parent_template == ActiveSupport::Inflector::singularize( parent_template )
-			tpl = Page.available_templates.select{ |t| t.match( Regexp.new( '^'+Regexp.quote( ActiveSupport::Inflector::singularize( parent_template ) ) ) ) }.first rescue nil
+		(self.parent) ? self.parent.default_subtemplate : 'index'
+	end
+	
+	def default_subtemplate
+		return 'index' unless self.template
+		reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
+		base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
+		tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
+		# Try to singularize the base template if the subtemplate could not be found.
+		unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
+			tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
 		end
 		tpl ||= "index"
 	end
@@ -519,7 +531,7 @@ class Page < ActiveRecord::Base
 	# Returns boolean true if template has an image slot
 	def template_has_image?
 		if self.template?
-			( self.template.humanize.downcase.match( /(with|med) (image|bilde)/ ) ) ? true : false
+			(self.template.humanize.downcase.match( /(with|med) (image|bilde)/)) ? true : false
 		else
 			false
 		end

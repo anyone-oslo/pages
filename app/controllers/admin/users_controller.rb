@@ -49,6 +49,10 @@ class Admin::UsersController < Admin::AdminController
 		end
 	end
 	
+	def login
+		redirect_to admin_default_url
+	end
+	
 	def logout
 		flash[:notice] = "You have been logged out."
 		deauthenticate!( :forcefully => true )

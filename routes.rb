@@ -27,7 +27,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 	admin.resources( 
 		:users,    
 		:controller => 'admin/users', 
-		:collection => { :new_password => :any, :welcome => :any, :list => :any, :logout => :any },
+		:collection => { :new_password => :any, :welcome => :any, :list => :any, :logout => :any, :login => :any },
 		:member     => { :delete_image => :delete }
 	)
 	admin.resources :accounts, :controller => 'admin/accounts'
@@ -35,7 +35,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:pages,
 		:controller  => 'admin/pages', 
 		:path_prefix => 'admin/:language',
-		:collection  => { :list => :any, :list_test => :any, :fragment => :any, :new => :any, :news => :any },
+		:collection  => { :list => :any, :list_test => :any, :fragment => :any, :new => :any, :news => :any, :new_news => :any },
 		:member      => { :delete_language => :any, :add_language => :any, :preview => :any, :delete_comment => :any, :add_image => :post, :delete_image => :any, :delete_presentation_image => :any, :update_image_caption => :any }
 	)
 	admin.resources(
@@ -61,7 +61,7 @@ connect 'admin/pages/reorder/:id/:direction',       :controller => 'admin/pages'
 #connect 'admin/pages/:action/:id/:language',        :controller => 'admin/pages'
 #connect 'admin/pages/:action/:id/:language/:field', :controller => 'admin/pages'
 
-connect 'admin/',                                   :controller => 'admin/pages'
+admin_default 'admin',                                   :controller => 'admin/admin', :action => 'redirect'
 
 
 connect 'feeds/:action/:language/:slug/index.xml',  :controller => 'feeds'

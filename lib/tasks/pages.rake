@@ -121,18 +121,20 @@ namespace :pages do
 	namespace :update do
 		desc "Patch files"
 		task :files do
-			def find_files(file_expression)
+			def find_files(file_expression, options={})
 				paths = []
 				Find.find(".") do |path|
-					if path.gsub(/^\.?\/?/,'') =~ file_expression && !(path =~ /\.svn/)
+					gsubbed_path = path.gsub(/^\.?\/?/,'')
+					Find.prune if options[:except] && gsubbed_path =~ options[:except]
+					if gsubbed_path =~ file_expression && !(path =~ /\.svn/)
 						paths << path
 					end
 				end
 				paths
 			end
-			def patch_files(file_expression, expression, sub)
+			def patch_files(file_expression, expression, sub, options={})
 				updated_files = []
-				find_files(file_expression).each do |path|
+				find_files(file_expression, options).each do |path|
 					file_content = File.read(path)
 					patched_file_content = file_content.gsub(expression, sub)
 					unless file_content == patched_file_content
@@ -151,7 +153,12 @@ namespace :pages do
 			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
 				puts "config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
 			end
-			patch_files %r%^app/controllers/[\w\d\-_]*_controller\.rb%, /< ApplicationController/, "< FrontendController" do |files|
+			patch_files(
+				%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
+				/< ApplicationController/, 
+				"< FrontendController",
+				:except => %r%^app/controllers/(frontend|images)_controller\.rb%
+			) do |files|
 				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
 			end
 			
