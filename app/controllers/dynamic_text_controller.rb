@@ -36,11 +36,13 @@ class DynamicTextController < FrontendController
             self.size = options[:max_width]
             block.call(self) if block_given?
         }.first
-		if RAILS_ENV == "production"
-            image.crop!(Magick::NorthWestGravity, 4, 0, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
-        else
-            image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
-        end
+# This is bad
+#		if RAILS_ENV == "production"
+#            image.crop!(Magick::NorthWestGravity, 4, 0, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
+#        else
+#            image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
+#        end
+        image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
         image
     end
 
