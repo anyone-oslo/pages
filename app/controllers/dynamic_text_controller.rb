@@ -26,6 +26,7 @@ class DynamicTextController < FrontendController
     caches_page :show
 
     def render_dynamic_text(text, options={}, &block)
+		text = text.gsub('&#47;', '/') # Hack to circumvent the Apache encoded slashes bug
         options[:crop] = true unless options.has_key?(:crop)
 		if RAILS_ENV == "production"
             options[:margin] ||= 10
