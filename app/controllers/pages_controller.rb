@@ -65,7 +65,7 @@ class PagesController < FrontendController
 	def show
 		respond_to do |format|
 			format.html do
-				if @page
+				if @page && @page.published?
 					render_page
 				else
 					render_error 404
