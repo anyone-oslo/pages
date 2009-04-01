@@ -15,6 +15,11 @@ class PagesController < FrontendController
 	end
 	before_filter :send_cache_headers
 	protected     :send_cache_headers
+	
+	# Set a different layout for a page template
+	def page_template_layout(layout_name)
+		@page_template_layout = layout_name
+	end
 
 
 	before_filter :find_page, :only => [ :show ]
@@ -128,8 +133,10 @@ class PagesController < FrontendController
 				return
 			end
 			
-			if @disable_layout
-				render :template => "pages/templates/#{template}", :layout => false
+			@page_template_layout = false if @disable_layout
+			
+			if self.instance_variables.include?('@page_template_layout')
+				render :template => "pages/templates/#{template}", :layout => @page_template_layout
 			else
 				render :template => "pages/templates/#{template}"
 			end
