@@ -30,7 +30,7 @@ class Admin::UsersController < Admin::AdminController
 				@current_user.last_login_at = Time.now
 				@current_user.save
 				session[:user_id] = @current_user.id
-				redirect_to :controller => 'pages' and return
+				redirect
 			end
 		else
 			raise "Account holder already created"

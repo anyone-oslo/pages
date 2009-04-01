@@ -24,7 +24,8 @@
 			<%= link_to "Edit", edit_admin_page_url( @language, page ) %> /
 			<%= link_to "Create subpage", new_admin_page_url( :language => @language, :parent => page ) %>
 			<% if page.reorderable? %>
-				/ <%= link_to "Move Up", { :action => :reorder, :id => page, :direction => 'up' } %> / <%= link_to "Move Down", { :action => :reorder, :id => page, :direction => 'down' } %>
+				/ <%= link_to "Move Up", { :action => :reorder, :id => page, :direction => 'up', :language => @language } %> / 
+				<%= link_to "Move Down", { :action => :reorder, :id => page, :direction => 'down', :language => @language } %>
 			<% end %>
 			&mdash;
 			<small>last updated <%= time_ago_in_words page.updated_at %> ago</small>
