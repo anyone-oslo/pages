@@ -57,7 +57,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 end
 
 connect 'admin/pages/new/:parent',                  :controller => 'admin/pages', :action => :new
-connect 'admin/pages/reorder/:id/:direction',       :controller => 'admin/pages', :action => 'reorder'
+connect 'admin/:language/pages/reorder/:id/:direction',       :controller => 'admin/pages', :action => 'reorder'
 #connect 'admin/pages/:action/:id/:language',        :controller => 'admin/pages'
 #connect 'admin/pages/:action/:id/:language/:field', :controller => 'admin/pages'
 

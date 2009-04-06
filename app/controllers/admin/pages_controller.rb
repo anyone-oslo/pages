@@ -224,7 +224,7 @@ class Admin::PagesController < Admin::AdminController
 	def delete_language
 		@page.destroy_language( @language )
 		#redirect_to :action => :edit, :id => @page
-		redirect_to admin_pages_url( :language => @language )
+		redirect_to admin_pages_url(:language => @language)
 	end
 
 
@@ -235,7 +235,7 @@ class Admin::PagesController < Admin::AdminController
 			@page.move_lower
 		end
 
-		redirect_to :action => :index
+		redirect_to admin_pages_url(:language => @language)
 	end
 	
 end
