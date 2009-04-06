@@ -43,6 +43,7 @@ module ApplicationHelper
 		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
 		output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		output += "	<title>#{options[:title]}</title>\n"
+		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
 		#output += "\t"+javascript_include_tag(
 		if options.has_key?(:javascript)
 			options[:javascript].each do |js|
@@ -54,7 +55,6 @@ module ApplicationHelper
 			end
 		end
 		#output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
-		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
 		output += indent(feed_tags, 1) if options[:feed_tags]
 		output += "\n"
 		if page = @page
