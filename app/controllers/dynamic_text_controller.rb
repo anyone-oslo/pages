@@ -27,22 +27,12 @@ class DynamicTextController < FrontendController
 
     def render_dynamic_text(text, options={}, &block)
 		text = text.gsub('&#47;', '/') # Hack to circumvent the Apache encoded slashes bug
-        options[:crop] = true unless options.has_key?(:crop)
-		if RAILS_ENV == "production"
-            options[:margin] ||= 10
-        else
-            options[:margin] ||= 3
-        end
-        image = Magick::Image.read("caption:#{text.to_s}") {
-            self.size = options[:max_width]
-            block.call(self) if block_given?
-        }.first
-# This is bad
-#		if RAILS_ENV == "production"
-#            image.crop!(Magick::NorthWestGravity, 4, 0, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
-#        else
-#            image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
-#        end
+		options[:crop] = true unless options.has_key?(:crop)
+		options[:margin] ||= 3
+		image = Magick::Image.read("caption:#{text.to_s}") {
+			self.size = options[:max_width]
+			block.call(self) if block_given?
+		}.first
         image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
         image
     end
