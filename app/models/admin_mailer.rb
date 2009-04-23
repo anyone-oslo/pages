@@ -53,4 +53,14 @@ class AdminMailer < ActionMailer::Base
 		self.generic_mailer( mailer_options )
 	end
 	
+	def comment_notification(recipients, options={})
+		mailer_options = {
+			:subject    => "[#{PagesCore.config(:site_name)}] New comment on #{options[:page].name.to_s}",
+			:recipients => recipients,
+			:from       => options[:comment].email,
+			:body       => options,
+		}
+		self.generic_mailer(mailer_options)
+	end
+	
 end

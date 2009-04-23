@@ -6,6 +6,12 @@ module PagesCore
 		@@config[key]
 	end
 	
+	def self.configure(options={})
+		options.each do |key,value|
+			self.config(key, value)
+		end
+	end
+	
 	config :localizations,          false
 	config :text_filter,            'textile'
 	config :page_image_is_linkable, false
@@ -14,6 +20,8 @@ module PagesCore
     config :newsletter_template,    false
 	config :newsletter_image,       false
 	config :page_cache,             false
+	
+	#config :comment_notifications,  [:author, 'your@email.com']
 end
 
 module ActionController
