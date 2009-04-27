@@ -21,6 +21,8 @@ module PagesCore
 	config :newsletter_image,       false
 	config :page_cache,             false
 	
+	config :sphinx_enabled,         false # Enables Sphinx search engine
+	
 	#config :comment_notifications,  [:author, 'your@email.com']
 end
 
