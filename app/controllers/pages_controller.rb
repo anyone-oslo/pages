@@ -37,7 +37,7 @@ class PagesController < FrontendController
 				render_page
 			else
 				@comment.save
-				if PagesCore.config(:comment_notifications) && PagesCore.config(:comment_notifications).kind_of?(Enumerable)
+				if PagesCore.config(:comment_notifications)
 					recipients = PagesCore.config(:comment_notifications).map{|r| r = @page.author.realname_and_email if r == :author; r }.uniq
 					recipients.each do |r|
 						AdminMailer.deliver_comment_notification(r, :page => @page, :comment => @comment, :url => page_url(@page))

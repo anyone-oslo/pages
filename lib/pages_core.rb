@@ -28,6 +28,7 @@ module ActionController
 
 	class ActionControllerError < StandardError #:nodoc:
 	end
+
 	class RoutingError < ActionControllerError #:nodoc:
 		attr_reader :failures
 		def initialize(message, failures=[])
@@ -85,11 +86,3 @@ require "pages_core/string_extensions"
 require "pages_core/array_extensions"
 require "pages_core/awstats"
 require "pages_core/paginates"
-
-
-
-
-
-
-
-
