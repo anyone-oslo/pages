@@ -14,7 +14,7 @@ connect 'pages/:language/:id/:page',              :controller => 'pages', :actio
 
 connect ':language/pages/:page_id/files/:id',     :controller => 'page_files', :action => 'show'
 
-resources :pages, :path_prefix => '/:language'
+resources :pages, :path_prefix => '/:language', :collection => {:search => :any}
 resources :page_files, :path_prefix => '/:language/pages/:page_id'
 
 
@@ -35,7 +35,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:pages,
 		:controller  => 'admin/pages', 
 		:path_prefix => 'admin/:language',
-		:collection  => { :list => :any, :list_test => :any, :fragment => :any, :new => :any, :news => :any, :new_news => :any },
+		:collection  => { :list => :any, :list_test => :any, :fragment => :any, :new => :any, :news => :any, :new_news => :any, :search => :any },
 		:member      => { :delete_language => :any, :add_language => :any, :preview => :any, :delete_comment => :any, :add_image => :post, :delete_image => :any, :delete_presentation_image => :any, :update_image_caption => :any }
 	)
 	admin.resources(

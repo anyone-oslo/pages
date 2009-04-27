@@ -186,6 +186,17 @@ class Page < ActiveRecord::Base
 			pages
 		end
 		
+		def search_paginated(query, options={})
+			options[:page] = (options[:page] || 1).to_i
+			search_options = {
+				:per_page   => 20,
+				:include    => [:textbits, :categories, :image, :author]
+			}.merge(options)
+			pages = Page.search(query, search_options)
+			PagesCore::Paginates.paginate(pages, :current_page => options[:page], :pages => pages.total_pages, :per_page => search_options[:per_page])
+			pages
+		end
+		
 		# Count pages. See Page.get_pages for options.
 		def count_pages(options={}, find_options=nil)
 			unless find_options
@@ -740,14 +751,6 @@ class Page < ActiveRecord::Base
 	def published?
 		(self.status == 2 && !self.autopublish?) ? true : false
 	end
-
-    def names_for_search
-        self.textbits.select{ |tb| tb.name == "name" }.map{ |tb| tb.to_s }.join("\n")
-    end
-
-    def content_for_search
-        self.textbits.select{ |tb| tb.name == "body" }.map{ |tb| tb.to_s }.join("\n")
-    end
 
 	def slug
 		self.class.string_to_slug( self.name.to_s )

@@ -88,6 +88,10 @@ class Admin::PagesController < Admin::AdminController
 	def list
 		redirect_to admin_pages_url( :language => @language )
 	end
+	
+	def search
+		
+	end
 
 
 

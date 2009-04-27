@@ -25,7 +25,9 @@ module FrontendHelper
 	end
 	
 	def formatted_time(time, options={})
-		formatted_date(time, options) + time.strftime( ", %Y" )
+		f = formatted_date(time, options)
+		f += time.strftime( ", %Y" ) if time.strftime("%Y") == Time.now.strftime("%Y")
+		f
 	end
 
 	def nav_link(page)
