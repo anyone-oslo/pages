@@ -71,9 +71,20 @@ namespace :pages do
 		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
 	end
 
-	desc "Reindex Sphinx" 
-	task :reindex_sphinx do
+end
+
+namespace :sphinx do
+	desc "(Re)index Sphinx"
+	task :index do
         run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+	end
+	desc "Start Sphinx"
+	task :start do
+        run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
+	end
+	desc "Stop Sphinx"
+	task :stop do
+        run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
 	end
 end
 
@@ -94,10 +105,11 @@ end
 after "deploy:setup",    "pages:create_shared_dirs"
 after "deploy:symlink",  "pages:fix_permissions"
 after "deploy:symlink",  "pages:create_symlinks"
-after "deploy:restart",  "pages:reindex_sphinx"
+after "deploy:restart",  "sphinx:index"
 after "deploy:restart",  "cache:flush"
 before "deploy:migrate", "deploy:fix_plugin_migrations"
 
 before "deploy:cold", "deploy:setup"
 before "deploy:cold", "deploy"
 after "deploy:cold", "deploy:reload_webserver"
+after "deploy:cold", "sphinx:start"

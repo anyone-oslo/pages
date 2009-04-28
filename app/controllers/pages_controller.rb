@@ -7,11 +7,9 @@ class PagesController < FrontendController
 	end
 	
 	def send_cache_headers
-		if PagesCore.config(:http_caching)
-			cache_time = 2.minutes
-			response.headers['Cache-Control'] = "max-age: #{cache_time.to_s}, must-revalidate"
-			response.headers['Expires']       = (Time.now + cache_time).to_formatted_s(:rfc822)
-		end
+		cache_time = 2.minutes
+		response.headers['Cache-Control'] = "max-age: #{cache_time.to_s}, must-revalidate"
+		response.headers['Expires']       = (Time.now + cache_time).to_formatted_s(:rfc822)
 	end
 	before_filter :send_cache_headers
 	protected     :send_cache_headers

@@ -58,18 +58,16 @@ class User < ActiveRecord::Base
 		user.is_admin = true if user.is_super_admin?
 	end
 	
-	if PagesCore.config(:sphinx_enabled)
-		define_index do
-			# fields
-			indexes username, realname, email, mobile
+	define_index do
+		# fields
+		indexes username, realname, email, mobile
 
-			# attributes
-			has :last_login_at, :type => :datetime
-			has :created_at, :type => :datetime
-			has is_activated
+		# attributes
+		has :last_login_at, :type => :datetime
+		has :created_at, :type => :datetime
+		has is_activated
 
-			set_property :delta => true
-		end
+		set_property :delta => true
 	end
 
 	class << self # -- Class methods ------------------------------------------
