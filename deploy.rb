@@ -74,6 +74,10 @@ namespace :pages do
 end
 
 namespace :sphinx do
+	desc "Configure Sphinx"
+	task :configure do
+        run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
+	end
 	desc "(Re)index Sphinx"
 	task :index do
         run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
@@ -85,6 +89,10 @@ namespace :sphinx do
 	desc "Stop Sphinx"
 	task :stop do
         run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+	end
+	desc "Restart Sphinx"
+	task :restart do
+        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
 	end
 end
 
