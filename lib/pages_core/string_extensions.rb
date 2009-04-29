@@ -42,7 +42,17 @@ module PagesCore
             return new_string
         end
         
+		# Prepend http:// if necessary
+		def with_http
+			(self.strip =~ /^https?:\/\//) ? self.strip : "http://"+self.strip
+		end
+
+		# Strip http:// from the string
+		def without_http
+			self.strip.gsub(/^https?:\/\//, '')
+		end
+
 	end
 end
 
-String.send( :include, PagesCore::StringExtensions )
+String.send(:include, PagesCore::StringExtensions)
