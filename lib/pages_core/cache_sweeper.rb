@@ -36,10 +36,14 @@ module PagesCore
 						Find.prune if path =~ Regexp.new("^#{cache_dir}/dynamic_image") # Ignore dynamic image
 						file = path.gsub(Regexp.new("^#{cache_dir}"), "")
 						kill_patterns.each do |p|
+							path_swept = false
 							if file =~ p && File.exist?( path )
 								swept_files << path
+								puts "Sweeping: #{path}"
 								`rm -rf #{path}`
+								path_swept = true
 							end
+							puts "NOT Sweeping: #{path}" unless path_swept
 						end
 					end
 				end
