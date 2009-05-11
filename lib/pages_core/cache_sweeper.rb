@@ -29,21 +29,17 @@ module PagesCore
 				#languages = %w{nor eng}
 				cache_dir = self.config.cache_path
 				swept_files = []
-				if File.exist?(cache_dir) && PagesCore.config(:page_cache)
+				if File.exist?(cache_dir)
 					kill_patterns = self.config.patterns
 					paths = []
 					Find.find(cache_dir+"/") do |path|
 						Find.prune if path =~ Regexp.new("^#{cache_dir}/dynamic_image") # Ignore dynamic image
 						file = path.gsub(Regexp.new("^#{cache_dir}"), "")
 						kill_patterns.each do |p|
-							path_swept = false
 							if file =~ p && File.exist?( path )
 								swept_files << path
-								puts "Sweeping: #{path}"
 								`rm -rf #{path}`
-								path_swept = true
 							end
-							puts "NOT Sweeping: #{path}" unless path_swept
 						end
 					end
 				end
