@@ -271,4 +271,13 @@ module ApplicationHelper
         return new_string
     end
 
+	def unique_page(page_name, &block)
+		page = Page.find_unique(page_name)
+		if page && block_given?
+			output = capture(page, &block)
+			concat(output)
+		end
+		page
+	end
+
 end

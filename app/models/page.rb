@@ -29,6 +29,9 @@ class Page < ActiveRecord::Base
 	
 	@@available_templates_cached = nil
 	
+	validates_format_of :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
+	validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
+	
 	validate do |page|
 		#page.errors.add( :name, 'must have a title' ) if page.name.empty? # and !page.deleted?
 		page.template ||= page.default_template
@@ -63,6 +66,11 @@ class Page < ActiveRecord::Base
 
 	class << self
 		
+		# Finds page with unique name
+		def find_unique(name)
+			page = Page.find_by_unique_name(name.to_s)
+		end
+
 		# Finds pages due for auto publishing and publishes them.
 		def autopublish!(options={})
 			options[:fuzziness] ||= 1.minute
