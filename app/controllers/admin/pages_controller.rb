@@ -11,7 +11,7 @@ class Admin::PagesController < Admin::AdminController
 		end
 	end
 	private       :find_page
-	before_filter :find_page, :only => [ :show, :edit, :preview, :update, :destroy, :reorder, :add_image, :delete_image, :delete_language, :delete_comment, :delete_presentation_image ]
+	before_filter :find_page, :only => [ :show, :edit, :preview, :update, :destroy, :reorder, :add_image, :delete_image, :delete_language, :delete_comment, :delete_presentation_image, :import_xml ]
 	
 	def application_languages
 		@application_languages = Textbit.languages
@@ -92,7 +92,7 @@ class Admin::PagesController < Admin::AdminController
 	def search
 		
 	end
-
+	
 
 
 	# --- MEMBER -------------------------------------------------------------
@@ -102,6 +102,12 @@ class Admin::PagesController < Admin::AdminController
 		render :action => :edit
 	end
 	
+	def import_xml
+		if request.post? && params[:xmlfile]
+			@created_pages = @page.import_xml(params[:xmlfile].read)
+		end
+	end
+
 	def new
 		@page = Page.new.translate(@language)
 		if params[:parent]

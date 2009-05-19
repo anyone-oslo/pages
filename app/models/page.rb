@@ -37,7 +37,26 @@ class Page < ActiveRecord::Base
 		page.template ||= page.default_template
 	end
 	
-	before_save    { |page| page.published_at = Time.now unless page.published_at? }
+	attr_accessor :image_url, :image_description
+
+	before_save do |page| 
+		page.published_at = Time.now unless page.published_at?
+		if page.image_url && !page.image_url.blank?
+			temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')
+			target_filename = page.image_url.split("/").last
+			target_file = File.join(temp_path, target_filename)
+			`curl -o #{target_file} #{page.image_url}`
+			page.image = File.open(target_file)
+			`rm #{target_file}`
+		end
+		if page.image_description && !page.image_description.blank?
+			begin
+				page.image.update_attribute(:description, page.image_description)
+			rescue
+	            # Alert?
+            end
+		end
+	end
 	
 	# fuck a ferret
 	#acts_as_ferret :fields => { :names_for_search => { :boost => 2 }, :content_for_search => {} }
@@ -61,6 +80,7 @@ class Page < ActiveRecord::Base
 
 		set_property :delta => true
 	end
+
 
 	# ---- CLASS METHODS ------------------------------------------------------
 
@@ -736,6 +756,29 @@ class Page < ActiveRecord::Base
 	end
 
 
+	# Imports subpages from XML
+	def import_xml(xmldata)
+		created_pages = []
+		require 'rexml/document'
+		doc = REXML::Document.new(xmldata)
+		doc.elements.each('pages/page') do |page_xml|
+			attributes = Hash.from_xml(page_xml.to_s)['page']
+			attributes.merge!({'parent_page_id' => self.id})
+			if attributes.has_key?('author_email')
+				author = User.exists?(:email => attributes['author_email']) ? User.find_by_email(attributes['author_email']): self.author
+				attributes.delete('author_email')
+			else
+				author = self.author
+			end
+			page = Page.new.translate(self.working_language)
+			page.author = author
+			if page.update_attributes(attributes)
+				created_pages << page
+			end
+		end
+		created_pages
+	end
+
 	# Enable virtual setters and getters for existing (and enforced) textbits
 	def method_missing( method_name, *args )
 		name = method_name.to_s
@@ -750,6 +793,19 @@ class Page < ActiveRecord::Base
 			end
 		else
 			super
+		end
+	end
+	
+	# Set categories from string
+	def category_names=(names)
+		if names
+			names = names.split(/[\s]*,[\s]*/).reject{|n| n.blank?}
+			if names.length > 0
+				categories = names.map do |name|
+					cat = Category.exists?(:name => name) ? Category.find_by_name(name) : Category.create(:name => name)
+				end
+			end
+			self.categories = categories
 		end
 	end
 	

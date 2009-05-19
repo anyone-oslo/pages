@@ -1,6 +1,6 @@
 class Admin::UsersController < Admin::AdminController
 	
-	before_filter :find_user, :only => [ :edit, :update, :show, :destroy, :delete_image ]
+	before_filter :find_user, :only => [:edit, :update, :show, :destroy, :delete_image]
 
 	def list
 		redirect_to :action => "index"
@@ -20,17 +20,31 @@ class Admin::UsersController < Admin::AdminController
 
 	def welcome
 		if User.count < 1
-			flash.now[:notice] = nil # TODO: fiks hack
 			if request.get?
 				@user = User.new
 			else
-				@user = User.new( params[:user].merge( { :is_admin => true, :is_activated => true } ) )
-				@user.save
-				@current_user = @user
-				@current_user.last_login_at = Time.now
-				@current_user.save
-				session[:user_id] = @current_user.id
-				redirect
+				attributes = params[:user].merge({:is_admin => true, :is_activated => true})
+				if attributes[:openid_url] && !attributes[:openid_url].blank?
+					new_openid_url = attributes[:openid_url]
+				end
+				@user = User.create(attributes)
+				if @user.valid?
+					@current_user = @user
+					@current_user.update_attribute(:last_login_at, Time.now)
+					session[:current_user_id] = @current_user.id
+					set_authentication_cookies
+
+					# Verify the changed OpenID URL
+					if new_openid_url
+						response = openid_consumer.begin(new_openid_url) rescue nil
+						if response
+							redirect_to response.redirect_url(root_url, update_openid_user_url, false) and return
+						else
+							flash[:notice] = "WARNING: Your OpenID URL is invalid!"
+						end
+					end
+					redirect
+				end
 			end
 		else
 			raise "Account holder already created"

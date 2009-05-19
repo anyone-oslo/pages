@@ -206,6 +206,10 @@
 		<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
 			:errors      => @page.errors[:redirect_to]
 		%>
+		<p class="field">
+			<label>Import subpages</label>
+			<%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
+		</p>
 	<% end %>
 	
 	<div class="buttons">

@@ -22,7 +22,7 @@ class Admin::AdminController < ApplicationController
 			end
 		end
 	end
-	before_filter :require_authentication, :except => [ :new_password, :welcome ]
+	before_filter :require_authentication, :except => [:new_password, :welcome]
 
 	# Builds the admin menu tabs.
 	def build_admin_tabs
