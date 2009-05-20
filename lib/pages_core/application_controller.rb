@@ -5,6 +5,7 @@ module PagesCore
 		# Useful for actions that don't rely on PagesCore.
 		SKIP_FILTERS = [:render_dynamic_image]
 
+		before_filter :domain_cache
 		before_filter :authenticate,               :except => SKIP_FILTERS
 		before_filter :load_account,               :except => SKIP_FILTERS
 		before_filter :get_language,               :except => SKIP_FILTERS
@@ -28,6 +29,13 @@ module PagesCore
 
 		protected
 		
+			def domain_cache
+				if PagesCore.config(:domain_based_cache)
+					@@default_page_cache_directory ||= @@page_cache_directory
+					@@page_cache_directory = File.join(@@default_page_cache_directory, request.domain)
+				end
+			end
+
 			def set_process_title
 				@@default_process_title ||= $0
 				@@number_of_requests ||= 0
