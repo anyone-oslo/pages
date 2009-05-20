@@ -21,7 +21,8 @@ PagesCore.configure(
 	:page_image_is_linkable => false,                                       # Page image is linkable
 	:recaptcha              => false,                                       # Enable reCAPTCHA
 	:flickr_api             => false,                                       # Enable Flickr API integration
-	:page_cache             => true                                         # Enable page caching
+	:page_cache             => true,                                        # Enable page caching
+	:domain_based_cache     => true                                         # Enable domain name based page caching
 )	
 
 # Configure the cache sweeper, add any custom paths and models
