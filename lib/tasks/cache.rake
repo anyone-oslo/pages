@@ -5,5 +5,10 @@ namespace :pages do
 			swept_files = PagesCore::CacheSweeper.sweep!
 			puts "Cache swept, #{swept_files.length} files deleted."
 		end
+		desc "Purge the entire pages cache"
+		task :purge => :environment do
+			PagesCore::CacheSweeper.purge!
+			puts "Cache purged."
+		end
 	end
 end

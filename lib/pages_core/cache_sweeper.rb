@@ -24,6 +24,14 @@ module PagesCore
 				@@configuration
 			end
 
+			# Purge the entire pages cache
+			def purge!
+				cache_dir = self.config.cache_path
+				if File.exist?(cache_dir)
+					`rm -rf #{cache_dir}/*`
+				end
+			end
+
 			# Sweep all cached pages
 			def sweep!
 				#languages = %w{nor eng}
