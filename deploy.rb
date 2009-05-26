@@ -7,7 +7,7 @@ set :use_sudo,    false
 set :deploy_to,   "/var/www/#{application}"
 set :web_server,  :apache2
 
-set :repository,  "http://svn.manualdesign.no/svn/backstage/sites/#{application}/trunk"
+set :repository,  "http://svn.manualdesign.no/svn/pages/sites/#{application}/trunk"
 set :scm, :subversion
 
 set :flush_cache, true
