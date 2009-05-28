@@ -68,7 +68,7 @@ class Textbit < ActiveRecord::Base
 		text = " " + text
 		string = self.to_s
 		if options.has_key?( :shorten ) && string.length > options[:shorten]
-			string = string[0..options[:shorten]] + ".."
+			string = string[0..options[:shorten]] + "..."
 		end
 		
 		case self.filter
@@ -87,7 +87,7 @@ class Textbit < ActiveRecord::Base
 	def to_html( options={} )
 		string = self.to_s
 		if options.has_key?( :shorten ) && string.length > options[:shorten]
-			string = string[0..options[:shorten]] + ".."
+			string = string[0..options[:shorten]] + "..."
 		end
 
 		case self.filter
