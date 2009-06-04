@@ -3,3 +3,9 @@ body.login {
 body.login #header {
 	height:          55px;
 }
+body.login #loginForm input {
+	width: 190px;
+}
+body.login .forgot_password_link {
+	padding-left: 6px;
+}

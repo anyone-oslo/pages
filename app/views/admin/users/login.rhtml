@@ -5,23 +5,6 @@
 -%>
 
 <% sidebar do -%>
-	<h2>Did you forget your password?</h2>
-	<div id="forgot-password-primer">
-		<p>
-			Don't worry, it happens. <%= link_to_function "Click here", "Element.show('forgot-password-form');Element.hide('forgot-password-primer')" %> to make a new one.
-		</p>
-	</div>
-	<div id="forgot-password-form">
-		<%= form_tag( { :controller => :users, :action => :new_password } ) %>
-			<p>
-				Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
-			</p>
-			<p>
-				<%= text_field_tag :username, '', :size => 22 %>
-				<%= submit_tag "Find" %>
-			</p>
-		</form>
-	</div>
 	<h2>Please note</h2>
 	<p>
 		Microsoft Internet Explorer is currently not supported. We recommend using <strong>Safari</strong> or 
@@ -38,6 +21,20 @@
 	</p>
 <% end -%>
 
+<div id="forgotPasswordForm">
+	<% form_tag({:controller => :users, :action => :new_password}) do %>
+		<h2>Forgot your password?</h2>
+		<p>
+			Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
+		</p>
+		<p>
+			<%= text_field_tag :username, '', :size => 48 %>
+			<%= submit_tag "Send" %>
+		</p>
+	<% end %>
+</div>
+
+<div id="loginForm">
 <% form_tag login_admin_users_path do %>
 <table>
 	<tr>
@@ -52,13 +49,19 @@
 		<td></td>
 		<td>
 			<button type="submit">Log in</button>
+			<span class="forgot_password_link"><%= link_to_function "I forgot my password!", "forgot_password();" %></span>
 		</td>
 	</tr>
 </table>
 <% end %>
+</div>
 
-</form>
 
 <script type="text/javascript">
-	Element.hide( "forgot-password-form" );
+	jQuery('#forgotPasswordForm').hide();
+	function forgot_password() {
+		jQuery('#forgotPasswordForm').show();
+		jQuery('#loginForm').hide();
+		return false;
+	}
 </script>
