@@ -43,6 +43,21 @@ end
 
 namespace :pages do
 
+	desc "Verify migrations"
+	task :verify_migrations, :roles => [:web, :app, :db] do
+		migration_status = `rake -s pages:migration_status`
+		current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
+		unless current == plugin
+			puts "================================================================================"
+			puts "MIGRATIONS MISMATCH!"
+			puts migration_status
+			puts "\nRun the following commands to fix:"
+			puts "\nrake pages:update\nrake db:migrate\nsvn ci -m \"#{application}: Fixed migrations\"\ncap deploy:migrations"
+			puts
+			exit
+		end
+	end
+
 	desc "Create shared directories"
 	task :create_shared_dirs, :roles => [:web,:app] do
 		run "mkdir -p #{deploy_to}/#{shared_dir}/cache"
@@ -109,6 +124,8 @@ namespace :cache do
 	    end
 	end
 end
+
+before "deploy", "pages:verify_migrations"
 
 after "deploy:setup",    "pages:create_shared_dirs"
 after "deploy:symlink",  "pages:fix_permissions"
