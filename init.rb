@@ -39,3 +39,7 @@ class Image < ActiveRecord::Base
 	has_many :album_images
 	has_many :albums, :through => :album_images
 end
+
+# reCaptcha Global Keys
+ENV['RECAPTCHA_PUBLIC_KEY']  = "***REMOVED***"
+ENV['RECAPTCHA_PRIVATE_KEY'] = "***REMOVED***"
