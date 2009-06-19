@@ -31,7 +31,7 @@ module FrontendHelper
 	end
 
 	def nav_link(page)
-		link_to page.name.to_s.upcase, page_url(page) #:controller => :pages, :action => :show, :id => page
+		link_to page.name.to_s, page_url(page) #:controller => :pages, :action => :show, :id => page
 	end
 
 	def nav_list_item(page, options={})
