@@ -51,7 +51,7 @@
 		%>
 		<% if @page.image %>
 			<p>
-				<%= dynamic_image_tag(@page.image, :size => '300x200') %>
+				<%= editable_dynamic_image_tag(@page.image, :size => '300x200') %>
 			</p>
 			<p>
 				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
@@ -98,7 +98,7 @@
 						<th></th>
 					</tr>
 					<% @page.images.each do |image| %><tr>
-						<td class="thumbnail"><%= dynamic_image_tag image, :size => '100x100' %></td>
+						<td class="thumbnail"><%= editable_dynamic_image_tag image, :size => '100x100' %></td>
 						<!--<td><strong><%= image.name %></strong></td>-->
 						<td>
 							<div id="image-caption-<%= image.id %>"><%= ( image.byline? ) ? image.byline : "<em>No caption</em>" %></div>

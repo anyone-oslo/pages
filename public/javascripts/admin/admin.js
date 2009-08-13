@@ -200,10 +200,13 @@ function EditableImage(link, options){
 			this.imageData = false;
 			jQuery.dimScreenStop();
 		},
-		refreshLinkedImage : function() {
+		refreshLinkedImage : function(size) {
 			var newURL = this.linkedImage.src.toString();
 			newURL = newURL+"?"+Math.round(Math.random() * 65535);
 			this.linkedImage.src = newURL;
+			size = size.split("x",2); newWidth = size[0]; newHeight = size[1]; // first attempt at fixing this, but the URL is the wrong part ;)
+			this.linkedImage.width = newWidth;
+			this.linkedImage.height = newHeight;
 		},
 		submit : function() {
 			var cropped = (!this.cropWidth || !this.cropHeight) ? 0 : 1;
@@ -219,7 +222,7 @@ function EditableImage(link, options){
 			}
 			var binding = this;
 			jQuery.put(this.resourceURL+".js", put_options, function(){
-				binding.refreshLinkedImage();
+				binding.refreshLinkedImage(crop_size);
 				binding.closeEditor();
 			})
 		}
