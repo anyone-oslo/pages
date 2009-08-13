@@ -202,9 +202,10 @@ function EditableImage(link, options){
 		},
 		refreshLinkedImage : function(size) {
 			var newURL = this.linkedImage.src.toString();
+			newURL = newURL.replace(/\/[\d]+x[\d]+\//, '/'+size+'/'); // temporary hack, fix to use rel="" dimensions
 			newURL = newURL+"?"+Math.round(Math.random() * 65535);
 			this.linkedImage.src = newURL;
-			size = size.split("x",2); newWidth = size[0]; newHeight = size[1]; // first attempt at fixing this, but the URL is the wrong part ;)
+			size = size.split("x",2); newWidth = size[0]; newHeight = size[1];
 			this.linkedImage.width = newWidth;
 			this.linkedImage.height = newHeight;
 		},
