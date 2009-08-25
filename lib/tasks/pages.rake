@@ -16,7 +16,10 @@ namespace :pages do
 	desc "Refresh RSS feeds"
 	task :refresh_feeds => :environment do
 		puts "Refreshing external feeds"
-		Feed.refresh_feeds
+		PagesCore::CacheSweeper.disable do
+			Feed.refresh_feeds
+		end
+		PagesCore::CacheSweeper.sweep!
 	end
 	
 	desc "Autopublish due pages"
