@@ -90,7 +90,7 @@ module PagesCore
 				[]
 			end
 
-			self.enabled ||= true
 		end
+		self.enabled ||= true
 	end
 end

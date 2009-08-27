@@ -1,3 +1,4 @@
+/*
 button {
 	background:    transparent url(../../images/admin/button-left.gif) no-repeat;
 	padding:       0;
@@ -28,7 +29,7 @@ button:hover {
 button:hover .inner {
 	background:    transparent url(../../images/admin/button-right-hover.gif) top right no-repeat;
 }
-
+*/
 form.button-to {
 	display:       inline;
 	margin:        0;
