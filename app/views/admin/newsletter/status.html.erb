@@ -24,7 +24,7 @@
 			<td><%= h(m.recipients) %></td>
 			<td><%= h(m.sender) %></td>
 			<td><%= h(m.subject) %></td>
-			<td><%= formatted_time m.created_at %></td>
+			<td><%= smart_time m.created_at %></td>
 			<td><em>Pending</em></td>
 		</tr><% end %>
 	<% end %>
@@ -33,7 +33,7 @@
 			<td><%= h(m.recipients) %></td>
 			<td><%= h(m.sender) %></td>
 			<td><%= h(m.subject) %></td>
-			<td><%= formatted_time m.created_at %></td>
+			<td><%= smart_time m.created_at %></td>
 			<td><strong class="warning">Failed</strong></td>
 		</tr><% end %>
 	<% end %>
