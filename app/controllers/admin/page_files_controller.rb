@@ -44,7 +44,8 @@ class Admin::PageFilesController < Admin::AdminController
 	end
 	
 	def create
-		@page_file = @page.files.create( params[:page_file] )
+		@page_file = @page.files.new
+		@page_file.update_attributes(params[:page_file])
 		if @page_file.valid?
 			flash[:notice] = "File uploaded"
 		else

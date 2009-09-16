@@ -53,10 +53,14 @@ Admin.PagesController = {
 		this.applyAutopublishCheck();
 	},
 
+	show_action : function() {
+		this.edit_action();
+	},
+
 	edit_action : function() {
 		
 		this.applyAutopublishCheck();
-		
+
 		window.hidePreview = function() {
 			if( window.documentPreview ) {
 				document.body.removeChild( window.documentPreview );
