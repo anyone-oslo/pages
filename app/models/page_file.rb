@@ -1,7 +1,12 @@
 class PageFile < ActiveRecord::Base
 
 	FORMATS = {
-		'audio/mpeg' => :mp3
+		'audio/mpeg' => :mp3,
+		'image/gif' => :gif,
+		'image/jpeg' => :jpg,
+		'image/jpg' => :jpg,
+		'image/png' => :png,
+		'application/pdf' => :pdf
 	}
 
 	belongs_to :page
