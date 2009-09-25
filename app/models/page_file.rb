@@ -1,5 +1,9 @@
 class PageFile < ActiveRecord::Base
 
+	FORMATS = {
+		'audio/mpeg' => :mp3
+	}
+
 	belongs_to :page
 	belongs_to :binary, :dependent => :destroy
 	
@@ -24,6 +28,14 @@ class PageFile < ActiveRecord::Base
 	
 	def data
 		self.binary.data
+	end
+	
+	def format?
+		(self.content_type && FORMATS.keys.include?(self.content_type)) ? true : false
+	end
+	
+	def format
+		FORMATS[self.content_type]
 	end
 
 end

@@ -115,6 +115,15 @@ module ApplicationHelper
 		end
 		options = options.merge( { :language => target_language } )
 	end
+	
+	def page_file_link(file, options={})
+		options[:language] ||= @language
+		if file.format?
+			formatted_page_file_path(@language,file.page,file, :format => file.format)
+		else
+			page_file_path(@language,file.page,file)
+		end
+	end
 
 	def translated_link( name, new_language )
 		language = @language || Language.default
