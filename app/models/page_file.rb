@@ -5,6 +5,7 @@ class PageFile < ActiveRecord::Base
 		'image/gif' => :gif,
 		'image/jpeg' => :jpg,
 		'image/jpg' => :jpg,
+		'image/pjpeg' => :jpg,
 		'image/png' => :png,
 		'application/pdf' => :pdf
 	}
