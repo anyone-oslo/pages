@@ -7,8 +7,10 @@ set :use_sudo,    false
 set :deploy_to,   "/var/www/#{application}"
 set :web_server,  :apache2
 
-set :repository,  "http://svn.manualdesign.no/svn/pages/sites/#{application}/trunk"
-set :scm, :subversion
+set :scm,                   "git"
+set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.git"
+set :deploy_via,            :remote_cache
+set :git_enable_submodules, 1
 
 set :flush_cache, true
 
