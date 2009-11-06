@@ -54,7 +54,7 @@ namespace :pages do
 			puts "MIGRATIONS MISMATCH!"
 			puts migration_status
 			puts "\nRun the following commands to fix:"
-			puts "\nrake pages:update\nrake db:migrate\nsvn ci -m \"#{application}: Fixed migrations\"\ncap deploy:migrations"
+			puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
 			puts
 			exit
 		end
