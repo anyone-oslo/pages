@@ -132,7 +132,7 @@ before "deploy", "pages:verify_migrations"
 after "deploy:setup",    "pages:create_shared_dirs"
 after "deploy:symlink",  "pages:fix_permissions"
 after "deploy:symlink",  "pages:create_symlinks"
-after "deploy:restart",  "sphinx:index"
+#after "deploy:restart",  "sphinx:index"
 after "deploy:restart",  "cache:flush"
 before "deploy:migrate", "deploy:fix_plugin_migrations"
 
