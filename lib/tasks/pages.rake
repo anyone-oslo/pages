@@ -87,7 +87,7 @@ namespace :pages do
 		puts "\nGenerating files..."
 		template_path = File.join(File.dirname(__FILE__), '../../template')
 		Find.find(template_path) do |path|
-			Find.prune if path =~ /\.svn/
+			Find.prune if path =~ /\.git/
 			if File.file?(path)
 				file_path = path.gsub(Regexp.new("^#{Regexp.escape(template_path)}/?"),'')
 				template = ERB.new(File.read(path))
@@ -100,7 +100,7 @@ namespace :pages do
 			puts "Creating development database and migrations (this might take a while)..."
 			`rake db:create`
 			`script/generate plugin_migration pages`
-			`svn add db/migrate/*`
+			`git add db/migrate/*`
 			`rake db:migrate`
 			puts "Starting server..."
 			new_thread = Thread.new do
@@ -129,7 +129,7 @@ namespace :pages do
 				Find.find(".") do |path|
 					gsubbed_path = path.gsub(/^\.?\/?/,'')
 					Find.prune if options[:except] && gsubbed_path =~ options[:except]
-					if gsubbed_path =~ file_expression && !(path =~ /\.svn/)
+					if gsubbed_path =~ file_expression && !(path =~ /\.git/)
 						paths << path
 					end
 				end
@@ -168,14 +168,14 @@ namespace :pages do
 			#config.action_view.cache_template_loading
 			if !File.exists?('app/views/pages/templates')
 				puts "Page template dir not found, moving old templates..."
-				`svn mkdir app/views/pages/templates`
+				`mkdir app/views/pages/templates`
 				find_files(%r%^app/views/pages/[\w\d\-_]+\.[\w\d\-_\.]+%).each do |path|
 					new_path = path.split('/')
 					filename = new_path.pop
 					new_path << 'templates'
 					new_path << filename
 					new_path = new_path.join('/')
-					`svn mv #{path} #{new_path}`
+					`mv #{path} #{new_path}`
 				end
 			end
 		end
@@ -204,7 +204,7 @@ namespace :pages do
 				end
 			end
 			if plugins_migrated > 0
-				`svn -q add db/migrate/*`
+				`git add db/migrate/*`
 				puts "\nNew migrations added, now run rake db:migrate"
 			end
 		end
@@ -217,9 +217,15 @@ namespace :pages do
 			patcher.register_prefix( [ 'admin', 'pages' ] )
 			patcher.patch!
 		end
+		
+		desc "Update submodules"
+		task :submodules => :environment do
+			puts "Updating submodules..."
+			`git submodule foreach 'git pull'`
+		end
 	end 
 
 	desc "Automated updates for newest version"
-	task :update => ["update:files", "update:fix_plugin_migrations", "update:migrations"]
+	task :update => ["update:submodules", "update:files", "update:fix_plugin_migrations", "update:migrations"]
 end
 
