@@ -26,7 +26,7 @@ class Account < ActiveRecord::Base
 	end
 	
 	def make_key!
-		self.key = UUID.random_create.to_s
+		self.key = UUIDTools::UUID.random_create.to_s
 	end
 	
 	def database_size
