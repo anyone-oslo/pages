@@ -18,6 +18,15 @@ role :web, remote_host
 role :app, remote_host
 role :db,  remote_host, :primary => true
 
+desc "Run rake task (specified as TASK environment variable)"
+task :rake_task, :roles => :app do
+	if ENV['TASK']
+        run "cd #{deploy_to}/#{current_dir} && rake #{ENV['TASK']} RAILS_ENV=production"
+	else
+		puts "Please specify a command to execute on the remote servers (via the COMMAND environment variable)"
+	end
+end
+
 namespace :deploy do
 
 	desc "Setup, configure the web server and deploy the application"
