@@ -32,13 +32,6 @@ module PagesCore
 			[:acts_as_taggable, :session_cleaner, :apparat, :language, :mumbojumbo, :enumerable, :feed_builder].each do |lib|
 				require File.join(File.dirname(__FILE__), "../#{lib.to_s}")
 			end
-			# require 'acts_as_taggable'
-			# require 'session_cleaner'
-			# require 'apparat'
-			# require 'language'
-			# require 'mumbojumbo'
-			# require 'enumerable'
-			# require 'feed_builder'
 		end
 
 	end
