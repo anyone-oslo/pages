@@ -58,10 +58,10 @@ end
 
 # -- debug
 
-module PagesCore
-	def self.config(*args)
-		false
-	end
-end
-
-puts PagesCore::Templates.configuration.inspect
+# module PagesCore
+# 	def self.config(*args)
+# 		false
+# 	end
+# end
+# 
+# puts PagesCore::Templates.configuration.inspect

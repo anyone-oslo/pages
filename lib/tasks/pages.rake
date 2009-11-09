@@ -238,7 +238,7 @@ namespace :pages do
 		end
 		
 		desc "Update submodules"
-		task :submodules => :environment do
+		task :submodules do
 			puts "Updating submodules..."
 			`git submodule foreach 'git checkout master && git pull'`
 		end
