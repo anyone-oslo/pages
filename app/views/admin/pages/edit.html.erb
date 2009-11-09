@@ -1,7 +1,7 @@
 <%
 	page_title       "Editing “" + @page.name.to_s + "”"
 	page_description "Editing " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path( :id => page, :language => @language )) }.join( " &raquo; " )
-	if PagesCore.config( :localizations )
+	if PagesCore.config.localizations?
 		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator ) 
 	end
 
@@ -49,23 +49,25 @@
 		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", 
 			:errors      => @page.errors[:template]
 		%>
-		<% if @page.image %>
-			<p>
-				<%= editable_dynamic_image_tag(@page.image, :size => '300x200') %>
-			</p>
-			<p>
-				<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
-			</p>
-		<% end %>
-		<%= labelled_field f.file_field( :image ), "Image", 
-			:errors      => @page.errors[:template],
-			:description => "The template you have selected allows you to attach an image, which will be scaled and positioned to fit the design."
-		%>
-		<%= labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Caption" %>
-		<% if @page.image && PagesCore.config( :page_image_is_linkable ) %>
-			<%= labelled_field f.text_field( :image_link ), "Image link <small>(including http://)</small>", 
-				:errors      => @page.errors[:image_link]
+		<% if @page.template_config.value(:image) %>
+			<% if @page.image %>
+				<p>
+					<%= editable_dynamic_image_tag(@page.image, :size => '300x200') %>
+				</p>
+				<p>
+					<%= link_to "Delete image", delete_presentation_image_admin_page_path(:language => @language, :id => @page), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo" %>
+				</p>
+			<% end %>
+			<%= labelled_field f.file_field( :image ), "Image", 
+				:errors      => @page.errors[:template],
+				:description => "The template you have selected allows you to attach an image, which will be scaled and positioned to fit the design."
 			%>
+			<%= labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Caption" %>
+			<% if @page.image && @page.template_config.options(:image)[:linkable] %>
+				<%= labelled_field f.text_field( :image_link ), "Image link <small>(including http://)</small>", 
+					:errors      => @page.errors[:image_link]
+				%>
+			<% end %>
 		<% end %>
 	<% end %>
 	
@@ -87,7 +89,7 @@
 	<% end %>
 
 	<%# #### ADDITIONAL IMAGES #### %>
-	<% if PagesCore.config( :page_additional_images ) %>
+	<% if @page.template_config.value(:images) %>
 		<% content_tab "Additional images" do %>
 			<% unless @page.images.empty? %>
 				<table class="list images_list">
@@ -131,7 +133,7 @@
 
 
 	<%# #### FILES #### %>
-	<% if PagesCore.config( :page_files ) %>
+	<% if @page.template_config.value(:files) %>
 		<% content_tab "Files" do %>
 			<% if @page.files? %>
 				<ul id="filelist">
@@ -155,33 +157,35 @@
 
 
 	<%# #### COMMENTS #### %>
-	<% content_tab "Comments" do %>
-		<%= labelled_field f.check_box( :comments_allowed ), "Comments allowed", 
-			:errors      => @page.errors[:comments_allowed],
-			:check_box_description => "Comments are allowed on this page"
-		%>
-		<% if @page.comments.count > 0 %>
-			<table class="list comments_list">
-				<% @page.comments.each do |c| %>
-					<tr>
-						<td>
-							<strong><%= c.name %></strong><br />
-							<% if c.email? %><%= mail_to c.email, c.email %><br /><% end %>
-							<% if c.url? %><%= link_to c.url, c.url %><br /><% end %>
-						</td>
-						<td><%= c.body %></td>
-						<td>
-							<%= time_ago_in_words c.created_at %> ago<br />
-							from <%= c.remote_ip %>
-						</td>
-						<td>
-							<%= link_to "Delete", delete_comment_admin_page_url( :id => @page, :comment_id => c, :language => @language ), :confirm => 'Are you sure?', :class => :delete %>
-						</td>
-					</tr>
-				<% end %>
-			</table>
-		<% else %>
-			<p>No comments added.</p>
+	<% if @page.template_config.value(:comments) %>
+		<% content_tab "Comments" do %>
+			<%= labelled_field f.check_box( :comments_allowed ), "Comments allowed", 
+				:errors      => @page.errors[:comments_allowed],
+				:check_box_description => "Comments are allowed on this page"
+			%>
+			<% if @page.comments.count > 0 %>
+				<table class="list comments_list">
+					<% @page.comments.each do |c| %>
+						<tr>
+							<td>
+								<strong><%= c.name %></strong><br />
+								<% if c.email? %><%= mail_to c.email, c.email %><br /><% end %>
+								<% if c.url? %><%= link_to c.url, c.url %><br /><% end %>
+							</td>
+							<td><%= c.body %></td>
+							<td>
+								<%= time_ago_in_words c.created_at %> ago<br />
+								from <%= c.remote_ip %>
+							</td>
+							<td>
+								<%= link_to "Delete", delete_comment_admin_page_url( :id => @page, :comment_id => c, :language => @language ), :confirm => 'Are you sure?', :class => :delete %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			<% else %>
+				<p>No comments added.</p>
+			<% end %>
 		<% end %>
 	<% end %>
 	
@@ -241,7 +245,7 @@
 </div>
 
 <%# #### UPLOAD FILE #### %>
-<% if PagesCore.config( :page_files ) %>
+<% if @page.template_config.value(:files) %>
 	<div id="new-file" class="page_new_file">
 		<h2>Upload new file</h2>
 		<% form_for( ( @new_file = PageFile.new ), :url => admin_page_files_path( @language, @page ), :html => { :multipart => true } ) do |f| %>

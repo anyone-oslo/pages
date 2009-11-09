@@ -4,12 +4,12 @@ require File.join(File.dirname(__FILE__), '../configuration')
 module PagesCore
 	module Templates
 		class Configuration < PagesCore::Configuration::Handler
-			VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template
+			VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template, :comments
 			
-			handle :default do |instance, name, args|
+			handle :default do |instance, name, *args|
 				if name == :blocks
 					blocks_proxy = instance.blocks
-					args.call(blocks_proxy) if args.kind_of?(Proc)
+					args.first.call(blocks_proxy) if args.first.kind_of?(Proc)
 					blocks_proxy
 				else
 					instance.configure_template(:_defaults, name, *args)
@@ -50,14 +50,14 @@ module PagesCore
 			end
 
 			def blocks(template_name = :_defaults, &block)
-				proxy(block) { |name, args| self.configure_block(template_name, name, *args)}
+				proxy(block) { |name, *args| self.configure_block(template_name, name, *args)}
 			end
 			
 			def templates(*args, &block)
 				template_names = args.flatten.map{|a| a.to_sym}
-				proxy(block) do |name, args|
+				proxy(block) do |name, *args|
 					if name == :blocks
-						proxy(args.kind_of?(Proc) ? args : nil) do |n2, a2|
+						proxy(args.first.kind_of?(Proc) ? args.first : nil) do |n2, *a2|
 							template_names.each do |template_name| 
 								self.configure_block(template_name, n2, *a2)
 							end

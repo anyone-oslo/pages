@@ -2,16 +2,21 @@
 	:errors      => @page.errors[:name],
 	:description => "This is the name of the page, and it will also be the name of the link to this page."
 %>
-<%= labelled_field f.text_field( :headline, :class => 'text page_title' ), "Headline", 
-	:errors      => @page.errors[:headline],
-	:description => "Optional, use if the headline should differ from the page name."
-%>
-<%= labelled_field f.text_area(:excerpt, :rows => 5, :id => 'compose-teaser', :class => 'rich'), "Teaser", 
-	:errors      => @page.errors[:excerpt]
-%>
-<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => 'rich'), "Body", 
-	:errors      => @page.errors[:body]
-%>
+
+<% @page.template_config.enabled_blocks do |block_name, block_options| %>
+	<% if block_options[:size] == :field %>
+		<%= labelled_field f.text_field(block_name, :class => 'text' ), block_options[:title], 
+			:errors      => @page.errors[block_name],
+			:description => block_options[:description]
+		%>
+	<% else %>
+		<%= labelled_field f.text_area(block_name, :rows => (block_options[:size] == :large ? 15 : 5), :class => 'rich'), block_options[:title],
+			:errors      => @page.errors[block_name],
+			:description => block_options[:description]
+		%>
+	<% end %>
+<% end %>
+
 <%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
 	:errors      => @page.errors[:status]
 %>

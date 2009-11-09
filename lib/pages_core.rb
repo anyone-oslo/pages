@@ -8,13 +8,6 @@ end
 
 module PagesCore
 	class << self
-		def config(key, value=nil)
-			key = key.to_s
-			@@config ||= {}
-			@@config[key] = value if value != nil
-			@@config[key]
-		end
-	
 		def init!
 			# Verify that we've been properly bootstrapped
 			unless PagesCore.const_defined?('BOOTSTRAPPED') && PagesCore::BOOTSTRAPPED
@@ -58,9 +51,10 @@ module PagesCore
 			@@configuration = PagesCore::Configuration::SiteConfiguration.new
 			
 			config.localizations       :disabled
-			config.page_cache          :disabled
+			config.page_cache          :enabled
 			config.newsletter.template :disabled
 			config.newsletter.image    :disabled
+			config.text_filter         :textile
 			
 			#config.comment_notifications [:author, 'your@email.com']
 		end
@@ -77,14 +71,14 @@ module PagesCore
 		alias :config :configuration
 	end
 	
-	config :localizations,          false
-	config :text_filter,            'textile'
+	#config :localizations,          false
+	#config :text_filter,            'textile'
 	config :page_image_is_linkable, false
 	config :page_additional_images, false
 	config :page_additional_files,  false
-    config :newsletter_template,    false
-	config :newsletter_image,       false
-	config :page_cache,             false
+    #config :newsletter_template,    false
+	#config :newsletter_image,       false
+	#config :page_cache,             false
 	
 	#config :comment_notifications,  [:author, 'your@email.com']
 	

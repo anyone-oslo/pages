@@ -15,7 +15,7 @@ class Page < ActiveRecord::Base
 	acts_as_list :scope => :parent_page
 	acts_as_tree :order => :position, :foreign_key => :parent_page_id
 
-	acts_as_textable [ "name", "body", "excerpt", "headline", "boxout" ], :allow_any => true
+	acts_as_textable :name, :body, :excerpt, :headline, :boxout, :allow_any => true
 	acts_as_taggable
 	
 	# Page status labels
@@ -467,6 +467,11 @@ class Page < ActiveRecord::Base
 	
 	self.send :alias_method, :acts_as_tree_parent, :parent 
 
+	alias :textable_has_field? :has_field?
+	def has_field?(field_name, options={})
+		self.textable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
+	end
+
 	# Get this page's parent page.
 	def parent
 		parent_page = acts_as_tree_parent
@@ -551,34 +556,48 @@ class Page < ActiveRecord::Base
 	end
 	
 	def default_template
-		(self.parent) ? self.parent.default_subtemplate : 'index'
+		if self.parent
+			t = self.parent.default_subtemplate
+		else
+			default_value   = PagesCore::Templates.configuration.get(:default, :template, :value)
+			default_options = PagesCore::Templates.configuration.get(:default, :template, :options)
+			if  default_options && default_options[:root]
+				t = default_options[:root]
+			elsif default_value && default_value != :autodetect
+				t = default_value
+			end
+		end
+		t ||= :index
 	end
 	
 	def default_subtemplate
-		return 'index' unless self.template
-		reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
-		base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
-		tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
-		# Try to singularize the base template if the subtemplate could not be found.
-		unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
-			tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
+		tpl = nil
+		default_template = PagesCore::Templates.configuration.get(:default, :template, :value)
+		if self.template_config.value(:sub_template)
+			tpl = self.template_config.value(:sub_template)
+		elsif default_template && default_template != :autodetect
+			tpl = default_template
+		else
+			# Autodetect sub template
+			reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
+			base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
+			tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
+			# Try to singularize the base template if the subtemplate could not be found.
+			unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
+				tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
+			end
 		end
-		tpl ||= "index"
+		# Inherit template by default
+		tpl ||= self.template
+	end
+
+	def template_config
+		PagesCore::Templates::TemplateConfiguration.new(self.template)
 	end
 
 	def template
-		self[:template] || self.default_template
+		(self[:template] && !self[:template].blank?) ? self[:template] : self.default_template.to_s
 	end
-	
-	# Returns boolean true if template has an image slot
-	def template_has_image?
-		if self.template?
-			(self.template.humanize.downcase.match( /(with|med) (image|bilde)/)) ? true : false
-		else
-			false
-		end
-	end
-
 	
 	# Get subpages
 	def pages( options={} )

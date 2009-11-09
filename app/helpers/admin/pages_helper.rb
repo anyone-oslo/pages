@@ -8,7 +8,7 @@ module Admin::PagesHelper
 	def available_templates_for_select
 		Page.available_templates.collect do |template|
 			if template == "index"
-				[ "[Default]", "" ] 
+				[ "[Default]", "index" ] 
 			else
 				[ template.humanize, template ]
 			end

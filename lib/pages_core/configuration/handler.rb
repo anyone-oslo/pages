@@ -16,7 +16,7 @@ module PagesCore
 			def initialize
 				@configuration = {}
 			end
-
+			
 			def method_missing(method_name, *args, &block)
 				if @@handle_blocks && @@handle_blocks.keys.include?(method_name)
 					proxy = PagesCore::Configuration::Proxy.new(@@handle_blocks[method_name], self)
@@ -37,11 +37,14 @@ module PagesCore
 			
 			def set(stack, value)
 				@configuration ||= {}
+				value = true  if value == :enabled
+				value = false if value == :disabled
 				stack = [stack] unless stack.kind_of?(Enumerable)
 				partial_hash = stack.reverse.inject(value) do |hash, key|
 					Hash[key => hash]
 				end
 				@configuration = @configuration.deep_merge(partial_hash)
+				value
 			end
 
 			def get(*path)

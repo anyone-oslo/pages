@@ -1,7 +1,7 @@
 <%
 	page_title "Pages"
 	page_description "Viewing pages"
-	if PagesCore.config( :localizations )
+	if PagesCore.config.localizations?
 		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
 	end
 %>
