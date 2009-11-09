@@ -1,5 +1,3 @@
-%w( rubygems open-uri hpricot ).each{ |lib| require lib }
-
 class PagesStats
 	
 	attr_accessor :domain, :script, :month, :year

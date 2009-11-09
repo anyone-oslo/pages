@@ -1,5 +1,3 @@
-require 'RMagick'
-
 # Dynamic text images.
 #
 # Setup:

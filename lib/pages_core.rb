@@ -1,15 +1,80 @@
-module PagesCore
-	def self.config(key, value=nil)
-		key = key.to_s
-		@@config ||= {}
-		@@config[key] = value if value != nil
-		@@config[key]
+
+# Load ./pages_core/*.rb
+Dir.entries(File.join(File.dirname(__FILE__), 'pages_core')).select{|f| f =~ /\.rb$/}.map{|f| File.basename(f, '.*')}.each do |lib|
+	unless lib =~ /^bootstrap/
+		require File.join(File.dirname(__FILE__), 'pages_core', lib)
 	end
-	
-	def self.configure(options={})
-		options.each do |key,value|
-			self.config(key, value)
+end
+
+module PagesCore
+	class << self
+		def config(key, value=nil)
+			key = key.to_s
+			@@config ||= {}
+			@@config[key] = value if value != nil
+			@@config[key]
 		end
+	
+		def init!
+			# Verify that we've been properly bootstrapped
+			unless PagesCore.const_defined?('BOOTSTRAPPED') && PagesCore::BOOTSTRAPPED
+				puts "---------------------------------------------------------------------------------------------------------------"
+				puts "PAGES BOOTSTRAPPER NOT LOADED!"
+				puts "Please run \"rake pages:update\" to patch config/environment.rb, or add the following line yourself:"
+				puts "\n# Bootstrap Pages"
+				puts "require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')"
+				puts "---------------------------------------------------------------------------------------------------------------"
+				raise "Pages not bootstrapped"
+			end
+			
+			# Load dependencies
+			PagesCore::Dependencies.load
+
+			# Initialize MumboJumbo
+			MumboJumbo.load_languages!
+			MumboJumbo.translators << PagesCore::StringTranslator
+
+			# Register default mime types
+			Mime::Type.register "application/rss+xml", 'rss'
+		end
+
+		def configure(options={}, &block)
+			if block_given?
+				if options[:reset] == :defaults
+					load_default_configuration
+				elsif options[:reset] === true
+					@@configuration = PagesCore::Configuration::SiteConfiguration.new
+				end
+				yield self.configuration if block_given?
+			else
+				# Legacy
+				options.each do |key,value|
+					self.config(key, value)
+				end
+			end
+		end
+		
+		def load_default_configuration
+			@@configuration = PagesCore::Configuration::SiteConfiguration.new
+			
+			config.localizations       :disabled
+			config.page_cache          :disabled
+			config.newsletter.template :disabled
+			config.newsletter.image    :disabled
+			
+			#config.comment_notifications [:author, 'your@email.com']
+		end
+		
+		def configuration(key=nil, value=nil)
+			load_default_configuration unless self.class_variables.include?('@@configuration')
+			if key
+				configuration.send(key, value) if value != nil
+				configuration.get(key)
+			else
+				@@configuration
+			end
+		end
+		alias :config :configuration
 	end
 	
 	config :localizations,          false
@@ -22,6 +87,7 @@ module PagesCore
 	config :page_cache,             false
 	
 	#config :comment_notifications,  [:author, 'your@email.com']
+	
 end
 
 module ActionController
@@ -76,13 +142,3 @@ module ActionController
 		alias_method_chain :out, :espipe  
 	end
 end
-	
-require "pages_core/acts_as_textable"
-require "pages_core/methoded_hash"
-require "pages_core/cache_sweeper"
-require "pages_core/application_controller"
-require "pages_core/string_translator"
-require "pages_core/string_extensions"
-require "pages_core/array_extensions"
-require "pages_core/awstats"
-require "pages_core/paginates"

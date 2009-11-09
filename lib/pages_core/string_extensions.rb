@@ -1,4 +1,3 @@
-require 'iconv'
 module PagesCore
 	module StringExtensions
 
@@ -52,6 +51,10 @@ module PagesCore
 			self.strip.gsub(/^https?:\/\//, '')
 		end
 
+		# Iconv wrapper
+		def iconv(to, from)
+			Iconv.iconv(to, from, self)
+		end
 	end
 end
 

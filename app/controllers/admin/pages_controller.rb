@@ -1,5 +1,3 @@
-require 'iconv'
-
 class Admin::PagesController < Admin::AdminController
 
 	def find_page

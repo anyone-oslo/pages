@@ -1,7 +1,3 @@
-require 'bluecloth'
-require 'redcloth'
-require 'language'
-
 # Patch older versions of RedCloth to fix Textile hard breaking
 if Object.const_defined?("RedCloth") && RedCloth.kind_of?(Class)
 	class RedCloth < String

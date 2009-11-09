@@ -1,6 +1,3 @@
-require 'open-uri'
-require 'yaml'
-
 class Admin::AccountsController < Admin::AdminController
 	
 	def index

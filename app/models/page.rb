@@ -1,9 +1,3 @@
-require 'language'
-require 'unicode'
-require 'iconv'
-require 'yaml'
-#require 'manual_support'
-
 class Page < ActiveRecord::Base
 	
 	serialize :redirect_to

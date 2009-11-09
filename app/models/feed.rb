@@ -1,6 +1,3 @@
-require 'simple-rss'
-require 'open-uri'
-
 class Feed < ActiveRecord::Base
 	
 	has_many :feed_items, :order => "pubdate DESC, id DESC", :dependent => :destroy

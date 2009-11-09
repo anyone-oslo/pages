@@ -1,5 +1,3 @@
-require "digest/sha1"
-
 class User < ActiveRecord::Base
 	
 	belongs_to :creator,

@@ -55,7 +55,7 @@ class MumboJumboTest < Test::Unit::TestCase
 		end
 	end
 	
-	def test_withhout_translators
+	def test_without_translators
 		MumboJumbo.translators << TestTranslators::OK
 		assert_equal "Testing"[:test], "OK"
 		MumboJumbo.without_translators do

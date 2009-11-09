@@ -1,4 +1,3 @@
-require 'find'
 module PagesCore
 	class CacheSweeper
 		class << self

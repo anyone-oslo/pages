@@ -1,5 +1,3 @@
-require 'uuidtools'
-
 class Account < ActiveRecord::Base
 
 	belongs_to :account_holder, :class_name => 'User', :foreign_key => :account_holder_id
