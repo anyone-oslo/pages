@@ -7,7 +7,6 @@ module PagesCore
 			GemLoader.run do |config|
 				#config.gem 'BlueCloth'
 				config.gem 'vector2d'
-				config.gem 'enumerable_mapper'
 				config.gem 'hpricot'
 				config.gem 'simple-rss'
 				config.gem 'RedCloth'
