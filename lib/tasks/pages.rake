@@ -149,8 +149,9 @@ namespace :pages do
 				updated_files = []
 				find_files(file_expression, options).each do |path|
 					file_content = File.read(path)
+					skip_file = (options.has_key?(:unless_matches) && file_content =~ options[:unless_matches]) ? true : false
 					patched_file_content = file_content.gsub(expression, sub)
-					unless file_content == patched_file_content
+					unless file_content == patched_file_content || skip_file
 						puts "Patching file #{path}.."
 						updated_files << path
 						File.open(path, 'w') {|fh| fh.write(patched_file_content)}
@@ -161,10 +162,18 @@ namespace :pages do
 				end
 			end
 			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.2.2'" do
-				abort "\nRails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
+				abort "\n* Rails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
+			end
+			patch_files(
+				%r%^config/environment.rb% , 
+				/^Rails::Initializer\.run/, 
+				"# Bootstrap Pages\nrequire File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')\n\nRails::Initializer.run",
+				:unless_matches => /vendor\/plugins\/pages\/boot/
+			) do
+				puts "* Added Pages engine bootstrapper"
 			end
 			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
-				puts "config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
+				puts "* config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
 			end
 			patch_files(
 				%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
