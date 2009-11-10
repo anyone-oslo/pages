@@ -95,11 +95,11 @@ module PagesCore
 				# Default template options
 				config.default do |default|
 					default.template       :autodetect, :root => 'index'
-					default.image          :enabled, :linkable => (PagesCore.config(:page_image_is_linkable) ? true : false)
+					default.image          :enabled, :linkable => false
 					default.comments       :enabled
-					default.files          PagesCore.config(:page_additional_files) ? :enabled : :disabled
-					default.images         PagesCore.config(:additional_images) ? :enabled : :disabled
-					default.text_filter    PagesCore.config(:text_filter) ? PagesCore.config(:text_filter) : :textile
+					default.files          :disabled
+					default.images         :disabled
+					default.text_filter    :textile
 					default.enabled_blocks [:headline, :excerpt, :body]
 					default.blocks do |block|
 						block.body        "Body",        :size => :large

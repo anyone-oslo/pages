@@ -73,9 +73,9 @@ module PagesCore
 	
 	#config :localizations,          false
 	#config :text_filter,            'textile'
-	config :page_image_is_linkable, false
-	config :page_additional_images, false
-	config :page_additional_files,  false
+	#config :page_image_is_linkable, false
+	#config :page_additional_images, false
+	#config :page_additional_files,  false
     #config :newsletter_template,    false
 	#config :newsletter_image,       false
 	#config :page_cache,             false

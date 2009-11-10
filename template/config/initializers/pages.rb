@@ -25,6 +25,9 @@ PagesCore.configure do |config|
 	#config.domain_based_cache :enabled	 # Enable domain based page cache (for multiple domains)
 	#config.newsletter.template :enabled # Enable template based newsletters
 	#config.newsletter.image :enabled    # Enable image in newsletters
+
+	# Uncomment to send notifications on comments
+	#config :comment_notifications,  [:author, 'your@email.com']
 end
 
 # Templates configuration
