@@ -69,7 +69,7 @@ module PagesCore
 
 			# Returns a list of all configured blocks
 			def all_blocks
-				all_templates = config.get(:templates).keys
+				all_templates = config.get(:templates).keys rescue []
 				blocks = []
 				blocks += config.get(:default, :enabled_blocks, :value)
 				blocks += config.get(:default, :blocks).keys rescue []
