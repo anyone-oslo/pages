@@ -18,10 +18,11 @@ class Mailing < ActiveRecord::Base
     end
     
 	def self.do_queue
-		mailings = self.find( :all, :conditions => ['failed = 0'], :limit => 400 )
+		mailings = self.find(:all, :conditions => ['failed = 0 AND in_progress = 0'], :limit => 400)
 		unless mailings.empty?
 			mailings.each do |mailing|
 				begin
+					mailing.update_attribute(:in_progress, true)
 					Notifications.deliver_newsletter(mailing.sender, mailing.recipients, mailing.subject, mailing.body, mailing.content_type)
 					mailing.destroy
 				rescue
