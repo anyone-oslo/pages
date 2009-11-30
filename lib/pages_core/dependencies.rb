@@ -10,7 +10,7 @@ module PagesCore
 				config.gem 'hpricot'
 				config.gem 'simple-rss'
 				config.gem 'RedCloth'
-				config.gem 'RMagick'
+				config.gem 'rmagick'
 				config.gem 'uuidtools'
 				config.gem 'unicode'
 				if ENV['RAILS_ENV'] == 'test'
