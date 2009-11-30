@@ -191,11 +191,12 @@ module ApplicationHelper
 	end
 	
 	def page_url( page, options={} )
-		page.translate( @language ) do |p|
+		options[:language] ||= @language
+		page.translate(options[:language]) do |p|
 			if p.redirects? 
-				url_options = p.redirect_to_options( options.merge( { :language => p.working_language } ) )
+				url_options = p.redirect_to_options(options.merge({:language => p.working_language}))
 			else
-				url_options = options.merge( { :controller => 'pages', :action => :show, :language => p.working_language, :id => p } )
+				url_options = options.merge({:controller => 'pages', :action => :show, :language => p.working_language, :id => p.to_param})
 			end
 			url_for url_options
 		end
