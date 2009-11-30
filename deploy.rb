@@ -1,10 +1,10 @@
-set :remote_host, "server.manualdesign.no"
-set :remote_user, "rails"
+set :remote_host, "server.manualdesign.no" unless remote_host
+set :remote_user, "rails" unless remote_user
 
 set :runner,      remote_user
 set :user,        remote_user
 set :use_sudo,    false
-set :deploy_to,   "/var/www/#{application}"
+set :deploy_to,   "/var/www/#{application}" unless deploy_to
 set :web_server,  :apache2
 
 set :scm,                   "git"
