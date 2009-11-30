@@ -29,7 +29,7 @@ module PagesCore
 			require 'open-uri'
 
 			# Included in vendor/plugins/pages/lib
-			[:acts_as_taggable, :session_cleaner, :apparat, :language, :mumbojumbo, :enumerable, :feed_builder].each do |lib|
+			[:acts_as_taggable, :session_cleaner, :apparat, :language, :mumbojumbo, :enumerable, :feed_builder, :country_select].each do |lib|
 				require File.join(File.dirname(__FILE__), "../#{lib.to_s}")
 			end
 		end
