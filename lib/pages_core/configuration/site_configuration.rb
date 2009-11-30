@@ -67,12 +67,12 @@ module PagesCore
 			end
 
 			# Depreceated, use the template config
-			def text_filter(value)
-				::ActiveSupport::Deprecation.warn( 
-					":text_filter configuration option is depreceated, use the template config", 
-					caller)
-				templates.default.text_filter value
-			end
+			#def text_filter(value)
+			#	::ActiveSupport::Deprecation.warn( 
+			#		":text_filter configuration option is depreceated, use the template config", 
+			#		caller)
+			#	templates.default.text_filter value
+			#end
 		end
 	end
 end

@@ -19,7 +19,6 @@ module Admin::PagesHelper
 		page_name_cache[options] ||= {}
 
 		if page_name_cache[options][page.id]
-			logger.info " ** PAGE NAME CACHE HIT"
 			page_name_cache[options][page.id]
 		else
 			page_names = (options[:include_parents]) ? [page.ancestors, page].flatten : [page]
