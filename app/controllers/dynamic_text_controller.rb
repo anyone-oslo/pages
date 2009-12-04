@@ -25,13 +25,16 @@ class DynamicTextController < FrontendController
 
     def render_dynamic_text(text, options={}, &block)
 		text = text.gsub('&#47;', '/') # Hack to circumvent the Apache encoded slashes bug
+		text = text.gsub('ENCODEDQUESTION', '?')
+		text = text.gsub('ENCODEDHASH', '#')
 		options[:crop] = true unless options.has_key?(:crop)
-		options[:margin] ||= 3
-		image = Magick::Image.read("caption:#{text.to_s}") {
+		options[:padding_right] = options[:margin] if options.has_key?(:margin)
+		options[:padding_right] ||= 3
+ 		image = Magick::Image.read("caption:#{text.to_s}") {
 			self.size = options[:max_width]
 			block.call(self) if block_given?
 		}.first
-        image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:margin], image.rows) if options[:crop]
+        image.crop!(Magick::NorthWestGravity, image.bounding_box.width + options[:padding_right], image.rows) if options[:crop]
         image
     end
 
