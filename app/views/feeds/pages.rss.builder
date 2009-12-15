@@ -13,7 +13,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			xml.item do
 				xml.title       { xml.cdata! converter.iconv(item.name.to_s) }
 				xml.link        page_url( item, :only_path => false )
-				xml.description { xml.cdata! converter.iconv( item.extended? ? item.excerpt.to_s : item.body.to_s ) }
+				xml.description { xml.cdata! converter.iconv( (item.extended? ? item.excerpt : item.body).to_html ) }
 				xml.guid        page_url( item, :only_path => false )
 				xml.pubDate     item.published_at.to_formatted_s( :rfc822 )
 				xml.tag!("dc:creator", converter.iconv( item.author.realname ) )
