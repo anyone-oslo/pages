@@ -17,6 +17,10 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 				xml.guid        page_url( item, :only_path => false )
 				xml.pubDate     item.published_at.to_formatted_s( :rfc822 )
 				xml.tag!("dc:creator", converter.iconv( item.author.realname ) )
+				if item.image
+					image_size = item.image.data.length rescue 0
+					xml.enclosure :url => dynamic_image_url(item.image, :only_path => false), :length => image_size, :type => item.image.content_type
+				end
 			end
 		end
 	end

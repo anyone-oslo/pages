@@ -86,9 +86,16 @@ class PagesController < FrontendController
 				@encoding = (params[:encoding] ||= "UTF-8").downcase
 				@page.working_language = @language || Language.default
 				@page_title ||= @page.name.to_s
-				@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})
+
+				if params[:category_name]
+					@category = Category.find_by_name(params[:category_name])
+					@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20}, :category => @category)
+				else
+					@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})
+				end
+				
 				response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
-				render :template => 'feeds/rss', :layout => false
+				render :template => 'feeds/pages', :layout => false
 			end
 		end
 	end
