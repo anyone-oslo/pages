@@ -1,5 +1,5 @@
-set :remote_host, "server.manualdesign.no" unless remote_host
-set :remote_user, "rails" unless remote_user
+set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
+set :remote_user, "rails" unless variables.has_key?(:remote_user)
 
 set :runner,      remote_user
 set :user,        remote_user
