@@ -32,3 +32,11 @@ if RAILS_GEM_VERSION == '2.2.2' || RAILS_GEM_VERSION == '2.2.3'
 		end
 	end
 end
+
+if RAILS_ENV == 'production'
+	ActionMailer::Base.delivery_method = :sendmail
+	ActionMailer::Base.sendmail_settings = {
+		:location       => '/usr/sbin/sendmail',
+		:arguments      => '-i -t -f support@manualdesign.no'
+	}
+end
