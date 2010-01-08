@@ -2,6 +2,16 @@
 require File.join(File.dirname(__FILE__), 'lib/pages_core/bootstrap')
 PagesCore.bootstrap!
 
+if RAILS_ENV == 'production'
+	require 'activerecord'
+	require 'actionmailer'
+	ActionMailer::Base.delivery_method = :sendmail
+	ActionMailer::Base.sendmail_settings = {
+		:location       => '/usr/sbin/sendmail',
+		:arguments      => '-i -t -f support@manualdesign.no'
+	}
+end
+
 # ActionMailer monkey patch
 if RAILS_GEM_VERSION == '2.2.2' || RAILS_GEM_VERSION == '2.2.3'
 	module ActionMailer
@@ -21,10 +31,3 @@ if RAILS_GEM_VERSION == '2.2.2' || RAILS_GEM_VERSION == '2.2.3'
 	end
 end
 
-if RAILS_ENV == 'production'
-	ActionMailer::Base.delivery_method = :sendmail
-	ActionMailer::Base.sendmail_settings = {
-		:location       => '/usr/sbin/sendmail',
-		:arguments      => '-i -t -f support@manualdesign.no'
-	}
-end
