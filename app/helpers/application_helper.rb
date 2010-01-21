@@ -3,8 +3,14 @@ module ApplicationHelper
 	#include ActsAsDynamicImage::Helper
 	include VideoHelper
 	
-	def feed_tags
-		Page.enabled_feeds( @language ).map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
+	def feed_tags(options={})
+		feeds = Page.enabled_feeds(@language, options)
+		output = ''
+		if feeds && feeds.length > 1
+			output += "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}\" href=\""+formatted_pages_url(:language => @language, :format => :rss)+"\" />\n"
+		end
+		output += feeds.map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
+		output
 	end
 
 	def i18n( string )

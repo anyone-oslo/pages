@@ -50,16 +50,28 @@ class PagesController < FrontendController
 
 
 	def index
-		if self.respond_to? :no_page_given
-			no_page_given
-		else
-			@page = @root_pages.first rescue nil
-		end
+		respond_to do |format|
+			format.html do
+				if self.respond_to? :no_page_given
+					no_page_given
+				else
+					@page = @root_pages.first rescue nil
+				end
 
-		if @page
-			render_page
-		else
-			render_error 404 # TODO: friendly message here
+				if @page
+					render_page
+				else
+					render_error 404 # TODO: friendly message here
+				end
+			end
+			format.rss do
+				@encoding   = (params[:encoding] ||= "UTF-8").downcase
+				@title      = PagesCore.config(:site_name)
+				feeds       = Page.enabled_feeds(@language, {:include_hidden => true})
+				@feed_items = Page.get_pages(:paginate => {:page => 1, :per_page => 20}, :parent => feeds, :order => 'published_at DESC')
+				response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
+				render :template => 'feeds/pages', :layout => false
+			end
 		end
 	end
 	
@@ -86,6 +98,7 @@ class PagesController < FrontendController
 				@encoding = (params[:encoding] ||= "UTF-8").downcase
 				@page.working_language = @language || Language.default
 				@page_title ||= @page.name.to_s
+				@title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
 				if params[:category_name]
 					@category = Category.find_by_name(params[:category_name])

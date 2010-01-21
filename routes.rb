@@ -2,8 +2,10 @@
 dynamic_text '/dynamic_text/:text_format/:text.png', :controller => 'dynamic_text', :action => 'show'
 
 connect '',                                       :controller => 'pages', :action => 'index'
+connect 'index',                                  :controller => 'pages', :action => 'index'
 connect 'pages/:language/:id/add_comment',        :controller => 'pages', :action => 'add_comment', :requirements => { :id => /[\d]+.*/ }
 connect 'pages/:id',                              :controller => 'pages', :action => 'show', :requirements => { :id => /[\d]+.*/ }
+formatted_pages 'pages/:language/index.:format',  :controller => 'pages', :action => 'index'
 connect 'pages/:language',                        :controller => 'pages', :action => 'index'
 connect 'pages/:language/sitemap.xml',            :controller => 'pages', :action => 'sitemap'
 connect 'pages/:language/search',                 :controller => 'pages', :action => 'search'
