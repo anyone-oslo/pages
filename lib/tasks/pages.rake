@@ -17,7 +17,13 @@ namespace :pages do
 	task :refresh_feeds => :environment do
 		puts "Refreshing external feeds"
 		PagesCore::CacheSweeper.disable do
-			Feed.refresh_feeds
+			Feed.find(:all).each do |feed|
+				begin
+					feed.refresh
+				rescue
+					puts "!!! Error parsing feed #{feed.url} - #{$!.to_s}"
+				end
+			end
 		end
 		PagesCore::CacheSweeper.sweep!
 	end
