@@ -352,7 +352,7 @@ class Page < ActiveRecord::Base
 		# Convert a string to an URL friendly slug
 		def string_to_slug( string )
 			#slug = (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv string.gsub( /[Øø]/, "oe" ).gsub( /[Åå]/, "aa" ) ).downcase
-			slug = string.dup.ascii.downcase.gsub(/[^\w\s]/,'')
+			slug = string.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
 			slug = slug.split( /[^\w\d\-]+/ ).compact.join( "_" )
 		end
 

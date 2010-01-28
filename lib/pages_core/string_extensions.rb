@@ -2,10 +2,9 @@ module PagesCore
 	module StringExtensions
 
 		# Convert any string to ASCII
-		def ascii
+		def convert_to_ascii
 			@@ascii_converter ||= Iconv.new("ASCII//TRANSLIT", "UTF-8")
-			old_kcode = $KCODE # Backup $KCODE
-			string    = self
+			string = self.dup
 
 			# Do tuned translation first.
 			[
@@ -18,11 +17,11 @@ module PagesCore
 			# Translate each char with iconv. This is done on char level 
 			# in order to trap errors. 
 			chars = (string.respond_to?(:mb_chars)) ? string.mb_chars : string.chars
+
 			string = chars.map do |char|
-				@@ascii_converter.iconv( string ) rescue '?'
+				@@ascii_converter.iconv(char) rescue '?'
 			end.join
 
-			$KCODE = old_kcode # Restore $KCODE
 			return string
 		end
 		
