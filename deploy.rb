@@ -4,7 +4,7 @@ set :remote_user, "rails" unless variables.has_key?(:remote_user)
 set :runner,      remote_user
 set :user,        remote_user
 set :use_sudo,    false
-set :deploy_to,   "/var/www/#{application}" unless variables.has_key?(:deploy_to)
+set :deploy_to,   "/var/www/#{application}" unless variables.has_key?(:deploy_to) && deploy_to != "/u/apps/#{application}"
 set :web_server,  :apache2
 
 set :scm,                   "git"

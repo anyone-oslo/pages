@@ -3,10 +3,10 @@ converter = Iconv.new( @encoding + "//TRANSLIT", 'utf-8' )
 xml << "<?xml version=\"1.0\" encoding=\"" + @encoding.upcase + "\"?>\n"
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 	xml.channel do
-		xml.title( converter.iconv( [PagesCore.config( :site_name ), @page.name.to_s].join( ": " ) ) )
-		xml.link(url_for( :controller => 'pages', :action => 'index', :only_path => false ))
+		xml.title(converter.iconv(@title))
+		xml.link(url_for(:controller => 'pages', :action => 'index', :only_path => false))
 		xml.description "Recent items"
-		xml.language Language.definition( @page.working_language ).iso639_1
+		xml.language Language.definition(@language).iso639_1
 		xml.generator "Pages"
 		xml.ttl "40"
 		for item in @feed_items

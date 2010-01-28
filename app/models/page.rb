@@ -357,8 +357,9 @@ class Page < ActiveRecord::Base
 		end
 
 		# Find all published and feed enabled pages
-		def enabled_feeds( language )
-			Page.find( :all, :conditions => 'feed_enabled = 1 AND status = 2' ).collect{ |p| p.working_language = language.to_s; p }
+		def enabled_feeds(language, options={})
+			conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
+			Page.find(:all, :conditions => conditions).collect{|p| p.working_language = language.to_s; p}
 		end
 		
 		protected
