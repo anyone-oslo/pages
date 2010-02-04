@@ -49,10 +49,19 @@ class PagesController < FrontendController
 	end
 
 
+	# Search pages
+	def search
+		params[:query] = params[:q] if params[:q]
+		@search_query = params[:query] || ""
+		#normalized_query = @search_query.split(/\s+/).map{|p| "*#{p}*"}.join(' ')
+		#@pages = Page.find_by_contents(normalized_query, {:limit => :all}, {:conditions => 'status = 2'})
+		@pages = Page.search_paginated(@search_query, :page => params[:page], :conditions => {:status => 2}, :order => :published_at, :sort_mode => :desc)
+    end
+
 	def index
 		respond_to do |format|
 			format.html do
-				if self.respond_to? :no_page_given
+				if self.respond_to?(:no_page_given)
 					no_page_given
 				else
 					@page = @root_pages.first rescue nil
@@ -75,16 +84,6 @@ class PagesController < FrontendController
 		end
 	end
 	
-	# Search pages
-	def search
-		params[:query] = params[:q] if params[:q]
-		@search_query = params[:query] || ""
-		#normalized_query = @search_query.split(/\s+/).map{|p| "*#{p}*"}.join(' ')
-		#@pages = Page.find_by_contents(normalized_query, {:limit => :all}, {:conditions => 'status = 2'})
-		@pages = Page.search_paginated(@search_query, :page => params[:page], :conditions => {:status => 2}, :order => :published_at, :sort_mode => :desc)
-    end
-
-
 	def show
 		respond_to do |format|
 			format.html do
@@ -111,6 +110,11 @@ class PagesController < FrontendController
 				render :template => 'feeds/pages', :layout => false
 			end
 		end
+	end
+	
+	def preview
+		@page = Page.new(params[:page])
+		render_page
 	end
 	
 	def sitemap
@@ -150,10 +154,10 @@ class PagesController < FrontendController
 
 			@page_title ||= @page.name.to_s
 
-			# Call template methods
+			# Call template method
 			template = @page.template
-			template = "index" unless Page.available_templates.include? template
-			self.method( "template_#{template}" ).call if self.methods.include? "template_#{template}"
+			template = "index" unless Page.available_templates.include?(template)
+			self.method("template_#{template}").call if self.methods.include?("template_#{template}")
 			
 			if @redirect
 				return

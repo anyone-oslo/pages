@@ -1,6 +1,7 @@
 <%
 	page_title       "Editing “" + @page.name.to_s + "”"
 	page_description "Editing " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path( :id => page, :language => @language )) }.join( " &raquo; " )
+
 	if PagesCore.config.localizations?
 		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator ) 
 	end
@@ -17,19 +18,6 @@
 		This page was last modified <%= time_ago_in_words @page.updated_at %> ago by 
 		<%= link_to @page.author.realname, admin_user_path( @page.author ) %>.
 	</p>
-	
-	<!--
-	<h2>Formatting tips</h2>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
-		labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-		nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-		velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-		sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</p>
-	
-	<h2>Your pages</h2>
-	-->
 <% end %>
 
 
@@ -37,7 +25,6 @@
 <%# #### EDIT AREA ######################################################### %>
 
 <% form_for 'page', @page, :url => admin_page_url( :id => @page, :language => @language ), :html => { :class => :edit_page, :id => 'page-form', :method => :put, :multipart => true } do |f| %>
-
 
 	<%# #### CONTENT #### %>
 	<% content_tab "Content" do %>
@@ -217,7 +204,7 @@
 	<% end %>
 	
 	<div class="buttons">
-		<%= button_to_function "Preview formatting", 'showPreview()' %>
+		<button type="button" id="previewButton">Preview</button>
 		<%= pages_button_to "Save changes" %>
 	</div>
 

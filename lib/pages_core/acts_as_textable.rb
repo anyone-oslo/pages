@@ -10,7 +10,6 @@ module PagesCore
 
 		# Model for <tt>acts_as_textable</tt>
 		module Model
-			
 			# Class methods for <tt>acts_as_textable</tt> models
 			module ClassMethods
 				def languages(options={})
@@ -31,6 +30,19 @@ module PagesCore
 			# Get the working language
 			def working_language
 				@working_language ||= Language.default
+			end
+
+			def attributes=(new_attributes, guard_protected_attributes=true)
+				attributes = new_attributes.dup
+				attributes.stringify_keys!
+				attributes = remove_attributes_protected_from_mass_assignment(attributes) if guard_protected_attributes
+				attributes.each do |attribute, value|
+					if self.has_field?(attribute)
+						attributes.delete(attribute)
+						set_textbit_body(attribute, value)
+					end
+				end
+				super(attributes, guard_protected_attributes)
 			end
 
 			# Returns true if this page has the named textbit
@@ -178,29 +190,6 @@ module PagesCore
 					super
 				end
 			end
-			
-			def update_attributes(attributes)
-				attributes = attributes.dup
-				attributes.each do |attribute, value|
-					if self.has_field?(attribute)
-						attributes.delete(attribute)
-						set_textbit_body(attribute, value)
-					end
-				end
-				super(attributes)
-			end
-
-			def update_attributes!(attributes)
-				attributes = attributes.dup
-				attributes.each do |attribute, value|
-					if self.has_field?(attribute)
-						attributes.delete(attribute)
-						set_textbit_body(attribute, value)
-					end
-				end
-				super(attributes)
-			end
-
 		end
 	end
 end

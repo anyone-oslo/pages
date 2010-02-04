@@ -30,11 +30,12 @@ module Admin::AdminHelper
 
 		if File.exists?(File.join(File.dirname(__FILE__), "../../../public/javascripts/#{controller_script}.js"))
 			output += "\t"+javascript_include_tag(controller_script, :plugin => 'pages') + "\n"
-			output += "<script type=\"text/javascript\">"
-			output += "  Admin.controller = Admin.#{controller_name};";
-			output += "  Admin.action     = \"#{action_name}\"";
-			output += "</script>"
 		end
+		output += "<script type=\"text/javascript\">"
+		output += "  Admin.controller = Admin.#{controller_name};"
+		output += "  Admin.action     = \"#{action_name}\";"
+		output += "  Admin.language   = \"#{@language}\";" if @language
+		output += "</script>"
 		
 		output
 	end

@@ -16,7 +16,7 @@ connect 'pages/:language/:id/:page',              :controller => 'pages', :actio
 
 connect ':language/pages/:page_id/files/:id',     :controller => 'page_files', :action => 'show'
 
-resources :pages, :path_prefix => '/:language', :collection => {:search => :any}
+resources :pages, :path_prefix => '/:language', :collection => {:search => :any, :preview => :any}
 resources :page_files, :path_prefix => '/:language/pages/:page_id'
 
 

@@ -58,38 +58,30 @@ Admin.PagesController = {
 	},
 
 	edit_action : function() {
-		
 		this.applyAutopublishCheck();
 
-		window.hidePreview = function() {
-			if( window.documentPreview ) {
-				document.body.removeChild( window.documentPreview );
-				window.documentPreview = false;
-			}
-		}
+		(function($){
 
-		window.showPreview = function() {
-			alert("We're working on it");
-			/*
-			var url = document.location.toString().replace('/edit', '/preview');
-			new Ajax.Request( url, {
-				method:     'post',
-				parameters: Form.serialize( 'page-form', true ),
-				onSuccess: function( transport ) {
-					hidePreview();
-					window.documentPreview = document.createElement( "div" );
-					window.documentPreview.id = "documentPreview";
-					window.documentPreview.innerHTML = transport.responseText;
-					document.body.appendChild( window.documentPreview );
-					Element.hide( window.documentPreview );
-					Effect.Appear( window.documentPreview, { duration: 0.6 } );
-				}
+			// Previewing
+			$('#previewButton').click(function(){
+				var button = this;
+				var form = $(button).closest('form').get(0);
+				var previewUrl = '/'+Admin.language+'/pages/preview';
+				button.originalValue = $(button).html();
+				$(button).html("Loading..").attr('disabled', true);
+				$.post(previewUrl, $(form).serialize(), function(html){
+					previewWindow = window.open('', 'pages_preview', "status=0,toolbar=0,location=0,menubar=0,resizable=1,scrollbars=1");
+					var output = previewWindow.document;
+					output.title = "Preview";
+					output.write(html);
+					output.close();
+					$(button).html(button.originalValue).attr('disabled', false);
+				});
 			});
-			*/
-		}
 
-		jQuery('#new-image').hide();
-		jQuery('#new-file').hide();
+			$('#new-image').hide();
+			$('#new-file').hide();
+		})(jQuery);
 
 	}
 }
