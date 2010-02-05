@@ -185,7 +185,7 @@ namespace :pages do
 				%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
 				/< ApplicationController/, 
 				"< FrontendController",
-				:except => %r%^app/controllers/(frontend|images)_controller\.rb%
+				:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
 			) do |files|
 				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
 			end
