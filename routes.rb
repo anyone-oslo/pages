@@ -20,6 +20,8 @@ resources :pages, :path_prefix => '/:language', :collection => {:search => :any,
 resources :page_files, :path_prefix => '/:language/pages/:page_id'
 
 
+unsubscribe 'newsletter/unsubscribe/*email', :controller => 'newsletter', :action => 'unsubscribe'
+
 # Resources for admin
 with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 	admin.resources(

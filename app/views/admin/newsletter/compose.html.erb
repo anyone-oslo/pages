@@ -17,10 +17,10 @@
 	%>
 	<%= labelled_field text_field_tag( "subject", "", :size => 60 ), "Subject" %>
 	<%= labelled_field text_area_tag( "message", "", :size => "60x20" ), "Message" %>
-	<% if PagesCore.config(:newsletter_template) %>
+	<% if PagesCore.config.newsletter.template %>
 		<%= labelled_field select_tag( "template", options_for_select(Mailing.templates) ), "Template" %>
 	<% end %>
-	<% if PagesCore.config(:newsletter_image) %>
+	<% if PagesCore.config.newsletter.image %>
 		<%= labelled_field file_field_tag("image"), "Image" %>
 	<% end %>
 
@@ -29,7 +29,7 @@
 	<div class="field"><p>
 		<label>Send to</label><br />
 		<% @groups.each do |group| %>
-			<%= check_box_tag "send_to[#{group[:name].underscore.gsub(/[\s]+/,'_')}]", "1", false, :id => "send_to_#{group[:name].underscore.gsub(/[\s]+/,'_')}"%>
+			<%= check_box_tag "send_to[#{group[:id]}]", "1", false, :id => "send_to_#{group[:id]}"%>
 			<%= group[:name] %> <small>(<%= group[:count] %>)</small><br />
 		<% end %>
 	</p></div>

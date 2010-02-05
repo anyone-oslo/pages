@@ -31,11 +31,6 @@
 	
 </script>
 
-<h2>Mailing Queue</h2>
-<p>
-	<%= link_to "View the mailing queue status", {:action => :status} %>
-</p>
-
 <h2>Export to CSV</h2>
 <ul>
 	<% MailSubscriber.groups.each do |group| %>
