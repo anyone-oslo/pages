@@ -270,9 +270,16 @@ namespace :pages do
 			`git submodule foreach 'git checkout -q master'`
 			`git submodule foreach 'git pull'`
 		end
+		
+		desc "Run all update tasks"
+		task :all => ["update:files", "update:fix_plugin_migrations", "update:migrations"]
 	end 
 
 	desc "Automated updates for newest version"
-	task :update => ["update:submodules", "update:files", "update:fix_plugin_migrations", "update:migrations"]
+	task :update => ["update:submodules"] do
+		puts "Submodules updated, running rake again"
+		`rake pages:update:all`
+	end
+	#, "update:files", "update:fix_plugin_migrations", "update:migrations"]
 end
 
