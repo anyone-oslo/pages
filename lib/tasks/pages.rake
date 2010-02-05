@@ -278,7 +278,7 @@ namespace :pages do
 	desc "Automated updates for newest version"
 	task :update => ["update:submodules"] do
 		puts "Submodules updated, running rake again"
-		`rake pages:update:all`
+		system "rake pages:update:all"
 	end
 	#, "update:files", "update:fix_plugin_migrations", "update:migrations"]
 end
