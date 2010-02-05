@@ -190,7 +190,16 @@ namespace :pages do
 				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
 			end
 			
-			#config.action_view.cache_template_loading
+			if !File.exists?('script/delayed_job')
+				puts "Delayed job worker script not found, installing..."
+				File.open('script/delayed_job', 'w') do |fh|
+					fh.write("#!/usr/bin/env ruby\n")
+					fh.write("require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/lib/delayed_job_worker.rb')\n")
+				end
+				`chmod +x script/delayed_job`
+				`git add script/delayed_job`
+			end
+
 			if !File.exists?('app/views/pages/templates')
 				puts "Page template dir not found, moving old templates..."
 				`mkdir app/views/pages/templates`

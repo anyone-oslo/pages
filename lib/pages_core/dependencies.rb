@@ -13,6 +13,7 @@ module PagesCore
 				config.gem 'rmagick', :lib => 'RMagick'
 				config.gem 'uuidtools'
 				config.gem 'unicode'
+				config.gem 'daemon-spawn'
 				if ENV['RAILS_ENV'] == 'test'
 					config.gem 'thoughtbot-shoulda', :lib => 'shoulda'
 					config.gem 'notahat-machinist', :lib => 'machinist'

@@ -52,6 +52,24 @@ namespace :deploy do
 	end
 end
 
+namespace :delayed_job do
+	desc "Start delayed_job process" 
+	task :start, :roles => :app do
+		run "cd #{current_path}; script/delayed_job start production" 
+	end
+
+	desc "Stop delayed_job process" 
+	task :stop, :roles => :app do
+		run "cd #{current_path}; script/delayed_job stop production" 
+	end
+
+	desc "Restart delayed_job process" 
+	task :restart, :roles => :app do
+		run "cd #{current_path}; script/delayed_job restart production" 
+	end
+end
+
+
 namespace :pages do
 
 	desc "Verify migrations"
@@ -149,3 +167,7 @@ before "deploy:cold", "deploy:setup"
 before "deploy:cold", "deploy"
 after "deploy:cold", "deploy:reload_webserver"
 after "deploy:cold", "sphinx:start"
+
+after "deploy:start", "delayed_job:start" 
+after "deploy:stop", "delayed_job:stop" 
+after "deploy:restart", "delayed_job:restart" 
