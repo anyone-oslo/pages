@@ -12,7 +12,9 @@ set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.gi
 set :deploy_via,            :remote_cache
 set :git_enable_submodules, 1
 
-set :flush_cache, true
+set :verify_migrations, true
+set :flush_cache,       true
+set :reindex_sphinx,    true
 
 role :web, remote_host
 role :app, remote_host
@@ -25,6 +27,13 @@ task :rake_task, :roles => :app do
 	else
 		puts "Please specify a command to execute on the remote servers (via the COMMAND environment variable)"
 	end
+end
+
+desc "Quick deploy, do not clean cache and reindex Sphinx"
+task :quick, :roles => [:web] do
+	set :verify_migrations, false
+	set :flush_cache,       false
+	set :reindex_sphinx,    false
 end
 
 namespace :deploy do
@@ -74,16 +83,18 @@ namespace :pages do
 
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
-		migration_status = `rake -s pages:migration_status`
-		current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
-		unless current == plugin
-			puts "================================================================================"
-			puts "MIGRATIONS MISMATCH!"
-			puts migration_status
-			puts "\nRun the following commands to fix:"
-			puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
-			puts
-			exit
+		if verify_migrations
+			migration_status = `rake -s pages:migration_status`
+			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
+			unless current == plugin
+				puts "================================================================================"
+				puts "MIGRATIONS MISMATCH!"
+				puts migration_status
+				puts "\nRun the following commands to fix:"
+				puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
+				puts
+				exit
+			end
 		end
 	end
 
@@ -137,6 +148,9 @@ namespace :sphinx do
 	desc "Restart Sphinx"
 	task :restart do
         run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+	end
+	desc "Do not reindex Sphinx" do
+		set :reindex_sphinx, false
 	end
 end
 
