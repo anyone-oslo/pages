@@ -12,7 +12,7 @@ set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.gi
 set :deploy_via,            :remote_cache
 set :git_enable_submodules, 1
 
-set :verify_migrations, true
+set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
 
@@ -31,7 +31,7 @@ end
 
 desc "Quick deploy, do not clean cache and reindex Sphinx"
 task :quick, :roles => [:web] do
-	set :verify_migrations, false
+	set :perform_verify_migrations, false
 	set :flush_cache,       false
 	set :reindex_sphinx,    false
 end
@@ -83,7 +83,7 @@ namespace :pages do
 
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
-		if verify_migrations
+		if perform_verify_migrations
 			migration_status = `rake -s pages:migration_status`
 			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
 			unless current == plugin
