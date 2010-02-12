@@ -256,7 +256,7 @@ namespace :pages do
 		task :submodules do
 			puts "Updating submodules..."
 			# Get origin base patch
-			origin_base_url = `cd #{RAILS_ROOT}/vendor/plugins/pages && git remote -v | grep origin`.split(/\s+/)[1].gsub(/pages\.git$/, '')
+			origin_base_url = `cd #{RAILS_ROOT}/vendor/plugins/pages && git remote -v | grep origin`.split(/\s+/)[1].gsub(/pages(\.git)?$/, '')
 
 			required_plugins = %w{thinking-sphinx acts_as_list acts_as_tree dynamic_image engines recaptcha delayed_job}
 			required_plugins.each do |plugin|
