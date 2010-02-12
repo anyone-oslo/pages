@@ -181,6 +181,9 @@ namespace :pages do
 			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
 				puts "* config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
 			end
+			patch_files %r%^config/environment\.rb%, /^[\s]*config\.action_controller\.session_store/, "\t#config.action_controller.session_store" do |files|
+				puts "* ActiveRecord session store has been depreceated, commented out in #{files.inspect}."
+			end
 			patch_files(
 				%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
 				/< ApplicationController/, 
