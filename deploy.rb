@@ -59,6 +59,12 @@ namespace :deploy do
 	task :fix_plugin_migrations, :roles => [:db] do
 		run "cd #{release_path} && rake pages:update:fix_plugin_migrations RAILS_ENV=production --trace"
 	end
+	
+	desc "Ensure binary objects store"
+	task :ensure_binary_objects, :roles => [:web] do
+		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
+		run "ln -s #{deploy_to}/#{shared_dir}/binary-objects #{release_path}/db/binary-objects"
+	end
 end
 
 namespace :delayed_job do
@@ -106,6 +112,7 @@ namespace :pages do
 		run "mkdir -p #{deploy_to}/#{shared_dir}/sessions"
 		run "mkdir -p #{deploy_to}/#{shared_dir}/index"
 		run "mkdir -p #{deploy_to}/#{shared_dir}/sphinx"
+		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
 	end
 
 	desc "Fix permissions"
@@ -176,6 +183,7 @@ after "deploy:symlink",  "pages:create_symlinks"
 #after "deploy:restart",  "sphinx:index"
 after "deploy:restart",  "cache:flush"
 before "deploy:migrate", "deploy:fix_plugin_migrations"
+after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 before "deploy:cold", "deploy:setup"
 before "deploy:cold", "deploy"
