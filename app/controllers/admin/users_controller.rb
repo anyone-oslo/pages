@@ -9,13 +9,17 @@ class Admin::UsersController < Admin::AdminController
 	def index
 		respond_to do |format|
 			format.html do 
-				@users = User.find( :all, :order => 'is_activated DESC, realname' )
+				@users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
 			end
 			format.xml do
-				@users = User.find( :all )
+				@users = User.find(:all, :order => 'realname')
 				render :xml => @users.to_xml
 			end
 		end
+	end
+	
+	def deactivated
+		@users = User.find_deactivated
 	end
 
 	def welcome

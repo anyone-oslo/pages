@@ -106,6 +106,14 @@ class User < ActiveRecord::Base
 		def admin_users
 			self.find( :all, :conditions => 'is_activated = 1 AND is_admin = 1', :order => 'realname ASC' )
 		end
+		
+		def find_deactivated
+			self.find(:all, :conditions => {:is_activated => false}, :order => 'realname ASC')
+		end
+		
+		def deactivated_count
+			self.count(:all, :conditions => {:is_activated => false})
+		end
 	
 	end # class << self -------------------------------------------------------
 	

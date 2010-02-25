@@ -31,8 +31,8 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 	admin.resources( 
 		:users,    
 		:controller => 'admin/users', 
-		:collection => { :new_password => :any, :welcome => :any, :list => :any, :logout => :any, :login => :any },
-		:member     => { :delete_image => :delete }
+		:collection => {:new_password => :any, :welcome => :any, :list => :any, :logout => :any, :login => :any, :deactivated => :any},
+		:member     => {:delete_image => :delete}
 	)
 	admin.resources :accounts, :controller => 'admin/accounts'
 	admin.resources( 
@@ -40,13 +40,13 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:controller  => 'admin/pages', 
 		:path_prefix => 'admin/:language',
 		:collection  => { 
-			:list => :any, 
+			:list      => :any, 
 			:list_test => :any, 
-			:fragment => :any, 
-			:new => :any, 
-			:news => :any, 
-			:new_news => :any, 
-			:search => :any
+			:fragment  => :any, 
+			:new       => :any, 
+			:news      => :any, 
+			:new_news  => :any, 
+			:search    => :any
 		},
 		:member      => { 
 			:delete_language => :any, 
