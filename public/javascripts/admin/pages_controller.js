@@ -67,6 +67,18 @@ Admin.PagesController = {
 				var button = this;
 				var form = $(button).closest('form').get(0);
 				var previewUrl = '/'+Admin.language+'/pages/preview';
+				
+				// Rewrite the form and submit
+				form.oldAction = form.action;
+				form.target = "_blank";
+				form.action = previewUrl;
+				$(form).submit();
+
+				// Undo rewrite
+				form.action = form.oldAction;
+				form.target = "";
+
+				/*
 				button.originalValue = $(button).html();
 				$(button).html("Loading..").attr('disabled', true);
 				$.post(previewUrl, $(form).serialize(), function(html){
@@ -77,6 +89,7 @@ Admin.PagesController = {
 					output.close();
 					$(button).html(button.originalValue).attr('disabled', false);
 				});
+				*/
 			});
 
 			$('#new-image').hide();

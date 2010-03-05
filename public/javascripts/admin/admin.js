@@ -68,7 +68,7 @@ function jRichTextArea(textArea, options){
 			a.title = name;
 			a.textArea = this.textArea;
 			//callback.this = this;
-			jQuery(a).click(callback);
+			jQuery(a).mousedown(callback);
 			jQuery(a).addClass(settings.className);
 			jQuery(li).append(a).appendTo(this.listElement);
 			this.buttons.push(li);
@@ -92,7 +92,10 @@ function jRichTextArea(textArea, options){
 	this.textArea.wrapSelection = function() {
 		var prepend = arguments[0];
 		var append = (arguments.length > 1) ? arguments[1] : prepend
-		return this.replaceSelection(prepend + this.selectedText() + append);
+		var selectedText = this.selectedText();
+		var trailingSpace = selectedText.match(/(\s)*$/)[0];
+		selectedText = selectedText.replace(/(\s)*$/, '');
+		return this.replaceSelection(prepend + selectedText + append + trailingSpace);
 	}
 
 	// Delegates
