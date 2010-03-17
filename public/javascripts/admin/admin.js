@@ -192,7 +192,7 @@ function EditableImage(link, options){
 					var crop_end_y = crop_start_y + Math.round(imageData.crop_height * binding.getScale());
 					jCropOptions['setSelect'] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y];
 				}
-				console.log(jCropOptions);
+				// console.log(jCropOptions);
 				jQuery('#editableImageEditorImage').Jcrop(jCropOptions);
 			});
 			
@@ -366,7 +366,7 @@ PagesAdmin.contentTabs = {
 				if(tabs[this]) {
 					jQuery(tabs[this]).hide();
 				} else {
-					console.log("Could not hide tab: "+this);
+					// console.log("Could not hide tab: "+this);
 				}
 				jQuery("#content-tab-link-"+this).removeClass('current');
 			});
