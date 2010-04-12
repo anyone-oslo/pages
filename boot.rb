@@ -8,7 +8,7 @@ if RAILS_ENV == 'production'
 	ActionMailer::Base.delivery_method = :sendmail
 	ActionMailer::Base.sendmail_settings = {
 		:location       => '/usr/sbin/sendmail',
-		:arguments      => '-i -t -f support@manualdesign.no'
+		:arguments      => '-i -t -f no-reply@manualdesign.no'
 	}
 end
 

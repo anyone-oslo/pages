@@ -208,15 +208,20 @@ class Page < ActiveRecord::Base
 		
 		def search_paginated(query, options={})
 			options[:page] = (options[:page] || 1).to_i
+
 			search_options = {
 				:per_page   => 20,
 				:include    => [:textbits, :categories, :image, :author]
 			}.merge(options)
+
+			# TODO: Allow more fine-grained control over status filtering
+			search_options[:conditions] = {:status => '2', :autopublish => '0'}
+			
 			pages = Page.search(query, search_options)
 			PagesCore::Paginates.paginate(pages, :current_page => options[:page], :pages => pages.total_pages, :per_page => search_options[:per_page])
 			pages
 		end
-		
+				
 		# Count pages. See Page.get_pages for options.
 		def count_pages(options={}, find_options=nil)
 			unless find_options
