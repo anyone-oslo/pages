@@ -32,6 +32,7 @@ class PagesController < FrontendController
 		@comment = PageComment.new(params[:page_comment].merge({:remote_ip => remote_ip, :page_id => @page.id}))
 		if @page.comments_allowed?
 			if PagesCore.config(:recaptcha) && !verify_recaptcha
+				@comment.invalid_captcha = true
 				render_page
 			else
 				@comment.save
