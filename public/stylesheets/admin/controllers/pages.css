@@ -106,19 +106,6 @@
 }
 
 
-.page_new_image, .page_new_file {
-	position: absolute;
-	top: 120px;
-	left: 48px;
-	border: 1px solid #cdc;
-	background: #f8fff8;
-}
-
-.page_new_image h2, .page_new_file h2 {
-	margin: 1em 24px;
-}
-
-
 .edit_page .images_list .thumbnail {
 	padding: 0;
 	width: 124px;

@@ -61,6 +61,12 @@ Admin.PagesController = {
 		this.applyAutopublishCheck();
 
 		(function($){
+			
+			$('#new-image').hide();
+
+			window.showAdditionalImageModal = function(){
+				Modal.show('<div class="uploadImages">'+$('#new-image').html()+'</div>');
+			}
 
 			// Previewing
 			$('#previewButton').click(function(){
@@ -92,7 +98,6 @@ Admin.PagesController = {
 				*/
 			});
 
-			$('#new-image').hide();
 			$('#new-file').hide();
 		})(jQuery);
 
