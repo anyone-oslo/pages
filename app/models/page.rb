@@ -478,6 +478,12 @@ class Page < ActiveRecord::Base
 
 	# ---- INSTANCE METHODS ---------------------------------------------------
 	
+	def fix_counter_cache!
+		if comments_count != comments.count
+			Page.update_counters(self.id, :comments_count => (comments.count - comments_count) )
+		end
+	end
+
 	self.send :alias_method, :acts_as_tree_parent, :parent 
 
 	alias :textable_has_field? :has_field?

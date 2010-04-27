@@ -4,8 +4,8 @@ class PageCommentsCounterCache < ActiveRecord::Migration
 		add_column :pages, :last_comment_at, :datetime
 		# Add counts
 		Page.find(:all).each do |page|
-			page.update_attribute(:comments_count, page.comments.count)
 			if page.comments.length > 0
+				page.fix_counter_cache!
 				page.update_attribute(:last_comment_at, page.comments.last.created_at)
 			end
 		end
