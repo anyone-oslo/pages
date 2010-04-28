@@ -179,12 +179,20 @@
 
 	<%# #### ADVANCED OPTIONS #### %>
 	<% content_tab "Options" do %>
-		<%= labelled_field (
-				f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
-			), 
-			"Published timestamp",
-			:errors      => @page.errors[:published_at]
-		%>
+		<% if @page.has_been_published? %>
+			<%= labelled_field (
+					f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+				), 
+				"Published",
+				:errors      => @page.errors[:published_at]
+			%>
+		<% else %>
+			<%= labelled_field (
+					'By ' + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+				), 
+				"Published"
+			%>
+		<% end %>
 		<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
 			:errors      => @page.errors[:content_order]
 		%>

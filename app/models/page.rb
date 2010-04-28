@@ -35,6 +35,10 @@ class Page < ActiveRecord::Base
 
 	before_save do |page| 
 		page.published_at = Time.now unless page.published_at?
+		if page.published? && !page.has_been_published?
+			page.published_at = Time.now
+			page.has_been_published = true
+		end
 		if page.image_url && !page.image_url.blank?
 			temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')
 			target_filename = page.image_url.split("/").last
