@@ -8,7 +8,7 @@ class PageComment < ActiveRecord::Base
 	end
 	
 	after_create do |page_comment|
-		if page_comment.page
+		if page_comment.page && page_comment.valid?
 			page_comment.page.update_attribute(:last_comment_at, page_comment.created_at)
 		end
 	end
