@@ -177,13 +177,18 @@ class Page < ActiveRecord::Base
 			# Pagination
 			pagination_options = {}
 			if options[:paginate]
-				pages_count = Page.count_pages(options, find_options)
+				# Count total pages
+				options[:paginate][:offset] ||= 0
+				options[:paginate][:offset] = options[:paginate][:offset].to_i
+				pages_count = (Page.count_pages(options, find_options) - options[:paginate][:offset])
+
 				options[:paginate][:page] ||= 1
 				options[:paginate][:page] = options[:paginate][:page].to_i
 				options[:paginate][:page] = 1 if options[:paginate][:page] < 1
 				pagination_count = (pages_count.to_f / options[:paginate][:per_page]).ceil
 
-				pagination_options[:offset] = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
+				pagination_options[:offset] = (options[:paginate][:per_page].to_i * (options[:paginate][:page].to_i - 1)) + options[:paginate][:offset]
+				pagination_options[:offset] = 0 if pagination_options[:offset] < 0 # Failsafe
 				pagination_options[:limit]  = options[:paginate][:per_page]
 			end
 			
@@ -198,7 +203,12 @@ class Page < ActiveRecord::Base
 
 			# Add the pagination methods
 			if options[:paginate] && pagination_count > 0
-				PagesCore::Paginates.paginate(pages, :current_page => options[:paginate][:page], :pages => pagination_count, :per_page => options[:paginate][:per_page])
+				PagesCore::Paginates.paginate(pages, {
+					:current_page => options[:paginate][:page], 
+					:pages        => pagination_count, 
+					:per_page     => options[:paginate][:per_page], 
+					:offset       => options[:paginate][:offset]
+				})
 			else
 				PagesCore::Paginates.paginate(pages)
 			end
