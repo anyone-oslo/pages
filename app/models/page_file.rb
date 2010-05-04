@@ -1,12 +1,12 @@
 class PageFile < ActiveRecord::Base
 
 	FORMATS = {
-		'audio/mpeg' => :mp3,
-		'image/gif' => :gif,
-		'image/jpeg' => :jpg,
-		'image/jpg' => :jpg,
-		'image/pjpeg' => :jpg,
-		'image/png' => :png,
+		'audio/mpeg'      => :mp3,
+		'image/gif'       => :gif,
+		'image/jpeg'      => :jpg,
+		'image/jpg'       => :jpg,
+		'image/pjpeg'     => :jpg,
+		'image/png'       => :png,
 		'application/pdf' => :pdf
 	}
 
@@ -20,10 +20,12 @@ class PageFile < ActiveRecord::Base
 	acts_as_textable [ "description" ], :allow_any => false
 
 	validate do |file|
-		file.name = File.basename( file.filename, ".*" ) unless file.name?
+		file.name = File.basename(file.filename, ".*") unless file.name?
+		file.content_type = 'image/jpeg' if file.content_type == 'image/x-citrix-pjpeg' # Fuck you, Citrix
+		file.content_type = 'image/jpeg' if file.content_type == 'image/pjpeg'          # Fuck you, MSIE
 	end
 	
-	def file=( file )
+	def file=(file)
 		self.filename     = file.original_filename rescue File.basename( file.path )
 		self.filesize     = file.size
 		self.content_type = file.content_type
