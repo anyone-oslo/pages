@@ -22,7 +22,7 @@ class PageFile < ActiveRecord::Base
 	validate do |file|
 		file.name = File.basename(file.filename, ".*") unless file.name?
 		file.content_type = 'image/jpeg' if file.content_type == 'image/x-citrix-pjpeg' # Fuck you, Citrix
-		file.content_type = 'image/jpeg' if file.content_type == 'image/pjpeg'          # Fuck you, MSIE
+		file.content_type = 'image/gif'  if file.content_type == 'image/x-citrix-gif'   # Fuck you, Citrix
 	end
 	
 	def file=(file)
