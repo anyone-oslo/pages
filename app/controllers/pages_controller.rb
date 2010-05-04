@@ -181,7 +181,7 @@ class PagesController < FrontendController
 				request_options[:category_name] = params[:category_name] if params[:category_name]
 				request_options[:sort] = params[:sort] if params[:sort]
 				request_path = url_for(request_options) 
-				#request_path += ".#{params[:format]}" if params[:format]
+				request_path += ".#{params[:format]}" if params[:format] && params[:format].to_s != 'html'
 				self.class.cache_page response.body, request_path
 			end
 		end
