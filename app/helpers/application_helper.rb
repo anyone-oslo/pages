@@ -288,12 +288,13 @@ module ApplicationHelper
     end
 
 	def unique_page(page_name, &block)
+		language = @language || Language.default
 		page = Page.find_unique(page_name)
 		if page && block_given?
 			output = capture(page, &block)
 			concat(output)
 		end
-		page
+		(page) ? page.translate(language) : nil
 	end
 
 end
