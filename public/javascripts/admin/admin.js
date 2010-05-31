@@ -24,6 +24,115 @@ jQuery.extend({
     }
 });
 
+(function($){ 
+	$.BehaviorDetector = {
+		register: function(selector, behavior){
+			if(!$(this).data('behaviors')){
+				$(this).data('behaviors', {});
+			}
+			var behaviors = $(this).data('behaviors');
+			if(!behaviors[selector]){
+				behaviors[selector] = [];
+			}
+			behaviors[selector].push(behavior);
+		},
+		run: function(){
+			if($(this).data('behaviors')){
+				for(var selector in $(this).data('behaviors')){
+					for(var a = 0; a < $(this).data('behaviors')[selector].length; a++){
+						var behavior = $(this).data('behaviors')[selector][a];
+						$(selector).filter(function(){
+							return !$(this).data('appliedBehaviors') || $.inArray(behavior, $(this).data('appliedBehaviors'));
+						}).each(function(){
+							$(this).each(behavior);
+							if(!$(this).data('appliedBehaviors')){
+								$(this).data('appliedBehaviors', []);
+							}
+							$(this).data('appliedBehaviors').push(behavior);
+							return this
+						});
+					}
+				}
+			}
+		}
+	};
+	$.fn.onDetect = function(behavior){
+		$.BehaviorDetector.register(this.selector, behavior);
+		$.BehaviorDetector.run();
+		return this;
+	};
+	$(document).ready(function(){
+		$.BehaviorDetector.run();
+	});
+	$(document.body).bind('modified', function(){
+		$.BehaviorDetector.run();
+	});
+})(jQuery);
+
+
+var Modal = {
+	container: false,
+	makeContainer: function(){
+		var modal = this;
+		if(!this.container){
+			jQuery(document.body).append('<div id="modal_container"/>');
+			this.container = jQuery('#modal_container').get(0);
+			jQuery(this.container).hide();
+			jQuery(window).scroll(function(){
+				modal.position();
+			});
+			jQuery(window).resize(function(){
+				modal.position();
+			});
+		}
+	},
+	clear: function(){
+		jQuery(this.container).fadeOut(150,function(){
+			jQuery(this).html();
+			jQuery('#modalOverlay').fadeOut(50);
+		});
+	},
+	draw: function(options){
+		var modal = this;
+		this.makeContainer();
+		jQuery(this.container).show();
+		jQuery(this.container).html('<div class="container">'+options.text+'</div>');
+		this.position();
+		jQuery(document.body).append('<div id="modalOverlay"/>');
+		jQuery(document.body).trigger('modified');
+		jQuery('#modalOverlay').show().click(function(){Modal.clear();}).css({
+			position: 'absolute', top: 0, left: 0, width: jQuery(document).width()+'px', height: jQuery(document).height()+'px', 'z-index': 19,
+			'background-color': '#000000', opacity: 0
+		}).animate({
+		 	opacity: 0.6
+		}, 100);
+	},
+	position: function(){
+		var width  = jQuery(this.container).width();
+		var height = jQuery(this.container).height();
+		var scrollTop = jQuery(window).scrollTop();
+		var viewportWidth = window.innerWidth ? window.innerWidth : jQuery(window).width();
+		var viewportHeight = window.innerHeight ? window.innerHeight : jQuery(window).height();
+		var left   = Math.round(viewportWidth / 2) - (width / 2);
+		var top    = (Math.round(viewportHeight / 2) - (height / 2)) + scrollTop;
+		if(top < 5) { top = 5; }
+		if(left < 5) { left = 5; }
+		jQuery('#modalOverlay').css({
+			top: 0, left: 0, width: jQuery(document).width()+'px', height: jQuery(document).height()+'px'
+		});
+		jQuery(this.container).css('left', left).css('top', top);
+	},
+	alert: function(string){
+		this.draw({text: string});
+	},
+	show: function(string){
+		this.draw({text: string});
+	},
+	showMap: function(string){
+		this.draw({text: string});
+	}
+}
+
 jQuery.fn.centerOnScreen = function(){
     var win_width      = jQuery(window).width();
     var scrollToLeft   = jQuery(window).scrollLeft();
@@ -192,7 +301,7 @@ function EditableImage(link, options){
 					var crop_end_y = crop_start_y + Math.round(imageData.crop_height * binding.getScale());
 					jCropOptions['setSelect'] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y];
 				}
-				console.log(jCropOptions);
+				// console.log(jCropOptions);
 				jQuery('#editableImageEditorImage').Jcrop(jCropOptions);
 			});
 			
@@ -366,7 +475,7 @@ PagesAdmin.contentTabs = {
 				if(tabs[this]) {
 					jQuery(tabs[this]).hide();
 				} else {
-					console.log("Could not hide tab: "+this);
+					// console.log("Could not hide tab: "+this);
 				}
 				jQuery("#content-tab-link-"+this).removeClass('current');
 			});

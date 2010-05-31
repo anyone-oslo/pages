@@ -175,6 +175,28 @@ namespace :cache do
 	end
 end
 
+namespace :log do
+	namespace :tail do
+		desc "Tail production log"
+		task :production, :roles => :app do
+			run "tail -f #{shared_path}/log/production.log" do |channel, stream, data|
+				puts  # for an extra line break before the host name
+				puts "==== #{channel[:host]} ====\n#{data}" 
+				break if stream == :err    
+			end
+		end
+
+		desc "Tail delayed_job log"
+		task :delayed_job, :roles => :app do
+			run "tail -f #{shared_path}/log/delayed_job.log" do |channel, stream, data|
+				puts  # for an extra line break before the host name
+				puts "==== #{channel[:host]} ====\n#{data}" 
+				break if stream == :err    
+			end
+		end
+	end
+end
+
 before "deploy", "pages:verify_migrations"
 
 after "deploy:setup",    "pages:create_shared_dirs"

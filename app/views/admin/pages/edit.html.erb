@@ -78,6 +78,9 @@
 	<%# #### ADDITIONAL IMAGES #### %>
 	<% if @page.template_config.value(:images) %>
 		<% content_tab "Additional images" do %>
+			<p>
+				<%= button_to_function "Upload images", "showAdditionalImageModal();" %>
+			</p>
 			<% unless @page.images.empty? %>
 				<table class="list images_list">
 					<tr>
@@ -106,15 +109,12 @@
 						</td>
 					</tr><% end %>
 				</table>
+				<p>
+					Click on the caption text to edit it.
+				</p>
 			<% else %>
 				<p>No images added yet.</p>
 			<% end %>
-			<p>
-				Click on the caption text to edit it.
-			</p>
-			<p>
-				<%= link_to_function "Add image", "Element.show('new-image');", :class => :create %>
-			</p>
 		<% end %>
 	<% end %>
 
@@ -179,12 +179,20 @@
 
 	<%# #### ADVANCED OPTIONS #### %>
 	<% content_tab "Options" do %>
-		<%= labelled_field (
-				f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
-			), 
-			"Published timestamp",
-			:errors      => @page.errors[:published_at]
-		%>
+		<% if @page.has_been_published? %>
+			<%= labelled_field (
+					f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+				), 
+				"Published",
+				:errors      => @page.errors[:published_at]
+			%>
+		<% else %>
+			<%= labelled_field (
+					'By ' + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+				), 
+				"Published"
+			%>
+		<% end %>
 		<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
 			:errors      => @page.errors[:content_order]
 		%>
@@ -212,9 +220,28 @@
 <% end %>
 
 <%# #### UPLOAD IMAGE #### %>
-<div id="new-image" class="page_new_image">
-	<h2>Upload new image</h2>
+<div id="new-image">
+	<h2>Upload images</h2>
 	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
+
+		<table>
+			<tr>
+				<th>File</th>
+				<th>Caption</th>
+			</tr>
+			<% 10.times do |i| %>
+				<tr>
+					<td>
+						<%= file_field_tag("images[#{i}][imagefile]") %>
+					</td>
+					<td>
+						<%= text_field_tag("images[#{i}][byline]", '', :size => 48) %>
+					</td>
+				</tr>
+			<% end %>
+		</table>
+
+		<% if false %>
 		<%= labelled_field f.file_field( :imagefile ), "File", 
 			:errors      => @new_image.errors[:imagefile]
 		%>
@@ -224,9 +251,10 @@
 		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption", 
 			:errors      => @new_image.errors[:byline]
 		%>
+		<% end %>
 		<p>
 			<%= submit_tag "Upload" %> or 
-			<%= link_to_function "Cancel", "Element.hide('new-image');", :class => :cancel %>
+			<%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
 		</p>
 	<% end %>
 </div>

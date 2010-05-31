@@ -35,6 +35,12 @@ class Page < ActiveRecord::Base
 
 	before_save do |page| 
 		page.published_at = Time.now unless page.published_at?
+		if page.respond_to?('has_been_published?') # Stupid check for stupid migrations
+			if page.published? && !page.has_been_published?
+				page.published_at = Time.now
+				page.has_been_published = true
+			end
+		end
 		if page.image_url && !page.image_url.blank?
 			temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')
 			target_filename = page.image_url.split("/").last
@@ -104,11 +110,11 @@ class Page < ActiveRecord::Base
 		# Example:
 		#   Page.last_commented(:limit => 10)
 		def last_commented(options={})
-			find_query = "SELECT p.* FROM pages p, page_comments c 
-			              WHERE c.page_id = p.id AND p.status = 2 
-			              GROUP BY c.page_id ORDER BY c.created_at DESC"
-			find_query << " LIMIT #{options[:limit]}" if options[:limit]
-			Page.find_by_sql(find_query)
+			options = {
+				:order    => 'last_comment_at DESC',
+				:comments => true
+			}.merge(options)
+			Page.get_pages(options)
 		end
 	
 		# Finds pages with comments, ordered by number of comments.
@@ -119,11 +125,11 @@ class Page < ActiveRecord::Base
 		# Example:
 		#   Page.most_commented(:limit => 10)
 		def most_commented(options={})
-			find_query = "SELECT p.*, COUNT(c.id) as comments_count FROM pages p, page_comments c 
-			              WHERE c.page_id = p.id AND p.status = 2 
-			              GROUP BY c.page_id ORDER BY comments_count DESC"
-			find_query << " LIMIT #{options[:limit]}" if options[:limit]
-			Page.find_by_sql(find_query)
+			options = {
+				:order    => 'comments_count DESC',
+				:comments => true
+			}.merge(options)
+			Page.get_pages(options)
 		end
 
 		# Finds pages based on the given criteria. Only published pages are loaded by default, this can be overridden by passing the
@@ -147,6 +153,7 @@ class Page < ActiveRecord::Base
 		# * <tt>:paginate</tt>         - Paginates results. Takes a hash with the format: {:page => 1, :per_page => 20}
 		# * <tt>:category</tt>         - Loads only pages within the given category.
 		# * <tt>:include</tt>          - Which relationships to include (Default: :textbits, :categories, :image, :author)
+		# * <tt>:comments</tt>         - Limit results to pages with comments.
 		# * <tt>:limit</tt>            - Limit results to n records.
 		# * <tt>:published_after</tt>  - Loads only pages published after this date.
 		# * <tt>:published_before</tt> - Loads only pages published before this date.
@@ -177,13 +184,18 @@ class Page < ActiveRecord::Base
 			# Pagination
 			pagination_options = {}
 			if options[:paginate]
-				pages_count = Page.count_pages(options, find_options)
+				# Count total pages
+				options[:paginate][:offset] ||= 0
+				options[:paginate][:offset] = options[:paginate][:offset].to_i
+				pages_count = (Page.count_pages(options, find_options) - options[:paginate][:offset])
+
 				options[:paginate][:page] ||= 1
 				options[:paginate][:page] = options[:paginate][:page].to_i
 				options[:paginate][:page] = 1 if options[:paginate][:page] < 1
 				pagination_count = (pages_count.to_f / options[:paginate][:per_page]).ceil
 
-				pagination_options[:offset] = options[:paginate][:per_page].to_i * ( options[:paginate][:page].to_i - 1 )
+				pagination_options[:offset] = (options[:paginate][:per_page].to_i * (options[:paginate][:page].to_i - 1)) + options[:paginate][:offset]
+				pagination_options[:offset] = 0 if pagination_options[:offset] < 0 # Failsafe
 				pagination_options[:limit]  = options[:paginate][:per_page]
 			end
 			
@@ -198,7 +210,12 @@ class Page < ActiveRecord::Base
 
 			# Add the pagination methods
 			if options[:paginate] && pagination_count > 0
-				PagesCore::Paginates.paginate(pages, :current_page => options[:paginate][:page], :pages => pagination_count, :per_page => options[:paginate][:per_page])
+				PagesCore::Paginates.paginate(pages, {
+					:current_page => options[:paginate][:page], 
+					:pages        => pagination_count, 
+					:per_page     => options[:paginate][:per_page], 
+					:offset       => options[:paginate][:offset]
+				})
 			else
 				PagesCore::Paginates.paginate(pages)
 			end
@@ -208,15 +225,20 @@ class Page < ActiveRecord::Base
 		
 		def search_paginated(query, options={})
 			options[:page] = (options[:page] || 1).to_i
+
 			search_options = {
 				:per_page   => 20,
 				:include    => [:textbits, :categories, :image, :author]
 			}.merge(options)
+
+			# TODO: Allow more fine-grained control over status filtering
+			search_options[:conditions] = {:status => '2', :autopublish => '0'}
+			
 			pages = Page.search(query, search_options)
 			PagesCore::Paginates.paginate(pages, :current_page => options[:page], :pages => pages.total_pages, :per_page => search_options[:per_page])
 			pages
 		end
-		
+				
 		# Count pages. See Page.get_pages for options.
 		def count_pages(options={}, find_options=nil)
 			unless find_options
@@ -383,6 +405,7 @@ class Page < ActiveRecord::Base
 				options[:drafts]        ||= options[:all]
 				options[:autopublish]   ||= options[:all]
 				options[:all_languages] ||= false
+				options[:comments]      ||= false
 				options[:order]         ||= "position"
 				options[:parent]        = options[:parents] if options[:parents]
 				options[:include]       ||= [:textbits, :categories, :image, :author]
@@ -415,7 +438,7 @@ class Page < ActiveRecord::Base
 					find_options[:conditions].first << "status >= 2"  unless options[:drafts]
 				end
 				find_options[:conditions].first << "autopublish = 0" unless options[:autopublish]
-
+				
 				# Date limit check
 				if options[:published_within]
 					options[:published_before] = options[:published_within].last
@@ -430,6 +453,11 @@ class Page < ActiveRecord::Base
 						find_options[:conditions].first << "published_at >= ?"
 						find_options[:conditions] << options[:published_after]
 					end
+				end
+
+				# Check for comments
+				if options[:comments]
+					find_options[:conditions].first << 'comments_count > 0'
 				end
 
 				# Language check
@@ -466,6 +494,12 @@ class Page < ActiveRecord::Base
 
 	# ---- INSTANCE METHODS ---------------------------------------------------
 	
+	def fix_counter_cache!
+		if comments_count != comments.count
+			Page.update_counters(self.id, :comments_count => (comments.count - comments_count) )
+		end
+	end
+
 	self.send :alias_method, :acts_as_tree_parent, :parent 
 
 	alias :textable_has_field? :has_field?

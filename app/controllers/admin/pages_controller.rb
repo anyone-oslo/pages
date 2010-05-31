@@ -173,7 +173,10 @@ class Admin::PagesController < Admin::AdminController
 
 
 	def add_image
-		@page.images.create( params[:image] )
+		images = params[:images].map{|k, v| {:params => v, :index => k.to_i} }.sort{|a, b| a[:index] <=> b[:index]}
+		images.each do |image|
+			@page.images.create(image[:params]) if image[:params][:imagefile] && !image[:params][:imagefile].blank?
+		end
 		redirect_to edit_admin_page_url( :language => @language, :id => @page, :anchor => 'additional_images' )
 	end
 	

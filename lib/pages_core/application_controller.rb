@@ -65,11 +65,11 @@ module PagesCore
 			#
 			#   redirect_back_or_to "/"
 			#
-			def redirect_back_or_to( options={}, *parameters_for_method_reference )
+			def redirect_back_or_to(options={}, response_status={})
 				begin
 					redirect_to :back
 				rescue #RedirectBackError
-					redirect_to options, parameters_for_method_reference
+					redirect_to options, response_status
 				end
 			end
 
