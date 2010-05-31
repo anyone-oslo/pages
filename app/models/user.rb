@@ -206,7 +206,7 @@ class User < ActiveRecord::Base
 	def editable_by?( user )
 		return false unless user
 		return false if !user.is_special? && self.is_special?
-		( user == self or user.is_special? or user.account_holder? ) ? true : false
+		( user == self or user.is_special? or user.account_holder? or user.is_super_admin?) ? true : false
 	end
 	
 	# Is this user currently online?
