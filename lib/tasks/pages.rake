@@ -1,6 +1,34 @@
 require 'find'
 namespace :pages do
 	
+	desc "Show error reports"
+	task :error_reports => :environment do
+		require 'term/ansicolor'
+		include Term::ANSIColor
+
+		reports = []
+		reports_dir = File.join(RAILS_ROOT, 'log/error_reports')
+		if File.exists?(reports_dir)
+			files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
+			files.each do |f|
+				reports << YAML.load_file(File.join(reports_dir, f)).merge({:sha1_hash => f.gsub(/\.yml$/, '')})
+			end
+		end
+		if reports.length > 1
+			puts
+			reports = reports.sort{|a, b| a[:timestamp] <=> b[:timestamp]}
+			reports.each do |report|
+				message = report[:message].strip.split("\n").first
+				print "#{report[:timestamp]} ", "#{report[:sha1_hash]}".blue.bold, "\n"
+				print "#{report[:url]}".green.bold, "\n"
+				print "#{report[:params].inspect}\n".yellow
+				print "#{message}\n\n"
+			end
+		else
+			puts "No error reports found"
+		end
+	end
+	
 	desc "Deliver mailing queue"
 	task :deliver_mailings => :environment do
 		puts "Delivering mailings"
