@@ -43,14 +43,15 @@ class AdminMailer < ActionMailer::Base
 		self.generic_mailer( options )
 	end
 	
-	def error_report( options={} )
+	def error_report(options={})
 		mailer_options = {}
 		mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Pages] "
 		mailer_options[:subject]   += "Error: #{options[:error_report][:message][0..80]}" rescue "Unknown error"
 		mailer_options[:recipients] = "system+error@manualdesign.no"
 		mailer_options[:body]       = options
 		mailer_options[:from]       = options[:from] if options[:from] && !options[:from].empty?
-		self.generic_mailer( mailer_options )
+		content_type "text/html"
+		self.generic_mailer(mailer_options)
 	end
 	
 	def comment_notification(recipients, options={})
