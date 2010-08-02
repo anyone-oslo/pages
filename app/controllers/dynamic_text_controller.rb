@@ -23,6 +23,15 @@ class DynamicTextController < FrontendController
     session :off
     caches_page :show
 
+	# Enforce caching of dynamic images, even if caching is turned off
+	def force_page_cache
+		cache_setting = ActionController::Base.perform_caching
+		ActionController::Base.perform_caching = true
+		cache_page
+		ActionController::Base.perform_caching = cache_setting
+	end
+	after_filter :force_page_cache
+
     def render_dynamic_text(text, options={}, &block)
 		text = text.gsub('&#47;', '/') # Hack to circumvent the Apache encoded slashes bug
 		text = text.gsub('ENCODEDQUESTION', '?')

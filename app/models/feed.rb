@@ -1,6 +1,6 @@
 class Feed < ActiveRecord::Base
 	
-	has_many :feed_items, :order => "pubdate DESC, id DESC", :dependent => :destroy
+	has_many :feed_items, :order => "id DESC", :dependent => :destroy
 
 	# -- CLASS METHODS --------------------------------------------------------
 
