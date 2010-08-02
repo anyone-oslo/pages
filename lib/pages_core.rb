@@ -116,11 +116,12 @@ module ActionController
 	end
 
 	class Base #:nodoc:
-		def rescue_action_in_public( exception )
-			log_error( exception )
-			if( exception.class == RoutingError )
+		def rescue_action_in_public(exception)
+			log_error exception
+			if exception.class == RoutingError
 				render_error 404
 			else
+				# Generate the error report
 				error_report = {}
 				error_report[:message]   = exception.to_s
 				error_report[:url]       = "http://"+request.env['HTTP_HOST']
@@ -130,7 +131,20 @@ module ActionController
 				error_report[:session]   = session.instance_variable_get( "@data" )
 				error_report[:backtrace] = clean_backtrace( exception )
 				error_report[:timestamp] = Time.now
-				session[:error_report]   = error_report
+				
+				sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)
+
+				error_report_dir  = File.join(RAILS_ROOT, 'log/error_reports')
+				error_report_file = File.join(error_report_dir, "#{sha1_hash}.yml")
+				`mkdir -p #{error_report_dir}` unless File.exists?(error_report_dir)
+				
+				unless File.exists?(error_report_file)
+					File.open(error_report_file, 'w') do |fh|
+						fh.write error_report.to_yaml
+					end
+				end
+				
+				session[:error_report] = sha1_hash
 				render_error 500
 			end
 		end

@@ -5,11 +5,15 @@ class ErrorsController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def report
-		@error_report = session[:error_report]
-		@from         = params[:email]
-		@description  = params[:description]
-		@site_name    = PagesCore.config :site_name
-		AdminMailer.deliver_error_report( :error_report => @error_report, :from => @from, :description => @description, :site_name => @site_name )
+		if session[:error_report]
+			error_report_dir  = File.join(RAILS_ROOT, 'log/error_reports')
+			error_report_file = File.join(error_report_dir, "#{session[:error_report]}.yml")
+			@error_report = YAML.load_file(error_report_file)
+			@from         = params[:email]
+			@description  = params[:description]
+			@site_name    = PagesCore.config :site_name
+			AdminMailer.deliver_error_report(:error_report => @error_report, :from => @from, :description => @description, :site_name => @site_name)
+		end
 	end
 	
 	
