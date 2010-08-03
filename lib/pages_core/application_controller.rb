@@ -1,6 +1,15 @@
 module PagesCore
 	class ApplicationController < ActionController::Base
 		
+		# Trap errors
+		unless ActionController::Base.consider_all_requests_local
+			rescue_from Exception,                            :with => :handle_exception
+			rescue_from ActiveRecord::RecordNotFound,         :with => :handle_exception
+			rescue_from ActionController::RoutingError,       :with => :handle_exception
+			rescue_from ActionController::UnknownController,  :with => :handle_exception
+			rescue_from ActionController::UnknownAction,      :with => :handle_exception
+		end
+
 		# Actions added to the SKIP_FILTERS array will be bypassed by filters. 
 		# Useful for actions that don't rely on PagesCore.
 		SKIP_FILTERS = [:render_dynamic_image]
@@ -47,6 +56,47 @@ module PagesCore
 				set_process_title
 				$0 = "#{@@default_process_title}: Idle (#{@@number_of_requests} reqs)"
 			end
+			
+			def handle_exception(exception)
+				begin
+					log_error exception
+					if exception.kind_of?(ActionController::RoutingError)
+						render_error 404
+					else
+						# Generate the error report
+						error_report = {}
+						error_report[:message]   = exception.to_s
+						error_report[:url]       = "http://"+request.env['HTTP_HOST']
+						error_report[:url]      += request.env['REQUEST_URI'] if request.env['REQUEST_URI']
+						error_report[:params]    = params
+						error_report[:env]       = request.env
+						error_report[:session]   = session.instance_variable_get("@data")
+						error_report[:backtrace] = clean_backtrace(exception)
+						error_report[:timestamp] = Time.now
+						if @current_user
+							error_report[:user_id] = @current_user.id
+						end
+
+						sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)
+
+						error_report_dir  = File.join(RAILS_ROOT, 'log/error_reports')
+						error_report_file = File.join(error_report_dir, "#{sha1_hash}.yml")
+						`mkdir -p #{error_report_dir}` unless File.exists?(error_report_dir)
+
+						unless File.exists?(error_report_file)
+							File.open(error_report_file, 'w') do |fh|
+								fh.write error_report.to_yaml
+							end
+						end
+
+						session[:error_report] = sha1_hash
+						@error_id = sha1_hash
+						render_error 500
+					end
+				rescue
+					render :template => 'errors/500_critical', :status => 500, :layout => false
+				end
+			end
 		
 			# Renders a fancy error page from app/views/errors. If the error name is numeric,
 			# it will also be set as the response status. Example:
@@ -56,7 +106,8 @@ module PagesCore
 			def render_error(error, options={})
 				options[:status] ||= error if error.kind_of? Numeric
 				options[:template] ||= "errors/#{error}"
-				options[:layout] = 'errors' unless options.has_key? :layout
+				options[:layout] ||= 'errors'
+				@email = (@current_user) ? @current_user.email : ""
 				render options
 			end
 		

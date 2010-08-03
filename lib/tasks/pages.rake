@@ -12,7 +12,9 @@ namespace :pages do
 			if File.exists?(reports_dir)
 				files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
 				files.each do |f|
-					reports << YAML.load_file(File.join(reports_dir, f)).merge({:sha1_hash => f.gsub(/\.yml$/, '')})
+					if report = YAML.load_file(File.join(reports_dir, f)).merge({:sha1_hash => f.gsub(/\.yml$/, '')}) rescue nil
+						reports << report
+					end
 				end
 			end
 			if reports.length > 1

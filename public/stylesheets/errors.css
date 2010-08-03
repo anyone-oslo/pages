@@ -47,6 +47,11 @@ p.footer {
 	font-size:           12px;
 	color:               #868686;
 }
+p.error_id {
+	margin-top:          64px;
+	font-size:           12px;
+	color:               #DCDBD2;
+}
 
 input.text, textarea {
 	background:          #fff url(../images/errors/input_bg.gif) repeat-x;

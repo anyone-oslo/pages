@@ -16,6 +16,11 @@
 		<p class="footer">
 			This site is powered by <%= link_to "Pages", "http://pages.manualdesign.no" %>, a Manual design product.
 		</p>
+		<% if @error_id %>
+			<p class="error_id">
+				Error ID: <%= @error_id %>
+			</p>
+		<% end %>
 	</content>
 </body>
 </html>

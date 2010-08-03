@@ -1,20 +1,51 @@
-<h3>Requested URL</h3>
-<p><a href="<%= @error_report[:url] %>"><%= @error_report[:url] %></a></p>
+<style type="text/css">
+	h3 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-size: 18px;
+	}
+	pre {
+		background: #eee;
+		border: 1px solid #ccc;
+		padding: 8px;
+		background: #f8f8f8;
+	}
+	table {
+		border-collapse: collapse;
+	}
+	td {
+		border: 1px solid #ccc;
+		padding: 4px 20px 4px 8px;
+	}
+</style>
+
+<table>
+	<tr>
+		<td><strong>Requested URL</strong></td>
+		<td><a href="<%= @error_report[:url] %>"><%= @error_report[:url] %></td>
+	</tr>
+	<tr>
+		<td><strong>Timestamp</strong></td>
+		<td><%= @error_report[:timestamp].to_s %></a></td>
+	</tr>
+	<tr>
+		<td><strong>Reported by</strong></td>
+		<td><a href="mailto:<%= @from %>"><%= @from %></a></td>
+	</tr>
+	<% if @error_report[:user] %>
+		<tr>
+			<td><strong>User account</strong></td>
+			<td>#<%= @error_report[:user].id %>: <%= @error_report[:user].username %> (<a href="mailto:<%= @error_report[:user].email %>"><%= @error_report[:user].email %></a>)</td>
+		</tr>
+	<% end %>
+</table>
 
 <h3>Message</h3>
-<p><%= @error_report[:message] %></p>
-
-<h3>Reported by</h3>
-<p><a href="mailto:<%= @from %>"><%= @from %></a></p>
-
-<p>
-	<strong>Timestamp:</strong>     <%= @error_report[:timestamp].to_s %><br />
-	<strong>Reported at:</strong>   <%= Time.now.to_s %>
-</p>
+<pre><%= @error_report[:message] %></pre>
 
 <% if @description && !@description.empty? %>
 	<h3>Description of error</h3>
-	<p><%= @description %></p>
+	<pre><%= @description %></pre>
 <% end %>
 
 <h3>Params</h3>
@@ -23,15 +54,15 @@
 <h3>Session data</h3>
 <pre><%= @error_report[:session].reject{ |k,v| k == :error_report }.to_yaml %></pre>
 
+<h3>Backtrace</h3>
+<pre><%= @error_report[:backtrace].join("\n") %></pre>
+
 <h3>Environment</h3>
 <table>
 	<% @error_report[:env].each do |key,value| %>
 		<tr>
 			<td><strong><%= key %></strong></td>
-			<td><%= value %></td>
+			<td><%= (key == 'HTTP_COOKIE' ) ? value.split(/;[\s]*/).reject{|c| c =~ /^[\w\d]+_session=/}.join('<br />') : value %></td>
 		</tr>
 	<% end %>
 </table>
-
-<h3>Backtrace</h3>
-<pre><%= @error_report[:backtrace].join("\n") %></pre>

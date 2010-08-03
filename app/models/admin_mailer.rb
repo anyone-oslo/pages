@@ -45,8 +45,9 @@ class AdminMailer < ActionMailer::Base
 	
 	def error_report(options={})
 		mailer_options = {}
+		short_message = options[:error_report][:message].gsub(/[\s\n]+/, ' ')[0..80]
 		mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Pages] "
-		mailer_options[:subject]   += "Error: #{options[:error_report][:message][0..80]}" rescue "Unknown error"
+		mailer_options[:subject]   += "Error: #{short_message}" rescue "Unknown error"
 		mailer_options[:recipients] = "system+error@manualdesign.no"
 		mailer_options[:body]       = options
 		mailer_options[:from]       = options[:from] if options[:from] && !options[:from].empty?
