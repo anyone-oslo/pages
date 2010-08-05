@@ -41,7 +41,7 @@
 </table>
 
 <h3>Message</h3>
-<pre><%= @error_report[:message] %></pre>
+<pre><%= @error_report[:message].gsub('<', '&lt;').gsub('>', '&gt;') %></pre>
 
 <% if @description && !@description.empty? %>
 	<h3>Description of error</h3>
