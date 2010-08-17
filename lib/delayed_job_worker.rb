@@ -5,7 +5,7 @@ require 'daemon-spawn'
  
 RAILS_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '../../../..'))
  
-process_title = "delayed_job: "+`pwd`
+process_title = "delayed_job: "+RAILS_ROOT
 $0 = process_title
 
 class DelayedJobWorker < DaemonSpawn::Base
