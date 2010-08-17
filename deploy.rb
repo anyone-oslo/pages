@@ -136,6 +136,12 @@ namespace :pages do
 end
 
 namespace :sphinx do
+	desc "Rebuild Sphinx"
+	task :rebuild do
+        run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
+        run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+	end
 	desc "Configure Sphinx"
 	task :configure do
         run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
@@ -199,12 +205,13 @@ end
 
 before "deploy", "pages:verify_migrations"
 
-after "deploy:setup",    "pages:create_shared_dirs"
-after "deploy:symlink",  "pages:fix_permissions"
-after "deploy:symlink",  "pages:create_symlinks"
-#after "deploy:restart",  "sphinx:index"
-after "deploy:restart",  "cache:flush"
-before "deploy:migrate", "deploy:fix_plugin_migrations"
+after "deploy:setup",           "pages:create_shared_dirs"
+#after "deploy:symlink",         "pages:fix_permissions"
+after "deploy:symlink",         "pages:create_symlinks"
+after "deploy:symlink",         "sphinx:configure"
+#after "deploy:restart",   "sphinx:index"
+after "deploy:restart",         "cache:flush"
+before "deploy:migrate",        "deploy:fix_plugin_migrations"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 before "deploy:cold", "deploy:setup"
