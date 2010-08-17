@@ -23,6 +23,29 @@ Admin.PagesController = {
 
 	index_action : function() {
 
+		(function($){
+			$('ul.reorderable').each(function(){
+				var list = this;
+				$(list).sortable({
+					axis: "y",
+					cursor: "move",
+					distance: 10,
+					update: function(event, ui){
+						var new_order = [];
+						var parent_page_id = $(list).attr('parent_page_id');
+						$(list).children('li').each(function(){
+							new_order.push($(this).attr('page_id'));
+						});
+
+						var reorder_url = '/admin/'+Admin.language+'/pages/reorder_pages';
+						$.get(reorder_url, {ids: new_order}, function(data){
+							$(list).effect("highlight", {}, 1500);
+						});
+					}
+				});				
+			});
+		})(jQuery);
+
 		// Hover actions on .page .actions
 		jQuery('.page').hover(
 			function(){

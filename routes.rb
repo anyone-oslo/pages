@@ -40,13 +40,14 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:controller  => 'admin/pages', 
 		:path_prefix => 'admin/:language',
 		:collection  => { 
-			:list      => :any, 
-			:list_test => :any, 
-			:fragment  => :any, 
-			:new       => :any, 
-			:news      => :any, 
-			:new_news  => :any, 
-			:search    => :any
+			:list          => :any, 
+			:list_test     => :any, 
+			:fragment      => :any, 
+			:new           => :any, 
+			:news          => :any, 
+			:new_news      => :any, 
+			:search        => :any,
+			:reorder_pages => :any
 		},
 		:member      => { 
 			:delete_language => :any, 

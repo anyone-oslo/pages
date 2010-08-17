@@ -40,7 +40,7 @@
 	<% if @root_pages.length < 1 -%>
 		<p>No pages found</p>
 	<% else -%>
-		<ul class="pagelist">
+		<ul class="pagelist reorderable">
 			<% @root_pages.each do |page| -%>
 				<%= render :partial => "pagelisting", :locals => { :page => page } %>
 			<% end -%>

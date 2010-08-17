@@ -798,6 +798,11 @@ class Page < ActiveRecord::Base
 	end
 	
 
+	# Returns true if this page's children is reorderable
+	def reorderable_children?
+		( !self.content_order? || ( self.content_order =~ /position/ )  ) ? true : false
+	end
+
 	# Returns true if this page is reorderable
 	def reorderable?
 		( !self.parent || !self.parent.content_order? || ( self.parent.content_order =~ /position/ )  ) ? true : false

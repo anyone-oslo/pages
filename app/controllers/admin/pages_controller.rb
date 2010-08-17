@@ -91,6 +91,20 @@ class Admin::PagesController < Admin::AdminController
 		
 	end
 	
+	def reorder_pages
+		pages = params[:ids].map{|id| Page.find(id)}
+		PagesCore::CacheSweeper.disable do
+			pages.each_with_index do |page, index|
+				page.update_attribute(:position, (index + 1))
+			end
+		end
+		PagesCore::CacheSweeper.sweep!
+
+		if request.xhr?
+			render :text => 'ok'
+		end
+	end
+	
 
 
 	# --- MEMBER -------------------------------------------------------------
@@ -237,7 +251,6 @@ class Admin::PagesController < Admin::AdminController
 		#redirect_to :action => :edit, :id => @page
 		redirect_to admin_pages_url(:language => @language)
 	end
-
 
 	def reorder
 		if params[:direction] == "up"
