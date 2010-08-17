@@ -65,6 +65,15 @@ namespace :deploy do
 		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
 		run "ln -s #{deploy_to}/#{shared_dir}/binary-objects #{release_path}/db/binary-objects"
 	end
+	
+	desc "Setup services"
+	task :services, :roles => [:web] do
+	end
+	after 'deploy:services', 'sphinx:configure'
+	after 'deploy:services', 'sphinx:index'
+	after 'deploy:services', 'monit:configure'
+	after 'deploy:services', 'monit:restart'
+	
 end
 
 namespace :delayed_job do
@@ -167,6 +176,29 @@ namespace :sphinx do
 	end
 end
 
+namespace :monit do
+	desc "Reconfigure Monit"
+	task :configure do
+		run "pages_console monitrc > /etc/monit.d/pages && echo 'Monit configured'"
+	end
+	desc "Start Monit"
+	task :start do
+		sudo "/etc/init.d/monit start"
+	end
+	desc "Stop Monit"
+	task :stop do
+		sudo "/etc/init.d/monit stop"
+	end
+	desc "Restart Monit"
+	task :restart do
+		sudo "/etc/init.d/monit restart"
+	end
+	desc "Check Monit config syntax"
+	task :syntax do
+		sudo "/etc/init.d/monit syntax"
+	end
+end
+
 namespace :cache do
 	desc "Do not flush the page cache on reload"
 	task :keep do
@@ -222,3 +254,6 @@ after "deploy:cold", "sphinx:start"
 after "deploy:start", "delayed_job:start" 
 after "deploy:stop", "delayed_job:stop" 
 after "deploy:restart", "delayed_job:restart" 
+
+
+
