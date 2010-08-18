@@ -24,12 +24,25 @@ Admin.PagesController = {
 	index_action : function() {
 
 		(function($){
+			$('#reorder_link').click(function(){
+				var link = this;
+				var list = $('.pagelist').get(0);
+				if($(list).hasClass('reorder')){
+					$(link).html('Reorder pages');
+					$(list).removeClass('reorder');
+				} else {
+					$(link).html('Done reordering');
+					$(list).addClass('reorder');
+				}
+			});
+			
 			$('ul.reorderable').each(function(){
 				var list = this;
 				$(list).sortable({
-					axis: "y",
-					cursor: "move",
+					axis:     "y",
+					cursor:   "move",
 					distance: 10,
+					handle:   '.drag_handle',
 					update: function(event, ui){
 						var new_order = [];
 						var parent_page_id = $(list).attr('parent_page_id');

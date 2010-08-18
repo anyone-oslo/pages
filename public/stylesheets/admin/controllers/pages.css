@@ -41,6 +41,24 @@
 	text-decoration: underline;
 }
 
+#reorder_link {
+	float: right;
+	margin-top: 20px;
+}
+.pagelist .drag_handle {
+	float: left;
+	vertical-align: middle;
+	margin-top: 5px;
+	margin-left: 6px;
+	width: 13px;
+	height: 13px;
+	background-image: url(../../../images/admin/drag-icon.png);
+	display: none;
+}
+.pagelist.reorder .drag_handle {
+	display: block;
+}
+
 /* pages/news */
 .news_item_list .name {
 	line-height: 1.5;
