@@ -27,8 +27,9 @@ module ApplicationHelper
 
 		# Get options
 		options[:language] ||= @language
-		options[:charset] ||= "utf-8"
-		options[:author] ||= "Manual design (manualdesign.no)"
+		options[:charset]  ||= "utf-8"
+		options[:author]   ||= "Manual design (manualdesign.no)"
+		options[:doctype]  ||= :xhtml
 		language_definition = Language.definition( options[:language] ).iso639_1 || "en"
 		unless options.has_key?( :title )
 			options[:title] = PagesCore.config(:site_name)
@@ -42,11 +43,19 @@ module ApplicationHelper
 		end
 		
 		# Build HTML
-		output  = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-		output += "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language_definition}\" lang=\"#{language_definition}\">\n"
-		output += "<head>\n"
-		output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\" />\n"
-		output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
+		output  = ""
+		if options[:doctype] == :xhtml
+			output += "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
+			output += "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language_definition}\" lang=\"#{language_definition}\">\n"
+			output += "<head>\n"
+			output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\" />\n"
+			output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
+		elsif options[:doctype] == :html5
+			output += "<!DOCTYPE html>\n"
+			output += "<html lang=\"#{language_definition}\">\n"
+			output += "<head>\n"
+			output += "	<meta charset=\"#{options[:charset]}\" />\n"
+		end
 		output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		output += "	<title>#{options[:title]}</title>\n"
 		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
