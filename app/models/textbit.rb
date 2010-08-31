@@ -22,6 +22,13 @@ class Textbit < ActiveRecord::Base
 		end
 	end
 	
+	after_save do |textbit|
+		# Update delta index
+		if textbit.textable && textbit.textable.respond_to?(:delta)
+			textbit.textable.update_attribute(:delta, true)
+		end
+	end
+	
 	class << self
 		def fetch_simple_array_from_sql( field, options={} )
 			sql = ActiveRecord::Base.connection();

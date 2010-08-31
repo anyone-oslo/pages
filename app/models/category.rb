@@ -7,4 +7,10 @@ class Category < ActiveRecord::Base
 		cat.slug = cat.name.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
 		cat.slug = cat.slug.split( /[^\w\d\-]+/ ).compact.join( "-" )
 	end
+
+	after_save do |cat|
+		cat.pages.each do |page|
+			page.update_attribute(:delta, true)
+		end
+	end
 end
