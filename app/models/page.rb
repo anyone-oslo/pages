@@ -56,6 +56,7 @@ class Page < ActiveRecord::Base
 	            # Alert?
             end
 		end
+		page.delta = true
 	end
 	
 	# fuck a ferret
