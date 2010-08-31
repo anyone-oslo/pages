@@ -78,7 +78,7 @@ class Page < ActiveRecord::Base
 		has categories(:id), :as => :category_ids
 		has tags(:id), :as => :tag_ids
 
-		set_property :delta => true
+		set_property :delta => :delayed
 	end
 
 

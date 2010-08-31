@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
 		has :created_at, :type => :datetime
 		has is_activated
 
-		set_property :delta => true
+		set_property :delta => :delayed
 	end
 
 	class << self # -- Class methods ------------------------------------------
