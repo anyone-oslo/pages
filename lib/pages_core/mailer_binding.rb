@@ -7,7 +7,10 @@ module PagesCore
 		include ActionView::Helpers::CaptureHelper
 	    include ApplicationHelper
 	
+		attr_accessor :output_buffer
+	
 		def initialize(controller)
+			@output_buffer = ""
 			@controller = controller
 		end
 	
