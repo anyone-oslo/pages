@@ -67,13 +67,18 @@ class Admin::PagesController < Admin::AdminController
 		@archive_count = Page.count_pages_by_year_and_month(count_options)
 		
 		# Set @year and @month from params, default to the last available one
-		@year  = (params[:year]  || @archive_count.keys.last).to_i
-		@month = (params[:month] || @archive_count[@year].keys.last).to_i
+		last_year  = !@archive_count.empty? ? @archive_count.keys.last.to_i : Time.now.year
+		last_month = (@archive_count && @archive_count[@year]) ? @archive_count[@year].keys.last.to_i : Time.now.month
+
+		@year  = (params[:year]  || last_year).to_i
+		@month = (params[:month] || last_month).to_i
 		
 		# Let's check that there's data for the queried @year and @month
-		unless @archive_count[@year] && @archive_count[@year][@month] && @archive_count[@year][@month] > 0
-			flash[:notice] = "No news posted in the given range"
-			redirect_to news_admin_pages_url(:language => @language) and return
+		unless @archive_count.empty?
+			unless @archive_count[@year] && @archive_count[@year][@month] && @archive_count[@year][@month] > 0
+				flash[:notice] = "No news posted in the given range"
+				redirect_to news_admin_pages_url(:language => @language) and return
+			end
 		end
 
 		# Make the range
