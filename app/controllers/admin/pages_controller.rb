@@ -68,7 +68,7 @@ class Admin::PagesController < Admin::AdminController
 		
 		# Set @year and @month from params, default to the last available one
 		last_year  = !@archive_count.empty? ? @archive_count.keys.last.to_i : Time.now.year
-		last_month = (@archive_count && @archive_count[@year]) ? @archive_count[@year].keys.last.to_i : Time.now.month
+		last_month = (@archive_count && @archive_count[last_year]) ? @archive_count[last_year].keys.last.to_i : Time.now.month
 
 		@year  = (params[:year]  || last_year).to_i
 		@month = (params[:month] || last_month).to_i
