@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
 set :remote_user, "rails" unless variables.has_key?(:remote_user)
 
