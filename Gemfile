@@ -5,6 +5,7 @@ source 'http://gems.manualdesign.no/gems/'
 gem 'rails', '2.2.2'
 gem 'mysql'
 
+gem 'capistrano'
 gem 'vector2d'
 gem 'hpricot'
 gem 'simple-rss'
