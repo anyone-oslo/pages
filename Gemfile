@@ -15,6 +15,7 @@ gem 'rmagick', '2.12.2', :require => 'RMagick'
 gem 'uuidtools'
 gem 'unicode'
 gem 'daemon-spawn', '0.2.0'
+gem 'aws-s3', '0.6.2'
 
 group :test do
 	gem 'shoulda'
