@@ -7,6 +7,7 @@ gem 'mysql'
 
 gem 'capistrano'
 gem 'vector2d'
+gem 'enumerable_mapper'
 gem 'hpricot'
 gem 'simple-rss'
 gem 'RedCloth'
