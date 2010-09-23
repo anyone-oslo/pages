@@ -1,0 +1,30 @@
+source 'http://rubygems.org'
+source 'http://gems.manualdesign.no/gems/'
+#source 'http://gems.github.com'
+
+gem 'rails', '2.2.2'
+gem 'mysql'
+
+gem 'vector2d'
+gem 'hpricot'
+gem 'simple-rss'
+gem 'RedCloth'
+gem 'rmagick', :require => 'RMagick'
+gem 'uuidtools'
+gem 'unicode'
+gem 'daemon-spawn', '0.2.0'
+
+group :test do
+	gem 'shoulda'
+	gem 'machinist'
+	gem 'faker'
+end
+
+# Load gems from plugins
+plugins_dir = File.join(File.dirname(__FILE__), '..')
+Dir.entries(plugins_dir).each do |plugin|
+	plugin_gemfile = File.join(plugins_dir, plugin, 'Gemfile')
+	if File.exist?(plugin_gemfile) && plugin != "pages"
+		self.instance_eval(Bundler.read_file(plugin_gemfile.to_s), plugin_gemfile.to_s, 1)
+	end
+end

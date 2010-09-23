@@ -263,6 +263,27 @@ namespace :pages do
 					`mv #{path} #{new_path}`
 				end
 			end
+
+			# Bundler
+			if !File.exists?('Gemfile')
+				puts "* Gemfile not found, installing default..."
+				gemfile_template = File.join(File.dirname(__FILE__), '../../template/Gemfile')
+				`cp #{gemfile_template} Gemfile`
+			end
+			patch_files(
+				%r%^config/boot\.rb%, 
+				/^[\s]*Rails\.boot!/, 
+				"class Rails::Boot\n  def run\n    load_initializer\n    Rails::Initializer.class_eval do\n      def load_gems\n        @bundler_loaded ||= Bundler.require :default, Rails.env\n      end\n    end\n    Rails::Initializer.run(:set_load_path)\n  end\nend\n\nRails.boot!",
+				:unless_matches => /Bundler.require/
+			) do |files|
+				puts "* boot.rb patched for Bundler"
+			end
+			if !File.exists?('config/preinitializer.rb')
+				preinit_template = File.join(File.dirname(__FILE__), '../../template/config/preinitializer.rb')
+				`cp #{preinit_template} config/preinitializer.rb`
+				abort "\n* Updated for Bundler support, please run pages:update again."
+			end
+
 		end
 
 		desc "Fix plugin migrations"
@@ -274,6 +295,12 @@ namespace :pages do
 				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages_portfolio\" WHERE plugin_name = \"backstage_portfolio\"")
 				Rake::Task["db:migrate:upgrade_plugin_migrations"].execute
 			end
+		end
+		
+		desc "Update gems"
+		task :gems do
+			puts "Updating Bundler..."
+			`bundle install`
 		end
 
 		desc "Update migrations"
@@ -323,7 +350,7 @@ namespace :pages do
 		end
 		
 		desc "Run all update tasks"
-		task :all => ["update:files", "update:fix_plugin_migrations", "update:migrations"]
+		task :all => ["update:files", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
 	end 
 
 	desc "Automated updates for newest version"
