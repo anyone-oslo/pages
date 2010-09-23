@@ -264,6 +264,13 @@ namespace :pages do
 				end
 			end
 
+			# Passenger/RVM
+			if !File.exists?('config/setup_load_paths.rb')
+				puts "* setup_load_paths.rb not found, installing default..."
+				slp_template = File.join(File.dirname(__FILE__), '../../template/config/setup_load_paths.rb')
+				`cp #{slp_template} config/setup_load_paths.rb`
+			end
+
 			# Bundler
 			if !File.exists?('Gemfile')
 				puts "* Gemfile not found, installing default..."
