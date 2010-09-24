@@ -18,6 +18,9 @@ set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
 
+set :monit_delayed_job, "#{application}_delayed_job"
+set :monit_sphinx,      "#{application}_sphinx"
+
 role :web, remote_host
 role :app, remote_host
 role :db,  remote_host, :primary => true
@@ -81,17 +84,17 @@ end
 namespace :delayed_job do
 	desc "Start delayed_job process" 
 	task :start, :roles => :app do
-		run "cd #{current_path}; script/delayed_job start production" 
+		run "sudo monit start #{monit_delayed_job}"
 	end
 
 	desc "Stop delayed_job process" 
 	task :stop, :roles => :app do
-		run "cd #{current_path}; script/delayed_job stop production" 
+		run "sudo monit stop #{monit_delayed_job}"
 	end
 
 	desc "Restart delayed_job process" 
 	task :restart, :roles => :app do
-		run "cd #{current_path}; script/delayed_job restart production" 
+		run "sudo monit restart #{monit_delayed_job}"
 	end
 end
 
@@ -149,9 +152,8 @@ end
 namespace :sphinx do
 	desc "Rebuild Sphinx"
 	task :rebuild do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
         run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
-        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+		run "sudo monit restart #{monit_sphinx}"
 	end
 	desc "Configure Sphinx"
 	task :configure do
@@ -163,17 +165,18 @@ namespace :sphinx do
 	end
 	desc "Start Sphinx"
 	task :start do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
+		run "sudo monit start #{monit_sphinx}"
 	end
 	desc "Stop Sphinx"
 	task :stop do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+		run "sudo monit stop #{monit_sphinx}"
 	end
 	desc "Restart Sphinx"
 	task :restart do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+		run "sudo monit restart #{monit_sphinx}"
 	end
-	desc "Do not reindex Sphinx" do
+	desc "Do not reindex Sphinx"
+	task :skip_reindex do
 		set :reindex_sphinx, false
 	end
 end
@@ -198,6 +201,10 @@ namespace :monit do
 	desc "Check Monit config syntax"
 	task :syntax do
 		sudo "/etc/init.d/monit syntax"
+	end
+	desc "Show Monit status"
+	task :status do
+		run "sudo monit status"
 	end
 end
 
@@ -237,16 +244,18 @@ namespace :log do
 	end
 end
 
-before "deploy", "pages:verify_migrations"
+#before "deploy", "pages:verify_migrations"
 
 after "deploy:setup",           "pages:create_shared_dirs"
 #after "deploy:symlink",         "pages:fix_permissions"
 after "deploy:symlink",         "pages:create_symlinks"
-after "deploy:symlink",         "sphinx:configure"
 #after "deploy:restart",   "sphinx:index"
 after "deploy:restart",         "cache:flush"
 before "deploy:migrate",        "deploy:fix_plugin_migrations"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
+
+# Sphinx
+after "deploy:symlink", "sphinx:configure"
 
 before "deploy:cold", "deploy:setup"
 before "deploy:cold", "deploy"
