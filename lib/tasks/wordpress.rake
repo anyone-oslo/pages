@@ -307,6 +307,15 @@ namespace :pages do
 					end
 				end
 			end
+			
+			puts "All done!"
+			puts ""
+			if get_input_yn('Delete Wordpress tables?', false)
+				@wp_tables.each do |key, table_name|
+					ActiveRecord::Base.connection.drop_table table_name
+				end
+				puts "Wordpress tables deleted."
+			end
 
 		end
 	end
