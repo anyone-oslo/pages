@@ -247,6 +247,16 @@ namespace :pages do
 							post[:page].update_attribute(:parent_page_id, post_parent_id.to_i)
 						end
 					end
+					
+					if post[:terms]
+						post[:terms].each do |term_id, term|
+							if term['type'] == 'tag'
+								post[:page].tags << term['tag']
+							elsif term['type'] == 'category'
+								post[:page].categories << term['category']
+							end
+						end
+					end
 
 				end
 			end
