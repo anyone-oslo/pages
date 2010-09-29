@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
 	validates_presence_of   :username, :email, :realname
 	validates_uniqueness_of :username, :message => 'already in use'
 	validates_format_of     :username, :with => /^[-_\w\d@\.]+$/i, :message => "may only contain numbers, letters and '-_.@'"
-	validates_length_of     :username, :in => 4..32
+	validates_length_of     :username, :in => 3..32
 	validates_format_of     :email,    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => 'is not a valid email address'
 
 	validates_presence_of   :password, { :on => :create }
