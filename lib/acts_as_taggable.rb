@@ -23,7 +23,7 @@ module ActiveRecord
 			end
 
 			module SingletonMethods
-				def find_tagged_with(list)
+				def find_tagged_with(list=[])
 					if list.kind_of?(String) || !list.kind_of?(Enumerable)
 						list = [list]
 					end
