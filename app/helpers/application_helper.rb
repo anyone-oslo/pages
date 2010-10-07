@@ -305,5 +305,10 @@ module ApplicationHelper
 		end
 		(page) ? page.translate(language) : nil
 	end
+	
+	# Sets a page title
+	def page_title(title)
+		@page_title = title
+	end
 
 end
