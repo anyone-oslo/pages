@@ -18,7 +18,7 @@ class Mailing < ActiveRecord::Base
     end
     
 	def self.do_queue
-		mailings = self.find(:all, :conditions => ['failed = 0 AND in_progress = 0'], :limit => 2000)
+		mailings = self.find(:all, :conditions => ['failed = 0 AND in_progress = 0'])
 		unless mailings.empty?
 			mailings.each do |mailing|
 				begin
