@@ -34,6 +34,9 @@ class Page < ActiveRecord::Base
 	attr_accessor :image_url, :image_description
 
 	before_save do |page| 
+		if page.autopublish? && !page.autopublish_at?
+			page.autopublish = false
+		end
 		page.published_at = Time.now unless page.published_at?
 		if page.respond_to?('has_been_published?') # Stupid check for stupid migrations
 			if page.published? && !page.has_been_published?
