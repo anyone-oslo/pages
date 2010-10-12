@@ -9,10 +9,10 @@ class Admin::UsersController < Admin::AdminController
 	def index
 		respond_to do |format|
 			format.html do 
-				@users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
+				@users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true}).reject{|user| user.email.match(/@manualdesign\.no/)}
 			end
 			format.xml do
-				@users = User.find(:all, :order => 'realname')
+				#@users = User.find(:all, :order => 'realname')
 				render :xml => @users.to_xml
 			end
 		end
