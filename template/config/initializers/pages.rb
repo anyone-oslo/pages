@@ -80,7 +80,7 @@ PagesCore::Templates.configure do |config|
 	# end
 	
 	### Add a video embed field to the previously defined news_page_with_video template
-	# config.template(:news_page_with_image).do |t|
+	# config.template(:news_page_with_image) do |t|
 	# 	t.enabled_blocks [:headline, :excerpt, :body, :video_embed]
 	# end
 	
