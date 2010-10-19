@@ -252,11 +252,14 @@ module ApplicationHelper
 	#     <%= submit_tag "Save" %>
 	#   <% end %>
 	#
-	def labelled_field( field, label=nil, options={} )
+	def labelled_field(field, label=nil, options={})
+		options = {
+			:field_tag => 'p'
+		}.merge(options)
 		if options[:errors]
-			output  = '<p class="field field_with_errors">'
+			output  = "<#{options[:field_tag]} class=\"field field_with_errors\">"
 		else
-			output  = '<p class="field">'
+			output  = "<#{options[:field_tag]} class=\"field\">"
 		end
 		output += "<label>#{label}" if label
 		if options[:errors]
@@ -267,7 +270,7 @@ module ApplicationHelper
 		output += "</label>" if label
 		output += options[:description] + "<br />" if options[:description]
 		output += field
-		output += "</p>"
+		output += "</#{options[:field_tag]}>"
 	end
 	
 
