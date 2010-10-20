@@ -45,7 +45,7 @@
 	float: right;
 	margin-top: 20px;
 }
-.pagelist .drag_handle {
+.drag_handle {
 	float: left;
 	vertical-align: middle;
 	margin-top: 5px;
@@ -53,6 +53,8 @@
 	width: 13px;
 	height: 16px;
 	background-image: url(../../../images/admin/drag-icon.png);
+}
+.pagelist .drag_handle {
 	display: none;
 }
 .pagelist.reorder .drag_handle {
