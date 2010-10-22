@@ -22,6 +22,14 @@ module PagesCore
 				end
 			end
 			
+			def root_class
+				rc = self.class
+				while rc.superclass != ActiveRecord::Base
+					rc = rc.superclass
+				end
+				rc
+			end
+			
 			# Set the working language
 			def working_language=(language)
 				@working_language = language.to_s
@@ -47,7 +55,7 @@ module PagesCore
 
 			# Returns true if this page has the named textbit
 			def has_field?(name, options={})
-				return true if (PagesCore::ActsAsTextable.textable_fields[self.class].include?(name))
+				return true if (PagesCore::ActsAsTextable.textable_fields[self.root_class].include?(name))
 				(self.fields.include?(name.to_s)) ? true : false
 			end
 
@@ -107,7 +115,7 @@ module PagesCore
 
 			# Returns an array with the names of all text blocks excluding special fields.
 			def fields
-				self.textbits.collect{|tb| tb.name }.uniq.compact.reject{|name| PagesCore::ActsAsTextable.textable_fields[self.class].include?(name)}
+				self.textbits.collect{|tb| tb.name }.uniq.compact.reject{|name| PagesCore::ActsAsTextable.textable_fields[self.root_class].include?(name)}
 			end
 
 			# Returns an array with the names of all text blocks.
@@ -118,7 +126,7 @@ module PagesCore
 			# Returns an array with the names of all text blocks with the given 
 			# language code.
 			def fields_for_languague(language)
-				self.textbits.collect {|tb| tb.name if tb.language == language.to_s }.uniq.compact.reject {|name| PagesCore::ActsAsTextable.textable_fields[ self.class ].include? name }
+				self.textbits.collect {|tb| tb.name if tb.language == language.to_s }.uniq.compact.reject {|name| PagesCore::ActsAsTextable.textable_fields[ self.root_class ].include? name }
 			end
 
 
@@ -158,7 +166,7 @@ module PagesCore
 			def add_language( language )
 				language = language.to_s
 				fields = self.all_fields
-				fields = fields.concat( PagesCore::ActsAsTextable.textable_fields[ self.class ] ) if fields.empty?
+				fields = fields.concat( PagesCore::ActsAsTextable.textable_fields[ self.root_class ] ) if fields.empty?
 				fields.each do |name|
 					tb = get_textbit( name, { :language => language } )
 				end
