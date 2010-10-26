@@ -17,6 +17,7 @@ set :git_enable_submodules, 1
 set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
+set :use_monit,         true unless variables.keys.include?(:use_monit)
 
 set :monit_delayed_job, "#{application}_delayed_job"
 set :monit_sphinx,      "#{application}_sphinx"
@@ -84,17 +85,29 @@ end
 namespace :delayed_job do
 	desc "Start delayed_job process" 
 	task :start, :roles => :app do
-		run "sudo monit start #{monit_delayed_job}"
+		if use_monit
+			run "sudo monit start #{monit_delayed_job}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
+		end
 	end
 
 	desc "Stop delayed_job process" 
 	task :stop, :roles => :app do
-		run "sudo monit stop #{monit_delayed_job}"
+		if use_monit
+			run "sudo monit stop #{monit_delayed_job}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
+		end
 	end
 
 	desc "Restart delayed_job process" 
 	task :restart, :roles => :app do
-		run "sudo monit restart #{monit_delayed_job}"
+		if use_monit
+			run "sudo monit restart #{monit_delayed_job}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart production"
+		end
 	end
 end
 
