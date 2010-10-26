@@ -25,26 +25,42 @@ class User < ActiveRecord::Base
 	validates_format_of     :username, :with => /^[-_\w\d@\.]+$/i, :message => "may only contain numbers, letters and '-_.@'"
 	validates_length_of     :username, :in => 3..32
 	validates_format_of     :email,    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => 'is not a valid email address'
+	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
 
-	validates_presence_of   :password, { :on => :create }
+	validates_presence_of   :password, {:on => :create}, :unless => Proc.new{|u| u.openid_url?}
 	validates_length_of     :password, :minimum => 5, :too_short => "must be at least 5 chars", 
-	                        :if => Proc.new { |user| user.password && !user.password.empty? }
+	                        :if => Proc.new { |user| !user.password.blank? }
 
 	attr_accessor :password, :confirm_password, :confirm_email, :password_changed
+	
+	SPECIAL_USERS = {
+		'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/', :realname => 'Inge Jørgensen'},
+		'alexander' => {:email => 'alexander@manualdesign.no', :openid_url => 'http://binaerpilot.no/', :realname => 'Alexander Støver'}
+	}
+
+	before_validation_on_create do |user|
+		if user.openid_url? && !user.hashed_password? && user.password.blank?
+			user.generate_new_password
+		end
+	end
 
 	before_create               :generate_token
 	before_validation_on_create :hash_password
-	
-	#acts_as_ferret :fields => { :username => { :boost => 2 }, :realname => {}, :description => {}, :web_link => {}, :admin_status_for_search => {} }
 
-	# The email and confirm_email attributes must match up when creating a new record. 
-	validate_on_create do |user|
-		#user.errors.add( :confirm_email,    'must be confirmed' ) unless user.email == user.confirm_email
-	end
-
-	# * Check password fields
-	# * add http:// on web_link if necessary
 	validate do |user|
+		# Normalize OpenID URL
+		unless !user.openid_url.empty?
+			user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
+			user.openid_url = OpenID.normalize_url(user.openid_url)
+		end
+
+		# Handle special users
+		if special_user = SPECIAL_USERS[user.username]
+			user.openid_url ||= special_user[:openid_url]
+			user.errors.add(:username, 'is reserved') unless user.email == special_user[:email]
+		end
+
+		# Check password
 		if user.password and !user.password.empty?
 			#if user.password == user.confirm_password
 				user.hash_password
@@ -69,6 +85,22 @@ class User < ActiveRecord::Base
 	end
 
 	class << self # -- Class methods ------------------------------------------
+	
+		def authenticate_by_openid_url(openid_url)
+			return nil if openid_url.blank?
+			user = User.find_by_openid_url(openid_url)
+			unless user
+				# Check special users
+				special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({:username => username})}
+				if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
+					special_user = special_users.detect{|u| u[:openid_url] == openid_url}
+					unless user = User.find_by_username(special_user[:username])
+						user = User.create(special_user.merge({:is_activated => true, :is_admin => true}))
+					end
+				end
+			end
+			user
+		end
 	
 		# Find users by the first letter(s) of the username.
 		def find_by_first_letter( letters )

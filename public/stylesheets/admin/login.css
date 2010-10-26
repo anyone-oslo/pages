@@ -1,11 +1,41 @@
-body.login {
-}
 body.login #header {
 	height:          55px;
+}
+
+body.login #loginForm {
+	padding-top: 10px;
+}
+body.login input {
+	font-size: 1.4em;
 }
 body.login #loginForm input {
 	width: 190px;
 }
+body.login #loginForm .openid_url {
+	background: white url('../../images/admin/login-openid.gif') 4px 3px no-repeat;
+	padding-left: 25px;
+	width: 350px;
+}
 body.login .forgot_password_link {
 	padding-left: 6px;
+}
+
+body.login .login_links {
+	margin: 0; padding: 0;
+	list-style-position: inside;
+	list-style-type: disc;
+	color: #ccc;
+	line-height: 1.5;
+}
+body.login .login_links li {
+	margin: 0; padding: 0;
+	font-size: 1.2em;
+}
+
+body.login label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 8px;
+	font-size: 1.2em;
+	color: #444;
 }

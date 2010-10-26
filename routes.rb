@@ -22,6 +22,8 @@ resources :page_files, :path_prefix => '/:language/pages/:page_id'
 
 unsubscribe 'newsletter/unsubscribe/*email', :controller => 'newsletter', :action => 'unsubscribe'
 
+map.resource :openid, :member => { :complete => :get }, :controller => 'openid'
+
 # Resources for admin
 with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 	admin.resources(
@@ -91,3 +93,5 @@ connect 'feeds/:action/:language/:slug/index.xml',  :controller => 'feeds'
 connect 'feeds/:action/:language/:slug/:tag.xml',   :controller => 'feeds'
 
 connect 'comments/:action/:type/:id',               :controller => 'comments'
+
+root :controller => 'pages', :action => 'index'

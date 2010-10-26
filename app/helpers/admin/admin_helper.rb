@@ -87,6 +87,7 @@ module Admin::AdminHelper
 		classes << controller.class.underscore
 		classes << "#{controller.action_name}_action"
 		classes << "with_sidebar" if @sidebar_enabled
+		classes << "with_notice" if flash[:notice]
 		classes.reverse.join( " " )
 	end
 	

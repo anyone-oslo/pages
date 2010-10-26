@@ -1,7 +1,7 @@
 <%
-	page_title       "Log in"
-	page_description "Please enter your username and password to log in"
-	add_body_class "login"
+	page_title       "Sign in"
+	page_description "Please enter your username and password to sign in"
+	add_body_class   "login"
 -%>
 
 <% sidebar do -%>
@@ -29,39 +29,78 @@
 		</p>
 		<p>
 			<%= text_field_tag :username, '', :size => 48 %>
-			<%= submit_tag "Send" %>
+			<button type="submit">Send</button>
 		</p>
 	<% end %>
 </div>
 
 <div id="loginForm">
-<% form_tag login_admin_users_path do %>
-<table>
-	<tr>
-		<td>Username:</td>
-		<td><%= text_field_tag :login_username %></td>
-	</tr>
-	<tr>
-		<td>Password:</td>
-		<td><%= password_field_tag :login_password %></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>
-			<button type="submit">Log in</button>
-			<span class="forgot_password_link"><%= link_to_function "I forgot my password!", "forgot_password();" %></span>
-		</td>
-	</tr>
-</table>
-<% end %>
+
+	<% form_tag login_admin_users_path, :id => 'loginRegular' do %>
+		<p>
+			<label>Username</label>
+			<%= text_field_tag :login_username %>
+		</p>
+		<p>
+			<label>Password</label>
+			<%= password_field_tag :login_password %>
+		</p>
+		<p>
+			<button type="submit">Sign in</button>
+		</p>
+		<ul class="login_links">
+			<li><%= link_to_function "<strong>Help!</strong> I forgot my password!", "forgot_password();" %></li>
+			<li><%= link_to_function "Sign in with OpenID", "toggleLoginMode();" %></li>
+		</ul>
+	<% end %>
+
+	<% form_tag openid_path, :id => 'loginOpenID' do %>
+		<%= hidden_field_tag :openid_success, admin_default_url %>
+		<%= hidden_field_tag :openid_fail, admin_default_url %>
+		<p>
+			<label>Enter your OpenID URL:</label>
+			<%= text_field_tag :openid_url, '', :class => 'openid_url' %>
+		</p>
+		<p>
+			<button type="submit">Sign in</button>
+		</p>
+		<ul class="login_links">
+			<li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
+			<li><%= link_to_function "Sign in with with username and password", "toggleLoginMode();" %></li>
+		</ul>
+	<% end %>
+
+
 </div>
 
 
 <script type="text/javascript">
-	jQuery('#forgotPasswordForm').hide();
-	function forgot_password() {
-		jQuery('#forgotPasswordForm').show();
-		jQuery('#loginForm').hide();
-		return false;
-	}
+	(function($){
+		
+		window.toggleLoginMode = function(){
+			if ($.cookie('login_mode') === 'openid') {
+				$('#loginOpenID').hide();
+				$('#loginRegular').show();
+				$.cookie('login_mode', 'regular');
+			} else {
+				$('#loginOpenID').show();
+				$('#loginRegular').hide();
+				$.cookie('login_mode', 'openid');
+			}
+		}
+		
+		if ($.cookie('login_mode') === 'openid') {
+			$('#loginRegular').hide();
+		} else {
+			$('#loginOpenID').hide();
+		}
+
+		$('#forgotPasswordForm').hide();
+
+		window.forgot_password = function() {
+			$('#forgotPasswordForm').show();
+			$('#loginForm').hide();
+			return false;
+		}
+	})(jQuery);
 </script>

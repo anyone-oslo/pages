@@ -17,6 +17,7 @@ gem 'unicode'
 gem 'daemon-spawn', '0.2.0'
 gem 'aws-s3', '0.6.2'
 gem 'pages_console'
+gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 group :test do
 	gem 'shoulda'
