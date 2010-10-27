@@ -1,4 +1,5 @@
 require "bundler/capistrano"
+require File.join(File.dirname(__FILE__), 'lib/campfire')
 
 set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
 set :remote_user, "rails" unless variables.has_key?(:remote_user)
@@ -21,6 +22,9 @@ set :use_monit,         true unless variables.keys.include?(:use_monit)
 
 set :monit_delayed_job, "#{application}_delayed_job"
 set :monit_sphinx,      "#{application}_sphinx"
+
+set :campfire_room, 302048
+
 
 role :web, remote_host
 role :app, remote_host
@@ -79,6 +83,14 @@ namespace :deploy do
 	after 'deploy:services', 'sphinx:index'
 	after 'deploy:services', 'monit:configure'
 	after 'deploy:services', 'monit:restart'
+	
+	desc "Notify Campfire"
+	task :notify_campfire, :roles => [:web] do
+		username = `whoami`.chomp
+		repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
+		room = Campfire.room(campfire_room)
+		room.message "-- #{repo_name} has been deployed by #{username}"
+	end
 	
 end
 
@@ -278,3 +290,5 @@ after "deploy:cold", "sphinx:start"
 after "deploy:start", "delayed_job:start" 
 after "deploy:stop", "delayed_job:stop" 
 after "deploy:restart", "delayed_job:restart"
+
+after "deploy:restart", "deploy:notify_campfire"
