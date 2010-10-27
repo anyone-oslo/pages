@@ -22,4 +22,3 @@ Rake::RDocTask.new(:doc) do |rdoc|
 	rdoc.rdoc_dir = 'doc' # rdoc output folder
 	rdoc.options << '--inline-source' << '--charset=UTF-8'
 end
- 
