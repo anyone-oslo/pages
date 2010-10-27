@@ -69,9 +69,11 @@
 		:description => "Leave the field blank if you do not wish to change the password. " + link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
 		:errors => @user.errors[:password] 
 	%>
-	<%= labelled_field f.text_field( :openid_url ), "OpenID URL", 
-		:errors => @user.errors[:openid_url] 
-	%>
+	<% if @user == @current_user %>
+		<%= labelled_field f.text_field(:openid_url), "OpenID URL", 
+			:errors => @user.errors[:openid_url] 
+		%>
+	<% end %>
 	<% unless @user == @current_user || !@user.is_deletable? %>
 	<div class="field">
 		<%= f.check_box :is_activated %> The user account is activated<br />

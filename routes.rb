@@ -34,7 +34,7 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		:users,    
 		:controller => 'admin/users', 
 		:collection => {:new_password => :any, :welcome => :any, :list => :any, :logout => :any, :login => :any, :deactivated => :any},
-		:member     => {:delete_image => :delete}
+		:member     => {:delete_image => :delete, :update_openid => :any}
 	)
 	admin.resources :accounts, :controller => 'admin/accounts'
 	admin.resources( 

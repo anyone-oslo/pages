@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 	validates_format_of     :email,    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => 'is not a valid email address'
 	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
 
-	validates_presence_of   :password, {:on => :create}, :unless => Proc.new{|u| u.openid_url?}
+	validates_presence_of   :password, :on => :create, :unless => Proc.new{|u| u.openid_url?}
 	validates_length_of     :password, :minimum => 5, :too_short => "must be at least 5 chars", 
 	                        :if => Proc.new { |user| !user.password.blank? }
 
@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
 
 	validate do |user|
 		# Normalize OpenID URL
-		unless !user.openid_url.empty?
+		unless user.openid_url.blank?
 			user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
 			user.openid_url = OpenID.normalize_url(user.openid_url)
 		end
