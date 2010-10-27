@@ -10,7 +10,7 @@
 
 Account, Category, Event, Feed, FeedItem, Imageset, MailSubscriber, Mailing, Mailout, 
 Page, PageComment, PageFile, Partial, SetImage, SmsSubscriber, Tag, Tagging, Textbit, 
-User and UserLogin.
+and User.
 
 == Mailers
 

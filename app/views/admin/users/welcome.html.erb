@@ -22,6 +22,9 @@
 		:description => link_to_function( "Click here", "jQuery('#user_password' ).val(random_password())" ) + " to generate a random password.",
 		:errors => @user.errors[:password] 
 	%>
+	<%= labelled_field f.text_field( :openid_url ), "OpenID URL", 
+		:errors => @user.errors[:openid_url] 
+	%>
 	<p>
 		<%= submit_tag 'Create' %>
 	</p>

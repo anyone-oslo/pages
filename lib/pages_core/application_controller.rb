@@ -161,7 +161,7 @@ module PagesCore
 			# A user is considered authenticated if one of the following events occur (in this order):
 			# * Valid username and password are passed through <tt>params[:login_username]</tt> and <tt>params[:login_password]</tt>
 			# * <tt>session[:current_user_id]</tt> is set.
-			# * <tt>cookies[:login_username]</tt> and <tt>cookies[:login_token]</tt> are set, and matches a valid UserLogin object.
+			# * <tt>session[:authenticated_openid_url]</tt> is set.
 			#
 			# The user will not be authenticated if the account is deleted or not activated. An instance attribute - <tt>@current_user</tt> -
 			# will be set if authentication is successfull, and can be used to test for a valid login in controllers and views.
@@ -175,26 +175,26 @@ module PagesCore
 
 				if params[:logout]
 					deauthenticate! :forcefully => true
+
+				# Login with username and password
 				elsif params[:login_username] && params[:login_password]
-					# Params auth
-					if user = User.find_by_username( params[:login_username] )
-						@current_user = user if @current_login = user.authenticate( :password => params[:login_password] )
+					if user = User.find_by_username(params[:login_username])
+						@current_user = user if user.authenticate(:password => params[:login_password])
 					end
 					login_attempted = true
+
+				# Login with session
 				elsif session[:current_user_id]
-					# Session auth - this should be pretty safe
 					@current_user = User.find(session[:current_user_id]) rescue nil
-					@current_login = UserLogin.find( session[:current_login_id] ) if session[:current_login_id] rescue nil
 					login_attempted = true
+
+				# Login with OpenID
 				elsif !session[:authenticated_openid_url].blank?
 					if user = User.authenticate_by_openid_url(session[:authenticated_openid_url])
 						@current_user = user
 					end
 					login_attempted = true
-				elsif cookies[:login_username] && cookies[:login_token]
-					# Cookie auth
-					user = User.find_by_username( cookies[:login_username] )
-					@current_user = user if user && @current_login = user.authenticate( :token => cookies[:login_token], :remote_ip => remote_ip )
+
 				end
 
 				if @current_user
@@ -203,17 +203,6 @@ module PagesCore
 					if !@current_user.last_login_at || @current_user.last_login_at < 10.minutes.ago
 						@current_user.update_attribute(:last_login_at, Time.now)
 					end
-
-					# Create or update the login record
-					if @current_login
-						@current_login.user          ||= @current_user
-						@current_login.remote_ip       = remote_ip
-						@current_login.last_used_at    = Time.now
-						@current_login.hashed_password = @current_user.hashed_password
-						@current_login.save
-
-					end
-
 					set_authentication_cookies(:force => false)
 
 					@current_user_is_admin = @current_user.is_admin?
@@ -243,16 +232,8 @@ module PagesCore
 
 			# The session and cookie data is set in an after filter, since the data might have been changed by the controller.
 			def set_authentication_cookies(options={})
-				options[:force] = true unless options.has_key?(:force)
-				# Set the cookies
-				cookie_expiration = Time.now + 1.years
-				if @current_user && (options[:force] || !cookies[:login_username] || cookies[:login_username] != @current_user.username)
+				if @current_user
 					session[:current_user_id] = @current_user.id
-					cookies[:login_username] = { :value => @current_user.username, :expires => cookie_expiration }
-				end
-				if @current_login && (options[:force] || !cookies[:login_token] || cookies[:login_token] != @current_login.token)
-					session[:current_login_id] = @current_login.id
-					cookies[:login_token]    = { :value => @current_login.token,   :expires => cookie_expiration }
 				end
 			end
 
@@ -260,10 +241,7 @@ module PagesCore
 			# Deauthenticate user; unset the instance variables, crumble cookies and optionally reset the session.
 			# This is called from <tt>/users/logout</tt>, and <tt>authenticate</tt> if login fails.
 			def deauthenticate!( options={} )
-				cookies.delete :login_username
-				cookies.delete :login_token
 				@current_user  = nil
-				@current_login = nil
 				session[:current_user_id] = nil
 				session[:authenticated_openid_url] = nil
 				#reset_session if options[:forcefully]

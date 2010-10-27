@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
 
 	# Relations
 	has_many :permissions,     :as => :owner
-	has_many :logins,          :class_name => 'UserLogin'
 	has_many :pages
 	
 	belongs_to :group
@@ -180,13 +179,6 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	# Destroys all invalid UserLogin records related to this user.
-	def destroy_invalid_logins
-		if invalid_logins = self.logins.find( :all, :conditions => [ "hashed_password != ?", self.hashed_password ] )
-			invalid_logins.each{ |l| l.destroy }
-		end
-	end
-
 	# Activate user. Works only if the correct token is supplied and the user isn't deleted.
 	def activate( token )
 		return false if self.is_deleted?
@@ -198,33 +190,20 @@ class User < ActiveRecord::Base
 		end
 	end
 	
-	# Authenticate user, returns a login object if successful. Only works if the user is activated and not deleted.
+	# Authenticate user, returns a true if successful. Only works if the user is activated and not deleted.
 	# Returns false if authentication fails.
 	# 
-	# The following methods work:
+	# Example:
 	#
-	#   login = @user.authenticate( :password => 'unencrypted password' )
-	#   login = @user.authenticate( :token => '3529bb6867e0f', :remote_ip => '127.0.0.1' )
+	#   login = @user.authenticate(:password => 'unencrypted password')
 	#
 	def authenticate( options={} )
 		options.symbolize_keys!
 		return false if self.is_deleted? or !self.is_activated
 
-		# Authentication by token + ip
-		if options[:token] && options[:remote_ip]
-			login = UserLogin.find( :first, :conditions => [ 'token = ? AND remote_ip = ?', options[:token], options[:remote_ip] ] )
-			if login && login.hashed_password == self.hashed_password
-				login.update_attribute( :last_used_at, Time.now )
-				return login
-			end
-		end
-		
 		# Authentication by password
-		if options[:password]
-			if self.class.hash_string( options[:password] ) == self.hashed_password
-				login = UserLogin.new
-				return login
-			end
+		if options[:password] && self.class.hash_string(options[:password]) == self.hashed_password
+			return true
 		end
 
 		return false
