@@ -30,4 +30,3 @@ if RAILS_GEM_VERSION == '2.2.2' || RAILS_GEM_VERSION == '2.2.3'
 		end
 	end
 end
-
