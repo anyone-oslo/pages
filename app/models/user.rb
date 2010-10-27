@@ -33,8 +33,9 @@ class User < ActiveRecord::Base
 	attr_accessor :password, :confirm_password, :confirm_email, :password_changed
 	
 	SPECIAL_USERS = {
-		'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/', :realname => 'Inge Jørgensen'},
-		'alexander' => {:email => 'alexander@manualdesign.no', :openid_url => 'http://binaerpilot.no/', :realname => 'Alexander Støver'}
+		'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/',            :realname => 'Inge Jørgensen'},
+		'alexander' => {:email => 'alexander@manualdesign.no', :openid_url => 'http://binaerpilot.no/',            :realname => 'Alexander Støver'},
+		'thomas'    => {:email => 'thomas@manualdesign.no',    :openid_url => 'http://silverminken.myopenid.com/', :realname => 'Thomas Knutstad'}
 	}
 
 	before_validation_on_create do |user|
