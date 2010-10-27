@@ -44,9 +44,12 @@ class Admin::UsersController < Admin::AdminController
 					@user = User.new
 				else
 					attributes = params[:user].merge({:is_admin => true, :is_activated => true})
-					if attributes[:openid_url] && !attributes[:openid_url].blank?
+
+					unless attributes[:openid_url].blank?
 						new_openid_url = attributes[:openid_url]
+						attributes.delete(:openid_url)
 					end
+
 					@user = User.create(attributes)
 					if @user.valid?
 						@current_user = @user
@@ -54,16 +57,15 @@ class Admin::UsersController < Admin::AdminController
 						session[:current_user_id] = @current_user.id
 						set_authentication_cookies
 
-						# Verify the changed OpenID URL
 						if new_openid_url
-							response = openid_consumer.begin(new_openid_url) rescue nil
-							if response
-								redirect_to response.redirect_url(root_url, update_openid_user_url, false) and return
-							else
-								flash[:notice] = "WARNING: Your OpenID URL is invalid!"
+							unless start_openid_session(new_openid_url, 
+								:success   => update_openid_admin_user_url(@user), 
+								:fail      => edit_admin_user_url(@user)
+							)
+								flash.now[:error] = "Not a valid OpenID URL"
+								render :action => :edit
 							end
 						end
-						redirect
 					end
 				end
 			else
