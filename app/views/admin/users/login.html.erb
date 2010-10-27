@@ -7,17 +7,18 @@
 <% sidebar do -%>
 	<h2>Please note</h2>
 	<p>
-		Microsoft Internet Explorer is currently not supported. We recommend using <strong>Safari</strong> or 
-		<a href="http://www.mozilla.com/" target="_blank"><strong>Firefox</strong></a>, a free, fast and secure alternative.
+		Microsoft Internet Explorer 6 and 7 are not supported.
 	</p>
 	<p>
-		<a href="http://getfirefox.com/"
-		title="Get Firefox - The Browser, Reloaded."><img
-		src="http://www.mozilla.org/products/firefox/buttons/firefox_80x15.png"
-		width="80" height="15" border="0" alt="Get Firefox"></a>
+		We recommend using one of the following browsers:
 	</p>
+	<ul>
+		<li><%= link_to 'Google Chrome', 'http://www.google.com/chrome' %></li>
+		<li><%= link_to 'Firefox', 'http://mozilla.com/firefox' %></li>
+		<li><%= link_to 'Safari', 'http://www.apple.com/safari/' %></li>
+	</ul>
 	<p>
-		Please make sure Javascript and cookies are enabled if you experience problems logging in or using Pages.
+		Please <%= link_to "contact support", 'http://support.manualdesign.no/' %> if you experience problems logging in or using Pages.
 	</p>
 <% end -%>
 
