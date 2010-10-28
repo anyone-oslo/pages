@@ -19,7 +19,7 @@ gem 'aws-s3', '0.6.2'
 gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty'
-gem 'json'
+#gem 'json'
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 group :test do
