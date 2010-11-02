@@ -9,8 +9,8 @@ module FrontendHelper
 		options[:include_day] ||= false
 		options[:short_month], options[:short_day] = true if options[:short]
 		if @language.to_s == 'nor'
-			months = ( !options[:short_month] ) ? %w{Januar Februar Mars April Mai Juni Juli August September Oktober November Desember} : %w{Jan Feb Mar Apr Mai Jun Jul Aug Sep Okt Nov Des}
-			days   = ( !options[:short_day] )   ? %w{Mandag Tirsdag Onsdag Torsdag Fredag Lørdag Søndag} : %w{Man Tir Ons Tor Fre Lør Søn}
+			months = ( !options[:short_month] ) ? %w{januar februar mars april mai juni juli august september oktober november desember} : %w{jan feb mar apr mai jun jul aug sep okt nov des}
+			days   = ( !options[:short_day] )   ? %w{mandag tirsdag onsdag torsdag fredag lørdag søndag} : %w{man tir ons tor fre lør søn}
 		else
 			months = ( !options[:short_month] ) ? %w{January February March April May June July August September October November December} : %w{Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
 			days   = ( !options[:short_day] )   ? %w{Monday Tuesday Wednesday Thursday Friday Saturday Sunday} : %w{Mon Tue Wed Thu Fri Sat Sun}
