@@ -6,6 +6,7 @@ gem 'rails', '2.2.2'
 gem 'mysql'
 
 gem 'capistrano'
+gem 'capistrano_colors'
 gem 'vector2d'
 gem 'enumerable_mapper'
 gem 'hpricot'
