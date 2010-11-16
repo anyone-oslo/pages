@@ -1,5 +1,4 @@
 require "bundler/capistrano"
-require 'capistrano_colors'
 require File.join(File.dirname(__FILE__), 'lib/campfire')
 
 set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
