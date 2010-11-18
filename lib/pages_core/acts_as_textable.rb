@@ -2,9 +2,12 @@ module PagesCore
 	module ActsAsTextable
 	
 		class << self
-			# Return the config hash, create it if necessary
 			def textable_fields
-				@@textable_fields        ||= Hash.new
+				@@textable_fields  ||= {}
+			end
+			
+			def textable_options
+				@@textable_options ||= {}
 			end
 		end
 
@@ -19,6 +22,9 @@ module PagesCore
 				def fields( options={} )
 					options = {:type => self.to_s}.merge(options)
 					Textbit.fields( options )
+				end
+				def textable_options
+					PagesCore::ActsAsTextable.textable_options[self] || {}
 				end
 			end
 			
@@ -38,6 +44,21 @@ module PagesCore
 			# Get the working language
 			def working_language
 				@working_language ||= Language.default
+			end
+
+			# Set the fallback language
+			def fallback_language=(language)
+				@fallback_language = language.to_s
+			end
+
+			# Get the fallback language
+			def fallback_language
+				@fallback_language || self.root_class.textable_options[:fallback_language]
+			end
+			
+			# Does this model have a fallback language?
+			def fallback_language?
+				self.fallback_language ? true : false
 			end
 
 			def attributes=(new_attributes, guard_protected_attributes=true)
@@ -62,18 +83,22 @@ module PagesCore
 			# Get the textbit with specified name (and optional language), create and add it if necessary
 			def get_textbit(name, options={})
 				name = name.to_s
-				options[:language] ||= self.working_language
-				self.textbits.each do |tb|
-					if( tb.name == name && tb.language == options[:language].to_s )
-						return tb
+				
+				languages      = options[:language] ? [options[:language]] : [self.working_language, self.fallback_language].compact
+				named_textbits = self.textbits.select{|tb| tb.name == name}
+				textbit        = nil
+				
+				# Find the first applicable textbit
+				languages.each do |lang|
+					if !textbit && named_textbits.select{|tb| tb.language == lang.to_s}.length > 0
+						textbit = named_textbits.select{|tb| tb.language == lang.to_s}.first
 					end
 				end
 
-				# Create new textbit if necessary
-				textbit ||= Textbit.new(:name => name, :textable => self, :language => options[:language].to_s)
-				if textbit.new_record?
-					self.textbits.push(textbit)
-				end
+				# Default to a blank one
+				textbit ||= Textbit.new(:name => name, :textable => self, :language => languages.first)
+				self.textbits.push(textbit) if textbit.new_record?
+
 				textbit
 			end
 
@@ -107,10 +132,14 @@ module PagesCore
 				self.textbits.collect {|tb| tb.language if tb.name == name }.uniq.compact
 			end
 			
-			def field_has_language?( name, language=nil )
-				language ||= self.working_language
-				language = language.to_s
-				(self.languages_for_field( name ).include?(language.to_s)) ? true : false
+			def field_has_language?(name, language=nil)
+				languages = (language ? language : [self.working_language, self.fallback_language].compact)
+				languages = [languages] unless languages.kind_of?(Array)
+				languages = languages.map{|l| l.to_s}
+				
+				available_languages = self.languages_for_field(name)
+				languages.each{|l| return true if available_languages.include?(l)}
+				return false
 			end
 
 			# Returns an array with the names of all text blocks excluding special fields.
@@ -174,11 +203,12 @@ module PagesCore
 			end
 		
 			# Get a translated version of this page
-			def translate(language)
+			def translate(language, options={})
 				language = language.to_s
 				#self.add_language( language )
 				dupe = self.dup
 				dupe.working_language = language
+				dupe.fallback_language = options[:fallback_language] if options[:fallback_language]
 				(block_given?) ? (yield dupe) : dupe
 			end
 
@@ -208,12 +238,14 @@ module ActiveRecord
 		# Controller is textable. This adds the methods from <tt>ActsAsTextable::Model</tt>.
 		def self.acts_as_textable(*args)
 			options = args.last.kind_of?(Hash) ? args.pop : {}
+			options.symbolize_keys!
 			fields = args.flatten
 			include PagesCore::ActsAsTextable::Model
 			self.class.send(:include, PagesCore::ActsAsTextable::Model::ClassMethods)
 			has_many :textbits, :as => :textable, :dependent => :destroy, :order => "name"
 			after_save :save_textbits
-			PagesCore::ActsAsTextable.textable_fields[self] = fields.map{|f| f.to_s}
+			PagesCore::ActsAsTextable.textable_fields[self]  = fields.map{|f| f.to_s}
+			PagesCore::ActsAsTextable.textable_options[self] = options
 			before_validation do |textable|
 				invalid_textbits = textable.textbits.select{ |tb| !tb.valid? }
 				unless invalid_textbits.empty?

@@ -19,14 +19,14 @@ module FrontendHelper
 
 		output  = ""
 		output += days[(date.strftime( "%w" ).to_i)]+" " if options[:include_day]
-		output += date.strftime( "%d. " ) + months[(date.strftime("%m").to_i-1)]
+		output += "#{date.day}. " + months[(date.strftime("%m").to_i-1)]
 		output += date.strftime( " %Y" ) if date.strftime( "%Y" ) != Time.now.strftime( "%Y" ) || options[:include_year]
 		output
 	end
 	
 	def formatted_time(time, options={})
 		f = formatted_date(time, options)
-		f += time.strftime( ", %Y" ) if time.strftime("%Y") == Time.now.strftime("%Y")
+		f += time.strftime( " %Y" ) if time.strftime("%Y") == Time.now.strftime("%Y")
 		f
 	end
 
