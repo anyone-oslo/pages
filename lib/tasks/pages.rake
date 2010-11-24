@@ -194,7 +194,7 @@ namespace :pages do
 					gsubbed_path = path.gsub(/^\.?\/?/,'')
 					Find.prune if options[:except] && gsubbed_path =~ options[:except]
 					if gsubbed_path =~ file_expression && !(path =~ /\.git/)
-						paths << path
+						paths << path unless File.directory?(path)
 					end
 				end
 				paths
@@ -239,6 +239,9 @@ namespace :pages do
 				:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
 			) do |files|
 				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
+			end
+			patch_files %r%^script/[\w\d_\-\/]+%, /^#!\/usr\/bin\/ruby/, "#!/usr/bin/env ruby" do |files|
+				puts "* Updated shebang in script files: #{files.inspect}"
 			end
 			
 			if !File.exists?('script/delayed_job')
