@@ -114,13 +114,6 @@ namespace :pages do
 			`script/generate plugin_migration pages`
 			`git add db/migrate/*`
 			`rake db:migrate`
-			puts "Starting server..."
-			new_thread = Thread.new do
-				sleep(5)
-				`open http://localhost:3000/admin`
-			end
-			`ruby script/server`
-			new_thread.join
 			puts "\n"
 			puts "All done."
 		else
