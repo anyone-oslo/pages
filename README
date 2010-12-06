@@ -44,7 +44,6 @@ AdminMailer and Notifications.
 
 *Libraries*
 
-* Apparat - SMS service interface
 * FeedBuilder - Creates RSS 2.0 feeds
 * Language - Languages support
 * MumboJumbo - Internationalization of strings
