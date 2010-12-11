@@ -218,7 +218,7 @@ module PagesCore
 				else
 					# Authentication failed, reset session and wipe cookies
 					# TODO: only deauthenticate if a login was attempted
-					deauthenticate!
+					#deauthenticate!
 
 					# Explicitely fail the login and redirect if login was attempted via params
 					if login_attempted
