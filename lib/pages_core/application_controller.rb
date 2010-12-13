@@ -193,7 +193,7 @@ module PagesCore
 					if user = User.authenticate_by_openid_url(session[:authenticated_openid_url])
 						@current_user = user
 					end
-					login_attempted = true
+					#login_attempted = true
 
 				end
 
@@ -243,7 +243,7 @@ module PagesCore
 			def deauthenticate!( options={} )
 				@current_user  = nil
 				session[:current_user_id] = nil
-				session[:authenticated_openid_url] = nil
+				session[:authenticated_openid_url] = nil if options[:forcefully]
 				#reset_session if options[:forcefully]
 			end
 			
