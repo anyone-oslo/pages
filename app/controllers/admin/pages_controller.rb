@@ -43,6 +43,12 @@ class Admin::PagesController < Admin::AdminController
 			:autopublish   => true,
 			:language      => @language 
 		)
+		respond_to do |format|
+			format.html
+			format.xml do
+				render :xml => @root_pages.to_xml(:pages => true)
+			end
+		end
 	end
 	
 	def news
