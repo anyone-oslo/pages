@@ -162,13 +162,6 @@ namespace :pages do
 			`script/generate plugin_migration pages`
 			`git add db/migrate/*`
 			`rake db:migrate`
-			puts "Starting server..."
-			new_thread = Thread.new do
-				sleep(5)
-				`open http://localhost:3000/admin`
-			end
-			`ruby script/server`
-			new_thread.join
 			puts "\n"
 			puts "All done."
 		else
@@ -232,14 +225,14 @@ namespace :pages do
 			patch_files %r%^config/environment\.rb%, /^[\s]*config\.action_controller\.session_store/, "\t#config.action_controller.session_store" do |files|
 				puts "* ActiveRecord session store has been depreceated, commented out in #{files.inspect}."
 			end
-			patch_files(
-				%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
-				/< ApplicationController/, 
-				"< FrontendController",
-				:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
-			) do |files|
-				puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
-			end
+			# patch_files(
+			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
+			# 	/< ApplicationController/, 
+			# 	"< FrontendController",
+			# 	:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
+			# ) do |files|
+			# 	puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
+			# end
 			patch_files %r%^script/[\w\d_\-\/]+%, /^#!\/usr\/bin\/ruby/, "#!/usr/bin/env ruby" do |files|
 				puts "* Updated shebang in script files: #{files.inspect}"
 			end
