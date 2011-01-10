@@ -94,13 +94,14 @@ module PagesCore
 
 				# Default template options
 				config.default do |default|
-					default.template       :autodetect, :root => 'index'
-					default.image          :enabled, :linkable => false
-					default.comments       :enabled
-					default.files          :disabled
-					default.images         :disabled
-					default.text_filter    :textile
-					default.enabled_blocks [:headline, :excerpt, :body]
+					default.template         :autodetect, :root => 'index'
+					default.image            :enabled, :linkable => false
+					default.comments         :enabled
+					default.comments_allowed :enabled
+					default.files            :disabled
+					default.images           :disabled
+					default.text_filter      :textile
+					default.enabled_blocks   [:headline, :excerpt, :body]
 					default.blocks do |block|
 						block.body        "Body",        :size => :large
 						block.headline    "Headline",    :description => 'Optional, use if the headline should differ from the page name.', :size => :field
