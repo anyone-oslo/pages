@@ -23,7 +23,19 @@ module ApplicationHelper
 		end
 	end
 	
+	def include_stylesheet(source, options={})
+		@include_stylesheets ||= []
+		@include_stylesheets << [source, options]
+	end
+
+	def include_javascript(source, options={})
+		@include_javascripts ||= []
+		@include_javascripts << [source, options]
+	end
+
 	def head_tag(options={}, &block)
+		# Evaluate the given block first
+		output_block = block_given? ? capture(&block) : ''
 
 		# Get options
 		options[:language] ||= @language
@@ -59,6 +71,17 @@ module ApplicationHelper
 		output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		output += "	<title>#{options[:title]}</title>\n"
 		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
+
+		if @include_stylesheets
+			output += @include_stylesheets.map do |source, source_options| 
+				ie = source_options.delete(:ie)
+				source_output = stylesheet_link_tag(source, source_options)
+				source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
+				indent(source_output, 1)
+			end.join("\n")
+			output += "\n"
+		end
+
 		#output += "\t"+javascript_include_tag(
 		if options.has_key?(:javascript)
 			options[:javascript].each do |js|
@@ -70,7 +93,23 @@ module ApplicationHelper
 			end
 		end
 		#output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
-		output += indent(feed_tags, 1) if options[:feed_tags]
+
+		if @include_javascripts
+			output += @include_javascripts.map do |source, source_options| 
+				ie = source_options.delete(:ie)
+				source_output = javascript_include_tag(source)
+				source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
+				indent(source_output, 1)
+			end.join("\n")
+			output += "\n"
+		end
+
+		if options[:feed_tags] && options[:feed_tags] == :include_hidden
+			output += indent(feed_tags(:include_hidden => true), 1)
+		elsif options[:feed_tags]
+			output += indent(feed_tags, 1)
+		end
+			
 		output += "\n"
 		if page = @page
 		    # META description
@@ -96,7 +135,7 @@ module ApplicationHelper
 				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
 			end	
 		end
-		output += capture( &block ) if block_given?
+		output += output_block
 		output += "</head>\n"
 
 		# Inject HTML

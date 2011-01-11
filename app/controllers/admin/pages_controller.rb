@@ -43,6 +43,12 @@ class Admin::PagesController < Admin::AdminController
 			:autopublish   => true,
 			:language      => @language 
 		)
+		respond_to do |format|
+			format.html
+			format.xml do
+				render :xml => @root_pages.to_xml(:pages => true)
+			end
+		end
 	end
 	
 	def news
@@ -143,7 +149,9 @@ class Admin::PagesController < Admin::AdminController
 		@page = Page.new.translate( @language )
 		params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 		@page.author = @current_user
+		
 		if @page.update_attributes(params[:page])
+			@page.update_attribute(:comments_allowed, @page.template_config.value(:comments_allowed))
 			@page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
 		    if params[:page_image_description]
 		        begin

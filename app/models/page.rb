@@ -887,4 +887,24 @@ class Page < ActiveRecord::Base
 		( ( self.body.to_s + self.excerpt.to_s ).strip.empty? ) ? true : false
 	end
 	
+	alias_method :ar_to_xml, :to_xml
+	def to_xml(options = {})
+		default_except = [:comments_count]
+		options[:except] = (options[:except] ? options[:except] + default_except : default_except)
+		ar_to_xml(options) do |xml|
+			self.all_fields.each do |textable_name|
+				xml.tag!(textable_name.to_sym) do |field|
+					self.languages_for_field(textable_name).each do |language|
+						field.tag!(language.to_sym, self.get_textbit(textable_name, :language => language).to_s)
+					end
+				end
+			end
+			if options[:pages]
+				xml.pages do |pages_xml|
+					self.pages.each{|page| page.to_xml(options.merge({:builder => pages_xml, :skip_instruct => true}))}
+				end
+			end
+		end
+	end
+	
 end
