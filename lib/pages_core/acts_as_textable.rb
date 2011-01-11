@@ -109,6 +109,7 @@ module PagesCore
 						set_textbit_body( name, string, options.merge( { :language => language } ) )
 					end
 				else
+					options = {:language => self.working_language}.merge(options)
 					textbit = get_textbit( name, options )
 					textbit.body = value
 				end
