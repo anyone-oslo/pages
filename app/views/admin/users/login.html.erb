@@ -82,11 +82,11 @@
 			if ($.cookie('login_mode') === 'openid') {
 				$('#loginOpenID').hide();
 				$('#loginRegular').show();
-				$.cookie('login_mode', 'regular');
+				$.cookie('login_mode', 'regular', {expires: 1095});
 			} else {
 				$('#loginOpenID').show();
 				$('#loginRegular').hide();
-				$.cookie('login_mode', 'openid');
+				$.cookie('login_mode', 'openid', {expires: 1095});
 			}
 		}
 		
