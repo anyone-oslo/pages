@@ -44,12 +44,13 @@ PagesCore::Templates.configure do |config|
 		# end
 
 		### These are the default options for all templates.
-		# default.template       :autodetect, :root => 'index'   # Autodetect template, root template is 'index'.
-		# default.image          :enabled, :linkable => false    # Image is enabled by default, but not linkable
-		# default.files          :disabled                       # Files are disabled by default
-		# default.images         :disabled                       # Additional images are disabled by default
-		# default.text_filter    :textile                        # Use textile as default text filter
-		# default.commens        :enabled                        # Enable comments
+		# default.template         :autodetect, :root => 'index' # Autodetect template, root template is 'index'.
+		# default.image            :enabled, :linkable => false  # Image is enabled by default, but not linkable
+		# default.files            :disabled                     # Files are disabled by default
+		# default.images           :disabled                     # Additional images are disabled by default
+		# default.text_filter      :textile                      # Use textile as default text filter
+		# default.comments         :enabled                      # Enables/disables the comments functionality
+		# default.comments_allowed :enabled                      # Default comments_allowed value for new pages
 		# default.enabled_blocks [:headline, :excerpt, :body]    # Only use the blocks enabled here by default
 	end
 

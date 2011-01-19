@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), '../configuration')
 module PagesCore
 	module Templates
 		class Configuration < PagesCore::Configuration::Handler
-			VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template, :comments
+			VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template, :comments, :comments_allowed
 			
 			handle :default do |instance, name, *args|
 				if name == :blocks
