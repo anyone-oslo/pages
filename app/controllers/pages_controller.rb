@@ -115,6 +115,7 @@ class PagesController < FrontendController
 	
 	def preview
 		@page = Page.new(params[:page])
+		@page.published_at ||= Time.now
 		render_page
 	end
 	
