@@ -1,6 +1,7 @@
 development:
   adapter:  mysql
   database: <%= @database_development %>
+  encoding: utf8
   username: root
   password: 
   host:     localhost
@@ -8,6 +9,7 @@ development:
 test:
   adapter:  mysql
   database: <%= @database_test %>
+  encoding: utf8
   username: root
   password:
   host:     localhost
@@ -15,6 +17,7 @@ test:
 production:
   adapter:  mysql
   database: <%= @database_production %>
+  encoding: utf8
   username: rails
   password: ***REMOVED***
   host:     server.manualdesign.no
