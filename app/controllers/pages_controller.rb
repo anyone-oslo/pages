@@ -176,7 +176,8 @@ class PagesController < FrontendController
 		
 		# Cache pages by hand. This is dirty, but it works.
 		def cache_page_request
-			if PagesCore.config(:page_cache) && @page && @language
+			status_code = response.status.to_i rescue nil
+			if status_code == 200 && PagesCore.config(:page_cache) && @page && @language
 				request_options = {:controller => 'pages', :action => :show, :id => @page, :language => @language, :only_path => true}
 				request_options[:page] = params[:page] if params[:page]
 				request_options[:category_name] = params[:category_name] if params[:category_name]
