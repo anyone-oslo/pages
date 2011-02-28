@@ -1,0 +1,46 @@
+.tag_editor {
+	margin-bottom: 1.5em;
+	max-width: 600px;
+}
+.tag_editor .tags {
+	line-height: 1.5
+}
+
+.tag_editor .tag {
+	cursor: pointer;
+	display: block;
+	float: left;
+	margin: 0 5px 10px 0;
+	padding: 4px 5px;
+	background: #f8f8f8;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	line-height: 1;
+	min-width: 40px;
+}
+.tag_editor .tag input {
+	float: left;
+	margin: 2px 0 0 0;
+}
+.tag_editor .tag .name {
+	float: left;
+	padding: 1px 5px;
+	margin: 0;
+}
+.tag_editor .tag.enabled {
+	background: #396e97;
+	border-color: #274b67;
+	color: #fff;
+}
+.tag_editor .add_tag_form {
+	float: left;
+	width: 178px;
+	white-space: nowrap;
+}
+.tag_editor input.add_tag {
+	margin: 0 4px 0 0;
+	padding: 4px 3px 3px 3px;
+}
+.tag_editor input.add_tag.example {
+	color: #888;
+}

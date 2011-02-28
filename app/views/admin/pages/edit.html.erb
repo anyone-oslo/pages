@@ -70,9 +70,9 @@
 		<% else %>
 			<p>No categories have been added yet.</p>
 		<% end %>
-		<%= labelled_field f.text_field( :tag_list, :class => 'text' ), "Tags", 
-			:errors      => @page.errors[:tag_list]
-		%>
+
+		<h3>Tags</h3>
+		<%= tag_editor_for f, @page %>
 	<% end %>
 
 	<%# #### ADDITIONAL IMAGES #### %>

@@ -2,7 +2,10 @@ module ActiveRecord
 	module Acts #:nodoc:
 		module Taggable #:nodoc:
 			def self.included(base)
-				base.extend(ClassMethods)  
+				base.extend(ClassMethods)
+				base.instance_eval do
+					attr_accessor :serialized_tags
+				end
 			end
 
 			module ClassMethods
@@ -42,6 +45,21 @@ module ActiveRecord
 			end
 
 			module InstanceMethods
+
+				def serialized_tags=(serialized_tags)
+					Tag.transaction do
+						taggings.destroy_all
+						tag_names = ActiveSupport::JSON.decode(serialized_tags)
+						tag_names.each do |name|
+							if acts_as_taggable_options[:from]
+								send(acts_as_taggable_options[:from]).tags.find_or_create_by_name(name).on(self)
+							else
+								Tag.find_or_create_by_name(name).on(self)
+							end
+						end
+					end
+				end
+
 				def tag_with(list)
 					Tag.transaction do
 						taggings.destroy_all

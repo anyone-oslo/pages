@@ -13,6 +13,7 @@
 @import url(admin/textarea.css);
 @import url(admin/editable_image.css);
 @import url(admin/controllers/pages.css);
+@import url(admin/tag_editor.css);
 
 body {
 	background: #fff;

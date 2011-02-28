@@ -1,5 +1,24 @@
 module Admin::AdminHelper
 
+	def tag_editor_for(form_helper, item)
+		tags = Tag.tags_and_suggestions_for(item, :limit => 20)
+		content_tag(:div, :class => 'tag_editor clearfix') do
+			form_helper.hidden_field(:serialized_tags, :class => 'serialized_tags') +
+			content_tag(:div, :class => :tags) do
+				tags.map do |tag|
+					content_tag(:span, :class => :tag) do
+						check_box_tag("tag-#{tag.id}", 1, item.tags.include?(tag)) +
+						content_tag(:span, tag.name, :class => :name)
+					end
+				end.join
+			end +  
+			content_tag(:div, :class => 'add_tag_form') do
+				text_field_tag('add_tag', 'Add tag...', :class => 'add_tag') + 
+				content_tag(:button, 'Add', :class => 'add_tag_button')
+			end
+		end
+	end
+
 	def paginator( pages, options={} )
 		raise "Pagination is gone"
 		html = ""
@@ -22,7 +41,8 @@ module Admin::AdminHelper
 	end
 
 	def admin_javascript_tags
-		output = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
+		output  = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
+		output += "\t"+javascript_include_tag("admin/tag_editor", :plugin => 'pages') + "\n"
 
 		controller_name    = controller.class.to_s.demodulize
 		action_name        = params[:action]
