@@ -274,13 +274,14 @@ end
 after "deploy:setup",           "pages:create_shared_dirs"
 #after "deploy:symlink",         "pages:fix_permissions"
 after "deploy:symlink",         "pages:create_symlinks"
-#after "deploy:restart",   "sphinx:index"
+
 after "deploy:restart",         "cache:flush"
 before "deploy:migrate",        "deploy:fix_plugin_migrations"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 # Sphinx
 after "deploy:symlink", "sphinx:configure"
+after "deploy:restart", "sphinx:restart"
 
 before "deploy:cold", "deploy:setup"
 before "deploy:cold", "deploy"
