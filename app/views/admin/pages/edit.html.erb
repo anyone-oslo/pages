@@ -1,9 +1,9 @@
 <%
 	page_title       "Editing “" + @page.name.to_s + "”"
-	page_description "Editing " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path( :id => page, :language => @language )) }.join( " &raquo; " )
+	page_description "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@language, page))}.join(" &raquo; ")
 
 	if PagesCore.config.localizations?
-		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator ) 
+		page_description_links "In " + @available_languages.map{|lang| link_to_unless_current(Language.name_for_code(lang), edit_admin_page_path(lang, @page))}.join(link_separator)
 	end
 
 %>
@@ -15,8 +15,8 @@
 <% sidebar do %>
 	<h2>About this page</h2>
 	<p>
-		This page was last modified <%= time_ago_in_words @page.updated_at %> ago by 
-		<%= link_to @page.author.realname, admin_user_path( @page.author ) %>.
+		This page was created by <%= link_to @page.author.realname, [:admin, @page.author] %>
+    and was last modified <%= time_ago_in_words @page.updated_at %> ago.
 	</p>
 <% end %>
 
@@ -24,7 +24,7 @@
 
 <%# #### EDIT AREA ######################################################### %>
 
-<% form_for 'page', @page, :url => admin_page_url( :id => @page, :language => @language ), :html => { :class => :edit_page, :id => 'page-form', :method => :put, :multipart => true } do |f| %>
+<% form_for 'page', @page, :url => admin_page_url(@language, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
 
 	<%# #### CONTENT #### %>
 	<% content_tab "Content" do %>
