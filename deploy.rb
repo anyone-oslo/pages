@@ -190,15 +190,27 @@ namespace :sphinx do
 	end
 	desc "Start Sphinx"
 	task :start do
-		run "sudo monit start #{monit_sphinx}"
+		if use_monit
+			run "sudo monit start #{monit_sphinx}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
+		end
 	end
 	desc "Stop Sphinx"
 	task :stop do
-		run "sudo monit stop #{monit_sphinx}"
+		if use_monit
+			run "sudo monit stop #{monit_sphinx}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+		end
 	end
 	desc "Restart Sphinx"
 	task :restart do
-		run "sudo monit restart #{monit_sphinx}"
+		if use_monit
+			run "sudo monit restart #{monit_sphinx}"
+		else
+	        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+		end
 	end
 	desc "Do not reindex Sphinx"
 	task :skip_reindex do
