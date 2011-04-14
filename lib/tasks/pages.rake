@@ -286,6 +286,14 @@ namespace :pages do
 				`cp #{preinit_template} config/preinitializer.rb`
 				abort "\n* Updated for Bundler support, please run pages:update again."
 			end
+			
+			# Sass
+			if !File.exists?('public/stylesheets/sass')
+				puts "* Sass folder not found, creating..."
+				`mkdir -p public/stylesheets/sass`
+				`touch public/stylesheets/sass/.gitignore`
+				`git add public/stylesheets/sass/.gitignore`
+			end
 
 		end
 

@@ -22,3 +22,6 @@ class CGI::Session::CookieStore
 		original_write_cookie(options)
 	end
 end
+
+# Initialize Haml/Sass
+Haml.init_rails(binding) if defined?(Haml)
