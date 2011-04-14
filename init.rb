@@ -23,5 +23,6 @@ class CGI::Session::CookieStore
 	end
 end
 
-# Initialize Haml/Sass
+# Initialize and configure Haml/Sass
 Haml.init_rails(binding) if defined?(Haml)
+Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/assets/stylesheets')

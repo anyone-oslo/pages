@@ -18,6 +18,7 @@ module PagesCore
 		before_filter :authenticate,               :except => SKIP_FILTERS
 		before_filter :load_account,               :except => SKIP_FILTERS
 		before_filter :get_language,               :except => SKIP_FILTERS
+		after_filter  :compile_assets,             :except => SKIP_FILTERS
 		after_filter  :set_headers,                :except => SKIP_FILTERS
 		after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
 		after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
@@ -140,6 +141,11 @@ module PagesCore
 				MumboJumbo.current_language = @language
 			end
 			
+			# Compiles assets
+			def compile_assets
+				PagesCore::Assets.compile!
+			end
+
 			# Sends HTTP headers (Content-Language etc) to the client.
 			# This method is automatically run from an after_filter.
 			def set_headers

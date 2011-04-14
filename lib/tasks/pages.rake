@@ -1,6 +1,13 @@
 require 'find'
 namespace :pages do
 	
+	namespace :assets do
+		desc "Compile assets"
+		task :compile => :environment do
+			PagesCore::Assets.compile!(:force => true)
+		end
+	end
+
 	namespace :error_reports do
 		desc "Show error reports"
 		task :list => :environment do
@@ -287,12 +294,17 @@ namespace :pages do
 				abort "\n* Updated for Bundler support, please run pages:update again."
 			end
 			
-			# Sass
-			if !File.exists?('public/stylesheets/sass')
-				puts "* Sass folder not found, creating..."
-				`mkdir -p public/stylesheets/sass`
-				`touch public/stylesheets/sass/.gitignore`
-				`git add public/stylesheets/sass/.gitignore`
+			if !File.exists?("app/assets")
+				puts "* Assets folder not found, creating..."
+				FileUtils.mkdir_p File.join(RAILS_ROOT, 'app/assets/javascripts')
+				FileUtils.mkdir_p File.join(RAILS_ROOT, 'app/assets/stylesheets')
+				`touch app/assets/javascripts/.gitignore`
+				`touch app/assets/stylesheets/.gitignore`
+				`git add app/assets/javascripts/.gitignore`
+				`git add app/assets/stylesheets/.gitignore`
+				`git mv public/javascripts/* app/assets/javascripts`
+				`git mv public/stylesheets/* app/assets/stylesheets`
+				PagesCore::Assets.compile!(:force => true)
 			end
 
 		end

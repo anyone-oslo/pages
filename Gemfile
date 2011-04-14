@@ -20,7 +20,8 @@ gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty'
 gem 'haml'
-#gem 'json'
+gem 'json'
+gem 'coffee-script'
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 group :test do
