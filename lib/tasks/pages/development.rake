@@ -1,5 +1,6 @@
 namespace :pages do
 	namespace :development do
+
 		desc "Generate test pages"
 		task :generate_pages => :environment do
 			required_vars = %w{NUMBER PARENT}
@@ -42,5 +43,6 @@ namespace :pages do
 				page.update_attributes(create_options)
 			end
 		end
+
 	end
 end
