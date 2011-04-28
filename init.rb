@@ -24,6 +24,6 @@ class CGI::Session::CookieStore
 end
 
 # Initialize and configure Haml/Sass
-Haml.init_rails(binding) if defined?(Haml)
-# This breaks generate migrations ???
-#Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/assets/stylesheets')
+require 'sass'
+require 'sass/plugin' if defined?(Sass)
+Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/assets/stylesheets')
