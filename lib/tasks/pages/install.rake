@@ -52,7 +52,7 @@ namespace :pages do
 		@session_secret = generate_key(128)
 		
 		puts "\nGenerating files..."
-		template_path = File.join(File.dirname(__FILE__), '../../template')
+		template_path = File.join(File.dirname(__FILE__), '../../../template')
 		Find.find(template_path) do |path|
 			Find.prune if path =~ /\.git/
 			if File.file?(path)
