@@ -25,6 +25,7 @@ PagesCore.configure do |config|
 	#config.domain_based_cache :enabled	 # Enable domain based page cache (for multiple domains)
 	#config.newsletter.template :enabled # Enable template based newsletters
 	#config.newsletter.image :enabled    # Enable image in newsletters
+	#config.image_fallback_url "http://<%= @site_domain %>/" # Will try to load images from production if they are missing
 
 	# Uncomment to send notifications on comments
 	#config :comment_notifications,  [:author, 'your@email.com']
