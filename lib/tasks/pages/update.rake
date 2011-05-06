@@ -88,14 +88,14 @@ namespace :pages do
 			# Passenger/RVM
 			if !File.exists?('config/setup_load_paths.rb')
 				puts "* setup_load_paths.rb not found, installing default..."
-				slp_template = File.join(File.dirname(__FILE__), '../../template/config/setup_load_paths.rb')
+				slp_template = File.join(File.dirname(__FILE__), '../../../template/config/setup_load_paths.rb')
 				`cp #{slp_template} config/setup_load_paths.rb`
 			end
 
 			# Bundler
 			if !File.exists?('Gemfile')
 				puts "* Gemfile not found, installing default..."
-				gemfile_template = File.join(File.dirname(__FILE__), '../../template/Gemfile')
+				gemfile_template = File.join(File.dirname(__FILE__), '../../../template/Gemfile')
 				`cp #{gemfile_template} Gemfile`
 			end
 			patch_files(
@@ -107,7 +107,7 @@ namespace :pages do
 				puts "* boot.rb patched for Bundler"
 			end
 			if !File.exists?('config/preinitializer.rb')
-				preinit_template = File.join(File.dirname(__FILE__), '../../template/config/preinitializer.rb')
+				preinit_template = File.join(File.dirname(__FILE__), '../../../template/config/preinitializer.rb')
 				`cp #{preinit_template} config/preinitializer.rb`
 				abort "\n* Updated for Bundler support, please run pages:update again."
 			end

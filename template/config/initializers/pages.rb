@@ -26,6 +26,9 @@ PagesCore.configure do |config|
 	#config.newsletter.template :enabled # Enable template based newsletters
 	#config.newsletter.image :enabled    # Enable image in newsletters
 
+	# Will try to load images from production if they are missing in development
+	#config.image_fallback_url "http://<%= @site_domain %>/"
+
 	# Uncomment to send notifications on comments
 	#config :comment_notifications,  [:author, 'your@email.com']
 end
