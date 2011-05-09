@@ -292,7 +292,7 @@ before "deploy:migrate",        "deploy:fix_plugin_migrations"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 # Sphinx
-#before "deploy:update", "sphinx:stop"
+before "deploy:update", "sphinx:stop"
 after "deploy:symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
