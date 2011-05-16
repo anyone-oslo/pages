@@ -203,14 +203,18 @@ module PagesCore
 				languages
 			end
 		
-			# Get a translated version of this page
+			# Get a translated version of this record
 			def translate(language, options={})
-				language = language.to_s
-				#self.add_language( language )
-				dupe = self.dup
-				dupe.working_language = language
-				dupe.fallback_language = options[:fallback_language] if options[:fallback_language]
+				dupe = self.dup.translate!(language, options)
 				(block_given?) ? (yield dupe) : dupe
+			end
+			
+			# Translate this record
+			def translate!(language, options={})
+				language = language.to_s
+				self.working_language = language
+				self.fallback_language = options[:fallback_language] if options[:fallback_language]
+				self
 			end
 
 			# Enable virtual setters and getters for existing (and enforced) textbits
