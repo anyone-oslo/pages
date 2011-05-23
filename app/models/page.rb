@@ -19,15 +19,14 @@ class Page < ActiveRecord::Base
 	acts_as_taggable
 	
 	# Page status labels
-	STATUS_LABELS = [ "Draft", "Reviewed", "Published", "Hidden", "Deleted" ]
+	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
 	
 	@@available_templates_cached = nil
 	
-	validates_format_of :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
+	validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
 	validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
 	
 	validate do |page|
-		#page.errors.add( :name, 'must have a title' ) if page.name.empty? # and !page.deleted?
 		page.template ||= page.default_template
 	end
 	
@@ -56,14 +55,11 @@ class Page < ActiveRecord::Base
 			begin
 				page.image.update_attribute(:description, page.image_description)
 			rescue
-	            # Alert?
-            end
+				# Alert?
+			end
 		end
 		page.delta = true
 	end
-	
-	# fuck a ferret
-	#acts_as_ferret :fields => { :names_for_search => { :boost => 2 }, :content_for_search => {} }
 	
 	define_index do
 		# Fields
@@ -210,7 +206,9 @@ class Page < ActiveRecord::Base
 			pages = Page.find(:all, find_options.merge(pagination_options))
 
 			# Set working language
-			pages = pages.map{|p| p.working_language = options[:language]; p} if options[:language]
+			if options[:language]
+				pages = pages.map{|p| p.working_language = options[:language]; p}
+			end
 
 			# Add the pagination methods
 			if options[:paginate] && pagination_count > 0
@@ -239,7 +237,12 @@ class Page < ActiveRecord::Base
 			search_options[:conditions] = {:status => '2', :autopublish => '0'}
 			
 			pages = Page.search(query, search_options)
-			PagesCore::Paginates.paginate(pages, :current_page => options[:page], :pages => pages.total_pages, :per_page => search_options[:per_page])
+			PagesCore::Paginates.paginate(
+				pages, 
+				:current_page => options[:page], 
+				:pages        => pages.total_pages, 
+				:per_page     => search_options[:per_page]
+			)
 			pages
 		end
 				
@@ -346,7 +349,8 @@ class Page < ActiveRecord::Base
 			(Page.count(:all, :conditions => ['news_page = 1']) > 0) ? true : false
 		end
 	
-		# Finds news items (which are pages where the parent is flagged as news_page). See <tt>Page.get_pages</tt> for more info on the options.
+		# Finds news items (which are pages where the parent is flagged as news_page). 
+		# See Page.get_pages for more info on the options.
 		def get_news(options={})
 			options[:parent] ||= Page.news_pages
 			options[:order] ||= "published_at DESC"
@@ -355,29 +359,34 @@ class Page < ActiveRecord::Base
 	
 
 		# Find a page by slug and language
-		def find_by_slug_and_language( slug, language )
+		def find_by_slug_and_language(slug, language)
 			language = language.to_s
 			slug     = slug.to_s
 
 			# Search legacy slug textbits
-			if textbit = Textbit.find( :first, :conditions => [ 'name = "slug" AND textable_type = ? AND body = ? AND language = ?', self.to_s, slug, language ] )
+			if textbit = Textbit.find(
+					:first, 
+					:conditions => ['name = "slug" AND textable_type = ? AND body = ? AND language = ?', self.to_s, slug, language]
+				)
 				page = textbit.textable
 
 			# Search page names
 			else
-				textbits = Textbit.find( :all, :conditions => [ "name = 'name' AND textable_type = '#{self.to_s}' AND language = ?", language ] )
-				textbits = textbits.select{ |tb| Page.string_to_slug( tb.body ) == slug }
+				textbits = Textbit.find(
+					:all, 
+					:conditions => [ "name = 'name' AND textable_type = '#{self.to_s}' AND language = ?", language]
+				)
+				textbits = textbits.select{|tb| Page.string_to_slug( tb.body ) == slug}
 				if textbits.length > 0
 					page = textbits.first.textable
 				end
 			end
 
-			( page ) ? page.translate( language ) : nil
+			page ? page.translate(language) : nil
 		end
 	
 		# Convert a string to an URL friendly slug
-		def string_to_slug( string )
-			#slug = (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv string.gsub( /[Øø]/, "oe" ).gsub( /[Åå]/, "aa" ) ).downcase
+		def string_to_slug(string)
 			slug = string.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
 			slug = slug.split( /[^\w\d\-]+/ ).compact.join( "_" )
 		end
@@ -522,8 +531,8 @@ class Page < ActiveRecord::Base
 	end
 	alias_method :parent_page, :parent
 	
-	def tag_list=( tag_list )
-		tag_with( tag_list )
+	def tag_list=(tag_list)
+		tag_with(tag_list)
 	end
 
 	self.send :alias_method, :acts_as_tree_ancestors, :ancestors 
@@ -536,14 +545,13 @@ class Page < ActiveRecord::Base
 		end
 		ancestors
 	end
-	
 
-	def is_ancestor?( page )
-		page.ancestors.include?( self )
+	def is_ancestor?(page)
+		page.ancestors.include?(self)
 	end
 	
-	def is_or_is_ancestor?( page )
-		( page == self || self.is_ancestor?( page ) ) ? true : false
+	def is_or_is_ancestor?(page)
+		(page == self || self.is_ancestor?(page)) ? true : false
 	end
 	
 	def excerpt_or_body
@@ -563,12 +571,12 @@ class Page < ActiveRecord::Base
     end
 	
 	def is_extended?
-		( self.excerpt? && self.body? ) ? true : false
+		(self.excerpt? && self.body?) ? true : false
 	end
 	
 	# Does this page have any files?
 	def files?
-		( !self.files.empty? ) ? true : false
+		(!self.files.empty?) ? true : false
 	end
 	
 	# Get an array of available templates
@@ -581,13 +589,13 @@ class Page < ActiveRecord::Base
 				File.join(File.dirname(__FILE__), '../../../../../app/views/pages/templates')
 			]
 			templates = locations.collect do |location|
-				Dir.entries( location ).select { |f| File.file?( File.join( location, f ) ) and !f.match( /^_/ ) } if File.exists? location
+				Dir.entries(location).select{|f| File.file?(File.join(location, f)) and !f.match(/^_/)} if File.exists?(location)
 			end
-			templates = templates.flatten.uniq.compact.sort.collect { |f| f.gsub(/\.[\w\d\.]+$/,'') }
+			templates = templates.flatten.uniq.compact.sort.collect{|f| f.gsub(/\.[\w\d\.]+$/,'')}
 
 			# make index the first template
-			if templates.include? "index"
-				templates = [ "index", templates.reject { |f| f == "index" } ].flatten
+			if templates.include?("index")
+				templates = ["index", templates.reject{|f| f == "index"}].flatten
 			end
 			@@available_templates_cached = templates
 		end
@@ -667,15 +675,15 @@ class Page < ActiveRecord::Base
 	# Get this page's root page.
 	def root_page
 		root_page = self
-		while( root_page.parent )
+		while root_page.parent 
 			root_page = root_page.parent
 		end
 		root_page
 	end
 	
-	def is_child_of( page )
+	def is_child_of(page)
 		compare = self
-		while( compare.parent )
+		while compare.parent
 			compare = compare.parent
 			return true if compare == page
 		end
@@ -683,22 +691,22 @@ class Page < ActiveRecord::Base
 	end
 	
 	# Get sibling by offset (most likely +1 or -1)
-	def sibling_by_offset( offset, options={} )
+	def sibling_by_offset(offset, options={})
 		return nil unless self.parent
-		siblings = self.parent.pages( options )
+		siblings = self.parent.pages(options)
 		raise "self not found in collection" unless siblings.include? self
-		index    = siblings.index( self ) + offset
-		( index >= 0 && index < siblings.length ) ? siblings[index] : nil
+		index    = siblings.index(self) + offset
+		(index >= 0 && index < siblings.length) ? siblings[index] : nil
 	end
 
 	# Get the next sibling
-	def next_sibling( options={} )
-		sibling_by_offset( 1, options )
+	def next_sibling(options={})
+		sibling_by_offset(1, options)
 	end
 
 	# Get the previous
-	def previous_sibling( options={} )
-		sibling_by_offset( -1, options )
+	def previous_sibling(options={})
+		sibling_by_offset(-1, options)
 	end
 
 	# Return the status of the page as a string
@@ -708,111 +716,103 @@ class Page < ActiveRecord::Base
 	
 	def self.status_labels_for_options
 		labels = Array.new
-		Page::STATUS_LABELS.each_index {|i| labels << [Page::STATUS_LABELS[i],i] }
+		Page::STATUS_LABELS.each_index{|i| labels << [Page::STATUS_LABELS[i],i]}
 		labels
 	end
-
 	
 	# Set the page status
-	def set_status( new_status )
-		new_status = new_status.to_i if new_status.kind_of?( String ) && new_status.match( /^[\d]+$/ )
-		if( new_status.kind_of?( String ) || new_status.kind_of?( Symbol ) )
+	def set_status(new_status)
+		new_status = new_status.to_i if new_status.kind_of?(String) && new_status.match(/^[\d]+$/)
+		if( new_status.kind_of?(String) || new_status.kind_of?(Symbol))
 			new_status = new_status.to_s
-			index = STATUS_LABELS.collect {|l| l.downcase}.index( new_status.downcase )
-			write_attribute( :status, index ) unless index.nil?
-		elsif new_status.kind_of? Numeric
-			write_attribute( :status, new_status.to_i ) 
+			index = STATUS_LABELS.collect{|l| l.downcase}.index(new_status.downcase)
+			write_attribute(:status, index) unless index.nil?
+		elsif new_status.kind_of?(Numeric)
+			write_attribute(:status, new_status.to_i)
 		end
 	end
 
 	# Alias get_textbit as get_field
-	def get_field( name, options={} )
-		get_textbit( name, options )
+	def get_field(name, options={})
+		get_textbit(name, options)
 	end
 	
-	
-	def template=( template_file )
-		write_attribute( 'template', template_file )
+	def template=(template_file)
+		write_attribute('template', template_file)
 	end
 	
 	def extended?
-		( self.get_field( 'excerpt' ).to_s.strip != "" ) ? true : false
+		(self.get_field( 'excerpt' ).to_s.strip != "") ? true : false
 	end
 	
 	def blank?
-		( self.get_field( 'body' ).to_s.strip == "" ) ? true : false
+		(self.get_field( 'body' ).to_s.strip == "") ? true : false
 	end
 	
 	# Get word count for page
 	def word_count
 		words = self.body.to_s
-		words.gsub! /<\/?[^>]*>/, ''     # strip html tags
-		words.gsub! /[^\w^\s]/, ''       # remove all non-word/space chars
-		words.split( /[\s]+/ ).length    # split by spaces and return length
+		words.gsub!(/<\/?[^>]*>/, '') # strip html tags
+		words.gsub!(/[^\w^\s]/, '')   # remove all non-word/space chars
+		words.split(/[\s]+/).length   # split by spaces and return length
 	end
-	
 	
 	# Get publication date, which defaults to the creation date
 	def published_at
 		self[:published_at] ||= self.created_at
 	end
 
-
 	# Get the first page which redirects to the given options.
 	# Example:
 	#   @page = Page.for_request( params, [ :controller, :action ] )
-	def self.for_request( options={}, limit=nil )
-		raise "Limit has to be nil or an array" if limit and !limit.kind_of?( Array )
+	def self.for_request(options={}, limit=nil)
+		raise "Limit has to be nil or an array" if limit and !limit.kind_of?(Array)
 		if limit
-			limit = limit.collect { |l| l.to_sym }
-			options = options.dup.delete_if{ |key,value| !limit.include? key.to_sym }
+			limit = limit.collect{|l| l.to_sym}
+			options = options.dup.delete_if{|key,value| !limit.include?(key.to_sym)}
 		end
 		options = options.symbolize_keys
 
 		# Load pages with redirect_to and get the first one that matches the criteria
-		page = Page.find( :all, :conditions => ['redirect_to IS NOT NULL'] ).select do |p|
+		page = Page.find(:all, :conditions => ['redirect_to IS NOT NULL']).select do |p|
 			redirect = p.redirect_to
-			redirect.kind_of? Hash and options.reject { |k,v| redirect[k] == v }.empty?
+			redirect.kind_of?(Hash) and options.reject{|k,v| redirect[k] == v}.empty?
 		end.first rescue nil
 		
 		# Default to a blank page, so the template won't bork
 		page ||= Page.new
 	end
 
-
 	# Returns boolean true if page has a valid redirect
 	def redirects?
 		return false if self.redirect_to == "0"
-		return true if self.redirect_to.kind_of? String and !self.redirect_to.strip.empty?
-		return true if self.redirect_to.kind_of? Hash   and !self.redirect_to.empty?
+		return true if self.redirect_to.kind_of?(String) and !self.redirect_to.strip.empty?
+		return true if self.redirect_to.kind_of?(Hash)   and !self.redirect_to.empty?
 		return false
 	end
 	
-
 	# Take the given options and merge self.redirect_to with them. If self.redirect_to is a string, nothing will be merged. 
-	def redirect_to_options( options={} )
+	def redirect_to_options(options={})
 		options.symbolize_keys!
 		redirect = self.redirect_to
-		if redirect.kind_of? Hash
+		if redirect.kind_of?(Hash)
 			redirect.symbolize_keys!
-			options.delete :language unless redirect.has_key? :language
-			redirect.delete :language if options.has_key? :language
-			redirect = options.merge redirect
+			options.delete :language unless redirect.has_key?(:language)
+			redirect.delete :language if options.has_key?(:language)
+			redirect = options.merge(redirect)
 		end
 		redirect
 	end
-	
 
 	# Returns true if this page's children is reorderable
 	def reorderable_children?
-		( !self.content_order? || ( self.content_order =~ /position/ )  ) ? true : false
+		(!self.content_order? || (self.content_order =~ /position/)) ? true : false
 	end
 
 	# Returns true if this page is reorderable
 	def reorderable?
-		( !self.parent || !self.parent.content_order? || ( self.parent.content_order =~ /position/ )  ) ? true : false
+		(!self.parent || !self.parent.content_order? || (self.parent.content_order =~ /position/)) ? true : false
 	end
-
 
 	# Imports subpages from XML
 	def import_xml(xmldata)
@@ -838,14 +838,13 @@ class Page < ActiveRecord::Base
 	end
 
 	# Enable virtual setters and getters for existing (and enforced) textbits
-	def method_missing( method_name, *args )
+	def method_missing(method_name, *args)
 		name = method_name.to_s
 		# Booleans
-		if( n = name.match( /(.*)\?/ ) )
-
+		if(n = name.match(/(.*)\?/))
 			downcase_labels = STATUS_LABELS.collect{|l| l.downcase }
-			if downcase_labels.include?( n[1].downcase ) 
-				return ( self.status == downcase_labels.index( n[1].downcase ) ) ? true : false
+			if downcase_labels.include?(n[1].downcase)
+				return (self.status == downcase_labels.index(n[1].downcase)) ? true : false
 			else
 				super
 			end
@@ -885,7 +884,7 @@ class Page < ActiveRecord::Base
 	end
 	
 	def empty?
-		( ( self.body.to_s + self.excerpt.to_s ).strip.empty? ) ? true : false
+		((self.body.to_s + self.excerpt.to_s).strip.empty?) ? true : false
 	end
 	
 	alias_method :ar_to_xml, :to_xml
