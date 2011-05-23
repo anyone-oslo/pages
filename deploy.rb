@@ -301,8 +301,10 @@ before "deploy:cold", "deploy"
 after "deploy:cold", "deploy:reload_webserver"
 after "deploy:cold", "sphinx:start"
 
+# Delayed Job
+before "deploy:update", "delayed_job:stop"
 after "deploy:start", "delayed_job:start" 
 after "deploy:stop", "delayed_job:stop" 
-after "deploy:restart", "delayed_job:restart"
+after "deploy:restart", "delayed_job:start"
 
 after "deploy:restart", "deploy:notify_campfire"
