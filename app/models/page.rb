@@ -639,11 +639,12 @@ class Page < ActiveRecord::Base
 	end
 	
 	# Get subpages
-	def pages( options={} )
+	def pages(options={})
+		return [] if self.new_record? && !options.has_key?(:parent)
 		options[:parent]   ||= self.id
 		options[:order]    ||= self.content_order
 		options[:language] ||= self.working_language if self.working_language
-		Page.get_pages( options )
+		Page.get_pages(options)
 	end
 	
 	# Count subpages
