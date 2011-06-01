@@ -10,6 +10,11 @@ module PagesCore
 				yield
 				self.enabled = old_value
 			end
+			
+			def once(&block)
+			  disable(&block)
+			  sweep_later!
+		  end
 
 			# Returns the default configuration.
 			def default_config
@@ -39,6 +44,11 @@ module PagesCore
 					`rm -rf #{cache_dir}/*`
 				end
 			end
+			
+      # Sweep all cached pages later
+			def sweep_later!
+			  self.send_later(:sweep!)
+		  end
 
 			# Sweep all cached pages
 			def sweep!
