@@ -10,7 +10,6 @@ class CacheObserver < ActiveRecord::Observer
   			record.cache_swept = false
   		end
   		if !record.cache_swept
-  		  puts "Sweeping cache lol"
   			PagesCore::CacheSweeper.sweep_image!(record) if record.kind_of?(Image)
   			PagesCore::CacheSweeper.send_later(:sweep!)
   			record.cache_swept = true
