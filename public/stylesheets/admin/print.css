@@ -1,0 +1,17 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12pt;
+}
+#header, #page-description .links {
+	display: none;
+}
+
+table.list {
+	border-collapse: collapse;
+}
+table.list td, table.list th {
+	border-bottom: 1px solid #888;
+	padding: 0.4em 1em 0.4em 0;
+	font-size: 7.5pt;
+	vertical-align: top;
+}
