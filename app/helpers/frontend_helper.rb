@@ -10,10 +10,10 @@ module FrontendHelper
 		options[:short_month], options[:short_day] = true if options[:short]
 		if @language.to_s == 'nor'
 			months = ( !options[:short_month] ) ? %w{januar februar mars april mai juni juli august september oktober november desember} : %w{jan feb mar apr mai jun jul aug sep okt nov des}
-			days   = ( !options[:short_day] )   ? %w{mandag tirsdag onsdag torsdag fredag lørdag søndag} : %w{man tir ons tor fre lør søn}
+			days   = ( !options[:short_day] )   ? %w{søndag mandag tirsdag onsdag torsdag fredag lørdag} : %w{søn man tir ons tor fre lør}
 		else
 			months = ( !options[:short_month] ) ? %w{January February March April May June July August September October November December} : %w{Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
-			days   = ( !options[:short_day] )   ? %w{Monday Tuesday Wednesday Thursday Friday Saturday Sunday} : %w{Mon Tue Wed Thu Fri Sat Sun}
+			days   = ( !options[:short_day] )   ? %w{Sunday Monday Tuesday Wednesday Thursday Friday Saturday} : %w{Sun Mon Tue Wed Thu Fri Sat}
 		end
 		days   = days.map{ |d| d.downcase } unless options[:capitalize_day]
 
