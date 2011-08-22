@@ -27,7 +27,7 @@ gem 'coffee-script', '2.1.3'
 group :test do
 	gem 'shoulda'
 	gem 'machinist'
-	gem 'faker'
+	gem 'faker', '0.3.1'
 end
 
 # Load gems from plugins

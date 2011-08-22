@@ -1,6 +1,6 @@
 class Admin::PagesController < Admin::AdminController
 
-	before_filter :find_page, :only => [ :show, :edit, :preview, :update, :destroy, :reorder, :add_image, :delete_image, :delete_language, :delete_comment, :delete_presentation_image, :import_xml ]
+	before_filter :find_page, :only => [:show, :edit, :preview, :update, :destroy, :reorder, :add_image, :delete_image, :delete_language, :delete_comment, :delete_presentation_image, :import_xml]
 	before_filter :application_languages
 	before_filter :load_categories
 	before_filter :load_news_pages, :only => [:news, :new_news]
