@@ -18,6 +18,7 @@ set :git_enable_submodules, 1
 set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
+set :cold_deploy,       false
 set :use_monit,         true unless variables.keys.include?(:use_monit)
 
 set :monit_delayed_job, "#{application}_delayed_job"
@@ -47,6 +48,10 @@ task :quick, :roles => [:web] do
 end
 
 namespace :deploy do
+
+	task :setup_cold_deploy, :roles => [:web] do
+		set :cold_deploy, true
+	end
 
 	desc "Setup, configure the web server and deploy the application"
 	task :cold, :roles => [:web] do
@@ -177,31 +182,33 @@ end
 namespace :sphinx do
 	desc "Rebuild Sphinx"
 	task :rebuild do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
 		run "sudo monit restart #{monit_sphinx}"
 	end
 	desc "Configure Sphinx"
 	task :configure do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
 	end
 	desc "(Re)index Sphinx"
 	task :index do
-        run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
 	end
 	desc "Start Sphinx"
 	task :start do
 		if use_monit
 			run "sudo monit start #{monit_sphinx}"
 		else
-	        run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
 		end
 	end
 	desc "Stop Sphinx"
 	task :stop do
-		if use_monit
-			run "sudo monit stop #{monit_sphinx}"
-		else
-	        run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+		unless cold_deploy
+			if use_monit
+				run "sudo monit stop #{monit_sphinx}"
+			else
+				run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+			end
 		end
 	end
 	desc "Restart Sphinx"
@@ -282,6 +289,8 @@ namespace :log do
 end
 
 #before "deploy", "pages:verify_migrations"
+
+before "deploy:cold", "deploy:setup_cold_deploy"
 
 after "deploy:setup",           "pages:create_shared_dirs"
 #after "deploy:symlink",         "pages:fix_permissions"
