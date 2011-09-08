@@ -111,10 +111,12 @@ namespace :delayed_job do
 
 	desc "Stop delayed_job process" 
 	task :stop, :roles => :app do
-		if use_monit
-			run "sudo monit stop #{monit_delayed_job}"
-		else
-	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
+		unless cold_deploy
+			if use_monit
+				run "sudo monit stop #{monit_delayed_job}"
+			else
+				run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
+			end
 		end
 	end
 
@@ -123,7 +125,7 @@ namespace :delayed_job do
 		if use_monit
 			run "sudo monit restart #{monit_delayed_job}"
 		else
-	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart production"
+			run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart production"
 		end
 	end
 end
