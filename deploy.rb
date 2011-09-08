@@ -55,8 +55,8 @@ namespace :deploy do
 
 	desc "Setup, configure the web server and deploy the application"
 	task :cold, :roles => [:web] do
-		sudo "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
-		sudo "a2ensite #{application}"
+		run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
+		run "sudo a2ensite #{application}"
 		run "cd #{deploy_to}/#{current_dir} && rake db:create RAILS_ENV=production"
 	end
 
@@ -234,19 +234,19 @@ namespace :monit do
 	end
 	desc "Start Monit"
 	task :start do
-		sudo "/etc/init.d/monit start"
+		run "sudo /etc/init.d/monit start"
 	end
 	desc "Stop Monit"
 	task :stop do
-		sudo "/etc/init.d/monit stop"
+		run "sudo /etc/init.d/monit stop"
 	end
 	desc "Restart Monit"
 	task :restart do
-		sudo "/etc/init.d/monit restart"
+		run "sudo /etc/init.d/monit restart"
 	end
 	desc "Check Monit config syntax"
 	task :syntax do
-		sudo "/etc/init.d/monit syntax"
+		run "sudo /etc/init.d/monit syntax"
 	end
 	desc "Show Monit status"
 	task :status do
@@ -308,9 +308,9 @@ after "deploy:symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
 before "deploy:cold", "deploy:setup"
-before "deploy:cold", "deploy"
+#before "deploy:cold", "deploy"
+after "deploy:cold", "deploy:services"
 after "deploy:cold", "deploy:reload_webserver"
-after "deploy:cold", "sphinx:start"
 
 # Delayed Job
 before "deploy:update", "delayed_job:stop"
