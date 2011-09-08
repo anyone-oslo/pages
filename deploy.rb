@@ -26,10 +26,14 @@ set :monit_sphinx,      "#{application}_sphinx"
 
 set :campfire_room, 302048
 
-
 role :web, remote_host
 role :app, remote_host
 role :db,  remote_host, :primary => true
+
+load File.join(File.dirname(__FILE__), 'deploy/monit.rb')
+load File.join(File.dirname(__FILE__), 'deploy/sphinx.rb')
+load File.join(File.dirname(__FILE__), 'deploy/delayed_job.rb')
+load File.join(File.dirname(__FILE__), 'deploy/pages.rb')
 
 desc "Run rake task (specified as TASK environment variable)"
 task :rake_task, :roles => :app do
@@ -97,161 +101,6 @@ namespace :deploy do
 		room.message "[#{repo_name}] has been deployed by #{username}"
 	end
 	
-end
-
-namespace :delayed_job do
-	desc "Start delayed_job process" 
-	task :start, :roles => :app do
-		if use_monit
-			run "sudo monit start #{monit_delayed_job}"
-		else
-	        run "cd #{deploy_to}/#{current_dir} && script/delayed_job start production"
-		end
-	end
-
-	desc "Stop delayed_job process" 
-	task :stop, :roles => :app do
-		unless cold_deploy
-			if use_monit
-				run "sudo monit stop #{monit_delayed_job}"
-			else
-				run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
-			end
-		end
-	end
-
-	desc "Restart delayed_job process" 
-	task :restart, :roles => :app do
-		if use_monit
-			run "sudo monit restart #{monit_delayed_job}"
-		else
-			run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart production"
-		end
-	end
-end
-
-
-namespace :pages do
-
-	desc "Verify migrations"
-	task :verify_migrations, :roles => [:web, :app, :db] do
-		if perform_verify_migrations
-			migration_status = `rake -s pages:migration_status`
-			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
-			unless current == plugin
-				puts "================================================================================"
-				puts "MIGRATIONS MISMATCH!"
-				puts migration_status
-				puts "\nRun the following commands to fix:"
-				puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
-				puts
-				exit
-			end
-		end
-	end
-
-	desc "Create shared directories"
-	task :create_shared_dirs, :roles => [:web,:app] do
-		run "mkdir -p #{deploy_to}/#{shared_dir}/cache"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/public_cache"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/sockets"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/sessions"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/index"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/sphinx"
-		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
-	end
-
-	desc "Fix permissions"
-	task :fix_permissions, :roles => [:web, :app] do
-		run "chmod -R a+x #{deploy_to}/#{current_dir}/script/*"
-		run "chmod a+x    #{deploy_to}/#{current_dir}/public/dispatch.*"
-		run "chmod a+rwx  #{deploy_to}/#{current_dir}/public"
-		run "chmod a+rw   #{deploy_to}/#{current_dir}/public/plugin_assets"
-	end
-
-	desc "Create symlinks"
-	task :create_symlinks, :roles => [:web,:app] do
-		run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
-		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
-		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
-		run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
-		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
-		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
-	end
-
-end
-
-namespace :sphinx do
-	desc "Rebuild Sphinx"
-	task :rebuild do
-		run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
-		run "sudo monit restart #{monit_sphinx}"
-	end
-	desc "Configure Sphinx"
-	task :configure do
-		run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
-	end
-	desc "(Re)index Sphinx"
-	task :index do
-		run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
-	end
-	desc "Start Sphinx"
-	task :start do
-		if use_monit
-			run "sudo monit start #{monit_sphinx}"
-		else
-			run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
-		end
-	end
-	desc "Stop Sphinx"
-	task :stop do
-		unless cold_deploy
-			if use_monit
-				run "sudo monit stop #{monit_sphinx}"
-			else
-				run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
-			end
-		end
-	end
-	desc "Restart Sphinx"
-	task :restart do
-		if use_monit
-			run "sudo monit restart #{monit_sphinx}"
-		else
-			run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
-		end
-	end
-	desc "Do not reindex Sphinx"
-	task :skip_reindex do
-		set :reindex_sphinx, false
-	end
-end
-
-namespace :monit do
-	desc "Reconfigure Monit"
-	task :configure do
-		run "pages_console monitrc > /etc/monit.d/pages && echo 'Monit configured'"
-	end
-	desc "Start Monit"
-	task :start do
-		run "sudo /etc/init.d/monit start"
-	end
-	desc "Stop Monit"
-	task :stop do
-		run "sudo /etc/init.d/monit stop"
-	end
-	desc "Restart Monit"
-	task :restart do
-		run "sudo /etc/init.d/monit restart"
-	end
-	desc "Check Monit config syntax"
-	task :syntax do
-		run "sudo /etc/init.d/monit syntax"
-	end
-	desc "Show Monit status"
-	task :status do
-		run "sudo monit status"
-	end
 end
 
 namespace :cache do
