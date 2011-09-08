@@ -34,7 +34,7 @@ role :db,  remote_host, :primary => true
 desc "Run rake task (specified as TASK environment variable)"
 task :rake_task, :roles => :app do
 	if ENV['TASK']
-        run "cd #{deploy_to}/#{current_dir} && rake #{ENV['TASK']} RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && rake #{ENV['TASK']} RAILS_ENV=production"
 	else
 		puts "Please specify a command to execute on the remote servers (via the COMMAND environment variable)"
 	end
@@ -218,7 +218,7 @@ namespace :sphinx do
 		if use_monit
 			run "sudo monit restart #{monit_sphinx}"
 		else
-	        run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
 		end
 	end
 	desc "Do not reindex Sphinx"
@@ -257,14 +257,14 @@ end
 namespace :cache do
 	desc "Do not flush the page cache on reload"
 	task :keep do
-	    set :flush_cache, false
+		set :flush_cache, false
 	end
 
 	desc "Flush the page cache"
 	task :flush, :roles => :app do
-	    if flush_cache
-	        run "cd #{deploy_to}/#{current_dir} && rake pages:cache:sweep RAILS_ENV=production"
-	    end
+		if flush_cache
+			run "cd #{deploy_to}/#{current_dir} && rake pages:cache:sweep RAILS_ENV=production"
+		end
 	end
 end
 
