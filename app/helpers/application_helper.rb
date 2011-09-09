@@ -62,13 +62,15 @@ module ApplicationHelper
 			output += "<head>\n"
 			output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\" />\n"
 			output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
+			output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		elsif options[:doctype] == :html5
-			output += "<!DOCTYPE html>\n"
+			output += "<!doctype html>\n"
 			output += "<html lang=\"#{language_definition}\">\n"
 			output += "<head>\n"
-			output += "	<meta charset=\"#{options[:charset]}\" />\n"
+			output += "	<meta charset=\"#{options[:charset]}\">\n"
+			output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n"
+			output += "	<meta name=\"author\" content=\"#{options[:author]}\">\n"
 		end
-		output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		output += "	<title>#{options[:title]}</title>\n"
 		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
 
