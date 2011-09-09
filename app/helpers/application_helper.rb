@@ -65,7 +65,17 @@ module ApplicationHelper
 			output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
 		elsif options[:doctype] == :html5
 			output += "<!doctype html>\n"
-			output += "<html lang=\"#{language_definition}\">\n"
+			if options.has_key?(:modernizr)
+				output += "<!--[if lt IE 7]><html class=\"no-js ie6\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if IE 7]><html class=\"no-js ie7\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if IE 8]><html class=\"no-js ie8\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if gt IE 8]><!--><html class=\"no-js\" lang=\"#{language_definition}\"><!--<![endif]-->\n"
+			else
+				output += "<!--[if lt IE 7]><html class=\"ie6\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if IE 7]><html class=\"ie7\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if IE 8]><html class=\"ie8\" lang=\"#{language_definition}\"><![endif]-->\n"
+				output += "<!--[if gt IE 8]><!--><html lang=\"#{language_definition}\"><!--<![endif]-->\n"
+			end
 			output += "<head>\n"
 			output += "	<meta charset=\"#{options[:charset]}\">\n"
 			output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n"
