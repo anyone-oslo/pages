@@ -1,15 +1,12 @@
 class Admin::AccountsController < Admin::AdminController
 	
 	def index
-		redirect_to edit_admin_account_path( @account )
+		redirect_to edit_admin_account_path(@account)
 	end
 	
 	def edit
 		@database_size = @account.database_size
 		@domain        = @account.domain || request.domain.gsub( /^www\./, '' )
-		@stats         = PagesCore::AWStats.new( @domain )
-		@plans         = YAML.load( URI.parse( "http://pages.manualdesign.no/plans/" ).read ) rescue []
-		@plan          = @plans.select{ |p| p[:key] == @account.plan }.first
 	end
 	
 	def update
