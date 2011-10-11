@@ -1,3 +1,12 @@
+require 'digest/sha1'
+require 'iconv'
+require 'find'
+require 'open-uri'
+
+# Included in vendor/plugins/pages/lib
+[:acts_as_taggable, :language, :mumbojumbo, :enumerable, :feed_builder, :country_select, :catch_cookie_exception].each do |lib|
+	require File.join(File.dirname(__FILE__), "../#{lib.to_s}")
+end
 
 # Load ./pages_core/*.rb
 Dir.entries(File.join(File.dirname(__FILE__), 'pages_core')).select{|f| f =~ /\.rb$/}.map{|f| File.basename(f, '.*')}.each do |lib|
@@ -9,20 +18,6 @@ end
 module PagesCore
 	class << self
 		def init!
-			# Verify that we've been properly bootstrapped
-			unless PagesCore.const_defined?('BOOTSTRAPPED') && PagesCore::BOOTSTRAPPED
-				puts "---------------------------------------------------------------------------------------------------------------"
-				puts "PAGES BOOTSTRAPPER NOT LOADED!"
-				puts "Please run \"rake pages:update\" to patch config/environment.rb, or add the following line yourself:"
-				puts "\n# Bootstrap Pages"
-				puts "require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')"
-				puts "---------------------------------------------------------------------------------------------------------------"
-				raise "Pages not bootstrapped"
-			end
-			
-			# Load dependencies
-			PagesCore::Dependencies.load
-
 			# Initialize MumboJumbo
 			MumboJumbo.load_languages!
 			MumboJumbo.translators << PagesCore::StringTranslator

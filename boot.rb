@@ -1,6 +1,3 @@
-require File.join(File.dirname(__FILE__), 'lib/pages_core/bootstrap')
-PagesCore.bootstrap!
-
 if RAILS_ENV == 'production'
 	require 'activerecord'
 	require 'actionmailer'
