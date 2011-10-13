@@ -4,6 +4,34 @@ require 'open-uri'
 namespace :pages do
 	namespace :update do
 
+		desc "Fix inheritance"
+		task :fix_inheritance do
+			def find_files(file_expression, options={})
+				paths = []
+				Find.find(".") do |path|
+					gsubbed_path = path.gsub(/^\.?\/?/,'')
+					Find.prune if options[:except] && gsubbed_path =~ options[:except]
+					if gsubbed_path =~ file_expression && !(path =~ /\.git/)
+						paths << path unless File.directory?(path)
+					end
+				end
+				paths
+			end
+			
+			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
+				plugin_controller = File.join('vendor/plugins/pages', controller)
+				if File.exists?(plugin_controller)
+					class_definition = File.read(plugin_controller).split(/\n/).first
+					file_content = File.read(controller)
+					patched_file_content = file_content.gsub(/class [\w:]+Controller( < [\w:]+)/, class_definition)
+					unless patched_file_content == file_content
+						puts "Patching file #{controller}.."
+						File.open(controller, 'w') {|fh| fh.write(patched_file_content)}
+					end
+				end
+			end
+		end
+
 		desc "Patch files"
 		task :files do
 			def find_files(file_expression, options={})
@@ -191,7 +219,7 @@ namespace :pages do
 		end
 		
 		desc "Run all update tasks"
-		task :all => ["update:files", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
+		task :all => ["update:files", "update:fix_inheritance", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
 	end 
 
 	desc "Automated updates for newest version"
