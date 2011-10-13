@@ -50,7 +50,7 @@ class PagesCore::Frontend::DynamicTextController < FrontendController
     def show
         text = params[:text]
         text_format = PagesCore::DynamicText::TEXT_FORMATS[params[:text_format].to_sym]
-        font_path = File.join(File.dirname(__FILE__), '../../../../../fonts', text_format[:font])
+        font_path = File.join(RAILS_ROOT, 'fonts', text_format[:font])
 
         text_image = render_dynamic_text(text, text_format) do |img|
             img.fill             = text_format[:color]
