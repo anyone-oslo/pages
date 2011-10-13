@@ -1,4 +1,4 @@
-class PagesCore::ImagesController < ApplicationController
+class PagesCore::ImagesController < DynamicImage::ImagesController
 	caches_page :view_image
 
 	def render_missing_image
