@@ -164,6 +164,17 @@ namespace :pages do
 				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages_portfolio\" WHERE plugin_name = \"backstage_portfolio\"")
 				Rake::Task["db:migrate:upgrade_plugin_migrations"].execute
 			end
+			if ActiveRecord::Base.connection.table_exists?("schema_migrations")
+				updated_versions = []
+				ActiveRecord::Base.connection.select_values("SELECT * FROM schema_migrations").each do |version|
+					if version =~ /^[\d]+\-backstage$/
+						new_version = version.gsub('backstage', 'pages')
+						updated_versions << new_version
+						ActiveRecord::Base.connection.update_sql("UPDATE schema_migrations SET version = \"#{new_version}\" WHERE version = \"#{version}\"")
+					end
+				end
+				puts "* #{updated_versions.length} plugin migrations renamed" if updated_versions.length > 0
+			end
 		end
 		
 		desc "Update gems"
