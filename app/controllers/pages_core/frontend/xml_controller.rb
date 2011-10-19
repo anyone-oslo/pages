@@ -7,7 +7,7 @@ class PagesCore::Frontend::XmlController < FrontendController
 		Page.find( :all )
 		
 		# grab root pages
-        @pages = Page.root_pages(:language => @language) 
+		@pages = Page.root_pages(:language => @language) 
 		render :layout => false
 	end
 
