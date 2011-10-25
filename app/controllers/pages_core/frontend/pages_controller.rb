@@ -1,7 +1,5 @@
 class PagesCore::Frontend::PagesController < FrontendController
 
-	include ApplicationHelper
-
 	if PagesCore.config(:page_cache)
 		caches_page :index
 	end
