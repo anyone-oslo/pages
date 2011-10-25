@@ -123,27 +123,29 @@ module ApplicationHelper
 		end
 			
 		output += "\n"
+
+		# META description
+		if @meta_description
+			options[:meta_description] = @meta_description
+		elsif @page && !@page.excerpt.to_s.empty?
+			options[:meta_description] = @page.excerpt.to_s
+		end
+		if options[:meta_description]
+			meta_description = html_escape(strip_tags(options[:meta_description]))
+			output += "\t<meta name=\"description\" content=\"#{meta_description}\" />\n"
+		end
+		# META keywords
+		if @meta_keywords
+			options[:meta_keywords] = @meta_keywords
+		elsif @page && @page.tags?
+			options[:meta_keywords] = @page.tag_list
+		end
+		if options[:meta_keywords]
+			meta_keywords = html_escape(strip_tags(options[:meta_keywords]))
+			output += "\t<meta name=\"keywords\" content=\"#{options[:meta_keywords]}\" />\n"
+		end
+
 		if page = @page
-			# META description
-			if @meta_description
-				options[:meta_description] = @meta_description
-			elsif !page.excerpt.to_s.empty?
-				options[:meta_description] = page.excerpt.to_s
-			end
-			if options[:meta_description]
-				meta_description = html_escape(strip_tags(options[:meta_description]))
-				output += "\t<meta name=\"description\" content=\"#{meta_description}\" />\n"
-			end
-			# META keywords
-			if @meta_keywords
-				options[:meta_keywords] = @meta_keywords
-			elsif !page.tags?
-				options[:meta_keywords] = page.tag_list
-			end
-			if options[:meta_keywords]
-				meta_keywords = html_escape(strip_tags(options[:meta_keywords]))
-				output += "\t<meta name=\"keywords\" content=\"#{options[:meta_keywords]}\" />\n"
-			end
 			if page.image
 				# Facebook likes this
 				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
