@@ -64,7 +64,7 @@
 		<% if @categories.length > 0 %>
 			<p>
 				<% @categories.each do |category| %>
-					<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.include?(category) ? true : false) %><strong><%= category.name %></strong><br />
+					<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %><strong><%= category.name %></strong><br />
 				<% end %>
 			</p>
 		<% else %>

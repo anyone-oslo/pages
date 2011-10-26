@@ -11,7 +11,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			begin
 				@page = Page.find(params[:id]).translate(@language)
 			rescue
-				flash[:notice] = "Cannot load user with id ##{params[:id]}"
+				flash[:notice] = "Cannot load page with id ##{params[:id]}"
 				redirect_to admin_pages_path and return
 			end
 		end
