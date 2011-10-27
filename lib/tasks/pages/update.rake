@@ -18,6 +18,7 @@ namespace :pages do
 				paths
 			end
 			
+			# Update controllers
 			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
 				plugin_controller = File.join('vendor/plugins/pages', controller)
 				if File.exists?(plugin_controller)
@@ -30,6 +31,31 @@ namespace :pages do
 					end
 				end
 			end
+			
+			# Update helpers
+			find_files(%r%^app/helpers/.*\.rb%).each do |helper|
+				plugin_helper = File.join('vendor/plugins/pages', helper)
+				if File.exists?(plugin_helper)
+					helper_name = helper.gsub(/.*\/app\/helpers\//, '').gsub(/\.rb$/, '').camelize
+					includes = File.readlines(plugin_helper).select{|l| l =~ /^\s*include /}
+					includes.map!{|i| i.match(/\s*include\s+([\w\d:]+)/)[1]}
+					file_content = File.read(helper)
+					patched_file_content = file_content.dup
+					includes.reverse.each do |include_module|
+						unless file_content =~ Regexp.new('include\s+' + include_module)
+							patched_file_content.gsub!(Regexp.new('module\s+' + helper_name)) do
+								"module #{helper_name}\n\tinclude #{include_module}"
+							end
+						end
+					end
+
+					unless patched_file_content == file_content
+						puts "Patching file #{helper}.."
+						File.open(helper, 'w') {|fh| fh.write(patched_file_content)}
+					end
+				end
+			end
+			
 		end
 
 		desc "Patch files"

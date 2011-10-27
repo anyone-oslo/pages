@@ -10,7 +10,7 @@
 # * Imeem
 # * MySpace
 # * Vimeo
-module VideoHelper
+module PagesCore::VideoHelper
 	
 	module Formats #:nodoc:
 		VIDEO_FORMATS = {
@@ -46,7 +46,7 @@ module VideoHelper
 	end
 	
 	# Video formats
-	include VideoHelper::Formats
+	include PagesCore::VideoHelper::Formats
 
 	# Embeds a video, optionally resizing the object. The height
 	# will be calculated to the proper aspect ratio if <tt>:height</tt> is omitted.
