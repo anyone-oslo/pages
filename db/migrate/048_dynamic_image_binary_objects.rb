@@ -18,7 +18,7 @@ class DynamicImageBinaryObjects < ActiveRecord::Migration
 					ActiveRecord::Base.connection.execute(query)
 				end
 				# Get SHA1 hash of content
-				sha1_hash = `sha1sum #{dump_file}`.split(/\s+/).first
+				sha1_hash = `#{DynamicImage.sha1sum_path} #{dump_file}`.split(/\s+/).first
 				# Move file to proper location
 				target_file = Binary.storage_path(sha1_hash)
 				if File.exists?(target_file)
