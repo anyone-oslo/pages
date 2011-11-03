@@ -15,7 +15,7 @@
 	</p>
 	<% if PagesCore.config.localizations? %>
 		<h2>Language</h2>
-		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator) %></p>
+		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator) %></p>
 	<% end %>
 <% end %>
 
