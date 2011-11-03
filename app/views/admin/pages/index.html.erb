@@ -20,7 +20,7 @@
 	<% end %>
 	<% if @root_pages.length > 1 %>
 		<h2>Site structure</h2>
-		<p><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></p>
+		<p><button><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></button></p>
 	<% end %>
 	<h2>Categories</h2>
 	<% if @categories && @categories.length > 0 %>
@@ -29,8 +29,6 @@
 				<li><%= category.name %> (<%= link_to "Delete", admin_category_path(category), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo." %>)</li>
 			<% end %>
 		</ul>
-	<% else %>
-		<p>No categories added yet.</p>
 	<% end %>
 	<div id="new-category">
 		<% form_for([:admin, Category.new]) do |f| %>
