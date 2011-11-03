@@ -1,11 +1,11 @@
 module PagesCore
 	class MailerBinding
-	    include ActionView::Helpers::TextHelper
-	    include ActionView::Helpers::UrlHelper
-	    include ActionView::Helpers::TagHelper
-	    include ActionView::Helpers::AssetTagHelper
+		include ActionView::Helpers::TextHelper
+		include ActionView::Helpers::UrlHelper
+		include ActionView::Helpers::TagHelper
+		include ActionView::Helpers::AssetTagHelper
 		include ActionView::Helpers::CaptureHelper
-	    include ApplicationHelper
+		include ApplicationHelper
 	
 		attr_accessor :output_buffer
 	
@@ -30,8 +30,8 @@ module PagesCore
 			concat(@cache[key], block.binding)
 		end
 
-	    def get_binding
-	        binding
-	    end
+		def get_binding
+ 			binding
+		end
 	end
 end

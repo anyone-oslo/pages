@@ -10,13 +10,13 @@
 # * Imeem
 # * MySpace
 # * Vimeo
-module VideoHelper
+module PagesCore::VideoHelper
 	
 	module Formats #:nodoc:
 		VIDEO_FORMATS = {
 			:youtube => {
 				:detect_expression    => /youtube/,
-				:id_expression        => /((v|pl)\/|\?v=)([\w_\-]+)/,
+				:id_expression        => /((embed|v|pl)\/|\?v=)([\w_\-]+)/,
 				:id_expression_offset => 3,
 				:default_size         => Vector2d.new('425x344'),
 				:embed_tag            => "<object width=\"NEW_WIDTH\" height=\"NEW_HEIGHT\"><param name=\"movie\" value=\"http://www.youtube.com/v/VIDEO_ID&rel=1\"></param><param name=\"wmode\" value=\"transparent\"></param><embed src=\"http://www.youtube.com/v/VIDEO_ID&rel=1\" type=\"application/x-shockwave-flash\" wmode=\"transparent\" width=\"NEW_WIDTH\" height=\"NEW_HEIGHT\"></embed></object>"
@@ -46,7 +46,7 @@ module VideoHelper
 	end
 	
 	# Video formats
-	include VideoHelper::Formats
+	include PagesCore::VideoHelper::Formats
 
 	# Embeds a video, optionally resizing the object. The height
 	# will be calculated to the proper aspect ratio if <tt>:height</tt> is omitted.

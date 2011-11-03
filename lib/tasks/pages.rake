@@ -57,12 +57,6 @@ namespace :pages do
 		Mailing.do_queue
 	end
 	
-	desc "Remove stale sessions"
-	task :clean_sessions => :environment do
-		puts "Removing stale sessions"
-		SessionCleaner.remove_stale_sessions
-	end
-	
 	desc "Refresh RSS feeds"
 	task :refresh_feeds => :environment do
 		puts "Refreshing external feeds"
