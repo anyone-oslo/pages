@@ -197,7 +197,9 @@
 			<label>Options</label>
 			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
 			<%= f.check_box(:news_page) %> This is a news page<br />
-			<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
+			<% if @page.template_config.value(:comments) %>
+				<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
+			<% end %>
 		</p>
 		<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
 		<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
