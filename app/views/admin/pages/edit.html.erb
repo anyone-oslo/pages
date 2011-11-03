@@ -144,12 +144,8 @@
 
 	<%# #### COMMENTS #### %>
 	<% if @page.template_config.value(:comments) %>
-		<% content_tab "Comments" do %>
-			<%= labelled_field f.check_box( :comments_allowed ), "Comments allowed", 
-				:errors      => @page.errors[:comments_allowed],
-				:check_box_description => "Comments are allowed on this page"
-			%>
-			<% if @page.comments.count > 0 %>
+		<% if @page.comments.count > 0 %>
+			<% content_tab "Comments" do %>
 				<table class="list comments_list">
 					<% @page.comments.each do |c| %>
 						<tr>
@@ -169,7 +165,9 @@
 						</tr>
 					<% end %>
 				</table>
-			<% else %>
+			<% end %>			
+		<% else %>
+			<% content_tab "Comments", {:disabled => true} do %>
 				<p>No comments added.</p>
 			<% end %>
 		<% end %>
@@ -199,6 +197,7 @@
 			<label>Options</label>
 			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
 			<%= f.check_box(:news_page) %> This is a news page<br />
+			<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
 		</p>
 		<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
 		<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 

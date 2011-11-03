@@ -26,7 +26,9 @@ a.delete, a.delete:visited {
 a.delete:hover {
 	color: #880000;
 }
+
 button a {
+	padding:5px 0;
 	color:#000 !important;
 	text-decoration:none;
 }

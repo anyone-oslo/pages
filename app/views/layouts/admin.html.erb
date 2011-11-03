@@ -71,12 +71,15 @@
 				<h3><%= @page_description || @page_title %></h3>
 				<% if @content_tabs %>
 					<ul id="content-tabs">
-						<%= @content_tabs.map do |t|
-							"<li id=\"content-tab-link-#{t[:key]}\">" + 
-							link_to( t[:name], :anchor => "#{t[:key]}" ) + 
-							"</li>"
-							end.join 
-						%>
+						<% @content_tabs.map do |t| %>
+							<li id="content-tab-link-<%= t[:key] %>">
+								<% if t[:options][:disabled] == true %>
+									<%= t[:name] %>
+								<% else %>
+									<%= link_to(t[:name], :anchor => "#{t[:key]}") %>
+								<% end %>
+							</li>
+						<% end %>
 					</ul>
 				<% end %>
 			</div>
