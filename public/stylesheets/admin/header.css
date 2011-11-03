@@ -21,24 +21,24 @@
 #header #logo {
 	position:        absolute;
 	z-index:         2;
-	top:             0;
-	left:            0;
-	width:           118px;
-	height:          54px;
+	top:             11px;
+	left:            16px;
+	width:           21px;
+	height:          27px;
 }
 #header #site-name {
 	color:           #fff;
 	position:        absolute;
-	top:             16px;
-	left:            110px;
+	top:             15px;
+	left:            52px;
 }
 #header #site-name h1 {
 	margin:          0;
 	padding:         0;
 	font-family:     Arial, Helvetica, sans-serif;
 	display:         inline;
-	font-size:       22px;
-	font-weight:     bold;
+	font-size:       20px;
+	font-weight:     normal;
 }
 #header .user {
 	position:        absolute;
@@ -77,9 +77,9 @@
 	font-size:       11px;
 }
 #header .tabs a, #header .tabs a:visited {
-	background:      #363636;
-	border-left:     1px solid #262626;
-	border-right:    1px solid #262626;
+	background:      #484848;
+	border-left:     1px solid #383838;
+	border-right:    1px solid #383838;
 	color:           #fff;
 	display:         block;
 	float:           left;
