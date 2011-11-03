@@ -4,7 +4,7 @@
 %>
 
 <% sidebar do %>
-	<h2>Create new</h2>
+	<h2>New page</h2>
 	<p>
 		<% form_tag new_admin_pages_path, :method => :get do %>
 			In <%= select_tag 'parent', options_from_collection_for_select(@root_pages, 'id', 'name') %>
@@ -19,9 +19,10 @@
 		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator) %></p>
 	<% end %>
 	<% if @root_pages.length > 1 %>
-		<h2>Site structure</h2>
+		<h2>Structure</h2>
 		<p><button><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></button></p>
 	<% end %>
+	<!-- What shall with do with a drunken sailor?
 	<h2>Categories</h2>
 	<% if @categories && @categories.length > 0 %>
 		<ul>
@@ -42,6 +43,7 @@
 	<div id="new-category-button">
 		<p><%= button_to_function "Add a new category", 'toggleNewCategory();' %></p>
 	</div>
+	-->
 <% end %>
 
 <div class="content">

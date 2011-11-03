@@ -5,7 +5,7 @@
 %>
 
 <% sidebar do %>
-	<h2>Create new</h2>
+	<h2>New article</h2>
 	<p>
 		<% form_tag new_news_admin_pages_path, :method => :get do %>
 			In <%= select_tag 'parent', options_from_collection_for_select(@news_pages, 'id', 'name') %>
