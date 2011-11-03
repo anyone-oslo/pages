@@ -76,41 +76,30 @@
 
 	<%# #### ADDITIONAL IMAGES #### %>
 	<% if @page.template_config.value(:images) %>
-		<% content_tab "Additional images" do %>
-			<p>
-				<%= button_to_function "Upload images", "showAdditionalImageModal();" %>
-			</p>
-			<% unless @page.images.empty? %>
+		<% content_tab "Images" do %>
+			<% if @page.page_images.any? %>
 				<table class="list images_list">
 					<tr>
 						<th>Image</th>
 						<!--<th>Title</th>-->
 						<th>Caption</th>
+						<th>Primary</th>
 						<th></th>
 					</tr>
-					<% @page.images.each do |image| %><tr>
-						<td class="thumbnail"><%= editable_dynamic_image_tag image, :size => '100x100' %></td>
-						<!--<td><strong><%= image.name %></strong></td>-->
+					<% @page.page_images.each do |pi| %><tr>
+						<td class="thumbnail"><%= editable_dynamic_image_tag pi.image, :size => '100x100' %></td>
+						<!--<td><strong><%= pi.image.name %></strong></td>-->
 						<td>
-							<div id="image-caption-<%= image.id %>"><%= ( image.byline? ) ? image.byline : "<em>No caption</em>" %></div>
-							<script type="text/javascript">
-								new Ajax.InPlaceEditor(
-									'image-caption-'+<%= image.id %>, 
-									"<%= url_for(:controller => 'admin/pages', :action => 'update_image_caption', :id => @page) %>",
-									{
-										callback: function(form, value) { return 'image_id='+<%= image.id %>+'&caption=' + encodeURIComponent(value) }
-									}
-								);
-							</script>
+							<div id="image-caption-<%= pi.image.id %>"><%= ( pi.image.byline? ) ? pi.image.byline : "<em>No caption</em>" %></div>
 						</td>
 						<td>
-							<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => image, :language => @language, :show_tab => 'additional images' ), :class => :delete, :confirm => 'Are you sure?' %>
+							<%= check_box_tag "page-image-primary-#{pi.id}", '1', pi.primary?, :disabled => true %>
+						</td>
+						<td>
+							<%# link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => image, :language => @language, :show_tab => 'additional images' ), :class => :delete, :confirm => 'Are you sure?' %>
 						</td>
 					</tr><% end %>
 				</table>
-				<p>
-					Click on the caption text to edit it.
-				</p>
 			<% else %>
 				<p>No images added yet.</p>
 			<% end %>
@@ -218,46 +207,6 @@
 
 <% end %>
 
-<%# #### UPLOAD IMAGE #### %>
-<div id="new-image">
-	<h2>Upload images</h2>
-	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
-
-		<table>
-			<tr>
-				<th>File</th>
-				<th>Caption</th>
-			</tr>
-			<% 10.times do |i| %>
-				<tr>
-					<td>
-						<%= file_field_tag("images[#{i}][imagefile]") %>
-					</td>
-					<td>
-						<%= text_field_tag("images[#{i}][byline]", '', :size => 48) %>
-					</td>
-				</tr>
-			<% end %>
-		</table>
-
-		<% if false %>
-		<%= labelled_field f.file_field( :imagefile ), "File", 
-			:errors      => @new_image.errors[:imagefile]
-		%>
-		<%# labelled_field f.text_field( :name, :size => 48 ), "Title", 
-			:errors      => @new_image.errors[:name]
-		%>
-		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption", 
-			:errors      => @new_image.errors[:byline]
-		%>
-		<% end %>
-		<p>
-			<%= submit_tag "Upload" %> or 
-			<%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
-		</p>
-	<% end %>
-</div>
-
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>
 	<div id="new-file" class="page_new_file">
@@ -278,3 +227,13 @@
 		<% end %>
 	</div>
 <% end %>
+
+
+<div style="margin: 40px; padding: 20px; border: 1px solid #ccc;">
+<h3>Upload image form</h3>
+<% form_for @page.page_images.new, :url => admin_page_images_path(@language, @page), :html => {:multipart => true} do |f| %>
+	<%= labelled_field f.file_field(:image), 'Image file' %>
+	<p><%= f.check_box :primary %> Make primary image</p>
+	<p><%= submit_tag 'Upload' %></p>
+<% end %>
+</div>
