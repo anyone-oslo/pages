@@ -19,6 +19,7 @@ set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
 set :cold_deploy,       false
+set :skip_services,     false
 set :use_monit,         true unless variables.keys.include?(:use_monit)
 
 set :monit_delayed_job, "#{application}_delayed_job"
@@ -49,6 +50,11 @@ task :quick, :roles => [:web] do
 	set :perform_verify_migrations, false
 	set :flush_cache,       false
 	set :reindex_sphinx,    false
+end
+
+desc "Deploy without services"
+task :without_services, :roles => [:web] do
+	set :skip_services, true
 end
 
 namespace :deploy do

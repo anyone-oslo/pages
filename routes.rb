@@ -94,6 +94,8 @@ connect 'admin/:language/pages/reorder/:id/:direction',       :controller => 'ad
 admin_default 'admin',                                   :controller => 'admin/admin', :action => 'redirect'
 
 
+connect 'xml/:language/:action.:format', :controller => 'xml'
+
 connect 'feeds/:action/:language/:slug/index.xml',  :controller => 'feeds'
 connect 'feeds/:action/:language/:slug/:tag.xml',   :controller => 'feeds'
 

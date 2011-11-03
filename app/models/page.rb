@@ -883,6 +883,11 @@ class Page < ActiveRecord::Base
 		end
 	end
 	
+	# Does this page have images?
+	def images?
+		self.images.count > 0
+	end
+
 	# Is this page published?
 	def published?
 		(self.status == 2 && !self.autopublish?) ? true : false

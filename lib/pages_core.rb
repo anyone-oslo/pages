@@ -1,3 +1,12 @@
+require 'digest/sha1'
+require 'iconv'
+require 'find'
+require 'open-uri'
+
+# Included in vendor/plugins/pages/lib
+[:acts_as_taggable, :language, :mumbojumbo, :enumerable, :feed_builder, :country_select].each do |lib|
+	require File.join(File.dirname(__FILE__), lib.to_s)
+end
 
 # Load ./pages_core/*.rb
 Dir.entries(File.join(File.dirname(__FILE__), 'pages_core')).select{|f| f =~ /\.rb$/}.map{|f| File.basename(f, '.*')}.each do |lib|
@@ -9,20 +18,6 @@ end
 module PagesCore
 	class << self
 		def init!
-			# Verify that we've been properly bootstrapped
-			unless PagesCore.const_defined?('BOOTSTRAPPED') && PagesCore::BOOTSTRAPPED
-				puts "---------------------------------------------------------------------------------------------------------------"
-				puts "PAGES BOOTSTRAPPER NOT LOADED!"
-				puts "Please run \"rake pages:update\" to patch config/environment.rb, or add the following line yourself:"
-				puts "\n# Bootstrap Pages"
-				puts "require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')"
-				puts "---------------------------------------------------------------------------------------------------------------"
-				raise "Pages not bootstrapped"
-			end
-			
-			# Load dependencies
-			PagesCore::Dependencies.load
-
 			# Initialize MumboJumbo
 			MumboJumbo.load_languages!
 			MumboJumbo.translators << PagesCore::StringTranslator
@@ -89,36 +84,4 @@ module PagesCore
 		alias :config :configuration
 	end
 	
-	#config :localizations,          false
-	#config :text_filter,            'textile'
-	#config :page_image_is_linkable, false
-	#config :page_additional_images, false
-	#config :page_additional_files,  false
-    #config :newsletter_template,    false
-	#config :newsletter_image,       false
-	#config :page_cache,             false
-	
-	#config :comment_notifications,  [:author, 'your@email.com']
-	
-end
-
-module ActionController
-
-	# Monkey patch for fixing file upload breakage
-	class CgiResponse  
-		def out_with_espipe(*args)  
-			begin  
-				out_without_espipe(*args)  
-			rescue Errno::ESPIPE => exception  
-				File.open(File.join(File.dirname(__FILE__), '../../../../log/cgiresponse.log'), 'a'){|fh| fh.write(exception.to_s)} rescue nil
-				begin  
-					message    = exception.to_s + "\r\n" + exception.backtrace.join("\r\n")
-					RAILS_DEFAULT_LOGGER.fatal(message)  
-				rescue Exception => e
-					$stderr.write("Exception #{e.to_s} in handling exception #{exception.to_s}")  
-				end  
-			end  
-		end  
-		alias_method_chain :out, :espipe  
-	end
 end

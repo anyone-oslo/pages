@@ -17,26 +17,3 @@
 		<button type="submit">Save changes</button>
 	</p>
 <% end -%>
-
-<div class="content">
-	<h2>Statistics</h2>
-	<table>
-		<tr>
-			<th>Storage used</th>
-			<td><%= number_to_human_size @database_size %></td>
-			<td><%= number_to_percentage (@database_size.to_f/@plan[:storage].to_f*100), :precision => 2 %></td>
-		</tr>
-		<tr>
-			<th>Bandwidth used this month</th>
-			<td><%= number_to_human_size @stats.bandwidth %></td>
-			<td><%= number_to_percentage (@stats.bandwidth.to_f/@plan[:bandwidth].to_f*100), :precision => 2 %></td>
-		</tr>
-		<tr>
-			<th>Estimated bandwidth usage</th>
-			<td><%= number_to_human_size @stats.projected_bandwidth %></td>
-			<td><%= number_to_percentage (@stats.projected_bandwidth.to_f/@plan[:bandwidth].to_f*100), :precision => 2 %></td>
-		</tr>
-	</table>
-
-</div>
-
