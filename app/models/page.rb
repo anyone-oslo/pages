@@ -7,7 +7,8 @@ class Page < ActiveRecord::Base
 	has_and_belongs_to_many :categories, :join_table => :pages_categories
 
 	belongs_to_image        :image
-	has_and_belongs_to_many :images
+	has_many :page_images,  :order => 'position ASC'
+	has_many :images,       :through => :page_images, :order => 'position ASC', :conditions => '`page_images`.`primary` = 0'
 
 	has_many :comments, :class_name => 'PageComment', :dependent => :destroy
 	has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
@@ -59,6 +60,22 @@ class Page < ActiveRecord::Base
 			end
 		end
 		page.delta = true
+	end
+	
+	# Update primary image status
+	after_save do |page|
+		if page.image_id_changed?
+			if page.image_id?
+				# Update existing image
+				if page_image = page.page_images.first(:conditions => {:image_id => page.image_id})
+					page_image.update_attribute(:primary, true)
+					
+				# ..or create a new one
+				else
+					page.page_images.create(:image_id => page.image_id, :primary => true)
+				end
+			end
+		end
 	end
 	
 	define_index do
@@ -866,6 +883,11 @@ class Page < ActiveRecord::Base
 		end
 	end
 	
+	# Does this page have images?
+	def images?
+		self.images.count > 0
+	end
+
 	# Is this page published?
 	def published?
 		(self.status == 2 && !self.autopublish?) ? true : false

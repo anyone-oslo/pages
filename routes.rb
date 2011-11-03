@@ -64,6 +64,11 @@ with_options :path_prefix => '/admin', :name_prefix => 'admin_' do |admin|
 		}
 	)
 	admin.resources(
+		:page_images,
+		:path_prefix => 'admin/:language/pages/:page_id',
+		:controller => 'admin/page_images'
+	)
+	admin.resources(
 		:page_files,
 		:path_prefix => 'admin/:language/pages/:page_id',
 		:controller => 'admin/page_files', 
@@ -88,6 +93,8 @@ connect 'admin/:language/pages/reorder/:id/:direction',       :controller => 'ad
 
 admin_default 'admin',                                   :controller => 'admin/admin', :action => 'redirect'
 
+
+connect 'xml/:language/:action.:format', :controller => 'xml'
 
 connect 'feeds/:action/:language/:slug/index.xml',  :controller => 'feeds'
 connect 'feeds/:action/:language/:slug/:tag.xml',   :controller => 'feeds'

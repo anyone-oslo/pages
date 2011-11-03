@@ -1,6 +1,6 @@
 module PagesCore
 	module ArrayExtensions
-		def move_item( index, movement )
+		def move_item(index, movement)
 			new_index = index + movement
 			new_index = 0 if new_index < 0
 			new_index = (self.length - 1) if new_index >= self.length
@@ -10,4 +10,4 @@ module PagesCore
 	end
 end
 
-Array.send( :include, PagesCore::ArrayExtensions )
+Array.send(:include, PagesCore::ArrayExtensions)

@@ -4,6 +4,60 @@ require 'open-uri'
 namespace :pages do
 	namespace :update do
 
+		desc "Fix inheritance"
+		task :fix_inheritance do
+			def find_files(file_expression, options={})
+				paths = []
+				Find.find(".") do |path|
+					gsubbed_path = path.gsub(/^\.?\/?/,'')
+					Find.prune if options[:except] && gsubbed_path =~ options[:except]
+					if gsubbed_path =~ file_expression && !(path =~ /\.git/)
+						paths << path unless File.directory?(path)
+					end
+				end
+				paths
+			end
+			
+			# Update controllers
+			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
+				plugin_controller = File.join('vendor/plugins/pages', controller)
+				if File.exists?(plugin_controller)
+					class_definition = File.read(plugin_controller).split(/\n/).first
+					file_content = File.read(controller)
+					patched_file_content = file_content.gsub(/class [\w:]+Controller( < [\w:]+)/, class_definition)
+					unless patched_file_content == file_content
+						puts "Patching file #{controller}.."
+						File.open(controller, 'w') {|fh| fh.write(patched_file_content)}
+					end
+				end
+			end
+			
+			# Update helpers
+			find_files(%r%^app/helpers/.*\.rb%).each do |helper|
+				plugin_helper = File.join('vendor/plugins/pages', helper)
+				if File.exists?(plugin_helper)
+					helper_name = helper.gsub(/.*\/app\/helpers\//, '').gsub(/\.rb$/, '').camelize
+					includes = File.readlines(plugin_helper).select{|l| l =~ /^\s*include /}
+					includes.map!{|i| i.match(/\s*include\s+([\w\d:]+)/)[1]}
+					file_content = File.read(helper)
+					patched_file_content = file_content.dup
+					includes.reverse.each do |include_module|
+						unless file_content =~ Regexp.new('include\s+' + include_module)
+							patched_file_content.gsub!(Regexp.new('module\s+' + helper_name)) do
+								"module #{helper_name}\n\tinclude #{include_module}"
+							end
+						end
+					end
+
+					unless patched_file_content == file_content
+						puts "Patching file #{helper}.."
+						File.open(helper, 'w') {|fh| fh.write(patched_file_content)}
+					end
+				end
+			end
+			
+		end
+
 		desc "Patch files"
 		task :files do
 			def find_files(file_expression, options={})
@@ -136,6 +190,17 @@ namespace :pages do
 				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages_portfolio\" WHERE plugin_name = \"backstage_portfolio\"")
 				Rake::Task["db:migrate:upgrade_plugin_migrations"].execute
 			end
+			if ActiveRecord::Base.connection.table_exists?("schema_migrations")
+				updated_versions = []
+				ActiveRecord::Base.connection.select_values("SELECT * FROM schema_migrations").each do |version|
+					if version =~ /^[\d]+\-backstage$/
+						new_version = version.gsub('backstage', 'pages')
+						updated_versions << new_version
+						ActiveRecord::Base.connection.update_sql("UPDATE schema_migrations SET version = \"#{new_version}\" WHERE version = \"#{version}\"")
+					end
+				end
+				puts "* #{updated_versions.length} plugin migrations renamed" if updated_versions.length > 0
+			end
 		end
 		
 		desc "Update gems"
@@ -191,7 +256,7 @@ namespace :pages do
 		end
 		
 		desc "Run all update tasks"
-		task :all => ["update:files", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
+		task :all => ["update:files", "update:fix_inheritance", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
 	end 
 
 	desc "Automated updates for newest version"
