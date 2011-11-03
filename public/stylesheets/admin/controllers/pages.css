@@ -40,11 +40,6 @@
 .pagelist .page a.page_name:hover {
 	text-decoration: underline;
 }
-
-#reorder_link {
-	float: right;
-	margin-top: 20px;
-}
 .drag_handle {
 	float: left;
 	vertical-align: middle;

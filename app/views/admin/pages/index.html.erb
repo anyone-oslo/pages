@@ -1,17 +1,27 @@
 <%
 	page_title "Pages"
 	page_description "Viewing pages"
-	if PagesCore.config.localizations?
-		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
-	end
 %>
 
 <% sidebar do %>
-	<h2>Adding pages</h2>
+	<h2>Create new</h2>
 	<p>
-		Click here to create a new page at the root level.
-		<%= link_to "New page", new_admin_page_path( :language => @language ) %>
+		<% form_tag new_admin_pages_path, :method => :get do %>
+			In <%= select_tag 'parent', options_from_collection_for_select(@root_pages, 'id', 'name') %>
+			<%= submit_tag "Go", :name => nil %>
+		<% end %>
 	</p>
+	<p>
+		You can also <%= link_to "create a new root page", new_admin_page_path(:language => @language) %>.
+	</p>
+	<% if PagesCore.config.localizations? %>
+		<h2>Language</h2>
+		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator) %></p>
+	<% end %>
+	<% if @root_pages.length > 1 %>
+		<h2>Site structure</h2>
+		<p><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></p>
+	<% end %>
 	<h2>Categories</h2>
 	<% if @categories && @categories.length > 0 %>
 		<ul>
@@ -22,25 +32,24 @@
 	<% else %>
 		<p>No categories added yet.</p>
 	<% end %>
-		<div id="new-category">
-			<% form_for([:admin, Category.new]) do |f| %>
-				<p>
-					<label><strong>New category</strong></label>
-					<%= f.text_field :name %>
-					<%= submit_tag "Save" %>
-				</p>
-			<% end %>
-		</div>
-		<div id="new-category-button">
-			<p><%= button_to_function "Add a new category", 'toggleNewCategory();' %></p>
-		</div>
+	<div id="new-category">
+		<% form_for([:admin, Category.new]) do |f| %>
+			<p>
+				<label><strong>New category</strong></label>
+				<%= f.text_field :name %>
+				<%= submit_tag "Save" %>
+			</p>
+		<% end %>
+	</div>
+	<div id="new-category-button">
+		<p><%= button_to_function "Add a new category", 'toggleNewCategory();' %></p>
+	</div>
 <% end %>
 
 <div class="content">
 	<% if @root_pages.length < 1 -%>
 		<p>No pages found</p>
 	<% else -%>
-		<%= link_to "Reorder pages", '#', :id => 'reorder_link' %>
 		<ul class="pagelist reorderable">
 			<% @root_pages.each do |page| -%>
 				<%= render :partial => "pagelisting", :locals => { :page => page } %>

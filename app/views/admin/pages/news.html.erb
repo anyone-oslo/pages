@@ -2,9 +2,6 @@
 	month_names = %w{January February March April May June July August September October November December}
 	page_title "News"
 	page_description "<em>#{month_names[@month-1]} #{@year}</em>"
-	if PagesCore.config.localizations?
-		page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_admin_pages_path( :language => l ) ) }.join( link_separator ) 
-	end
 %>
 
 <% sidebar do %>
@@ -15,6 +12,10 @@
 			<%= submit_tag "Go", :name => nil %>
 		<% end %>
 	</p>
+	<% if PagesCore.config.localizations? %>
+		<h2>Language</h2>
+		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator) %></p>
+	<% end %>
 	<% @archive_count.reverse.each do |year, months| %>
 		<h2><%= year %><%= ": #{@category.name}" if @category %></h2>
 		<ul>
