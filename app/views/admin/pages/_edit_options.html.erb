@@ -5,12 +5,12 @@
 	<%= labelled_field (
 			f.date_select('published_at') +
 			'<br />' +
-			f.time_select('published_at', :minute_step => 15)
+			f.time_select('published_at')
 		), 
 		"Date",
 		:errors      => @page.errors[:published_at]
 	%>
-	<p class="autopublish_notice">This page will publish automatically later</p>
+	<p class="autopublish_notice">This page will publish later</p>
 </div>
 
 <%= labelled_field (
@@ -37,19 +37,20 @@
 
 	<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
 
-	<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
-		:errors      => @page.errors[:content_order]
-	%>
-	<p class="field">
-		<label>Options</label>
-		<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
-		<%= f.check_box(:news_page) %> This is a news page<br />
-		<% if @page.template_config.value(:comments) %>
-			<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
-		<% end %>
-	</p>
+	<div class="field">
+		<label>Subpages</label>
+		Sort <%= f.select(:content_order, [ ['manually','position'], ['with the newest first','published_at DESC'] ] ) %><br />
+		<%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
+		<%= f.check_box(:news_page) %> Show in News<br />
+	</div>
+	<% if @page.template_config.value(:comments) %>
+		<p class="field">
+			<label>Comments</label>
+			<%= f.check_box(:comments_allowed) %> Enabled<br />
+		</p>
+	<% end %>
 	<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
-	<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
+	<%= labelled_field f.text_area(:redirect_to, :rows => 3), "Redirect", 
 		:errors      => @page.errors[:redirect_to]
 	%>
 	<p class="field">

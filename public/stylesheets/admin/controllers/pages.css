@@ -14,7 +14,7 @@
 }
 .pagelist .page_listing {
 	border: 1px solid transparent;
-	padding: 3px 8px !important;
+	padding: 3px 8px 2px 8px !important;
 }
 .pagelist ul {
 	border-left: 1px dotted #ccc !important;
@@ -30,12 +30,18 @@
 	background: #ffd;
 	border: 1px solid #dda;
 }
+.pagelist .page .status {
+	font-weight: normal;
+}
 .pagelist .page:hover .status {
 	display: none;
 }
 .pagelist .page a.page_name, .pagelist .page a.page_name:visited {
 	text-decoration: none;
 	color: #222;
+}
+.pagelist .hidden.page a.page_name {
+	color: #666;
 }
 .pagelist .page a.page_name:hover {
 	text-decoration: underline;

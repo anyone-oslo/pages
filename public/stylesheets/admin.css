@@ -52,7 +52,8 @@ body html {
 #main #page-description h3 {
 	margin: 0;
 	padding: 0;
-	font-size: 12px;
+	font-size: 13px;
+	text-shadow: #E9F6FF 1px 1px 1px;
 }
 #page-description .links {
 	float: right;
@@ -67,8 +68,8 @@ body html {
 
 
 body, td, th {
-	font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif;
-	font-size: 11px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -173,7 +174,7 @@ div.taskbar div.taskbar-group {
 
 
 .sidebar {
-	font-family: Lucida Grande;
+	font-family: Helvetica, Arial, sans-serif;
 	width: 280px;
 	background: #F7F0DA;
 	float: right;
@@ -190,7 +191,7 @@ div.taskbar div.taskbar-group {
 }
 .sidebar h2 {
 	font-size: 1.2em;
-	font-family: Lucida Grande, Lucida Sans, Lucida Sans Unicode;
+	font-family: Helvetica, Arial, sans-serif;
 	font-weight: normal;
 	color: #fff;
 	background: #4D4745;
@@ -371,9 +372,9 @@ ul.pagelist .hover {
 }
 
 li .actions {
-	font-weight: bold;
+	font-weight: normal;
 	display:  inline;
-	font-size: 11px;
+	font-size: 12px;
 	color: #aaa;
 	margin-top: 1px;
 }
