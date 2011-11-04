@@ -98,6 +98,19 @@ Admin.PagesController = {
 
 		(function($){
 			
+			var replicateFormElement = function() {
+				var newValue = this;
+				$('#page-form').find('[name="' + newValue.name + '"]').each(function () {
+					if (newValue.type == 'checkbox') {
+						$(this).attr('checked', $(newValue).attr('checked'));
+					} else {
+						$(this).val($(newValue).val());
+					}
+				});
+			}
+			
+			$('#page-form-sidebar').find('input,textarea,select').change(replicateFormElement);
+			
 			$('#new-image').hide();
 
 			window.showAdditionalImageModal = function(){

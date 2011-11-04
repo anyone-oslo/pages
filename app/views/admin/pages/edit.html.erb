@@ -1,6 +1,10 @@
 <%
 	page_title       "Editing “" + @page.name.to_s + "”"
 	page_description "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@language, page))}.join(" &raquo; ")
+
+	if PagesCore.config.localizations?
+		page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator)
+	end
 %>
 
 
@@ -8,14 +12,25 @@
 <%# #### SIDEBAR ########################################################### %>
 
 <% sidebar do %>
-	<h2>About this page</h2>
-	<p>
-		This page was created by <%= link_to @page.author.realname, [:admin, @page.author] %>
-    and was last modified <%= time_ago_in_words @page.updated_at %> ago.
-	</p>
-	<% if PagesCore.config.localizations? %>
-		<h2>Language</h2>
-		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator) %></p>
+	<% form_for 'page', @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
+		<%= labelled_field (
+				f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
+			), 
+			"Published",
+			:errors      => @page.errors[:published_at]
+		%>
+		<p class="field">
+			<label>Options</label>
+			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
+			<%= f.check_box(:news_page) %> This is a news page<br />
+			<% if @page.template_config.value(:comments) %>
+				<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
+			<% end %>
+			<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
+				:errors      => @page.errors[:redirect_to]
+			%>
+		</p>
+		<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
 	<% end %>
 <% end %>
 

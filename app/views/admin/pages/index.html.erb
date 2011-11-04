@@ -1,6 +1,10 @@
 <%
 	page_title "Pages"
 	page_description "Viewing pages"
+
+	if PagesCore.config.localizations?
+		page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator)
+	end
 %>
 
 <% sidebar do %>
@@ -14,10 +18,6 @@
 	<p>
 		You can also <%= link_to "create a new root page", new_admin_page_path(:language => @language) %>.
 	</p>
-	<% if PagesCore.config.localizations? %>
-		<h2>Language</h2>
-		<p><%= @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator) %></p>
-	<% end %>
 	<% if @root_pages.length > 1 %>
 		<h2>Structure</h2>
 		<p><button><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></button></p>
