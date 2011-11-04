@@ -40,6 +40,10 @@
 	font-size:       20px;
 	font-weight:     normal;
 }
+#site-name h1 a {
+	font-weight:bold;
+	text-decoration:none;
+}
 #header .user {
 	position:        absolute;
 	top:             20px;
@@ -106,6 +110,7 @@
 	margin-bottom: 0;
 }
 #content-tabs li {
+	color:hsla(0,0%,0%,0.25);
 	display: inline;
 	background: transparent;
 	padding: 6px 17px;

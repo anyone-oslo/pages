@@ -871,7 +871,7 @@ Object.extend(Ajax.InPlaceEditor, {
     ajaxOptions: { },
     autoRows: 3,                                // Use when multi-line w/ rows == 1
     cancelControl: 'link',                      // 'link'|'button'|false
-    cancelText: 'cancel',
+    cancelText: 'Cancel',
     clickToEditText: 'Click to edit',
     externalControl: null,                      // id|elt
     externalControlOnly: false,
@@ -885,7 +885,7 @@ Object.extend(Ajax.InPlaceEditor, {
     loadingClassName: 'inplaceeditor-loading',
     loadingText: 'Loading...',
     okControl: 'button',                        // 'link'|'button'|false
-    okText: 'ok',
+    okText: 'Ok',
     paramName: 'value',
     rows: 1,                                    // If 1 and multi-line, uses autoRows
     savingClassName: 'inplaceeditor-saving',
