@@ -213,7 +213,6 @@ namespace :pages do
 						params.delete(:youtube_id)
 					end
 
-					params[:has_been_published] = true
 					params[:published_at] = params[:created_at]
 
 					post[:page].attributes = params

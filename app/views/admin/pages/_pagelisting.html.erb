@@ -19,7 +19,7 @@
 			<em>
 				<%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'page_name') %>
 				<small class="status">
-					(<%= (page.autopublish?) ? "Autopublish at "+page.autopublish_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)</small>
+					(<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)</small>
 			</em>
 		<% end %>
 		<%= image_tag( "feed-icon-14x14.png", :size=>"10x10", :plugin => :pages ) if page.feed_enabled? %>

@@ -21,6 +21,7 @@ class Page < ActiveRecord::Base
 	
 	# Page status labels
 	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
+	AUTOPUBLISH_FUZZINESS = 5.minutes
 	
 	@@available_templates_cached = nil
 	
@@ -34,16 +35,9 @@ class Page < ActiveRecord::Base
 	attr_accessor :image_url, :image_description
 
 	before_save do |page| 
-		if page.autopublish? && !page.autopublish_at?
-			page.autopublish = false
-		end
-		page.published_at = Time.now unless page.published_at?
-		if page.respond_to?('has_been_published?') # Stupid check for stupid migrations
-			if page.published? && !page.has_been_published?
-				page.published_at = Time.now
-				page.has_been_published = true
-			end
-		end
+		page.published_at ||= Time.now
+		page.autopublish = true if page.published_at > (Time.now + AUTOPUBLISH_FUZZINESS)
+
 		if page.image_url && !page.image_url.blank?
 			temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')
 			target_filename = page.image_url.split("/").last
@@ -110,9 +104,9 @@ class Page < ActiveRecord::Base
 
 		# Finds pages due for auto publishing and publishes them.
 		def autopublish!(options={})
-			options[:fuzziness] ||= 1.minute
+			options[:fuzziness] ||= AUTOPUBLISH_FUZZINESS
 			publish_timestamp = Time.now + options[:fuzziness]
-			pages = self.find(:all, :conditions => ['autopublish = 1 AND autopublish_at < ?', publish_timestamp])
+			pages = self.find(:all, :conditions => ['autopublish = 1 AND published_at < ?', publish_timestamp])
 			pages.each do |p|
 				p.update_attribute(:autopublish, false)
 			end

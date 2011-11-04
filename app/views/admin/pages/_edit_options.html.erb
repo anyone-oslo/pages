@@ -2,16 +2,14 @@
 	:errors      => @page.errors[:status]
 %>
 <div class="published_date">
-	<% if @page.has_been_published? %>
-		<%= labelled_field (
-				f.date_select('published_at') +
-				'<br />' +
-				f.time_select('published_at', :minute_step => 15)
-			), 
-			"Date",
-			:errors      => @page.errors[:published_at]
-		%>
-	<% end %>
+	<%= labelled_field (
+			f.date_select('published_at') +
+			'<br />' +
+			f.time_select('published_at', :minute_step => 15)
+		), 
+		"Date",
+		:errors      => @page.errors[:published_at]
+	%>
 	<p class="autopublish_notice">This page will publish automatically later</p>
 </div>
 
