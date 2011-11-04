@@ -59,7 +59,7 @@
 							</script>
 						</td>
 						<td>
-							<%= check_box_tag "page-image-primary-#{pi.id}", '1', pi.primary? %>
+							<%= radio_button_tag "primary", pi.id, pi.primary? %>
 						</td>
 						<td>
 							<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => pi.image, :language => @language, :show_tab => 'images' ), :class => :delete, :confirm => 'Are you sure?' %>
