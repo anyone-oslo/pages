@@ -1,0 +1,66 @@
+<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status", 
+	:errors      => @page.errors[:status]
+%>
+<div class="published_date">
+	<% if @page.has_been_published? %>
+		<%= labelled_field (
+				f.date_select('published_at') +
+				'<br />' +
+				f.time_select('published_at', :minute_step => 15)
+			), 
+			"Date",
+			:errors      => @page.errors[:published_at]
+		%>
+	<% end %>
+	<p class="autopublish_notice">This page will publish automatically later</p>
+</div>
+
+<%= labelled_field (
+		f.select(:user_id, @authors.map{|a| [a.realname, a.id]})
+	),
+	"Author", 
+	:errors => @page.errors[:user_id]
+%>
+
+<% if @categories.length > 0 %>
+	<div class="field">
+		<label>Categories</label>
+		<% @categories.each do |category| %>
+			<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %>
+			<%= category.name %><br />
+		<% end %>
+	</div>
+<% end %>
+
+
+<%= link_to_function 'Advanced options', 'return false;', :class => 'advanced_toggle' %>
+
+<div class="advanced_options">
+
+	<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
+
+	<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
+		:errors      => @page.errors[:content_order]
+	%>
+	<p class="field">
+		<label>Options</label>
+		<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
+		<%= f.check_box(:news_page) %> This is a news page<br />
+		<% if @page.template_config.value(:comments) %>
+			<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
+		<% end %>
+	</p>
+	<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
+	<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
+		:errors      => @page.errors[:redirect_to]
+	%>
+	<p class="field">
+		<label>Import subpages</label>
+		<%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
+	</p>
+
+</div>
+
+<!--
+<p>This page was last modified <%= time_ago_in_words @page.updated_at %> ago.</p>
+-->

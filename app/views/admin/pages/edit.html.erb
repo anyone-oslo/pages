@@ -13,24 +13,7 @@
 
 <% sidebar do %>
 	<% form_for 'page', @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
-		<%= labelled_field (
-				f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
-			), 
-			"Published",
-			:errors      => @page.errors[:published_at]
-		%>
-		<p class="field">
-			<label>Options</label>
-			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
-			<%= f.check_box(:news_page) %> This is a news page<br />
-			<% if @page.template_config.value(:comments) %>
-				<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
-			<% end %>
-			<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
-				:errors      => @page.errors[:redirect_to]
-			%>
-		</p>
-		<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
+		<%= render :partial => 'edit_options', :locals => {:f => f} %>
 	<% end %>
 <% end %>
 
@@ -40,9 +23,13 @@
 
 <% form_for 'page', @page, :url => admin_page_url(@language, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
 
+	<div class="hiddenOptions">
+		<%= render :partial => 'edit_options', :locals => {:f => f} %>
+	</div>
+
 	<%# #### CONTENT #### %>
 	<% content_tab "Content" do %>
-		<%= render :partial => 'page_content_form', :locals => {:f => f} %>
+		<%= render :partial => 'edit_content', :locals => {:f => f} %>
 	<% end %>
 
 	<%# #### IMAGES #### %>
@@ -87,23 +74,6 @@
 		<% end %>
 	<% end %>
 
-
-	<%# #### CATEGORIZATION #### %>
-	<% content_tab "Categorization" do %>
-		<h3>Categories</h3>
-		<% if @categories.length > 0 %>
-			<p>
-				<% @categories.each do |category| %>
-					<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %><strong><%= category.name %></strong><br />
-				<% end %>
-			</p>
-		<% else %>
-			<p>No categories have been added yet.</p>
-		<% end %>		
-
-		<h3>Tags</h3>
-		<%= tag_editor_for f, @page %>
-	<% end %>
 
 	<%# #### FILES #### %>
 	<% if @page.template_config.value(:files) %>
@@ -161,49 +131,10 @@
 	<% end %>
 	
 
-	<%# #### ADVANCED OPTIONS #### %>
-	<% content_tab "Options" do %>
-		<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
-		<% if @page.has_been_published? %>
-			<%= labelled_field (
-					f.datetime_select( 'published_at' ) + " &nbsp;by&nbsp; " + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
-				), 
-				"Published",
-				:errors      => @page.errors[:published_at]
-			%>
-		<% else %>
-			<%= labelled_field (
-					'By ' + f.select( 'user_id', @authors.collect { |a| [a.realname, a.id] } )
-				), 
-				"Published"
-			%>
-		<% end %>
-		<%= labelled_field f.select( :content_order, [ ['Manually','position'], ['Newest first','published_at DESC'] ] ), "Order subpages", 
-			:errors      => @page.errors[:content_order]
-		%>
-		<p class="field">
-			<label>Options</label>
-			<%= f.check_box(:feed_enabled) %> Enable RSS feed for items below this page<br />
-			<%= f.check_box(:news_page) %> This is a news page<br />
-			<% if @page.template_config.value(:comments) %>
-				<%= f.check_box(:comments_allowed) %> Comments are allowed on this page<br />			
-			<% end %>
-		</p>
-		<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
-		<%= labelled_field f.text_area( :redirect_to, :rows => 4 ), "Redirect/Link", 
-			:errors      => @page.errors[:redirect_to]
-		%>
-		<p class="field">
-			<label>Import subpages</label>
-			<%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
-		</p>
-	<% end %>
-	
 	<div class="buttons">
 		<button type="button" id="previewButton">Preview</button>
 		<%= pages_button_to "Save changes" %>
 	</div>
-
 
 <% end %>
 

@@ -80,6 +80,14 @@
 	padding-top: 1px;
 }
 
+.edit_page .hiddenOptions {
+	display: none;
+}
+
+.edit_page .advanced_options {
+	visibility: none;
+}
+
 .edit_page input.text, .edit_page textarea {
 	width: 100%;
 }

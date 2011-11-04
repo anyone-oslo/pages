@@ -2,25 +2,6 @@ Admin.PagesController = {
 	init : function() {
 	},
 
-	applyAutopublishCheck : function() {
-		window.checkAutopublishOptions = function(elmnt) {
-			if($('page_status').value == 2) {
-				Element.show('page_autopublish_field');
-			} else {
-				Element.hide('page_autopublish_field');
-			}
-			if($('page_autopublish').checked) {
-				Element.show($('page_autopublish_options'));
-			} else {
-				Element.hide($('page_autopublish_options'));
-			}
-		}
-		checkAutopublishOptions();
-
-		$('page_autopublish').observe('click', function(e){ checkAutopublishOptions(); });
-		$('page_status').observe('change', function(e){ checkAutopublishOptions(); });
-	},
-
 	index_action : function() {
 
 		(function($){
@@ -82,11 +63,9 @@ Admin.PagesController = {
 	},
 	
 	new_action : function() {
-		this.applyAutopublishCheck();
 	},
 
 	new_news_action : function() {
-		this.applyAutopublishCheck();
 	},
 
 	show_action : function() {
@@ -94,9 +73,45 @@ Admin.PagesController = {
 	},
 
 	edit_action : function() {
-		this.applyAutopublishCheck();
 
 		(function($){
+			
+			$('.advanced_options').hide();
+			$('.advanced_toggle').click(function () {
+				$('.advanced_options').slideToggle();
+			});
+
+			var checkStatus = function () {
+				var pageStatus = $('#page-form-sidebar #page_status').val();
+				if (pageStatus == 2) {
+					$('#page-form-sidebar .published_date').fadeIn();
+				} else {
+					$('#page-form-sidebar .published_date').hide();
+				}
+			}
+			$('#page-form-sidebar #page_status').change(checkStatus);
+			checkStatus();
+			
+			$('.autopublish_notice').hide();
+			var checkDate = function () {
+				
+				var year   = $('#page-form-sidebar select[name="page[published_at(1i)]"]').val();
+				var month  = $('#page-form-sidebar select[name="page[published_at(2i)]"]').val();
+				var day    = $('#page-form-sidebar select[name="page[published_at(3i)]"]').val();
+				var hour   = $('#page-form-sidebar select[name="page[published_at(4i)]"]').val();
+				var minute = $('#page-form-sidebar select[name="page[published_at(5i)]"]').val();
+				
+				var publishDate = new Date(year, (month-1), day, hour, minute);
+				var now = new Date();
+		
+				if (publishDate > now) {
+					$('.autopublish_notice').fadeIn();
+				} else {
+					$('.autopublish_notice').fadeOut();
+				}
+			}
+			$('.published_date').find('select').change(checkDate);
+			checkDate();
 			
 			var replicateFormElement = function() {
 				var newValue = this;
