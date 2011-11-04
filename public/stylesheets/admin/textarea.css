@@ -1,16 +1,18 @@
 textarea.rich {
-	width: 100%;
+	margin-top: 0px;
 }
 .richTextToolbar {  
     position:relative;  
     list-style:none;  
-    border:1px solid #d7d7d7;  
+    border:1px solid #d7d7d7;
+		border-bottom: none;
     background-color:#F6F6F6;  
     margin:0;  
     padding:0;  
+		padding-right: 20px;
+		width: 100%;
     height:18px;  
-    margin-bottom:2px;  
-	width: 100%;
+		margin-bottom: 0px;
 } 
  
 .richTextToolbar li {  
