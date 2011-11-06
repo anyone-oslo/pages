@@ -76,32 +76,30 @@
 
 
 <script type="text/javascript">
-  (function($){
-    
-    window.toggleLoginMode = function(){
-      if ($.cookie('login_mode') === 'openid') {
-        $('#loginOpenID').hide();
-        $('#loginRegular').show();
-        $.cookie('login_mode', 'regular', {expires: 1095});
-      } else {
-        $('#loginOpenID').show();
-        $('#loginRegular').hide();
-        $.cookie('login_mode', 'openid', {expires: 1095});
-      }
-    }
-    
+  window.toggleLoginMode = function(){
     if ($.cookie('login_mode') === 'openid') {
-      $('#loginRegular').hide();
-    } else {
       $('#loginOpenID').hide();
+      $('#loginRegular').show();
+      $.cookie('login_mode', 'regular', {expires: 1095});
+    } else {
+      $('#loginOpenID').show();
+      $('#loginRegular').hide();
+      $.cookie('login_mode', 'openid', {expires: 1095});
     }
+  }
 
-    $('#forgotPasswordForm').hide();
 
-    window.forgot_password = function() {
-      $('#forgotPasswordForm').show();
-      $('#loginForm').hide();
-      return false;
-    }
-  })(jQuery);
+  if ($.cookie('login_mode') === 'openid') {
+    $('#loginRegular').hide();
+  } else {
+    $('#loginOpenID').hide();
+  }
+
+  $('#forgotPasswordForm').hide();
+
+  window.forgot_password = function() {
+    $('#forgotPasswordForm').show();
+    $('#loginForm').hide();
+    return false;
+  }
 </script>

@@ -23,13 +23,12 @@
 
 <script type="text/javascript">
   <% unless @new_subscriber && @new_subscriber.errors.length > 0 %>
-    Element.hide( 'add-subscriber' );
+    $('#add-subscriber').hide();
   <% end %>
   function show_add_subscriber_form() {
-    Element.show( 'add-subscriber' );
+    $('#add-subscriber').show();
   }
-  
-</script>
+  </script>
 
 <h2>Export to CSV</h2>
 <ul>

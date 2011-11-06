@@ -1,4 +1,5 @@
 // Frameworks
+//= require "pages/jquery"
 //= require "pages/underscore"
 //= require "pages/jquery-ui"
 

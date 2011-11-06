@@ -1,12 +1,12 @@
 
-/* Extend jQuery with functions for PUT and DELETE requests. */
+/* Extend $ with functions for PUT and DELETE requests. */
 
 function _ajax_request(url, data, callback, type, method) {
-    if (jQuery.isFunction(data)) {
+    if ($.isFunction(data)) {
         callback = data;
         data = {};
     }
-    return jQuery.ajax({
+    return $.ajax({
         type: method,
         url: url,
         data: data,
@@ -15,7 +15,7 @@ function _ajax_request(url, data, callback, type, method) {
         });
 }
 
-jQuery.extend({
+$.extend({
     put: function(url, data, callback, type) {
         return _ajax_request(url, data, callback, type, 'PUT');
     },
@@ -75,52 +75,52 @@ var Modal = {
   makeContainer: function(){
     var modal = this;
     if(!this.container){
-      jQuery(document.body).append('<div id="modal_container"/>');
-      this.container = jQuery('#modal_container').get(0);
-      jQuery(this.container).hide();
-      jQuery(window).scroll(function(){
+      $(document.body).append('<div id="modal_container"/>');
+      this.container = $('#modal_container').get(0);
+      $(this.container).hide();
+      $(window).scroll(function(){
         modal.position();
       });
-      jQuery(window).resize(function(){
+      $(window).resize(function(){
         modal.position();
       });
     }
   },
   clear: function(){
-    jQuery(this.container).fadeOut(150,function(){
-      jQuery(this).html();
-      jQuery('#modalOverlay').fadeOut(50);
+    $(this.container).fadeOut(150,function(){
+      $(this).html();
+      $('#modalOverlay').fadeOut(50);
     });
   },
   draw: function(options){
     var modal = this;
     this.makeContainer();
-    jQuery(this.container).show();
-    jQuery(this.container).html('<div class="container">'+options.text+'</div>');
+    $(this.container).show();
+    $(this.container).html('<div class="container">'+options.text+'</div>');
     this.position();
-    jQuery(document.body).append('<div id="modalOverlay"/>');
-    jQuery(document.body).trigger('modified');
-    jQuery('#modalOverlay').show().click(function(){Modal.clear();}).css({
-      position: 'absolute', top: 0, left: 0, width: jQuery(document).width()+'px', height: jQuery(document).height()+'px', 'z-index': 19,
+    $(document.body).append('<div id="modalOverlay"/>');
+    $(document.body).trigger('modified');
+    $('#modalOverlay').show().click(function(){Modal.clear();}).css({
+      position: 'absolute', top: 0, left: 0, width: $(document).width()+'px', height: $(document).height()+'px', 'z-index': 19,
       'background-color': '#000000', opacity: 0
     }).animate({
        opacity: 0.6
     }, 100);
   },
   position: function(){
-    var width  = jQuery(this.container).width();
-    var height = jQuery(this.container).height();
-    var scrollTop = jQuery(window).scrollTop();
-    var viewportWidth = window.innerWidth ? window.innerWidth : jQuery(window).width();
-    var viewportHeight = window.innerHeight ? window.innerHeight : jQuery(window).height();
+    var width  = $(this.container).width();
+    var height = $(this.container).height();
+    var scrollTop = $(window).scrollTop();
+    var viewportWidth = window.innerWidth ? window.innerWidth : $(window).width();
+    var viewportHeight = window.innerHeight ? window.innerHeight : $(window).height();
     var left   = Math.round(viewportWidth / 2) - (width / 2);
     var top    = (Math.round(viewportHeight / 2) - (height / 2)) + scrollTop;
     if(top < 5) { top = 5; }
     if(left < 5) { left = 5; }
-    jQuery('#modalOverlay').css({
-      top: 0, left: 0, width: jQuery(document).width()+'px', height: jQuery(document).height()+'px'
+    $('#modalOverlay').css({
+      top: 0, left: 0, width: $(document).width()+'px', height: $(document).height()+'px'
     });
-    jQuery(this.container).css('left', left).css('top', top);
+    $(this.container).css('left', left).css('top', top);
   },
   alert: function(string){
     this.draw({text: string});
@@ -134,18 +134,19 @@ var Modal = {
 }
 
 jQuery.fn.centerOnScreen = function(){
-    var win_width      = jQuery(window).width();
-    var scrollToLeft   = jQuery(window).scrollLeft();
-    var win_height     = jQuery(window).height();
-    var scrollToBottom = jQuery(window).scrollTop();
+  var win_width      = $(window).width();
+  var scrollToLeft   = $(window).scrollLeft();
+  var win_height     = $(window).height();
+  var scrollToBottom = $(window).scrollTop();
   var box_width = 200;
   var box_height = 200;
 
   this.css('position', 'absolute');
   this.css('z-index', (1000+(Math.round(Math.random() * 5000))));
 
-  var x = ((jQuery(window).width() / 2) - (this.width() / 2)) + jQuery(window).scrollLeft();
-  var y  = ((jQuery(window).height() / 2) - (this.height() / 2)) + jQuery(window).scrollTop();
+  var x = (($(window).width() / 2) - (this.width() / 2)) + $(window).scrollLeft();
+  var y  = (($(window).height() / 2) - (this.height() / 2)) + $(window).scrollTop();
+
   if(x < 0) { x = 0; }; if(y < 0) { y = 0; }
 
   this.css({ left: x+"px", top: y+"px" });
@@ -158,7 +159,7 @@ function jRichTextArea(textArea, options){
   this.textArea = textArea;
 
   // Default options
-  settings = jQuery.extend({
+  settings = $.extend({
        className: "richTextToolbar"
   }, options);
 
@@ -169,7 +170,7 @@ function jRichTextArea(textArea, options){
     buttons : new Array(),
     addButton : function(name, callback, options) {
       // Default options
-      settings = jQuery.extend({
+      settings = $.extend({
            className: name.replace(/[\s]+/, '')+"Button"
       }, options);
       var li = document.createElement("li");
@@ -177,26 +178,26 @@ function jRichTextArea(textArea, options){
       a.title = name;
       a.textArea = this.textArea;
       //callback.this = this;
-      jQuery(a).mousedown(callback);
-      jQuery(a).addClass(settings.className);
-      jQuery(li).append(a).appendTo(this.listElement);
+      $(a).mousedown(callback);
+      $(a).addClass(settings.className);
+      $(li).append(a).appendTo(this.listElement);
       this.buttons.push(li);
       return this;
     },
     create : function() {
       if(!this.listElement) {
         this.listElement = document.createElement("ul");
-        jQuery(this.listElement).addClass(this.settings.className);
-        jQuery(this.listElement).insertBefore(this.textArea);
+        $(this.listElement).addClass(this.settings.className);
+        $(this.listElement).insertBefore(this.textArea);
       }
     }
   }
 
   this.textArea.selectedText = function() {
-    return jQuery(this).getSelection().text;
+    return $(this).getSelection().text;
   }
   this.textArea.replaceSelection = function(replacement) {
-    return jQuery(this).replaceSelection(replacement);
+    return $(this).replaceSelection(replacement);
   }
   this.textArea.wrapSelection = function() {
     var prepend = arguments[0];
@@ -215,7 +216,7 @@ function jRichTextArea(textArea, options){
 function EditableImage(link, options){
 
   // Default options
-  settings = jQuery.extend({
+  settings = $.extend({
     resourceURL: link.href,
     width: 800
   }, options);
@@ -223,7 +224,7 @@ function EditableImage(link, options){
   this.editableImage = {
     settings : settings,
     link : link,
-    linkedImage : jQuery(link).children('img')[0],
+    linkedImage : $(link).children('img')[0],
     resourceURL : settings.resourceURL,
     editorDialog : false,
     imageData : false,
@@ -237,18 +238,18 @@ function EditableImage(link, options){
     },
     openEditor : function() {
       // Dim the screen and create the loading dialog
-      jQuery.dimScreen(200, 0.90);
-      jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"<%= asset_path "pages/admin/loading-modal.gif" %>\" /> Loading image editor&hellip;</div>");
-      jQuery('#modalLoadingNotice').centerOnScreen().hide().fadeIn(200);
+      $.dimScreen(200, 0.90);
+      $('body').append("<div id=\"modalLoadingNotice\"><img src=\"/plugin_assets/pages/images/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
+      $('#modalLoadingNotice').centerOnScreen().hide().fadeIn(200);
 
       // Create the container
-      jQuery('#editableImageEditor').remove();
-      jQuery('body').append("<div id=\"editableImageEditor\" class=\"modalWindow\"></div>");
+      $('#editableImageEditor').remove();
+      $('body').append("<div id=\"editableImageEditor\" class=\"modalWindow\"></div>");
 
       // Load data
       var binding = this;
       if(!this.imageData){
-        jQuery.getJSON(this.resourceURL+".js", function(json){
+        $.getJSON(this.resourceURL+".js", function(json){
           binding.imageData = json;
           binding.populateEditor();
         });
@@ -257,12 +258,12 @@ function EditableImage(link, options){
       }
     },
     populateEditor : function() {
-      jQuery('#editableImageEditor')
+      $('#editableImageEditor')
         .empty()
         .append("<img id=\"editableImageEditorImage\" />")
         .append("<div id=\"editableImageEditorControls\" class=\"controls\" />")
         .hide();
-      jQuery('#editableImageEditorControls')
+      $('#editableImageEditorControls')
         .append("<input type=\"button\" id=\"editableImageEditorSubmit\" value=\"Save\" />")
         .append("<input type=\"button\" id=\"editableImageEditorClose\" value=\"Cancel\" />")
 
@@ -270,13 +271,13 @@ function EditableImage(link, options){
       this.previewURL = this.previewURL.replace(/([\?\d])*$/, '');
 
       var binding = this;
-      jQuery('#editableImageEditorImage').each(function(){
+      $('#editableImageEditorImage').each(function(){
         this.src = binding.previewURL;
       });
-      jQuery('#editableImageEditorSubmit').click(function(){
+      $('#editableImageEditorSubmit').click(function(){
         binding.submit();
       });
-      jQuery('#editableImageEditorClose').click(function(){
+      $('#editableImageEditorClose').click(function(){
         binding.closeEditor();
       });
 
@@ -286,9 +287,9 @@ function EditableImage(link, options){
         binding.cropWidth = coords.w;
         binding.cropHeight = coords.h;
       }
-      jQuery('#editableImageEditorImage').load(function(){
-        jQuery('#modalLoadingNotice').fadeOut(100);
-        jQuery('#editableImageEditor').show().centerOnScreen();
+      $('#editableImageEditorImage').load(function(){
+        $('#modalLoadingNotice').fadeOut(100);
+        $('#editableImageEditor').show().centerOnScreen();
         var jCropOptions = {
           onChange: onCrop,
           onSelect: onCrop
@@ -302,15 +303,15 @@ function EditableImage(link, options){
           jCropOptions['setSelect'] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y];
         }
         // console.log(jCropOptions);
-        jQuery('#editableImageEditorImage').Jcrop(jCropOptions);
+        $('#editableImageEditorImage').Jcrop(jCropOptions);
       });
 
     },
     closeEditor : function() {
-      jQuery('#modalLoadingNotice').remove();
-      jQuery('#editableImageEditor').remove();
+      $('#modalLoadingNotice').remove();
+      $('#editableImageEditor').remove();
       this.imageData = false;
-      jQuery.dimScreenStop();
+      $.dimScreenStop();
     },
     refreshLinkedImage : function(size) {
       var imageUrl = this.linkedImage.src.replace(/\?.*$/, '') + '?' + (new Date().getTime());
@@ -338,7 +339,7 @@ function EditableImage(link, options){
         put_options = { 'image[cropped]': cropped }
       }
       var binding = this;
-      jQuery.put(this.resourceURL + ".json", put_options, function(json) {
+      $.put(this.resourceURL + ".json", put_options, function(json) {
         binding.refreshLinkedImage(crop_size);
         binding.closeEditor();
       })
@@ -347,7 +348,7 @@ function EditableImage(link, options){
 
   // Apply onClick behaviour
   link.editableImage = this.editableImage;
-  jQuery(link).click(function(){
+  $(link).click(function(){
     this.editableImage.openEditor();
     return false;
   });
@@ -362,22 +363,22 @@ var PagesAdmin = {
 
   sniffBrowser : function() {
     if(navigator) {
-      jQuery.each(Array("WebKit","Gecko","Firefox"), function(){
+      $.each(Array("WebKit","Gecko","Firefox"), function(){
         if( navigator.userAgent.match( new RegExp(this+"\\/[\\d]+", 'i'))) {
-          jQuery(document.body).addClass(this.toLowerCase());
+          $(document.body).addClass(this.toLowerCase());
         }
       });
       if(navigator.userAgent.match("MSIE")) {
-        jQuery(document.body).addClass('msie')
+        $(document.body).addClass('msie')
       };
       if( navigator.userAgent.match("MSIE 7") ) {
-        jQuery(document.body).addClass('msie7');
+        $(document.body).addClass('msie7');
       }
     }
   },
 
   applyTextAreas : function() {
-    jQuery('textarea.rich').each(function(){
+    $('textarea.rich').each(function(){
       var ta = new jRichTextArea(this);
 
       // Add buttons to the field
@@ -432,23 +433,22 @@ var PagesAdmin = {
   },
 
   applyEditableImages : function() {
-    jQuery('a.editableImage').each(function(){
+    $('a.editableImage').each(function(){
       new EditableImage(this);
     });
   },
 
   applyStyles : function() {
     // Detect the sidebar and add the appropriate class to the document element.
-    if(jQuery('#sidebar').length > 0){
-      jQuery(document.body).addClass('with_sidebar');
+    if($('#sidebar').length > 0){
+      $(document.body).addClass('with_sidebar');
     }
 
     // Add input_$type class to inputs.
-    jQuery('input').each(function(i){jQuery(this).addClass("input_"+this.type);});
+    $('input').each(function(i){$(this).addClass("input_"+this.type);});
 
     // Inject buttons with <div class="inner">
-    jQuery('button').wrapInner('<div class="inner"></div>');
-
+    $('button').wrapInner('<div class="inner"></div>');
   },
 
   init : function() {
@@ -482,16 +482,16 @@ PagesAdmin.contentTabs = {
     var tabs = PagesAdmin.contentTabs.tabs;
     var tab = tabs[tab_id];
     if(tab) {
-      jQuery.each(PagesAdmin.contentTabs.ids, function(i){
+      $.each(PagesAdmin.contentTabs.ids, function(i){
         if(tabs[this]) {
-          jQuery(tabs[this]).hide();
+          $(tabs[this]).hide();
         } else {
           // console.log("Could not hide tab: "+this);
         }
-        jQuery("#content-tab-link-"+this).removeClass('current');
+        $("#content-tab-link-"+this).removeClass('current');
       });
-      jQuery(tab).show();
-      jQuery("#content-tab-link-"+tab_id).addClass('current');
+      $(tab).show();
+      $("#content-tab-link-"+tab_id).addClass('current');
     }
   },
 
@@ -509,9 +509,9 @@ PagesAdmin.contentTabs = {
     //PagesAdmin.contentTabs.tabs = new Array();
     var tabs = PagesAdmin.contentTabs.tabs;
     PagesAdmin.contentTabs.ids = tab_ids;
-    jQuery.each(tab_ids, function(i) {
+    $.each(tab_ids, function(i) {
       var tab_id = this;
-      jQuery("#content-tab-"+this).each(function(i){
+      $("#content-tab-"+this).each(function(i){
         this.tab_id = tab_id;
         tabs[tab_id] = this;
       });
@@ -522,17 +522,40 @@ PagesAdmin.contentTabs = {
 
   init : function() {
     (function ($) {
-      if(jQuery('#content-tabs').length > 0) {
-        jQuery('#content-tabs a').each(function(){
-          jQuery(this).click(function(){
+      if($('#content-tabs').length > 0) {
+        $('#content-tabs a').each(function(){
+          $(this).click(function(){
             PagesAdmin.contentTabs.showFromURL(this.href);
             return false;
           });
         });
       }
       window.showContentTab = PagesAdmin.contentTabs.show;
-    })(jQuery);
+
+      /*
+      $('textarea.rich').each(function () {
+        var textarea = this;
+        var focusedHeight = 450;
+        textarea.originalHeight = $(textarea).height();
+        $(textarea)
+          .focus(function () {
+            if ($(textarea).height() < focusedHeight) {
+              $(textarea).animate({
+                height: focusedHeight
+              }, 200);
+            }
+          })
+          .blur(function () {
+            $(textarea).animate({
+              height: (textarea.originalHeight)
+            }, 200);
+          })
+      });
+      */
+    })($);
   }
 }
 
-jQuery(PagesAdmin.init);
+$(function () {
+  PagesAdmin.init();
+});
