@@ -30,12 +30,12 @@
 	</div>
 <% end %>
 
+<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
+
 
 <%= link_to_function 'Advanced options', 'return false;', :class => 'advanced_toggle' %>
 
 <div class="advanced_options">
-
-	<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
 
 	<div class="field">
 		<label>Subpages</label>

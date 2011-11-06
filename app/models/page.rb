@@ -21,7 +21,7 @@ class Page < ActiveRecord::Base
 	
 	# Page status labels
 	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
-	AUTOPUBLISH_FUZZINESS = 5.minutes
+	AUTOPUBLISH_FUZZINESS = 2.minutes
 	
 	@@available_templates_cached = nil
 	
@@ -36,7 +36,7 @@ class Page < ActiveRecord::Base
 
 	before_save do |page| 
 		page.published_at ||= Time.now
-		page.autopublish = true if page.published_at > (Time.now + AUTOPUBLISH_FUZZINESS)
+		page.autopublish = (page.published_at > Time.now) ? true : false
 
 		if page.image_url && !page.image_url.blank?
 			temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')

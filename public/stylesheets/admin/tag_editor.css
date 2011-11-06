@@ -3,14 +3,14 @@
 	max-width: 600px;
 }
 .tag_editor .tags {
-	line-height: 1.5
+	line-height: 1.5;
 }
 
 .tag_editor .tag {
 	cursor: pointer;
 	display: block;
 	float: left;
-	margin: 0 5px 10px 0;
+	margin: 0 5px 5px 0;
 	padding: 4px 5px;
 	background: #f8f8f8;
 	border: 1px solid #ccc;
@@ -31,6 +31,7 @@
 	background: #396e97;
 	border-color: #274b67;
 	color: #fff;
+	text-shadow: #274b67 1px 1px 1px;
 }
 .tag_editor .add_tag_form {
 	float: left;

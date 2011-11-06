@@ -510,14 +510,37 @@ PagesAdmin.contentTabs = {
 	},
 
 	init : function() {
-		if(jQuery('#content-tabs').length > 0) {
-			jQuery('#content-tabs a').each(function(){
-				jQuery(this).click(function(){
-					PagesAdmin.contentTabs.showFromURL(this.href);
+		(function ($) {
+			if(jQuery('#content-tabs').length > 0) {
+				jQuery('#content-tabs a').each(function(){
+					jQuery(this).click(function(){
+						PagesAdmin.contentTabs.showFromURL(this.href);
+					});
 				});
+			}
+			window.showContentTab = PagesAdmin.contentTabs.show;
+
+			/*
+			$('textarea.rich').each(function () {
+				var textarea = this;
+				var focusedHeight = 450;
+				textarea.originalHeight = $(textarea).height();
+				$(textarea)
+					.focus(function () {
+						if ($(textarea).height() < focusedHeight) {
+							$(textarea).animate({
+								height: focusedHeight
+							}, 200);
+						}
+					})
+					.blur(function () {
+						$(textarea).animate({
+							height: (textarea.originalHeight)
+						}, 200);
+					})
 			});
-		}
-		window.showContentTab = PagesAdmin.contentTabs.show;
+			*/
+		})(jQuery);
 	}
 }
 
