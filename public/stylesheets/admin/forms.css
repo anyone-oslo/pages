@@ -14,12 +14,20 @@ form .field label {
 	font-weight:   bold;
 	font-size:     13px;
 	color:         #444;
+	/*
+	text-transform: uppercase;
+	font-size:     11px;
+	*/
 }
+/*
+#sidebar form .field label {
+	color: #666;
+}*/
 .msie7 form .field label {
 	height:        1em;
 }
 form .field .description {
-	color:         #444;
+	color:         #888;
 	margin:        0 0 6px 0;
 }
 form .field_with_errors {
