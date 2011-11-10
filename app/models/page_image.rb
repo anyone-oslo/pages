@@ -27,5 +27,13 @@ class PageImage < ActiveRecord::Base
 			end
 		end
 	end
+	
+	class << self
+		def cleanup!
+			self.find(:all).each do |page_image|
+				page_image.destroy unless page_image.image
+			end
+		end
+	end
 
 end
