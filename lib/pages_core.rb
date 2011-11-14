@@ -2,6 +2,7 @@ require 'digest/sha1'
 require 'iconv'
 require 'find'
 require 'open-uri'
+require 'pathname'
 
 # Included in vendor/plugins/pages/lib
 [:acts_as_taggable, :language, :mumbojumbo, :enumerable, :feed_builder, :country_select].each do |lib|
@@ -27,6 +28,14 @@ module PagesCore
 			
 			# Register with PagesConsole
 			PagesCore.register_with_pages_console
+		end
+		
+		def version
+			@@version ||= File.read(plugin_root.join('VERSION'))
+		end
+		
+		def plugin_root
+			Pathname.new(File.dirname(__FILE__)).join('..').expand_path
 		end
 
 		def application_name
