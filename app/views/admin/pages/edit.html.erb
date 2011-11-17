@@ -37,6 +37,35 @@
 		<% content_tab "Images" do %>
 			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
 			<% if @page.page_images.any? %>
+				<div id="image-editor">
+					<div class="controls">
+						<div class="nav">
+							<%= link_to "Previous", '#' %>
+							<%= link_to "Next", '#' %>
+						</div>
+						<h4>Image Editor</h4>
+						<input type="text" placeholder="Write your caption/byline"/>
+						<input type="checkbox"/><label>Primary image</label>
+						<button><%= link_to "Crop the image", '#' %></button>
+					</div>
+					<%= dynamic_image_tag(@page.page_images.last.image, :size => '600x', :upscale => true) %>
+				</div>
+				<div class="image primary selected">
+					<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
+				</div>
+				<div class="images clearfix">
+					<% @page.page_images.each do |i| %>
+						<% 5.times do %>
+						<div class="image">
+							<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
+						</div>
+						<% end %>
+					<% end %>
+				</div>
+			<% end %>
+			<!-- 
+			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
+			<% if @page.page_images.any? %>
 				<table class="list images_list">
 					<tr>
 						<th>Image</th>
@@ -75,6 +104,7 @@
 			<% else %>
 				<p>No images added yet.</p>
 			<% end %>
+			-->
 		<% end %>
 	<% end %>
 
@@ -143,6 +173,7 @@
 <% end %>
 
 <%# #### UPLOAD IMAGE #### %>
+<!--
 <div id="new-image">
 	<h2>Upload images</h2>
 	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
@@ -181,6 +212,7 @@
 		</p>
 	<% end %>
 </div>
+-->
 
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>

@@ -187,7 +187,6 @@ module PagesCore::Admin::AdminHelper
 			}
 			@content_tabs << tab
 			tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">"
-			tab_output += "<a name=\"#{tab[:key]}\"></a>"
 			tab_output += tab[:content]
 			tab_output += "</div>"
 			concat(tab_output)
