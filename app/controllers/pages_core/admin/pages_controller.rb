@@ -201,11 +201,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 		end
 	
 		def delete_image
-			@image = @page.images.select{|i| i.id == params[:image_id].to_i}.first rescue nil
-			if @image
-				@page.images.delete(@image)
-				@image.destroy
-			end
+			@page.page_images.find(params[:image_id]).destroy
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'additional_images')
 		end
 	

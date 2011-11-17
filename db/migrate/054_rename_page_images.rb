@@ -28,6 +28,8 @@ class RenamePageImages < ActiveRecord::Migration
 				end
 			end
 		end
+		
+		PageImage.cleanup!
 	end
 
 	def self.down

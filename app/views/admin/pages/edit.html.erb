@@ -54,26 +54,30 @@
 						<th>Controls</th>
 					</tr>
 					<% @page.page_images.each do |pi| %><tr>
-						<td class="thumbnail"><%= editable_dynamic_image_tag pi.image, :size => '100x100' %></td>
-						<td><strong><%= pi.image.name %></strong></td>
-						<td>
-							<div id="image-caption-<%= pi.image.id %>"><%= ( pi.image.byline? ) ? pi.image.byline : "Click to edit" %></div>
-							<script type="text/javascript">
-								new Ajax.InPlaceEditor(
-									'image-caption-'+<%= pi.image.id %>, 
-									"<%= url_for(:controller => 'admin/pages', :action => 'update_image_caption', :id => @page) %>",
-									{
-										callback: function(form, value) { return 'image_id='+<%= pi.image.id %>+'&caption=' + encodeURIComponent(value) }
-									}
-								);
-							</script>
-						</td>
-						<td>
-							<%= radio_button_tag "primary", pi.id, pi.primary? %>
-						</td>
-						<td>
-							<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => pi.image, :language => @language, :show_tab => 'images' ), :class => :delete, :confirm => 'Are you sure?' %>
-						</td>
+						<% if pi.image %>
+							<td class="thumbnail"><%= editable_dynamic_image_tag pi.image, :size => '100x100' %></td>
+							<td><strong><%= pi.image.name %></strong></td>
+							<td>
+								<div id="image-caption-<%= pi.image.id %>"><%= ( pi.image.byline? ) ? pi.image.byline : "Click to edit" %></div>
+								<script type="text/javascript">
+									new Ajax.InPlaceEditor(
+										'image-caption-'+<%= pi.image.id %>, 
+										"<%= url_for(:controller => 'admin/pages', :action => 'update_image_caption', :id => @page) %>",
+										{
+											callback: function(form, value) { return 'image_id='+<%= pi.image.id %>+'&caption=' + encodeURIComponent(value) }
+										}
+									);
+								</script>
+							</td>
+							<td>
+								<%= f.radio_button :image_id, pi.image.id %>
+							</td>
+							<td>
+								<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => pi.id, :language => @language, :show_tab => 'images' ), :class => :delete, :confirm => 'Are you sure?' %>
+							</td>
+						<% else %>
+							Error: <%= pi.id %>
+						<% end %>
 					</tr><% end %>
 				</table>
 			<% else %>

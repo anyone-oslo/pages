@@ -18,10 +18,8 @@
 	<p>
 		You can also <%= link_to "create a new root page", new_admin_page_path(:language => @language) %>.
 	</p>
-	<% if @root_pages.length > 1 %>
-		<h2>Structure</h2>
-		<p><button><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></button></p>
-	<% end %>
+	<h2>Structure</h2>
+	<p><button><%= link_to "Reorder the pages", '#', :id => 'reorder_link' %></button></p>
 	<!-- What shall with do with a drunken sailor?
 	<h2>Categories</h2>
 	<% if @categories && @categories.length > 0 %>
