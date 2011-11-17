@@ -905,7 +905,7 @@ class Page < ActiveRecord::Base
 	
 	alias_method :ar_to_xml, :to_xml
 	def to_xml(options = {})
-		default_except = [:comments_count]
+		default_except = [:comments_count, :byline, :delta, :last_comment_at, :image_id]
 		options[:except] = (options[:except] ? options[:except] + default_except : default_except)
 		ar_to_xml(options) do |xml|
 			self.all_fields.each do |textable_name|
@@ -915,7 +915,19 @@ class Page < ActiveRecord::Base
 					end
 				end
 			end
+			self.tags.to_xml(:builder => xml, :skip_instruct => true, :only => [:name])
+			if options[:images]
+				xml.images do |images_xml|
+					self.page_images.each{|page| page.to_xml(:builder => images_xml, :skip_instruct => true, :only => [:image_id, :primary])}
+				end
+			end
+			if options[:comments]
+				xml.comments do |comments_xml|
+					self.comments.each{|comment| comment.to_xml(:except => [:page_id], :builder => comments_xml, :skip_instruct => true)}
+				end
+			end
 			if options[:pages]
+				subpages = (options[:pages] == :all) ? self.pages(:all => true) : self.pages
 				xml.pages do |pages_xml|
 					self.pages.each{|page| page.to_xml(options.merge({:builder => pages_xml, :skip_instruct => true}))}
 				end
