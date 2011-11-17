@@ -6,7 +6,7 @@ module PagesCore::Admin::PagesHelper
 	end
 
 	def available_templates_for_select
-		Page.available_templates.collect do |template|
+		PagesCore::Templates.names.collect do |template|
 			if template == "index"
 				[ "[Default]", "index" ] 
 			else

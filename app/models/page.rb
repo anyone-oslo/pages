@@ -23,8 +23,6 @@ class Page < ActiveRecord::Base
 	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
 	AUTOPUBLISH_FUZZINESS = 2.minutes
 	
-	@@available_templates_cached = nil
-	
 	validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
 	validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
 	
@@ -99,18 +97,14 @@ class Page < ActiveRecord::Base
 		
 		# Finds page with unique name
 		def find_unique(name)
-			page = Page.find_by_unique_name(name.to_s)
+			find_by_unique_name(name.to_s)
 		end
 
 		# Finds pages due for auto publishing and publishes them.
 		def autopublish!(options={})
-			options[:fuzziness] ||= AUTOPUBLISH_FUZZINESS
-			publish_timestamp = Time.now + options[:fuzziness]
-			pages = self.find(:all, :conditions => ['autopublish = 1 AND published_at < ?', publish_timestamp])
-			pages.each do |p|
-				p.update_attribute(:autopublish, false)
-			end
-			pages
+			timestamp  = Time.now + (options[:fuzziness] || AUTOPUBLISH_FUZZINESS)
+			pages      = self.find(:all, :conditions => ['autopublish = 1 AND published_at < ?', timestamp])
+			pages.each {|p| p.update_attribute(:autopublish, false)}
 		end
 		
 		# Finds pages with comments, ordered by date of last comment.
@@ -121,11 +115,10 @@ class Page < ActiveRecord::Base
 		# Example:
 		#   Page.last_commented(:limit => 10)
 		def last_commented(options={})
-			options = {
+			get_pages({
 				:order    => 'last_comment_at DESC',
 				:comments => true
-			}.merge(options)
-			Page.get_pages(options)
+			}.merge(options))
 		end
 	
 		# Finds pages with comments, ordered by number of comments.
@@ -136,11 +129,10 @@ class Page < ActiveRecord::Base
 		# Example:
 		#   Page.most_commented(:limit => 10)
 		def most_commented(options={})
-			options = {
+			get_pages({
 				:order    => 'comments_count DESC',
 				:comments => true
-			}.merge(options)
-			Page.get_pages(options)
+			}.merge(options))
 		end
 
 		# Finds pages based on the given criteria. Only published pages are loaded by default, this can be overridden by passing the
@@ -196,12 +188,10 @@ class Page < ActiveRecord::Base
 			pagination_options = {}
 			if options[:paginate]
 				# Count total pages
-				options[:paginate][:offset] ||= 0
-				options[:paginate][:offset] = options[:paginate][:offset].to_i
+				options[:paginate][:offset] = (options[:paginate][:offset] || 0).to_i
 				pages_count = (Page.count_pages(options, find_options) - options[:paginate][:offset])
 
-				options[:paginate][:page] ||= 1
-				options[:paginate][:page] = options[:paginate][:page].to_i
+				options[:paginate][:page] = (options[:paginate][:page] || 1).to_i
 				options[:paginate][:page] = 1 if options[:paginate][:page] < 1
 				pagination_count = (pages_count.to_f / options[:paginate][:per_page]).ceil
 
@@ -221,7 +211,7 @@ class Page < ActiveRecord::Base
 				pages = pages.map{|p| p.working_language = options[:language]; p}
 			end
 
-			# Add the pagination methods
+			# Decorate with the pagination methods
 			if options[:paginate] && pagination_count > 0
 				PagesCore::Paginates.paginate(pages, {
 					:current_page => options[:paginate][:page], 
@@ -590,29 +580,6 @@ class Page < ActiveRecord::Base
 		(!self.files.empty?) ? true : false
 	end
 	
-	# Get an array of available templates
-	def self.available_templates
-		unless @@available_templates_cached
-			logger.info "caching templates"
-			locations = 
-			[
-				File.join(File.dirname(__FILE__), '../views/pages/templates'),
-				File.join(File.dirname(__FILE__), '../../../../../app/views/pages/templates')
-			]
-			templates = locations.collect do |location|
-				Dir.entries(location).select{|f| File.file?(File.join(location, f)) and !f.match(/^_/)} if File.exists?(location)
-			end
-			templates = templates.flatten.uniq.compact.sort.collect{|f| f.gsub(/\.[\w\d\.]+$/,'')}
-
-			# make index the first template
-			if templates.include?("index")
-				templates = ["index", templates.reject{|f| f == "index"}].flatten
-			end
-			@@available_templates_cached = templates
-		end
-		return @@available_templates_cached
-	end
-	
 	def default_template
 		if self.parent
 			t = self.parent.default_subtemplate
@@ -639,10 +606,10 @@ class Page < ActiveRecord::Base
 			# Autodetect sub template
 			reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
 			base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
-			tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
+			tpl = PagesCore::Templates.names.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
 			# Try to singularize the base template if the subtemplate could not be found.
 			unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
-				tpl = Page.available_templates.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
+				tpl = PagesCore::Templates.names.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
 			end
 		end
 		# Inherit template by default
@@ -797,8 +764,8 @@ class Page < ActiveRecord::Base
 	# Returns boolean true if page has a valid redirect
 	def redirects?
 		return false if self.redirect_to == "0"
-		return true if self.redirect_to.kind_of?(String) and !self.redirect_to.strip.empty?
-		return true if self.redirect_to.kind_of?(Hash)   and !self.redirect_to.empty?
+		return true  if self.redirect_to.kind_of?(String) and !self.redirect_to.strip.empty?
+		return true  if self.redirect_to.kind_of?(Hash)   and !self.redirect_to.empty?
 		return false
 	end
 	
