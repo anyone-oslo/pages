@@ -28,6 +28,10 @@
 	color:#fff;
 	line-height:1.4em;
 }
+.controls .nav a {
+	margin-left:5px;
+	color:hsl(198,37%,65%);
+}
 #image-editor img {
 	margin:20px;
 }

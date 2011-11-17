@@ -40,15 +40,15 @@
 				<div id="image-editor">
 					<div class="controls">
 						<div class="nav">
-							<button><%= link_to "Previous", '#' %></button>
-							<button><%= link_to "Next", '#' %></button>
+							<%= link_to "Previous", '#' %>
+							<%= link_to "Next", '#' %>
 						</div>
 						<h4>Image Editor</h4>
 						<input type="text" placeholder="Write your caption/byline"/>
 						<input type="checkbox"/><label>Primary image</label>
 						<button><%= link_to "Crop the image", '#' %></button>
 					</div>
-					<%= dynamic_image_tag(@page.page_images.last.image, :size => '400x', :upscale => true) %>
+					<%= dynamic_image_tag(@page.page_images.last.image, :size => '600x', :upscale => true) %>
 				</div>
 				<div class="image primary selected">
 					<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
