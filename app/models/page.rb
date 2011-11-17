@@ -348,7 +348,7 @@ class Page < ActiveRecord::Base
 		# === Parameters
 		# * <tt>:language</tt> - String to set as working language for the resulting pages.
 		def news_pages(options={})
-			ps = Page.find(:all, :conditions => ['news_page = 1'], :order => 'published_at ASC')
+			ps = Page.find(:all, :conditions => ['news_page = 1 AND status < 4'], :order => 'published_at ASC')
 			if options[:language]
 				ps = ps.map{|p| p.working_language = options[:language]; p}
 			end
@@ -357,7 +357,7 @@ class Page < ActiveRecord::Base
 		
 		# Are there any news pages?
 		def news_pages?
-			(Page.count(:all, :conditions => ['news_page = 1']) > 0) ? true : false
+			(Page.count(:all, :conditions => ['news_page = 1 AND status < 4']) > 0) ? true : false
 		end
 	
 		# Finds news items (which are pages where the parent is flagged as news_page). 
