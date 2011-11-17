@@ -35,6 +35,14 @@
 	<%# #### IMAGES #### %>
 	<% if @page.template_config.value(:images) %>
 		<% content_tab "Images" do %>
+			<% if @page.page_images.any? %>
+				<% @page.page_images.each do |i| %>
+					<div class="image <%= ' primary' if i.image.primary? %>">
+						<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upcase => true) %>
+					</div>
+				<% end %>
+			<% end %>
+			<!-- 
 			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
 			<% if @page.page_images.any? %>
 				<table class="list images_list">
@@ -71,6 +79,7 @@
 			<% else %>
 				<p>No images added yet.</p>
 			<% end %>
+			-->
 		<% end %>
 	<% end %>
 
@@ -139,6 +148,7 @@
 <% end %>
 
 <%# #### UPLOAD IMAGE #### %>
+<!--
 <div id="new-image">
 	<h2>Upload images</h2>
 	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
@@ -177,6 +187,7 @@
 		</p>
 	<% end %>
 </div>
+-->
 
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>

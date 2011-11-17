@@ -1,0 +1,14 @@
+.image {
+	float:left;
+	line-height:1px;
+	margin-right:20px;
+	margin-bottom:20px;
+	border:solid 5px #fff;
+	outline:solid 5px #fff;
+}
+.image:hover, .image.selected {
+	outline-color:#1d7195;
+}
+.image.primary {
+	border-color:#f5f3bc;
+}
