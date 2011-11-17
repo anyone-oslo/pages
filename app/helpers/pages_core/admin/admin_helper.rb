@@ -122,7 +122,19 @@ module PagesCore::Admin::AdminHelper
 		options = {
 			:class => :pages
 		}.merge(options)
-		menu_items = @admin_menu.select{ |i| i[:class] == options[:class] }
+
+		menu_items = @admin_menu.select{|i| i[:class] == options[:class]}
+
+		# Determine current menu item
+		current_tab = menu_items.select { |menu_item|
+			if menu_item[:options] && menu_item[:options][:current]
+				menu_item[:options][:current].call
+			else
+				menu_item[:url][:controller] == controller.class.controller_path
+			end
+		}.first
+		
+		# Build menu
 		if menu_items.length > 0
 			menu_items = menu_items.collect do |menu_item|
 				classes = []
@@ -134,13 +146,9 @@ module PagesCore::Admin::AdminHelper
 				end
 				action_name = menu_item[:url][:action]
 				
-				if controller.class.controller_path == controller_name && !menu_item[:options][:skip_actions].include?(request.path_parameters[:action])
-					if !menu_item[:options].has_key?(:only_actions) || (menu_item[:options][:only_actions].include?(request.path_parameters[:action]))
-						classes << "current"
-					end
-				end
+				classes << "current" if menu_item == current_tab
 				
-				link_to( menu_item[:name], menu_item[:url], :class => classes.join( " " ) )
+				link_to(menu_item[:name], menu_item[:url], :class => classes.join(' '))
 			end
 			"<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>"
 		else

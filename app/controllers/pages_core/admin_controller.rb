@@ -33,10 +33,16 @@ class PagesCore::AdminController < ApplicationController
 		# Builds the admin menu tabs.
 		def build_admin_tabs
 			if Page.news_pages?
-				register_menu_item "News", hash_for_news_admin_pages_path({:language => @language}), :pages, { :only_actions => ['news', 'new_news'] }
+				register_menu_item(
+					"News", hash_for_news_admin_pages_path({:language => @language}), :pages, 
+					:current => Proc.new {
+						params[:controller] == 'admin/pages' && 
+						(params[:action] == 'news' || (@page && @page.parent_page && @page.parent_page.news_page?))
+					}
+				)
 			end
-			register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages, { :skip_actions => ['news', 'new_news'] }
-			register_menu_item "Users",  hash_for_admin_users_path, :account
+			register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages
+			register_menu_item "Users", hash_for_admin_users_path, :account
 		end
 
 		# Loads persistent params from user model and merges with session.
@@ -68,7 +74,6 @@ class PagesCore::AdminController < ApplicationController
 			@admin_menu      ||= []
 			url[:controller] ||= "admin/#{name.underscore}"
 			url[:action]     ||= 'index'
-			options[:skip_actions] ||= []
 			@admin_menu << { :name => name, :url => url, :class => class_name, :options => options }
 		end
 
