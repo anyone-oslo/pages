@@ -35,12 +35,33 @@
 	<%# #### IMAGES #### %>
 	<% if @page.template_config.value(:images) %>
 		<% content_tab "Images" do %>
+			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
 			<% if @page.page_images.any? %>
-				<% @page.page_images.each do |i| %>
-					<div class="image <%= ' primary' if i.image.primary? %>">
-						<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upcase => true) %>
+				<div id="image-editor">
+					<div class="controls">
+						<div class="nav">
+							<button><%= link_to "Previous", '#' %></button>
+							<button><%= link_to "Next", '#' %></button>
+						</div>
+						<h4>Image Editor</h4>
+						<input type="text" placeholder="Write your caption/byline"/>
+						<input type="checkbox"/><label>Primary image</label>
+						<button><%= link_to "Crop the image", '#' %></button>
 					</div>
-				<% end %>
+					<%= dynamic_image_tag(@page.page_images.last.image, :size => '400x', :upscale => true) %>
+				</div>
+				<div class="image primary selected">
+					<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
+				</div>
+				<div class="images clearfix">
+					<% @page.page_images.each do |i| %>
+						<% 5.times do %>
+						<div class="image">
+							<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
+						</div>
+						<% end %>
+					<% end %>
+				</div>
 			<% end %>
 			<!-- 
 			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
