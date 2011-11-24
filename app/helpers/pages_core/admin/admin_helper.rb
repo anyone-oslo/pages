@@ -45,6 +45,7 @@ module PagesCore::Admin::AdminHelper
 	def admin_javascript_tags
 		output  = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
 		output += "\t"+javascript_include_tag("admin/tag_editor", :plugin => 'pages') + "\n"
+		output += "\t"+javascript_include_tag("admin/page_images", :plugin => 'pages') + "\n"
 
 		controller_name    = controller.class.to_s.demodulize
 		action_name        = params[:action]

@@ -35,76 +35,7 @@
 	<%# #### IMAGES #### %>
 	<% if @page.template_config.value(:images) %>
 		<% content_tab "Images" do %>
-			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
-			<% if @page.page_images.any? %>
-				<div id="image-editor">
-					<div class="controls">
-						<div class="nav">
-							<%= link_to "Previous", '#' %>
-							<%= link_to "Next", '#' %>
-						</div>
-						<h4>Image Editor</h4>
-						<input type="text" placeholder="Write your caption/byline"/>
-						<input type="checkbox"/><label>Primary image</label>
-						<button><%= link_to "Crop the image", '#' %></button>
-					</div>
-					<%= dynamic_image_tag(@page.page_images.last.image, :size => '600x', :upscale => true) %>
-				</div>
-				<div class="image primary selected">
-					<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
-				</div>
-				<div class="images clearfix">
-					<% @page.page_images.each do |i| %>
-						<% 5.times do %>
-						<div class="image">
-							<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
-						</div>
-						<% end %>
-					<% end %>
-				</div>
-			<% end %>
-			<!-- 
-			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
-			<% if @page.page_images.any? %>
-				<table class="list images_list">
-					<tr>
-						<th>Image</th>
-						<th>Title</th>
-						<th>Caption</th>
-						<th>Primary</th>
-						<th>Controls</th>
-					</tr>
-					<% @page.page_images.each do |pi| %><tr>
-						<% if pi.image %>
-							<td class="thumbnail"><%= editable_dynamic_image_tag pi.image, :size => '100x100' %></td>
-							<td><strong><%= pi.image.name %></strong></td>
-							<td>
-								<div id="image-caption-<%= pi.image.id %>"><%= ( pi.image.byline? ) ? pi.image.byline : "Click to edit" %></div>
-								<script type="text/javascript">
-									new Ajax.InPlaceEditor(
-										'image-caption-'+<%= pi.image.id %>, 
-										"<%= url_for(:controller => 'admin/pages', :action => 'update_image_caption', :id => @page) %>",
-										{
-											callback: function(form, value) { return 'image_id='+<%= pi.image.id %>+'&caption=' + encodeURIComponent(value) }
-										}
-									);
-								</script>
-							</td>
-							<td>
-								<%= f.radio_button :image_id, pi.image.id %>
-							</td>
-							<td>
-								<%= link_to "Delete", delete_image_admin_page_path( :id => @page, :image_id => pi.id, :language => @language, :show_tab => 'images' ), :class => :delete, :confirm => 'Are you sure?' %>
-							</td>
-						<% else %>
-							Error: <%= pi.id %>
-						<% end %>
-					</tr><% end %>
-				</table>
-			<% else %>
-				<p>No images added yet.</p>
-			<% end %>
-			-->
+			<%= render :partial => 'edit_images', :locals => {:f => f} %>
 		<% end %>
 	<% end %>
 

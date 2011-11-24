@@ -1,0 +1,29 @@
+<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
+
+<% if @page.page_images.any? %>
+	<div class="page_images">
+		<div class="editor">
+			<div class="controls">
+				<div class="nav">
+					<%= link_to "Previous", '#', :class => :previous %>
+					<%= link_to "Next", '#', :class => :next %>
+				</div>
+				<h4>Image Editor</h4>
+				<input type="text" placeholder="Write your caption/byline"/>
+				<input type="checkbox"/><label>Primary image</label>
+				<button><%= link_to "Crop the image", '#' %></button>
+			</div>
+			<%= dynamic_image_tag(@page.page_images.last.image, :size => '600x', :upscale => true) %>
+		</div>
+		<div class="image primary ">
+			<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
+		</div>
+		<div class="images clearfix">
+			<% @page.page_images.each do |i| %>
+				<div class="image">
+					<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
+				</div>
+			<% end %>
+		</div>
+	</div>
+<% end %>
