@@ -19,6 +19,13 @@
 				}
 			}
 			
+			function closeEditor() {
+				$(images).removeClass('selected');
+				selectedImage = false;
+				$editor.slideUp(400);
+				return false;
+			}
+			
 			function showNextImage() {
 				var nextIndex = false;
 				if (selectedImage) {
@@ -54,6 +61,7 @@
 			
 			$editor.find('a.next').click(showNextImage);
 			$editor.find('a.previous').click(showPreviousImage);
+			$editor.find('a.close').click(closeEditor);
 
 			// Apply to images
 			$(container).find('.image').each(function () {
