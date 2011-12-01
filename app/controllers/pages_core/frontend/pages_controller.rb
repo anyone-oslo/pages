@@ -10,6 +10,11 @@ class PagesCore::Frontend::PagesController < FrontendController
 
 
 	protected
+	
+		def render(*args)
+			@already_rendered = true
+			super
+		end
 
 		def find_page
 			unless @page
@@ -45,10 +50,12 @@ class PagesCore::Frontend::PagesController < FrontendController
 			
 			@page_template_layout = false if @disable_layout
 			
-			if self.instance_variables.include?('@page_template_layout')
-				render :template => "pages/templates/#{template}", :layout => @page_template_layout
-			else
-				render :template => "pages/templates/#{template}"
+			unless @already_rendered
+				if self.instance_variables.include?('@page_template_layout')
+					render :template => "pages/templates/#{template}", :layout => @page_template_layout
+				else
+					render :template => "pages/templates/#{template}"
+				end
 			end
 		end
 		
