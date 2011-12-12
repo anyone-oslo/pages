@@ -33,7 +33,7 @@
 	<% end %>
 
 	<%# #### IMAGES #### %>
-	<% if @page.template_config.value(:images) %>
+	<% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
 		<% content_tab "Images" do %>
 			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
 			<% if @page.page_images.any? %>
