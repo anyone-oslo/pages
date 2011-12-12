@@ -33,7 +33,7 @@
 	<% end %>
 
 	<%# #### IMAGES #### %>
-	<% if @page.template_config.value(:images) %>
+	<% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
 		<% content_tab "Images" do %>
 			<%= render :partial => 'edit_images', :locals => {:f => f} %>
 		<% end %>
