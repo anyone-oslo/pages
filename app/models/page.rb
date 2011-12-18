@@ -1,7 +1,7 @@
 class Page < ActiveRecord::Base
-	
+
 	serialize :redirect_to
-	
+
 	# Relations
 	belongs_to   :author, :class_name => "User", :foreign_key => :user_id
 	has_and_belongs_to_many :categories, :join_table => :pages_categories
@@ -18,21 +18,21 @@ class Page < ActiveRecord::Base
 
 	acts_as_textable :name, :body, :excerpt, :headline, :boxout, :allow_any => true
 	acts_as_taggable
-	
+
 	# Page status labels
 	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
 	AUTOPUBLISH_FUZZINESS = 2.minutes
-	
+
 	validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
 	validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
-	
+
 	validate do |page|
 		page.template ||= page.default_template
 	end
-	
+
 	attr_accessor :image_url, :image_description
 
-	before_save do |page| 
+	before_save do |page|
 		page.published_at ||= Time.now
 		page.autopublish = (page.published_at > Time.now) ? true : false
 
@@ -53,7 +53,7 @@ class Page < ActiveRecord::Base
 		end
 		page.delta = true
 	end
-	
+
 	# Update primary image status
 	after_save do |page|
 		if page.image_id_changed?
@@ -61,7 +61,7 @@ class Page < ActiveRecord::Base
 				# Update existing image
 				if page_image = page.page_images.first(:conditions => {:image_id => page.image_id})
 					page_image.update_attribute(:primary, true)
-					
+
 				# ..or create a new one
 				else
 					page.page_images.create(:image_id => page.image_id, :primary => true)
@@ -69,7 +69,7 @@ class Page < ActiveRecord::Base
 			end
 		end
 	end
-	
+
 	define_index do
 		# Fields
 		indexes textbits.body,                   :as => :textbit_bodies
@@ -94,7 +94,7 @@ class Page < ActiveRecord::Base
 	# ---- CLASS METHODS ------------------------------------------------------
 
 	class << self
-		
+
 		# Finds page with unique name
 		def find_unique(name)
 			find_by_unique_name(name.to_s)
@@ -106,11 +106,11 @@ class Page < ActiveRecord::Base
 			pages      = self.find(:all, :conditions => ['autopublish = 1 AND published_at < ?', timestamp])
 			pages.each {|p| p.update_attribute(:autopublish, false)}
 		end
-		
+
 		# Finds pages with comments, ordered by date of last comment.
 		#
 		# === Parameters
-		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned. 
+		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned.
 		#
 		# Example:
 		#   Page.last_commented(:limit => 10)
@@ -120,11 +120,11 @@ class Page < ActiveRecord::Base
 				:comments => true
 			}.merge(options))
 		end
-	
+
 		# Finds pages with comments, ordered by number of comments.
 		#
 		# === Parameters
-		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned. 
+		# * <tt>:limit</tt> - An integer determining the limit on the number of results that should be returned.
 		#
 		# Example:
 		#   Page.most_commented(:limit => 10)
@@ -170,7 +170,7 @@ class Page < ActiveRecord::Base
 		#
 		# == Pagination
 		#
-		# The results can be paginated by setting the <tt>:paginate</tt> parameter in the form of 
+		# The results can be paginated by setting the <tt>:paginate</tt> parameter in the form of
 		# <tt>{:page => page_number, :per_page => items_per_page }</tt>. The result set has a few methods injected
 		# to make views easier to write and more readable.
 		#
@@ -199,7 +199,7 @@ class Page < ActiveRecord::Base
 				pagination_options[:offset] = 0 if pagination_options[:offset] < 0 # Failsafe
 				pagination_options[:limit]  = options[:paginate][:per_page]
 			end
-			
+
 			pagination_options[:limit] = options[:limit] if options[:limit]
 
 			# Find the pages
@@ -214,18 +214,18 @@ class Page < ActiveRecord::Base
 			# Decorate with the pagination methods
 			if options[:paginate] && pagination_count > 0
 				PagesCore::Paginates.paginate(pages, {
-					:current_page => options[:paginate][:page], 
-					:pages        => pagination_count, 
-					:per_page     => options[:paginate][:per_page], 
+					:current_page => options[:paginate][:page],
+					:pages        => pagination_count,
+					:per_page     => options[:paginate][:per_page],
 					:offset       => options[:paginate][:offset]
 				})
 			else
 				PagesCore::Paginates.paginate(pages)
 			end
-		
+
 			pages
 		end
-		
+
 		def search_paginated(query, options={})
 			options[:page] = (options[:page] || 1).to_i
 
@@ -236,17 +236,17 @@ class Page < ActiveRecord::Base
 
 			# TODO: Allow more fine-grained control over status filtering
 			search_options[:conditions] = {:status => '2', :autopublish => '0'}
-			
+
 			pages = Page.search(query, search_options)
 			PagesCore::Paginates.paginate(
-				pages, 
-				:current_page => options[:page], 
-				:pages        => pages.total_pages, 
+				pages,
+				:current_page => options[:page],
+				:pages        => pages.total_pages,
 				:per_page     => search_options[:per_page]
 			)
 			pages
 		end
-				
+
 		# Count pages. See Page.get_pages for options.
 		def count_pages(options={}, find_options=nil)
 			unless find_options
@@ -318,7 +318,7 @@ class Page < ActiveRecord::Base
 					query[:group_by]
 				].join(" ")
 			end
-			
+
 			pages_count = ActiveSupport::OrderedHash.new
 			ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
 				year, month, page_count = row.mapped.to_i
@@ -332,7 +332,7 @@ class Page < ActiveRecord::Base
 			options[:parent] ||= :root
 			Page.get_pages(options)
 		end
-	
+
 		# Finds all news pages (pages with the news_page bit on).
 		#
 		# === Parameters
@@ -344,20 +344,20 @@ class Page < ActiveRecord::Base
 			end
 			ps
 		end
-		
+
 		# Are there any news pages?
 		def news_pages?
 			(Page.count(:all, :conditions => ['news_page = 1 AND status < 4']) > 0) ? true : false
 		end
-	
-		# Finds news items (which are pages where the parent is flagged as news_page). 
+
+		# Finds news items (which are pages where the parent is flagged as news_page).
 		# See Page.get_pages for more info on the options.
 		def get_news(options={})
 			options[:parent] ||= Page.news_pages
 			options[:order] ||= "published_at DESC"
 			Page.get_pages(options)
 		end
-	
+
 
 		# Find a page by slug and language
 		def find_by_slug_and_language(slug, language)
@@ -366,7 +366,7 @@ class Page < ActiveRecord::Base
 
 			# Search legacy slug textbits
 			if textbit = Textbit.find(
-					:first, 
+					:first,
 					:conditions => ['name = "slug" AND textable_type = ? AND body = ? AND language = ?', self.to_s, slug, language]
 				)
 				page = textbit.textable
@@ -374,7 +374,7 @@ class Page < ActiveRecord::Base
 			# Search page names
 			else
 				textbits = Textbit.find(
-					:all, 
+					:all,
 					:conditions => [ "name = 'name' AND textable_type = '#{self.to_s}' AND language = ?", language]
 				)
 				textbits = textbits.select{|tb| Page.string_to_slug( tb.body ) == slug}
@@ -385,7 +385,7 @@ class Page < ActiveRecord::Base
 
 			page ? page.translate(language) : nil
 		end
-	
+
 		# Convert a string to an URL friendly slug
 		def string_to_slug(string)
 			slug = string.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
@@ -397,9 +397,9 @@ class Page < ActiveRecord::Base
 			conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
 			Page.find(:all, :conditions => conditions).collect{|p| p.working_language = language.to_s; p}
 		end
-		
+
 		protected
-		
+
 			# Translates options for get_pages to options for find.
 			def get_pages_options(options={})
 				options.symbolize_keys!
@@ -452,7 +452,7 @@ class Page < ActiveRecord::Base
 					find_options[:conditions].first << "status >= 2"  unless options[:drafts]
 				end
 				find_options[:conditions].first << "autopublish = 0" unless options[:autopublish]
-				
+
 				# Date limit check
 				if options[:published_within]
 					options[:published_before] = options[:published_within].last
@@ -500,21 +500,21 @@ class Page < ActiveRecord::Base
 				find_options[:conditions][0] = conditions
 				[options, find_options]
 			end
-			
+
 
 	end
-	
+
 
 
 	# ---- INSTANCE METHODS ---------------------------------------------------
-	
+
 	def fix_counter_cache!
 		if comments_count != comments.count
 			Page.update_counters(self.id, :comments_count => (comments.count - comments_count) )
 		end
 	end
 
-	self.send :alias_method, :acts_as_tree_parent, :parent 
+	self.send :alias_method, :acts_as_tree_parent, :parent
 
 	alias :textable_has_field? :has_field?
 	def has_field?(field_name, options={})
@@ -531,13 +531,13 @@ class Page < ActiveRecord::Base
 		end
 	end
 	alias_method :parent_page, :parent
-	
+
 	def tag_list=(tag_list)
 		tag_with(tag_list)
 	end
 
-	self.send :alias_method, :acts_as_tree_ancestors, :ancestors 
-	
+	self.send :alias_method, :acts_as_tree_ancestors, :ancestors
+
 	# Finds this page's ancestors
 	def ancestors
 		ancestors = self.acts_as_tree_ancestors
@@ -550,11 +550,11 @@ class Page < ActiveRecord::Base
 	def is_ancestor?(page)
 		page.ancestors.include?(self)
 	end
-	
+
 	def is_or_is_ancestor?(page)
 		(page == self || self.is_ancestor?(page)) ? true : false
 	end
-	
+
 	def excerpt_or_body
 		if self.excerpt?
 			self.excerpt
@@ -562,7 +562,7 @@ class Page < ActiveRecord::Base
 			self.body
 		end
 	end
-	
+
 	def headline_or_name
 	    if self.headline?
 	        self.headline
@@ -570,16 +570,16 @@ class Page < ActiveRecord::Base
             self.name
         end
     end
-	
+
 	def is_extended?
 		(self.excerpt? && self.body?) ? true : false
 	end
-	
+
 	# Does this page have any files?
 	def files?
 		(!self.files.empty?) ? true : false
 	end
-	
+
 	def default_template
 		if self.parent
 			t = self.parent.default_subtemplate
@@ -594,7 +594,7 @@ class Page < ActiveRecord::Base
 		end
 		t ||= :index
 	end
-	
+
 	def default_subtemplate
 		tpl = nil
 		default_template = PagesCore::Templates.configuration.get(:default, :template, :value)
@@ -623,7 +623,12 @@ class Page < ActiveRecord::Base
 	def template
 		(self[:template] && !self[:template].blank?) ? self[:template] : self.default_template.to_s
 	end
-	
+
+	# Does this page have an image?
+	def image?
+		self.image_id?
+	end
+
 	# Get subpages
 	def pages(options={})
 		return [] if self.new_record? && !options.has_key?(:parent)
@@ -632,7 +637,7 @@ class Page < ActiveRecord::Base
 		options[:language] ||= self.working_language if self.working_language
 		Page.get_pages(options)
 	end
-	
+
 	# Count subpages
 	def count_pages(options={})
 		options[:parent]   ||= self.id
@@ -641,7 +646,7 @@ class Page < ActiveRecord::Base
 		Page.count_pages(options)
 	end
 	alias_method :pages_count, :count_pages
-	
+
 	# Count subpages by year and month
 	def count_pages_by_year_and_month(options={})
 		options = options.dup
@@ -653,12 +658,12 @@ class Page < ActiveRecord::Base
 	# Get this page's root page.
 	def root_page
 		root_page = self
-		while root_page.parent 
+		while root_page.parent
 			root_page = root_page.parent
 		end
 		root_page
 	end
-	
+
 	def is_child_of(page)
 		compare = self
 		while compare.parent
@@ -667,7 +672,7 @@ class Page < ActiveRecord::Base
 		end
 		return false
 	end
-	
+
 	# Get sibling by offset (most likely +1 or -1)
 	def sibling_by_offset(offset, options={})
 		return nil unless self.parent
@@ -691,13 +696,13 @@ class Page < ActiveRecord::Base
 	def status_label
 		STATUS_LABELS[self.status]
 	end
-	
+
 	def self.status_labels_for_options
 		labels = Array.new
 		Page::STATUS_LABELS.each_index{|i| labels << [Page::STATUS_LABELS[i],i]}
 		labels
 	end
-	
+
 	# Set the page status
 	def set_status(new_status)
 		new_status = new_status.to_i if new_status.kind_of?(String) && new_status.match(/^[\d]+$/)
@@ -714,19 +719,19 @@ class Page < ActiveRecord::Base
 	def get_field(name, options={})
 		get_textbit(name, options)
 	end
-	
+
 	def template=(template_file)
 		write_attribute('template', template_file)
 	end
-	
+
 	def extended?
 		(self.get_field( 'excerpt' ).to_s.strip != "") ? true : false
 	end
-	
+
 	def blank?
 		(self.get_field( 'body' ).to_s.strip == "") ? true : false
 	end
-	
+
 	# Get word count for page
 	def word_count
 		words = self.body.to_s
@@ -734,7 +739,7 @@ class Page < ActiveRecord::Base
 		words.gsub!(/[^\w^\s]/, '')   # remove all non-word/space chars
 		words.split(/[\s]+/).length   # split by spaces and return length
 	end
-	
+
 	# Get publication date, which defaults to the creation date
 	def published_at
 		self[:published_at] ||= self.created_at
@@ -756,7 +761,7 @@ class Page < ActiveRecord::Base
 			redirect = p.redirect_to
 			redirect.kind_of?(Hash) and options.reject{|k,v| redirect[k] == v}.empty?
 		end.first rescue nil
-		
+
 		# Default to a blank page, so the template won't bork
 		page ||= Page.new
 	end
@@ -768,8 +773,8 @@ class Page < ActiveRecord::Base
 		return true  if self.redirect_to.kind_of?(Hash)   and !self.redirect_to.empty?
 		return false
 	end
-	
-	# Take the given options and merge self.redirect_to with them. If self.redirect_to is a string, nothing will be merged. 
+
+	# Take the given options and merge self.redirect_to with them. If self.redirect_to is a string, nothing will be merged.
 	def redirect_to_options(options={})
 		options.symbolize_keys!
 		redirect = self.redirect_to
@@ -830,7 +835,7 @@ class Page < ActiveRecord::Base
 			super
 		end
 	end
-	
+
 	# Set categories from string
 	def category_names=(names)
 		if names
@@ -843,7 +848,7 @@ class Page < ActiveRecord::Base
 			self.categories = categories
 		end
 	end
-	
+
 	# Does this page have images?
 	def images?
 		self.images.count > 0
@@ -857,19 +862,19 @@ class Page < ActiveRecord::Base
 	def slug
 		self.class.string_to_slug( self.name.to_s )
 	end
-	
+
 	def to_param
 		"#{id}-#{self.slug}"
 	end
-	
+
 	def content_order
 		self[:content_order] || 'position'
 	end
-	
+
 	def empty?
 		((self.body.to_s + self.excerpt.to_s).strip.empty?) ? true : false
 	end
-	
+
 	alias_method :ar_to_xml, :to_xml
 	def to_xml(options = {})
 		default_except = [:comments_count, :byline, :delta, :last_comment_at, :image_id]
@@ -901,5 +906,5 @@ class Page < ActiveRecord::Base
 			end
 		end
 	end
-	
+
 end

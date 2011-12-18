@@ -48,7 +48,7 @@
 					<% @page.files.each do |file| %>
 						<li id="file_<%= file.id %>">
 							<%= image_tag 'admin/drag-handle.gif', :class => :handle, :plugin => :pages %>
-							<strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %> 
+							<strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %>
 							(<%= link_to "Delete", admin_page_file_path( @language, @page, file ), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
 						</li>
 					<% end %>
@@ -87,14 +87,14 @@
 						</tr>
 					<% end %>
 				</table>
-			<% end %>			
+			<% end %>
 		<% else %>
 			<% content_tab "Comments", {:disabled => true} do %>
 				<p>No comments added.</p>
 			<% end %>
 		<% end %>
 	<% end %>
-	
+
 
 	<div class="buttons">
 		<button type="button" id="previewButton">Preview</button>
@@ -104,8 +104,15 @@
 <% end %>
 
 <%# #### UPLOAD IMAGE #### %>
-<!--
 <div id="new-image">
+	<% form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
+		<%= labelled_field f.file_field(:image), 'Image' %>
+		<%= labelled_field f.text_field(:byline), 'Caption' %>
+		<p><%= f.check_box :primary %> Primary</p>
+		<p><%= submit_tag 'Upload' %></p>
+	<% end %>
+
+	<!--
 	<h2>Upload images</h2>
 	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
 
@@ -127,36 +134,37 @@
 		</table>
 
 		<% if false %>
-		<%= labelled_field f.file_field( :imagefile ), "File", 
+		<%= labelled_field f.file_field( :imagefile ), "File",
 			:errors      => @new_image.errors[:imagefile]
 		%>
-		<%# labelled_field f.text_field( :name, :size => 48 ), "Title", 
+		<%# labelled_field f.text_field( :name, :size => 48 ), "Title",
 			:errors      => @new_image.errors[:name]
 		%>
-		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption", 
+		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption",
 			:errors      => @new_image.errors[:byline]
 		%>
 		<% end %>
 		<p>
-			<%= submit_tag "Upload" %> or 
+			<%= submit_tag "Upload" %> or
 			<%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
 		</p>
 	<% end %>
+	-->
 </div>
--->
+
 
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>
 	<div id="new-file" class="page_new_file">
 		<h2>Upload new file</h2>
 		<% form_for( ( @new_file = PageFile.new ), :url => admin_page_files_path( @language, @page ), :html => { :multipart => true } ) do |f| %>
-			<%= labelled_field f.text_field( :name, :size => 48 ), "Name", 
+			<%= labelled_field f.text_field( :name, :size => 48 ), "Name",
 				:errors      => @new_file.errors[:name]
 			%>
-			<%= labelled_field f.text_field( :description, :size => 48 ), "Description", 
+			<%= labelled_field f.text_field( :description, :size => 48 ), "Description",
 				:errors      => @new_file.errors[:name]
 			%>
-			<%= labelled_field f.file_field( :file ), "File", 
+			<%= labelled_field f.file_field( :file ), "File",
 				:errors      => @new_file.errors[:file]
 			%>
 			<p>

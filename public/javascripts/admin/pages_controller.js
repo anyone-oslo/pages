@@ -16,7 +16,7 @@ Admin.PagesController = {
 					$(list).addClass('reorder');
 				}
 			});
-			
+
 			$('ul.reorderable').each(function(){
 				var list = this;
 				$(list).sortable({
@@ -36,7 +36,7 @@ Admin.PagesController = {
 							$(list).effect("highlight", {}, 1500);
 						});
 					}
-				});				
+				});
 			});
 		})(jQuery);
 
@@ -57,25 +57,25 @@ Admin.PagesController = {
 		window.toggleNewCategory = function(){
 			jQuery('#new-category').toggle();
 			jQuery('#new-category-button').toggle();
-		}
+		};
 		jQuery('#new-category').hide();
 
 	},
-	
+
 	new_action : function() {
 	},
 
 	new_news_action : function() {
 	},
 
-	show_action : function() {
+	show_action : function () {
 		this.edit_action();
 	},
 
 	edit_action : function() {
 
 		(function($){
-			
+
 			$('.advanced_options').hide();
 			$('.advanced_toggle').click(function () {
 				$('.advanced_options').slideToggle();
@@ -88,32 +88,32 @@ Admin.PagesController = {
 				} else {
 					$('#page-form-sidebar .published_date').hide();
 				}
-			}
+			};
 			$('#page-form-sidebar #page_status').change(checkStatus);
 			checkStatus();
-			
+
 			$('.autopublish_notice').hide();
 			var checkDate = function () {
-				
+
 				var year   = $('#page-form-sidebar select[name="page[published_at(1i)]"]').val();
 				var month  = $('#page-form-sidebar select[name="page[published_at(2i)]"]').val();
 				var day    = $('#page-form-sidebar select[name="page[published_at(3i)]"]').val();
 				var hour   = $('#page-form-sidebar select[name="page[published_at(4i)]"]').val();
 				var minute = $('#page-form-sidebar select[name="page[published_at(5i)]"]').val();
-				
+
 				var publishDate = new Date(year, (month-1), day, hour, minute);
 				var now = new Date();
-		
+
 				if (publishDate > now) {
 					$('.autopublish_notice').fadeIn();
 				} else {
 					$('.autopublish_notice').fadeOut();
 				}
-			}
+			};
 			$('.published_date').find('select').change(checkDate);
 			checkDate();
-			
-			var replicateFormElement = function() {
+
+			var replicateFormElement = function () {
 				var newValue = this;
 				$('#page-form').find('[name="' + newValue.name + '"]').each(function () {
 					if (newValue.type == 'checkbox') {
@@ -122,22 +122,22 @@ Admin.PagesController = {
 						$(this).val($(newValue).val());
 					}
 				});
-			}
-			
+			};
+
 			$('#page-form-sidebar').find('input,textarea,select').change(replicateFormElement);
-			
+
 			$('#new-image').hide();
 
-			window.showAdditionalImageModal = function(){
+			window.showAdditionalImageModal = function () {
 				Modal.show('<div class="uploadImages">'+$('#new-image').html()+'</div>');
-			}
+			};
 
 			// Previewing
 			$('#previewButton').click(function(){
 				var button = this;
 				var form = $(button).closest('form').get(0);
 				var previewUrl = '/'+Admin.language+'/pages/preview';
-				
+
 				// Rewrite the form and submit
 				form.oldAction = form.action;
 				form.target = "_blank";
@@ -166,4 +166,4 @@ Admin.PagesController = {
 		})(jQuery);
 
 	}
-}
+};

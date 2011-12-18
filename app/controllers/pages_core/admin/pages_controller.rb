@@ -1,6 +1,11 @@
 class PagesCore::Admin::PagesController < Admin::AdminController
 
-	before_filter :find_page, :only => [:show, :edit, :preview, :update, :destroy, :reorder, :add_image, :delete_image, :delete_language, :delete_comment, :delete_presentation_image, :import_xml]
+	before_filter :find_page, :only => [
+		:show, :edit, :preview, :update, :destroy, :reorder,
+		:add_image, :delete_image,
+		:delete_language, :delete_comment, :delete_presentation_image,
+		:import_xml
+	]
 	before_filter :application_languages
 	before_filter :load_categories
 	before_filter :load_news_pages, :only => [:news, :new_news]
@@ -15,15 +20,15 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				redirect_to admin_pages_path and return
 			end
 		end
-	
+
 		def application_languages
 			@application_languages = Textbit.languages
 		end
-	
+
 		def load_categories
 			@categories = Category.find(:all, :order => [:name])
 		end
-	
+
 		def load_news_pages
 			@news_pages = Page.news_pages(:language => @language)
 			unless @news_pages && @news_pages.length > 0
@@ -31,16 +36,16 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				redirect_to admin_pages_url(:language => @language) and return
 			end
 		end
-		
+
 	public
 
 		def index
-			@root_pages = Page.root_pages( 
-				:drafts        => true, 
-				:hidden        => true, 
+			@root_pages = Page.root_pages(
+				:drafts        => true,
+				:hidden        => true,
 				:all_languages => true,
 				:autopublish   => true,
-				:language      => @language 
+				:language      => @language
 			)
 			respond_to do |format|
 				format.html
@@ -49,11 +54,11 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				end
 			end
 		end
-	
+
 		def news
 			count_options = {
-				:drafts        => true, 
-				:hidden        => true, 
+				:drafts        => true,
+				:hidden        => true,
 				:all_languages => true,
 				:autopublish   => true,
 				:language      => @language,
@@ -70,14 +75,14 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				count_options[:category] = @category
 			end
 			@archive_count = Page.count_pages_by_year_and_month(count_options)
-		
+
 			# Set @year and @month from params, default to the last available one
 			last_year  = !@archive_count.empty? ? @archive_count.keys.last.to_i : Time.now.year
 			last_month = (@archive_count && @archive_count[last_year]) ? @archive_count[last_year].keys.last.to_i : Time.now.month
 
 			@year  = (params[:year]  || last_year).to_i
 			@month = (params[:month] || last_month).to_i
-		
+
 			# Let's check that there's data for the queried @year and @month
 			unless @archive_count.empty?
 				unless @archive_count[@year] && @archive_count[@year][@month] && @archive_count[@year][@month] > 0
@@ -96,11 +101,11 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 		def list
 			redirect_to admin_pages_url(:language => @language)
 		end
-	
+
 		def search
 			raise "Not implemented"
 		end
-	
+
 		def reorder_pages
 			pages = params[:ids].map{|id| Page.find(id)}
 			PagesCore::CacheSweeper.disable do
@@ -118,7 +123,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			edit
 			render :action => :edit
 		end
-	
+
 		def import_xml
 			if request.post? && params[:xmlfile]
 				@created_pages = @page.import_xml(params[:xmlfile].read)
@@ -133,7 +138,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				@page.parent = @news_pages.first
 			end
 		end
-	
+
 		def new_news
 			new
 			render :action => :new
@@ -143,7 +148,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			@page = Page.new.translate(@language)
 			params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 			@page.author = @current_user
-		
+
 			if @page.update_attributes(params[:page])
 				@page.update_attribute(:comments_allowed, @page.template_config.value(:comments_allowed))
 				@page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
@@ -202,12 +207,12 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			end
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'additional_images')
 		end
-	
+
 		def delete_image
 			@page.page_images.find(params[:image_id]).destroy
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'additional_images')
 		end
-	
+
 		def delete_presentation_image
 			if @page.image
 				@page.image.destroy
@@ -215,7 +220,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			end
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'presentation')
 		end
-	
+
 		def update_image_caption
 			@image = Image.find(params[:image_id]) rescue nil
 			if @image
@@ -248,7 +253,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			end
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'comments')
 		end
-	
+
 		# Remove a language from a page
 		def delete_language
 			@page.destroy_language(@language)
@@ -263,5 +268,5 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			end
 			redirect_to admin_pages_url(:language => @language)
 		end
-	
+
 end

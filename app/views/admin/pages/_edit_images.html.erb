@@ -6,22 +6,25 @@
 			<div class="controls">
 				<div class="nav">
 					<%= link_to "Previous", '#', :class => :previous %>
-					<%= link_to "Next", '#', :class => :next %>
-					<%= link_to "Close", '#', :class => :close %>
+					<%= link_to "Next",     '#', :class => :next %>
+					<%= link_to "Close",    '#', :class => :close %>
 				</div>
 				<h4>Image Editor</h4>
 				<input type="text" placeholder="Write your caption/byline"/>
 				<input type="checkbox"/><label>Primary image</label>
 				<button><%= link_to "Crop the image", '#' %></button>
 			</div>
-			<%= dynamic_image_tag(@page.page_images.last.image, :size => '600x', :upscale => true) %>
+			<div class="edit_image"></div>
 		</div>
-		<div class="image primary ">
-			<%= dynamic_image_tag(@page.page_images.last.image, :size => '220x220', :crop => true, :upscale => true) %>
-		</div>
+		<% if @page.image? %>
+			<% page_image = @page.page_images.select{|pi| pi.primary?}.first %>
+			<div class="image primary" data-page-image-id="<%= page_image.id %>">
+				<%= dynamic_image_tag(page_image.image, :size => '220x220', :crop => true, :upscale => true) %>
+			</div>
+		<% end %>
 		<div class="images clearfix">
-			<% @page.page_images.each do |i| %>
-				<div class="image">
+			<% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
+				<div class="image" data-page-image-id="<%= i.id %>">
 					<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
 				</div>
 			<% end %>
