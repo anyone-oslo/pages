@@ -281,6 +281,7 @@
 								if (images.length > 1) {
 									showNextImage();
 								} else {
+									$(container).find('.no_images').slideDown();
 									closeEditor();
 								}
 								images = _.reject(images, function (i) {
@@ -305,6 +306,9 @@
 				images.push(this);
 				$(this).find('img').removeAttr('width').removeAttr('height');
 			});
+			if (images.length > 0) {
+				$(container).find('.no_images').hide();
+			}
 
 			$(container).on('click', '.image', function () {
 				showImage(this);

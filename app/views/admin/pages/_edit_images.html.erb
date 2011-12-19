@@ -21,6 +21,10 @@
 			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
 		</div>
 
+		<div class="no_images">
+			<p>No images have been uploaded.</p>
+		</div>
+
 		<div class="primary_container">
 			<% if @page.image? %>
 				<% page_image = @page.page_images.select{|pi| pi.primary?}.first %>
@@ -36,4 +40,5 @@
 				</div>
 			<% end %>
 		</div>
+
 	</div>
