@@ -9,6 +9,7 @@
 			var baseURL = $editor.closest('form').attr('action');
 
 			var selectedImage = false;
+			var selectedImageId = false;
 			var images = [];
 			var imagesData = false;
 
@@ -18,6 +19,14 @@
 				});
 			}
 			loadImagesData();
+
+			function updateImageData(data) {
+				for (var a = 0; a < imagesData.length; a++) {
+					if (imagesData[a].id == data.id) {
+						imagesData[a] = data;
+					}
+				}
+			}
 
 			function getImageData (imageId) {
 				var data = false;
@@ -56,12 +65,26 @@
 				}
 
 				if (image) {
-					var maxSize   = [600, 600];
-					var imageId   = $(image).data('page-image-id');
+					var imageId   = parseInt($(image).data('page-image-id'), 10);
 					var imageData = getImageData(imageId);
 
-					var imageSize = getImageSize(imageId);
+					// Show the editor
+					$('.page_images .uploadButton').hide();
+					$editor.find('#page_image_byline').val(imageData.image.byline);
+					if (imageData.primary) {
+						$editor.find('#page_image_primary').attr('checked', 'checked');
+					} else {
+						$editor.find('#page_image_primary').attr('checked', false);
+					}
+					$(images).removeClass('selected');
+					$(image).addClass('selected');
+					selectedImage = image;
+					selectedImageId = imageId;
+					$editor.slideDown(400);
 
+					// Determine resized size
+					var maxSize   = [($editor.width() - 40), ($(window).height() - 200)];
+					var imageSize = getImageSize(imageId);
 					var scaleFactor = maxSize[1] / imageSize[1];
 					if ((imageSize[0] * scaleFactor) > maxSize[0]) {
 						scaleFactor = maxSize[0] / imageSize[0];
@@ -74,6 +97,7 @@
 						Math.floor(imageSize[1] * scaleFactor)
 					];
 
+					// Load the image
 					var imageURL = '/dynamic_image/' +
 						imageData.image.id +
 						'/original/' +
@@ -86,17 +110,51 @@
 						'" height="' + resizedSize[1] + '" />'
 					);
 
-					$(images).removeClass('selected');
-					$(image).addClass('selected');
-					selectedImage = image;
-					$editor.slideDown(400);
+					// Handle cropping
+					var cropStart = parseSizeString(imageData.image.crop_start);
+					var cropSize  = parseSizeString(imageData.image.crop_size);
+
+					var updateCrop = function (crop) {
+						var start = [0, 0];
+						var size = imageSize;
+						if (crop.w > 0 && crop.h > 0) {
+							start = [
+								Math.floor(crop.x / scaleFactor),
+								Math.floor(crop.y / scaleFactor)
+							];
+							size = [
+								Math.floor(crop.w / scaleFactor),
+								Math.floor(crop.h / scaleFactor)
+							];
+						}
+						$editor.find('#page_image_crop_start').val(
+							start[0] + 'x' + start[1]
+						);
+						$editor.find('#page_image_crop_size').val(
+							size[0] + 'x' + size[1]
+						);
+					};
+
+					$editor.find('.edit_image img').Jcrop({
+						setSelect: [
+							Math.floor(cropStart[0] * scaleFactor),
+							Math.floor(cropStart[1] * scaleFactor),
+							Math.floor(cropStart[0] * scaleFactor) + Math.floor(cropSize[0] * scaleFactor),
+							Math.floor(cropStart[1] * scaleFactor) + Math.floor(cropSize[1] * scaleFactor)
+						],
+						onSelect: updateCrop,
+						onChange: updateCrop
+					});
+
 				}
 			}
 
 			function closeEditor () {
 				$(images).removeClass('selected');
 				selectedImage = false;
+				selectedImageId = false;
 				$editor.slideUp(400);
+				$('.page_images .uploadButton').slideDown(400);
 				return false;
 			}
 
@@ -133,9 +191,37 @@
 				return false;
 			}
 
+			function reloadImage () {
+				if (selectedImage && selectedImageId) {
+					// Changes the image URL to include the timestamp, which forces a reload
+					var imageData = getImageData(selectedImageId);
+					var timestamp = imageData.image.updated_at.replace(/[^\d]/g, '');
+					var imageUrl = $(selectedImage).find('img').attr('src').split('?')[0];
+					$(selectedImage).find('img').attr('src', imageUrl + '?' + timestamp);
+				}
+			}
+
+			function saveImage () {
+				$editor.animate({opacity: 0.8}, 300);
+				var data = {
+					'page_image[byline]':     $editor.find('#page_image_byline').val(),
+					'page_image[primary]':    $editor.find('#page_image_primary').is(':checked'),
+					'page_image[crop_start]': $editor.find('#page_image_crop_start').val(),
+					'page_image[crop_size]':  $editor.find('#page_image_crop_size').val()
+				};
+				var url = baseURL + '/page_images/' + selectedImageId + '.json';
+				$.put(url, data, function (json) {
+					updateImageData(json);
+					reloadImage();
+					$editor.animate({opacity: 1.0}, 300);
+				});
+				return false;
+			}
+
 			$editor.find('a.next').click(showNextImage);
 			$editor.find('a.previous').click(showPreviousImage);
 			$editor.find('a.close').click(closeEditor);
+			$editor.find('button.save').click(saveImage);
 
 			// Apply to images
 			$(container).find('.image').each(function () {
@@ -144,6 +230,27 @@
 					showImage(this);
 				});
 			});
+
+			// Sorting images
+			var updateImagePosition = function () {
+				var ids = [];
+				$('.page_images .images .image').each(function () {
+					ids.push(parseInt($(this).data('page-image-id'), 10));
+				});
+				$('.page_images .images').animate({opacity: 0.8}, 300);
+				var url = baseURL + '/page_images/reorder.json';
+				var data = {ids: ids};
+				$.put(url, data, function (json) {
+					$('.page_images .images').animate({opacity: 1.0}, 300);
+				});
+			};
+
+			$('.page_images .images').sortable({
+				forcePlaceholderSize: true,
+				update: updateImagePosition
+			});
+			$('.page_images .image').disableSelection();
+
 		});
 	});
 })(jQuery);

@@ -105,16 +105,8 @@
 
 <%# #### UPLOAD IMAGE #### %>
 <div id="new-image">
-	<% form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
-		<%= labelled_field f.file_field(:image), 'Image' %>
-		<%= labelled_field f.text_field(:byline), 'Caption' %>
-		<p><%= f.check_box :primary %> Primary</p>
-		<p><%= submit_tag 'Upload' %></p>
-	<% end %>
-
-	<!--
 	<h2>Upload images</h2>
-	<% form_for 'image', @new_image, :url => add_image_admin_page_url( :id => @page, :language => @language ), :html => { :method => :post, :multipart => true } do |f| %>
+	<% form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
 
 		<table>
 			<tr>
@@ -124,32 +116,20 @@
 			<% 10.times do |i| %>
 				<tr class="hidden">
 					<td>
-						<%= file_field_tag("images[#{i}][imagefile]") %>
+						<%= file_field_tag("page_images[#{i}][image]") %>
 					</td>
 					<td>
-						<%= text_field_tag("images[#{i}][byline]", '', :size => 48) %>
+						<%= text_field_tag("page_images[#{i}][byline]", '', :size => 48) %>
 					</td>
 				</tr>
 			<% end %>
 		</table>
 
-		<% if false %>
-		<%= labelled_field f.file_field( :imagefile ), "File",
-			:errors      => @new_image.errors[:imagefile]
-		%>
-		<%# labelled_field f.text_field( :name, :size => 48 ), "Title",
-			:errors      => @new_image.errors[:name]
-		%>
-		<%= labelled_field f.text_field( :byline, :size => 48 ), "Caption",
-			:errors      => @new_image.errors[:byline]
-		%>
-		<% end %>
 		<p>
 			<%= submit_tag "Upload" %> or
 			<%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
 		</p>
 	<% end %>
-	-->
 </div>
 
 

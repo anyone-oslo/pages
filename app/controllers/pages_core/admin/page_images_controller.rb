@@ -16,7 +16,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
 
 		def load_page_image
 			begin
-			@page_file = @page.page_images.find(params[:id])
+				@page_image = @page.page_images.find(params[:id])
 			rescue ActiveRecord::RecordNotFound
 				flash[:notice] = "Could not find PageImage with ID ##{params[:id]}"
 				redirect_to admin_page_path(@language, @page) and return
@@ -34,6 +34,18 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
 			end
 		end
 
+		def reorder
+			@page_images = params[:ids].map{|id| PageImage.find(id)}
+			@page_images.each_with_index do |pi, i|
+				pi.update_attribute(:position, i)
+			end
+			respond_to do |format|
+				format.json do
+					render :json => '[' + @page_images.map{|pi| pi.to_json}.join(', ') + ']'
+				end
+			end
+		end
+
 		def show
 		end
 
@@ -42,23 +54,34 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
 		end
 
 		def create
-			#attributes = params[:page_images]
-			#if attributes[:image]
-			#	image = Image.create(attributes[:image])
-			#end
-			@page_image = @page.page_images.create(params[:page_image])
-			if @page_image.valid?
-				flash[:notice] = "The image was created"
-				redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
-			else
-				render :action => :new
+			if params[:page_image]
+				@page.page_images.create(params[:page_image])
+			elsif params[:page_images]
+				params[:page_images].each do |index, attributes|
+					@page.page_images.create(attributes) if attributes[:image] && attributes[:image] != ""
+				end
 			end
+			redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
 		end
 
 		def update
 			if @page_image.update_attributes(params[:page_image])
-				flash[:notice] = "The image was updated"
-				redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+
+				# Empty the cache
+				cache_path = File.join(RAILS_ROOT, "public/cache/dynamic_image/#{@page_image.image.id}")
+				if File.exists?(cache_path)
+					`rm -rf #{cache_path}`
+				end
+
+				respond_to do |format|
+					format.html do
+						flash[:notice] = "The image was updated"
+						redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+					end
+					format.json do
+						render :json => @page_image.to_json
+					end
+				end
 			else
 				render :action => :edit
 			end

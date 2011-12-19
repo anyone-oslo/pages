@@ -5,7 +5,8 @@ class PageImage < ActiveRecord::Base
 
 	validates_presence_of :page_id, :image_id
 
-	delegate :name, :name=, :description, :description=, :byline, :byline=, :to => :image_or_new
+	DELEGATED_ATTRIBUTES = [:name, :description, :byline, :crop_start, :crop_size]
+	DELEGATED_ATTRIBUTES.each{|a| attr_accessor a}
 
 	acts_as_list :scope => :page
 
@@ -26,6 +27,20 @@ class PageImage < ActiveRecord::Base
 				page_image.page.update_attribute(:image_id, nil)
 			end
 		end
+
+		image_attributes = {}
+		DELEGATED_ATTRIBUTES.each do |attribute|
+			page_image_attribute = page_image.send(attribute)
+			if !page_image_attribute.nil? && page_image_attribute != page_image.image.attributes[attribute]
+				image_attributes[attribute] = page_image_attribute
+			end
+		end
+		if image_attributes.length > 0
+			if image_attributes[:crop_size] && image_attributes[:crop_size] != page_image.image.original_size
+				image_attributes[:cropped] = true
+			end
+			page_image.image.update_attributes(image_attributes)
+		end
 	end
 
 	class << self
@@ -36,8 +51,24 @@ class PageImage < ActiveRecord::Base
 		end
 	end
 
-	def image_or_new
-		self.image ||= Image.new
+	def name
+		@name ||= (self.image ? self.image.name : nil)
+	end
+
+	def byline
+		@byline ||= (self.image ? self.image.byline : nil)
+	end
+
+	def description
+		@description ||= (self.image ? self.image.description : nil)
+	end
+
+	def crop_start
+		@crop_start ||= (self.image ? self.image.crop_start : nil)
+	end
+
+	def crop_size
+		@crop_size ||= (self.image ? self.image.crop_size : nil)
 	end
 
 	def to_json(options={})
