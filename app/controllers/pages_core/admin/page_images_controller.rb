@@ -68,10 +68,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
 			if @page_image.update_attributes(params[:page_image])
 
 				# Empty the cache
-				cache_path = File.join(RAILS_ROOT, "public/cache/dynamic_image/#{@page_image.image.id}")
-				if File.exists?(cache_path)
-					`rm -rf #{cache_path}`
-				end
+				#PagesCore::CacheSweeper.sweep_image!(@page_image.image_id)
 
 				respond_to do |format|
 					format.html do

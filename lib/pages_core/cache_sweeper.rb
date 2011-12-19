@@ -10,7 +10,7 @@ module PagesCore
 				yield
 				self.enabled = old_value
 			end
-			
+
 			def once(&block)
 			  disable(&block)
 			  sweep_later!
@@ -44,7 +44,7 @@ module PagesCore
 					`rm -rf #{cache_dir}/*`
 				end
 			end
-			
+
       # Sweep all cached pages later
 			def sweep_later!
 			  self.send_later(:sweep!)
@@ -85,14 +85,23 @@ module PagesCore
 			# Sweep cached dynamic image
 			def sweep_image!(image_id)
 				image_id = image_id.id if image_id.kind_of?(Image)
-				cache_dir = self.config.cache_path
-				image_dir = File.join(cache_dir, "dynamic_image/#{image_id}")
-				swept_files = []
-				if File.exist?(cache_dir) && File.exist?(image_dir)
-					Find.find( image_dir+"/" ) do |path|
-						if File.file?(path)
-							swept_files << path
-							`rm -rf #{path}`
+
+				cache_base_dir = self.config.cache_path
+				if PagesCore.config(:domain_based_cache)
+					cache_dirs = Dir.entries(cache_base_dir).select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}.map{|d| File.join(cache_base_dir, d)}
+				else
+					cache_dirs = [cache_base_dir]
+				end
+
+				cache_dirs.each do |cache_dir|
+					image_dir = File.join(cache_dir, "dynamic_image/#{image_id}")
+					swept_files = []
+					if File.exist?(cache_dir) && File.exist?(image_dir)
+						Find.find( image_dir+"/" ) do |path|
+							if File.file?(path)
+								swept_files << path
+								`rm -rf #{path}`
+							end
 						end
 					end
 				end
