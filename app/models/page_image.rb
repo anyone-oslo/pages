@@ -10,6 +10,12 @@ class PageImage < ActiveRecord::Base
 
 	acts_as_list :scope => :page
 
+	validate do |page_image|
+		if page_image.page && page_image.page.page_images.count < 1
+			page_image.primary = true
+		end
+	end
+
 	after_save do |page_image|
 		if page_image.primary_changed?
 
