@@ -218,10 +218,35 @@
 				return false;
 			}
 
+			function deleteImage () {
+				if (selectedImage && selectedImageId) {
+					if (confirm('Are you sure you want to delete this image?')) {
+						var url = baseURL + '/page_images/' + selectedImageId + '.json';
+						$.ajax(url, {
+							type: 'DELETE',
+							success: function () {
+								var deletedImage = selectedImage;
+								if (images.length > 1) {
+									showNextImage();
+								} else {
+									closeEditor();
+								}
+								images = _.reject(images, function (i) {
+									return i == deletedImage;
+								});
+								$(deletedImage).remove();
+							}
+						});
+					}
+				}
+				return false;
+			}
+
 			$editor.find('a.next').click(showNextImage);
 			$editor.find('a.previous').click(showPreviousImage);
 			$editor.find('a.close').click(closeEditor);
 			$editor.find('button.save').click(saveImage);
+			$editor.find('a.delete').click(deleteImage);
 
 			// Apply to images
 			$(container).find('.image').each(function () {

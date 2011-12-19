@@ -8,6 +8,7 @@
 
 	<%= javascript_include_tag "fastinit", :plugin => 'pages' %>
 	<%= javascript_include_tag "prototype", :plugin => 'pages' %>
+	<%= javascript_include_tag "underscore", :plugin => 'pages' %>
 	<%= javascript_include_tag "jquery", :plugin => 'pages' %>
 	<script type="text/javascript">jQuery.noConflict();</script>
 	<%= javascript_include_tag "jquery-ui", :plugin => 'pages' %>
@@ -88,12 +89,12 @@
 		<%# Template output %>
 		<%= yield %>
 	</div>
-	
+
 	<%# Javascript magic %>
 	<% if @content_tabs %><script type="text/javascript">
 		PagesAdmin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ") %>));
 	</script><% end %>
-	
+
 	<%# multiple domain tracking for usage statistics %>
 	<script type="text/javascript">
 

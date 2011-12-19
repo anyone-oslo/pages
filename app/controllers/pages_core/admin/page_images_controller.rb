@@ -89,8 +89,15 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
 
 		def destroy
 			@page_image.destroy
-			flash[:notice] = "The image was deleted"
-			redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+			respond_to do |format|
+				format.html do
+					flash[:notice] = "The image was deleted"
+					redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+				end
+				format.json do
+					render :json => @page_image.to_json
+				end
+			end
 		end
 
 end

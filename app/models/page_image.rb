@@ -1,7 +1,7 @@
 class PageImage < ActiveRecord::Base
 
 	belongs_to :page
-	belongs_to_image :image, :dependent => :destroy
+	belongs_to_image :image#, :dependent => :destroy
 
 	validates_presence_of :page_id, :image_id
 
@@ -40,6 +40,12 @@ class PageImage < ActiveRecord::Base
 				image_attributes[:cropped] = true
 			end
 			page_image.image.update_attributes(image_attributes)
+		end
+	end
+
+	after_destroy do |page_image|
+		if page_image.primary?
+			page_image.page.update_attribute(:image_id, nil)
 		end
 	end
 

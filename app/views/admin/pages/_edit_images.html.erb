@@ -1,4 +1,3 @@
-<% if @page.page_images.any? %>
 	<div class="page_images">
 		<div class="editor">
 			<div class="controls">
@@ -13,6 +12,7 @@
 				<%= hidden_field_tag 'page_image[crop_start]' %>
 				<%= hidden_field_tag 'page_image[crop_size]' %>
 				<button class="save">Save</button>
+				<%= link_to "Delete image", '#', :class => :delete %>
 			</div>
 			<div class="edit_image"></div>
 		</div>
@@ -37,4 +37,3 @@
 			<% end %>
 		</div>
 	</div>
-<% end %>
