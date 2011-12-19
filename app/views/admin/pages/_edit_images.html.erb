@@ -26,8 +26,7 @@
 		</div>
 
 		<div class="primary_container">
-			<% if @page.image? %>
-				<% page_image = @page.page_images.select{|pi| pi.primary?}.first %>
+			<% if @page.image? && (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
 				<div class="image primary" data-page-image-id="<%= page_image.id %>">
 					<%= dynamic_image_tag(page_image.image, :size => '220x220', :crop => true, :upscale => true) %>
 				</div>
