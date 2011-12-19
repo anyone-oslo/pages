@@ -24,6 +24,8 @@
 				for (var a = 0; a < imagesData.length; a++) {
 					if (imagesData[a].id == data.id) {
 						imagesData[a] = data;
+					} else if (data.primary) {
+						imagesData[a].primary = false;
 					}
 				}
 			}
@@ -56,7 +58,7 @@
 
 			function showImage (image) {
 
-				// Delay execution if imageData hasn't yet been loaded.
+				// Delay execution if imageData is unavailable
 				if (imagesData === false) {
 					setTimeout(function () {
 						showImage(image);
@@ -76,7 +78,7 @@
 					} else {
 						$editor.find('#page_image_primary').attr('checked', false);
 					}
-					$(images).removeClass('selected');
+					$(container).find('.image').removeClass('selected');
 					$(image).addClass('selected');
 					selectedImage = image;
 					selectedImageId = imageId;
@@ -150,7 +152,7 @@
 			}
 
 			function closeEditor () {
-				$(images).removeClass('selected');
+				$(container).find('.image').removeClass('selected');
 				selectedImage = false;
 				selectedImageId = false;
 				$editor.slideUp(400);
@@ -191,7 +193,7 @@
 				return false;
 			}
 
-			function reloadImage () {
+			function reloadThumbnail () {
 				if (selectedImage && selectedImageId) {
 					// Changes the image URL to include the timestamp, which forces a reload
 					var imageData = getImageData(selectedImageId);
@@ -201,7 +203,49 @@
 				}
 			}
 
+			// Sorting images
+			var saveImageOrder = function () {
+				var ids = [];
+				images = [];
+				$('.page_images .images .image').each(function () {
+					images.push(this);
+					ids.push(parseInt($(this).data('page-image-id'), 10));
+				});
+				$('.page_images .images').animate({opacity: 0.8}, 300);
+				var url = baseURL + '/page_images/reorder.json';
+				var data = {ids: ids};
+				$.put(url, data, function (json) {
+					$('.page_images .images').animate({opacity: 1.0}, 300);
+				});
+			};
+
+			function setPrimaryImage (newPrimary) {
+				var $previousPrimary = $(container).find('.primary');
+				if ($previousPrimary.length > 0) {
+					var thumbURL = $previousPrimary.find('img').attr('src').replace('220x220', '100x100');
+					$previousPrimary.find('img').attr('src', thumbURL);
+					$previousPrimary
+						.removeClass('primary')
+						.remove()
+						.appendTo($(container).find('.images'));
+					$previousPrimary.hide().fadeIn(400);
+				}
+
+				if (newPrimary) {
+					$(newPrimary)
+						.addClass('primary')
+						.remove()
+						.appendTo($(container).find('.primary_container'));
+					var bigURL = $(newPrimary).find('img').attr('src').replace('100x100', '220x220');
+					$(newPrimary).find('img').attr('src', bigURL);
+					$(newPrimary).hide().fadeIn(400);
+				}
+				saveImageOrder();
+			}
+
 			function saveImage () {
+				var savedId = selectedImageId;
+				var savedImage = selectedImage;
 				$editor.animate({opacity: 0.8}, 300);
 				var data = {
 					'page_image[byline]':     $editor.find('#page_image_byline').val(),
@@ -209,10 +253,18 @@
 					'page_image[crop_start]': $editor.find('#page_image_crop_start').val(),
 					'page_image[crop_size]':  $editor.find('#page_image_crop_size').val()
 				};
-				var url = baseURL + '/page_images/' + selectedImageId + '.json';
+				var url = baseURL + '/page_images/' + savedId + '.json';
 				$.put(url, data, function (json) {
 					updateImageData(json);
-					reloadImage();
+					reloadThumbnail();
+
+					// Shuffle primary image around
+					if (json.primary && !$(savedImage).hasClass('primary')) {
+						setPrimaryImage(savedImage);
+					} else if (!json.primary && $(savedImage).hasClass('primary')) {
+						setPrimaryImage(false);
+					}
+
 					$editor.animate({opacity: 1.0}, 300);
 				});
 				return false;
@@ -248,31 +300,20 @@
 			$editor.find('button.save').click(saveImage);
 			$editor.find('a.delete').click(deleteImage);
 
-			// Apply to images
+			// Find images
 			$(container).find('.image').each(function () {
 				images.push(this);
-				$(this).click(function () {
-					showImage(this);
-				});
+				$(this).find('img').removeAttr('width').removeAttr('height');
 			});
 
-			// Sorting images
-			var updateImagePosition = function () {
-				var ids = [];
-				$('.page_images .images .image').each(function () {
-					ids.push(parseInt($(this).data('page-image-id'), 10));
-				});
-				$('.page_images .images').animate({opacity: 0.8}, 300);
-				var url = baseURL + '/page_images/reorder.json';
-				var data = {ids: ids};
-				$.put(url, data, function (json) {
-					$('.page_images .images').animate({opacity: 1.0}, 300);
-				});
-			};
+			$(container).on('click', '.image', function () {
+				showImage(this);
+			});
 
 			$('.page_images .images').sortable({
 				forcePlaceholderSize: true,
-				update: updateImagePosition
+				update:               saveImageOrder,
+				distance:             5
 			});
 			$('.page_images .image').disableSelection();
 

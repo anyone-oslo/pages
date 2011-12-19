@@ -4,9 +4,31 @@
 	line-height:1px;
 	margin-left:20px;
 	margin-bottom:20px;
+
+	background-image: linear-gradient(right bottom, rgb(245,245,245) 23%, rgb(240,240,240) 58%);
+	background-image: -o-linear-gradient(right bottom, rgb(245,245,245) 23%, rgb(240,240,240) 58%);
+	background-image: -moz-linear-gradient(right bottom, rgb(245,245,245) 23%, rgb(240,240,240) 58%);
+	background-image: -webkit-linear-gradient(right bottom, rgb(245,245,245) 23%, rgb(240,240,240) 58%);
+	background-image: -ms-linear-gradient(right bottom, rgb(245,245,245) 23%, rgb(240,240,240) 58%);
+	background-image: -webkit-gradient(
+		linear,
+		right bottom,
+		left top,
+		color-stop(0.23, rgb(245,245,245)),
+		color-stop(0.58, rgb(240,240,240))
+	);
+	background-color: #eee;
+}
+.page_images .imageimg {
+	width: 100px;
+	height: 100px;
 }
 .page_images .image.primary {
 	margin-left:0;
+}
+.page_images .image.primary img {
+	width: 220px;
+	height: 220px;
 }
 .page_images .image:hover, .page_images .image.selected {
 	/*-webkit-transition:all .2s ease-in;*/
