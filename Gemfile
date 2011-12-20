@@ -28,12 +28,6 @@ group :development do
 	gem 'rack'
 end
 
-group :test do
-	gem 'shoulda'
-	gem 'machinist'
-	gem 'faker', '0.3.1'
-end
-
 # Load gems from plugins
 plugins_dir = File.join(File.dirname(__FILE__), '..')
 Dir.entries(plugins_dir).each do |plugin|
