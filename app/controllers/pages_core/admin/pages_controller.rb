@@ -195,41 +195,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				edit
 				render :action => :edit
 			end
-
-		end
-
-		def add_image
-			images = params[:images].map{|k, v| {:params => v, :index => k.to_i} }.sort{|a, b| a[:index] <=> b[:index]}
-			images = images.map do |image|
-				@page.images.create(image[:params]) if image[:params][:imagefile] && !image[:params][:imagefile].blank?
-			end
-			if images.length > 0 && !@page.image
-				@page.update_attribute(:image_id, images.first.id)
-			end
-			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'additional_images')
-		end
-
-		def delete_image
-			@page.page_images.find(params[:image_id]).destroy
-			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'additional_images')
-		end
-
-		def delete_presentation_image
-			if @page.image
-				@page.image.destroy
-				flash[:notice] = "Image deleted"
-			end
-			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'presentation')
-		end
-
-		def update_image_caption
-			@image = Image.find(params[:image_id]) rescue nil
-			if @image
-				@image.update_attribute(:byline, params[:caption])
-				render :text => @image.byline
-			else
-				render :text => "ERROR! Could not update caption."
-			end
 		end
 
 		def destroy

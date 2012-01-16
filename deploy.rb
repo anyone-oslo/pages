@@ -80,17 +80,12 @@ namespace :deploy do
 	    sudo "/etc/init.d/#{web_server} reload"
 	end
 
-	desc "Update plugin migrations"
-	task :fix_plugin_migrations, :roles => [:db] do
-		run "cd #{release_path} && rake pages:update:fix_plugin_migrations RAILS_ENV=production --trace"
-	end
-	
 	desc "Ensure binary objects store"
 	task :ensure_binary_objects, :roles => [:web] do
 		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
 		run "ln -s #{deploy_to}/#{shared_dir}/binary-objects #{release_path}/db/binary-objects"
 	end
-	
+
 	desc "Setup services"
 	task :services, :roles => [:web] do
 	end
@@ -98,7 +93,7 @@ namespace :deploy do
 	after 'deploy:services', 'sphinx:index'
 	after 'deploy:services', 'monit:configure'
 	after 'deploy:services', 'monit:restart'
-	
+
 	desc "Notify Campfire"
 	task :notify_campfire, :roles => [:web] do
 		username = `whoami`.chomp
@@ -106,7 +101,7 @@ namespace :deploy do
 		room = Campfire.room(campfire_room)
 		room.message "[#{repo_name}] has been deployed by #{username}"
 	end
-	
+
 end
 
 namespace :cache do
@@ -129,8 +124,8 @@ namespace :log do
 		task :production, :roles => :app do
 			run "tail -f #{shared_path}/log/production.log" do |channel, stream, data|
 				puts  # for an extra line break before the host name
-				puts "==== #{channel[:host]} ====\n#{data}" 
-				break if stream == :err    
+				puts "==== #{channel[:host]} ====\n#{data}"
+				break if stream == :err
 			end
 		end
 
@@ -138,8 +133,8 @@ namespace :log do
 		task :delayed_job, :roles => :app do
 			run "tail -f #{shared_path}/log/delayed_job.log" do |channel, stream, data|
 				puts  # for an extra line break before the host name
-				puts "==== #{channel[:host]} ====\n#{data}" 
-				break if stream == :err    
+				puts "==== #{channel[:host]} ====\n#{data}"
+				break if stream == :err
 			end
 		end
 	end
@@ -154,7 +149,6 @@ after "deploy:setup",           "pages:create_shared_dirs"
 after "deploy:symlink",         "pages:create_symlinks"
 
 after "deploy:restart",         "cache:flush"
-before "deploy:migrate",        "deploy:fix_plugin_migrations"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 # Sphinx
@@ -169,8 +163,8 @@ after "deploy:cold", "deploy:reload_webserver"
 
 # Delayed Job
 before "deploy:update", "delayed_job:stop"
-after "deploy:start", "delayed_job:start" 
-after "deploy:stop", "delayed_job:stop" 
+after "deploy:start", "delayed_job:start"
+after "deploy:stop", "delayed_job:stop"
 after "deploy:restart", "delayed_job:start"
 
 after "deploy:restart", "deploy:notify_campfire"
