@@ -22,6 +22,7 @@ gem 'httparty', '0.6.1'
 gem 'sass', '3.1.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.1.3'
+gem 'uuid'
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 group :development do
