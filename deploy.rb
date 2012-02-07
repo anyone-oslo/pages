@@ -67,7 +67,11 @@ namespace :deploy do
 	task :cold, :roles => [:web] do
 		run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
 		run "a2ensite #{application}"
-		run "cd #{deploy_to}/#{current_dir} && rake db:create RAILS_ENV=production"
+	end
+
+	desc "Create database"
+	task :create_database, :roles => [:web] do
+		run "cd #{release_path} && bundle exec rake db:create RAILS_ENV=production"
 	end
 
 	desc "Restart application"
@@ -156,8 +160,12 @@ before "deploy:update", "sphinx:stop"
 after "deploy:symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
+# Cold deploy
+before "deploy:cold", "without_services"
 before "deploy:cold", "deploy:setup"
-#before "deploy:cold", "deploy"
+after "deploy:cold", "deploy"
+after "deploy:cold", "deploy:create_database"
+after "deploy:cold", "deploy:migrate"
 after "deploy:cold", "deploy:services"
 after "deploy:cold", "deploy:reload_webserver"
 
