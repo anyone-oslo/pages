@@ -66,7 +66,7 @@ namespace :deploy do
 	desc "Setup, configure the web server and deploy the application"
 	task :cold, :roles => [:web] do
 		run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
-		run "sudo a2ensite #{application}"
+		run "a2ensite #{application}"
 		run "cd #{deploy_to}/#{current_dir} && rake db:create RAILS_ENV=production"
 	end
 
