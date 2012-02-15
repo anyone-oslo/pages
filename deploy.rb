@@ -148,13 +148,13 @@ after "deploy:setup",           "pages:create_shared_dirs"
 #after "deploy:symlink",         "pages:fix_permissions"
 after "deploy:symlink",         "pages:create_symlinks"
 
-after "deploy:restart",         "cache:flush"
-after "deploy:finalize_update", "deploy:ensure_binary_objects"
-
 # Sphinx
-before "deploy:update", "sphinx:stop"
+before "deploy:symlink", "sphinx:stop"
 after "deploy:symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
+
+after "deploy:restart",         "cache:flush"
+after "deploy:finalize_update", "deploy:ensure_binary_objects"
 
 before "deploy:cold", "deploy:setup"
 #before "deploy:cold", "deploy"
