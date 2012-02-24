@@ -228,7 +228,7 @@ namespace :pages do
 			# Get origin base patch
 			origin_base_url = `cd #{RAILS_ROOT}/vendor/plugins/pages && git remote -v | grep origin`.split(/\s+/)[1].gsub(/pages(\.git)?$/, '')
 
-			required_plugins = %w{thinking-sphinx acts_as_list acts_as_tree dynamic_image engines recaptcha delayed_job}
+			required_plugins = %w{thinking-sphinx acts_as_list acts_as_tree dynamic_image recaptcha delayed_job}
 			required_plugins.each do |plugin|
 				unless File.exists?(File.join(RAILS_ROOT, "vendor/plugins/#{plugin}"))
 					puts "Missing plugin: #{plugin} .. installing.."
