@@ -1,8 +1,9 @@
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
 	#include ActsAsDynamicImage::Helper
+	include PagesCore::PluginAssetsHelper
 	include PagesCore::VideoHelper
-	
+
 	def feed_tags(options={})
 		feeds = Page.enabled_feeds(@language, options)
 		output = ''
@@ -22,7 +23,7 @@ module PagesCore::ApplicationHelper
 			string
 		end
 	end
-	
+
 	def include_stylesheet(source, options={})
 		@include_stylesheets ||= []
 		@include_stylesheets << [source, options]
@@ -53,7 +54,7 @@ module PagesCore::ApplicationHelper
 				end
 			end
 		end
-		
+
 		# Build HTML
 		output  = ""
 		if options[:doctype] == :xhtml
@@ -85,7 +86,7 @@ module PagesCore::ApplicationHelper
 		output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"    if options.has_key? :stylesheet
 
 		if @include_stylesheets
-			output += @include_stylesheets.map do |source, source_options| 
+			output += @include_stylesheets.map do |source, source_options|
 				ie = source_options.delete(:ie)
 				source_output = stylesheet_link_tag(source, source_options)
 				source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
@@ -107,7 +108,7 @@ module PagesCore::ApplicationHelper
 		#output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
 
 		if @include_javascripts
-			output += @include_javascripts.map do |source, source_options| 
+			output += @include_javascripts.map do |source, source_options|
 				ie = source_options.delete(:ie)
 				source_output = javascript_include_tag(source)
 				source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
@@ -121,7 +122,7 @@ module PagesCore::ApplicationHelper
 		elsif options[:feed_tags]
 			output += indent(feed_tags, 1)
 		end
-			
+
 		output += "\n"
 
 		# META description
@@ -149,7 +150,7 @@ module PagesCore::ApplicationHelper
 			if page.image
 				# Facebook likes this
 				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
-			end	
+			end
 		end
 		output += output_block
 		output += "</head>\n"
@@ -158,17 +159,17 @@ module PagesCore::ApplicationHelper
 		concat(output)
 		return ""
 	end
-	
+
 	def indent( string, level=0 )
 		indent_string = ""; level.times{ indent_string += "\t" }
 		string.split("\n").map{ |line| "#{indent_string}#{line}" }.join("\n")
 	end
-	
-	
+
+
 	def is_page_route?( options={} )
 		( options[:controller] == 'pages' && options[:action] =~ /^(index|show)$/ ) ? true : false
 	end
-	
+
 	def hash_for_translated_route( options, target_language )
 		if is_page_route? options
 			if options[:id].kind_of? Page
@@ -185,7 +186,7 @@ module PagesCore::ApplicationHelper
 		end
 		options = options.merge( { :language => target_language } )
 	end
-	
+
 	def page_file_link(file, options={})
 		options[:language] ||= @language
 		if file.format?
@@ -209,12 +210,12 @@ module PagesCore::ApplicationHelper
 		end
 		link_to_unless_current name, :overwrite_params => overwrite_params
 	end
-	
+
 	def smart_time( time, options={} )
 		options.symbolize_keys!
 		options[:include_distance] ||= false
 		options[:always_include_time] ||= false
-		
+
 		if options[:skip_prefix]
 			date_string = ""
 		else
@@ -231,18 +232,18 @@ module PagesCore::ApplicationHelper
 			date_string += time.strftime(" at %H:%M") if options[:always_include_time]
 			options[:include_distance] = false
 		end
-		
+
 		date_string += " (" + time_ago_in_words( time ) + " ago)" if options[:include_distance]
-		
+
 		date_string
 	end
-	
+
 	def fragment( name )
 		Partial.find_by_name(name).translate(@language).body.to_html rescue ""
 	end
 	alias_method :partial, :fragment
-	
-	def page_link( page, options={} ) 
+
+	def page_link( page, options={} )
 		page.translate( @language ) do |p|
 			options[:title] ||= p.name.to_s
 			if options.has_key? :unless
@@ -251,7 +252,7 @@ module PagesCore::ApplicationHelper
 			if options.has_key?( :if ) && !( options[:if] )
 				return options[:title]
 			end
-			if p.redirects? 
+			if p.redirects?
 				#raise p.redirect_to_options( { :language => p.working_language } ).inspect
 				link_to options[:title], p.redirect_to_options( { :language => p.working_language } ), :class => options[:class]
 			else
@@ -259,11 +260,11 @@ module PagesCore::ApplicationHelper
 			end
 		end
 	end
-	
+
 	def page_url( page, options={} )
 		options[:language] ||= @language
 		page.translate(options[:language]) do |p|
-			if p.redirects? 
+			if p.redirects?
 				url_options = p.redirect_to_options(options.merge({:language => p.working_language}))
 			else
 				url_options = options.merge({:controller => 'pages', :action => :show, :language => p.working_language, :id => p.to_param})
@@ -271,8 +272,8 @@ module PagesCore::ApplicationHelper
 			url_for url_options
 		end
 	end
-	
-	
+
+
 	def dynamic_lightbox_image( image, options={} )
 		options = { :fullsize => '640x480' }.merge( options ).symbolize_keys!
 		fullsize = options[:fullsize]
@@ -283,16 +284,16 @@ module PagesCore::ApplicationHelper
 		else
 			rel = "lightbox"
 		end
-		
-		link_to( 
-			dynamic_image_tag( image, options ), 
-			dynamic_image_url( image, :size => fullsize, :crop => false ), 
-			:title => options[:title] || image.name, 
+
+		link_to(
+			dynamic_image_tag( image, options ),
+			dynamic_image_url( image, :size => fullsize, :crop => false ),
+			:title => options[:title] || image.name,
 			:rel => rel,
 			:target => '_blank'
 		)
 	end
-	
+
 	# Generate HTML for a field, with label and optionally description and errors.
 	#
 	# The options are:
@@ -301,8 +302,8 @@ module PagesCore::ApplicationHelper
 	#
 	# An example:
 	#   <% form_for 'user', @user do |f| %>
-	#     <%= labelled_field f.text_field( :username ), "Username", 
-	#                        :description => "Choose your username, minimum 4 characters", 
+	#     <%= labelled_field f.text_field( :username ), "Username",
+	#                        :description => "Choose your username, minimum 4 characters",
 	#                        :errors => @user.errors[:username] %>
 	#     <%= submit_tag "Save" %>
 	#   <% end %>
@@ -327,7 +328,7 @@ module PagesCore::ApplicationHelper
 		output += field
 		output += "</#{options[:field_tag]}>"
 	end
-	
+
 
 	# Generate HTML for a text area field.
 	def labelled_body_field( field, label=nil, options={} )
@@ -339,8 +340,8 @@ module PagesCore::ApplicationHelper
 		render :partial => 'common/body_field', :locals => { :field => field, :label => label, :error => error }
 	end
 
-    # Truncate string to max_length, retaining words. If the first word is shorter than max_length, 
-    # it will be shortened. An optional end_string can be supplied, which will be appended to the 
+    # Truncate string to max_length, retaining words. If the first word is shorter than max_length,
+    # it will be shortened. An optional end_string can be supplied, which will be appended to the
     # string if it has been truncated.
 	def truncate(string, max_length, end_string='')
 	    words = string.split(' ')
@@ -363,7 +364,7 @@ module PagesCore::ApplicationHelper
 		end
 		(page) ? page.translate(language) : nil
 	end
-	
+
 	# Sets a page title
 	def page_title(title)
 		@page_title = title
