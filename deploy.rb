@@ -15,7 +15,6 @@ set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.gi
 set :deploy_via,            :remote_cache
 set :git_enable_submodules, 1
 
-set :perform_verify_migrations, true
 set :flush_cache,       true
 set :reindex_sphinx,    true
 set :cold_deploy,       false
@@ -47,7 +46,6 @@ end
 
 desc "Quick deploy, do not clean cache and reindex Sphinx"
 task :quick, :roles => [:web] do
-	set :perform_verify_migrations, false
 	set :flush_cache,       false
 	set :reindex_sphinx,    false
 end
@@ -143,8 +141,6 @@ namespace :log do
 		end
 	end
 end
-
-#before "deploy", "pages:verify_migrations"
 
 before "deploy:cold", "deploy:setup_cold_deploy"
 

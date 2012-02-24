@@ -2,7 +2,7 @@ require 'find'
 require 'open-uri'
 
 namespace :pages do
-	
+
 	namespace :error_reports do
 		desc "Show error reports"
 		task :list => :environment do
@@ -33,7 +33,7 @@ namespace :pages do
 				puts "No error reports found"
 			end
 		end
-		
+
 		desc "Clear all error reports"
 		task :clear => :environment do
 			reports_dir = File.join(RAILS_ROOT, 'log/error_reports')
@@ -46,17 +46,17 @@ namespace :pages do
 			puts "Error reports cleared"
 		end
 	end
-	
+
 	desc "Show error reports"
 	task :error_reports => "pages:error_reports:list" do
 	end
-	
+
 	desc "Deliver mailing queue"
 	task :deliver_mailings => :environment do
 		puts "Delivering mailings"
 		Mailing.do_queue
 	end
-	
+
 	desc "Refresh RSS feeds"
 	task :refresh_feeds => :environment do
 		puts "Refreshing external feeds"
@@ -70,26 +70,16 @@ namespace :pages do
 			end
 		end
 	end
-	
+
 	desc "Autopublish due pages"
 	task :autopublish => :environment do
 		published = Page.autopublish!
 		puts "Autopublished #{published.length} pages"
 	end
-	
+
 	desc "Perform routine maintenance"
 	task :maintenance => [:autopublish, :clean_sessions, :refresh_feeds, :deliver_mailings] do
 	end
-	
-	desc "Migration status"
-	task :migration_status => :environment do
-		puts "Plugins:"
-		plugins = Rails.plugins.select{ |p| p.latest_migration }
-		longest_name = plugins.mapped.name.sort{|a,b| a.length <=> b.length }.last.length + 1
-		plugins.each do |p|
-			puts "  " + "#{p.name}:".ljust(longest_name,' ')+" "+Engines::Plugin::Migrator.current_version( p ).to_s+"/#{p.latest_migration}"
-		end
-	end
-	
+
 end
 
