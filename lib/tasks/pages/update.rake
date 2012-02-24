@@ -139,6 +139,8 @@ namespace :pages do
 				end
 			end
 
+			# TODO: remove old migrations
+
 			# Passenger/RVM
 			if !File.exists?('config/setup_load_paths.rb')
 				puts "* setup_load_paths.rb not found, installing default..."
@@ -187,21 +189,36 @@ namespace :pages do
 			`bundle install`
 		end
 
-		desc "Update migrations"
-		task :migrations => :environment do
-			# Update migrations for plugins
-			plugins = Rails.plugins.select{|p| p.latest_migration}
-			plugins_migrated = 0
-			plugins.each do |plugin|
-				if (plugin.name =~ /^pages/ || plugin.name =~ /^backstage/) && plugin.latest_migration != Engines::Plugin::Migrator.current_version(plugin)
-					puts "Generating migrations for plugin #{plugin.name}..."
-					`script/generate plugin_migration #{plugin.name}`
-					plugins_migrated += 1
+		desc "Fix plugin migrations"
+		task :fix_migrations => :environment do
+			Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
+				plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
+				if File.exists?(old_migrations = File.join(plugin_root, 'config/old_migrations.yml'))
+					YAML::load_file(old_migrations).each_with_index do |migration, i|
+						old_migration = "#{i + 1}-#{plugin}"
+						query = "UPDATE schema_migrations SET version = '#{migration}' WHERE version = '#{old_migration}'"
+						ActiveRecord::Base.connection.execute(query)
+					end
 				end
 			end
-			if plugins_migrated > 0
-				`git add db/migrate/*`
-				puts "\nNew migrations added, now run rake db:migrate"
+		end
+
+		desc "Update migrations"
+		task :migrations => :environment do
+			new_migrations = []
+			Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
+				plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
+				if File.exists?(template_dir = File.join(plugin_root, 'template/db/migrate'))
+					Dir.entries(template_dir).select{|f| f =~ /^\d+/}.each do |migration|
+						unless File.exists?(File.join(RAILS_ROOT, 'db/migrate', migration))
+							`cp #{File.join(template_dir, migration)} #{File.join(RAILS_ROOT, 'db/migrate', migration)}`
+							new_migrations << migration
+						end
+					end
+				end
+			end
+			if new_migrations.any?
+				puts "\n#{new_migrations.length} new migrations added, now run rake db:migrate"
 			end
 		end
 
@@ -225,7 +242,7 @@ namespace :pages do
 		end
 
 		desc "Run all update tasks"
-		task :all => ["update:files", "update:fix_inheritance", "update:gems", "update:migrations"]
+		task :all => ["update:fix_migrations", "update:files", "update:fix_inheritance", "update:gems", "update:migrations"]
 	end
 
 	desc "Automated updates for newest version"
