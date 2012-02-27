@@ -148,6 +148,8 @@ end
 
 before "deploy:cold", "deploy:setup_cold_deploy"
 
+before "deploy:migrations", "pages:fix_migrations"
+
 after "deploy:setup",           "pages:create_shared_dirs"
 #after "deploy:symlink",         "pages:fix_permissions"
 after "deploy:symlink",         "pages:create_symlinks"
