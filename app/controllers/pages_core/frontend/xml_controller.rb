@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Frontend::XmlController < FrontendController
 
 	caches_page :sitemap
@@ -7,9 +9,9 @@ class PagesCore::Frontend::XmlController < FrontendController
 
 		# cache everything
 		Page.find( :all )
-		
+
 		# grab root pages
-		@pages = Page.root_pages(:language => @language) 
+		@pages = Page.root_pages(:language => @language)
 		render :layout => false
 	end
 

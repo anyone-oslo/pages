@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Configuration file for Pages CMS
 # Be sure to restart your web server when you modify this file.
 
@@ -38,7 +40,7 @@ PagesCore::Templates.configure do |config|
 
 	# Default configuration for all templates
 	config.default do |default|
-		### The block definitions here will be available for all templates. 
+		### The block definitions here will be available for all templates.
 		# default.blocks do |block|
 		# 	block.headline    "Headline",   :description => 'The main statement, usually largest and boldest, describing the main story.', :size => :field
 		# 	block.excerpt     "Standfirst", :description => 'An introductory paragraph before the start of the body.'
@@ -58,7 +60,7 @@ PagesCore::Templates.configure do |config|
 	end
 
 	# Sample template configurations:
-	
+
 	### News container template
 	# config.template(:news) do |t|
 	# 	t.enabled_blocks []         # Disable everything but the page title
@@ -82,12 +84,12 @@ PagesCore::Templates.configure do |config|
 	# 	t.image          :enabled, :linkable => true    # Make image linkable
 	# 	t.comments       :enabled                       # Enable comments
 	# end
-	
+
 	### Add a video embed field to the previously defined news_page_with_video template
 	# config.template(:news_page_with_image) do |t|
 	# 	t.enabled_blocks [:headline, :excerpt, :body, :video_embed]
 	# end
-	
+
 end
 
 

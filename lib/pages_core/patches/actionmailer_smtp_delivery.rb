@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # ActionMailer monkey patch
 if RAILS_GEM_VERSION == '2.2.2' || RAILS_GEM_VERSION == '2.2.3'
 	module ActionMailer

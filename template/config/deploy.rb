@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 set :application, "<%= @app_name %>"
 load File.join(File.dirname(__FILE__), '../vendor/plugins/pages/deploy.rb')
 

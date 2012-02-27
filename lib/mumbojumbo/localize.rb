@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Derived from the Gibberish plugin, which is copyright (c) 2007 Chris Wanstrath.
 # http://plugins.require.errtheblog.com/browser/gibberish
 
@@ -8,7 +10,7 @@ module MumboJumbo
 
 		@@reserved_keys = [ :limit ]
 		mattr_reader :reserved_keys
-		
+
 		@@translators = []
 		mattr_accessor :translators
 
@@ -40,7 +42,7 @@ module MumboJumbo
 			self.current_language = start_language
 			result
 		end
-		
+
 		def without_translators
 			start_translators = @@translators
 			@@translators = []
@@ -52,11 +54,11 @@ module MumboJumbo
 		def default_language?
 			current_language == default_language
 		end
-		
+
 		def translations
 			@@languages[current_language] || {}
 		end
-		
+
 		def get_translation( key )
 			return if reserved_keys.include? key
 			translations[key.to_sym] || ""
@@ -72,7 +74,7 @@ module MumboJumbo
 		end
 
 		def load_languages!
-			language_files.each do |file| 
+			language_files.each do |file|
 				key = File.basename(file, '.*').to_sym
 				@@languages[key] ||= {}
 				@@languages[key].merge! YAML.load_file(file).symbolize_keys
@@ -85,16 +87,16 @@ module MumboJumbo
 		def language_paths
 			@@language_paths ||= []
 		end
-		
+
 		def add_language_path( path )
 			@@language_paths.delete( RAILS_ROOT )
 			@@language_paths = [ @@language_paths, path, RAILS_ROOT ].flatten
 		end
-		
+
 		def reset_language_paths!
 			@@language_paths = [RAILS_ROOT]
 		end
-		
+
 		private
 		def interpolate_string(string, *args)
 			if args.last.is_a? Hash
@@ -107,7 +109,7 @@ module MumboJumbo
 		def interpolate_with_hash(string, hash)
 			hash.inject(string) do |target, (search, replace)|
 				target.sub("{#{search}}", replace)
-			end 
+			end
 		end
 
 		def interpolate_with_strings(string, strings)
@@ -121,7 +123,7 @@ module MumboJumbo
 		def translators_have_key?( key, string )
 			@@translators.inject( false ){ |has_key,translator| has_key ||= translator.has_key?( key, current_language, string ) }
 		end
-		
+
 		def get_target_from_translators( key, string )
 			return false unless translators_have_key?( key, string )
 			@@translators.select{ |t| t.has_key? key, current_language, string }.first.get_target( key, current_language, string )

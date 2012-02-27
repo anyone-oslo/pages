@@ -1,14 +1,16 @@
+# encoding: utf-8
+
 class PagesCore::Admin::UsersController < Admin::AdminController
-	
+
 	before_filter :find_user, :only => [:edit, :update, :show, :destroy, :delete_image, :update_openid]
 	before_filter :verify_editable, :only => [:delete_image, :update, :destroy, :edit, :update_openid]
 
 	protected
-	
+
 		def find_user
 			@user = User.find(params[:id])
 		end
-		
+
 		def verify_editable
 			unless @user.editable_by?(@current_user)
 				flash[:error] = "Only the account holder can edit this person"
@@ -21,10 +23,10 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 		def list
 			redirect_to :action => "index"
 		end
-	
+
 		def index
 			respond_to do |format|
-				format.html do 
+				format.html do
 					@users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true}).reject{|user| user.email.match(/@manualdesign\.no/)}
 				end
 				format.xml do
@@ -33,7 +35,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				end
 			end
 		end
-	
+
 		def deactivated
 			@users = User.find_deactivated
 		end
@@ -58,8 +60,8 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 						set_authentication_cookies
 
 						if new_openid_url
-							unless start_openid_session(new_openid_url, 
-								:success   => update_openid_admin_user_url(@user), 
+							unless start_openid_session(new_openid_url,
+								:success   => update_openid_admin_user_url(@user),
 								:fail      => edit_admin_user_url(@user)
 							)
 								flash.now[:error] = "Not a valid OpenID URL"
@@ -72,7 +74,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				raise "Account holder already created"
 			end
 		end
-	
+
 		def new_password
 			if params[:username]
 				if user = User.find_by_username_or_email( params[:username] )
@@ -84,23 +86,23 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				end
 			end
 		end
-	
+
 		def login
 			redirect_to admin_default_url
 		end
-	
+
 		def logout
 			flash[:notice] = "You have been logged out."
 			deauthenticate!( :forcefully => true )
 			redirect_to( "/admin" ) and return
 		end
-	
+
 		def new
 			@user = User.new
 			@user.is_admin     = true
 			@user.is_activated = true
 		end
-	
+
 		def create
 			@user = User.new( params[:user] )
 			@user.creator  = @current_user
@@ -113,40 +115,40 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				render :action => :new
 			end
 		end
-	
+
 		def show
 			respond_to do |format|
 				format.html
 				format.xml { render :xml => @user.to_xml }
 			end
 		end
-	
+
 		def edit
 		end
-	
+
 		def update
 			original_username = @user.username
-		
+
 			update_params = params[:user]
 			unless update_params[:openid_url].blank?
 				new_openid_url = update_params[:openid_url] if @user == @current_user && update_params[:openid_url] != @user.openid_url
 				update_params.delete(:openid_url)
 			end
-		
+
 			if @user.update_attributes( params[:user] )
 				# Send an email notification if the username or password changes
 				if ( params[:user][:username] && params[:user][:username] != original_username ) || ( params[:user][:password] && !params[:user][:password].blank? )
-					AdminMailer.deliver_user_changed( 
-						:user       => @user, 
-						:site_name  => PagesCore.config( :site_name ), 
+					AdminMailer.deliver_user_changed(
+						:user       => @user,
+						:site_name  => PagesCore.config( :site_name ),
 						:login_url  => admin_default_url,
 						:updated_by => @current_user
 					)
 				end
 				@current_user = @user if @user == @current_user
 				if new_openid_url
-					unless start_openid_session(new_openid_url, 
-						:success   => update_openid_admin_user_url(@user), 
+					unless start_openid_session(new_openid_url,
+						:success   => update_openid_admin_user_url(@user),
 						:fail      => edit_admin_user_url(@user)
 					)
 						flash.now[:error] = "Not a valid OpenID URL"
@@ -161,7 +163,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				render :action => :edit
 			end
 		end
-	
+
 		def update_openid
 			if session[:authenticated_openid_url]
 				@user.update_attribute(:openid_url, session[:authenticated_openid_url])
@@ -169,14 +171,14 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 			flash[:notice] = "Your changed to #{@user.realname} were saved."
 			redirect_to admin_users_path
 		end
-	
+
 		def destroy
 			@user = User.find( params[:id] )
 			flash[:notice] = "User <strong>#{@user.username}</strong> has been deleted"
 			@user.destroy
 			redirect_to :action => :list
 		end
-	
+
 		def delete_image
 			@user.image.destroy
 			respond_to do |format|
@@ -184,5 +186,5 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 				format.html { redirect_to( edit_admin_user_path( @user ) ) }
 			end
 		end
-	
+
 end

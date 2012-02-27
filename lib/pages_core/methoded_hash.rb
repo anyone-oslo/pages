@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	class MethodedHash < Hash
 		def method_missing(key,args=nil)

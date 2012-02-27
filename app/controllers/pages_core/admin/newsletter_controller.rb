@@ -1,9 +1,11 @@
+# encoding: utf-8
+
 require 'erb'
 
 class PagesCore::Admin::NewsletterController < Admin::AdminController
     include ActionView::Helpers::TextHelper
 	include Newsletter
-	
+
     def render_mailing_template(template_name, options={})
 		options = {
 			:unsubscribable   => true,
@@ -12,7 +14,7 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 
 		@mailer_binding ||= PagesCore::MailerBinding.new(self)
 		@mailer_binding.set_instance_variables(options)
-		
+
 		@mailer_binding.call_template_action(template_name)
 
 		template_file = Mailing.template_path(template_name)
@@ -26,15 +28,15 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 		sort_clause = { 'group' => '`group` ASC', 'date' => 'created_at DESC', 'email' => 'email ASC' }
 		@subscribers = MailSubscriber.find( :all, :order => sort_clause[@sort_by], :conditions => ['unsubscribed = 0'] )
 	end
-	
+
 	def status
         @pending = Mailing.find(:all, :conditions => 'failed = 0', :order => 'created_at DESC')
 	    @failed  = Mailing.find(:all, :conditions => 'failed = 1', :order => 'created_at DESC')
     end
-	
+
 	def import
     end
-	
+
 
 	def csv_export
 		if params[:group]
@@ -43,10 +45,10 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 			@subscribers = MailSubscriber.find( :all, :order => "created_at" )
 		end
 		text = @subscribers.map{|s| [ s.email, s.group, s.created_at ].join(",") }.join("\n")
-		send_data( 
-			text, 
-			:filename    => "mail_subscribers.csv", 
-			:type        => "application/csv", 
+		send_data(
+			text,
+			:filename    => "mail_subscribers.csv",
+			:type        => "application/csv",
 			:disposition => 'inline'
 			#:disposition => 'attachment'
 		)
@@ -62,7 +64,7 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 			group
 		end
 	end
-	
+
 	def create
 		emails = params[:subscriber][:email].split
 	    group = (params[:new_group] && !params[:new_group].empty?) ? params[:new_group] : params[:subscriber][:group]
@@ -76,7 +78,7 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 		end
 		redirect_to :action => :index
 	end
-	
+
 	def destroy
 		@subscriber = MailSubscriber.find( params[:id] ) rescue nil
 		if @subscriber
@@ -85,7 +87,7 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 		end
 		redirect_to :action => :index
 	end
-	
+
 	def preview
 		recipient    = @current_user.email
 		message      = params[:message]
@@ -102,20 +104,20 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
         end
         render :text => message, :layout => false
     end
-	
+
 
 	def send_message
 
 		@mailout = Mailout.create(
-			:subject  => params[:subject], 
-			:sender   => params[:sender], 
-			:body     => params[:message], 
-			:template => params[:template], 
+			:subject  => params[:subject],
+			:sender   => params[:sender],
+			:body     => params[:message],
+			:template => params[:template],
 			:image    => params[:image],
 			:groups   => params[:send_to].map{|k,v| v == "1" ? k : nil}.compact,
 			:host     => (request.port != 80) ? "#{request.host}:#{request.port}" : request.host
 		)
-		
+
 		if @mailout.valid?
 			@mailout.send_later(:deliver!)
 		end
@@ -123,21 +125,21 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 
 		if false
 	        @mailout = Mailout.create( :subject => params[:subject], :sender => params[:sender], :body => params[:message], :template => params[:template], :image => params[:image] )
-	    
+
 			@groups = @groups.select { |g| params[:send_to][g[:name].underscore.gsub(/[\s]+/,'_')] == "1" }.collect do |group|
 				args = Hash.new
 				args[:conditions] = group[:conditions] if group[:conditions]
 				group[:members] = group[:class].classify.constantize.find( :all, args )
 				group
 			end
-		
+
 			@recipients  = @groups.collect { |g| g[:members].collect { |m| m[g[:method]] } }.flatten.uniq.compact.sort
 			unsubscribed = MailSubscriber.unsubscribed_emails
 			sent_to      = []
-		
+
 			message      = params[:message]
 			message_html = textilize(message) if params[:template]
-		
+
 			@groups.each do |g|
 			    g[:members].each do |m|
 			        recipient = m[g[:method]]
@@ -162,6 +164,6 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 			end
 		end
 	end
-	
-	
+
+
 end

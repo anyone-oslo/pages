@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Derived from the Gibberish plugin, which is copyright (c) 2007 Chris Wanstrath.
 # http://plugins.require.errtheblog.com/browser/gibberish
 

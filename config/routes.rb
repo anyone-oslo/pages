@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 ActionController::Routing::Routes.draw do |map|
 
 	map.dynamic_text '/dynamic_text/:text_format/:text.png', :controller => 'dynamic_text', :action => 'show'

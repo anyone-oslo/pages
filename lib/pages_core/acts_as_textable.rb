@@ -1,11 +1,13 @@
+# encoding: utf-8
+
 module PagesCore
 	module ActsAsTextable
-	
+
 		class << self
 			def textable_fields
 				@@textable_fields  ||= {}
 			end
-			
+
 			def textable_options
 				@@textable_options ||= {}
 			end
@@ -27,7 +29,7 @@ module PagesCore
 					PagesCore::ActsAsTextable.textable_options[self] || {}
 				end
 			end
-			
+
 			def root_class
 				rc = self.class
 				while rc.superclass != ActiveRecord::Base
@@ -35,7 +37,7 @@ module PagesCore
 				end
 				rc
 			end
-			
+
 			# Set the working language
 			def working_language=(language)
 				@working_language = language.to_s
@@ -55,7 +57,7 @@ module PagesCore
 			def fallback_language
 				@fallback_language || self.root_class.textable_options[:fallback_language]
 			end
-			
+
 			# Does this model have a fallback language?
 			def fallback_language?
 				self.fallback_language ? true : false
@@ -83,11 +85,11 @@ module PagesCore
 			# Get the textbit with specified name (and optional language), create and add it if necessary
 			def get_textbit(name, options={})
 				name = name.to_s
-				
+
 				languages      = options[:language] ? [options[:language]] : [self.working_language, self.fallback_language].compact
 				named_textbits = self.textbits.select{|tb| tb.name == name}
 				textbit        = nil
-				
+
 				# Find the first applicable textbit
 				languages.each do |lang|
 					if !textbit && named_textbits.select{|tb| tb.language == lang.to_s}.length > 0
@@ -132,12 +134,12 @@ module PagesCore
 			def languages_for_field( name )
 				self.textbits.collect {|tb| tb.language if tb.name == name }.uniq.compact
 			end
-			
+
 			def field_has_language?(name, language=nil)
 				languages = (language ? language : [self.working_language, self.fallback_language].compact)
 				languages = [languages] unless languages.kind_of?(Array)
 				languages = languages.map{|l| l.to_s}
-				
+
 				available_languages = self.languages_for_field(name)
 				languages.each{|l| return true if available_languages.include?(l)}
 				return false
@@ -153,7 +155,7 @@ module PagesCore
 				self.textbits.collect {|tb| tb.name }.uniq.compact
 			end
 
-			# Returns an array with the names of all text blocks with the given 
+			# Returns an array with the names of all text blocks with the given
 			# language code.
 			def fields_for_languague(language)
 				self.textbits.collect {|tb| tb.name if tb.language == language.to_s }.uniq.compact.reject {|name| PagesCore::ActsAsTextable.textable_fields[ self.root_class ].include? name }
@@ -202,13 +204,13 @@ module PagesCore
 				end
 				languages
 			end
-		
+
 			# Get a translated version of this record
 			def translate(language, options={})
 				dupe = self.dup.translate!(language, options)
 				(block_given?) ? (yield dupe) : dupe
 			end
-			
+
 			# Translate this record
 			def translate!(language, options={})
 				language = language.to_s

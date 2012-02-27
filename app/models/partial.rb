@@ -1,10 +1,12 @@
+# encoding: utf-8
+
 class Partial < ActiveRecord::Base
 
 	validates_presence_of :name
 	validates_uniqueness_of :name
-	
+
 	acts_as_textable [ "body" ], :allow_any => false
-	
+
 	class << self
 		attr_accessor :allowed_names
 		def allowed_names
@@ -22,15 +24,15 @@ class Partial < ActiveRecord::Base
 	def has_language?( language )
 		self.languages.include?( language )
 	end
-	
+
 	def human_name
 		self.name.humanize
 	end
-	
+
 	def is_overridden?
 		self.body?
 	end
-	
+
 	def default_body
 		string = ""
 		MumboJumbo.use_language( self.working_language ) do
@@ -38,9 +40,9 @@ class Partial < ActiveRecord::Base
 		end
 		string
 	end
-	
+
 	def to_s
 		( self.is_overridden? ) ? self.body.to_s : self.default_body
 	end
-	
+
 end

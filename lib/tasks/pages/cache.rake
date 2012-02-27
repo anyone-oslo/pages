@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :pages do
 	namespace :cache do
 		desc "Sweep the pages cache"

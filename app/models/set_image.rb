@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class SetImage < ActiveRecord::Base
 	set_table_name  'images_imagesets'
 

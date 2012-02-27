@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # allow this test to hook into the Rails framework
 require File.dirname(__FILE__) + '/../test_helper'
 
@@ -25,7 +27,7 @@ module TestTranslators
 end
 
 class MumboJumboTest < Test::Unit::TestCase
-	
+
 	def setup
 		MumboJumbo.reset_language_paths!
 		MumboJumbo.current_language = MumboJumbo.default_language
@@ -54,7 +56,7 @@ class MumboJumboTest < Test::Unit::TestCase
 			assert_equal "I has invisible bike"[:invisible_bike], TestTranslators::Drunk.drunkify( "I has invisible bike" )
 		end
 	end
-	
+
 	def test_without_translators
 		MumboJumbo.translators << TestTranslators::OK
 		assert_equal "Testing"[:test], "OK"
@@ -73,7 +75,7 @@ class MumboJumboTest < Test::Unit::TestCase
 		MumboJumbo.reset_language_paths!
 		assert_equal MumboJumbo.language_paths.length, 1
 	end
-	
+
 	def test_language_loading
 		MumboJumbo.add_language_path( File.dirname(__FILE__) + '/../fixtures' )
 		MumboJumbo.load_languages!

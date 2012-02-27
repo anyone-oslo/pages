@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 class Notifications < ActionMailer::Base
-	
+
 	helper ActionView::Helpers::UrlHelper
 
 	def generic_mailer( options )
@@ -19,7 +21,7 @@ class Notifications < ActionMailer::Base
 	# def contact_us( options )
 	#	 self.generic_mailer( options )
 	# end
-	
+
 	def newsletter( sender, recipients, subject, message, ctype )
 		@from       = sender
 		@subject    = subject
@@ -29,5 +31,5 @@ class Notifications < ActionMailer::Base
 		@headers    = {}
 		content_type ctype
 	end
-	
+
 end

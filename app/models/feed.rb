@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 class Feed < ActiveRecord::Base
-	
+
 	has_many :feed_items, :order => "id DESC", :dependent => :destroy
 
 	# -- CLASS METHODS --------------------------------------------------------
@@ -8,7 +10,7 @@ class Feed < ActiveRecord::Base
 	def self.refresh_feeds
 		Feed.find(:all).each{|feed| feed.refresh}
 	end
-	
+
 	# Get a feed by url. The feed will be created and loaded if it doesn't exist. This is handy
 	# for simple aggregation in templates et al.
 	#
@@ -29,7 +31,7 @@ class Feed < ActiveRecord::Base
 
 	# -- INSTANCE METHODS -----------------------------------------------------
 
-	# Refresh feed. 
+	# Refresh feed.
 	def refresh
 		rss = SimpleRSS.parse open( self.url )
 
@@ -39,9 +41,9 @@ class Feed < ActiveRecord::Base
 		# Convert all strings from the source to UTF-8
 		converter = Iconv.new( 'utf-8', encoding.downcase )
 
-		self.title       ||= converter.iconv rss.channel.title 
-		self.link        ||= converter.iconv rss.channel.link 
-		self.description ||= converter.iconv rss.channel.description 
+		self.title       ||= converter.iconv rss.channel.title
+		self.link        ||= converter.iconv rss.channel.link
+		self.description ||= converter.iconv rss.channel.description
 
 		self.save
 
@@ -59,8 +61,8 @@ class Feed < ActiveRecord::Base
 			self.feed_items << feed_item
 
 			feed_item.guid        = converter.iconv item[:guid]
-			feed_item.title       = converter.iconv item[:title] 
-			feed_item.link        = converter.iconv item[:link] 
+			feed_item.title       = converter.iconv item[:title]
+			feed_item.link        = converter.iconv item[:link]
 			feed_item.description = converter.iconv item[:description]
 			feed_item.author      = converter.iconv item[:author]
 			feed_item.pubdate     = DateTime.parse( item[:pubDate].to_s ) if item[:pubDate]
@@ -72,5 +74,5 @@ class Feed < ActiveRecord::Base
 
 		self.refreshed_at = Time.now
 	end
-	
+
 end

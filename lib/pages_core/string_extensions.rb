@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module StringExtensions
 
@@ -13,9 +15,9 @@ module PagesCore
 				['Ø','OE'], ['ø','oe'],
 				['Å','AA'], ['å','aa'],
 			].each{ |s,r| string.gsub!(s,r) }
-			
-			# Translate each char with iconv. This is done on char level 
-			# in order to trap errors. 
+
+			# Translate each char with iconv. This is done on char level
+			# in order to trap errors.
 			chars = (string.respond_to?(:mb_chars)) ? string.mb_chars : string.chars
 
 			string = chars.map do |char|
@@ -24,9 +26,9 @@ module PagesCore
 
 			return string
 		end
-		
-		# Truncate string to max_length, retaining words. If the first word is shorter than max_length, 
-        # it will be shortened. An optional end_string can be supplied, which will be appended to the 
+
+		# Truncate string to max_length, retaining words. If the first word is shorter than max_length,
+        # it will be shortened. An optional end_string can be supplied, which will be appended to the
         # string if it has been truncated.
     	def truncate(max_length, end_string='')
     	    words = self.split(' ')
@@ -39,7 +41,7 @@ module PagesCore
             new_string += end_string unless new_string == self
             return new_string
         end
-        
+
 		# Prepend http:// if necessary
 		def with_http
 			(self.strip =~ /^https?:\/\//) ? self.strip : "http://"+self.strip

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 def page_to_xml( xml, page )
 	xml.page( "id" => page.id ) do
 		xml.name   page.name
@@ -7,13 +9,13 @@ def page_to_xml( xml, page )
 		xml.author( page.author.realname.to_s, "id" => page.author.id ) if page.author
 		xml.pubDate page.published_at.to_formatted_s( :rfc822 )
 		xml.modDate page.updated_at.to_formatted_s( :rfc822 )
-		
+
 		unless page.pages.empty?
 			page.pages.each do |p|
 				page_to_xml xml, p
 			end
 		end
-		
+
 	end
 end
 
@@ -21,7 +23,7 @@ xml.sitemap do
 
 	xml.title    PagesCore.config :site_name
 	xml.language @language
-	
+
 	unless @rss_feeds.empty?
 		xml.feeds do
 			@rss_feeds.each do |feed|
@@ -31,11 +33,11 @@ xml.sitemap do
 	end
 
 	xml.pages do |x|
-		
+
 		@pages.each do |page|
 			page_to_xml x, page
 		end
-		
+
 	end
 
 end

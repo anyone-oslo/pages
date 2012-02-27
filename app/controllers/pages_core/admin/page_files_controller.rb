@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Admin::PageFilesController < Admin::AdminController
 
 	before_filter :load_page
@@ -22,13 +24,13 @@ class PagesCore::Admin::PageFilesController < Admin::AdminController
 				redirect_to admin_page_path(@language, @page) and return
 			end
 		end
-	
+
 	public
 
 		def index
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def reorder
 			params[:filelist].each_with_index{|id,idx| PageFile.update(id, :position => idx)}
 			if request.xhr?
@@ -36,15 +38,15 @@ class PagesCore::Admin::PageFilesController < Admin::AdminController
 			end
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def show
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def new
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def create
 			@page_file = @page.files.new
 			@page_file.update_attributes(params[:page_file])
@@ -55,11 +57,11 @@ class PagesCore::Admin::PageFilesController < Admin::AdminController
 			end
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def edit
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def update
 			if @page_file.update_attributes(params[:page_file])
 				flash[:notice] = "File updated"
@@ -68,11 +70,11 @@ class PagesCore::Admin::PageFilesController < Admin::AdminController
 			end
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 		def destroy
 			@page_file.destroy
 			flash[:notice] = "File deleted"
 			redirect_to admin_page_path(@language, @page) and return
 		end
-	
+
 end

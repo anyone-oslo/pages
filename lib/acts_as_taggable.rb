@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module ActiveRecord
 	module Acts #:nodoc:
 		module Taggable #:nodoc:
@@ -21,7 +23,7 @@ module ActiveRecord
 					has_many :tags, :through => :taggings
 
 					include ActiveRecord::Acts::Taggable::InstanceMethods
-					extend ActiveRecord::Acts::Taggable::SingletonMethods          
+					extend ActiveRecord::Acts::Taggable::SingletonMethods
 				end
 			end
 

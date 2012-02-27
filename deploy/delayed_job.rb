@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 namespace :delayed_job do
-	desc "Start delayed_job process" 
+	desc "Start delayed_job process"
 	task :start, :roles => :app do
 		unless skip_services
 			if use_monit
@@ -10,7 +12,7 @@ namespace :delayed_job do
 		end
 	end
 
-	desc "Stop delayed_job process" 
+	desc "Stop delayed_job process"
 	task :stop, :roles => :app do
 		unless cold_deploy || skip_services
 			if use_monit
@@ -21,7 +23,7 @@ namespace :delayed_job do
 		end
 	end
 
-	desc "Restart delayed_job process" 
+	desc "Restart delayed_job process"
 	task :restart, :roles => :app do
 		unless skip_services
 			if use_monit

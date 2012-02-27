@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # allow this test to hook into the Rails framework
 require File.dirname(__FILE__) + '/../test_helper'
 
@@ -7,7 +9,7 @@ end
 
 
 class VideoEmbedHelperTest < Test::Unit::TestCase
-	
+
 	def setup
 		@helper = MockVideoHelper.new
 
@@ -28,7 +30,7 @@ class VideoEmbedHelperTest < Test::Unit::TestCase
 		assert_equal @imeem_id, @helper.imeem_id( @imeem_id )
 		assert_equal @imeem_id, @helper.imeem_id( @imeem_embed )
 	end
-	
+
 	def test_embedding
 		assert_equal @youtube_embed, @helper.youtube_embed( @youtube_id )
 		assert_equal @youtube_embed, @helper.youtube_embed( @youtube_link )
@@ -36,14 +38,14 @@ class VideoEmbedHelperTest < Test::Unit::TestCase
 		assert_equal @imeem_embed, @helper.imeem_embed( @imeem_id )
 		assert_equal @imeem_embed, @helper.imeem_embed( @imeem_embed )
 	end
-	
+
 	def test_resizing
 		assert_equal @youtube_embed_resized, @helper.youtube_embed( @youtube_id, :width => 325, :height => 263 )
 		assert_equal @youtube_embed_resized, @helper.youtube_embed( @youtube_id, :width => 325 )
 		assert_equal @imeem_embed_resized, @helper.imeem_embed( @imeem_id, :width => 300, :height => 254 )
 		assert_equal @imeem_embed_resized, @helper.imeem_embed( @imeem_id, :width => 300 )
 	end
-	
+
 	def test_transparency
 		assert_equal @youtube_embed, @helper.video_embed( @youtube_link )
 		assert_equal @imeem_embed,   @helper.video_embed( @imeem_embed )

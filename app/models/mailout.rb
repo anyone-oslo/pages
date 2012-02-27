@@ -1,10 +1,12 @@
+# encoding: utf-8
+
 class Mailout < ActiveRecord::Base
 	include ActionController::UrlWriter
 	include ActionView::Helpers::TextHelper
 
-	belongs_to_image :image	
+	belongs_to_image :image
 	serialize :groups, Array
-	
+
 	class << self
 		def subscriber_groups
 			groups = []
@@ -44,7 +46,7 @@ class Mailout < ActiveRecord::Base
 			recipients += members.collect{|m| m[group[:method]]}
 		end
 		recipients = recipients.compact.map{|r| r.strip}.uniq.sort
-		
+
 		# Remove unsubscribed
 		unsubscribed = MailSubscriber.unsubscribed_emails
 		recipients.reject!{|r| unsubscribed.include?(r)}

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # All admin controllers inherit Admin::AdminController, which provides layout, authorization
 # and other common code for the Admin set of controllers.
 class PagesCore::AdminController < ApplicationController
@@ -34,9 +36,9 @@ class PagesCore::AdminController < ApplicationController
 		def build_admin_tabs
 			if Page.news_pages?
 				register_menu_item(
-					"News", hash_for_news_admin_pages_path({:language => @language}), :pages, 
+					"News", hash_for_news_admin_pages_path({:language => @language}), :pages,
 					:current => Proc.new {
-						params[:controller] == 'admin/pages' && 
+						params[:controller] == 'admin/pages' &&
 						(params[:action] == 'news' || (@page && @page.parent_page && @page.parent_page.news_page?))
 					}
 				)
@@ -87,20 +89,20 @@ class PagesCore::AdminController < ApplicationController
 		# Get a persistent param
 		def persistent_param( key, default=nil, options={} )
 			namespace = options[:namespace] || self.class.to_s
-		
+
 			# someone set us up the hash
 			session[:persistent_params]                 ||= Hash.new
 			session[:persistent_params][namespace]      ||= Hash.new
-		
+
 			if options[:preserve_nil]
 				session[:persistent_params][namespace][key] = default unless session[:persistent_params][namespace].has_key? key
 			else
 				session[:persistent_params][namespace][key] ||= default
 			end
-		
+
 			# store the posted param if provided
 			session[:persistent_params][namespace][key] = params[key] if params.has_key? key
-		
+
 			# conversions
 			if session[:persistent_params][namespace][key].kind_of? String
 				session[:persistent_params][namespace][key] = true  if session[:persistent_params][namespace][key] == "true"

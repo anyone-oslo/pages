@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module Templates
 
@@ -7,7 +9,7 @@ module PagesCore
 			def initialize(template_name)
 				@template_name = template_name.to_sym
 			end
-			
+
 			def config
 				PagesCore::Templates.configuration
 			end
@@ -66,7 +68,7 @@ module PagesCore
 				blocks.flatten.compact.uniq
 			end
 		end
-		
+
 		class << self
 			def configure(options={}, &block)
 				if options[:reset] == :defaults
@@ -76,7 +78,7 @@ module PagesCore
 				end
 				yield self.configuration if block_given?
 			end
-			
+
 			def load_default_configuration
 				@@configuration = PagesCore::Templates::Configuration.new
 
@@ -98,13 +100,13 @@ module PagesCore
 					end
 				end
 			end
-			
+
 			def configuration
 				load_default_configuration unless self.class_variables.include?('@@configuration')
 				@@configuration
 			end
 			alias :config :configuration
 		end
-		
+
 	end
 end

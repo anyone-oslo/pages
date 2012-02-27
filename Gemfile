@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 source 'http://rubygems.org'
 source 'http://gems.manualdesign.no/gems/'
 #source 'http://gems.github.com'

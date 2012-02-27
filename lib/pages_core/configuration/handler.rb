@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module Configuration
 		class Handler
@@ -10,13 +12,13 @@ module PagesCore
 					@@default_handler = handle_block
 				end
 			end
-			
+
 			attr_reader :configuration
-			
+
 			def initialize
 				@configuration = {}
 			end
-			
+
 			def method_missing(method_name, *args, &block)
 				if @@handle_blocks && @@handle_blocks.keys.include?(method_name)
 					proxy = PagesCore::Configuration::Proxy.new(@@handle_blocks[method_name], self)
@@ -28,13 +30,13 @@ module PagesCore
 					super
 				end
 			end
-			
+
 			def proxy(proxy_block=nil, &callback)
 				proxy_object = PagesCore::Configuration::Proxy.new(callback)
 				proxy_block.call(proxy_object) if proxy_block
 				proxy_object
 			end
-			
+
 			def set(stack, value)
 				@configuration ||= {}
 				value = true  if value == :enabled

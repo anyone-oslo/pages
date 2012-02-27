@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :pages do
 
 	desc "Fix migrations"

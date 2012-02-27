@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Dynamic text images.
 #
 # Setup:
@@ -60,12 +62,12 @@ class PagesCore::Frontend::DynamicTextController < FrontendController
 			img.antialias        = true
 			img.font             = font_path
 		end
-        
+
 		image_data = text_image.to_blob{ |img| img.format = "PNG" }
-		send_data( 
-			image_data, 
+		send_data(
+			image_data,
 			:filename    => "#{text}.png",
-			:type        => 'image/png', 
+			:type        => 'image/png',
 			:disposition => 'inline'
 		)
 	end

@@ -1,14 +1,16 @@
+# encoding: utf-8
+
 class PagesCore::Admin::AccountsController < Admin::AdminController
-	
+
 	def index
 		redirect_to edit_admin_account_path(@account)
 	end
-	
+
 	def edit
 		@database_size = @account.database_size
 		@domain        = @account.domain || request.domain.gsub( /^www\./, '' )
 	end
-	
+
 	def update
 		if @account.update_attributes( params[:account] )
 			flash[:notice] = "Your account details were saved"
@@ -18,5 +20,5 @@ class PagesCore::Admin::AccountsController < Admin::AdminController
 			render :action => :edit
 		end
 	end
-	
+
 end

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore::Admin::AdminHelper
 
 	def tag_editor_for(form_helper, item, field_name = :serialized_tags, options = {})

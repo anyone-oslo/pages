@@ -1,17 +1,19 @@
+# encoding: utf-8
+
 class PagesCore::OpenidController < ApplicationController
 
 	# Start an authentication session
 	def create
 		unless start_openid_session(
-			params[:openid_url], 
-			:immediate => false, 
-			:success   => params[:openid_success], 
+			params[:openid_url],
+			:immediate => false,
+			:success   => params[:openid_success],
 			:fail      => params[:openid_success]
 		)
 			fail_authentication('Not a valid OpenID URL') and return
 		end
 	end
-	
+
 	# Complete the OpenID authentication
 	def complete
 		response_params = params.dup
@@ -47,14 +49,14 @@ class PagesCore::OpenidController < ApplicationController
 
 		fail_authentication and return
 	end
-	
+
 	protected
-	
+
 		def fail_authentication(message='OpenID login failed')
 			session[:openid_url] = nil
 			flash[:notice] = message
 			redirect_url = session[:openid_redirect_fail] || root_url
 			redirect_to redirect_url
 		end
-	
+
 end

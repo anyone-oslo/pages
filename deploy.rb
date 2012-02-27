@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require "bundler/capistrano"
 require File.join(File.dirname(__FILE__), 'lib/campfire')
 

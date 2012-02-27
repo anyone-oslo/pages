@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ProxyFile < File
 	attr_accessor :original_filename
 	attr_accessor :content_type
@@ -6,7 +8,7 @@ end
 class PagesCore::Admin::FilesController < Admin::AdminController
 
 	layout "admin"
-	
+
 	before_filter :stylesheets; def stylesheets; add_stylesheet "files.css"; end
 
 	# GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
@@ -29,8 +31,8 @@ class PagesCore::Admin::FilesController < Admin::AdminController
 
 		@pages, @images = paginate :images, :per_page => 12
 	end
-  
-  
+
+
 
 	def show
 		@image = Image.find(params[:id])
@@ -70,8 +72,8 @@ class PagesCore::Admin::FilesController < Admin::AdminController
 		@image_formats = PagesCore.config :image_formats
 		render_without_layout if request.xhr?
 	end
-	
-	
+
+
 
 	def update
 	@image = Image.find(params[:id])
@@ -82,20 +84,20 @@ class PagesCore::Admin::FilesController < Admin::AdminController
 			render :action => 'edit'
 		end
 	end
-	
-	
+
+
 
 	def destroy
 		Image.find(params[:id]).destroy
 		flash[:notice] = 'Image was successfully deleted.'
 		redirect_to :action => 'list'
 	end
-	
-	
-  
+
+
+
 	def clear_cache
 		logger.warn "clear_cache is depreceated!"
 		redirect_to :action => 'list'
 	end
-  
+
 end

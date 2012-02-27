@@ -1,24 +1,26 @@
+# encoding: utf-8
+
 # allow this test to hook into the Rails framework
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TextableTest < Test::Unit::TestCase
 
 	fixtures :pages, :textbits
-	
+
 	#def setup
 	#end
-	
+
 	def test_languages
 		assert_equal 3, Page.languages.length,                      "Page should have 3 languages"
 	end
-	
+
 	def test_textile
 		page = pages(:news_item)
 		page.working_language = 'eng'
 		assert_equal "This is the first post.\nIt has several lines.", page.body.to_s
 		assert_equal "<p>This is the first post.<br />\nIt has several lines.</p>", page.body.to_html
 	end
-	
+
 	def test_block_translate
 		page = pages( :front )
 		page.working_language = 'eng'
@@ -43,7 +45,7 @@ class TextableTest < Test::Unit::TestCase
 		page.working_language = 'ger'
 		assert_equal '',     page.excerpt.to_s,                     "Missing predefined textbit for missing language should return blank"
 	end
-	
+
 	def test_textbit_creation
 		page = pages( :front )
 		textbit_count = Textbit.count
@@ -58,13 +60,13 @@ class TextableTest < Test::Unit::TestCase
 		assert_raises( NoMethodError ){ pages(:front).extended = "Extended" }
 		assert_nothing_raised do
 			page = pages( :front )
-			page.add_field :extended 
+			page.add_field :extended
 			page.extended = "Extended"
 			assert_valid page
 			assert page.save,                                      "Should be able to save page"
 		end
 	end
-	
+
 	def test_blank_fields
 		textbit_count = Textbit.count
 		page = pages( :front )
@@ -76,12 +78,12 @@ class TextableTest < Test::Unit::TestCase
 		assert page.save
 		assert_equal textbit_count, Textbit.count
 	end
-	
+
 	def test_blank_strings
 		page = Page.create( :name => 'Testpage' )
 		assert_equal '', page.body.to_html
 	end
-	
+
 	def test_has_field
 		assert pages(:front).translate(:eng).body?
 		assert_raises( NoMethodError ) { pages(:front).no_such_field? }
@@ -96,7 +98,7 @@ class TextableTest < Test::Unit::TestCase
 			assert_valid page
 		end
 	end
-	
+
 	def test_set_from_hash
 		params = {
 			:name => { :nor => "Dette er en test", :eng => "This is a test" },
@@ -107,5 +109,5 @@ class TextableTest < Test::Unit::TestCase
 		assert_equal "Dette er en test", page.translate( 'nor' ).name.to_s
 		assert_equal "This is a test",   page.translate( 'eng' ).name.to_s
 	end
-	
+
 end

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'cgi'
 require 'cgi/session'
 class CGI::Session::CookieStore

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Admin::PageImagesController < Admin::AdminController
 
 	before_filter :load_page
