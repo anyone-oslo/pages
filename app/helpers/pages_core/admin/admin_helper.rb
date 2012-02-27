@@ -13,9 +13,9 @@ module PagesCore::Admin::AdminHelper
 						content_tag(:span, tag.name, :class => :name)
 					end
 				end.join
-			end +  
+			end +
 			content_tag(:div, :class => 'add_tag_form') do
-				text_field_tag('add_tag', options[:placeholder], :class => 'add_tag') + 
+				text_field_tag('add_tag', options[:placeholder], :class => 'add_tag') +
 				content_tag(:button, 'Add', :class => 'add_tag_button')
 			end
 		end
@@ -31,12 +31,12 @@ module PagesCore::Admin::AdminHelper
 			html << "<br />"
 			html << link_to_if( pages.current.previous, 'Previous', { :page => pages.current.previous } )
 			html << "/"
-			html <<	link_to_if( pages.current.next, 'Next', { :page => pages.current.next } ) 
+			html <<	link_to_if( pages.current.next, 'Next', { :page => pages.current.next } )
 			html << "</div>"
 		end
 		html
 	end
-	
+
 	# Generates tags for an editable dynamic image.
 	def editable_dynamic_image_tag(image, options={})
 		link_to(dynamic_image_tag(image, options), admin_image_path(image), :class => 'editableImage')
@@ -51,7 +51,7 @@ module PagesCore::Admin::AdminHelper
 		action_name        = params[:action]
 		controller_script = controller.class.to_s.underscore
 
-		if File.exists?(File.join(RAILS_ROOT, "vendor/plugins/pages/public/javascripts/#{controller_script}.js"))
+		if File.exists?(PagesCore.plugin_root.join("app/assets/javascripts/#{controller_script}.js"))
 			output += "\t"+javascript_include_tag(controller_script, :plugin => 'pages') + "\n"
 		end
 		output += "<script type=\"text/javascript\">"
@@ -59,7 +59,7 @@ module PagesCore::Admin::AdminHelper
 		output += "  Admin.action     = \"#{action_name}\";"
 		output += "  Admin.language   = \"#{@language}\";" if @language
 		output += "</script>"
-		
+
 		output
 	end
 
@@ -71,8 +71,8 @@ module PagesCore::Admin::AdminHelper
 	#
 	# An example:
 	#   <% form_for 'user', @user do |f| %>
-	#     <%= labelled_field f.text_field( :username ), "Username", 
-	#                        :description => "Choose your username, minimum 4 characters", 
+	#     <%= labelled_field f.text_field( :username ), "Username",
+	#                        :description => "Choose your username, minimum 4 characters",
 	#                        :errors => @user.errors[:username] %>
 	#     <%= submit_tag "Save" %>
 	#   <% end %>
@@ -95,7 +95,7 @@ module PagesCore::Admin::AdminHelper
 		output += "#{options[:check_box_description]}" if options[:check_box_description]
 		output += "</div>"
 	end
-	
+
 	def image_upload_field( form, label, method=nil, options={} )
 		method ||= :image
 		output = ''
@@ -104,7 +104,7 @@ module PagesCore::Admin::AdminHelper
 		end
 		output += labelled_field(form.file_field(method), label, { :errors => form.object.errors[method] }.merge(options))
 	end
-	
+
 	def body_classes
 		classes = @body_classes || []
 		classes << controller.class.underscore
@@ -113,12 +113,12 @@ module PagesCore::Admin::AdminHelper
 		classes << "with_notice" if flash[:notice]
 		classes.reverse.join( " " )
 	end
-	
+
 	def add_body_class( class_name )
 		@body_classes ||= []
 		@body_classes << class_name
 	end
-	
+
 	def header_tabs( options={} )
 		options = {
 			:class => :pages
@@ -134,7 +134,7 @@ module PagesCore::Admin::AdminHelper
 				menu_item[:url][:controller] == controller.class.controller_path
 			end
 		}.first
-		
+
 		# Build menu
 		if menu_items.length > 0
 			menu_items = menu_items.collect do |menu_item|
@@ -146,9 +146,9 @@ module PagesCore::Admin::AdminHelper
 					logger.warn "Cannot get controller name from #{menu_item.inspect}"
 				end
 				action_name = menu_item[:url][:action]
-				
+
 				classes << "current" if menu_item == current_tab
-				
+
 				link_to(menu_item[:name], menu_item[:url], :class => classes.join(' '))
 			end
 			"<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>"
@@ -156,16 +156,16 @@ module PagesCore::Admin::AdminHelper
 			""
 		end
 	end
-	
+
 	def page_title( title )
 		@page_title = title
 	end
-	
+
 	def page_description( string, class_name=nil )
 		@page_description = string
 		@page_description_class = class_name
 	end
-	
+
 	def page_description_links( links )
 		@page_description_links = links
 	end
@@ -176,7 +176,7 @@ module PagesCore::Admin::AdminHelper
 			@sidebar += capture( &block )
 		end
 	end
-	
+
 	def content_tab( name, options={}, &block )
 		@content_tabs ||= []
 		if block_given?
@@ -197,7 +197,7 @@ module PagesCore::Admin::AdminHelper
     		""
 		end
 	end
-	
+
 	def pages_button_to(name, options = {}, html_options = {})
 		html_options = html_options.stringify_keys
 		convert_boolean_attributes!(html_options, %w( disabled ))
@@ -218,12 +218,12 @@ module PagesCore::Admin::AdminHelper
 
 		html_options.merge!( "type" => "submit" )
 
-		"<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\">" + 
+		"<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\">" +
 		method_tag + content_tag( "button", name, html_options ) + "</form>"
 	end
-	
+
 	def link_separator
 		' <span class="separator">|</span> '
 	end
-	
+
 end
