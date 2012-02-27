@@ -24,6 +24,13 @@ gem 'sass', '3.1.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.1.3'
 gem 'uuid', '2.3.5'
+gem 'delayed_job', '2.0.7'
+
+# Thinking Sphinx
+gem 'riddle', '1.0.12'
+gem 'thinking-sphinx', '1.3.20'
+gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta'
+
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 # Load gems from plugins
