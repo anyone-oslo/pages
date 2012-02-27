@@ -224,21 +224,25 @@ namespace :pages do
 
 		desc "Update submodules"
 		task :submodules do
-			puts "Updating submodules..."
-			# Get origin base patch
-			origin_base_url = `cd #{RAILS_ROOT}/vendor/plugins/pages && git remote -v | grep origin`.split(/\s+/)[1].gsub(/pages(\.git)?$/, '')
+			puts "Removing old submodules..."
+			%w{acts_as_list acts_as_tree delayed_job engines recaptcha thinking-sphinx}.each do |plugin|
+				if File.exists?("vendor/plugins/#{plugin}")
+					`rm -rf vendor/plugins/#{plugin}`
+					`git rm vendor/plugins/#{plugin}`
 
-			required_plugins = %w{thinking-sphinx acts_as_list acts_as_tree dynamic_image recaptcha delayed_job}
-			required_plugins.each do |plugin|
-				unless File.exists?(File.join(RAILS_ROOT, "vendor/plugins/#{plugin}"))
-					puts "Missing plugin: #{plugin} .. installing.."
-					`cd #{RAILS_ROOT} && git submodule add #{origin_base_url}/#{plugin}.git vendor/plugins/#{plugin}`
+					# Remove from .gitmodules
+					if File.exists?('.gitmodules')
+						gitmodules = File.readlines('.gitmodules').reject{|l| l =~ Regexp.new(plugin)}.join
+						File.open('.gitmodules', 'w'){|fh| fh.write gitmodules}
+					end
+
+					# Remove from .git/config
+					if File.exists?('.git/config')
+						git_config = File.readlines('.git/config').reject{|l| l =~ Regexp.new(plugin)}.join
+						File.open('.git/config', 'w'){|fh| fh.write git_config}
+					end
 				end
 			end
-
-			`git submodule update --init`
-			`git submodule foreach 'git checkout -q master'`
-			`git submodule foreach 'git pull'`
 		end
 
 		desc "Run all update tasks"
