@@ -3,14 +3,18 @@ class PagesCore::Frontend::PagesController < FrontendController
 	if PagesCore.config(:page_cache)
 		caches_page :index
 	end
-	
+
 	before_filter :load_root_pages
 	before_filter :find_page, :only => [:show]
 	after_filter  :cache_page_request, :only => [ :show ]
 
 
 	protected
-	
+
+		def preview?
+			@page.new_record?
+		end
+
 		def render(*args)
 			@already_rendered = true
 			super
@@ -24,7 +28,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 				end
 			end
 		end
-		
+
 		# Set a different layout for a page template
 		def page_template_layout(layout_name)
 			@page_template_layout = layout_name
@@ -43,13 +47,13 @@ class PagesCore::Frontend::PagesController < FrontendController
 			template = @page.template
 			template = "index" unless PagesCore::Templates.names.include?(template)
 			self.method("template_#{template}").call if self.methods.include?("template_#{template}")
-			
+
 			if @redirect
 				return
 			end
-			
+
 			@page_template_layout = false if @disable_layout
-			
+
 			unless @already_rendered
 				if self.instance_variables.include?('@page_template_layout')
 					render :template => "pages/templates/#{template}", :layout => @page_template_layout
@@ -58,7 +62,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 				end
 			end
 		end
-		
+
 		# Cache pages by hand. This is dirty, but it works.
 		def cache_page_request
 			status_code = response.status.to_i rescue nil
@@ -67,14 +71,14 @@ class PagesCore::Frontend::PagesController < FrontendController
 				request_options[:page] = params[:page] if params[:page]
 				request_options[:category_name] = params[:category_name] if params[:category_name]
 				request_options[:sort] = params[:sort] if params[:sort]
-				request_path = url_for(request_options) 
+				request_path = url_for(request_options)
 				request_path += ".#{params[:format]}" if params[:format] && params[:format].to_s != 'html'
 				self.class.cache_page response.body, request_path
 			end
 		end
 
 	public
-	
+
 		def index
 			respond_to do |format|
 				format.html do
@@ -122,13 +126,13 @@ class PagesCore::Frontend::PagesController < FrontendController
 					else
 						@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})
 					end
-				
+
 					response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
 					render :template => 'feeds/pages', :layout => false
 				end
 			end
 		end
-	
+
 		# Add a comment to a page. Recaptcha is performed if PagesCore.config(:recaptcha) is set.
 		def add_comment
 			@page = Page.find(params[:id]) rescue nil
@@ -170,7 +174,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 			@page.published_at ||= Time.now
 			render_page
 		end
-	
+
 		def sitemap
 			if params[:root_id]
 				page = Page.find( params[:root_id] ) rescue nil
