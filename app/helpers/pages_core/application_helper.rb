@@ -1,6 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
-	#include ActsAsDynamicImage::Helper
+	include DynamicImage::DynamicImageHelper
 	include PagesCore::PluginAssetsHelper
 	include PagesCore::VideoHelper
 
