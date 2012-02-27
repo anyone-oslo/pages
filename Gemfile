@@ -20,15 +20,20 @@ gem 'aws-s3', '0.6.2'
 gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty', '0.6.1'
+gem 'uuid', '2.3.5'
+gem 'delayed_job', '2.0.7'
+
+# Assets
 gem 'sass', '3.1.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.1.3'
-gem 'uuid', '2.3.5'
-gem 'delayed_job', '2.0.7'
 
 # ActiveRecord extensions
 gem 'acts_as_list', '0.1.4'
 gem 'acts_as_tree', '0.1.1'
+
+# reCAPTCHA
+gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 
 # Thinking Sphinx
 gem 'riddle', '1.0.12'

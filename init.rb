@@ -1,15 +1,17 @@
 require 'pages_core'
 PagesCore.init!
 
-# Why the hell is this here? 
+# Why the hell is this here?
 class Image < ActiveRecord::Base
 	has_many :album_images
 	has_many :albums, :through => :album_images
 end
 
-# reCaptcha Global Keys
-ENV['RECAPTCHA_PUBLIC_KEY']  = "***REMOVED***"
-ENV['RECAPTCHA_PRIVATE_KEY'] = "***REMOVED***"
+# reCAPTCHA config
+Recaptcha.configure do |config|
+	config.public_key  = '***REMOVED***'
+	config.private_key = '***REMOVED***'
+end
 
 # Initialize and configure Haml/Sass
 require 'sass'
