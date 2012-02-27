@@ -25,6 +25,11 @@ gem 'httparty', '0.6.1'
 gem 'uuid', '2.3.5'
 gem 'delayed_job', '2.0.7'
 
+# DynamicImage
+gem 'rmagick', '2.12.2', :require => 'RMagick'
+gem 'dynamic_image-pages', :require => 'dynamic_image'
+#gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
+
 # Assets
 gem 'sass', '3.1.1'
 gem 'json', '1.5.1'

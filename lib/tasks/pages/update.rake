@@ -227,7 +227,7 @@ namespace :pages do
 		desc "Update submodules"
 		task :submodules do
 			puts "Removing old submodules..."
-			%w{acts_as_list acts_as_tree delayed_job engines recaptcha thinking-sphinx}.each do |plugin|
+			%w{acts_as_list acts_as_tree delayed_job dynamic_image engines recaptcha thinking-sphinx}.each do |plugin|
 				if File.exists?("vendor/plugins/#{plugin}")
 					`rm -rf vendor/plugins/#{plugin}`
 					`git rm vendor/plugins/#{plugin}`
