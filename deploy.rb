@@ -151,12 +151,12 @@ before "deploy:cold", "deploy:setup_cold_deploy"
 before "deploy:migrate", "pages:fix_migrations"
 
 after "deploy:setup",           "pages:create_shared_dirs"
-#after "deploy:symlink",         "pages:fix_permissions"
-after "deploy:symlink",         "pages:create_symlinks"
+#after "deploy:create_symlink",         "pages:fix_permissions"
+after "deploy:create_symlink",         "pages:create_symlinks"
 
 # Sphinx
-before "deploy:symlink", "sphinx:stop"
-after "deploy:symlink", "sphinx:configure"
+before "deploy:create_symlink", "sphinx:stop"
+after "deploy:create_symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
 after "deploy:restart",         "cache:flush"
