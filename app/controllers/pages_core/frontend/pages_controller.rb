@@ -24,6 +24,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 			unless @page
 				if params[:id]
 					@page = Page.find(params[:id]) rescue nil
+					@page ||= unique_page(params[:id])
 					@page ||= Page.find_by_slug_and_language(params[:id], @language)
 				end
 			end
@@ -67,13 +68,13 @@ class PagesCore::Frontend::PagesController < FrontendController
 		def cache_page_request
 			status_code = response.status.to_i rescue nil
 			if status_code == 200 && PagesCore.config(:page_cache) && @page && @language
-				request_options = {:controller => 'pages', :action => :show, :id => @page, :language => @language, :only_path => true}
-				request_options[:page] = params[:page] if params[:page]
-				request_options[:category_name] = params[:category_name] if params[:category_name]
-				request_options[:sort] = params[:sort] if params[:sort]
-				request_path = url_for(request_options)
-				request_path += ".#{params[:format]}" if params[:format] && params[:format].to_s != 'html'
-				self.class.cache_page response.body, request_path
+				#request_options = {:controller => 'pages', :action => :show, :id => @page, :language => @language, :only_path => true}
+				#request_options[:page] = params[:page] if params[:page]
+				#request_options[:category_name] = params[:category_name] if params[:category_name]
+				#request_options[:sort] = params[:sort] if params[:sort]
+				#request_path = url_for(request_options)
+				#request_path += ".#{params[:format]}" if params[:format] && params[:format].to_s != 'html'
+				self.class.cache_page response.body, request.path
 			end
 		end
 
