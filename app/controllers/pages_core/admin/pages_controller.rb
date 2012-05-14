@@ -187,6 +187,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 						# Alert?
 					end
 				end
+				@page.save
 				flash[:notice] = "Your changes were saved"
 				flash[:save_performed] = true
 				redirect_to edit_admin_page_url( @language, @page )

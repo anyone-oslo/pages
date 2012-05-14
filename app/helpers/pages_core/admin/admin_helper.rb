@@ -35,7 +35,7 @@ module PagesCore::Admin::AdminHelper
 		action_name        = params[:action]
 		controller_script = controller.class.to_s.underscore
 
-		if File.exists?(File.join(RAILS_ROOT, "vendor/plugins/pages/public/javascripts/#{controller_script}.js"))
+		if File.exists?(PagesCore.plugin_root.join("app/assets/javascripts/#{controller_script}.js"))
 			output += "\t"+javascript_include_tag(controller_script, :plugin => 'pages') + "\n"
 		end
 		output += "<script type=\"text/javascript\">"

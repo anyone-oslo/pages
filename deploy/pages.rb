@@ -1,5 +1,10 @@
 namespace :pages do
 
+	desc "Fix migrations"
+	task :fix_migrations, :roles => [:db] do
+		run "cd #{release_path} && bundle exec rake pages:update:fix_migrations RAILS_ENV=production"
+	end
+
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
 		if perform_verify_migrations
@@ -38,12 +43,12 @@ namespace :pages do
 
 	desc "Create symlinks"
 	task :create_symlinks, :roles => [:web,:app] do
-		run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
-		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
-		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
-		run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
-		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
-		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
+		run "ln -s #{deploy_to}/#{shared_dir}/cache #{release_path}/tmp/cache"
+		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{release_path}/tmp/sockets"
+		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{release_path}/tmp/sessions"
+		run "ln -s #{deploy_to}/#{shared_dir}/index #{release_path}/index"
+		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{release_path}/db/sphinx"
+		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{release_path}/public/cache"
 	end
 
 end
