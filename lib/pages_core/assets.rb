@@ -1,29 +1,86 @@
 module PagesCore
 	module Assets
 		class << self
-			ASSETS_ROOT = File.join(RAILS_ROOT, 'app/assets')
+			ASSETS_ROOT = 'app/assets'
+
+			def recipes(asset_type)
+				# Application assets
+				recipes = [{
+					:source => File.join(RAILS_ROOT, ASSETS_ROOT, asset_type.to_s),
+					:target => File.join(RAILS_ROOT, 'public', asset_type.to_s)
+				}]
+
+				# Plugin assets
+				Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
+					plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
+					if File.exists?(File.join(plugin_root, ASSETS_ROOT))
+						recipes << {
+							:source => File.join(plugin_root, ASSETS_ROOT, asset_type.to_s),
+							:target => File.join(RAILS_ROOT, 'public/plugin_assets', plugin, asset_type.to_s)
+						}
+					end
+				end
+
+				recipes
+			end
+
+			def javascripts
+				files = []
+				recipes(:javascripts).each do |recipe|
+					Find.find(recipe[:source]) do |path|
+						if path =~ /\.(js|coffee)$/
+							relative_path = path.gsub(Regexp.new("^#{Regexp.escape(recipe[:source])}/?"),'')
+							files << {
+								:name   => relative_path,
+								:source => path,
+								:target => File.join(recipe[:target], relative_path).gsub(/\.coffee$/, '.js')
+							}
+						end
+					end
+				end
+				files
+			end
+
+			def stylesheets
+				files = []
+				recipes(:stylesheets).each do |recipe|
+					Find.find(recipe[:source]) do |path|
+						if path =~ /\.(css)$/
+							relative_path = path.gsub(Regexp.new("^#{Regexp.escape(recipe[:source])}/?"),'')
+							files << {
+								:name   => relative_path,
+								:source => path,
+								:target => File.join(recipe[:target], relative_path)
+							}
+						end
+					end
+				end
+				files
+			end
+
+			def images
+				files = []
+				recipes(:images).each do |recipe|
+					Find.find(recipe[:source]) do |path|
+						if path =~ /\.(png|gif|jpg|jpeg)$/
+							relative_path = path.gsub(Regexp.new("^#{Regexp.escape(recipe[:source])}/?"),'')
+							files << {
+								:name   => relative_path,
+								:source => path,
+								:target => File.join(recipe[:target], relative_path)
+							}
+						end
+					end
+				end
+				files
+			end
 
 			def compile_javascripts(options={})
 				options = {
 					:force => false
 				}.merge(options)
 
-				js_source = File.join(ASSETS_ROOT, 'javascripts')
-				js_target = File.join(RAILS_ROOT, 'public/javascripts')
-
-				scripts = []
-				Find.find(js_source) do |path|
-					if path =~ /\.(js|coffee)$/
-						relative_path = path.gsub(Regexp.new("^#{Regexp.escape(js_source)}/?"),'')
-						scripts << {
-							:name   => relative_path,
-							:source => path,
-							:target => File.join(js_target, relative_path).gsub(/\.coffee$/, '.js')
-						}
-					end
-				end
-				
-				scripts.each do |script|
+				javascripts.each do |script|
 					source_time = File.mtime(script[:source])
 					target_time = File.mtime(script[:target]) rescue 0
 
@@ -46,21 +103,6 @@ module PagesCore
 					:force => false
 				}.merge(options)
 
-				css_source = File.join(ASSETS_ROOT, 'stylesheets')
-				css_target = File.join(RAILS_ROOT, 'public/stylesheets')
-
-				stylesheets = []
-				Find.find(css_source) do |path|
-					if path =~ /\.(css)$/
-						relative_path = path.gsub(Regexp.new("^#{Regexp.escape(css_source)}/?"),'')
-						stylesheets << {
-							:name   => relative_path,
-							:source => path,
-							:target => File.join(css_target, relative_path)
-						}
-					end
-				end
-				
 				stylesheets.each do |stylesheet|
 					source_time = File.mtime(stylesheet[:source])
 					target_time = File.mtime(stylesheet[:target]) rescue 0
@@ -76,9 +118,26 @@ module PagesCore
 				end
 			end
 
+			def compile_images(options={})
+				options = {
+					:force => false
+				}.merge(options)
+
+				images.each do |image|
+					source_time = File.mtime(image[:source])
+					target_time = File.mtime(image[:target]) rescue 0
+
+					if options[:force] || !File.exists?(image[:target]) || source_time > target_time
+						FileUtils.mkdir_p File.dirname(image[:target])
+						FileUtils.cp(image[:source], image[:target])
+					end
+				end
+			end
+
 			def compile!(options={})
 				compile_javascripts(options)
 				compile_stylesheets(options)
+				compile_images(options)
 			end
 		end
 	end

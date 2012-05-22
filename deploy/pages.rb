@@ -1,5 +1,10 @@
 namespace :pages do
 
+	desc "Fix migrations"
+	task :fix_migrations, :roles => [:db] do
+		run "cd #{release_path} && bundle exec rake pages:update:fix_migrations RAILS_ENV=production"
+	end
+
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
 		if perform_verify_migrations

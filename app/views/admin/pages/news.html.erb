@@ -16,10 +16,10 @@
 			<%= submit_tag "Go", :name => nil %>
 		<% end %>
 	</p>
-	<% @archive_count.reverse.each do |year, months| %>
+	<% @archive_count.to_a.reverse.each do |year, months| %>
 		<h2><%= year %><%= ": #{@category.name}" if @category %></h2>
 		<ul>
-			<% months.reverse.each do |month,page_count| %>
+			<% months.to_a.reverse.each do |month,page_count| %>
 				<li><% if year == @year && month == @month %>
 					<strong><%= month_names[month-1] %></strong> (<%= page_count %>)</strong>
 				<% else %>
