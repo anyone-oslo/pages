@@ -3,14 +3,14 @@ namespace :pages do
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
 		if perform_verify_migrations
-			migration_status = `rake -s pages:migration_status`
+			migration_status = `bundle exec rake -s pages:migration_status`
 			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
 			unless current == plugin
 				puts "================================================================================"
 				puts "MIGRATIONS MISMATCH!"
 				puts migration_status
 				puts "\nRun the following commands to fix:"
-				puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
+				puts "\nbundle exec rake pages:update\nbundle exec rake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
 				puts
 				exit
 			end
@@ -38,12 +38,12 @@ namespace :pages do
 
 	desc "Create symlinks"
 	task :create_symlinks, :roles => [:web,:app] do
-		run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
-		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
-		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
-		run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
-		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
-		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
+		run "ln -s #{deploy_to}/#{shared_dir}/cache #{release_path}/tmp/cache"
+		run "ln -s #{deploy_to}/#{shared_dir}/sockets #{release_path}/tmp/sockets"
+		run "ln -s #{deploy_to}/#{shared_dir}/sessions #{release_path}/tmp/sessions"
+		run "ln -s #{deploy_to}/#{shared_dir}/index #{release_path}/index"
+		run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{release_path}/db/sphinx"
+		run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{release_path}/public/cache"
 	end
 
 end

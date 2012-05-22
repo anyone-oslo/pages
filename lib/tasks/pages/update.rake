@@ -231,6 +231,6 @@ namespace :pages do
 	desc "Automated updates for newest version"
 	task :update => ["update:submodules"] do
 		puts "Submodules updated, running rake again"
-		system "rake pages:update:all"
+		system "bundle exec rake pages:update:all"
 	end
 end

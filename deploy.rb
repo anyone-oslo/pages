@@ -39,7 +39,7 @@ load File.join(File.dirname(__FILE__), 'deploy/pages.rb')
 desc "Run rake task (specified as TASK environment variable)"
 task :rake_task, :roles => :app do
 	if ENV['TASK']
-		run "cd #{deploy_to}/#{current_dir} && rake #{ENV['TASK']} RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && bundle exec rake #{ENV['TASK']} RAILS_ENV=production"
 	else
 		puts "Please specify a command to execute on the remote servers (via the COMMAND environment variable)"
 	end
@@ -117,7 +117,7 @@ namespace :cache do
 	desc "Flush the page cache"
 	task :flush, :roles => :app do
 		if flush_cache
-			run "cd #{deploy_to}/#{current_dir} && rake pages:cache:sweep RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && bundle exec rake pages:cache:sweep RAILS_ENV=production"
 		end
 	end
 end
@@ -153,8 +153,8 @@ after "deploy:setup",           "pages:create_shared_dirs"
 after "deploy:symlink",         "pages:create_symlinks"
 
 # Sphinx
-before "deploy:symlink", "sphinx:stop"
-after "deploy:symlink", "sphinx:configure"
+before "deploy:update", "sphinx:stop"
+after "deploy:update_code", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
 after "deploy:restart",         "cache:flush"
