@@ -2,20 +2,20 @@ namespace :sphinx do
 	desc "Rebuild Sphinx"
 	task :rebuild do
 		unless skip_services
-			run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && bundle exec rake ts:in RAILS_ENV=production"
 			run "sudo monit restart #{monit_sphinx}"
 		end
 	end
 	desc "Configure Sphinx"
 	task :configure do
 		unless skip_services
-			run "cd #{deploy_to}/#{current_dir} && rake ts:conf RAILS_ENV=production"
+			run "cd #{release_path} && bundle exec rake ts:conf RAILS_ENV=production"
 		end
 	end
 	desc "(Re)index Sphinx"
 	task :index do
 		unless skip_services
-			run "cd #{deploy_to}/#{current_dir} && rake ts:in RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && bundle exec rake ts:in RAILS_ENV=production"
 		end
 	end
 	desc "Start Sphinx"
@@ -24,7 +24,7 @@ namespace :sphinx do
 			if use_monit
 				run "sudo monit start #{monit_sphinx}"
 			else
-				run "cd #{deploy_to}/#{current_dir} && rake ts:start RAILS_ENV=production"
+				run "cd #{deploy_to}/#{current_dir} && bundle exec rake ts:start RAILS_ENV=production"
 			end
 		end
 	end
@@ -34,7 +34,7 @@ namespace :sphinx do
 			if use_monit
 				run "sudo monit stop #{monit_sphinx}"
 			else
-				run "cd #{deploy_to}/#{current_dir} && rake ts:stop RAILS_ENV=production"
+				run "cd #{deploy_to}/#{current_dir} && bundle exec rake ts:stop RAILS_ENV=production"
 			end
 		end
 	end
@@ -44,7 +44,7 @@ namespace :sphinx do
 			if use_monit
 				run "sudo monit restart #{monit_sphinx}"
 			else
-				run "cd #{deploy_to}/#{current_dir} && rake ts:restart RAILS_ENV=production"
+				run "cd #{deploy_to}/#{current_dir} && bundle exec rake ts:restart RAILS_ENV=production"
 			end
 		end
 	end

@@ -8,14 +8,14 @@ namespace :pages do
 	desc "Verify migrations"
 	task :verify_migrations, :roles => [:web, :app, :db] do
 		if perform_verify_migrations
-			migration_status = `rake -s pages:migration_status`
+			migration_status = `bundle exec rake -s pages:migration_status`
 			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
 			unless current == plugin
 				puts "================================================================================"
 				puts "MIGRATIONS MISMATCH!"
 				puts migration_status
 				puts "\nRun the following commands to fix:"
-				puts "\nrake pages:update\nrake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
+				puts "\nbundle exec rake pages:update\nbundle exec rake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
 				puts
 				exit
 			end
