@@ -25,17 +25,6 @@ class PagesCore::ApplicationController < ActionController::Base
 	before_filter :set_process_title
 	after_filter  :unset_process_title
 
-	if RAILS_ENV == "development"
-		# Hooks for development mode
-		def development_hooks
-			# Mirror plugin assets on each request in development mode
-			Rails.plugins.each do |plugin|
-				Engines::Assets.mirror_files_for(plugin)
-			end
-		end
-		before_filter :development_hooks
-	end
-
 	protected
 
 		def domain_cache

@@ -117,7 +117,7 @@ Admin.PagesController = {
 				var newValue = this;
 				$('#page-form').find('[name="' + newValue.name + '"]').each(function () {
 					if (newValue.type == 'checkbox') {
-						$(this).attr('checked', $(newValue).attr('checked'));
+						$(this).attr('checked', $(newValue).attr('checked') ? true : false);
 					} else {
 						$(this).val($(newValue).val());
 					}

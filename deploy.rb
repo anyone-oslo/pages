@@ -39,7 +39,7 @@ load File.join(File.dirname(__FILE__), 'deploy/pages.rb')
 desc "Run rake task (specified as TASK environment variable)"
 task :rake_task, :roles => :app do
 	if ENV['TASK']
-		run "cd #{deploy_to}/#{current_dir} && rake #{ENV['TASK']} RAILS_ENV=production"
+		run "cd #{deploy_to}/#{current_dir} && bundle exec rake #{ENV['TASK']} RAILS_ENV=production"
 	else
 		puts "Please specify a command to execute on the remote servers (via the COMMAND environment variable)"
 	end
@@ -66,8 +66,12 @@ namespace :deploy do
 	desc "Setup, configure the web server and deploy the application"
 	task :cold, :roles => [:web] do
 		run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
-		run "sudo a2ensite #{application}"
-		run "cd #{deploy_to}/#{current_dir} && rake db:create RAILS_ENV=production"
+		run "a2ensite #{application}"
+	end
+
+	desc "Create database"
+	task :create_database, :roles => [:web] do
+		run "cd #{release_path} && bundle exec rake db:create RAILS_ENV=production"
 	end
 
 	desc "Restart application"
@@ -80,17 +84,12 @@ namespace :deploy do
 	    sudo "/etc/init.d/#{web_server} reload"
 	end
 
-	desc "Update plugin migrations"
-	task :fix_plugin_migrations, :roles => [:db] do
-		run "cd #{release_path} && rake pages:update:fix_plugin_migrations RAILS_ENV=production --trace"
-	end
-	
 	desc "Ensure binary objects store"
 	task :ensure_binary_objects, :roles => [:web] do
 		run "mkdir -p #{deploy_to}/#{shared_dir}/binary-objects"
 		run "ln -s #{deploy_to}/#{shared_dir}/binary-objects #{release_path}/db/binary-objects"
 	end
-	
+
 	desc "Setup services"
 	task :services, :roles => [:web] do
 	end
@@ -98,7 +97,7 @@ namespace :deploy do
 	after 'deploy:services', 'sphinx:index'
 	after 'deploy:services', 'monit:configure'
 	after 'deploy:services', 'monit:restart'
-	
+
 	desc "Notify Campfire"
 	task :notify_campfire, :roles => [:web] do
 		username = `whoami`.chomp
@@ -106,7 +105,7 @@ namespace :deploy do
 		room = Campfire.room(campfire_room)
 		room.message "[#{repo_name}] has been deployed by #{username}"
 	end
-	
+
 end
 
 namespace :cache do
@@ -118,7 +117,7 @@ namespace :cache do
 	desc "Flush the page cache"
 	task :flush, :roles => :app do
 		if flush_cache
-			run "cd #{deploy_to}/#{current_dir} && rake pages:cache:sweep RAILS_ENV=production"
+			run "cd #{deploy_to}/#{current_dir} && bundle exec rake pages:cache:sweep RAILS_ENV=production"
 		end
 	end
 end
@@ -129,8 +128,8 @@ namespace :log do
 		task :production, :roles => :app do
 			run "tail -f #{shared_path}/log/production.log" do |channel, stream, data|
 				puts  # for an extra line break before the host name
-				puts "==== #{channel[:host]} ====\n#{data}" 
-				break if stream == :err    
+				puts "==== #{channel[:host]} ====\n#{data}"
+				break if stream == :err
 			end
 		end
 
@@ -138,8 +137,8 @@ namespace :log do
 		task :delayed_job, :roles => :app do
 			run "tail -f #{shared_path}/log/delayed_job.log" do |channel, stream, data|
 				puts  # for an extra line break before the host name
-				puts "==== #{channel[:host]} ====\n#{data}" 
-				break if stream == :err    
+				puts "==== #{channel[:host]} ====\n#{data}"
+				break if stream == :err
 			end
 		end
 	end
@@ -149,28 +148,33 @@ end
 
 before "deploy:cold", "deploy:setup_cold_deploy"
 
-after "deploy:setup",           "pages:create_shared_dirs"
-#after "deploy:symlink",         "pages:fix_permissions"
-after "deploy:symlink",         "pages:create_symlinks"
+before "deploy:migrate", "pages:fix_migrations"
 
-after "deploy:restart",         "cache:flush"
-before "deploy:migrate",        "deploy:fix_plugin_migrations"
-after "deploy:finalize_update", "deploy:ensure_binary_objects"
+after "deploy:setup",           "pages:create_shared_dirs"
+#after "deploy:create_symlink",         "pages:fix_permissions"
+after "deploy:create_symlink",         "pages:create_symlinks"
 
 # Sphinx
-before "deploy:update", "sphinx:stop"
-after "deploy:symlink", "sphinx:configure"
+before "deploy:create_symlink", "sphinx:stop"
+after "deploy:create_symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
+after "deploy:restart",         "cache:flush"
+after "deploy:finalize_update", "deploy:ensure_binary_objects"
+
+# Cold deploy
+before "deploy:cold", "without_services"
 before "deploy:cold", "deploy:setup"
-#before "deploy:cold", "deploy"
+after "deploy:cold", "deploy"
+after "deploy:cold", "deploy:create_database"
+after "deploy:cold", "deploy:migrate"
 after "deploy:cold", "deploy:services"
 after "deploy:cold", "deploy:reload_webserver"
 
 # Delayed Job
 before "deploy:update", "delayed_job:stop"
-after "deploy:start", "delayed_job:start" 
-after "deploy:stop", "delayed_job:stop" 
+after "deploy:start", "delayed_job:start"
+after "deploy:stop", "delayed_job:stop"
 after "deploy:restart", "delayed_job:start"
 
 after "deploy:restart", "deploy:notify_campfire"

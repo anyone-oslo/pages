@@ -68,25 +68,7 @@
 	<% if @page.template_config.value(:comments) %>
 		<% if @page.comments.count > 0 %>
 			<% content_tab "Comments" do %>
-				<table class="list comments_list">
-					<% @page.comments.each do |c| %>
-						<tr>
-							<td>
-								<strong><%= c.name %></strong><br />
-								<% if c.email? %><%= mail_to c.email, c.email %><br /><% end %>
-								<% if c.url? %><%= link_to c.url, c.url %><br /><% end %>
-							</td>
-							<td><%= c.body %></td>
-							<td>
-								<%= time_ago_in_words c.created_at %> ago<br />
-								from <%= c.remote_ip %>
-							</td>
-							<td>
-								<%= link_to "Delete", delete_comment_admin_page_url( :id => @page, :comment_id => c, :language => @language ), :confirm => 'Are you sure?', :class => :delete %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
+				<%= render :partial => 'edit_comments', :locals => {:f => f} %>
 			<% end %>
 		<% else %>
 			<% content_tab "Comments", {:disabled => true} do %>

@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 source 'http://gems.manualdesign.no/gems/'
 #source 'http://gems.github.com'
 
+gem 'rake', '0.8.7'
 gem 'rails', '2.2.2'
 gem 'mysql', '2.8.1'
 
@@ -23,16 +24,11 @@ gem 'httparty', '0.6.1'
 gem 'sass', '3.1.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.1.3'
+gem 'uuid', '2.3.5'
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
 group :development do
 	gem 'rack'
-end
-
-group :test do
-	gem 'shoulda'
-	gem 'machinist'
-	gem 'faker', '0.3.1'
 end
 
 # Load gems from plugins

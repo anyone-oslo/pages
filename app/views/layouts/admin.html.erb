@@ -3,8 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
-    <link rel="shortcut icon" href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
-    <link rel="icon"          href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
+	<link rel="shortcut icon" href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
+	<link rel="icon"          href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
+
+	<%= stylesheet_link_tag "admin", :plugin => 'pages' %>
+	<%= stylesheet_link_tag "admin/print", :plugin => 'pages', :media => 'print' %>
 
 	<%= javascript_include_tag "fastinit", :plugin => 'pages' %>
 	<%= javascript_include_tag "prototype", :plugin => 'pages' %>
@@ -24,8 +27,6 @@
 
 	<%= admin_javascript_tags %>
 
-	<%= stylesheet_link_tag "admin", :plugin => 'pages' %>
-	<%= stylesheet_link_tag "admin/print", :plugin => 'pages', :media => 'print' %>
 </head>
 <body class="<%= body_classes %>">
 
