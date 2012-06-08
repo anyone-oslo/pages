@@ -5,6 +5,7 @@ source 'http://gems.manualdesign.no/gems/'
 gem 'rails', '2.2.2'
 gem 'mysql', '2.8.1'
 
+gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
 gem 'vector2d'
 gem 'enumerable_mapper'
