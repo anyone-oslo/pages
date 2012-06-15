@@ -24,7 +24,7 @@ namespace :pages do
 			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
 				plugin_controller = File.join('vendor/plugins/pages', controller)
 				if File.exists?(plugin_controller)
-					class_definition = File.read(plugin_controller).split(/\n/).first
+					class_definition = File.read(plugin_controller).split(/\n/).select{|l| l =~ /class/}.first
 					file_content = File.read(controller)
 					patched_file_content = file_content.gsub(/class [\w:]+Controller( < [\w:]+)/, class_definition)
 					unless patched_file_content == file_content
