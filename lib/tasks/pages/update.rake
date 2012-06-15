@@ -17,7 +17,7 @@ namespace :pages do
 				end
 				paths
 			end
-			
+
 			# Update controllers
 			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
 				plugin_controller = File.join('vendor/plugins/pages', controller)
@@ -31,7 +31,7 @@ namespace :pages do
 					end
 				end
 			end
-			
+
 			# Update helpers
 			find_files(%r%^app/helpers/.*\.rb%).each do |helper|
 				plugin_helper = File.join('vendor/plugins/pages', helper)
@@ -55,7 +55,7 @@ namespace :pages do
 					end
 				end
 			end
-			
+
 		end
 
 		desc "Patch files"
@@ -91,8 +91,8 @@ namespace :pages do
 				abort "\n* Rails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
 			end
 			patch_files(
-				%r%^config/environment.rb% , 
-				/^Rails::Initializer\.run/, 
+				%r%^config/environment.rb% ,
+				/^Rails::Initializer\.run/,
 				"# Bootstrap Pages\nrequire File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')\n\nRails::Initializer.run",
 				:unless_matches => /vendor\/plugins\/pages\/boot/
 			) do
@@ -105,8 +105,8 @@ namespace :pages do
 				puts "* ActiveRecord session store has been depreceated, commented out in #{files.inspect}."
 			end
 			# patch_files(
-			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%, 
-			# 	/< ApplicationController/, 
+			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%,
+			# 	/< ApplicationController/,
 			# 	"< FrontendController",
 			# 	:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
 			# ) do |files|
@@ -115,7 +115,7 @@ namespace :pages do
 			patch_files %r%^script/[\w\d_\-\/]+%, /^#!\/usr\/bin\/ruby/, "#!/usr/bin/env ruby" do |files|
 				puts "* Updated shebang in script files: #{files.inspect}"
 			end
-			
+
 			if !File.exists?('script/delayed_job')
 				puts "Delayed job worker script not found, installing..."
 				File.open('script/delayed_job', 'w') do |fh|
@@ -139,6 +139,8 @@ namespace :pages do
 				end
 			end
 
+			# TODO: remove old migrations
+
 			# Passenger/RVM
 			if !File.exists?('config/setup_load_paths.rb')
 				puts "* setup_load_paths.rb not found, installing default..."
@@ -153,8 +155,8 @@ namespace :pages do
 				`cp #{gemfile_template} Gemfile`
 			end
 			patch_files(
-				%r%^config/boot\.rb%, 
-				/^[\s]*Rails\.boot!/, 
+				%r%^config/boot\.rb%,
+				/^[\s]*Rails\.boot!/,
 				"class Rails::Boot\n  def run\n    load_initializer\n    Rails::Initializer.class_eval do\n      def load_gems\n        @bundler_loaded ||= Bundler.require :default, Rails.env\n      end\n    end\n    Rails::Initializer.run(:set_load_path)\n  end\nend\n\nRails.boot!",
 				:unless_matches => /Bundler.require/
 			) do |files|
@@ -165,7 +167,7 @@ namespace :pages do
 				`cp #{preinit_template} config/preinitializer.rb`
 				abort "\n* Updated for Bundler support, please run pages:update again."
 			end
-			
+
 			if !File.exists?("app/assets")
 				puts "* Assets folder not found, creating..."
 				FileUtils.mkdir_p File.join(RAILS_ROOT, 'app/assets/javascripts')
@@ -181,61 +183,45 @@ namespace :pages do
 
 		end
 
-		desc "Fix plugin migrations"
-		task :fix_plugin_migrations => :environment do
-			if ActiveRecord::Base.connection.table_exists?("plugin_schema_info")
-				puts "Pre-2.2.2 plugin migrations table detected, upgrading..."
-				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages\" WHERE plugin_name = \"backstage\"")
-				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages_gallery\" WHERE plugin_name = \"backstage_gallery\"")
-				ActiveRecord::Base.connection.update("UPDATE plugin_schema_info SET plugin_name = \"pages_portfolio\" WHERE plugin_name = \"backstage_portfolio\"")
-				Rake::Task["db:migrate:upgrade_plugin_migrations"].execute
-			end
-			if ActiveRecord::Base.connection.table_exists?("schema_migrations")
-				updated_versions = []
-				ActiveRecord::Base.connection.select_values("SELECT * FROM schema_migrations").each do |version|
-					if version =~ /^[\d]+\-backstage$/
-						new_version = version.gsub('backstage', 'pages')
-						updated_versions << new_version
-						ActiveRecord::Base.connection.update_sql("UPDATE schema_migrations SET version = \"#{new_version}\" WHERE version = \"#{version}\"")
-					end
-				end
-				puts "* #{updated_versions.length} plugin migrations renamed" if updated_versions.length > 0
-			end
-		end
-		
 		desc "Update gems"
 		task :gems do
 			puts "Updating Bundler..."
 			`bundle install`
 		end
 
-		desc "Update migrations"
-		task :migrations => :environment do
-			# Update migrations for plugins
-			plugins = Rails.plugins.select{|p| p.latest_migration}
-			plugins_migrated = 0
-			plugins.each do |plugin|
-				if (plugin.name =~ /^pages/ || plugin.name =~ /^backstage/) && plugin.latest_migration != Engines::Plugin::Migrator.current_version(plugin)
-					puts "Generating migrations for plugin #{plugin.name}..."
-					`script/generate plugin_migration #{plugin.name}`
-					plugins_migrated += 1
+		desc "Fix plugin migrations"
+		task :fix_migrations => :environment do
+			Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
+				plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
+				if File.exists?(old_migrations = File.join(plugin_root, 'config/old_migrations.yml'))
+					YAML::load_file(old_migrations).each_with_index do |migration, i|
+						old_migration = "#{i + 1}-#{plugin}"
+						query = "UPDATE schema_migrations SET version = '#{migration}' WHERE version = '#{old_migration}'"
+						ActiveRecord::Base.connection.execute(query)
+					end
 				end
-			end
-			if plugins_migrated > 0
-				`git add db/migrate/*`
-				puts "\nNew migrations added, now run rake db:migrate"
 			end
 		end
 
-		desc "Patch routes for Rails 2.0"
-		task :patch_routes => :environment do
-			require 'routepatcher'
-			dir = File.join(File.dirname(__FILE__),'..','..','..','..','..')
-			patcher = RoutePatcher.new( dir )
-			patcher.register_prefix( [ 'admin', 'pages' ] )
-			patcher.patch!
+		desc "Update migrations"
+		task :migrations => :environment do
+			new_migrations = []
+			Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
+				plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
+				if File.exists?(template_dir = File.join(plugin_root, 'template/db/migrate'))
+					Dir.entries(template_dir).select{|f| f =~ /^\d+/}.each do |migration|
+						unless File.exists?(File.join(RAILS_ROOT, 'db/migrate', migration))
+							`cp #{File.join(template_dir, migration)} #{File.join(RAILS_ROOT, 'db/migrate', migration)}`
+							new_migrations << migration
+						end
+					end
+				end
+			end
+			if new_migrations.any?
+				puts "\n#{new_migrations.length} new migrations added, now run rake db:migrate"
+			end
 		end
-		
+
 		desc "Update submodules"
 		task :submodules do
 			puts "Updating submodules..."
@@ -249,19 +235,19 @@ namespace :pages do
 					`cd #{RAILS_ROOT} && git submodule add #{origin_base_url}/#{plugin}.git vendor/plugins/#{plugin}`
 				end
 			end
-			
+
 			`git submodule update --init`
 			`git submodule foreach 'git checkout -q master'`
 			`git submodule foreach 'git pull'`
 		end
-		
+
 		desc "Run all update tasks"
-		task :all => ["update:files", "update:fix_inheritance", "update:gems", "update:fix_plugin_migrations", "update:migrations"]
-	end 
+		task :all => ["update:fix_migrations", "update:files", "update:fix_inheritance", "update:gems", "update:migrations"]
+	end
 
 	desc "Automated updates for newest version"
 	task :update => ["update:submodules"] do
 		puts "Submodules updated, running rake again"
-		system "rake pages:update:all"
+		system "bundle exec rake pages:update:all"
 	end
 end

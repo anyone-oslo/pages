@@ -1,5 +1,5 @@
 class PagesCore::ApplicationController < ActionController::Base
-	
+
 	# Trap errors
 	unless ActionController::Base.consider_all_requests_local
 		rescue_from Exception,                            :with => :handle_exception
@@ -9,7 +9,7 @@ class PagesCore::ApplicationController < ActionController::Base
 		rescue_from ActionController::UnknownAction,      :with => :handle_exception
 	end
 
-	# Actions added to the SKIP_FILTERS array will be bypassed by filters. 
+	# Actions added to the SKIP_FILTERS array will be bypassed by filters.
 	# Useful for actions that don't rely on PagesCore.
 	SKIP_FILTERS = [:render_dynamic_image]
 
@@ -21,23 +21,12 @@ class PagesCore::ApplicationController < ActionController::Base
 	after_filter  :set_headers,                :except => SKIP_FILTERS
 	after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
 	after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
-	
+
 	before_filter :set_process_title
 	after_filter  :unset_process_title
-	
-	if RAILS_ENV == "development"
-		# Hooks for development mode
-		def development_hooks
-			# Mirror plugin assets on each request in development mode
-			Rails.plugins.each do |plugin|
-				Engines::Assets.mirror_files_for(plugin)
-			end
-		end
-		before_filter :development_hooks
-	end
 
 	protected
-	
+
 		def domain_cache
 			if PagesCore.config(:domain_based_cache)
 				@@default_page_cache_directory ||= @@page_cache_directory
@@ -51,12 +40,12 @@ class PagesCore::ApplicationController < ActionController::Base
 			@@number_of_requests += 1
 			$0 = "#{@@default_process_title}: Handling #{request.path} (#{@@number_of_requests} reqs)"
 		end
-		
+
 		def unset_process_title
 			set_process_title
 			$0 = "#{@@default_process_title}: Idle (#{@@number_of_requests} reqs)"
 		end
-		
+
 		def handle_exception(exception)
 			begin
 				log_error exception
@@ -97,7 +86,7 @@ class PagesCore::ApplicationController < ActionController::Base
 				render :template => 'errors/500_critical', :status => 500, :layout => false
 			end
 		end
-	
+
 		# Renders a fancy error page from app/views/errors. If the error name is numeric,
 		# it will also be set as the response status. Example:
 		#
@@ -110,7 +99,7 @@ class PagesCore::ApplicationController < ActionController::Base
 			@email = (@current_user) ? @current_user.email : ""
 			render options
 		end
-	
+
 		# Redirect to the previous page, falling back to the options specified if that fails.
 		# Example:
 		#
@@ -131,7 +120,7 @@ class PagesCore::ApplicationController < ActionController::Base
 				PagesCore.config(:site_name, @account.name)
 			end
 		end
-		
+
 		# Sets MumboJumbo.current_language to the requested language, or
 		# Language.default as a fallback.
 		# This method is automatically run from a before_filter.
@@ -139,7 +128,7 @@ class PagesCore::ApplicationController < ActionController::Base
 			@language = params[:language] || Language.default
 			MumboJumbo.current_language = @language
 		end
-		
+
 		# Compiles assets
 		def compile_assets
 			PagesCore::Assets.compile!
@@ -160,7 +149,7 @@ class PagesCore::ApplicationController < ActionController::Base
 				# no need to do it twice.
 			end
 		end
-	
+
 		# === Authentication filter
 		#
 		# A user is considered authenticated if one of the following events occur (in this order):
@@ -171,7 +160,7 @@ class PagesCore::ApplicationController < ActionController::Base
 		# The user will not be authenticated if the account is deleted or not activated. An instance attribute - <tt>@current_user</tt> -
 		# will be set if authentication is successfull, and can be used to test for a valid login in controllers and views.
 		#
-		# Conversely, any controller can log in a user for the duration of the session by setting <tt>@current_user</tt>, the 
+		# Conversely, any controller can log in a user for the duration of the session by setting <tt>@current_user</tt>, the
 		# mechanics are handled by <tt>set_authentication_cookies</tt>.
 		#
 		# This method is automatically run from a before_filter.
@@ -184,7 +173,10 @@ class PagesCore::ApplicationController < ActionController::Base
 			# Login with username and password
 			elsif params[:login_username] && params[:login_password]
 				if user = User.find_by_username(params[:login_username])
-					@current_user = user if user.authenticate(:password => params[:login_password])
+					if user.authenticate(:password => params[:login_password])
+						user.rehash_password!(params[:login_password]) if user.password_needs_rehash?
+						@current_user = user
+					end
 				end
 				login_attempted = true
 
@@ -211,7 +203,7 @@ class PagesCore::ApplicationController < ActionController::Base
 				set_authentication_cookies(:force => false)
 
 				@current_user_is_admin = @current_user.is_admin?
-			
+
 				# Bounce through a redirect if the request isn't a get
 				#if login_attempted && !request.get?
 				#	redirect_request = request.request_parameters
@@ -219,7 +211,7 @@ class PagesCore::ApplicationController < ActionController::Base
 				#	redirect_request.delete( 'login_username' )
 				#	redirect_to redirect_request and return false
 				#end
-				
+
 			else
 				# Authentication failed, reset session and wipe cookies
 				# TODO: only deauthenticate if a login was attempted
@@ -251,14 +243,14 @@ class PagesCore::ApplicationController < ActionController::Base
 			session[:authenticated_openid_url] = nil if options[:forcefully]
 			#reset_session if options[:forcefully]
 		end
-		
+
 		# Returns an OpenID consumer, creating it if necessary.
 		def openid_consumer
 			require 'openid/store/filesystem'
-			@openid_consumer ||= OpenID::Consumer.new(session,      
+			@openid_consumer ||= OpenID::Consumer.new(session,
 				OpenID::Store::Filesystem.new("#{RAILS_ROOT}/tmp/openid"))
 		end
-	
+
 		# Start an OpenID session
 		def start_openid_session(identity_url, options={})
 			options[:success] ||= root_path

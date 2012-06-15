@@ -1,0 +1,9 @@
+2.2.1
+
+- Nytt grensesnitt for å redigere bilder på pages
+- Bugfiks: CacheSweeper funker nå på bilder også på apps som har cache pr. domenenavn
+- updated_at blir nå tracket i databasen for Images
+- jQuery oppdatert til 1.7.1, Underscore.js lagt til
+- Slettede sider dukker ikke lenger opp som news pages
+- Bedre håndtering av valgt tab
+- Funksjon for å eksportere pages til XML
