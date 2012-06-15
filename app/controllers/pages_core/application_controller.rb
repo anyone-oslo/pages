@@ -175,7 +175,10 @@ class PagesCore::ApplicationController < ActionController::Base
 			# Login with username and password
 			elsif params[:login_username] && params[:login_password]
 				if user = User.find_by_username(params[:login_username])
-					@current_user = user if user.authenticate(:password => params[:login_password])
+					if user.authenticate(:password => params[:login_password])
+						user.rehash_password!(params[:login_password]) if user.password_needs_rehash?
+						@current_user = user
+					end
 				end
 				login_attempted = true
 

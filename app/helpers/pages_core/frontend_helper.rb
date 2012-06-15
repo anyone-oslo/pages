@@ -28,7 +28,7 @@ module PagesCore::FrontendHelper
 
 	def formatted_time(time, options={})
 		f = formatted_date(time, options)
-		f += time.strftime( " %Y" ) if time.strftime("%Y") == Time.now.strftime("%Y")
+		#f += time.strftime( " %Y" ) if time.strftime("%Y") != Time.now.strftime("%Y")
 		f
 	end
 

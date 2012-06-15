@@ -23,31 +23,15 @@ module PagesCore::Admin::AdminHelper
 		end
 	end
 
-	def paginator( pages, options={} )
-		raise "Pagination is gone"
-		html = ""
-		if pages.length > 1
-			html << "<div class=\"paginator\">\n"
-			html << "  Page " #{pages.current.number} of #{pages.length}\n"
-			html <<	pagination_links( pages, {}, {})
-			html << "<br />"
-			html << link_to_if( pages.current.previous, 'Previous', { :page => pages.current.previous } )
-			html << "/"
-			html <<	link_to_if( pages.current.next, 'Next', { :page => pages.current.next } )
-			html << "</div>"
-		end
-		html
-	end
-
 	# Generates tags for an editable dynamic image.
 	def editable_dynamic_image_tag(image, options={})
 		link_to(dynamic_image_tag(image, options), admin_image_path(image), :class => 'editableImage')
 	end
 
 	def admin_javascript_tags
-		output  = "\t"+javascript_include_tag("admin/admin", :plugin => 'pages') + "\n"
-		output += "\t"+javascript_include_tag("admin/tag_editor", :plugin => 'pages') + "\n"
-		output += "\t"+javascript_include_tag("admin/page_images", :plugin => 'pages') + "\n"
+		output  = "\t" + javascript_include_tag("admin/admin",       :plugin => 'pages') + "\n"
+		output += "\t" + javascript_include_tag("admin/tag_editor",  :plugin => 'pages') + "\n"
+		output += "\t" + javascript_include_tag("admin/page_images", :plugin => 'pages') + "\n"
 
 		controller_name    = controller.class.to_s.demodulize
 		action_name        = params[:action]

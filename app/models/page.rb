@@ -486,6 +486,7 @@ class Page < ActiveRecord::Base
 				end
 
 				# Category check
+				options[:category] = options[:categories] if options[:categories]
 				if options[:category]
 					find_options[:joins] ||= ""
 					# Multiple categories
@@ -494,7 +495,7 @@ class Page < ActiveRecord::Base
 					else
 						find_options[:joins] += "JOIN `pages_categories` ON `pages_categories`.page_id = `pages`.id AND `pages_categories`.category_id = "+(options[:category].kind_of?(Category) ? options[:category].id : options[:category]).to_s
 					end
-
+					find_options[:group] = "`pages`.id"
 				end
 
 				# Map conditions to string

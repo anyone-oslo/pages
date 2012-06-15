@@ -67,15 +67,15 @@ namespace :pages do
 		print "Create and migrate database? "
 		if STDIN.readline.downcase =~ /^y/
 			puts "Creating development database and migrations (this might take a while)..."
-			`rake db:create`
+			`bundle exec rake db:create`
 			`script/generate plugin_migration pages`
 			`git add db/migrate/*`
-			`rake db:migrate`
+			`bundle exec rake db:migrate`
 			puts "\n"
 			puts "All done."
 		else
 			puts "\nAll done. To set up the database and create the migrations, run the following commands and follow the instructions:"
-			puts "\nrake db:create\nrake pages:update"
+			puts "\nbundle exec rake db:create\nbundle exec rake pages:update"
 			puts
 		end
 		puts "When you're ready to deploy for the first time, run this command to set up the database and apache config:"

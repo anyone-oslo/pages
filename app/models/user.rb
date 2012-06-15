@@ -4,7 +4,6 @@ class User < ActiveRecord::Base
 
 	SPECIAL_USERS = {
 		'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/',            :realname => 'Inge Jørgensen'},
-		'alexander' => {:email => 'alexander@manualdesign.no', :openid_url => 'http://binaerpilot.no/',            :realname => 'Alexander Støver'},
 		'thomas'    => {:email => 'thomas@manualdesign.no',    :openid_url => 'http://silverminken.myopenid.com/', :realname => 'Thomas Knutstad'}
 	}
 
@@ -20,7 +19,7 @@ class User < ActiveRecord::Base
 	### Attributes ############################################################
 
 	serialize  :persistent_data
-	attr_accessor :password, :confirm_password, :confirm_email, :password_changed
+	attr_accessor :password, :confirm_password, :confirm_email
 
 
 	### Validations ###########################################################
@@ -153,9 +152,9 @@ class User < ActiveRecord::Base
 			user
 		end
 
-		# Creates a digest hash from the given string.
-		def hash_string(string)
-			Digest::SHA1.hexdigest(string)
+		# Creates an encrypted password
+		def encrypt_password(password)
+			BCrypt::Password.create(password)
 		end
 
 	end
@@ -181,10 +180,16 @@ class User < ActiveRecord::Base
 	# Hashes self.password and stores it in the hashed_password column.
 	def hash_password
  		if self.password and !self.password.empty?
-			old_hash = self.hashed_password
-			self.hashed_password = User.hash_string(self.password)
-			self.password_changed = true if old_hash != self.hashed_password
+ 			self.hashed_password = User.encrypt_password(password)
 		end
+	end
+
+	def rehash_password!(password)
+		self.update_attribute(:hashed_password, User.encrypt_password(password))
+	end
+
+	def password_needs_rehash?
+		self.hashed_password.length <= 40
 	end
 
 	# Activate user. Works only if the correct token is supplied and the user isn't deleted.
@@ -210,8 +215,17 @@ class User < ActiveRecord::Base
 		return false if self.is_deleted? or !self.is_activated
 
 		# Authentication by password
-		if options[:password] && self.class.hash_string(options[:password]) == self.hashed_password
-			return true
+		if options[:password]
+			# Legacy SHA1
+			if self.hashed_password.length <= 40
+				if self.hashed_password == Digest::SHA1.hexdigest(options[:password])
+					return true
+				end
+			else
+				if BCrypt::Password.new(self.hashed_password) == options[:password]
+					return true
+				end
+			end
 		end
 
 		return false

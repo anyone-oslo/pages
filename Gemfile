@@ -8,6 +8,7 @@ gem 'rake', '0.8.7'
 gem 'rails', '2.3.14'
 gem 'mysql', '2.8.1'
 
+gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
 gem 'vector2d'
 gem 'enumerable_mapper'
