@@ -1,3 +1,18 @@
+2.2.2
+
+- Oppgradert til Rails 2.3
+- Engines er fjernet, resten av plugins er oppdatert til å brukes som gems
+- Passord blir nå kryptert med BCrypt
+- Fikset årstall på datoer i FrontendHelper
+- Fjernet gamle update-tasks
+- Bugfiks: Checkboxes i sidebar funker igjen i Firefox
+- Fikset FOUC i Firefox
+- Byttet UIID-generator
+- Oppdatert Capistrano-recipe
+- Assets i plugins blir nå håndtert på samme måte som assets i apps
+- Migrations blir kopiert til app istedenfor å bli håndtert av Engines
+
+
 2.2.1
 
 - Nytt grensesnitt for å redigere bilder på pages
