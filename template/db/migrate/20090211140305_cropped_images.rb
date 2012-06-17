@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CroppedImages < ActiveRecord::Migration
 	def self.up
 		add_column :images, :cropped, :boolean, :null => false, :default => false

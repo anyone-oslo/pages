@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreatePartials < ActiveRecord::Migration
 	def self.up
 		

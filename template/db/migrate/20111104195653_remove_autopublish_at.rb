@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class RemoveAutopublishAt < ActiveRecord::Migration
 	def self.up
 		Page.find(:all, :conditions => ['autopublish = 1']).each do |page|

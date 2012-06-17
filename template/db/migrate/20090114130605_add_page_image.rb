@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AddPageImage < ActiveRecord::Migration
 	def self.up
 		add_column :pages, :image_id, :integer

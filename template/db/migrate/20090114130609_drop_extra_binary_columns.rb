@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class DropExtraBinaryColumns < ActiveRecord::Migration
 	def self.up
 		remove_column :binaries, :linkable_id

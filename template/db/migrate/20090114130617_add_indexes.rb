@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AddIndexes < ActiveRecord::Migration
 	def self.up
 		add_index( :textbits, [ :textable_id, :textable_type ], :name => :by_association )

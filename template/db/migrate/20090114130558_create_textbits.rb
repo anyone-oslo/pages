@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateTextbits < ActiveRecord::Migration
 	def self.up
 		create_table :textbits do |t|

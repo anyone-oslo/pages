@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreatePageComments < ActiveRecord::Migration
 	def self.up
 		create_table :page_comments do |t|

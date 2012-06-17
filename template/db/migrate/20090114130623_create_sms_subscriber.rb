@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateSmsSubscriber < ActiveRecord::Migration
 	def self.up
 		create_table :sms_subscribers do |t|

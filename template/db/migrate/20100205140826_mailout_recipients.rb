@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class MailoutRecipients < ActiveRecord::Migration
 	def self.up
 		add_column :mailouts, :groups, :text

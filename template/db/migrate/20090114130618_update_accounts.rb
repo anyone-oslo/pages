@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class UpdateAccounts < ActiveRecord::Migration
 	def self.up
 		add_column :accounts, :is_activated, :boolean, :null => false, :default => '1'

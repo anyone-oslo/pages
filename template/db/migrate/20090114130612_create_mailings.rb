@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateMailings < ActiveRecord::Migration
 	def self.up
 		create_table :mailings do |t|

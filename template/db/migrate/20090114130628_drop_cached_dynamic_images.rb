@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class DropCachedDynamicImages < ActiveRecord::Migration
 	def self.up
 		drop_table :cached_images

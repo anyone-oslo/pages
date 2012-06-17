@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class MailingInProgress < ActiveRecord::Migration
 	def self.up
 		add_column :mailings, :in_progress, :boolean, :null => false, :default => false

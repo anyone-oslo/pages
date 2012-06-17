@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateBinaries < ActiveRecord::Migration
 	def self.up
 		create_table :binaries do |t|

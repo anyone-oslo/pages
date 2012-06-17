@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PageHasBeenPublished < ActiveRecord::Migration
 	def self.up
 		add_column :pages, :has_been_published, :boolean, :default => 0, :null => false

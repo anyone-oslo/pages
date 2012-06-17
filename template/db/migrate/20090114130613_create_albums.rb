@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateAlbums < ActiveRecord::Migration
 	def self.up
 

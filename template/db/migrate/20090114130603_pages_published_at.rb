@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesPublishedAt < ActiveRecord::Migration
         def self.up
                 add_column :pages, :published_at, :datetime

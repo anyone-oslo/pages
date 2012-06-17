@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class RenamePageImages < ActiveRecord::Migration
 	def self.up
 		rename_table :images_pages, :page_images

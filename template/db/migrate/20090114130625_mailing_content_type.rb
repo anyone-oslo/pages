@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class MailingContentType < ActiveRecord::Migration
 	def self.up
 		add_column :mailings, :content_type, :string

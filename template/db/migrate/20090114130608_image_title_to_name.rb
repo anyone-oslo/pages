@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ImageTitleToName < ActiveRecord::Migration
 	def self.up
 		rename_column :images, :title, :name

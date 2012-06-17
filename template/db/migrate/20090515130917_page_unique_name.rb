@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PageUniqueName < ActiveRecord::Migration
 	def self.up
 		add_column :pages, :unique_name, :string

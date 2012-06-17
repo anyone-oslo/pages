@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AutopublishPage < ActiveRecord::Migration
 	def self.up
 		add_column :pages, :autopublish,    :boolean, :null => false, :default => 0

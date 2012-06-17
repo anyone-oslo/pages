@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class MiscIndexes < ActiveRecord::Migration
 	def self.up
 		add_index :feeds, :url

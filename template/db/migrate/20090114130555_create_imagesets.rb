@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateImagesets < ActiveRecord::Migration
 	def self.up
 		create_table :imagesets do |t|

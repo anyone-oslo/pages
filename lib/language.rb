@@ -23,7 +23,7 @@ module Language
 		# Load language data from the definition file
 		def load_data
 			languages = Array.new
-			File.open(File.join(File.dirname(__FILE__), 'language/iso-fdis-639-3.tab'), "r") do |f|
+			File.open(File.join(File.dirname(__FILE__), 'language/iso-fdis-639-3.tab'), "r:utf-8") do |f|
 				languages = f.read.split(/[\r]?\n/).map do |line|
 					d = Definition.new
 					d.iso639_3, d.iso639_2b, d.iso639_2t, d.iso639_1, d.scope, d.type, d.name = line.split(/\t/)

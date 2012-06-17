@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AddSphinxDeltas < ActiveRecord::Migration
 	def self.up
 		add_column :pages, :delta, :boolean, :null => false, :default => false

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AddSmsFlag < ActiveRecord::Migration
 	def self.up
 		add_column :users, :sms_sender, :boolean

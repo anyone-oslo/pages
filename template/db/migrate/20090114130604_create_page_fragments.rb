@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreatePageFragments < ActiveRecord::Migration
 	def self.up
 		create_table :page_fragments do |t|

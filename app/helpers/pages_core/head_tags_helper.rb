@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore::HeadTagsHelper
 
 	def include_stylesheet(source, options={})
