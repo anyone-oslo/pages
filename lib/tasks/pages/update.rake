@@ -115,6 +115,15 @@ namespace :pages do
 				puts "* Removed Engines bootstrapper"
 			end
 
+			# Remove the RAILS_GEM_VERSION
+			patch_files(
+				%r%^config/environment.rb% ,
+				/^\s*# Specifies gem version of Rails to use when vendor\/rails is not present[\s]*RAILS_GEM_VERSION = '[\d\.]+' unless defined\? RAILS_GEM_VERSION[\s]*/,
+				"\n"
+			) do
+				puts "* Removed RAILS_GEM_VERSION"
+			end
+
 			# Rename :session_key to :key
 			patch_files(
 				%r%^config/environment.rb% ,
@@ -142,9 +151,9 @@ namespace :pages do
 			end
 
 			# Set the correct RAILS_GEM_VERSION
-			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.3.14'" do
-				abort "\n* Rails gem version updated to newest, stopping. Please run bundler, then re-run this task to complete."
-			end
+			#patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.3.14'" do
+			#	abort "\n* Rails gem version updated to newest, stopping. Please run bundler, then re-run this task to complete."
+			#end
 
 			# patch_files(
 			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%,

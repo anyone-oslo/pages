@@ -11,6 +11,7 @@
 - Oppdatert Capistrano-recipe
 - Assets i plugins blir nå håndtert på samme måte som assets i apps
 - Migrations blir kopiert til app istedenfor å bli håndtert av Engines
+- Fjernet RAILS_GEM_VERSION fra environment.rb
 
 
 2.2.1
