@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Admin::PagesController < Admin::AdminController
 
 	before_filter :find_page, :only => [

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::ImagesController < DynamicImage::ImagesController
 	caches_page :view_image
 

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module ArrayExtensions
 		def move_item(index, movement)

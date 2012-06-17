@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 converter = Iconv.new( @encoding + "//TRANSLIT", 'utf-8' )
 
 xml << "<?xml version=\"1.0\" encoding=\"" + @encoding.upcase + "\"?>\n"

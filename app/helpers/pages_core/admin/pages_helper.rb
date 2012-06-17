@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 module PagesCore::Admin::PagesHelper
-	
+
 	def page_name_cache
 		@page_name_cache ||= {}
 		@page_name_cache
@@ -8,13 +10,13 @@ module PagesCore::Admin::PagesHelper
 	def available_templates_for_select
 		PagesCore::Templates.names.collect do |template|
 			if template == "index"
-				[ "[Default]", "index" ] 
+				[ "[Default]", "index" ]
 			else
 				[ template.humanize, template ]
 			end
 		end
 	end
-	
+
 	def page_name(page, options={})
 		page_name_cache[options] ||= {}
 

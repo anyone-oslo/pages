@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'find'
 require 'open-uri'
 
@@ -22,7 +24,7 @@ namespace :pages do
 			find_files(%r%^app/controllers/.*\.rb%).each do |controller|
 				plugin_controller = File.join('vendor/plugins/pages', controller)
 				if File.exists?(plugin_controller)
-					class_definition = File.read(plugin_controller).split(/\n/).first
+					class_definition = File.read(plugin_controller).split(/\n/).select{|l| l =~ /class/}.first
 					file_content = File.read(controller)
 					patched_file_content = file_content.gsub(/class [\w:]+Controller( < [\w:]+)/, class_definition)
 					unless patched_file_content == file_content
@@ -87,9 +89,14 @@ namespace :pages do
 					yield updated_files if block_given?
 				end
 			end
-			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.2.2'" do
-				abort "\n* Rails gem version updated to newest, stopping. Please run rake rails:update, then re-run this task to complete."
+
+			# Rename application.rb to application_controller.rb
+			if File.exists?('app/controllers/application.rb')
+				puts "* Renaming application.rb"
+				`mv app/controllers/application.rb app/controllers/application_controller.rb`
 			end
+
+			# Add the Pages bootstrapper
 			patch_files(
 				%r%^config/environment.rb% ,
 				/^Rails::Initializer\.run/,
@@ -98,12 +105,47 @@ namespace :pages do
 			) do
 				puts "* Added Pages engine bootstrapper"
 			end
+
+			# Remove the Engines bootstrapper
+			patch_files(
+				%r%^config/environment.rb% ,
+				/^\s*# Bootstrap Engines[\s]+require File\.join\(File\.dirname\(__FILE__\), '\.\.\/vendor\/plugins\/engines\/boot'\)[\s]*/,
+				"\n"
+			) do
+				puts "* Removed Engines bootstrapper"
+			end
+
+			# Rename :session_key to :key
+			patch_files(
+				%r%^config/environment.rb% ,
+				/:session_key[\s]+\=\>/,
+				":key         =>"
+			) do
+				puts "* Renamed :session_key to :key"
+			end
+
+			# Remove plugin routes
+			patch_files(
+				%r%^config/routes.rb% ,
+				/^[ \t]*(# Plugin routes|map.from_plugin :[\w_]+)[\n\r]*/,
+				""
+			) do
+				puts "* Removed plugin routes"
+			end
+
+			# Remove deprecated configuration
 			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
 				puts "* config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
 			end
 			patch_files %r%^config/environment\.rb%, /^[\s]*config\.action_controller\.session_store/, "\t#config.action_controller.session_store" do |files|
 				puts "* ActiveRecord session store has been depreceated, commented out in #{files.inspect}."
 			end
+
+			# Set the correct RAILS_GEM_VERSION
+			patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.3.14'" do
+				abort "\n* Rails gem version updated to newest, stopping. Please run bundler, then re-run this task to complete."
+			end
+
 			# patch_files(
 			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%,
 			# 	/< ApplicationController/,
@@ -112,6 +154,7 @@ namespace :pages do
 			# ) do |files|
 			# 	puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
 			# end
+
 			patch_files %r%^script/[\w\d_\-\/]+%, /^#!\/usr\/bin\/ruby/, "#!/usr/bin/env ruby" do |files|
 				puts "* Updated shebang in script files: #{files.inspect}"
 			end
@@ -139,7 +182,15 @@ namespace :pages do
 				end
 			end
 
-			# TODO: remove old migrations
+			# Remove old migrations
+			deleted_migrations = []
+			Dir.entries('db/migrate').each do |migration|
+				if migration =~ /_to_version_[\d]+\.rb$/
+					deleted_migrations << migration
+					`rm db/migrate/#{migration}`
+				end
+			end
+			puts "* Deleted #{deleted_migrations.length} old engine migrations"
 
 			# Passenger/RVM
 			if !File.exists?('config/setup_load_paths.rb')
@@ -223,26 +274,45 @@ namespace :pages do
 		end
 
 		desc "Update submodules"
-		task :submodules do
-			puts "Updating submodules..."
-			# Get origin base patch
-			origin_base_url = `cd #{RAILS_ROOT}/vendor/plugins/pages && git remote -v | grep origin`.split(/\s+/)[1].gsub(/pages(\.git)?$/, '')
+		task :remove_old_submodules do
+			puts "Removing old submodules..."
+			%w{acts_as_list acts_as_tree delayed_job dynamic_image engines recaptcha thinking-sphinx}.each do |plugin|
+				if File.exists?("vendor/plugins/#{plugin}")
+					`rm -rf vendor/plugins/#{plugin}`
+					`git rm vendor/plugins/#{plugin}`
 
-			required_plugins = %w{thinking-sphinx acts_as_list acts_as_tree dynamic_image engines recaptcha delayed_job}
-			required_plugins.each do |plugin|
-				unless File.exists?(File.join(RAILS_ROOT, "vendor/plugins/#{plugin}"))
-					puts "Missing plugin: #{plugin} .. installing.."
-					`cd #{RAILS_ROOT} && git submodule add #{origin_base_url}/#{plugin}.git vendor/plugins/#{plugin}`
+					# Remove from .gitmodules
+					if File.exists?('.gitmodules')
+						gitmodules = File.readlines('.gitmodules').reject{|l| l =~ Regexp.new(plugin)}.join
+						File.open('.gitmodules', 'w'){|fh| fh.write gitmodules}
+					end
+
+					# Remove from .git/config
+					if File.exists?('.git/config')
+						git_config = File.readlines('.git/config').reject{|l| l =~ Regexp.new(plugin)}.join
+						File.open('.git/config', 'w'){|fh| fh.write git_config}
+					end
 				end
 			end
+		end
 
+		desc "Updates submodules"
+		task :submodules do
+			puts "Updating submodules..."
 			`git submodule update --init`
 			`git submodule foreach 'git checkout -q master'`
 			`git submodule foreach 'git pull'`
 		end
 
 		desc "Run all update tasks"
-		task :all => ["update:fix_migrations", "update:files", "update:fix_inheritance", "update:gems", "update:migrations"]
+		task :all => [
+			"update:remove_old_submodules",
+			"update:files",
+			"update:fix_inheritance",
+			"update:fix_migrations",
+			"update:migrations",
+			"update:gems"
+		]
 	end
 
 	desc "Automated updates for newest version"

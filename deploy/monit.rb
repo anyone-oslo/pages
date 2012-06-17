@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :monit do
 	desc "Reconfigure Monit"
 	task :configure do

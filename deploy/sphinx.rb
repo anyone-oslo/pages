@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :sphinx do
 	desc "Rebuild Sphinx"
 	task :rebuild do

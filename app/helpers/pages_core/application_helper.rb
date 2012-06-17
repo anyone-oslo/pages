@@ -1,6 +1,9 @@
+# encoding: utf-8
+
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
-	#include ActsAsDynamicImage::Helper
+	include DynamicImage::DynamicImageHelper
+	include PagesCore::PluginAssetsHelper
 	include PagesCore::VideoHelper
 	include PagesCore::HeadTagsHelper
 
@@ -18,7 +21,6 @@ module PagesCore::ApplicationHelper
 		indent_string = ""; level.times{indent_string += "\t"}
 		string.split("\n").map{|line| "#{indent_string}#{line}"}.join("\n")
 	end
-
 
 	def is_page_route?(options={})
 		(options[:controller] == 'pages' && options[:action] =~ /^(index|show)$/) ? true : false

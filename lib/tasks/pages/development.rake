@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :pages do
 	namespace :development do
 
@@ -11,7 +13,7 @@ namespace :pages do
 					exit
 				end
 			end
-			
+
 			number = ENV['NUMBER'].to_i
 			parent_page = Page.find(ENV['PARENT'])
 
@@ -38,7 +40,7 @@ namespace :pages do
 				if images.length > 0
 					create_options[:image] = File.open(images[rand(images.length)])
 				end
-				
+
 				page = Page.new
 				page.update_attributes(create_options)
 			end

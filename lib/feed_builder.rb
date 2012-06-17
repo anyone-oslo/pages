@@ -1,10 +1,12 @@
+# encoding: utf-8
+
 require 'rubygems'
 require 'builder'
 require 'iconv'
 require 'active_support'
 
 module FeedBuilder
-	
+
 	class FeedNotValidError < Exception; end
 
 	def self.format_value( value )
@@ -16,7 +18,7 @@ module FeedBuilder
 		end
 		value
 	end
-	
+
 	class ItemCollection < Array
 		attr_accessor :feed
 		def <<( item )
@@ -33,7 +35,7 @@ module FeedBuilder
 			return true
 		end
 	end
-	
+
 	module AttributeMachine
 		def set_attributes( attributes={} )
 			attributes.each do |key,value|
@@ -43,7 +45,7 @@ module FeedBuilder
 				end
 			end
 		end
-		
+
 		def method_missing( name, *args )
 			if name.to_s.match( /^(.*)=$/ ) && all_attributes.include?( $1.to_sym )
 				@attributes[$1.to_sym] = args.first
@@ -53,7 +55,7 @@ module FeedBuilder
 				super
 			end
 		end
-		
+
 		def valid?
 			required_attributes.each do |a|
 				return false unless @attributes.has_key?( a )
@@ -61,7 +63,7 @@ module FeedBuilder
 			return true
 		end
 	end
-	
+
 	class Feed
 		include AttributeMachine
 		attr_reader   :attributes, :items
@@ -88,13 +90,13 @@ module FeedBuilder
 			:skip_hours,
 			:skip_days
 		]
-		
+
 		ALL_ATTRIBUTES = REQUIRED_ATTRIBUTES + OPTIONAL_ATTRIBUTES
-		
+
 		def required_attributes; REQUIRED_ATTRIBUTES; end
 		def optional_attributes; OPTIONAL_ATTRIBUTES; end
 		def all_attributes;      ALL_ATTRIBUTES; end
-				
+
 		def initialize( attributes={} )
 			@encoding = ( attributes[:encoding] ||= "UTF-8" )
 			@attributes = Hash.new
@@ -102,7 +104,7 @@ module FeedBuilder
 			attributes[:items] ||= []
 			self.items = attributes[:items]
 		end
-		
+
 		def items=( collection )
 			@items = ItemCollection.new
 			@items.feed = self
@@ -110,7 +112,7 @@ module FeedBuilder
 				@items << item
 			end
 		end
-		
+
 		def to_rss
 			raise FeedNotValidError unless self.valid?
 			converter = Iconv.new( @encoding + "//TRANSLIT", 'utf-8' )
@@ -121,7 +123,7 @@ module FeedBuilder
 					all_attributes.select{ |a| @attributes.has_key?( a ) }.each do |a|
 						value = converter.iconv( FeedBuilder.format_value( @attributes[a] ) )
 						unless value =~ /[<>]/
-							xml.tag! a.to_s.camelcase( :lower ), converter.iconv( value ) 
+							xml.tag! a.to_s.camelcase( :lower ), converter.iconv( value )
 						else
 							xml.tag!( a.to_s.camelcase( :lower ) ){ xml.cdata!( converter.iconv( value ) ) }
 						end
@@ -132,18 +134,18 @@ module FeedBuilder
 				end
 			end
 		end
-		
+
 		def valid?
 			( self.items.valid? && super ) ? true : false
 		end
 
 	end
-	
+
 	class Item
 		attr_accessor :feed
 		include AttributeMachine
 		REQUIRED_ATTRIBUTES = []
-		
+
 		# Optional RSS 2.0 - either title or description must be present
 		OPTIONAL_ATTRIBUTES = [
 			:title,
@@ -157,22 +159,22 @@ module FeedBuilder
 			:pub_date,        # RFC 822
 			:source           # The RSS channel that the item came from
 		]
-		
+
 		ALL_ATTRIBUTES = REQUIRED_ATTRIBUTES + OPTIONAL_ATTRIBUTES
-		
+
 		def required_attributes; REQUIRED_ATTRIBUTES; end
 		def optional_attributes; OPTIONAL_ATTRIBUTES; end
 		def all_attributes;      ALL_ATTRIBUTES; end
-				
+
 		def initialize( attributes={} )
 			@attributes = Hash.new
 			set_attributes attributes
 		end
-		
+
 		def valid?
 			( ( @attributes[:title] || @attributes[:description] ) && super ) ? true : false
 		end
-		
+
 		def to_rss( xml=nil )
 			xml ||= Builder::XmlMarkup.new( :indent => 2 )
 			converter = Iconv.new( @feed.encoding + "//TRANSLIT", 'utf-8' )
@@ -185,7 +187,7 @@ module FeedBuilder
 						value = value.gsub("“", "&#8221;").gsub("”", "&#8221;") rescue value
 						value = value.gsub("'", "&#8217;") rescue value
 						unless value =~ /[<>]/
-							xml.tag! a.to_s.camelcase( :lower ), converter.iconv( value ) 
+							xml.tag! a.to_s.camelcase( :lower ), converter.iconv( value )
 						else
 							xml.tag!( a.to_s.camelcase( :lower ) ){ xml.cdata!( converter.iconv( value ) ) }
 						end
@@ -194,5 +196,5 @@ module FeedBuilder
 			end
 		end
 	end
-	
+
 end

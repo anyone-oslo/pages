@@ -1,6 +1,8 @@
+# encoding: utf-8
+
 # = Video embedding helpers
 #
-# These helper methods simplify embedding of videos. They are input agnostic; it doesn't matter 
+# These helper methods simplify embedding of videos. They are input agnostic; it doesn't matter
 # whether you supply a URL or an embed tag. Embed tags can also be resized.
 #
 # See <tt>video_embed</tt> for examples. The site specific methods wraps this and adds support for using video IDs.
@@ -11,7 +13,7 @@
 # * MySpace
 # * Vimeo
 module PagesCore::VideoHelper
-	
+
 	module Formats #:nodoc:
 		VIDEO_FORMATS = {
 			:youtube => {
@@ -44,7 +46,7 @@ module PagesCore::VideoHelper
 			}
 		}
 	end
-	
+
 	# Video formats
 	include PagesCore::VideoHelper::Formats
 
@@ -64,8 +66,8 @@ module PagesCore::VideoHelper
 		else
 			format         = nil
 			format_options = nil
-			VIDEO_FORMATS.each do |name, toptions| 
-				if video =~ toptions[:detect_expression] 
+			VIDEO_FORMATS.each do |name, toptions|
+				if video =~ toptions[:detect_expression]
 					format         = name
 					format_options = toptions
 				end
@@ -80,7 +82,7 @@ module PagesCore::VideoHelper
 		original_width, original_height = detect_video_dimensions(video)
 		original_width  ||= format_options[:default_size].x
 		original_height ||= format_options[:default_size].y
-		
+
 		# Resized dimensions
 		if options[:width] && options[:height]
 			new_width, new_height = options[:width].to_i, options[:height].to_i
@@ -99,7 +101,7 @@ module PagesCore::VideoHelper
 		embed_tag.gsub!(/NEW_HEIGHT/, new_height.round.to_i.to_s)
 		return embed_tag
 	end
-	
+
 	# Gets id from a YouTube embed or url.
 	def youtube_id(id); video_id(id, :youtube); end
 	# Gets id from an Imeem embed or url.
@@ -108,7 +110,7 @@ module PagesCore::VideoHelper
 	def myspace_id(id); video_id(id, :myspace); end
 	# Gets id from a Vimeo embed or url.
 	def vimeo_id(id);   video_id(id, :vimeo);   end
-	
+
 	# Embeds a YouTube video. The <tt>video</tt> parameter can be an id, a url or an embed tag. See <tt>video_embed</tt> for more options.
 	def youtube_embed(video, options={}); video_embed(video, options.merge({:format => :youtube})); end
 	# Embeds an Imeem video. The <tt>video</tt> parameter can be an id, a url or an embed tag. See <tt>video_embed</tt> for more options.
@@ -117,7 +119,7 @@ module PagesCore::VideoHelper
 	def myspace_embed(video, options={}); video_embed(video, options.merge({:format => :myspace})); end
 	# Embeds a Vimeo video. The <tt>video</tt> parameter can be an id, a url or an embed tag. See <tt>video_embed</tt> for more options.
 	def vimeo_embed(video, options={});   video_embed(video, options.merge({:format => :vimeo}));   end
-	
+
 	protected
 
 		# Converts a video embed tag or url to a video id.
@@ -128,7 +130,7 @@ module PagesCore::VideoHelper
 			end
 			embed_tag_or_url
 		end
-	
+
 		# Detects default video dimensions from an embed tag. Returns [width, height]
 		def detect_video_dimensions(embed_tag)
 			width  = embed_tag.match(/width="?([\d]+)"?/)[1].to_f  if embed_tag =~ /width="?([\d]+)"?/

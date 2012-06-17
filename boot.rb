@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 if RAILS_ENV == 'production'
 	require 'activerecord'
 	require 'actionmailer'

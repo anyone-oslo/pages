@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # allow this test to hook into the Rails framework
 require File.dirname(__FILE__) + '/../test_helper'
 
@@ -17,12 +19,12 @@ class UserTest < Test::Unit::TestCase
 		assert jimmy.save
 		assert jimmy.destroy
 	end
-	
+
 	def test_find_by_username_or_email
 		#assert User.find_by_username_or_email( 'inge' )
 		#assert User.find_by_username_or_email( 'inge@manualdesign.no' )
 		#assert_equal users(:inge), User.find_by_id_or_username( 2 )
-		#assert_equal users(:inge), User.find_by_id_or_username( 'inge' ) 
+		#assert_equal users(:inge), User.find_by_id_or_username( 'inge' )
 	end
 
 	# test creation of users
@@ -30,18 +32,18 @@ class UserTest < Test::Unit::TestCase
 		my_user = User.create( { :username => 'testuser1', :realname => 'Test User', :password => 'testpassword' } )
 		assert_equal my_user.hashed_password, User.hash_string( 'testpassword' )
 	end
-	
+
 	# test the password hashing function
 	def test_password_hasher
 		assert_equal users(:inge).hashed_password, User.hash_string( "ingepassord" )
 	end
-	
+
 	# test relations
 	def test_relations
 		assert_equal users(:thomas).creator, users(:inge)
 		assert users(:inge).created_users.include?( users(:thomas) )
 	end
-	
+
 	# test uniqueness of usernames
 	def test_username_uniqueness
 		assert User.create( :username => 'inge', :realname => 'Silly User', :password => 'passs', :email => 'test@test.com' )

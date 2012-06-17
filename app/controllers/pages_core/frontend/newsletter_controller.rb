@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Frontend::NewsletterController < FrontendController
 
 	def subscribe
@@ -12,7 +14,7 @@ class PagesCore::Frontend::NewsletterController < FrontendController
 		flash[:notice] = "You have subscribed to our newsletter."
 		redirect_back_or_to "/"
 	end
-	
+
 	def unsubscribe
 		email = [params[:email]].flatten.first rescue nil
 		if email

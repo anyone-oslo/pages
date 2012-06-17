@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Frontend::PagesController < FrontendController
 
 	if PagesCore.config(:page_cache)

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.join(File.dirname(__FILE__), 'templates/block_configuration')
 require File.join(File.dirname(__FILE__), 'templates/configuration')
 require File.join(File.dirname(__FILE__), 'templates/template_configuration')
@@ -23,6 +25,6 @@ module PagesCore
 				end
 				return @@available_templates_cached
 			end
-		end	
+		end
 	end
 end

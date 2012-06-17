@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore::FrontendHelper
 	def formatted_date(date, options={})
 		date = date.to_date

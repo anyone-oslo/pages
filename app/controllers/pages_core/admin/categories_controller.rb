@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Admin::CategoriesController < Admin::AdminController
 
 	before_filter :find_category, :only => [:show, :edit, :update, :destroy]
@@ -12,21 +14,21 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
 				redirect_to admin_pages_url(:language => @language) and return
 			end
 		end
-	
+
 	public
 
 		def index
 			@categories = Category.find(:all)
 		end
-	
+
 		def show
 			render :action => :edit
 		end
-	
+
 		def new
 			@category = Category.new
 		end
-	
+
 		def create
 			@category = Category.create(params[:category])
 			if @category.valid?
@@ -36,10 +38,10 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
 				render :action => :new
 			end
 		end
-	
+
 		def edit
 		end
-	
+
 		def update
 			if @category.update_attributes(params[:category])
 				flash[:notice] = "Category was updated"

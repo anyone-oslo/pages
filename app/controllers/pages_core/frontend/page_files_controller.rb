@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::Frontend::PageFilesController < FrontendController
 
 	before_filter :find_page_file, :only => [:show, :edit, :update, :destroy]
@@ -12,7 +14,7 @@ class PagesCore::Frontend::PageFilesController < FrontendController
 				redirect_to page_files_url and return
 			end
 		end
-	
+
 	public
 
 		def show
@@ -22,11 +24,11 @@ class PagesCore::Frontend::PageFilesController < FrontendController
 			end
 			response.headers['Last-Modified']       = @page_file.created_at.httpdate if @page_file.created_at?
 			send_data(
-				@page_file.data, 
-				:filename    => @page_file.filename, 
-				:type        => @page_file.content_type, 
+				@page_file.data,
+				:filename    => @page_file.filename,
+				:type        => @page_file.content_type,
 				:disposition => 'attachment'
 			)
 		end
-	
+
 end

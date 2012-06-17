@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PagesCore::ApplicationController < ActionController::Base
 
 	# Trap errors

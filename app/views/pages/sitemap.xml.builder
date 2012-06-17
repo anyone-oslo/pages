@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 xml.instruct! :xml, :version=>"1.0"
 xml.pages do
 	@pages.each do |page|

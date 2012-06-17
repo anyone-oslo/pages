@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Tag < ActiveRecord::Base
 	has_many :taggings
 
@@ -31,19 +33,19 @@ class Tag < ActiveRecord::Base
 		# # Old style parsing:
 		#
 		# tag_names = []
-		# 
+		#
 		# # first, pull out the quoted tags
 		# list.gsub!(/\"(.*?)\"\s*/ ) { tag_names << $1; "" }
-		# 
+		#
 		# # then, replace all commas with a space
 		# list.gsub!(/,/, " ")
-		# 
+		#
 		# # then, get whatever's left
 		# tag_names.concat list.split(/\s/)
-		# 
+		#
 		# # strip whitespace from the names
 		# tag_names = tag_names.map { |t| t.strip }
-		# 
+		#
 		# # delete any blank tag names
 		# tag_names = tag_names.delete_if { |t| t.empty? }
 

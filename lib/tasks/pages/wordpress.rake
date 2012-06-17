@@ -1,21 +1,23 @@
+# encoding: utf-8
+
 namespace :pages do
 	namespace :wordpress do
 
 		desc "Import WordPress content"
 		task :import => :environment do
-			
+
 			def get_input(prompt='', default='')
 				print "#{prompt} [#{default}]: "
 				input = STDIN.readline.chomp
 				input.empty? ? default : input
 			end
-			
+
 			def get_input_yn(prompt, default=false)
 				default_text = default ? 'y' : 'n'
 				value = get_input(prompt, default_text)
 				value =~ /^[yY]/ ? true : false
 			end
-			
+
 			def post_to_params(post)
 				params = {}
 				params[:name]       = post['post_title']   unless post['post_title'].blank?
@@ -52,9 +54,9 @@ namespace :pages do
 				@convert_to   = get_input('Convert to', 'utf-8')
 			end
 
-			
+
 			puts ""
-			
+
 			@wp_tables = {
 				:comments           => "#{table_prefix}_comments",
 				:links              => "#{table_prefix}_links",
@@ -69,7 +71,7 @@ namespace :pages do
 				:votes              => "#{table_prefix}_votes",
 				:votes_users        => "#{table_prefix}_votes_users",
 			}
-			
+
 			def get_rows(table_key)
 				table_name = @wp_tables[table_key]
 				@table_fields ||= {}
@@ -90,7 +92,7 @@ namespace :pages do
 				end
 				@table_rows[table_name]
 			end
-			
+
 			# Users
 			puts "Loading users..."
 			users = {}
@@ -116,7 +118,7 @@ namespace :pages do
 				end
 				users[user_id] = pages_user
 			end
-			
+
 			puts "Loading tags and categories..."
 			terms = {}
 			get_rows(:terms).each do |term|
@@ -182,7 +184,7 @@ namespace :pages do
 					end
 				end
 			end
-		
+
 			puts "Building pages..."
 			posts.each do |post_id, post|
 				if post['post_type'] =~ /^post$/ || (import_pages && post['post_type'] =~ /^page$/)
@@ -224,7 +226,7 @@ namespace :pages do
 					posts[post_id] = post
 				end
 			end
-			
+
 			puts "Saving pages..."
 			posts.each do |post_id, post|
 				if post[:page]
@@ -232,7 +234,7 @@ namespace :pages do
 					post[:page] = Page.find(post[:page].id)
 				end
 			end
-			
+
 			puts "Building relations..."
 			posts.each do |post_id, post|
 				if post[:page]
@@ -246,7 +248,7 @@ namespace :pages do
 							post[:page].update_attribute(:parent_page_id, post_parent_id.to_i)
 						end
 					end
-					
+
 					if post[:terms]
 						post[:terms].each do |term_id, term|
 							if term['type'] == 'tag'
@@ -316,7 +318,7 @@ namespace :pages do
 					end
 				end
 			end
-			
+
 			puts "All done!"
 			puts ""
 			if get_input_yn('Delete Wordpress tables?', false)

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module Configuration
 		class Proxy

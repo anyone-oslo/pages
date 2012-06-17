@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 class Postnummer
-	
+
 	class << self
 
 		def name(id)
@@ -52,5 +54,5 @@ class Postnummer
 			end
 
 	end
-	
+
 end

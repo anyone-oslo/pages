@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CacheObserver < ActiveRecord::Observer
 	observe PagesCore::CacheSweeper.config.observe
 

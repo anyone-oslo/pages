@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'digest/sha1'
 require 'iconv'
 require 'find'
@@ -25,15 +27,15 @@ module PagesCore
 
 			# Register default mime types
 			Mime::Type.register "application/rss+xml", 'rss'
-			
+
 			# Register with PagesConsole
 			PagesCore.register_with_pages_console
 		end
-		
+
 		def version
 			@@version ||= File.read(plugin_root.join('VERSION'))
 		end
-		
+
 		def plugin_root
 			Pathname.new(File.dirname(__FILE__)).join('..').expand_path
 		end
@@ -42,7 +44,7 @@ module PagesCore
 			dir = RAILS_ROOT
 			dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
 		end
-		
+
 		def register_with_pages_console
 			begin
 				require 'pages_console'
@@ -68,19 +70,19 @@ module PagesCore
 				end
 			end
 		end
-		
+
 		def load_default_configuration
 			@@configuration = PagesCore::Configuration::SiteConfiguration.new
-			
+
 			config.localizations       :disabled
 			config.page_cache          :enabled
 			config.newsletter.template :disabled
 			config.newsletter.image    :disabled
 			config.text_filter         :textile
-			
+
 			#config.comment_notifications [:author, 'your@email.com']
 		end
-		
+
 		def configuration(key=nil, value=nil)
 			load_default_configuration unless self.class_variables.include?('@@configuration')
 			if key
@@ -92,5 +94,5 @@ module PagesCore
 		end
 		alias :config :configuration
 	end
-	
+
 end

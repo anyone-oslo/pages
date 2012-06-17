@@ -1,7 +1,9 @@
+# encoding: utf-8
+
 class PagesCore::ErrorsController < ApplicationController
-	
+
 	layout 'errors'
-	
+
 	skip_before_filter :verify_authenticity_token
 
 	def report
@@ -19,6 +21,6 @@ class PagesCore::ErrorsController < ApplicationController
 			@error_id = session[:error_report]
 		end
 	end
-	
-	
+
+
 end

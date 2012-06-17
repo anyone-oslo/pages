@@ -1,25 +1,10 @@
+# encoding: utf-8
+
 namespace :pages do
 
 	desc "Fix migrations"
 	task :fix_migrations, :roles => [:db] do
 		run "cd #{release_path} && bundle exec rake pages:update:fix_migrations RAILS_ENV=production"
-	end
-
-	desc "Verify migrations"
-	task :verify_migrations, :roles => [:web, :app, :db] do
-		if perform_verify_migrations
-			migration_status = `bundle exec rake -s pages:migration_status`
-			current, plugin = (migration_status.split("\n").select{|l| l =~ /pages:/ }.first.match(/([\d]+\/[\d]+)/)[1] rescue "0/xx").split("/")
-			unless current == plugin
-				puts "================================================================================"
-				puts "MIGRATIONS MISMATCH!"
-				puts migration_status
-				puts "\nRun the following commands to fix:"
-				puts "\nbundle exec rake pages:update\nbundle exec rake db:migrate\ngit commit -a -m \"Fixed migrations\"\ncap deploy:migrations"
-				puts
-				exit
-			end
-		end
 	end
 
 	desc "Create shared directories"

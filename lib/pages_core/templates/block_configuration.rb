@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
 	module Templates
 
@@ -11,6 +13,6 @@ module PagesCore
 				(small?) ? false : true
 			end
 		end
-		
+
 	end
 end

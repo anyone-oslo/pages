@@ -1,9 +1,11 @@
+# encoding: utf-8
+
 # Abstract controller for all frontend controllers.
 class PagesCore::FrontendController < ApplicationController
 
 	include ApplicationHelper
 
-	# Loads @root_pages and @rss_feeds. To automatically load these in your own controllers, 
+	# Loads @root_pages and @rss_feeds. To automatically load these in your own controllers,
 	# add the following line to your controller definition:
 	#
 	#   before_filter :load_root_pages

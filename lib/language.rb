@@ -1,8 +1,10 @@
+# encoding: utf-8
+
 module Language
-	
+
 	@@languages = nil
 	@@cached_definitions = {}
-	
+
 	# Language definition
 	class Definition
 		attr_accessor :name, :iso639_3, :iso639_2b, :iso639_2t, :iso639_1, :scope, :type
@@ -10,7 +12,7 @@ module Language
 		def code(type=:iso639_3)
 			self.iso639_3
 		end
-		
+
 		def to_s
 			self.code
 		end
@@ -21,8 +23,8 @@ module Language
 		# Load language data from the definition file
 		def load_data
 			languages = Array.new
-			File.open( File.join(File.dirname(__FILE__), 'language/iso-fdis-639-3.tab' ), "r") do |f|
-				languages = f.read.split(/[\r]?\n/).collect do |line|
+			File.open(File.join(File.dirname(__FILE__), 'language/iso-fdis-639-3.tab'), "r") do |f|
+				languages = f.read.split(/[\r]?\n/).map do |line|
 					d = Definition.new
 					d.iso639_3, d.iso639_2b, d.iso639_2t, d.iso639_1, d.scope, d.type, d.name = line.split(/\t/)
 					d
@@ -30,7 +32,7 @@ module Language
 			end
 			languages
 		end
-	
+
 		def definition(code)
 			@@cached_definitions[code] ||= (@@languages ||= Language.load_data).select{|l| l.iso639_3 == code or l.iso639_1 == code}.first
 		end
@@ -39,7 +41,7 @@ module Language
 		def default=(language)
 			@@default_language = language
 		end
-	
+
 		# Get default language
 		def default
 			@@default_language
