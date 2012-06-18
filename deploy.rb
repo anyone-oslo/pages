@@ -63,6 +63,11 @@ namespace :deploy do
 		set :cold_deploy, true
 	end
 
+	desc "Remove the cached copy"
+	task :remove_cached_copy, :roles => [:web] do
+		run "rm -rf #{deploy_to}/#{shared_dir}/cached-copy"
+	end
+
 	desc "Setup, configure the web server and deploy the application"
 	task :cold, :roles => [:web] do
 		run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
