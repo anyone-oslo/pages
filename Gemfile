@@ -12,14 +12,14 @@ gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
 gem 'vector2d'
 gem 'enumerable_mapper'
-gem 'hpricot', '0.8.2'
+gem 'hpricot', '0.8.6'
 gem 'simple-rss', '1.2.3'
 gem 'RedCloth', '4.2.9'
 gem 'rmagick', '2.12.2', :require => 'RMagick'
 gem 'uuidtools', '2.1.1'
 gem 'unicode', '0.3.1'
 gem 'daemon-spawn', '0.2.0'
-gem 'aws-s3', '0.6.2'
+gem 'aws-s3', '0.6.3'
 gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty', '0.6.1'
@@ -47,6 +47,8 @@ gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 gem 'riddle', '1.0.12'
 gem 'thinking-sphinx', '1.3.20'
 gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta'
+
+gem 'term-ansicolor'
 
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
