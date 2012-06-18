@@ -96,6 +96,15 @@ namespace :pages do
 				`mv app/controllers/application.rb app/controllers/application_controller.rb`
 			end
 
+			# Update the Rakefile
+			patch_files(
+				%r%^Rakefile% ,
+				/^require 'rake\/rdoctask'/,
+				"require 'rdoc/task'"
+			) do
+				puts "* Updated RDoc require in Rakefile"
+			end
+
 			# Add the Pages bootstrapper
 			patch_files(
 				%r%^config/environment.rb% ,

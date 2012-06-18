@@ -4,9 +4,10 @@ source 'http://rubygems.org'
 source 'http://gems.manualdesign.no/gems/'
 #source 'http://gems.github.com'
 
-gem 'rake', '0.8.7'
+gem 'rake', '0.9.2.2'
 gem 'rails', '2.3.14'
 gem 'mysql', '2.8.1'
+gem 'rdoc', '3.12'
 
 gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
