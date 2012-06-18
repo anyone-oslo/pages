@@ -5,7 +5,7 @@ source 'http://gems.manualdesign.no/gems/'
 #source 'http://gems.github.com'
 
 gem 'rake', '0.9.2.2'
-gem 'rails', '2.3.14'
+gem 'rails', '3.0.3'
 gem 'mysql', '2.8.1'
 gem 'rdoc', '3.12'
 
@@ -25,7 +25,7 @@ gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty', '0.6.1'
 gem 'uuid', '2.3.5'
-gem 'delayed_job', '2.0.7'
+gem 'delayed_job', '3.0.3'
 
 # DynamicImage
 gem 'rmagick', '2.12.2', :require => 'RMagick'
@@ -45,9 +45,8 @@ gem 'acts_as_tree', '0.1.1'
 gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 
 # Thinking Sphinx
-gem 'riddle', '1.0.12'
-gem 'thinking-sphinx', '1.3.20'
-gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta'
+gem 'thinking-sphinx', '2.0.12'
+gem 'ts-delayed-delta', '1.1.3', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 gem 'term-ansicolor'
 
