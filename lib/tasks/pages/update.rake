@@ -105,6 +105,16 @@ namespace :pages do
 				puts "* Updated RDoc require in Rakefile"
 			end
 
+			# Add the root route
+			patch_files(
+				%r%^config/routes.rb% ,
+				/^end/,
+				"\tmap.root :controller => 'pages', :action => 'index'\nend",
+				:unless_matches => /^\s+map.root/
+			) do
+				puts "* Added root route"
+			end
+
 			# Add the Pages bootstrapper
 			patch_files(
 				%r%^config/environment.rb% ,
@@ -208,7 +218,9 @@ namespace :pages do
 					`rm db/migrate/#{migration}`
 				end
 			end
-			puts "* Deleted #{deleted_migrations.length} old engine migrations"
+			if deleted_migrations.length > 0
+				puts "* Deleted #{deleted_migrations.length} old engine migrations"
+			end
 
 			# Passenger/RVM
 			if !File.exists?('config/setup_load_paths.rb')

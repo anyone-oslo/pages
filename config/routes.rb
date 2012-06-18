@@ -4,8 +4,6 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.dynamic_text '/dynamic_text/:text_format/:text.png', :controller => 'dynamic_text', :action => 'show'
 
-	map.connect '',                                       :controller => 'pages', :action => 'index'
-	map.connect 'index',                                  :controller => 'pages', :action => 'index'
 	map.connect 'pages/:language/:id/add_comment',        :controller => 'pages', :action => 'add_comment', :requirements => { :id => /[\d]+.*/ }
 	map.connect 'pages/:id',                              :controller => 'pages', :action => 'show', :requirements => { :id => /[\d]+.*/ }
 	map.formatted_pages 'pages/:language/index.:format',  :controller => 'pages', :action => 'index'
@@ -107,6 +105,6 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.connect 'comments/:action/:type/:id',               :controller => 'comments'
 
-	map.root :controller => 'pages', :action => 'index'
+	#map.root :controller => 'pages', :action => 'index'
 
 end
