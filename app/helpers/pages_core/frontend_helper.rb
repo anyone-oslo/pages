@@ -1,6 +1,10 @@
 # encoding: utf-8
 
 module PagesCore::FrontendHelper
+	def root_pages
+		@root_pages ||= Page.root_pages(:language => @language)
+	end
+
 	def formatted_date(date, options={})
 		date = date.to_date
 		options.symbolize_keys!

@@ -11,6 +11,7 @@ gem 'rdoc', '3.12'
 
 gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
+gem 'capistrano_colors'
 gem 'vector2d'
 gem 'enumerable_mapper'
 gem 'hpricot', '0.8.6'
