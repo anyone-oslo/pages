@@ -163,7 +163,7 @@ after "deploy:setup",           "pages:create_shared_dirs"
 after "deploy:create_symlink",         "pages:create_symlinks"
 
 # Sphinx
-before "deploy:update", "sphinx:stop"
+before "deploy:create_symlink", "sphinx:stop"
 after "deploy:create_symlink", "sphinx:configure"
 after "deploy:restart", "sphinx:start"
 
@@ -180,7 +180,7 @@ after "deploy:cold", "deploy:services"
 after "deploy:cold", "deploy:reload_webserver"
 
 # Delayed Job
-before "deploy:update", "delayed_job:stop"
+before "deploy:create_symlink", "delayed_job:stop"
 after "deploy:start", "delayed_job:start"
 after "deploy:stop", "delayed_job:stop"
 after "deploy:restart", "delayed_job:start"
