@@ -20,7 +20,7 @@ config.action_controller.perform_caching             = true
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
 
-config.action_controller.page_cache_directory = File.join(RAILS_ROOT, 'public', 'cache')
+config.action_controller.page_cache_directory = Rails.root.join('public', 'cache')
 
 ActionMailer::Base.delivery_method = :sendmail
 ActionMailer::Base.sendmail_settings = {

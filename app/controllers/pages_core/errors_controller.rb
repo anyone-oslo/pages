@@ -8,8 +8,8 @@ class PagesCore::ErrorsController < ApplicationController
 
 	def report
 		if session[:error_report]
-			error_report_dir  = File.join(RAILS_ROOT, 'log/error_reports')
-			error_report_file = File.join(error_report_dir, "#{session[:error_report]}.yml")
+			error_report_dir  = Rails.root.join('log', 'error_reports')
+			error_report_file = error_report_dir.join("#{session[:error_report]}.yml")
 			@error_report = YAML.load_file(error_report_file)
 			@from         = params[:email]
 			@description  = params[:description]

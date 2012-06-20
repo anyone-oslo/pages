@@ -25,7 +25,7 @@ namespace :pages do
 		end
 
 		create_options = {}
-		create_options_file = File.join(RAILS_ROOT, 'config/create_options.yml')
+		create_options_file = Rails.root.join('config', 'create_options.yml')
 		if File.exists?(create_options_file)
 			create_options = YAML::load_file(create_options_file)
 		end
@@ -60,7 +60,7 @@ namespace :pages do
 			if File.file?(path)
 				file_path = path.gsub(Regexp.new("^#{Regexp.escape(template_path)}/?"),'')
 				template = ERB.new(File.read(path))
-				target_path = File.join(RAILS_ROOT, file_path)
+				target_path = Rails.root.join(file_path)
 				File.open(target_path, 'w+'){|fh| fh.write template.result}
 			end
 		end

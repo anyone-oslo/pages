@@ -30,7 +30,7 @@ module MumboJumbo
 		end
 
 		def current_language=(language)
-			load_languages! if defined?(RAILS_ENV) && RAILS_ENV == 'development'
+			load_languages! if Rails.env.development?
 			language = language.to_sym if language.respond_to? :to_sym
 			@@current_language = language
 		end
@@ -82,19 +82,19 @@ module MumboJumbo
 			languages
 		end
 
-		@@language_paths = [RAILS_ROOT]
+		@@language_paths = [Rails.root.to_s]
 		mattr_reader :language_paths
 		def language_paths
 			@@language_paths ||= []
 		end
 
 		def add_language_path( path )
-			@@language_paths.delete( RAILS_ROOT )
-			@@language_paths = [ @@language_paths, path, RAILS_ROOT ].flatten
+			@@language_paths.delete(Rails.root.to_s)
+			@@language_paths = [ @@language_paths, path, Rails.root.to_s].flatten
 		end
 
 		def reset_language_paths!
-			@@language_paths = [RAILS_ROOT]
+			@@language_paths = [Rails.root.to_s]
 		end
 
 		private

@@ -50,7 +50,7 @@ class PagesCore::Admin::FilesController < Admin::AdminController
 	def create
 		if params[:url] != ""
 			base_name = File.basename( params[:url] )
-			temp_file = File.join(RAILS_ROOT, tmp, base_name)
+			temp_file = Rails.root.join('tmp', base_name)
 			system "curl #{params[:url]} > #{temp_file}"
 			params[:image][:imagefile] = File.new( temp_file )
 		end

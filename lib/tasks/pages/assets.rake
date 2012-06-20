@@ -20,7 +20,7 @@ namespace :pages do
 
 		desc "Update to SCSS"
 		task :convert_to_scss => :environment do
-			assets_dir = File.join(RAILS_ROOT, 'app/assets/stylesheets')
+			assets_dir = Rails.root.join('app', 'assets', 'stylesheets')
 			Find.find(assets_dir) do |path|
 				if path =~ /\.css$/
 					scss_path = path.gsub(/\.css$/, '.scss')

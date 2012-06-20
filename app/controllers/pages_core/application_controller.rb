@@ -75,8 +75,8 @@ class PagesCore::ApplicationController < ActionController::Base
 
 					sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)
 
-					error_report_dir  = File.join(RAILS_ROOT, 'log/error_reports')
-					error_report_file = File.join(error_report_dir, "#{sha1_hash}.yml")
+					error_report_dir  = Rails.root.join('log', 'error_reports')
+					error_report_file = error_report_dir.join("#{sha1_hash}.yml")
 					`mkdir -p #{error_report_dir}` unless File.exists?(error_report_dir)
 
 					unless File.exists?(error_report_file)
@@ -254,8 +254,10 @@ class PagesCore::ApplicationController < ActionController::Base
 		# Returns an OpenID consumer, creating it if necessary.
 		def openid_consumer
 			require 'openid/store/filesystem'
-			@openid_consumer ||= OpenID::Consumer.new(session,
-				OpenID::Store::Filesystem.new("#{RAILS_ROOT}/tmp/openid"))
+			@openid_consumer ||= OpenID::Consumer.new(
+				session,
+				OpenID::Store::Filesystem.new(Rails.root.join('tmp', 'openid'))
+			)
 		end
 
 		# Start an OpenID session

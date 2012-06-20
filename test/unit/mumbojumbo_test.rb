@@ -71,7 +71,7 @@ class MumboJumboTest < Test::Unit::TestCase
 		MumboJumbo.add_language_path( File.dirname(__FILE__) + '/../..' )
 		MumboJumbo.add_language_path( File.dirname(__FILE__) + '/../fixtures' )
 		assert_equal MumboJumbo.language_paths.length, 3
-		assert_equal MumboJumbo.language_paths.last, RAILS_ROOT, "RAILS_ROOT should be last"
+		assert_equal MumboJumbo.language_paths.last, Rails.root, "Rails.root should be last"
 		MumboJumbo.reset_language_paths!
 		assert_equal MumboJumbo.language_paths.length, 1
 	end

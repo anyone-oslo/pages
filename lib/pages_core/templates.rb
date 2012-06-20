@@ -10,8 +10,8 @@ module PagesCore
 			def names
 				unless (@@available_templates_cached ||= nil)
 					templates = [
-						File.join(PagesCore.plugin_root, 'app/views/pages/templates'),
-						File.join(RAILS_ROOT,            'app/views/pages/templates')
+						PagesCore.plugin_root.join('app', 'views', 'pages', 'templates'),
+						Rails.root.join('app', 'views', 'pages', 'templates')
 					].map do |location|
 						Dir.entries(location).select{|f| File.file?(File.join(location, f)) and !f.match(/^_/)} if File.exists?(location)
 					end

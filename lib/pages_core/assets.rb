@@ -8,17 +8,17 @@ module PagesCore
 			def recipes(asset_type)
 				# Application assets
 				recipes = [{
-					:source => File.join(RAILS_ROOT, ASSETS_ROOT, asset_type.to_s),
-					:target => File.join(RAILS_ROOT, 'public', asset_type.to_s)
+					:source => Rails.root.join(ASSETS_ROOT, asset_type.to_s),
+					:target => Rails.root.join('public', asset_type.to_s)
 				}]
 
 				# Plugin assets
-				Dir.entries(File.join(RAILS_ROOT, 'vendor/plugins')).each do |plugin|
-					plugin_root = File.join(RAILS_ROOT, 'vendor/plugins', plugin)
-					if File.exists?(File.join(plugin_root, ASSETS_ROOT))
+				Dir.entries(Rails.root.join('vendor', 'plugins')).each do |plugin|
+					plugin_root = Rails.root.join('vendor', 'plugins', plugin)
+					if File.exists?(plugin_root.join(ASSETS_ROOT))
 						recipes << {
-							:source => File.join(plugin_root, ASSETS_ROOT, asset_type.to_s),
-							:target => File.join(RAILS_ROOT, 'public/plugin_assets', plugin, asset_type.to_s)
+							:source => plugin_root.join(ASSETS_ROOT, asset_type.to_s),
+							:target => Rails.root.join('public', 'plugin_assets', plugin, asset_type.to_s)
 						}
 					end
 				end

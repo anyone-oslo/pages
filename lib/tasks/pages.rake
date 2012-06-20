@@ -24,7 +24,7 @@ namespace :pages do
 			include Term::ANSIColor
 
 			reports = []
-			reports_dir = File.join(RAILS_ROOT, 'log/error_reports')
+			reports_dir = Rails.root.join('log', 'error_reports')
 			if File.exists?(reports_dir)
 				files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
 				files.each do |f|
@@ -50,7 +50,7 @@ namespace :pages do
 
 		desc "Clear all error reports"
 		task :clear => :environment do
-			reports_dir = File.join(RAILS_ROOT, 'log/error_reports')
+			reports_dir = Rails.root.join('log', 'error_reports')
 			if File.exists?(reports_dir)
 				files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
 				files.each do |f|

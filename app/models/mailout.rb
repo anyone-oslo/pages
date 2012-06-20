@@ -21,18 +21,18 @@ class Mailout < ActiveRecord::Base
 			groups
 		end
 
-	    def templates
-	        unless @cached_templates
-	            template_dir = File.join(RAILS_ROOT, 'app/views/mailings')
-	            @cached_templates = Dir.entries(template_dir).select{|f| f =~ /^[^_].*\.[\w]+\.erb$/}.map{|f| f.gsub(/\.[\w]+\.erb$/,'')}.uniq
-	        end
-	        return @cached_templates
-	    end
+		def templates
+			unless @cached_templates
+				template_dir = Rails.root.join('app', 'views', 'mailings')
+				@cached_templates = Dir.entries(template_dir).select{|f| f =~ /^[^_].*\.[\w]+\.erb$/}.map{|f| f.gsub(/\.[\w]+\.erb$/,'')}.uniq
+			end
+			return @cached_templates
+		end
 
-	    def template_path(template_name)
-	        template_dir = File.join(RAILS_ROOT, 'app/views/mailings')
-	        template_file = File.join(template_dir, Dir.entries(template_dir).select{|f| f =~ Regexp.new("^#{template_name}\\.html\\.erb$") }.first)
-	    end
+		def template_path(template_name)
+			template_dir = Rails.root.join('app', 'views', 'mailings')
+			template_file = File.join(template_dir, Dir.entries(template_dir).select{|f| f =~ Regexp.new("^#{template_name}\\.html\\.erb$") }.first)
+		end
 	end
 
 	def recipients
@@ -53,7 +53,7 @@ class Mailout < ActiveRecord::Base
 		recipients
 	end
 
-    def rendered_template(recipient, options={})
+		def rendered_template(recipient, options={})
 		options = {
 			:unsubscribable   => true,
 			:unsubscribe_link => url_for(hash_for_unsubscribe_path(:email => recipient).merge(:host => self.host, :only_path => false)),
@@ -76,7 +76,7 @@ class Mailout < ActiveRecord::Base
 		end
 		renderer = ERB.new(@template_file)
 		result = renderer.result(@mailer_binding.get_binding)
-    end
+		end
 
 	def deliver!
 		recipients.each do |r|

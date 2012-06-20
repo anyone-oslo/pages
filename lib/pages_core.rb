@@ -41,14 +41,14 @@ module PagesCore
 		end
 
 		def application_name
-			dir = RAILS_ROOT
+			dir = Rails.root.to_s
 			dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
 		end
 
 		def register_with_pages_console
 			begin
 				require 'pages_console'
-				site = PagesConsole::Site.new(self.application_name, RAILS_ROOT)
+				site = PagesConsole::Site.new(self.application_name, Rails.root.to_s)
 				PagesConsole.ping(site)
 			rescue MissingSourceFile
 				# Nothing to do, PagesConsole not installed.
