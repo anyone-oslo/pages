@@ -60,7 +60,12 @@ class PagesCore::ApplicationController < ActionController::Base
 					error_report[:url]       = "http://"+request.env['HTTP_HOST']
 					error_report[:url]      += request.env['REQUEST_URI'] if request.env['REQUEST_URI']
 					error_report[:params]    = params
-					error_report[:env]       = request.env
+					error_report[:env]       = request.env.inject({}) do |hash, value|
+						if value.first.kind_of?(String) && value.last.kind_of?(String)
+							hash[value.first] = value.last
+						end
+						hash
+					end
 					error_report[:session]   = session.instance_variable_get("@data")
 					error_report[:backtrace] = clean_backtrace(exception)
 					error_report[:timestamp] = Time.now
