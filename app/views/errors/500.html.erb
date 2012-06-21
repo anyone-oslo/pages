@@ -1,8 +1,8 @@
 <%
-	@page_title = "Oh dear.."
+	@page_title = "Oh dear..."
 %>
 <p>
-	Something went terribly wrong. Of course, this shouldn't happen, and we'd really appreciate it if you 
+	Something went terribly wrong. Of course, this shouldn't happen, and we'd really appreciate it if you
 	could click the button below to notify us about the problem.
 </p>
 <p>
@@ -10,11 +10,10 @@
 </p>
 
 <form action="/errors/report" method="post">
-	<h4>Your email address <em>(optional)</em></h4>
 	<p>
-		<input name="email" type="text" class="text" value="<%= @email %>" />
+		<input name="email" type="text" class="text" value="<%= @email %>" placeholder="Your email (optional)" />
 	</p>
 	<p>
-		<input type="submit" value="Send error report" />
+		<button type="submit" class="clean-gray">Report error</button>
 	</p>
 </form>

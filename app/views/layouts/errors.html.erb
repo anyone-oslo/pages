@@ -13,9 +13,6 @@
 			<h1><%= @page_title %></h1>
 		<% end -%>
 		<%= yield %>
-		<p class="footer">
-			This site is powered by <%= link_to "Pages", "http://pages.manualdesign.no" %>, a Manual design product.
-		</p>
 		<% if @error_id %>
 			<p class="error_id">
 				Error ID: <%= @error_id %>
