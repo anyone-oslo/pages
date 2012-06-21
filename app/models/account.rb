@@ -5,11 +5,6 @@ class Account < ActiveRecord::Base
 	belongs_to :account_holder, :class_name => 'User', :foreign_key => :account_holder_id
 	validates_presence_of :name, :account_holder_id
 
-	validate do |account|
-		# TODO: accounts should be limited to 1
-		account.make_key! unless account.key?
-	end
-
 	class << self
 
 		def find_or_create
@@ -23,10 +18,6 @@ class Account < ActiveRecord::Base
 			account
 		end
 
-	end
-
-	def make_key!
-		self.key = UUID.new.generate
 	end
 
 	def database_size
