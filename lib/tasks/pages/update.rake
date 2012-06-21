@@ -90,12 +90,6 @@ namespace :pages do
 				end
 			end
 
-			# Rename application.rb to application_controller.rb
-			if File.exists?('app/controllers/application.rb')
-				puts "* Renaming application.rb"
-				`mv app/controllers/application.rb app/controllers/application_controller.rb`
-			end
-
 			# Update the Rakefile
 			patch_files(
 				%r%^Rakefile% ,
@@ -115,78 +109,6 @@ namespace :pages do
 				puts "* Added root route"
 			end
 
-			# Add the Pages bootstrapper
-			patch_files(
-				%r%^config/environment.rb% ,
-				/^Rails::Initializer\.run/,
-				"# Bootstrap Pages\nrequire File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')\n\nRails::Initializer.run",
-				:unless_matches => /vendor\/plugins\/pages\/boot/
-			) do
-				puts "* Added Pages engine bootstrapper"
-			end
-
-			# Remove the Engines bootstrapper
-			patch_files(
-				%r%^config/environment.rb% ,
-				/^\s*# Bootstrap Engines[\s]+require File\.join\(File\.dirname\(__FILE__\), '\.\.\/vendor\/plugins\/engines\/boot'\)[\s]*/,
-				"\n"
-			) do
-				puts "* Removed Engines bootstrapper"
-			end
-
-			# Remove the RAILS_GEM_VERSION
-			patch_files(
-				%r%^config/environment.rb% ,
-				/^\s*# Specifies gem version of Rails to use when vendor\/rails is not present[\s]*RAILS_GEM_VERSION = '[\d\.]+' unless defined\? RAILS_GEM_VERSION[\s]*/,
-				"\n"
-			) do
-				puts "* Removed RAILS_GEM_VERSION"
-			end
-
-			# Rename :session_key to :key
-			patch_files(
-				%r%^config/environment.rb% ,
-				/:session_key[\s]+\=\>/,
-				":key         =>"
-			) do
-				puts "* Renamed :session_key to :key"
-			end
-
-			# Remove plugin routes
-			patch_files(
-				%r%^config/routes.rb% ,
-				/^[ \t]*(# Plugin routes|map.from_plugin :[\w_]+)[\n\r]*/,
-				""
-			) do
-				puts "* Removed plugin routes"
-			end
-
-			# Remove deprecated configuration
-			patch_files %r%^config/environments/.*\.rb%, /^config\.action_view\.cache_template_loading/, "#config.action_view.cache_template_loading" do |files|
-				puts "* config.action_view.cache_template_loading has been deprecated, commented out in #{files.inspect}."
-			end
-			patch_files %r%^config/environment\.rb%, /^[\s]*config\.action_controller\.session_store/, "\t#config.action_controller.session_store" do |files|
-				puts "* ActiveRecord session store has been depreceated, commented out in #{files.inspect}."
-			end
-
-			# Set the correct RAILS_GEM_VERSION
-			#patch_files %r%^config/environment.rb% , /^[\s]*RAILS_GEM_VERSION[\s]*=[\s]*'([\d\.]*)'/, "RAILS_GEM_VERSION = '2.3.14'" do
-			#	abort "\n* Rails gem version updated to newest, stopping. Please run bundler, then re-run this task to complete."
-			#end
-
-			# patch_files(
-			# 	%r%^app/controllers/[\w\d\-_]*_controller\.rb%,
-			# 	/< ApplicationController/,
-			# 	"< FrontendController",
-			# 	:except => %r%^app/controllers/(frontend|images|songs|newsletter)_controller\.rb%
-			# ) do |files|
-			# 	puts "Frontend controllers patched to inherit FrontendController: #{files.inspect}"
-			# end
-
-			patch_files %r%^script/[\w\d_\-\/]+%, /^#!\/usr\/bin\/ruby/, "#!/usr/bin/env ruby" do |files|
-				puts "* Updated shebang in script files: #{files.inspect}"
-			end
-
 			if !File.exists?('script/delayed_job')
 				puts "Delayed job worker script not found, installing..."
 				File.open('script/delayed_job', 'w') do |fh|
@@ -195,31 +117,6 @@ namespace :pages do
 				end
 				`chmod +x script/delayed_job`
 				`git add script/delayed_job`
-			end
-
-			if !File.exists?('app/views/pages/templates')
-				puts "Page template dir not found, moving old templates..."
-				`mkdir app/views/pages/templates`
-				find_files(%r%^app/views/pages/[\w\d\-_]+\.[\w\d\-_\.]+%).each do |path|
-					new_path = path.split('/')
-					filename = new_path.pop
-					new_path << 'templates'
-					new_path << filename
-					new_path = new_path.join('/')
-					`mv #{path} #{new_path}`
-				end
-			end
-
-			# Remove old migrations
-			deleted_migrations = []
-			Dir.entries('db/migrate').each do |migration|
-				if migration =~ /_to_version_[\d]+\.rb$/
-					deleted_migrations << migration
-					`rm db/migrate/#{migration}`
-				end
-			end
-			if deleted_migrations.length > 0
-				puts "* Deleted #{deleted_migrations.length} old engine migrations"
 			end
 
 			# Passenger/RVM
@@ -339,7 +236,7 @@ namespace :pages do
 		task :all => [
 			"update:remove_old_submodules",
 			"update:files",
-			"update:fix_inheritance",
+			#"update:fix_inheritance",
 			"update:fix_migrations",
 			"update:migrations",
 			"update:gems"

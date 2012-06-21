@@ -6,13 +6,6 @@
 # Default language
 Language.default = Language.code_for_name("<%= @default_language %>")
 
-# reCAPTCHA API keys
-# ENV['RECAPTCHA_PUBLIC_KEY']  = ''
-# ENV['RECAPTCHA_PRIVATE_KEY'] = ''
-
-# Flickr API key
-#ENV['FLICKR_API_KEY']        = ''
-
 # Site configuration
 PagesCore.configure do |config|
 	# Site name and default mail sender
@@ -22,7 +15,6 @@ PagesCore.configure do |config|
 	# Uncomment the options below to toggle them
 	#config.localizations :enabled       # Enable localizations
 	#config.recaptcha :enabled           # Enable ReCAPTCHA
-	#config.flickr :enabled              # Enable Flickr API integration
 	#config.page_cache :disabled         # Disable page cache (not recommended)
 	#config.domain_based_cache :enabled	 # Enable domain based page cache (for multiple domains)
 	#config.newsletter.template :enabled # Enable template based newsletters
@@ -92,18 +84,8 @@ PagesCore::Templates.configure do |config|
 
 end
 
-
 # Configure the cache sweeper, add any custom paths and models
 # PagesCore::CacheSweeper.config do |sweeper_config|
 # 	sweeper_config.observe  += [Store, StoreTest, Ad]
 # 	sweeper_config.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
 # end
-
-module Newsletter
-    # Additional subscribers for newsletter
-	def self.subscriber_groups
-		[
-			#{ :name => "Group name", :class => "Model", :method => :email, :conditions => nil }
-		]
-	end
-end
