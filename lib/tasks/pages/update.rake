@@ -167,35 +167,9 @@ namespace :pages do
 			`bundle install`
 		end
 
-		desc "Fix plugin migrations"
-		task :fix_migrations => :environment do
-			Dir.entries(Rails.root.join('vendor', 'plugins')).each do |plugin|
-				plugin_root = Rails.root.join('vendor', 'plugins', plugin)
-				if File.exists?(old_migrations = File.join(plugin_root, 'config/old_migrations.yml'))
-					YAML::load_file(old_migrations).each_with_index do |migration, i|
-						old_migration = "#{i + 1}-#{plugin}"
-						query = "UPDATE schema_migrations SET version = '#{migration}' WHERE version = '#{old_migration}'"
-						ActiveRecord::Base.connection.execute(query)
-					end
-				end
-			end
-		end
-
 		desc "Update migrations"
 		task :migrations => :environment do
-			new_migrations = []
-			Dir.entries(Rails.root.join('vendor', 'plugins')).each do |plugin|
-				plugin_root = Rails.root.join('vendor', 'plugins', plugin)
-				if File.exists?(template_dir = File.join(plugin_root, 'template/db/migrate'))
-					Dir.entries(template_dir).select{|f| f =~ /^\d+/}.each do |migration|
-						migration_file = Rails.root.join('db', 'migrate', migration)
-						unless File.exists?(migration_file)
-							`cp #{File.join(template_dir, migration)} #{migration_file}`
-							new_migrations << migration
-						end
-					end
-				end
-			end
+			new_migrations = PagesCore::Plugin.mirror_migrations!
 			if new_migrations.any?
 				puts "\n#{new_migrations.length} new migrations added, now run rake db:migrate"
 			end
