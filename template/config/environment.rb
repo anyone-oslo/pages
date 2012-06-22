@@ -11,9 +11,6 @@ $KCODE = "UTF8"
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
-# Bootstrap Pages
-require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/boot')
-
 Rails::Initializer.run do |config|
 	# Settings in config/environments/* take precedence over those specified here.
 	# Application configuration should go into files in config/initializers

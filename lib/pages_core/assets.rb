@@ -13,12 +13,12 @@ module PagesCore
 				}]
 
 				# Plugin assets
-				Dir.entries(Rails.root.join('vendor', 'plugins')).each do |plugin|
-					plugin_root = Rails.root.join('vendor', 'plugins', plugin)
-					if File.exists?(plugin_root.join(ASSETS_ROOT))
+				PagesCore::Plugin.plugins.each do |plugin|
+					plugin = plugin.new
+					if plugin.has_assets?
 						recipes << {
-							:source => plugin_root.join(ASSETS_ROOT, asset_type.to_s),
-							:target => Rails.root.join('public', 'plugin_assets', plugin, asset_type.to_s)
+							:source => plugin.assets_path.join(asset_type.to_s),
+							:target => Rails.root.join('public', 'plugin_assets', plugin.root.basename, asset_type.to_s)
 						}
 					end
 				end
