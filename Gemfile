@@ -31,7 +31,7 @@ gem 'dynamic_image-pages', :require => 'dynamic_image'
 #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
 # Assets
-gem 'sass', '3.1.1'
+gem 'sass', '3.1.19'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.1.3'
 
