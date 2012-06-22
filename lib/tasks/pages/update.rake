@@ -211,7 +211,7 @@ namespace :pages do
 			"update:remove_old_submodules",
 			"update:files",
 			#"update:fix_inheritance",
-			"update:fix_migrations",
+			#"update:fix_migrations",
 			"update:migrations",
 			"update:gems"
 		]
