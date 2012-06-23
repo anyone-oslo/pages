@@ -3,7 +3,7 @@
 class PagesCore::ApplicationController < ActionController::Base
 
 	# Trap errors
-	unless ActionController::Base.consider_all_requests_local
+	unless Rails.application.config.consider_all_requests_local
 		rescue_from Exception,                            :with => :handle_exception
 		rescue_from ActiveRecord::RecordNotFound,         :with => :handle_exception
 		rescue_from ActionController::RoutingError,       :with => :handle_exception

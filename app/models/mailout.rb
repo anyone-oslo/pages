@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 class Mailout < ActiveRecord::Base
-	include ActionController::UrlWriter
 	include ActionView::Helpers::TextHelper
+	include Rails.application.routes.url_helpers
 
 	belongs_to_image :image
 	serialize :groups, Array

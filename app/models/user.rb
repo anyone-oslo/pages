@@ -57,14 +57,9 @@ class User < ActiveRecord::Base
 
 	### Callbacks #############################################################
 
-	before_create               :generate_token
-	before_validation_on_create :hash_password
-
-	before_validation_on_create do |user|
-		if user.openid_url? && !user.hashed_password? && user.password.blank?
-			user.generate_new_password
-		end
-	end
+	before_create     :generate_token
+	before_validation :hash_password, :on => :create
+	before_validation :create_password, :on => :create
 
 
 	### Search index ##########################################################
@@ -165,6 +160,13 @@ class User < ActiveRecord::Base
 	# Generate a new token.
 	def generate_token
 		self.token = Digest::SHA1.hexdigest(self.username + Time.now.to_s)
+	end
+
+	# Create the first password
+	def create_password
+		if self.openid_url? && !self.hashed_password? && self.password.blank?
+			self.generate_new_password
+		end
 	end
 
 	# Generate a new password.

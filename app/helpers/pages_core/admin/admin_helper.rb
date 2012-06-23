@@ -46,7 +46,7 @@ module PagesCore::Admin::AdminHelper
 		output += "  Admin.language   = \"#{@language}\";" if @language
 		output += "</script>"
 
-		output
+		output.html_safe
 	end
 
 	# Generate HTML for a field, with label and optionally description and errors.
