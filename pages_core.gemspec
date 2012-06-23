@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
 
   s.add_dependency "rake", "0.9.2.2"
-  s.add_dependency "rails", "2.3.14"
+  s.add_dependency "rails", "3.0.3"
   s.add_dependency "mysql", "2.8.1"
   s.add_dependency "rdoc", "3.12"
 
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'pages_console'
   s.add_dependency 'ruby-openid'
   s.add_dependency 'httparty', '0.6.1'
-  s.add_dependency 'delayed_job', '2.0.7'
+  s.add_dependency 'delayed_job', '3.0.3'
 
   s.add_dependency 'rmagick', '2.12.2'
   s.add_dependency 'dynamic_image-pages'
@@ -59,8 +59,8 @@ Gem::Specification.new do |s|
 
   # Thinking Sphinx
   s.add_dependency 'riddle', '1.0.12'
-  s.add_dependency 'thinking-sphinx', '1.3.20'
-  s.add_dependency 'ts-delayed-delta', '1.1.1'
+  s.add_dependency 'thinking-sphinx', '2.0.12'
+  s.add_dependency 'ts-delayed-delta', '1.1.3'
 
   s.add_dependency 'term-ansicolor'
 
