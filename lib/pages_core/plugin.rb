@@ -24,7 +24,7 @@ module PagesCore
 
       def plugins
         @plugins ||= ::PagesCore::Plugin.subclasses.map do |class_name|
-          class_name.split("::").inject(Object) do |klass, m|
+          class_name.to_s.split("::").inject(Object) do |klass, m|
             klass = klass.const_get(m)
           end
         end

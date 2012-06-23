@@ -7,10 +7,10 @@
 	end
 %>
 
-<% sidebar do %>
+<% content_for :sidebar do %>
 	<h2>New page</h2>
 	<p>
-		<% form_tag new_admin_pages_path, :method => :get do %>
+		<%= form_tag new_admin_pages_path, :method => :get do %>
 			In <%= select_tag 'parent', options_from_collection_for_select(@root_pages, 'id', 'name') %>
 			<%= submit_tag "Go", :name => nil %>
 		<% end %>

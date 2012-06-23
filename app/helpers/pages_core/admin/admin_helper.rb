@@ -95,7 +95,7 @@ module PagesCore::Admin::AdminHelper
 		classes = @body_classes || []
 		classes << controller.class.underscore
 		classes << "#{controller.action_name}_action"
-		classes << "with_sidebar" if @sidebar_enabled
+		classes << "with_sidebar" if content_for?(:sidebar)
 		classes << "with_notice" if flash[:notice]
 		classes.reverse.join( " " )
 	end
@@ -137,7 +137,7 @@ module PagesCore::Admin::AdminHelper
 
 				link_to(menu_item[:name], menu_item[:url], :class => classes.join(' '))
 			end
-			"<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>"
+			("<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>").html_safe
 		else
 			""
 		end
@@ -204,12 +204,12 @@ module PagesCore::Admin::AdminHelper
 
 		html_options.merge!( "type" => "submit" )
 
-		"<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\">" +
-		method_tag + content_tag( "button", name, html_options ) + "</form>"
+		("<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\">" +
+		method_tag + content_tag( "button", name, html_options ) + "</form>").html_safe
 	end
 
 	def link_separator
-		' <span class="separator">|</span> '
+		' <span class="separator">|</span> '.html_safe
 	end
 
 end

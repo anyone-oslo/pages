@@ -3,14 +3,14 @@
 	page_description "You are composing a newsletter", :create
 %>
 
-<% sidebar do %>
+<% content_for :sidebar do %>
 	<%= render :partial => 'sidebar' %>
 <% end %>
 
 <%= form_tag( {:action => :send_message}, :multipart => true ) %>
 
-	<%= labelled_field( 
-			text_field_tag( "sender", @sender, :size => 60 ), 
+	<%= labelled_field(
+			text_field_tag( "sender", @sender, :size => 60 ),
 			"Sender",
 			:description => "This can be changed as long as you keep the format."
 		)
@@ -33,7 +33,7 @@
 			<%= group[:name] %> <small>(<%= group[:count] %>)</small><br />
 		<% end %>
 	</p></div>
-	
+
 	<p>
 		<%= submit_to_remote('preview_button', "Preview", :url => {:action => :preview}, :success => "showPreview(request.responseText);" )%>
 		<%= submit_tag "Send" %>

@@ -26,6 +26,7 @@
 	<%= javascript_include_tag "jquery.libraries.js", :plugin => 'pages' %>
 
 	<%= admin_javascript_tags %>
+	<%= csrf_meta_tag %>
 
 </head>
 <body class="<%= body_classes %>">
@@ -43,10 +44,10 @@
 		<% end -%>
 		<div class="tabs">
 			<% if @current_user && @admin_menu -%>
-				<%= header_tabs :class => :pages -%>
-				<%= header_tabs :class => :pages_plugins -%>
-				<%= header_tabs :class => :custom -%>
-				<%= header_tabs :class => :account -%>
+				<%= header_tabs(:class => :pages) -%>
+				<%= header_tabs(:class => :pages_plugins) -%>
+				<%= header_tabs(:class => :custom) -%>
+				<%= header_tabs(:class => :account) -%>
 			<% end -%>
 		</div>
 	</div>
@@ -57,8 +58,8 @@
 	<% end %>
 
 	<%# Sidebar %>
-	<% if @sidebar && !@sidebar.empty? -%>
-		<div id="sidebar"><%= @sidebar %></div>
+	<% if content_for?(:sidebar) %>
+		<div id="sidebar"><%= content_for(:sidebar) %></div>
 	<% end %>
 
 	<%# Main content area %>

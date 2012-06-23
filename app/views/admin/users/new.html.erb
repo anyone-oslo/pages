@@ -3,7 +3,7 @@
 	page_description "You are inviting a new user", :create
 %>
 
-<% sidebar do %>
+<% content_for :sidebar do %>
 	<h2>Inviting a new user</h2>
 	<p>
 		An email with the login details will be sent.
@@ -15,18 +15,18 @@
 	<%= f.hidden_field :is_admin %>
 	<%= f.hidden_field :is_activated %>
 
-	<%= labelled_field f.text_field( :realname ), "Name", 
-		:errors => @user.errors[:realname] 
+	<%= labelled_field f.text_field( :realname ), "Name",
+		:errors => @user.errors[:realname]
 	%>
-	<%= labelled_field f.text_field( :email ), "Email address", 
-		:errors => @user.errors[:email] 
+	<%= labelled_field f.text_field( :email ), "Email address",
+		:errors => @user.errors[:email]
 	%>
-	<%= labelled_field f.text_field( :username ), "Username", 
-		:errors => @user.errors[:username] 
+	<%= labelled_field f.text_field( :username ), "Username",
+		:errors => @user.errors[:username]
 	%>
-	<%= labelled_field f.text_field( :password ), "Password", 
+	<%= labelled_field f.text_field( :password ), "Password",
 		:description => link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
-		:errors => @user.errors[:password] 
+		:errors => @user.errors[:password]
 	%>
 	<p>
 		<%= submit_tag "Send invite", :class=> :button %> or <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>

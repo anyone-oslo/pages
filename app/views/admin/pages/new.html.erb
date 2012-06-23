@@ -11,7 +11,7 @@
 	@url_options[:parent] = @page.parent if @page.parent
 %>
 
-<% sidebar do %>
+<% content_for :sidebar do %>
 <% end %>
 
 
@@ -20,7 +20,7 @@
 	<%= hidden_field_tag 'language', @language %>
 	<%= f.hidden_field 'parent_page_id' if @page.parent %>
 
-	<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title", 
+	<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title",
 		:errors      => @page.errors[:name],
 		:description => "This is the name of the page, and it will also be the name of the link to this page."
 	%>
@@ -29,5 +29,5 @@
 	<%# labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Image caption" %>
 
 	<p><%= submit_tag "Continue" %></p>
-	
+
 <% end %>
