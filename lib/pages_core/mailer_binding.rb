@@ -7,7 +7,7 @@ module PagesCore
 		include ActionView::Helpers::TagHelper
 		include ActionView::Helpers::AssetTagHelper
 		include ActionView::Helpers::CaptureHelper
-		include ApplicationHelper
+		#include PagesCore::FrontendHelper
 
 		attr_accessor :output_buffer
 

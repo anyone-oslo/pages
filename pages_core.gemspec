@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rake", "0.9.2.2"
   s.add_dependency "rails", "3.0.3"
-  s.add_dependency "mysql", "2.8.1"
   s.add_dependency "rdoc", "3.12"
 
   s.add_dependency "bcrypt-ruby"
@@ -58,7 +57,6 @@ Gem::Specification.new do |s|
   s.add_dependency "recaptcha", '0.3.4'
 
   # Thinking Sphinx
-  s.add_dependency 'riddle', '1.0.12'
   s.add_dependency 'thinking-sphinx', '2.0.12'
   s.add_dependency 'ts-delayed-delta', '1.1.3'
 

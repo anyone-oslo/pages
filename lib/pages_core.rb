@@ -6,12 +6,51 @@ require 'find'
 require 'open-uri'
 require 'pathname'
 
+# -----
+
+#require "rake"
+require "rails"
+#require "mysql"
+require "rdoc"
+
+require "bcrypt"
+require 'capistrano'
+require 'capistrano_colors'
+require 'vector2d'
+require 'enumerable_mapper'
+require 'hpricot'
+require 'simple-rss'
+require 'RedCloth'
+require 'unicode'
+require 'daemon-spawn'
+require 'pages_console'
+require 'openid'
+require 'httparty'
+require 'delayed_job'
+
+require 'dynamic_image'
+
+require 'sass'
+require 'json'
+require 'coffee-script'
+
+require 'acts_as_list'
+require 'acts_as_tree'
+
+require "recaptcha/rails"
+
+require 'thinking-sphinx'
+require 'thinking_sphinx/deltas/delayed_delta'
+
+# -----
+
 # Included in lib/
 [:acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
 	require File.join(File.dirname(__FILE__), lib.to_s)
 end
 
 # Load ./pages_core/*.rb
+require File.join(File.dirname(__FILE__), 'pages_core', 'plugin')
 Dir.entries(File.join(File.dirname(__FILE__), 'pages_core')).select{|f| f =~ /\.rb$/}.map{|f| File.basename(f, '.*')}.each do |lib|
 	unless lib =~ /^bootstrap/
 		require File.join(File.dirname(__FILE__), 'pages_core', lib)
@@ -33,7 +72,7 @@ module PagesCore
 		end
 
 		def version
-			@@version ||= File.read(plugin_root.join('VERSION'))
+			VERSION
 		end
 
 		def plugin_root
