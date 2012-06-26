@@ -147,7 +147,7 @@ module PagesCore
 
 			# Returns an array with the names of all text blocks excluding special fields.
 			def fields
-				self.textbits.collect{|tb| tb.name }.uniq.compact.reject{|name| PagesCore::ActsAsTextable.textable_fields[self.root_class].include?(name)}
+				self.textbits.map{|tb| tb.name}.uniq.compact.reject{|name| PagesCore::ActsAsTextable.textable_fields[self.root_class].include?(name)}
 			end
 
 			# Returns an array with the names of all text blocks.
@@ -220,16 +220,16 @@ module PagesCore
 			end
 
 			# Enable virtual setters and getters for existing (and enforced) textbits
-			def method_missing( method_name, *args )
-				name,type = method_name.to_s.match( /(.*?)([\?=]?)$/ )[1..2]
-				if has_field? name
-					case type
+			def method_missing(method_name, *args)
+				requested_method, request_type = method_name.to_s.match( /(.*?)([\?=]?)$/ )[1..2]
+				if has_field? requested_method
+					case request_type
 					when "?"
-						field_has_language?(name)
+						field_has_language?(requested_method)
 					when "="
-						set_textbit_body(name, args.first)
+						set_textbit_body(requested_method, args.first)
 					else
-						get_textbit(name)
+						get_textbit(requested_method)
 					end
 				else
 					super
