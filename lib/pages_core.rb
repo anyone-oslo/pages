@@ -8,8 +8,13 @@ require 'pathname'
 
 # -----
 
-#require "rake"
 require "rails"
+require 'active_record'
+require 'action_controller'
+require 'action_view'
+require 'action_mailer'
+
+#require "rake"
 #require "mysql"
 require "rdoc"
 

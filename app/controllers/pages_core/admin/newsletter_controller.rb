@@ -3,10 +3,11 @@
 require 'erb'
 
 class PagesCore::Admin::NewsletterController < Admin::AdminController
-    include ActionView::Helpers::TextHelper
-	include Newsletter
+  include ActionView::Helpers::TextHelper
+  # TODO: Fix this
+	#include Newsletter
 
-    def render_mailing_template(template_name, options={})
+  def render_mailing_template(template_name, options={})
 		options = {
 			:unsubscribable   => true,
 			:unsubscribe_link => unsubscribe_url(:email => options[:recipient])
@@ -20,7 +21,7 @@ class PagesCore::Admin::NewsletterController < Admin::AdminController
 		template_file = Mailing.template_path(template_name)
 		template = ""; File.open(template_file, 'r'){|fh| template = fh.read }
 		result = ERB.new(template).result(@mailer_binding.get_binding)
-    end
+  end
 
 	#def index; redirect_to :action => :compose; end
 	def index

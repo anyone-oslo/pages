@@ -22,7 +22,9 @@ module PagesCore
 			def default_config
 				default = MethodedHash.new
 				default[:cache_path] = File.join(File.dirname(__FILE__), '../../../../../public/cache')
-				default[:observe]    = [Page, FeedItem, Feed, PageComment, Partial, Image]
+				# TODO: Fix DynamicImage
+				#default[:observe]    = [Page, FeedItem, Feed, PageComment, Partial, Image]
+				default[:observe]    = [Page, FeedItem, Feed, PageComment, Partial]
 				default[:patterns]   = [/^\/index\.[\w]+$/, /^\/pages\/[\w]{3}\/(.*)$/, /^\/[\w]{3}\/(.*)$/]
 				default
 			end
