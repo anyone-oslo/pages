@@ -1,0 +1,6 @@
+test:
+  adapter:  mysql
+  database: pages_test
+  encoding: utf8
+  username: root
+  password:

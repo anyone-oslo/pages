@@ -18,9 +18,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-
   s.add_dependency "rake", "0.9.2.2"
   s.add_dependency "rails", "3.0.3"
   s.add_dependency "rdoc", "3.12"
@@ -63,11 +60,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'term-ansicolor'
 
 
-  #, :require => "bcrypt"
-  #, :require => 'RMagick'
-  #, :require => 'openid'
-  #, :require => 'dynamic_image'
-  #, :require => "recaptcha/rails"
-  #, :require => 'thinking_sphinx/deltas/delayed_delta'
+  # Development
+  s.add_development_dependency "mysql"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency 'combustion', '~> 0.3.1'
 
 end
