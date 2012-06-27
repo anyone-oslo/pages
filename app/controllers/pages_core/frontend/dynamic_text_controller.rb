@@ -22,7 +22,6 @@
 #
 class PagesCore::Frontend::DynamicTextController < FrontendController
 
-	session :off
 	caches_page :show
 
 	after_filter :force_page_cache

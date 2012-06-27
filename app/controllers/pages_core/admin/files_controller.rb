@@ -11,12 +11,6 @@ class PagesCore::Admin::FilesController < Admin::AdminController
 
 	before_filter :stylesheets; def stylesheets; add_stylesheet "files.css"; end
 
-	# GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-	verify :method => :post, :only => [ :destroy, :create, :update ],
-		:redirect_to => { :action => :list }
-
-
-
 	def index
 		list
 		render :action => 'list'
