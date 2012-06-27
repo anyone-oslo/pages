@@ -25,7 +25,6 @@ class Page < ActiveRecord::Base
     attribute :excerpt
     attribute :headline
     attribute :boxout
-    allow_any true
   end
 
 	acts_as_taggable
