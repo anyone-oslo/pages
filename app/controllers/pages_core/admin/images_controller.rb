@@ -32,7 +32,7 @@ class PagesCore::Admin::ImagesController < Admin::AdminController
 	def update
 		@image.update_attributes(params[:image])
 		respond_to do |format|
-			format.js { render :text => @image.to_json, :layout => false }
+			format.json { render :text => @image.to_json, :layout => false }
 		end
 	end
 
