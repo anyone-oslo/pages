@@ -74,7 +74,7 @@ class Page < ActiveRecord::Base
 
 	define_index do
 		# Fields
-		indexes textbits.body,                   :as => :textbit_bodies
+		indexes localizations.body,                   :as => :localization_bodies
 		indexes categories.name,                 :as => :category_names
 		indexes tags.name,                       :as => :tag_names
 		indexes [author.realname, author.email], :as => :author_name
@@ -157,7 +157,7 @@ class Page < ActiveRecord::Base
 		# * <tt>:parent(s)</tt>        - Parent page. Can be an id, a Page or a collection of both. If parent is <tt>:root</tt>, pages at the root level will be loaded.
 		# * <tt>:paginate</tt>         - Paginates results. Takes a hash with the format: {:page => 1, :per_page => 20}
 		# * <tt>:category</tt>         - Loads only pages within the given category.
-		# * <tt>:include</tt>          - Which relationships to include (Default: :textbits, :categories, :image, :author)
+		# * <tt>:include</tt>          - Which relationships to include (Default: :localizations, :categories, :image, :author)
 		# * <tt>:comments</tt>         - Limit results to pages with comments.
 		# * <tt>:limit</tt>            - Limit results to n records.
 		# * <tt>:published_after</tt>  - Loads only pages published after this date.
@@ -233,7 +233,7 @@ class Page < ActiveRecord::Base
 
 			search_options = {
 				:per_page   => 20,
-				:include    => [:textbits, :categories, :image, :author]
+				:include    => [:localizations, :categories, :image, :author]
 			}.merge(options)
 
 			# TODO: Allow more fine-grained control over status filtering
@@ -366,22 +366,22 @@ class Page < ActiveRecord::Base
 			language = language.to_s
 			slug     = slug.to_s
 
-			# Search legacy slug textbits
-			if textbit = Textbit.find(
+			# Search legacy slug localizations
+			if localization = Localization.find(
 					:first,
-					:conditions => ['name = "slug" AND textable_type = ? AND body = ? AND language = ?', self.to_s, slug, language]
+					:conditions => ['name = "slug" AND localizable_type = ? AND body = ? AND language = ?', self.to_s, slug, language]
 				)
-				page = textbit.textable
+				page = localization.localizable
 
 			# Search page names
 			else
-				textbits = Textbit.find(
+				localizations = Localization.find(
 					:all,
-					:conditions => [ "name = 'name' AND textable_type = '#{self.to_s}' AND language = ?", language]
+					:conditions => [ "name = 'name' AND localizable_type = '#{self.to_s}' AND language = ?", language]
 				)
-				textbits = textbits.select{|tb| Page.string_to_slug( tb.body ) == slug}
-				if textbits.length > 0
-					page = textbits.first.textable
+				localizations = localizations.select{|tb| Page.string_to_slug( tb.body ) == slug}
+				if localizations.length > 0
+					page = localizations.first.localizable
 				end
 			end
 
@@ -424,7 +424,7 @@ class Page < ActiveRecord::Base
 				options[:comments]      ||= false
 				options[:order]         ||= "position"
 				options[:parent]        = options[:parents] if options[:parents]
-				options[:include]       ||= [:textbits, :categories, :image, :author]
+				options[:include]       ||= [:localizations, :categories, :image, :author]
 
 				find_options = {
 					:conditions => [[]]
@@ -481,7 +481,7 @@ class Page < ActiveRecord::Base
 					find_options[:joins] ||= ""
 					options[:language] = options[:language].to_s
 					raise "Not a valid language code" unless options[:language] =~ /^[\w]{2,3}$/
-					find_options[:joins] += "JOIN `textbits` ON `textbits`.textable_type = \"Page\" AND `textbits`.textable_id = `pages`.id AND `textbits`.language = '#{options[:language]}' "
+					find_options[:joins] += "JOIN `localizations` ON `localizations`.localizable_type = \"Page\" AND `localizations`.localizable_id = `pages`.id AND `localizations`.language = '#{options[:language]}' "
 					find_options[:group] = "`pages`.id"
 				end
 
@@ -519,10 +519,10 @@ class Page < ActiveRecord::Base
 
 	self.send :alias_method, :acts_as_tree_parent, :parent
 
-	alias :textable_has_field? :has_field?
-	def has_field?(field_name, options={})
-		self.textable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
-	end
+	#alias :localizable_has_field? :has_field?
+	#def has_field?(field_name, options={})
+	#	self.localizable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
+	#end
 
 	# Get this page's parent page.
 	def parent
@@ -883,10 +883,10 @@ class Page < ActiveRecord::Base
 		default_except = [:comments_count, :byline, :delta, :last_comment_at, :image_id]
 		options[:except] = (options[:except] ? options[:except] + default_except : default_except)
 		ar_to_xml(options) do |xml|
-			self.all_fields.each do |textable_name|
-				xml.tag!(textable_name.to_sym) do |field|
-					self.languages_for_field(textable_name).each do |language|
-						field.tag!(language.to_sym, self.get_textbit(textable_name, :language => language).to_s)
+			self.all_fields.each do |localizable_name|
+				xml.tag!(localizable_name.to_sym) do |field|
+					self.languages_for_field(localizable_name).each do |language|
+						field.tag!(language.to_sym, self.get_localization(localizable_name, :language => language).to_s)
 					end
 				end
 			end

@@ -24,7 +24,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 		end
 
 		def application_languages
-			@application_languages = Textbit.languages
+			@application_languages = Localization.locales
 		end
 
 		def load_categories

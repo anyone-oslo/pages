@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# This file is auto-generated from the current state of the database. Instead of editing this file,
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -301,19 +301,19 @@ ActiveRecord::Schema.define(:version => 20120621112244) do
 
   add_index "tags", ["name"], :name => "index_tags_on_name"
 
-  create_table "textbits", :force => true do |t|
-    t.integer  "textable_id"
-    t.string   "textable_type"
+  create_table "localizations", :force => true do |t|
+    t.integer  "localizable_id"
+    t.string   "localizable_type"
     t.string   "name"
-    t.string   "language"
+    t.string   "locale"
     t.string   "filter"
-    t.text     "body"
+    t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "textbits", ["textable_id", "textable_type", "name", "language"], :name => "by_foreign_key", :unique => true
-  add_index "textbits", ["textable_id", "textable_type"], :name => "by_association"
+  add_index "localizations", ["localizable_id", "localizable_type", "name", "locale"], :name => "by_foreign_key", :unique => true
+  add_index "localizations", ["localizable_id", "localizable_type"], :name => "by_association"
 
   create_table "users", :force => true do |t|
     t.string   "username"

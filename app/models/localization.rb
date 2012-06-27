@@ -13,28 +13,28 @@ if Object.const_defined?("RedCloth") && RedCloth.kind_of?(Class)
 	end
 end
 
-class Textbit < ActiveRecord::Base
-	belongs_to :textable, :polymorphic => true
+class Localization < ActiveRecord::Base
+	belongs_to :localizable, :polymorphic => true
 
-	validates_presence_of :body
+	#validates_presence_of :value
 
-	validate do |textbit|
-		if !textbit[:filter] || textbit[:filter].blank?
-			textbit.filter = PagesCore.config( :text_filter ).to_s
+	validate do |localization|
+		if !localization[:filter] || localization[:filter].blank?
+			localization.filter = PagesCore.config( :text_filter ).to_s
 		end
 	end
 
 	class << self
-		def fetch_simple_array_from_sql( field, options={} )
+		def fetch_simple_array_from_sql( name, options={} )
 			sql = ActiveRecord::Base.connection();
 			options.symbolize_keys!
-			query = "SELECT DISTINCT `#{field}` FROM `#{self.table_name}`"
+			query = "SELECT DISTINCT `#{name}` FROM `#{self.table_name}`"
 			conditions = []
-			conditions << "textable_type = '#{options[:type]}'"     if options.has_key? :type
-			conditions << "textable_id   = #{options[:id]}"         if options.has_key? :id
+			conditions << "localizable_type = '#{options[:type]}'"     if options.has_key? :type
+			conditions << "localizable_id   = #{options[:id]}"         if options.has_key? :id
 			conditions << "name          = '#{options[:name]}'"     if options.has_key? :name
 			conditions << "filter        = '#{options[:filter]}'"   if options.has_key? :filter
-			conditions << "language      = '#{options[:language]}'" if options.has_key? :language
+			conditions << "locale      = '#{options[:locale]}'" if options.has_key? :locale
 			query += " WHERE "+conditions.join( ' AND ' ) if conditions.length > 0
 			rows = []
 			result = sql.execute( query );
@@ -44,11 +44,11 @@ class Textbit < ActiveRecord::Base
 			rows.flatten.sort
 		end
 
-		def languages( options={} )
-			self.fetch_simple_array_from_sql( 'language', options )
+		def locales( options={} )
+			self.fetch_simple_array_from_sql( 'locale', options )
 		end
 
-		def fields( options={} )
+		def names( options={} )
 			self.fetch_simple_array_from_sql( 'name', options )
 		end
 	end
@@ -59,7 +59,7 @@ class Textbit < ActiveRecord::Base
 
 
 	def to_s #( options={} )
-		text = self.body || ""
+		text = self.value || ""
 	end
 
 	def to_html_with( text, options={} )
@@ -105,12 +105,12 @@ class Textbit < ActiveRecord::Base
 		( self.to_s.empty? ) ? true : false
 	end
 
-	def translate( language )
-		textbit = Textbit.find( :first, :conditions => [ "textable_id = ? AND textable_type = ? AND name = ? AND language = ?", self.textable_id, self.textable_type, self.name, language ] )
-		#if textbit == nil
-		#	textbit = Textbit.new( { :textable_id => self.textable_id, :textable_type => self.textable_type, :name => self.name, :language => language } )
+	def translate(locale)
+		localization = self.class.find( :first, :conditions => [ "localizable_id = ? AND localizable_type = ? AND name = ? AND locale = ?", self.localizable_id, self.localizable_type, self.name, locale ] )
+		#if localization == nil
+		#	localization = self.class.new( { :localizable_id => self.localizable_id, :localizable_type => self.localizable_type, :name => self.name, :locale => locale } )
 		#end
-		textbit
+		localization
 	end
 
 end
