@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rake", "0.9.2.2"
   s.add_dependency "rails", "3.0.3"
-  s.add_dependency "rdoc", "3.12"
+  #s.add_dependency "rdoc", "3.12"
 
   s.add_dependency "bcrypt-ruby"
   s.add_dependency 'capistrano'
@@ -64,5 +64,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mysql"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency 'combustion', '~> 0.3.1'
+  s.add_development_dependency "sdoc", ">= 0.3.0"
 
 end

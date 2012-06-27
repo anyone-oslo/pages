@@ -16,7 +16,7 @@ require 'action_mailer'
 
 #require "rake"
 #require "mysql"
-require "rdoc"
+#require "rdoc"
 
 require "bcrypt"
 require 'capistrano'
