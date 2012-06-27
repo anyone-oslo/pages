@@ -19,14 +19,10 @@ require 'action_mailer'
 #require "rdoc"
 
 require "bcrypt"
-require 'capistrano'
-require 'capistrano_colors'
 require 'vector2d'
 require 'enumerable_mapper'
-require 'hpricot'
 require 'simple-rss'
 require 'RedCloth'
-require 'unicode'
 require 'daemon-spawn'
 require 'pages_console'
 require 'openid'
