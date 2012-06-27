@@ -10,6 +10,10 @@ module Localizable
       @attributes ||= {}
     end
 
+    def has_attribute?(attribute)
+      @attributes.keys.include?(attribute)
+    end
+
     def allow_any(new_value=nil)
       @allow_any = new_value unless new_value.nil?
       @allow_any

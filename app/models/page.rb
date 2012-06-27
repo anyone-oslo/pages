@@ -18,7 +18,16 @@ class Page < ActiveRecord::Base
 	acts_as_list :scope => :parent_page
 	acts_as_tree :order => :position, :foreign_key => :parent_page_id
 
-	acts_as_textable :name, :body, :excerpt, :headline, :boxout, :allow_any => true
+	#acts_as_textable :name, :body, :excerpt, :headline, :boxout, :allow_any => true
+  localizable do
+    attribute :name
+    attribute :body
+    attribute :excerpt
+    attribute :headline
+    attribute :boxout
+    allow_any true
+  end
+
 	acts_as_taggable
 
 	# Page status labels
@@ -519,6 +528,7 @@ class Page < ActiveRecord::Base
 
 	self.send :alias_method, :acts_as_tree_parent, :parent
 
+	# TODO: Port to Localizable
 	#alias :localizable_has_field? :has_field?
 	#def has_field?(field_name, options={})
 	#	self.localizable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
@@ -718,21 +728,16 @@ class Page < ActiveRecord::Base
 		end
 	end
 
-	# Alias get_textbit as get_field
-	def get_field(name, options={})
-		get_textbit(name, options)
-	end
-
 	def template=(template_file)
 		write_attribute('template', template_file)
 	end
 
 	def extended?
-		(self.get_field( 'excerpt' ).to_s.strip != "") ? true : false
+		self.excerpt?
 	end
 
 	def blank?
-		(self.get_field( 'body' ).to_s.strip == "") ? true : false
+		!self.body?
 	end
 
 	# Get word count for page
@@ -823,7 +828,6 @@ class Page < ActiveRecord::Base
 		created_pages
 	end
 
-	# Enable virtual setters and getters for existing (and enforced) textbits
 	def method_missing(method_name, *args)
 		name = method_name.to_s
 		# Booleans
