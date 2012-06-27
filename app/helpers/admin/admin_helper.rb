@@ -1,5 +1,5 @@
 # encoding: utf-8
 
-module Admin::AdminHelper
+module Admin::AdminHelper #:nodoc:
 	include PagesCore::Admin::AdminHelper
 end

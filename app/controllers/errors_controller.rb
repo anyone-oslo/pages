@@ -1,4 +1,4 @@
 # encoding: utf-8
 
-class ErrorsController < PagesCore::ErrorsController
+class ErrorsController < PagesCore::ErrorsController #:nodoc:
 end

@@ -1,5 +1,5 @@
 # encoding: utf-8
 
-module FrontendHelper
+module FrontendHelper #:nodoc:
 	include PagesCore::FrontendHelper
 end

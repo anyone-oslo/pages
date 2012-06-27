@@ -1,59 +1,56 @@
-module Localizable
+module PagesCore
+  module Localizable
 
-  class Localizer
-    attr_accessor :locale
-    def initialize(model)
-      @model                 = model
-      @configuration         = model.class.localizable_configuration
-      @unsaved_localizations = []
-    end
-
-    def has_attribute?(attribute)
-      @configuration.has_attribute?(attribute)
-    end
-
-    def locale?
-      locale ? true : false
-    end
-
-    def get(attribute)
-      localizations = @model.localizations.select{|l| l.name == attribute.to_s && l.locale == locale.to_s}
-      localizations.length > 0 ? localizations.first : nil
-    end
-
-    def set_with_locale(set_locale, attribute, value)
-      unless set_locale
-        raise ArgumentError, "Tried to set :#{attribute}, but no locale has been set"
+    class Localizer
+      attr_accessor :locale
+      def initialize(model)
+        @model                 = model
+        @configuration         = model.class.localizable_configuration
+        @unsaved_localizations = []
       end
-      unless localization = get(attribute)
-        localization = @model.localizations.new(:locale => set_locale.to_s, :name => attribute.to_s)
-        @model.localizations << localization
-      end
-      localization.value = value
-    end
 
-    def set(attribute, value)
-      if value.is_a?(Hash)
-        value.each do |loc, val|
-          set_with_locale(loc, attribute, val)
+      def has_attribute?(attribute)
+        @configuration.has_attribute?(attribute)
+      end
+
+      def locale?
+        locale ? true : false
+      end
+
+      def get(attribute, options={})
+        get_options = {:locale => locale}.merge(options)
+        localizations = @model.localizations.select{|l| l.name == attribute.to_s && l.locale == get_options[:locale].to_s}
+        if localizations.length > 0
+          localizations.first
+        else
+          localization = @model.localizations.new(:locale => get_options[:locale].to_s, :name => attribute.to_s)
+          @model.localizations << localization
+          localization
         end
-      else
-        set_with_locale(locale, attribute, value)
       end
-      value
-    end
 
-    def has_value_for?(attribute)
-      if localization = get(attribute)
-        localization.value?
-      else
-        false
+      def set(attribute, value, options={})
+        set_options = {:locale => locale}.merge(options)
+        if value.is_a?(Hash)
+          value.each do |loc, val|
+            set(attribute, val, :locale => loc)
+          end
+        else
+          unless set_options[:locale]
+            raise ArgumentError, "Tried to set :#{attribute}, but no locale has been set"
+          end
+          get(attribute, :locale => set_options[:locale]).value = value
+        end
+        value
       end
-    end
 
-    def cleanup_localizations!
-      @model.localizations = @model.localizations.select{|l| l.value?}
+      def has_value_for?(attribute)
+        get(attribute).value?
+      end
+
+      def cleanup_localizations!
+        @model.localizations = @model.localizations.select{|l| l.value?}
+      end
     end
   end
-
 end

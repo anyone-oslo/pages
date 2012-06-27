@@ -1,4 +1,4 @@
 # encoding: utf-8
 
-class Admin::NewsletterController < PagesCore::Admin::NewsletterController
+class Admin::NewsletterController < PagesCore::Admin::NewsletterController #:nodoc:
 end

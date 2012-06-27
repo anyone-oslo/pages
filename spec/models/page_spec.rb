@@ -25,8 +25,14 @@ describe Page do
     it 'should respond with the locale specific string' do
       @page.excerpt?.should be_true
       @page.excerpt.to_s.should == 'My test page'
-      @page.translate('nb').excerpt.to_s.should == 'Testside'
+      @page.localize('nb').excerpt.to_s.should == 'Testside'
     end
+  end
+
+  it 'should return a blank Localization for uninitialized columns' do
+    @page = Page.new
+    @page.body?.should be_false
+    @page.body.should be_a(Localization)
   end
 
   describe 'with an excerpt' do

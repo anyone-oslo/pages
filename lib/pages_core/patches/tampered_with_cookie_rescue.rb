@@ -2,7 +2,7 @@
 
 require 'cgi'
 require 'cgi/session'
-class CGI::Session::CookieStore
+class CGI::Session::CookieStore #:nodoc: all
 	# Restore session data from the cookie.
 	# This method overrides the one in
 	# actionpack/lib/action_controller/session/cookie_store.rb

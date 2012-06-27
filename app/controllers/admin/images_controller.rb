@@ -1,4 +1,4 @@
 # encoding: utf-8
 
-class Admin::ImagesController < PagesCore::Admin::ImagesController
+class Admin::ImagesController < PagesCore::Admin::ImagesController #:nodoc:
 end
