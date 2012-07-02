@@ -391,22 +391,29 @@ var PagesAdmin = {
 				.addButton("Heading 3", function(){ this.textArea.wrapSelection('h3. ',''); })
 				.addButton("Heading 4", function(){ this.textArea.wrapSelection('h4. ',''); })
 				// Links
-				.addButton("Link", function(){
-				    var selection = this.textArea.selectedText();
-				    var response = prompt('Enter link URL','');
+				.addButton("Link", function() {
+			    var selection = this.textArea.selectedText();
+			    if (selection === '') {
+			    	selection = prompt('Link text', '');
+			    }
+			    var response = prompt('Enter link URL', 'http://');
+			    if (response) {
 				    this.textArea.replaceSelection(
-						'"' + (selection == '' ? "Link text" : selection) + '":' +
-						(response == '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
-					);
+							'"' + (selection === '' ? "Link text" : selection) + '":' +
+							(response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
+						);
+			    }
 				})
 				// Email links
-				.addButton("Email", function(){
-				    var selection = this.textArea.selectedText();
-				    var response = prompt('Enter mail address','');
+				.addButton("Email", function() {
+			    var selection = this.textArea.selectedText();
+			    var response = prompt('Enter mail address','');
+			    if (response) {
 				    this.textArea.replaceSelection(
-						'"' + (selection == '' ? "Link text" : selection) + '":mailto:' +
-						(response == '' ? 'support@manualdesign.no' : response)
-					);
+							'"' + (selection === '' ? response : selection) + '":mailto:' +
+							(response == '' ? '' : response)
+						);
+			    }
 				})
 				// Image tag
 				.addButton("Image", function(){
