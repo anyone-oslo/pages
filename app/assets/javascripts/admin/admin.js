@@ -24,7 +24,7 @@ jQuery.extend({
     }
 });
 
-(function($){ 
+(function($){
 	$.BehaviorDetector = {
 		register: function(selector, behavior){
 			if(!$(this).data('behaviors')){
@@ -143,13 +143,13 @@ jQuery.fn.centerOnScreen = function(){
 
 	this.css('position', 'absolute');
 	this.css('z-index', (1000+(Math.round(Math.random() * 5000))));
-	
+
 	var x = ((jQuery(window).width() / 2) - (this.width() / 2)) + jQuery(window).scrollLeft();
 	var y  = ((jQuery(window).height() / 2) - (this.height() / 2)) + jQuery(window).scrollTop();
 	if(x < 0) { x = 0; }; if(y < 0) { y = 0; }
-	
+
 	this.css({ left: x+"px", top: y+"px" });
-	
+
 	return this;
 }
 
@@ -161,7 +161,7 @@ function jRichTextArea(textArea, options){
 	settings = jQuery.extend({
 	     className: "richTextToolbar"
 	}, options);
-	
+
 	this.toolbar = {
 		settings : settings,
 		textArea : textArea,
@@ -191,7 +191,7 @@ function jRichTextArea(textArea, options){
 			}
 		}
 	}
-	
+
 	this.textArea.selectedText = function() {
 		return jQuery(this).getSelection().text;
 	}
@@ -217,7 +217,7 @@ function EditableImage(link, options){
 	// Default options
 	settings = jQuery.extend({
 		resourceURL: link.href,
-		width: 550
+		width: 800
 	}, options);
 
 	this.editableImage = {
@@ -304,7 +304,7 @@ function EditableImage(link, options){
 				// console.log(jCropOptions);
 				jQuery('#editableImageEditorImage').Jcrop(jCropOptions);
 			});
-			
+
 		},
 		closeEditor : function() {
 			jQuery('#modalLoadingNotice').remove();
@@ -313,6 +313,9 @@ function EditableImage(link, options){
 			jQuery.dimScreenStop();
 		},
 		refreshLinkedImage : function(size) {
+			var imageUrl = this.linkedImage.src.replace(/\?.*$/, '') + '?' + (new Date().getTime());
+			this.linkedImage.src = imageUrl;
+			/*
 			var newURL = this.linkedImage.src.toString();
 			newURL = newURL.replace(/\/[\d]+x[\d]+\//, '/'+size+'/'); // temporary hack, fix to use rel="" dimensions
 			newURL = newURL+"?"+Math.round(Math.random() * 65535);
@@ -320,6 +323,7 @@ function EditableImage(link, options){
 			size = size.split("x",2); newWidth = size[0]; newHeight = size[1];
 			this.linkedImage.width = newWidth;
 			this.linkedImage.height = newHeight;
+			*/
 		},
 		submit : function() {
 			var cropped = (!this.cropWidth || !this.cropHeight) ? 0 : 1;
@@ -334,7 +338,7 @@ function EditableImage(link, options){
 				put_options = { 'image[cropped]': cropped }
 			}
 			var binding = this;
-			jQuery.put(this.resourceURL+".js", put_options, function(){
+			jQuery.put(this.resourceURL + ".json", put_options, function(json) {
 				binding.refreshLinkedImage(crop_size);
 				binding.closeEditor();
 			})
@@ -363,8 +367,8 @@ var PagesAdmin = {
 					jQuery(document.body).addClass(this.toLowerCase());
 				}
 			});
-			if(navigator.userAgent.match("MSIE")) { 
-				jQuery(document.body).addClass('msie') 
+			if(navigator.userAgent.match("MSIE")) {
+				jQuery(document.body).addClass('msie')
 			};
 			if( navigator.userAgent.match("MSIE 7") ) {
 				jQuery(document.body).addClass('msie7');
@@ -387,30 +391,37 @@ var PagesAdmin = {
 				.addButton("Heading 3", function(){ this.textArea.wrapSelection('h3. ',''); })
 				.addButton("Heading 4", function(){ this.textArea.wrapSelection('h4. ',''); })
 				// Links
-				.addButton("Link", function(){
-				    var selection = this.textArea.selectedText();
-				    var response = prompt('Enter link URL','');  
+				.addButton("Link", function() {
+			    var selection = this.textArea.selectedText();
+			    if (selection === '') {
+			    	selection = prompt('Link text', '');
+			    }
+			    var response = prompt('Enter link URL', 'http://');
+			    if (response) {
 				    this.textArea.replaceSelection(
-						'"' + (selection == '' ? "Link text" : selection) + '":' + 
-						(response == '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
-					);
+							'"' + (selection === '' ? "Link text" : selection) + '":' +
+							(response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://')
+						);
+			    }
 				})
 				// Email links
-				.addButton("Email", function(){
-				    var selection = this.textArea.selectedText();
-				    var response = prompt('Enter mail address','');  
+				.addButton("Email", function() {
+			    var selection = this.textArea.selectedText();
+			    var response = prompt('Enter mail address','');
+			    if (response) {
 				    this.textArea.replaceSelection(
-						'"' + (selection == '' ? "Link text" : selection) + '":mailto:' + 
-						(response == '' ? 'support@manualdesign.no' : response)
-					);
+							'"' + (selection === '' ? response : selection) + '":mailto:' +
+							(response == '' ? '' : response)
+						);
+			    }
 				})
 				// Image tag
 				.addButton("Image", function(){
 				    var selection = this.textArea.selectedText();
 					if( selection == '') {
-					    var response = prompt('Enter image URL',''); 
-					    if(response == null)  
-					        return;  
+					    var response = prompt('Enter image URL','');
+					    if(response == null)
+					        return;
 						this.textArea.replaceSelection('!'+response+'!');
 					} else {
 						this.textArea.replaceSelection('!'+selection+'!');
@@ -419,7 +430,7 @@ var PagesAdmin = {
 			;
 		});
 	},
-	
+
 	applyEditableImages : function() {
 		jQuery('a.editableImage').each(function(){
 			new EditableImage(this);
@@ -437,9 +448,9 @@ var PagesAdmin = {
 
 		// Inject buttons with <div class="inner">
 		jQuery('button').wrapInner('<div class="inner"></div>');
-		
+
 	},
-	
+
 	init : function() {
 		PagesAdmin.sniffBrowser();
 		PagesAdmin.applyStyles();
@@ -448,7 +459,7 @@ var PagesAdmin = {
 		if(PagesAdmin.contentTabs) {
 			PagesAdmin.contentTabs.init();
 		}
-		
+
 		// Call the controller action
 		if(PagesAdmin.controller) {
 			if(PagesAdmin.controller.init){
