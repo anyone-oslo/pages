@@ -86,6 +86,6 @@ end
 
 # Configure the cache sweeper, add any custom paths and models
 # PagesCore::CacheSweeper.config do |sweeper_config|
-# 	sweeper_config.observe  += [Store, StoreTest, Ad]
+# 	sweeper_config.observe  += [:store, :store_test, :ad]
 # 	sweeper_config.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
 # end

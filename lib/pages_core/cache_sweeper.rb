@@ -23,8 +23,8 @@ module PagesCore
 				default = MethodedHash.new
 				default[:cache_path] = File.join(File.dirname(__FILE__), '../../../../../public/cache')
 				# TODO: Fix DynamicImage
-				#default[:observe]    = [Page, FeedItem, Feed, PageComment, Partial, Image]
-				default[:observe]    = [Page, FeedItem, Feed, PageComment, Partial]
+				#default[:observe]    = [:page, :feed_item, :feed, :page_comment, :partial, :image]
+				default[:observe]    = [:page, :feed_item, :feed, :page_comment, :partial]
 				default[:patterns]   = [/^\/index\.[\w]+$/, /^\/pages\/[\w]{3}\/(.*)$/, /^\/[\w]{3}\/(.*)$/]
 				default
 			end
@@ -32,7 +32,7 @@ module PagesCore
 			# Returns the configuration. Accepts a block, ie:
 			#
 			#   PagesCore::CacheSweeper.config do |c|
-			#     c.observe  += [Store, StoreTest]
+			#     c.observe  += [:store, :store_test]
 			#     c.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
 			#   end
 			def config
