@@ -49,8 +49,8 @@ class PagesCore::AdminController < ApplicationController
 			# Register menu items from plugins
 			PagesCore::Plugin.plugins.each do |plugin_class|
 				plugin = plugin_class.new
-				if plugin.respond_to?(:admin_menu_items)
-					plugin.admin_menu_items.each do |menu_item|
+				if plugin.respond_to?(:admin_menu_tabs)
+					plugin.admin_menu_tabs.each do |menu_item|
 						register_menu_item menu_item[:label], menu_item[:url], (menu_item[:group] || :pages_plugins)
 					end
 				end
