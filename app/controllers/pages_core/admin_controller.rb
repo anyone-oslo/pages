@@ -45,6 +45,16 @@ class PagesCore::AdminController < ApplicationController
 			end
 			register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages
 			register_menu_item "Users", hash_for_admin_users_path, :account
+
+			# Register menu items from plugins
+			PagesCore::Plugin.plugins.each do |plugin_class|
+				plugin = plugin_class.new
+				if plugin.respond_to?(:admin_menu_items)
+					plugin.admin_menu_items.each do |menu_item|
+						register_menu_item menu_item[:label], menu_item[:url], (menu_item[:group] || :pages_plugins)
+					end
+				end
+			end
 		end
 
 		# Loads persistent params from user model and merges with session.
