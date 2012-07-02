@@ -30,7 +30,7 @@ module PagesCore
 			# Returns the configuration. Accepts a block, ie:
 			#
 			#   PagesCore::CacheSweeper.config do |c|
-			#     c.observe  += [Store, StoreTest]
+			#     c.observe  += [:store, :store_test]
 			#     c.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
 			#   end
 			def config
