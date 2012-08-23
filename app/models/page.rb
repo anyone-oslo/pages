@@ -637,7 +637,11 @@ class Page < ActiveRecord::Base
 	def pages(options={})
 		return [] if self.new_record? && !options.has_key?(:parent)
 		options[:parent]   ||= self.id
-		options[:order]    ||= self.content_order
+		if self.news_page?
+			options[:order]    ||= "pinned DESC, #{self.content_order}"
+		else
+			options[:order]    ||= self.content_order
+		end
 		options[:language] ||= self.working_language if self.working_language
 		Page.get_pages(options)
 	end

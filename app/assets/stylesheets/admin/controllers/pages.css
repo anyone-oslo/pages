@@ -77,6 +77,10 @@
 .news_item_list .draft, .news_item_list .hidden, .news_item_list .autopublish, .news_item_list .reviewed {
 	background: #f4f4f4;
 }
+.news_item_list .pinned .name {
+	background: #fff8e8;
+	background: transparent url(../../../images/admin/list-table-pin-blue.gif) no-repeat 13px 50%;
+}
 .news_item_list .draft .name, .news_item_list .hidden .name, .news_item_list .autopublish .name, .news_item_list .autopublish .reviewed {
 	background: transparent url(../../../images/admin/list-table-pin-disabled.gif) no-repeat 13px 50%;
 }
@@ -149,5 +153,5 @@
 	margin-left: 0; margin-right: 0; padding: 0;
 }
 #filelist {
-	
+
 }
