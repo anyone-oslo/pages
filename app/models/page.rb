@@ -90,6 +90,7 @@ class Page < ActiveRecord::Base
 		has tags(:id), :as => :tag_ids
 
 		set_property :delta => :delayed
+		set_property :group_concat_max_len => 16.megabytes
 	end
 
 
@@ -237,7 +238,7 @@ class Page < ActiveRecord::Base
 			}.merge(options)
 
 			# TODO: Allow more fine-grained control over status filtering
-			search_options[:conditions] = {:status => '2', :autopublish => '0'}
+			search_options[:with] = {:status => 2, :autopublish => 0}
 
 			pages = Page.search(query, search_options)
 			PagesCore::Paginates.paginate(
