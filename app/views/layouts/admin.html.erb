@@ -6,25 +6,12 @@
 	<link rel="shortcut icon" href="/assets/pages/favicon.gif?" type="image/gif" />
 	<link rel="icon"          href="/assets/pages/favicon.gif?" type="image/gif" />
 
-	<%= stylesheet_link_tag "admin", :plugin => 'pages' %>
-	<%= stylesheet_link_tag "admin/print", :plugin => 'pages', :media => 'print' %>
+	<%= stylesheet_link_tag "pages/admin" %>
+	<%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
 
-	<%= javascript_include_tag "fastinit", :plugin => 'pages' %>
-	<%= javascript_include_tag "prototype", :plugin => 'pages' %>
-	<%= javascript_include_tag "underscore", :plugin => 'pages' %>
-	<%= javascript_include_tag "jquery", :plugin => 'pages' %>
+	<%= javascript_include_tag "pages/jquery" %>
 	<script type="text/javascript">jQuery.noConflict();</script>
-	<%= javascript_include_tag "jquery-ui", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "effects", :plugin => 'pages' %>
-	<%= javascript_include_tag "dragdrop", :plugin => 'pages' %>
-	<%= javascript_include_tag "controls", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "swfobject", :plugin => 'pages' %>
-	<%= javascript_include_tag "lightbox", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "jquery.libraries.js", :plugin => 'pages' %>
-
+	<%= javascript_include_tag "pages/admin" %>
 	<%= admin_javascript_tags %>
 
 </head>

@@ -1,3 +1,4 @@
+
 /* Extend jQuery with functions for PUT and DELETE requests. */
 
 function _ajax_request(url, data, callback, type, method) {
