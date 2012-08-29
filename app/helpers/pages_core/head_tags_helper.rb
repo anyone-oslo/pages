@@ -81,7 +81,7 @@ module PagesCore::HeadTagsHelper
 		end
 		output += "	<title>#{options[:title]}</title>\n"
 		if options.has_key? :stylesheet
-			output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"
+			output += indent(stylesheet_link_tag(*options[:stylesheet]), 1) + "\n"
 		end
 
 		if @include_stylesheets

@@ -12,8 +12,7 @@ module PagesCore
 
       def inherited(plugin)
         plugin.paths ||= {
-          'db/migrate' => 'db/migrate',
-          'app/assets' => 'app/assets'
+          'db/migrate' => 'db/migrate'
         }
         plugin.called_from = begin
           # Remove the line number from backtraces making sure we don't leave anything behind
@@ -51,14 +50,6 @@ module PagesCore
 
     def paths
       self.class.paths
-    end
-
-    def assets_path
-      root.join(paths['app/assets'])
-    end
-
-    def has_assets?
-      File.exists?(assets_path) && File.directory?(assets_path)
     end
 
     def migrations_path

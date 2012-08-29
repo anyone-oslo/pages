@@ -42,7 +42,7 @@
 .page_images .editor {
 	line-height:1px;
 	margin-bottom:40px;
-	background-image:url(../../images/admin/image-editor-bg.png);
+	background-image:url(/assets/pages/admin/image-editor-bg.png);
 	box-shadow:0px 2px 15px hsla(0,0%,0%,0.35);
 }
 .page_images .editor .controls {

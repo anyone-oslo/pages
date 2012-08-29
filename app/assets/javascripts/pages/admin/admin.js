@@ -1,4 +1,3 @@
-
 /* Extend jQuery with functions for PUT and DELETE requests. */
 
 function _ajax_request(url, data, callback, type, method) {
@@ -238,7 +237,7 @@ function EditableImage(link, options){
 		openEditor : function() {
 			// Dim the screen and create the loading dialog
 			jQuery.dimScreen(200, 0.90);
-			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"/plugin_assets/pages/images/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
+			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"/assets/pages/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
 			jQuery('#modalLoadingNotice').centerOnScreen().hide().fadeIn(200);
 
 			// Create the container

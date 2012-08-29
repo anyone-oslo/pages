@@ -23,7 +23,6 @@ namespace :pages do
 		run "chmod -R a+x #{deploy_to}/#{current_dir}/script/*"
 		run "chmod a+x    #{deploy_to}/#{current_dir}/public/dispatch.*"
 		run "chmod a+rwx  #{deploy_to}/#{current_dir}/public"
-		run "chmod a+rw   #{deploy_to}/#{current_dir}/public/plugin_assets"
 	end
 
 	desc "Create symlinks"

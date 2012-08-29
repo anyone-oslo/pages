@@ -7,7 +7,7 @@ require 'open-uri'
 require 'pathname'
 
 # Included in lib/
-[:acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
+[:extensions, :acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
 	require File.join(File.dirname(__FILE__), lib.to_s)
 end
 
