@@ -3,7 +3,6 @@
 //= require "pages/jquery-ui"
 
 // Old crap
-//= require "pages/fastinit"
 //= require "pages/prototype"
 //= require "pages/effects"
 //= require "pages/dragdrop"

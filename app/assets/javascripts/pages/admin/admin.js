@@ -530,29 +530,8 @@ PagesAdmin.contentTabs = {
 				});
 			}
 			window.showContentTab = PagesAdmin.contentTabs.show;
-
-			/*
-			$('textarea.rich').each(function () {
-				var textarea = this;
-				var focusedHeight = 450;
-				textarea.originalHeight = $(textarea).height();
-				$(textarea)
-					.focus(function () {
-						if ($(textarea).height() < focusedHeight) {
-							$(textarea).animate({
-								height: focusedHeight
-							}, 200);
-						}
-					})
-					.blur(function () {
-						$(textarea).animate({
-							height: (textarea.originalHeight)
-						}, 200);
-					})
-			});
-			*/
 		})(jQuery);
 	}
 }
 
-FastInit.addOnLoad(PagesAdmin.init);
+jQuery(PagesAdmin.init);
