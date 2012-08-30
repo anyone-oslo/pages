@@ -20,7 +20,7 @@
 	:errors => @page.errors[:user_id]
 %>
 
-<% if @page.parent_page.news_page? %>
+<% if @page.parent_page && @page.parent_page.news_page? %>
 	<div class="field">
 		<label>Pin to top</label>
 		<%= f.check_box(:pinned) %> Make post featured<br />
