@@ -169,7 +169,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
 		def edit
 			@authors = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
-			@authors = [@page.author] + @authors unless @authors.include?(@page.author)
+			@authors = ([@page.author] + @authors unless @authors.include?(@page.author)).compact
 			@new_image ||= Image.new
 		end
 
