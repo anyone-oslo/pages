@@ -169,7 +169,11 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
 		def edit
 			@authors = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
-			@authors = ([@page.author] + @authors unless @authors.include?(@page.author)).compact
+			# Make sure the page author is included in the dropdown
+			# even if the account isn't active.
+			if @authors.any? && @page.author
+				@authors = [@page.author] + @authors.reject{|a| a == @page.author}
+			end
 			@new_image ||= Image.new
 		end
 
