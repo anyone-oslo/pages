@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'fileutils'
+
 module PagesCore
 	class CacheSweeper
 		class << self
@@ -43,7 +45,7 @@ module PagesCore
 			def purge!
 				cache_dir = self.config.cache_path
 				if File.exist?(cache_dir)
-					`rm -rf #{cache_dir}/*`
+					`rm -rf "#{cache_dir}/*"`
 				end
 			end
 
@@ -58,7 +60,9 @@ module PagesCore
 					cache_base_dir = self.config.cache_path
 					swept_files = []
 					if PagesCore.config(:domain_based_cache)
-						cache_dirs = Dir.entries(cache_base_dir).select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}.map{|d| File.join(cache_base_dir, d)}
+						cache_dirs = Dir.entries(cache_base_dir)
+						cache_dirs = cache_dirs.select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}
+						cache_dirs = cache_dirs.map{|d| File.join(cache_base_dir, d)}
 					else
 						cache_dirs = [cache_base_dir]
 					end
@@ -72,7 +76,7 @@ module PagesCore
 								kill_patterns.each do |p|
 									if file =~ p && File.exist?( path )
 										swept_files << path
-										`rm -rf #{path}`
+										FileUtils.rm_rf(path)
 									end
 								end
 							end
@@ -102,7 +106,7 @@ module PagesCore
 						Find.find( image_dir+"/" ) do |path|
 							if File.file?(path)
 								swept_files << path
-								`rm -rf #{path}`
+								FileUtils.rm_rf(path)
 							end
 						end
 					end
