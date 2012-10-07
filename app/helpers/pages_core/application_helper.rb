@@ -157,8 +157,8 @@ module PagesCore::ApplicationHelper
 	# * <tt>:errors</tt>:      Error messages for the attribute
 	#
 	# An example:
-	#   <% form_for 'user', @user do |f| %>
-	#     <%= labelled_field f.text_field( :username ), "Username",
+	#   <%= form_for @user do |f| %>
+	#     <%= labelled_field f.text_field(:username), "Username",
 	#                        :description => "Choose your username, minimum 4 characters",
 	#                        :errors => @user.errors[:username] %>
 	#     <%= submit_tag "Save" %>

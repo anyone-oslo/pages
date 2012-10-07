@@ -32,7 +32,7 @@
 		</ul>
 	<% end %>
 	<div id="new-category">
-		<% form_for([:admin, Category.new]) do |f| %>
+		<%= form_for([:admin, Category.new]) do |f| %>
 			<p>
 				<label><strong>New category</strong></label>
 				<%= f.text_field :name %>

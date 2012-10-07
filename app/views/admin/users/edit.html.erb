@@ -23,7 +23,7 @@
 <% end %>
 
 
-<% form_for 'user', @user, :url => { :action => :update }, :html => { :method => :put, :multipart => true } do |f| %>
+<%= form_for @user, :url => {:action => :update}, :html => {:method => :put, :multipart => true} do |f| %>
 
 	<%= f.hidden_field :is_admin %>
 

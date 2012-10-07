@@ -12,7 +12,7 @@
 <%# #### SIDEBAR ########################################################### %>
 
 <% content_for :sidebar do %>
-	<% form_for 'page', @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
+	<%= form_for @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
 		<%= render :partial => 'edit_options', :locals => {:f => f} %>
 	<% end %>
 <% end %>
@@ -21,7 +21,7 @@
 
 <%# #### EDIT AREA ######################################################### %>
 
-<% form_for 'page', @page, :url => admin_page_url(@language, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
+<%= form_for @page, :url => admin_page_url(@language, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
 
 	<div class="hiddenOptions">
 		<%= render :partial => 'edit_options', :locals => {:f => f} %>
@@ -88,7 +88,7 @@
 <%# #### UPLOAD IMAGE #### %>
 <div id="new-image">
 	<h2>Upload images</h2>
-	<% form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
+	<%= form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
 
 		<table>
 			<tr>
@@ -119,7 +119,7 @@
 <% if @page.template_config.value(:files) %>
 	<div id="new-file" class="page_new_file">
 		<h2>Upload new file</h2>
-		<% form_for( ( @new_file = PageFile.new ), :url => admin_page_files_path( @language, @page ), :html => { :multipart => true } ) do |f| %>
+		<%= form_for((@new_file = PageFile.new), :url => admin_page_files_path(@language, @page), :html => {:multipart => true}) do |f| %>
 			<%= labelled_field f.text_field( :name, :size => 48 ), "Name",
 				:errors      => @new_file.errors[:name]
 			%>

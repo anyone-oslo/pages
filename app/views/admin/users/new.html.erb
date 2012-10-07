@@ -10,7 +10,7 @@
 	</p>
 <% end %>
 
-<% form_for 'user', @user, :url => { :action => :create }, :html => { :method => :post } do |f| %>
+<%= form_for @user, :url => {:action => :create}, :html => {:method => :post} do |f| %>
 
 	<%= f.hidden_field :is_admin %>
 	<%= f.hidden_field :is_activated %>
