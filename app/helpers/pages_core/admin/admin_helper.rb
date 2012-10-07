@@ -29,18 +29,10 @@ module PagesCore::Admin::AdminHelper
 	end
 
 	def admin_javascript_tags
-		output  = "\t" + javascript_include_tag("admin/admin",       :plugin => 'pages') + "\n"
-		output += "\t" + javascript_include_tag("admin/tag_editor",  :plugin => 'pages') + "\n"
-		output += "\t" + javascript_include_tag("admin/page_images", :plugin => 'pages') + "\n"
-
 		controller_name    = controller.class.to_s.demodulize
 		action_name        = params[:action]
-		controller_script = controller.class.to_s.underscore
 
-		if File.exists?(PagesCore.plugin_root.join("app/assets/javascripts/#{controller_script}.js"))
-			output += "\t"+javascript_include_tag(controller_script, :plugin => 'pages') + "\n"
-		end
-		output += "<script type=\"text/javascript\">"
+		output  = "<script type=\"text/javascript\">"
 		output += "  Admin.controller = Admin.#{controller_name};"
 		output += "  Admin.action     = \"#{action_name}\";"
 		output += "  Admin.language   = \"#{@language}\";" if @language

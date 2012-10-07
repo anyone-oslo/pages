@@ -238,7 +238,7 @@ function EditableImage(link, options){
 		openEditor : function() {
 			// Dim the screen and create the loading dialog
 			jQuery.dimScreen(200, 0.90);
-			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"/plugin_assets/pages/images/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
+			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"/assets/pages/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
 			jQuery('#modalLoadingNotice').centerOnScreen().hide().fadeIn(200);
 
 			// Create the container
@@ -530,29 +530,8 @@ PagesAdmin.contentTabs = {
 				});
 			}
 			window.showContentTab = PagesAdmin.contentTabs.show;
-
-			/*
-			$('textarea.rich').each(function () {
-				var textarea = this;
-				var focusedHeight = 450;
-				textarea.originalHeight = $(textarea).height();
-				$(textarea)
-					.focus(function () {
-						if ($(textarea).height() < focusedHeight) {
-							$(textarea).animate({
-								height: focusedHeight
-							}, 200);
-						}
-					})
-					.blur(function () {
-						$(textarea).animate({
-							height: (textarea.originalHeight)
-						}, 200);
-					})
-			});
-			*/
 		})(jQuery);
 	}
 }
 
-FastInit.addOnLoad(PagesAdmin.init);
+jQuery(PagesAdmin.init);

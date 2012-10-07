@@ -98,7 +98,7 @@
 }
 
 #header .tabs a:hover, #header .tabs a.current, #header .tabs a.current:visited {
-	background:      #fefefe url(../../images/admin/header-tab-current-bg.gif);
+	background:      #fefefe url(/assets/pages/admin/header-tab-current-bg.gif);
 	border-left:     1px solid #fefefe;
 	border-right:    1px solid #fefefe;
 	color:           #000;
@@ -107,7 +107,7 @@
 
 #content-tabs {
 	list-style-type: none;
-	margin: 24px 0px -11px -18px; 
+	margin: 24px 0px -11px -18px;
 	padding: 0;
 }
 .msie #content-tabs {

@@ -1,20 +1,24 @@
-@import url(jquery-smoothness/ui.all.css);
+/*
+ *= require "pages/jquery-smoothness/ui.all.css"
+ *= require "pages/admin/buttons"
+ *= require "pages/admin/controllers/pages.css"
+ *= require "pages/admin/editable_image.css"
+ *= require "pages/admin/forms.css"
+ *= require "pages/admin/header.css"
+ *= require "pages/admin/images.css"
+ *= require "pages/admin/lightbox.css"
+ *= require "pages/admin/links.css"
+ *= require "pages/admin/list_table.css"
+ *= require "pages/admin/login.css"
+ *= require "pages/admin/modal.css"
+ *= require "pages/admin/sidebar.css"
+ *= require "pages/admin/sortable_images.css"
+ *= require "pages/admin/tag_editor.css"
+ *= require "pages/admin/textarea.css"
+ *= require_self
+ */
 
-@import url(admin/header.css);
-@import url(admin/sidebar.css);
-@import url(admin/buttons.css);
-@import url(admin/links.css);
-@import url(admin/forms.css);
-@import url(admin/list_table.css);
-@import url(admin/login.css);
-@import url(admin/lightbox.css);
-@import url(admin/modal.css);
-@import url(admin/sortable_images.css);
-@import url(admin/textarea.css);
-@import url(admin/editable_image.css);
-@import url(admin/controllers/pages.css);
-@import url(admin/tag_editor.css);
-@import url(admin/images.css);
+
 
 body {
 	background: #fff;
@@ -37,7 +41,7 @@ body html {
 	margin: 0;
 	padding: 16px 32px;
 	display: block;
-	background: #e7f3f9 url(../images/admin/description-bg.gif) repeat-x;
+	background: #e7f3f9 url(/assets/pages/admin/description-bg.gif) repeat-x;
 	border-bottom: 1px solid #d4eaf4;
 	color: #000;
 }
@@ -110,7 +114,7 @@ div.content {
 
 table.show th, td {
 	font-weight: normal;
-	padding: 2px 16px 2px 0; 
+	padding: 2px 16px 2px 0;
 }
 
 
@@ -120,7 +124,7 @@ table.show th, td {
 }
 
 #flash-error {
-	background: #c00007 url(../images/admin/flash-error-bg.gif) repeat-x;
+	background: #c00007 url(/assets/pages/admin/flash-error-bg.gif) repeat-x;
 	border-bottom: 1px solid #9c0002;
 	color: #fff299;
 	font-weight: bold;

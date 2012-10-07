@@ -51,7 +51,7 @@
 #prevLink, #nextLink{
 	width:            49%;
 	height:           100%;
-	background:       transparent url(../../images/admin/blank.gif) no-repeat;
+	background:       transparent url(/assets/pages/admin/blank.gif) no-repeat;
 /* Trick IE into showing hover */
 	display:          block;
 }
@@ -64,10 +64,10 @@
 	float:            right;
 }
 #prevLink:hover, #prevLink:visited:hover {
-	background:       url(../../images/admin/lightbox-prevlabel.gif) left 15% no-repeat;
+	background:       url(/assets/pages/admin/lightbox-prevlabel.gif) left 15% no-repeat;
 }
 #nextLink:hover, #nextLink:visited:hover {
-	background:       url(../../images/admin/lightbox-nextlabel.gif) right 15% no-repeat;
+	background:       url(/assets/pages/admin/lightbox-nextlabel.gif) right 15% no-repeat;
 }
 
 
@@ -89,7 +89,7 @@
 	width:            70%;
 	float:            left;
 	text-align:       left;
-}	
+}
 #imageData #caption{
 	font-weight:      bold;
 	color: #aaa;
@@ -98,13 +98,13 @@
 	display:          block;
 	clear:            left;
 	padding-bottom:   1.0em;
-}			
+}
 #imageData #bottomNavClose{
 	width:            66px;
 	float:            right;
 	padding-bottom:   0.7em;
-}	
-		
+}
+
 #overlay{
 	position:         absolute;
 	top:              0;

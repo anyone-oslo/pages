@@ -64,15 +64,15 @@ module PagesCore::HeadTagsHelper
 		elsif options[:doctype] == :html5
 			output += "<!doctype html>\n"
 			if options.has_key?(:modernizr)
-				output += "<!--[if lt IE 7]><html class=\"no-js ie6\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if IE 7]><html class=\"no-js ie7\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if IE 8]><html class=\"no-js ie8\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if gt IE 8]><!--><html class=\"no-js\" lang=\"#{language_definition}\"><!--<![endif]-->\n"
+				output += "<!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"#{language_definition}\"> <!--<![endif]-->"
 			else
-				output += "<!--[if lt IE 7]><html class=\"ie6\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if IE 7]><html class=\"ie7\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if IE 8]><html class=\"ie8\" lang=\"#{language_definition}\"><![endif]-->\n"
-				output += "<!--[if gt IE 8]><!--><html lang=\"#{language_definition}\"><!--<![endif]-->\n"
+				output += "<!--[if lt IE 7]>      <html class=\"lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if IE 7]>         <html class=\"lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if IE 8]>         <html class=\"lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
+				output += "<!--[if gt IE 8]><!--> <html lang=\"#{language_definition}\"> <!--<![endif]-->"
 			end
 			output += "<head>\n"
 			output += "	<meta charset=\"#{options[:charset]}\">\n"
@@ -81,7 +81,7 @@ module PagesCore::HeadTagsHelper
 		end
 		output += "	<title>#{options[:title]}</title>\n"
 		if options.has_key? :stylesheet
-			output += indent(stylesheet_link_tag(*options[:stylesheet] ), 1) + "\n"
+			output += indent(stylesheet_link_tag(*options[:stylesheet]), 1) + "\n"
 		end
 
 		if @include_stylesheets

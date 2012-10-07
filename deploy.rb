@@ -108,6 +108,11 @@ namespace :deploy do
 	after 'deploy:services', 'monit:configure'
 	after 'deploy:services', 'monit:restart'
 
+  desc "Precompile assets"
+  task :precompile_assets do
+    run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
+  end
+
 	desc "Notify Campfire"
 	task :notify_campfire, :roles => [:web] do
 		username = `whoami`.chomp
@@ -169,6 +174,7 @@ after "deploy:restart", "sphinx:start"
 
 after "deploy:restart",         "cache:flush"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
+after "deploy:finalize_update", "deploy:precompile_assets"
 
 # Cold deploy
 before "deploy:cold", "without_services"

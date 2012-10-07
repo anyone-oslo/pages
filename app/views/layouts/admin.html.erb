@@ -3,28 +3,15 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
-	<link rel="shortcut icon" href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
-	<link rel="icon"          href="/plugin_assets/pages/images/favicon.gif?" type="image/gif" />
+	<link rel="shortcut icon" href="/assets/pages/favicon.gif?" type="image/gif" />
+	<link rel="icon"          href="/assets/pages/favicon.gif?" type="image/gif" />
 
-	<%= stylesheet_link_tag "admin", :plugin => 'pages' %>
-	<%= stylesheet_link_tag "admin/print", :plugin => 'pages', :media => 'print' %>
+	<%= stylesheet_link_tag "pages/admin" %>
+	<%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
 
-	<%= javascript_include_tag "fastinit", :plugin => 'pages' %>
-	<%= javascript_include_tag "prototype", :plugin => 'pages' %>
-	<%= javascript_include_tag "underscore", :plugin => 'pages' %>
-	<%= javascript_include_tag "jquery", :plugin => 'pages' %>
+	<%= javascript_include_tag "pages/jquery" %>
 	<script type="text/javascript">jQuery.noConflict();</script>
-	<%= javascript_include_tag "jquery-ui", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "effects", :plugin => 'pages' %>
-	<%= javascript_include_tag "dragdrop", :plugin => 'pages' %>
-	<%= javascript_include_tag "controls", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "swfobject", :plugin => 'pages' %>
-	<%= javascript_include_tag "lightbox", :plugin => 'pages' %>
-
-	<%= javascript_include_tag "jquery.libraries.js", :plugin => 'pages' %>
-
+	<%= javascript_include_tag "pages/admin" %>
 	<%= admin_javascript_tags %>
 	<%= csrf_meta_tag %>
 
@@ -33,7 +20,7 @@
 
 	<%# Header %>
 	<div id="header">
-		<div id="logo"><%= link_to image_tag( "/plugin_assets/pages/images/admin/icon.png"), '/admin' %></div>
+		<div id="logo"><%= link_to image_tag("admin/icon.png", :plugin => :pages), '/admin' %></div>
 		<div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
 		<% if @current_user -%>
 			<div class="user">
