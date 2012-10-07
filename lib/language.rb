@@ -44,7 +44,7 @@ module Language
 
 		# Get default language
 		def default
-			@@default_language
+			@@default_language ||= 'eng'
 		end
 
 		# Get language name for given code
