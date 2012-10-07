@@ -60,8 +60,9 @@ Gem::Specification.new do |s|
   # Development
   s.add_development_dependency "mysql"
   s.add_development_dependency "rspec-rails"
-  s.add_development_dependency 'factory_girl_rails', '~> 3.5.0'
-  s.add_development_dependency 'combustion', '~> 0.3.1'
+  s.add_development_dependency 'factory_girl', '2.6.4'
+  s.add_development_dependency 'factory_girl_rails', '1.7.0'
+  s.add_development_dependency 'combustion', '~> 0.3.2'
   s.add_development_dependency "sdoc", ">= 0.3.0"
 
 end
