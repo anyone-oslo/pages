@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
   #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
   # Assets
-  #s.add_dependency 'sprockets', '2.4.5'
   s.add_dependency 'sass-rails'
   s.add_dependency 'json', '1.5.1'
   s.add_dependency 'coffee-script', '2.1.3'

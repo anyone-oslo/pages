@@ -127,12 +127,9 @@ class PagesCore::ApplicationController < ActionController::Base
 			end
 		end
 
-		# Sets MumboJumbo.current_language to the requested language, or
-		# Language.default as a fallback.
-		# This method is automatically run from a before_filter.
+		# Sets @language from params[:language], with Language.default as fallback
 		def get_language
 			@language = params[:language] || Language.default
-			MumboJumbo.current_language = @language
 		end
 
 		# Sends HTTP headers (Content-Language etc) to the client.

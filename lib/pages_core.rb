@@ -46,7 +46,7 @@ require 'thinking_sphinx/deltas/delayed_delta'
 # -----
 
 # Included in lib/
-[:acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
+[:acts_as_taggable, :language, :feed_builder, :country_select].each do |lib|
 	require File.join(File.dirname(__FILE__), lib.to_s)
 end
 
@@ -61,10 +61,6 @@ end
 module PagesCore
 	class << self
 		def init!
-			# Initialize MumboJumbo
-			MumboJumbo.load_languages!
-			MumboJumbo.translators << PagesCore::StringTranslator
-
 			# Register default mime types
 			Mime::Type.register "application/rss+xml", 'rss'
 

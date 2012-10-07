@@ -9,8 +9,9 @@ module PagesCore::FrontendHelper
 		date = date.to_date
 		options.symbolize_keys!
 
-		return "Today"[] if date == Date.today
-		return "Yesterday"[] if date == Time.now.yesterday.to_date
+		# TODO: Internationalize
+		return "Today" if date == Date.today
+		return "Yesterday" if date == Time.now.yesterday.to_date
 
 		options[:include_day] ||= false
 		options[:short_month], options[:short_day] = true if options[:short]

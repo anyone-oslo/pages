@@ -35,9 +35,9 @@ class Partial < ActiveRecord::Base
 
 	def default_body
 		string = ""
-		MumboJumbo.use_language( self.working_language ) do
-			string = MumboJumbo.get_translation( self.name )
-		end
+		#MumboJumbo.use_language( self.working_language ) do
+		#	string = MumboJumbo.get_translation( self.name )
+		#end
 		string
 	end
 
