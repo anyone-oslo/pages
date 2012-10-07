@@ -46,7 +46,7 @@ require 'thinking_sphinx/deltas/delayed_delta'
 # -----
 
 # Included in lib/
-[:extensions, :acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
+[:acts_as_taggable, :language, :mumbojumbo, :feed_builder, :country_select].each do |lib|
 	require File.join(File.dirname(__FILE__), lib.to_s)
 end
 

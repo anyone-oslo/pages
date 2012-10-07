@@ -126,20 +126,6 @@ namespace :pages do
 				`cp #{slp_template} config/setup_load_paths.rb`
 			end
 
-			# Rack config
-			if !File.exists?('config.ru') || !(File.read('config.ru') =~ /sprockets/)
-				puts "* Rack config not found or wrong, installing default..."
-				rack_template = File.join(File.dirname(__FILE__), '../../../template/config.ru')
-				`cp #{rack_template} config.ru`
-			end
-
-			# Sprockets initializer
-			if !File.exists?('config/initializers/sprockets.rb')
-				puts "* Sprockets initializer not found, installing default..."
-				sprockets_template = File.join(File.dirname(__FILE__), '../../../template/config/initializers/sprockets.rb')
-				`cp #{sprockets_template} config/initializers/sprockets.rb`
-			end
-
 			# Bundler
 			if !File.exists?('Gemfile')
 				puts "* Gemfile not found, installing default..."
