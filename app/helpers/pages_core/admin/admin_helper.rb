@@ -70,7 +70,7 @@ module PagesCore::Admin::AdminHelper
 			output  = '<div class="field">'
 		end
 		output += "<label>#{label}" if label
-		if options[:errors]
+		if options[:errors] && options[:errors].any?
 			error = options[:errors]
 			error = error.last if error.kind_of? Array
 			output += ' <span class="error">' + error + '</span>'
@@ -80,6 +80,7 @@ module PagesCore::Admin::AdminHelper
 		output += field
 		output += "#{options[:check_box_description]}" if options[:check_box_description]
 		output += "</div>"
+		output.html_safe
 	end
 
 	def image_upload_field( form, label, method=nil, options={} )

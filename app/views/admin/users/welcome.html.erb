@@ -7,28 +7,28 @@
 	<p>Welcome to Pages! Before you can log on, we need to create the first user account. Please choose your desired username and password.</p>
 </div>
 
-<% form_for :user, @user, :method => :post, :url => { :action => :welcome } do |f| %>
+<%= form_for @user, :method => :post, :url => {:action => :welcome} do |f| %>
 
-	<%= labelled_field f.text_field( :realname ), "Your name", 
-		:errors => @user.errors[:realname] 
+	<%= labelled_field f.text_field(:realname), "Your name",
+		:errors => @user.errors[:realname]
 	%>
-	<%= labelled_field f.text_field( :email ), "Email address", 
-		:errors => @user.errors[:email] 
+	<%= labelled_field f.text_field(:email), "Email address",
+		:errors => @user.errors[:email]
 	%>
-	<%= labelled_field f.text_field( :username ), "Username", 
-		:errors => @user.errors[:username] 
+	<%= labelled_field f.text_field(:username), "Username",
+		:errors => @user.errors[:username]
 	%>
-	<%= labelled_field f.text_field( :password ), "Password", 
+	<%= labelled_field f.text_field(:password), "Password",
 		:description => link_to_function( "Click here", "jQuery('#user_password' ).val(random_password())" ) + " to generate a random password.",
-		:errors => @user.errors[:password] 
+		:errors => @user.errors[:password]
 	%>
-	<%= labelled_field f.text_field( :openid_url ), "OpenID URL", 
-		:errors => @user.errors[:openid_url] 
+	<%= labelled_field f.text_field(:openid_url), "OpenID URL",
+		:errors => @user.errors[:openid_url]
 	%>
 	<p>
 		<%= submit_tag 'Create' %>
 	</p>
-	
+
 <% end %>
 
 <script type="text/javascript">
