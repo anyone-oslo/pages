@@ -5,7 +5,7 @@ Bundler.require :default, :development
 
 #require 'capybara/rspec'
 
-Combustion.initialize! :active_record, :action_controller, :action_view, :action_mailer
+Combustion.initialize!
 
 require 'rspec/rails'
 #require 'capybara/rails'
