@@ -4,8 +4,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
 	before_filter :find_page, :only => [
 		:show, :edit, :preview, :update, :destroy, :reorder,
-		:add_image, :delete_image,
-		:delete_language, :delete_comment, :delete_presentation_image,
+		:delete_comment,
 		:import_xml
 	]
 	before_filter :application_languages
@@ -58,6 +57,11 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 		end
 
 		def news
+			# Redirect away if no news pages has been configured
+			unless Page.news_pages?
+				redirect_to admin_pages_url(:language => @language) and return
+			end
+
 			count_options = {
 				:drafts        => true,
 				:hidden        => true,
@@ -104,10 +108,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			redirect_to admin_pages_url(:language => @language)
 		end
 
-		def search
-			raise "Not implemented"
-		end
-
 		def reorder_pages
 			pages = params[:ids].map{|id| Page.find(id)}
 			PagesCore::CacheSweeper.disable do
@@ -141,6 +141,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			end
 		end
 
+		# TODO: Should be refactored
 		def new_news
 			new
 			render :action => :new
@@ -173,11 +174,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			@new_image ||= Image.new
 		end
 
-		def preview
-			@page.attributes = params[:page]
-			render :layout => false if request.xhr?
-		end
-
 		def update
 			params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 			if @page.update_attributes(params[:page])
@@ -203,14 +199,14 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 			@page = Page.find(params[:id])
 			@page.set_status(:deleted)
 			@page.save
-			redirect_to :action => :list
+			redirect_to admin_pages_url(:language => @language)
 		end
 
 		def set_status
 			@page = Page.find(params[:id])
 			@page.set_status(params[:status])
 			@page.save
-			redirect_to :action => :list
+			redirect_to admin_pages_url(:language => @language)
 		end
 
 		def delete_comment
@@ -220,12 +216,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 				flash[:notice] = "Comment deleted"
 			end
 			redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'comments')
-		end
-
-		# Remove a language from a page
-		def delete_language
-			@page.destroy_language(@language)
-			redirect_to admin_pages_url(:language => @language)
 		end
 
 		def reorder

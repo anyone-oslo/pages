@@ -4,7 +4,7 @@
 # and other common code for the Admin set of controllers.
 class PagesCore::AdminController < ApplicationController
 
-	before_filter :require_authentication, :except => [:new_password, :welcome]
+	before_filter :require_authentication
 	before_filter :build_admin_tabs
 	before_filter :restore_persistent_params
 	after_filter  :save_persistent_params

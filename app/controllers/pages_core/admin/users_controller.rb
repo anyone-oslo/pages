@@ -2,7 +2,8 @@
 
 class PagesCore::Admin::UsersController < Admin::AdminController
 
-	before_filter :find_user, :only => [:edit, :update, :show, :destroy, :delete_image, :update_openid]
+	before_filter :require_authentication, :except => [:new_password, :welcome, :create_first]
+	before_filter :find_user,       :only => [:edit, :update, :show, :destroy, :delete_image, :update_openid]
 	before_filter :verify_editable, :only => [:delete_image, :update, :destroy, :edit, :update_openid]
 
 	protected
@@ -41,49 +42,56 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 		end
 
 		def welcome
-			if User.count < 1
-				if request.get?
-					@user = User.new
-				else
-					attributes = params[:user].merge({:is_admin => true, :is_activated => true})
+			unless User.count == 0
+				raise "Account holder already created"
+			end
+			@user = User.new
+		end
 
-					unless attributes[:openid_url].blank?
-						new_openid_url = attributes[:openid_url]
-						attributes.delete(:openid_url)
-					end
+		def create_first
+			if User.count == 0
+				attributes = params[:user].merge({:is_admin => true, :is_activated => true})
 
-					@user = User.create(attributes)
-					if @user.valid?
-						@current_user = @user
-						@current_user.update_attribute(:last_login_at, Time.now)
-						session[:current_user_id] = @current_user.id
-						set_authentication_cookies
+				unless attributes[:openid_url].blank?
+					new_openid_url = attributes[:openid_url]
+					attributes.delete(:openid_url)
+				end
 
-						if new_openid_url
-							unless start_openid_session(new_openid_url,
-								:success   => update_openid_admin_user_url(@user),
-								:fail      => edit_admin_user_url(@user)
-							)
-								flash.now[:error] = "Not a valid OpenID URL"
-								render :action => :edit
-							end
+				@user = User.create(attributes)
+				if @user.valid?
+					@current_user = @user
+					@current_user.update_attribute(:last_login_at, Time.now)
+					session[:current_user_id] = @current_user.id
+					set_authentication_cookies
+
+					if new_openid_url
+						unless start_openid_session(new_openid_url,
+							:success   => update_openid_admin_user_url(@user),
+							:fail      => edit_admin_user_url(@user)
+						)
+							flash.now[:error] = "Not a valid OpenID URL"
+							render :action => :edit
 						end
 					end
 				end
 			else
 				raise "Account holder already created"
 			end
+			redirect_to admin_default_url and return
 		end
 
 		def new_password
-			if params[:username]
-				if user = User.find_by_username_or_email( params[:username] )
-					new_password = user.generate_new_password
-					user.save
-					AdminMailer.deliver_new_password( :user => user, :site_name => PagesCore.config( :site_name ), :password => new_password, :login_url => admin_default_url )
-					flash[:notice] = "A new password has been sent to your email address"
-					redirect_to "/admin" and return
-				end
+		end
+
+		def reset_password
+			if user = User.find_by_username_or_email(params[:username])
+				new_password = user.generate_new_password
+				user.save
+				AdminMailer.deliver_new_password( :user => user, :site_name => PagesCore.config( :site_name ), :password => new_password, :login_url => admin_default_url )
+				flash[:notice] = "A new password has been sent to your email address"
+				redirect_to "/admin" and return
+			else
+				redirect_to new_password_admin_users_url and return
 			end
 		end
 

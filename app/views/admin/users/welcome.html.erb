@@ -7,7 +7,7 @@
 	<p>Welcome to Pages! Before you can log on, we need to create the first user account. Please choose your desired username and password.</p>
 </div>
 
-<%= form_for @user, :method => :post, :url => {:action => :welcome} do |f| %>
+<%= form_for @user, :method => :post, :url => create_first_admin_users_path do |f| %>
 
 	<%= labelled_field f.text_field(:realname), "Your name",
 		:errors => @user.errors[:realname]
