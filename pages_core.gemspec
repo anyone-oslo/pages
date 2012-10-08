@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
 
   # ActiveRecord extensions
   s.add_dependency 'acts_as_list', '0.1.4'
-  s.add_dependency 'acts_as_tree', '0.1.1'
+  s.add_dependency 'acts_as_tree', '0.2.0'
 
   # reCAPTCHA
   s.add_dependency "recaptcha", '0.3.4'
