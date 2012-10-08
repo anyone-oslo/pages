@@ -543,7 +543,6 @@ class Page < ActiveRecord::Base
 		end
 	end
 
-	self.send :alias_method, :acts_as_tree_parent, :parent
 
 	# TODO: Port to Localizable
 	#alias :localizable_has_field? :has_field?
@@ -551,13 +550,15 @@ class Page < ActiveRecord::Base
 	#	self.localizable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
 	#end
 
+	alias_method :acts_as_tree_parent, :parent
+
 	# Get this page's parent page.
 	def parent
-		parent_page = acts_as_tree_parent
-		if parent_page && parent_page.kind_of?(Page)
-			parent_page.localize(self.locale)
+		parent = acts_as_tree_parent
+		if parent && parent.kind_of?(Page)
+			parent.localize(self.locale)
 		else
-			parent_page
+			parent
 		end
 	end
 	alias_method :parent_page, :parent
@@ -566,7 +567,7 @@ class Page < ActiveRecord::Base
 		tag_with(tag_list)
 	end
 
-	self.send :alias_method, :acts_as_tree_ancestors, :ancestors
+	alias_method :acts_as_tree_ancestors, :ancestors
 
 	# Finds this page's ancestors
 	def ancestors

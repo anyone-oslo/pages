@@ -37,8 +37,8 @@ module PagesCore
       #  page.locale # => 'en'
       #
       def localize(locale)
-        dupe = self.dup.localize!(locale)
-        (block_given?) ? (yield dupe) : dupe
+        clone = self.clone.localize!(locale)
+        (block_given?) ? (yield clone) : clone
       end
 
       # In-place variant of #localize.
@@ -53,12 +53,12 @@ module PagesCore
         self
       end
 
-      # attributes= from ActiveRecord is overridden to catch locale before
+      # assign_attributes from ActiveRecord is overridden to catch locale before
       # any other attributes are written. This enables the following construct:
       #
       #  Page.create(:name => 'My Page', :locale => 'en')
       #
-      def attributes=(new_attributes, guard_protected_attributes=true)
+      def assign_attributes(new_attributes, options={})
         if new_attributes.is_a?(Hash)
           attributes = new_attributes.stringify_keys
           self.locale = attributes['language'] if attributes.has_key?('language')
