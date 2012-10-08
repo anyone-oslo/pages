@@ -12,12 +12,11 @@ module ActiveRecord
 
 			module ClassMethods
 				def acts_as_taggable(options = {})
-					write_inheritable_attribute(:acts_as_taggable_options, {
+					class_attribute :acts_as_taggable_options
+					self.acts_as_taggable_options = {
 						:taggable_type => ActiveRecord::Base.send(:class_of_active_record_descendant, self).to_s,
 						:from => options[:from]
-					})
-
-					class_inheritable_reader :acts_as_taggable_options
+					}
 
 					has_many :taggings, :as => :taggable, :dependent => :destroy
 					has_many :tags, :through => :taggings
