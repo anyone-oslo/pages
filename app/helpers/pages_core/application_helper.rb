@@ -33,7 +33,7 @@ module PagesCore::ApplicationHelper
 				page = options[:id]
 			elsif options[:id]
 				page = Page.find(options[:id]) rescue nil
-				page ||= Page.find_by_slug_and_language(options[:id], @language)
+				page ||= Page.find_by_slug_and_locale(options[:id], @language)
 			elsif @page
 				page = @page
 			end
@@ -58,7 +58,7 @@ module PagesCore::ApplicationHelper
 		overwrite_params = {}
 		overwrite_params[:language] = new_language
 		if(params[:slug])
-			page = Page.find_by_slug_and_language(params[:slug], language)
+			page = Page.find_by_slug_and_locale(params[:slug], language)
 			page.working_language = new_language
 			overwrite_params[:slug] = page.slug.to_s
 			if overwrite_params[:slug] == ""

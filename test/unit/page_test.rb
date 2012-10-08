@@ -29,12 +29,12 @@ class PageTest < Test::Unit::TestCase
 	end
 
 	def test_find_by_slug
-		assert !Page.find_by_slug_and_language( 'home', :nor )
+		assert !Page.find_by_slug_and_locale( 'home', :nor )
 		# Search by legacy slug
-		assert_equal pages( :news ), Page.find_by_slug_and_language( 'latest-news', :eng )
+		assert_equal pages( :news ), Page.find_by_slug_and_locale( 'latest-news', :eng )
 		# Search by name
-		assert_equal pages( :front ), Page.find_by_slug_and_language( 'home', :eng )
-		assert_equal pages( :front ).translate( :nor ), Page.find_by_slug_and_language( 'hjem', :nor )
+		assert_equal pages( :front ), Page.find_by_slug_and_locale( 'home', :eng )
+		assert_equal pages( :front ).translate( :nor ), Page.find_by_slug_and_locale( 'hjem', :nor )
 	end
 
 end

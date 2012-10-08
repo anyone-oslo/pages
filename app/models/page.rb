@@ -149,8 +149,8 @@ class Page < ActiveRecord::Base
 		# Finds pages based on the given criteria. Only published pages are loaded by default, this can be overridden by passing the
 		# <tt>:drafts</tt>, <tt>:hidden</tt>, <tt>:deleted</tt> and/or <tt>:all</tt> parameters.
 		#
-		# The pages will have <tt>working_language</tt> set if <tt>:language</tt> is given, this is probably what you'll want to do.
-		# Only pages with translations for the given language will be returned unless <tt>:all_languages => true</tt> is specified.
+		# The pages will have <tt>locale</tt> set if <tt>:locale</tt> is given, this is probably what you'll want to do.
+		# Only pages with translations for the given locale will be returned unless <tt>:all_locales => true</tt> is specified.
 		#
 		# Usually, you'll want to load pages from the context of their parent, this is what <tt>Page.root_pages</tt> and <tt>Page#pages</tt> do.
 		#
@@ -160,8 +160,8 @@ class Page < ActiveRecord::Base
 		# * <tt>:deleted</tt>          - Include deleted pages.
 		# * <tt>:autopublish</tt>      - Include autopublish pages
 		# * <tt>:all</tt>              - Include all of the above.
-		# * <tt>:language</tt>         - Load only pages translated into this language.
-		# * <tt>:all_languages</tt>    - Load all pages regardless of language.
+		# * <tt>:locale</tt>           - Load only pages translated into this locale.
+		# * <tt>:all_locales</tt>      - Load all pages regardless of locale.
 		# * <tt>:order</tt>            - Sorting criteria, defaults to 'position'.
 		# * <tt>:parent(s)</tt>        - Parent page. Can be an id, a Page or a collection of both. If parent is <tt>:root</tt>, pages at the root level will be loaded.
 		# * <tt>:paginate</tt>         - Paginates results. Takes a hash with the format: {:page => 1, :per_page => 20}
@@ -217,9 +217,9 @@ class Page < ActiveRecord::Base
 			find_options[:include] = options[:include] if options[:include]
 			pages = Page.find(:all, find_options.merge(pagination_options))
 
-			# Set working language
-			if options[:language]
-				pages = pages.map{|p| p.working_language = options[:language]; p}
+			# Set locale
+			if options[:locale]
+				pages = pages.map{|p| p.locale = options[:locale]; p}
 			end
 
 			# Decorate with the pagination methods
@@ -347,11 +347,16 @@ class Page < ActiveRecord::Base
 		# Finds all news pages (pages with the news_page bit on).
 		#
 		# === Parameters
-		# * <tt>:language</tt> - String to set as working language for the resulting pages.
+		# * <tt>:locale</tt> - Set locale for the resulting pages.
 		def news_pages(options={})
 			ps = Page.find(:all, :conditions => ['news_page = 1 AND status < 4'], :order => 'published_at ASC')
-			if options[:language]
-				ps = ps.map{|p| p.working_language = options[:language]; p}
+			if options.has_key?(:language)
+				options[:locale] = options[:language]
+				options.delete(:language)
+				logger.warn "DEPRECEATED: Option :language is deprecated, use :locale"
+			end
+			if options[:locale]
+				ps = ps.map{|p| p.locale = options[:locale]; p}
 			end
 			ps
 		end
@@ -370,15 +375,15 @@ class Page < ActiveRecord::Base
 		end
 
 
-		# Find a page by slug and language
-		def find_by_slug_and_language(slug, language)
-			language = language.to_s
-			slug     = slug.to_s
+		# Find a page by slug and locale
+		def find_by_slug_and_locale(slug, locale)
+			locale = locale.to_s
+			slug   = slug.to_s
 
 			# Search legacy slug localizations
 			if localization = Localization.find(
 					:first,
-					:conditions => ['name = "slug" AND localizable_type = ? AND body = ? AND language = ?', self.to_s, slug, language]
+					:conditions => ['name = "slug" AND localizable_type = ? AND body = ? AND locale = ?', self.to_s, slug, locale]
 				)
 				page = localization.localizable
 
@@ -386,16 +391,17 @@ class Page < ActiveRecord::Base
 			else
 				localizations = Localization.find(
 					:all,
-					:conditions => [ "name = 'name' AND localizable_type = '#{self.to_s}' AND language = ?", language]
+					:conditions => [ "name = 'name' AND localizable_type = '#{self.to_s}' AND locale = ?", locale]
 				)
 				localizations = localizations.select{|tb| Page.string_to_slug( tb.body ) == slug}
 				if localizations.length > 0
 					page = localizations.first.localizable
 				end
 			end
-
-			page ? page.translate(language) : nil
+			page ? page.localize(locale) : nil
 		end
+    alias :find_by_slug_and_language :find_by_slug_and_locale
+
 
 		# Convert a string to an URL friendly slug
 		def string_to_slug(string)
@@ -404,9 +410,9 @@ class Page < ActiveRecord::Base
 		end
 
 		# Find all published and feed enabled pages
-		def enabled_feeds(language, options={})
+		def enabled_feeds(locale, options={})
 			conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
-			Page.find(:all, :conditions => conditions).collect{|p| p.working_language = language.to_s; p}
+			Page.find(:all, :conditions => conditions).collect{|p| p.locale = locale.to_s; p}
 		end
 
 		protected
@@ -424,16 +430,27 @@ class Page < ActiveRecord::Base
 					end
 				end
 
-				options[:all]           ||= false
-				options[:deleted]       ||= options[:all]
-				options[:hidden]        ||= options[:all]
-				options[:drafts]        ||= options[:all]
-				options[:autopublish]   ||= options[:all]
-				options[:all_languages] ||= false
-				options[:comments]      ||= false
-				options[:order]         ||= "position"
-				options[:parent]        = options[:parents] if options[:parents]
-				options[:include]       ||= [:localizations, :categories, :image, :author]
+				if options.has_key?(:language)
+					options[:locale] = options[:language]
+					options.delete(:language)
+					logger.warn "DEPRECEATED: Option :language is deprecated, use :locale"
+				end
+				if options.has_key?(:all_languages)
+					options[:all_locales] = options[:all_languages]
+					options.delete(:all_languages)
+					logger.warn "DEPRECEATED: Option :all_languages is deprecated, use :all_locales"
+				end
+
+				options[:all]         ||= false
+				options[:deleted]     ||= options[:all]
+				options[:hidden]      ||= options[:all]
+				options[:drafts]      ||= options[:all]
+				options[:autopublish] ||= options[:all]
+				options[:all_locales] ||= false
+				options[:comments]    ||= false
+				options[:order]       ||= "position"
+				options[:parent]      = options[:parents] if options[:parents]
+				options[:include]     ||= [:localizations, :categories, :image, :author]
 
 				find_options = {
 					:conditions => [[]]
@@ -486,11 +503,11 @@ class Page < ActiveRecord::Base
 				end
 
 				# Language check
-				if options[:language] && !options[:all_languages]
+				if options[:locale] && !options[:all_locales]
 					find_options[:joins] ||= ""
-					options[:language] = options[:language].to_s
-					raise "Not a valid language code" unless options[:language] =~ /^[\w]{2,3}$/
-					find_options[:joins] += "JOIN `localizations` ON `localizations`.localizable_type = \"Page\" AND `localizations`.localizable_id = `pages`.id AND `localizations`.language = '#{options[:language]}' "
+					options[:locale] = options[:locale].to_s
+					raise "Not a valid locale" unless options[:locale] =~ /^[\w]{2,3}$/
+					find_options[:joins] += "JOIN `localizations` ON `localizations`.localizable_type = \"Page\" AND `localizations`.localizable_id = `pages`.id AND `localizations`.locale = '#{options[:locale]}' "
 					find_options[:group] = "`pages`.id"
 				end
 
@@ -538,7 +555,7 @@ class Page < ActiveRecord::Base
 	def parent
 		parent_page = acts_as_tree_parent
 		if parent_page && parent_page.kind_of?(Page)
-			parent_page.translate(self.working_language)
+			parent_page.localize(self.locale)
 		else
 			parent_page
 		end
@@ -554,8 +571,8 @@ class Page < ActiveRecord::Base
 	# Finds this page's ancestors
 	def ancestors
 		ancestors = self.acts_as_tree_ancestors
-		if self.working_language
-			ancestors = ancestors.map{|a| a.translate(self.working_language) }
+		if self.locale
+			ancestors = ancestors.map{|a| a.localize(self.locale) }
 		end
 		ancestors
 	end
@@ -645,21 +662,21 @@ class Page < ActiveRecord::Base
 	# Get subpages
 	def pages(options={})
 		return [] if self.new_record? && !options.has_key?(:parent)
-		options[:parent]   ||= self.id
+		options[:parent] ||= self.id
 		if self.news_page?
-			options[:order]    ||= "pinned DESC, #{self.content_order}"
+			options[:order] ||= "pinned DESC, #{self.content_order}"
 		else
-			options[:order]    ||= self.content_order
+			options[:order] ||= self.content_order
 		end
-		options[:language] ||= self.working_language if self.working_language
+		options[:locale] ||= self.locale if self.locale
 		Page.get_pages(options)
 	end
 
 	# Count subpages
 	def count_pages(options={})
-		options[:parent]   ||= self.id
-		options[:order]    ||= self.content_order
-		options[:language] ||= self.working_language if self.working_language
+		options[:parent] ||= self.id
+		options[:order]  ||= self.content_order
+		options[:locale] ||= self.locale if self.locale
 		Page.count_pages(options)
 	end
 	alias_method :pages_count, :count_pages
@@ -823,7 +840,7 @@ class Page < ActiveRecord::Base
 			else
 				author = self.author
 			end
-			page = Page.new.translate(self.working_language)
+			page = Page.new.localize(self.locale)
 			page.author = author
 			if page.update_attributes(attributes)
 				created_pages << page
