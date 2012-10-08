@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-# TODO: Fix DynamicImage
-#class PagesCore::ImagesController < DynamicImage::ImagesController
-class PagesCore::ImagesController < ApplicationController
+class PagesCore::ImagesController < DynamicImage::ImagesController
 	caches_page :view_image
 
 	def render_missing_image

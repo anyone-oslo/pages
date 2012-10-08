@@ -2,8 +2,7 @@
 
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
-	# TODO: reinclude DynamicImageHelper
-	#include DynamicImage::DynamicImageHelper
+	include DynamicImage::DynamicImageHelper
 	include PagesCore::PluginAssetsHelper
 	include PagesCore::VideoHelper
 	include PagesCore::HeadTagsHelper
