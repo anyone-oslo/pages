@@ -56,9 +56,9 @@
 		<% if @page_description || @content_tabs %>
 			<div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
 				<% if @page_description_links -%>
-				<div class="links"><%= @page_description_links %></div>
+				<div class="links"><%= @page_description_links.html_safe %></div>
 				<% end %>
-				<h3><%= @page_description || @page_title %></h3>
+				<h3><%= (@page_description || @page_title).html_safe %></h3>
 				<% if @content_tabs %>
 					<ul id="content-tabs">
 						<% @content_tabs.map do |t| %>

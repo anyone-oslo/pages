@@ -56,7 +56,7 @@ module PagesCore::Admin::AdminHelper
 	#   <% end %>
 	#
 	def labelled_field( field, label=nil, options={} )
-		if options[:errors]
+		if options[:errors] && options[:errors].any?
 			output  = '<div class="field field_with_errors">'
 		else
 			output  = '<div class="field">'
@@ -136,16 +136,16 @@ module PagesCore::Admin::AdminHelper
 		end
 	end
 
-	def page_title( title )
+	def page_title(title)
 		@page_title = title
 	end
 
-	def page_description( string, class_name=nil )
+	def page_description(string, class_name=nil)
 		@page_description = string
 		@page_description_class = class_name
 	end
 
-	def page_description_links( links )
+	def page_description_links(links)
 		@page_description_links = links
 	end
 

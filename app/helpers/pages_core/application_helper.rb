@@ -168,13 +168,13 @@ module PagesCore::ApplicationHelper
 		options = {
 			:field_tag => 'p'
 		}.merge(options)
-		if options[:errors]
+		if options[:errors] && options[:errors].any?
 			output  = "<#{options[:field_tag]} class=\"field field_with_errors\">"
 		else
 			output  = "<#{options[:field_tag]} class=\"field\">"
 		end
 		output += "<label>#{label}" if label
-		if options[:errors]
+		if options[:errors] && options[:errors].any?
 			error = options[:errors]
 			error = error.last if error.kind_of? Array
 			output += ' <span class="error">' + error.to_s[] + '</span>'
