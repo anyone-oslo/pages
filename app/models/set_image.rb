@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class SetImage < ActiveRecord::Base
-	set_table_name  'images_imagesets'
+	self.table_name = 'images_imagesets'
 
 	acts_as_list :scope => :imageset_id
 
