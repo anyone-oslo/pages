@@ -72,14 +72,14 @@ Rails.application.routes.draw do
 				match 'new/:parent', :action => 'new'
 
 				# Page Images
-				resources :page_images do
+				resources :images, :controller => 'page_images' do
 					collection do
 						put 'reorder'
 					end
 				end
 
 				# Page Files
-				resources :page_files do
+				resources :files, :controller => 'page_files' do
 					collection do
 						get 'reorder'
 					end
