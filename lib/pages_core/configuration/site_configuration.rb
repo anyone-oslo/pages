@@ -13,14 +13,17 @@ module PagesCore
 				end
 			end
 
-			handle :newsletter do |conf, setting, *args|
-				if setting.to_s =~ /\?$/
-					value = conf.get(:newsletter, setting.to_s.gsub(/\?$/, '').to_sym)
-					(value && value != :disabled) ? true : false
-				else
-					(args && args.length > 0) ? conf.set([:newsletter, setting], *args) : conf.get(:newsletter, setting)
-				end
-			end
+			# Example scope:
+			# config.newsletter.template :disabled
+			#
+			#handle :newsletter do |conf, setting, *args|
+			#	if setting.to_s =~ /\?$/
+			#		value = conf.get(:newsletter, setting.to_s.gsub(/\?$/, '').to_sym)
+			#		(value && value != :disabled) ? true : false
+			#	else
+			#		(args && args.length > 0) ? conf.set([:newsletter, setting], *args) : conf.get(:newsletter, setting)
+			#	end
+			#end
 
 			def templates
 				PagesCore::Templates.configuration

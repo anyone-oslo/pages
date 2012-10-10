@@ -65,12 +65,6 @@ namespace :pages do
 	task :error_reports => "pages:error_reports:list" do
 	end
 
-	desc "Deliver mailing queue"
-	task :deliver_mailings => :environment do
-		puts "Delivering mailings"
-		Mailing.do_queue
-	end
-
 	desc "Refresh RSS feeds"
 	task :refresh_feeds => :environment do
 		puts "Refreshing external feeds"

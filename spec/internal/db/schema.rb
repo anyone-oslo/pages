@@ -130,35 +130,6 @@ ActiveRecord::Schema.define(:version => 20120621112244) do
     t.integer  "user_id"
   end
 
-  create_table "mail_subscribers", :force => true do |t|
-    t.string   "email"
-    t.datetime "created_at"
-    t.string   "group",      :default => "Default"
-  end
-
-  create_table "mailings", :force => true do |t|
-    t.string   "recipients"
-    t.string   "sender"
-    t.string   "subject"
-    t.text     "body"
-    t.datetime "created_at"
-    t.boolean  "failed",       :default => false
-    t.string   "content_type"
-    t.boolean  "in_progress",  :default => false, :null => false
-  end
-
-  create_table "mailouts", :force => true do |t|
-    t.string   "subject"
-    t.string   "sender"
-    t.string   "template"
-    t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "image_id"
-    t.text     "groups"
-    t.string   "host"
-  end
-
   create_table "page_comments", :force => true do |t|
     t.integer  "page_id"
     t.string   "remote_ip"

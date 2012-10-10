@@ -17,8 +17,6 @@ PagesCore.configure do |config|
 	#config.recaptcha :enabled           # Enable ReCAPTCHA
 	#config.page_cache :disabled         # Disable page cache (not recommended)
 	#config.domain_based_cache :enabled	 # Enable domain based page cache (for multiple domains)
-	#config.newsletter.template :enabled # Enable template based newsletters
-	#config.newsletter.image :enabled    # Enable image in newsletters
 
 	# Will try to load images from production if they are missing in development
 	#config.image_fallback_url "http://<%= @site_domain %>/"

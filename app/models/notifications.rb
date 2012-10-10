@@ -22,14 +22,4 @@ class Notifications < ActionMailer::Base
 	#	 self.generic_mailer( options )
 	# end
 
-	def newsletter( sender, recipients, subject, message, ctype )
-		@from       = sender
-		@subject    = subject
-		@body       = { :message => message }
-		@recipients = recipients
-		@sent_on    = Time.now
-		@headers    = {}
-		content_type ctype
-	end
-
 end

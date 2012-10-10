@@ -112,8 +112,6 @@ module PagesCore
 
 			config.localizations       :disabled
 			config.page_cache          :enabled
-			config.newsletter.template :disabled
-			config.newsletter.image    :disabled
 			config.text_filter         :textile
 
 			#config.comment_notifications [:author, 'your@email.com']
