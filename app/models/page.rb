@@ -10,15 +10,18 @@ class Page < ActiveRecord::Base
 
 	belongs_to_image        :image
 	has_many :page_images,  :order => 'position ASC'
-	has_many :images,       :through => :page_images, :order => 'position ASC', :conditions => '`page_images`.`primary` = 0'
+	has_many :images,
+	         :through => :page_images,
+	         :order => 'position ASC',
+	         :conditions => '`page_images`.`primary` = 0'
 
 	has_many :comments, :class_name => 'PageComment', :dependent => :destroy
 	has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
 
 	acts_as_list :scope => :parent_page
 	acts_as_tree :order => :position, :foreign_key => :parent_page_id
+	acts_as_taggable
 
-	#acts_as_textable :name, :body, :excerpt, :headline, :boxout, :allow_any => true
   localizable do
     attribute :name
     attribute :body
@@ -27,10 +30,8 @@ class Page < ActiveRecord::Base
     attribute :boxout
   end
 
-	acts_as_taggable
-
 	# Page status labels
-	STATUS_LABELS = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
+	STATUS_LABELS         = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
 	AUTOPUBLISH_FUZZINESS = 2.minutes
 
 	validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
@@ -550,6 +551,10 @@ class Page < ActiveRecord::Base
 	#	self.localizable_has_field?(field_name, options) || self.template_config.all_blocks.include?(field_name.to_sym)
 	#end
 
+	def tag_list=(tag_list)
+		tag_with(tag_list)
+	end
+
 	alias_method :acts_as_tree_parent, :parent
 
 	# Get this page's parent page.
@@ -562,10 +567,6 @@ class Page < ActiveRecord::Base
 		end
 	end
 	alias_method :parent_page, :parent
-
-	def tag_list=(tag_list)
-		tag_with(tag_list)
-	end
 
 	alias_method :acts_as_tree_ancestors, :ancestors
 
