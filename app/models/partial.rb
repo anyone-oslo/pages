@@ -5,7 +5,9 @@ class Partial < ActiveRecord::Base
 	validates_presence_of :name
 	validates_uniqueness_of :name
 
-	acts_as_textable [ "body" ], :allow_any => false
+  localizable do
+    attribute :body
+  end
 
 	class << self
 		attr_accessor :allowed_names

@@ -19,7 +19,9 @@ class PageFile < ActiveRecord::Base
 
 	acts_as_list :scope => :page
 
-	acts_as_textable [ "description" ], :allow_any => false
+  localizable do
+    attribute :description
+  end
 
 	validate do |file|
 		file.name = File.basename(file.filename, ".*") unless file.name?
