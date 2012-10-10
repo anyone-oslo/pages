@@ -65,20 +65,6 @@ namespace :pages do
 	task :error_reports => "pages:error_reports:list" do
 	end
 
-	desc "Refresh RSS feeds"
-	task :refresh_feeds => :environment do
-		puts "Refreshing external feeds"
-		PagesCore::CacheSweeper.once do
-			Feed.find(:all).each do |feed|
-				begin
-					feed.refresh
-				rescue
-					puts "!!! Error parsing feed #{feed.url} - #{$!.to_s}"
-				end
-			end
-		end
-	end
-
 	desc "Autopublish due pages"
 	task :autopublish => :environment do
 		published = Page.autopublish!
@@ -86,7 +72,7 @@ namespace :pages do
 	end
 
 	desc "Perform routine maintenance"
-	task :maintenance => [:autopublish, :clean_sessions, :refresh_feeds, :deliver_mailings] do
+	task :maintenance => [:autopublish] do
 	end
 
 end
