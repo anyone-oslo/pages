@@ -43,17 +43,25 @@ require 'thinking_sphinx/deltas/delayed_delta'
 # -----
 
 # Included in lib/
-[:acts_as_taggable, :language].each do |lib|
-	require File.join(File.dirname(__FILE__), lib.to_s)
-end
+require 'acts_as_taggable'
+require 'language'
 
 # Load ./pages_core/*.rb
-require File.join(File.dirname(__FILE__), 'pages_core', 'plugin')
-Dir.entries(File.join(File.dirname(__FILE__), 'pages_core')).select{|f| f =~ /\.rb$/}.map{|f| File.basename(f, '.*')}.each do |lib|
-	unless lib =~ /^bootstrap/
-		require File.join(File.dirname(__FILE__), 'pages_core', lib)
-	end
-end
+require 'pages_core/plugin'
+
+require 'pages_core/array_extensions'
+require 'pages_core/cache_sweeper'
+require 'pages_core/configuration'
+require 'pages_core/engine'
+require 'pages_core/form_builder'
+require 'pages_core/hash_extensions'
+require 'pages_core/localizable'
+require 'pages_core/methoded_hash'
+require 'pages_core/pages_plugin'
+require 'pages_core/paginates'
+require 'pages_core/string_extensions'
+require 'pages_core/templates'
+require 'pages_core/version'
 
 module PagesCore
 	class << self

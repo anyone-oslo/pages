@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require File.join(File.dirname(__FILE__), 'templates/block_configuration')
-require File.join(File.dirname(__FILE__), 'templates/configuration')
-require File.join(File.dirname(__FILE__), 'templates/template_configuration')
+require 'pages_core/templates/block_configuration'
+require 'pages_core/templates/configuration'
+require 'pages_core/templates/template_configuration'
 
 module PagesCore
 	module Templates

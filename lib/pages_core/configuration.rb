@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require File.join(File.dirname(__FILE__), 'configuration/handler')
-require File.join(File.dirname(__FILE__), 'configuration/proxy')
-require File.join(File.dirname(__FILE__), 'configuration/site_configuration')
+require 'pages_core/configuration/handler'
+require 'pages_core/configuration/proxy'
+require 'pages_core/configuration/site_configuration'
 
 module PagesCore
 	module Configuration
