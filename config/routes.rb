@@ -88,7 +88,6 @@ Rails.application.routes.draw do
 	#match '/admin' => 'admin#redirect', :as => 'admin_default'
 
 	# Legacy routes
-	match '/xml/:language/:action', :controller => 'xml'
 	match '/comments/:action/:type/:id', :controller => 'comments'
 
 end
