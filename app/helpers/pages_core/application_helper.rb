@@ -7,16 +7,6 @@ module PagesCore::ApplicationHelper
 	include PagesCore::VideoHelper
 	include PagesCore::HeadTagsHelper
 
-	def i18n(string)
-		language = @language || Language.default
-		begin
-			translated = @@i18n_table[string.downcase][language]
-			translated || string
-		rescue
-			string
-		end
-	end
-
 	def indent(string, level=0)
 		indent_string = ""; level.times{indent_string += "\t"}
 		string.split("\n").map{|line| "#{indent_string}#{line}"}.join("\n")
@@ -179,16 +169,6 @@ module PagesCore::ApplicationHelper
 		output += "</#{options[:field_tag]}>"
 	end
 
-
-	# Generate HTML for a text area field.
-	def labelled_body_field(field, label=nil, options={})
-		if options[:errors]
-			error = options[:errors]
-			error = error.last if error.kind_of? Array
-		end
-		error ||= nil
-		render :partial => 'common/body_field', :locals => { :field => field, :label => label, :error => error }
-	end
 
     # Truncate string to max_length, retaining words. If the first word is shorter than max_length,
     # it will be shortened. An optional end_string can be supplied, which will be appended to the
