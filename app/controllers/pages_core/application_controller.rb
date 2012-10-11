@@ -17,7 +17,6 @@ class PagesCore::ApplicationController < ActionController::Base
 
 	before_filter :domain_cache
 	before_filter :authenticate,               :except => SKIP_FILTERS
-	before_filter :load_account,               :except => SKIP_FILTERS
 	before_filter :get_language,               :except => SKIP_FILTERS
 	after_filter  :set_headers,                :except => SKIP_FILTERS
 	after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
@@ -116,14 +115,6 @@ class PagesCore::ApplicationController < ActionController::Base
 				redirect_to :back
 			rescue #RedirectBackError
 				redirect_to options, response_status
-			end
-		end
-
-		# Loads the @account model, creating it if necessary.
-		# This method is automatically run from a before_filter.
-		def load_account
-			if @account = Account.find_or_create
-				PagesCore.config(:site_name, @account.name)
 			end
 		end
 

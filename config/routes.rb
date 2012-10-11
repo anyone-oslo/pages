@@ -29,9 +29,6 @@ Rails.application.routes.draw do
 
 	namespace :admin do
 
-		# Accounts
-		resources :accounts
-
 		# Images
 		resources :images
 

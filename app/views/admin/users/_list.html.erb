@@ -6,10 +6,9 @@
 		<th></th>
 	</tr>
 <% @users.each do |user| -%>
-	<tr class="<%= 
+	<tr class="<%=
 		classes = []
-		#classes << "active" if user.account_holder? 
-		#classes << "disabled" unless user.is_activated? 
+		#classes << "disabled" unless user.is_activated?
 		classes.join( " " )
 	 %>">
 		<td>
@@ -31,10 +30,9 @@
 			<% end -%>
 		</td>
 		<td class="note">
-			<%= 
+			<%=
 				notes = []
-				notes << "Account holder" if user.account_holder? 
-				notes << "Deactivated" unless user.is_activated? 
+				notes << "Deactivated" unless user.is_activated?
 				notes.join( ", " )
 			%>
 		</td>

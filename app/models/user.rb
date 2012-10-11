@@ -241,7 +241,7 @@ class User < ActiveRecord::Base
 	def editable_by?(user)
 		return false unless user
 		return false if !user.is_special? && self.is_special?
-		( user == self or user.is_special? or user.account_holder? or user.is_super_admin?) ? true : false
+		(user == self or user.is_special? or user.is_super_admin?) ? true : false
 	end
 
 	# Is this user currently online?
@@ -253,13 +253,8 @@ class User < ActiveRecord::Base
 		(self.email =~ /^(inge|thomas|alexander)@manualdesign\.no$/) ? true : false
 	end
 
-	def account_holder?
-		account = Account.find_or_create
-		(account && account.account_holder == self) ? true : false
-	end
-
 	def is_deletable?
-		(!self.is_special? && !self.account_holder?) ? true : false
+		!self.is_special?
 	end
 
 	# Purge persistent params

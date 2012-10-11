@@ -11,19 +11,6 @@
 
 ActiveRecord::Schema.define(:version => 20120621112244) do
 
-  create_table "accounts", :force => true do |t|
-    t.string   "name"
-    t.string   "plan"
-    t.string   "key"
-    t.text     "billing_address"
-    t.integer  "account_holder_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "last_billed_at"
-    t.boolean  "is_activated",      :default => true, :null => false
-    t.string   "domain"
-  end
-
   create_table "album_images", :force => true do |t|
     t.integer  "album_id"
     t.integer  "image_id"
