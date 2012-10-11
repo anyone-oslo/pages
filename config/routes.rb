@@ -2,9 +2,6 @@
 
 Rails.application.routes.draw do
 
-	# DynamicText
-	match '/dynamic_text/:text_format/:text.png' => 'dynamic_text#show', :as => 'dynamic_text'
-
 	# Pages
 	resources :pages, :path => '/pages/:language' do
 		collection do
