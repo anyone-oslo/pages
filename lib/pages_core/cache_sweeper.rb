@@ -25,7 +25,7 @@ module PagesCore
 				default = MethodedHash.new
 				default[:cache_path] = File.join(File.dirname(__FILE__), '../../../../../public/cache')
 				# TODO: Fix DynamicImage
-				default[:observe]    = [:page, :page_comment, :partial, :image]
+				default[:observe]    = [:page, :page_comment, :image]
 				default[:patterns]   = [/^\/index\.[\w]+$/, /^\/pages\/[\w]{3}\/(.*)$/, /^\/[\w]{3}\/(.*)$/]
 				default
 			end

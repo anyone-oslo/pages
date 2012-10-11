@@ -94,11 +94,6 @@ module PagesCore::ApplicationHelper
 		date_string
 	end
 
-	def fragment(name)
-		Partial.find_by_name(name).translate(@language).body.to_html rescue ""
-	end
-	alias_method :partial, :fragment
-
 	def page_link(page, options={})
 		page.translate( @language ) do |p|
 			options[:title] ||= p.name.to_s

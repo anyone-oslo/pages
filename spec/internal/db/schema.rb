@@ -167,12 +167,6 @@ ActiveRecord::Schema.define(:version => 20120621112244) do
   add_index "pages_categories", ["category_id"], :name => "index_pages_categories_on_category_id"
   add_index "pages_categories", ["page_id"], :name => "index_pages_categories_on_page_id"
 
-  create_table "partials", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "production_dates", :force => true do |t|
     t.integer  "production_id"
     t.string   "venue"
