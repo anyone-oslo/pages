@@ -20,13 +20,10 @@ require 'action_mailer'
 
 require "bcrypt"
 require 'vector2d'
-require 'enumerable_mapper'
-require 'simple-rss'
 require 'RedCloth'
 require 'daemon-spawn'
 require 'pages_console'
 require 'openid'
-require 'httparty'
 require 'delayed_job'
 
 require 'dynamic_image'

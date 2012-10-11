@@ -25,13 +25,11 @@ Gem::Specification.new do |s|
   s.add_dependency "bcrypt-ruby"
   s.add_dependency 'capistrano'
   s.add_dependency 'vector2d'
-  s.add_dependency 'enumerable_mapper'
-  s.add_dependency 'simple-rss', '1.2.3'
   s.add_dependency 'RedCloth', '4.2.9'
   s.add_dependency 'daemon-spawn', '0.2.0'
   s.add_dependency 'pages_console'
   s.add_dependency 'ruby-openid'
-  s.add_dependency 'httparty', '0.6.1'
+  s.add_dependency 'httparty', '0.6.1' # For Campfire
   s.add_dependency 'delayed_job', '3.0.3'
 
   s.add_dependency 'rmagick', '2.12.2'

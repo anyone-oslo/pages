@@ -333,7 +333,7 @@ class Page < ActiveRecord::Base
 
 			pages_count = ActiveSupport::OrderedHash.new
 			ActiveRecord::Base.connection.execute(pages_count_query).each do |row|
-				year, month, page_count = row.mapped.to_i
+				year, month, page_count = row.map{|r| r.to_i}
 				(pages_count[year] ||= ActiveSupport::OrderedHash.new)[month] = page_count
 			end
 			pages_count

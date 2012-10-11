@@ -7,7 +7,7 @@ class SmsSubscriber < ActiveRecord::Base
 	class << self
 
 		def groups
-			self.find_by_sql("SELECT DISTINCT m.group FROM sms_subscribers m").mapped.group
+      self.find_by_sql("SELECT DISTINCT m.group FROM sms_subscribers m").map{|s| s.group}
 		end
 
 	end
