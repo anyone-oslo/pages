@@ -9,14 +9,6 @@ module Sprockets
       #sprockets.css_compressor  = YUI::CssCompressor.new
       #sprockets.js_compressor   = YUI::JavaScriptCompressor.new
 
-      Sprockets::Helpers.configure do |config|
-        config.environment = sprockets
-        config.prefix      = '/assets'
-        config.digest      = false
-        config.manifest    = Sprockets::Manifest.new(sprockets, Rails.root.join("public", "assets", "manifest.json"))
-        config.public_path = Rails.root.join('public')
-      end
-
       sprockets
     end
   end
@@ -25,6 +17,15 @@ module Sprockets
     @manifest ||= Sprockets::Manifest.new(env, Rails.root.join("public", "assets", "manifest.json"))
   end
 end
+
+Sprockets::Helpers.configure do |config|
+  config.environment = Sprockets.env
+  config.prefix      = '/assets'
+  config.digest      = false
+  config.manifest    = Sprockets.manifest
+  config.public_path = Rails.root.join('public')
+end
+
 
 # This controls whether or not to use "debug" mode with sprockets.  In debug mode,
 # asset tag helpers (like javascript_include_tag) will output the non-compiled
