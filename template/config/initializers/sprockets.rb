@@ -2,11 +2,21 @@ module Sprockets
   def self.env
     @env ||= begin
       sprockets = Sprockets::Environment.new
+      sprockets.append_path 'app/assets/images'
       sprockets.append_path 'app/assets/javascripts'
       sprockets.append_path 'app/assets/stylesheets'
       sprockets.append_plugin_paths
-      sprockets.css_compressor  = YUI::CssCompressor.new
-      sprockets.js_compressor   = YUI::JavaScriptCompressor.new
+      #sprockets.css_compressor  = YUI::CssCompressor.new
+      #sprockets.js_compressor   = YUI::JavaScriptCompressor.new
+
+      Sprockets::Helpers.configure do |config|
+        config.environment = sprockets
+        config.prefix      = '/assets'
+        config.digest      = false
+        config.manifest    = Sprockets::Manifest.new(sprockets, Rails.root.join("public", "assets", "manifest.json"))
+        config.public_path = Rails.root.join('public')
+      end
+
       sprockets
     end
   end
