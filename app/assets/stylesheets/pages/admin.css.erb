@@ -41,7 +41,7 @@ body html {
 	margin: 0;
 	padding: 16px 32px;
 	display: block;
-	background: #e7f3f9 url(/assets/pages/admin/description-bg.gif) repeat-x;
+	background: #e7f3f9 url('<%= asset_path "pages/admin/description-bg.gif" %>') repeat-x;
 	border-bottom: 1px solid #d4eaf4;
 	color: #000;
 }
@@ -124,7 +124,7 @@ table.show th, td {
 }
 
 #flash-error {
-	background: #c00007 url(/assets/pages/admin/flash-error-bg.gif) repeat-x;
+	background: #c00007 url('<%= asset_path "pages/admin/flash-error-bg.gif" %>') repeat-x;
 	border-bottom: 1px solid #9c0002;
 	color: #fff299;
 	font-weight: bold;

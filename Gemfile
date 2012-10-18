@@ -31,12 +31,13 @@ gem 'dynamic_image-pages', :require => 'dynamic_image'
 #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
 # Assets
+gem 'sprockets', '2.4.5'
+gem 'sprockets-plugin'
+gem 'sprockets-helpers'
 gem 'sass', '3.2.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.2.0'
 gem 'coffee-script-source', '1.2.0'
-gem 'sprockets', '2.4.5'
-gem 'sprockets-plugin'
 gem 'yui-compressor', :require => 'yui/compressor'
 
 # ActiveRecord extensions
