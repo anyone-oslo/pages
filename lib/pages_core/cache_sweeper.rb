@@ -23,7 +23,7 @@ module PagesCore
 			# Returns the default configuration.
 			def default_config
 				default = MethodedHash.new
-				default[:cache_path] = File.join(File.dirname(__FILE__), '../../../../../public/cache')
+				default[:cache_path] = ActionController::Base.page_cache_directory
 				default[:observe]    = [:page, :feed_item, :feed, :page_comment, :partial, :image]
 				default[:patterns]   = [/^\/index\.[\w]+$/, /^\/pages\/[\w]{3}\/(.*)$/, /^\/[\w]{3}\/(.*)$/]
 				default
