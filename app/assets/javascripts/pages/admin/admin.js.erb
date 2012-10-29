@@ -526,6 +526,7 @@ PagesAdmin.contentTabs = {
 				jQuery('#content-tabs a').each(function(){
 					jQuery(this).click(function(){
 						PagesAdmin.contentTabs.showFromURL(this.href);
+						return false;
 					});
 				});
 			}
