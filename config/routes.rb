@@ -6,8 +6,8 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.connect 'pages/:language/:id/add_comment',        :controller => 'pages', :action => 'add_comment', :requirements => { :id => /[\d]+.*/ }
 	map.connect 'pages/:id',                              :controller => 'pages', :action => 'show', :requirements => { :id => /[\d]+.*/ }
+	map.root_page 'pages/:language',                        :controller => 'pages', :action => 'index'
 	map.formatted_pages 'pages/:language/index.:format',  :controller => 'pages', :action => 'index'
-	map.connect 'pages/:language',                        :controller => 'pages', :action => 'index'
 	map.connect 'pages/:language/sitemap.xml',            :controller => 'pages', :action => 'sitemap'
 	map.connect 'pages/:language/search',                 :controller => 'pages', :action => 'search'
 	map.page    'pages/:language/:id',                    :controller => 'pages', :action => 'show'
