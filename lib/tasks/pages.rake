@@ -67,19 +67,19 @@ namespace :pages do
 
 	desc "Deliver mailing queue"
 	task :deliver_mailings => :environment do
-		puts "Delivering mailings"
+		Rails.logger.info "Delivering mailings"
 		Mailing.do_queue
 	end
 
 	desc "Refresh RSS feeds"
 	task :refresh_feeds => :environment do
-		puts "Refreshing external feeds"
+		Rails.logger.info "Refreshing external feeds"
 		PagesCore::CacheSweeper.once do
 			Feed.find(:all).each do |feed|
 				begin
 					feed.refresh
 				rescue
-					puts "!!! Error parsing feed #{feed.url} - #{$!.to_s}"
+					Rails.logger.warn "!!! Error parsing feed #{feed.url} - #{$!.to_s}"
 				end
 			end
 		end
@@ -88,7 +88,7 @@ namespace :pages do
 	desc "Autopublish due pages"
 	task :autopublish => :environment do
 		published = Page.autopublish!
-		puts "Autopublished #{published.length} pages"
+		Rails.logger.info "Autopublished #{published.length} pages"
 	end
 
 	desc "Perform routine maintenance"
