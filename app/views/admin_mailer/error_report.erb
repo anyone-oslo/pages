@@ -51,8 +51,10 @@
 <h3>Params</h3>
 <pre><%= @error_report[:params].to_yaml %></pre>
 
+<% if @error_report[:session] %>
 <h3>Session data</h3>
-<pre><%= @error_report[:session].reject{ |k,v| k == :error_report }.to_yaml %></pre>
+<pre><%= @error_report[:session].to_yaml %></pre>
+<% end %>
 
 <h3>Backtrace</h3>
 <pre><%= @error_report[:backtrace].join("\n") %></pre>

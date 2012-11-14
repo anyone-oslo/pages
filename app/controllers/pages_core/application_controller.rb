@@ -65,7 +65,7 @@ class PagesCore::ApplicationController < ActionController::Base
 						end
 						hash
 					end
-					error_report[:session]   = session.instance_variable_get("@data")
+					error_report[:session]   = session.to_hash
 					error_report[:backtrace] = clean_backtrace(exception)
 					error_report[:timestamp] = Time.now
 					if @current_user
