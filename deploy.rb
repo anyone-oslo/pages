@@ -112,8 +112,12 @@ namespace :deploy do
 	task :notify_campfire, :roles => [:web] do
 		username = `whoami`.chomp
 		repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
-		room = Campfire.room(campfire_room)
-		room.message "[#{repo_name}] has been deployed by #{username}"
+		begin
+			room = Campfire.room(campfire_room)
+			room.message "[#{repo_name}] has been deployed by #{username}"
+		rescue Exception => e
+			puts "Campfire notification failed: #{e.message}"
+		end
 	end
 
 end
