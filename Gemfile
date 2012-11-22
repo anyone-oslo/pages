@@ -38,7 +38,7 @@ gem 'sass', '3.2.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.2.0'
 gem 'coffee-script-source', '1.2.0'
-gem 'yui-compressor', :require => 'yui/compressor'
+#gem 'yui-compressor', :require => 'yui/compressor'
 
 # ActiveRecord extensions
 gem 'acts_as_list', '0.1.4'
