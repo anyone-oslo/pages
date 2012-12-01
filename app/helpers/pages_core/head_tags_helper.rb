@@ -150,8 +150,13 @@ module PagesCore::HeadTagsHelper
 		elsif @page && @page.image
 			options[:meta_image] = @page.image
 		end
+
 		if options[:meta_image]
-			output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false)+"\" />\n"
+			if options[:meta_image].kind_of?(Image)
+				output += "\t<link rel=\"image_src\" href=\"" + dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false) + "\" />\n"
+			else
+				output += "\t<link rel=\"image_src\" href=\""  +options[:meta_image] + "\" />\n"
+			end
 		end
 
 
@@ -160,7 +165,11 @@ module PagesCore::HeadTagsHelper
 	  output += "<meta property=\"og:site_name\" content=\"#{PagesCore.config(:site_name)}\" />\n"
 	  output += "<meta property=\"og:title\" content=\"#{options[:title]}\" />\n"
 		if options[:meta_image]
-			output += "<meta property=\"og:image\" content=\""+dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false)+"\" />\n"
+			if options[:meta_description].kind_of?(Image)
+				output += "<meta property=\"og:image\" content=\""+dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false)+"\" />\n"
+			else
+				output += "<meta property=\"og:image\" content=\"" + options[:meta_image] + "\" />\n"
+			end
 		end
 		if options[:meta_description]
 			meta_description = html_escape(strip_tags(options[:meta_description]))
