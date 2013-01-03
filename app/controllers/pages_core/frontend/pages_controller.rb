@@ -27,7 +27,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 				if params[:id]
 					@page = Page.find(params[:id]) rescue nil
 					@page ||= unique_page(params[:id])
-					@page ||= Page.find_by_slug_and_language(params[:id], @language)
+					@page ||= Page.find_by_slug_and_language(params[:id].to_s, @language)
 				end
 			end
 		end
@@ -124,7 +124,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 					@title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
 					if params[:category_name]
-						@category = Category.find_by_name(params[:category_name])
+						@category = Category.find_by_name(params[:category_name].to_s)
 						@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20}, :category => @category)
 					else
 						@feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})

@@ -32,7 +32,7 @@ module PagesCore::ApplicationHelper
 				page = options[:id]
 			elsif options[:id]
 				page = Page.find(options[:id]) rescue nil
-				page ||= Page.find_by_slug_and_language(options[:id], @language)
+				page ||= Page.find_by_slug_and_language(options[:id].to_s, @language)
 			elsif @page
 				page = @page
 			end
@@ -57,7 +57,7 @@ module PagesCore::ApplicationHelper
 		overwrite_params = {}
 		overwrite_params[:language] = new_language
 		if(params[:slug])
-			page = Page.find_by_slug_and_language(params[:slug], language)
+			page = Page.find_by_slug_and_language(params[:slug].to_s, language)
 			page.working_language = new_language
 			overwrite_params[:slug] = page.slug.to_s
 			if overwrite_params[:slug] == ""
@@ -95,7 +95,7 @@ module PagesCore::ApplicationHelper
 	end
 
 	def fragment(name)
-		Partial.find_by_name(name).translate(@language).body.to_html rescue ""
+		Partial.find_by_name(name.to_s).translate(@language).body.to_html rescue ""
 	end
 	alias_method :partial, :fragment
 
