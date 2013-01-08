@@ -215,7 +215,7 @@ namespace :pages do
 		task :submodules do
 			puts "Updating submodules..."
 			`git submodule update --init`
-			`git submodule foreach 'git checkout -q master'`
+			#`git submodule foreach 'git checkout -q master'`
 			`git submodule foreach 'git pull'`
 		end
 
