@@ -172,6 +172,14 @@ namespace :pages do
 				`git mv public/stylesheets/* app/assets/stylesheets`
 			end
 
+			['stylesheets', 'javascripts', 'plugin_assets'].each do |dir|
+				if File.exists?("public/#{dir}")
+					puts "* public/#{dir} found, removing..."
+					`git rm -r public/#{dir}`
+					`rm -rf public/#{dir}`
+				end
+			end
+
 		end
 
 		desc "Update gems"
@@ -214,7 +222,7 @@ namespace :pages do
 		desc "Updates submodules"
 		task :submodules do
 			puts "Updating submodules..."
-			`git submodule update --init`
+			#`git submodule update --init`
 			#`git submodule foreach 'git checkout -q master'`
 			`git submodule foreach 'git pull'`
 		end
