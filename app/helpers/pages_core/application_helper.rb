@@ -122,7 +122,7 @@ module PagesCore::ApplicationHelper
 			if p.redirects?
 				url_options = p.redirect_to_options(options.merge({:language => p.working_language}))
 			else
-				url_options = options.merge({:controller => 'pages', :action => :show, :language => p.working_language, :id => p.to_param})
+				url_options = options.merge({:controller => '/pages', :action => :show, :language => p.working_language, :id => p.to_param})
 			end
 			url_for url_options
 		end

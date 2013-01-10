@@ -67,6 +67,13 @@
 
 </div>
 
+<% if @page.id? && @page.name? %>
+	<div class="field">
+		<label>Page link</label>
+		<%= page_link @page %>
+	</div>
+<% end %>
+
 <!--
 <p>This page was last modified <%= time_ago_in_words @page.updated_at %> ago.</p>
 -->
