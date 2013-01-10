@@ -1,3 +1,37 @@
+2.3.0
+
+- Sikkerhetsoppdaterning: Rails 2.3.15, fikser for CVE-2012-5664, CVE-2013-155 og CVE-2013-156
+- Ny assets pipeline via Sprockets, kompatibel med Rails 3.1+
+- Støtte for Pages plugins som gems via PagesCore::Plugin
+- Plugins kan styre sine egne tabs i admin
+- Restart Sphinx og delayed_job ved deploy
+- Task for å fjerne cachet kopi av applikasjonen på server
+- Nytt design på feilmeldinger
+- Automatisk generering av OpenGraph meta tags for deling på Facebook
+- Mulig å merke pages som 'Featured'
+- Støtte for å indeksere sider større enn 1kb i søkemotoren
+- Søkemotoren finner nå flere treff
+- Bedre knapper for å legge inn linker i tekst
+- Genererte bilder blir nå cachet også i development
+- Apps bestemmer nå selv hva som er root_path
+- Helper for å hente ut root_pages
+- Oppdatert eksempel-config for nye sites
+- Egen formbuilder for admin: PagesCore::FormBuilder
+- Alle referanser til RAILS_ROOT og RAILS_ENV er oppdatert til fordel for Rails.root og Rails.env
+- Oppdaterte dependencies, fjernet unødvendige dependencies som ikke er i bruk
+- Eliminert deprecated config options
+- Event-modellen er flyttet til Backstage
+- Albums er flyttet til PagesGallery-pluginet
+- Enumerable::Mapper er fjernet
+- Postnummer er fjernet, finnes i en egen gem ved behov
+- Bugfix: Unngå kræsj på deploy dersom Campfire er nede
+- Bugfix: Feilrapportering fungerer igjen
+- Bugfix: Fikset tabs i admin
+- Bugfix: Fikset to bugs som forårsaket kræsj på edit page
+- Bugfix: Eliminert flere bugs i cache sweeper
+- Bugfix: Fikset cropping av bilder
+
+
 2.2.2
 
 - Oppgradert til Rails 2.3
