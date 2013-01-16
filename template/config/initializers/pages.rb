@@ -19,6 +19,7 @@ PagesCore.configure do |config|
 	#config.domain_based_cache :enabled	 # Enable domain based page cache (for multiple domains)
 	#config.newsletter.template :enabled # Enable template based newsletters
 	#config.newsletter.image :enabled    # Enable image in newsletters
+	#config.rss_fulltext :enabled        # Enable fulltext in RSS feeds
 
 	# Will try to load images from production if they are missing in development
 	#config.image_fallback_url "http://<%= @site_domain %>/"
