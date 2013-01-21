@@ -26,7 +26,7 @@ set :use_monit,         true unless variables.keys.include?(:use_monit)
 set :monit_delayed_job, "#{application}_delayed_job"
 set :monit_sphinx,      "#{application}_sphinx"
 
-set :campfire_room, 302048
+set :campfire_room, 302048 unless variables.has_key?(:campfire_room)
 
 role :web, remote_host
 role :app, remote_host
@@ -115,13 +115,15 @@ namespace :deploy do
 
 	desc "Notify Campfire"
 	task :notify_campfire, :roles => [:web] do
-		username = `whoami`.chomp
-		repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
-		begin
-			room = Campfire.room(campfire_room)
-			room.message "[#{repo_name}] has been deployed by #{username}"
-		rescue Exception => e
-			puts "Campfire notification failed: #{e.message}"
+		if campfire_room
+			username = `whoami`.chomp
+			repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
+			begin
+				room = Campfire.room(campfire_room)
+				room.message "[#{repo_name}] has been deployed by #{username}"
+			rescue Exception => e
+				puts "Campfire notification failed: #{e.message}"
+			end
 		end
 	end
 
