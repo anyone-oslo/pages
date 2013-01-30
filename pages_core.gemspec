@@ -30,10 +30,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'pages_console'
   s.add_dependency 'ruby-openid'
   s.add_dependency 'httparty', '0.6.1' # For Campfire
-  s.add_dependency 'delayed_job', '3.0.3'
+  s.add_dependency 'delayed_job', '3.0.5'
+  s.add_dependency 'delayed_job_active_record', '0.3.3'
 
   s.add_dependency 'rmagick', '2.12.2'
-  s.add_dependency 'dynamic_image-pages', ">= 0.0.4"
+  s.add_dependency 'dynamic_image-pages', ">= 0.0.5"
   #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
   # Assets

@@ -14,7 +14,7 @@
       var imagesData = false;
 
       function loadImagesData () {
-        $.getJSON(baseURL + '/page_images.json', function (json) {
+        $.getJSON(baseURL + '/images.json', function (json) {
           imagesData = json;
         });
       }
@@ -212,8 +212,11 @@
           ids.push(parseInt($(this).data('page-image-id'), 10));
         });
         $('.page_images .images').animate({opacity: 0.8}, 300);
-        var url = baseURL + '/page_images/reorder.json';
-        var data = {ids: ids};
+        var url = baseURL + '/images/reorder.json';
+        var data = {
+          ids: ids,
+          authenticity_token: $("input[name=authenticity_token]").val()
+        };
         $.put(url, data, function (json) {
           $('.page_images .images').animate({opacity: 1.0}, 300);
         });
@@ -251,9 +254,10 @@
           'page_image[byline]':     $editor.find('#page_image_byline').val(),
           'page_image[primary]':    $editor.find('#page_image_primary').is(':checked'),
           'page_image[crop_start]': $editor.find('#page_image_crop_start').val(),
-          'page_image[crop_size]':  $editor.find('#page_image_crop_size').val()
+          'page_image[crop_size]':  $editor.find('#page_image_crop_size').val(),
+          authenticity_token:       $("input[name=authenticity_token]").val()
         };
-        var url = baseURL + '/page_images/' + savedId + '.json';
+        var url = baseURL + '/images/' + savedId + '.json';
         $.put(url, data, function (json) {
           updateImageData(json);
           reloadThumbnail();
@@ -273,9 +277,10 @@
       function deleteImage () {
         if (selectedImage && selectedImageId) {
           if (confirm('Are you sure you want to delete this image?')) {
-            var url = baseURL + '/page_images/' + selectedImageId + '.json';
+            var url = baseURL + '/images/' + selectedImageId + '.json';
             $.ajax(url, {
               type: 'DELETE',
+              authenticity_token: $("input[name=authenticity_token]").val(),
               success: function () {
                 var deletedImage = selectedImage;
                 if (images.length > 1) {
