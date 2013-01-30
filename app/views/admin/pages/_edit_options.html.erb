@@ -4,7 +4,7 @@
 <div class="published_date">
   <%= labelled_field (
       f.date_select('published_at') +
-      '<br />' +
+      '<br />'.html_safe +
       f.time_select('published_at')
     ),
     "Date",
