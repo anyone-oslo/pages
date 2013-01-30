@@ -80,9 +80,11 @@
   </div>
 
   <%# Javascript magic %>
-  <% if @content_tabs %><script type="text/javascript">
-    PagesAdmin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ") %>));
-  </script><% end %>
+  <% if @content_tabs %>
+    <script type="text/javascript">
+      PagesAdmin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ").html_safe %>));
+    </script>
+  <% end %>
 
   <%# multiple domain tracking for usage statistics %>
   <script type="text/javascript">

@@ -156,7 +156,7 @@ module PagesCore::Admin::AdminHelper
     end
   end
 
-  def content_tab( name, options={}, &block )
+  def content_tab(name, options={}, &block)
     @content_tabs ||= []
     if block_given?
       tab = {
@@ -169,7 +169,7 @@ module PagesCore::Admin::AdminHelper
       tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">"
       tab_output += tab[:content]
       tab_output += "</div>"
-      concat(tab_output)
+      tab_output.html_safe
     else
       #    tab = @content_tabs.select{ |t| t[:key] == name.to_s.underscore }.first
         #    "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">#{tab[:content]}</div>"

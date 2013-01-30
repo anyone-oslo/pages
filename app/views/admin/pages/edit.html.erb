@@ -28,13 +28,13 @@
   </div>
 
   <%# #### CONTENT #### %>
-  <% content_tab "Content" do %>
+  <%= content_tab "Content" do %>
     <%= render :partial => 'edit_content', :locals => {:f => f} %>
   <% end %>
 
   <%# #### IMAGES #### %>
   <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
-    <% content_tab "Images" do %>
+    <%= content_tab "Images" do %>
       <%= render :partial => 'edit_images', :locals => {:f => f} %>
     <% end %>
   <% end %>
@@ -42,7 +42,7 @@
 
   <%# #### FILES #### %>
   <% if @page.template_config.value(:files) %>
-    <% content_tab "Files" do %>
+    <%= content_tab "Files" do %>
       <% if @page.files? %>
         <ul id="filelist">
           <% @page.files.each do |file| %>
@@ -67,11 +67,11 @@
   <%# #### COMMENTS #### %>
   <% if @page.template_config.value(:comments) %>
     <% if @page.comments.count > 0 %>
-      <% content_tab "Comments" do %>
+      <%= content_tab "Comments" do %>
         <%= render :partial => 'edit_comments', :locals => {:f => f} %>
       <% end %>
     <% else %>
-      <% content_tab "Comments", {:disabled => true} do %>
+      <%= content_tab "Comments", {:disabled => true} do %>
         <p>No comments added.</p>
       <% end %>
     <% end %>
