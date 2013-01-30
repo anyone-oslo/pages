@@ -1,156 +1,156 @@
 /* pages/index */
 .morepages {
-	clear: both;
+  clear: both;
 }
 .morepages .morepageslink {
-	margin-left: 32px;
-	font-size: 0.9em;
-	margin-bottom: 1em;
-	font-weight: bold;
-	display: block;
+  margin-left: 32px;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+  font-weight: bold;
+  display: block;
 }
 .pagelist {
-	float: left;
+  float: left;
 }
 .pagelist .page_listing {
-	border: 1px solid transparent;
-	padding: 3px 8px 2px 8px !important;
+  border: 1px solid transparent;
+  padding: 3px 8px 2px 8px !important;
 }
 .pagelist ul {
-	border-left: 1px dotted #ccc !important;
-	margin-left: 12px !important;
-	padding-left: 8px !important
+  border-left: 1px dotted #ccc !important;
+  margin-left: 12px !important;
+  padding-left: 8px !important
 }
 .pagelist ul li {
-	overflow: auto;
+  overflow: auto;
 }
 .pagelist ul .page {
 }
 .pagelist .page:hover {
-	background: #ffd;
-	border: 1px solid #dda;
+  background: #ffd;
+  border: 1px solid #dda;
 }
 .pagelist .page .status {
-	font-weight: normal;
+  font-weight: normal;
 }
 .pagelist .page:hover .status {
-	display: none;
+  display: none;
 }
 .pagelist .page a.page_name, .pagelist .page a.page_name:visited {
-	text-decoration: none;
-	color: #222;
+  text-decoration: none;
+  color: #222;
 }
 .pagelist .hidden.page a.page_name {
-	color: #666;
+  color: #666;
 }
 .pagelist .page a.page_name:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 .drag_handle {
-	float: left;
-	vertical-align: middle;
-	margin-top: 5px;
-	margin-left: 6px;
-	width: 13px;
-	height: 16px;
-	background-image: url('<%= asset_path "pages/admin/drag-icon.png" %>');
+  float: left;
+  vertical-align: middle;
+  margin-top: 5px;
+  margin-left: 6px;
+  width: 13px;
+  height: 16px;
+  background-image: url('<%= asset_path "pages/admin/drag-icon.png" %>');
 }
 .pagelist .drag_handle {
-	display: none;
+  display: none;
 }
 .pagelist.reorder .drag_handle {
-	display: block;
+  display: block;
 }
 
 /* pages/news */
 .news_item_list .name {
-	line-height: 1.5;
+  line-height: 1.5;
 }
 .news_item_list .name .name_link {
-	font-weight: bold;
+  font-weight: bold;
 }
 .news_item_list .name .status_label {
-	color: #666;
+  color: #666;
 }
 .news_item_list tr {
 }
 .news_item_list .draft, .news_item_list .hidden, .news_item_list .autopublish, .news_item_list .reviewed {
-	background: #f4f4f4;
+  background: #f4f4f4;
 }
 .news_item_list .pinned .name {
-	background: #fff8e8;
-	background: transparent url('<%= asset_path "pages/admin/list-table-pin-blue.gif" %>') no-repeat 13px 50%;
+  background: #fff8e8;
+  background: transparent url('<%= asset_path "pages/admin/list-table-pin-blue.gif" %>') no-repeat 13px 50%;
 }
 .news_item_list .draft .name, .news_item_list .hidden .name, .news_item_list .autopublish .name, .news_item_list .autopublish .reviewed {
-	background: transparent url('<%= asset_path "pages/admin/list-table-pin-disabled.gif" %>') no-repeat 13px 50%;
+  background: transparent url('<%= asset_path "pages/admin/list-table-pin-disabled.gif" %>') no-repeat 13px 50%;
 }
 
 /* pages/edit */
 .edit_page {
-	padding-top: 1px;
-	width: auto;
+  padding-top: 1px;
+  width: auto;
 }
 .edit_page .field {
-	margin-right: 20px;
+  margin-right: 20px;
 }
 
 .edit_page .hiddenOptions {
-	display: none;
+  display: none;
 }
 
 .edit_page .advanced_options {
-	visibility: none;
+  visibility: none;
 }
 
 .edit_page input.text, .edit_page textarea {
-	width: 100%;
+  width: 100%;
 }
 
 .edit_page input.page_title {
-	font-weight: bold;
-	font-size: 1.4em;
-	color: #222;
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #222;
 }
 
 #documentPreview {
-	position: absolute;
-	top: 64px;
-	left: 24px;
-	right: 300px;
-	background: #eee;
-	border: 1px solid #ccc;
-	padding: 24px;
-	padding-top: 0;
-	padding-bottom: 48px;
-	font-family: Georgia, serif;
-	font-size: 1.2em;
-	color: #222;
-	line-height: 1.4;
+  position: absolute;
+  top: 64px;
+  left: 24px;
+  right: 300px;
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 24px;
+  padding-top: 0;
+  padding-bottom: 48px;
+  font-family: Georgia, serif;
+  font-size: 1.2em;
+  color: #222;
+  line-height: 1.4;
 }
 
 #documentPreview .titleBar {
-	padding: 3px 24px;
-	background: #ddd;
-	color: #666;
-	margin: 0 -24px 24px -24px;
-	font-style: italic;
+  padding: 3px 24px;
+  background: #ddd;
+  color: #666;
+  margin: 0 -24px 24px -24px;
+  font-style: italic;
 }
 
 #documentPreview .postimage {
-	float: right;
-	margin: 0 0 24px 24px;
-	border: 1px solid #aaa;
+  float: right;
+  margin: 0 0 24px 24px;
+  border: 1px solid #aaa;
 }
 
 
 .edit_page .images_list .thumbnail {
-	padding: 0;
-	width: 124px;
+  padding: 0;
+  width: 124px;
 }
 
 #filelist {
-	list-style-type: none;
-	margin-left: 0; margin-right: 0; padding: 0;
+  list-style-type: none;
+  margin-left: 0; margin-right: 0; padding: 0;
 }
 #filelist {
 

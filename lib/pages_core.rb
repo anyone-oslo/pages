@@ -64,74 +64,74 @@ require 'pages_core/templates'
 require 'pages_core/version'
 
 module PagesCore
-	class << self
-		def init!
-			# Register default mime types
-			Mime::Type.register "application/rss+xml", 'rss'
+  class << self
+    def init!
+      # Register default mime types
+      Mime::Type.register "application/rss+xml", 'rss'
 
-			# Register with PagesConsole
-			PagesCore.register_with_pages_console
-		end
+      # Register with PagesConsole
+      PagesCore.register_with_pages_console
+    end
 
-		def version
-			VERSION
-		end
+    def version
+      VERSION
+    end
 
-		def plugin_root
-			Pathname.new(File.dirname(__FILE__)).join('..').expand_path
-		end
+    def plugin_root
+      Pathname.new(File.dirname(__FILE__)).join('..').expand_path
+    end
 
-		def application_name
-			dir = Rails.root.to_s
-			dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
-		end
+    def application_name
+      dir = Rails.root.to_s
+      dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
+    end
 
-		def register_with_pages_console
-			begin
-				require 'pages_console'
-				site = PagesConsole::Site.new(self.application_name, Rails.root.to_s)
-				PagesConsole.ping(site)
-			rescue MissingSourceFile
-				# Nothing to do, PagesConsole not installed.
-			end
-		end
+    def register_with_pages_console
+      begin
+        require 'pages_console'
+        site = PagesConsole::Site.new(self.application_name, Rails.root.to_s)
+        PagesConsole.ping(site)
+      rescue MissingSourceFile
+        # Nothing to do, PagesConsole not installed.
+      end
+    end
 
-		def configure(options={}, &block)
-			if block_given?
-				if options[:reset] == :defaults
-					load_default_configuration
-				elsif options[:reset] === true
-					@@configuration = PagesCore::Configuration::SiteConfiguration.new
-				end
-				yield self.configuration if block_given?
-			else
-				# Legacy
-				options.each do |key,value|
-					self.config(key, value)
-				end
-			end
-		end
+    def configure(options={}, &block)
+      if block_given?
+        if options[:reset] == :defaults
+          load_default_configuration
+        elsif options[:reset] === true
+          @@configuration = PagesCore::Configuration::SiteConfiguration.new
+        end
+        yield self.configuration if block_given?
+      else
+        # Legacy
+        options.each do |key,value|
+          self.config(key, value)
+        end
+      end
+    end
 
-		def load_default_configuration
-			@@configuration = PagesCore::Configuration::SiteConfiguration.new
+    def load_default_configuration
+      @@configuration = PagesCore::Configuration::SiteConfiguration.new
 
-			config.localizations       :disabled
-			config.page_cache          :enabled
-			config.text_filter         :textile
+      config.localizations       :disabled
+      config.page_cache          :enabled
+      config.text_filter         :textile
 
-			#config.comment_notifications [:author, 'your@email.com']
-		end
+      #config.comment_notifications [:author, 'your@email.com']
+    end
 
-		def configuration(key=nil, value=nil)
-			load_default_configuration unless self.class_variables.include?('@@configuration')
-			if key
-				configuration.send(key, value) if value != nil
-				configuration.get(key)
-			else
-				@@configuration
-			end
-		end
-		alias :config :configuration
-	end
+    def configuration(key=nil, value=nil)
+      load_default_configuration unless self.class_variables.include?('@@configuration')
+      if key
+        configuration.send(key, value) if value != nil
+        configuration.get(key)
+      else
+        @@configuration
+      end
+    end
+    alias :config :configuration
+  end
 
 end

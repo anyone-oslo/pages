@@ -1,14 +1,14 @@
 <%
-	if @page.parent
-		page_title "#{@page.parent.name} &raquo; New Page"
-		page_description "<em>#{@page.parent.name}</em> &raquo; New Page"
-	else
-		page_title "Create new page"
-		page_description "You are creating a new root page"
-	end
+  if @page.parent
+    page_title "#{@page.parent.name} &raquo; New Page"
+    page_description "<em>#{@page.parent.name}</em> &raquo; New Page"
+  else
+    page_title "Create new page"
+    page_description "You are creating a new root page"
+  end
 
-	@url_options = { :action => :new }
-	@url_options[:parent] = @page.parent if @page.parent
+  @url_options = { :action => :new }
+  @url_options[:parent] = @page.parent if @page.parent
 %>
 
 <% content_for :sidebar do %>
@@ -17,17 +17,17 @@
 
 <%= form_for @page, :url => admin_pages_url, :html => {:id => 'page_edit_form', :class => 'edit_page', :method => :post, :multipart => true} do |f| %>
 
-	<%= hidden_field_tag 'language', @language %>
-	<%= f.hidden_field 'parent_page_id' if @page.parent %>
+  <%= hidden_field_tag 'language', @language %>
+  <%= f.hidden_field 'parent_page_id' if @page.parent %>
 
-	<%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title",
-		:errors      => @page.errors[:name],
-		:description => "This is the name of the page, and it will also be the name of the link to this page."
-	%>
+  <%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title",
+    :errors      => @page.errors[:name],
+    :description => "This is the name of the page, and it will also be the name of the link to this page."
+  %>
 
-	<%# labelled_field f.file_field( :image ), "Image", :errors => @page.errors[:image] %>
-	<%# labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Image caption" %>
+  <%# labelled_field f.file_field( :image ), "Image", :errors => @page.errors[:image] %>
+  <%# labelled_field text_field_tag('page_image_description', (@page.image.description rescue ""), :size => 48 ), "Image caption" %>
 
-	<p><%= submit_tag "Continue" %></p>
+  <p><%= submit_tag "Continue" %></p>
 
 <% end %>

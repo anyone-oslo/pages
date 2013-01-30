@@ -2,7 +2,7 @@
 
 module PagesCore::PluginAssetsHelper
 
-	include ActionView::Helpers::AssetTagHelper
-	include Sprockets::Helpers
+  include ActionView::Helpers::AssetTagHelper
+  include Sprockets::Helpers
 
 end

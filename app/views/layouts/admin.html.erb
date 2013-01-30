@@ -1,105 +1,105 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
-	<link rel="shortcut icon" href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
-	<link rel="icon"          href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
+  <link rel="shortcut icon" href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
+  <link rel="icon"          href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
 
-	<%= stylesheet_link_tag "pages/admin" %>
-	<%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
+  <%= stylesheet_link_tag "pages/admin" %>
+  <%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
 
-	<%= javascript_include_tag "pages/jquery" %>
-	<script type="text/javascript">jQuery.noConflict();</script>
-	<%= javascript_include_tag "pages/admin" %>
-	<%= admin_javascript_tags %>
-	<%= csrf_meta_tag %>
+  <%= javascript_include_tag "pages/jquery" %>
+  <script type="text/javascript">jQuery.noConflict();</script>
+  <%= javascript_include_tag "pages/admin" %>
+  <%= admin_javascript_tags %>
+  <%= csrf_meta_tag %>
 
 </head>
 <body class="<%= body_classes %>">
 
-	<%# Header %>
-	<div id="header">
-		<div id="logo"><%= link_to image_tag("pages/admin/icon.png"), '/admin' %></div>
-		<div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
-		<% if @current_user -%>
-			<div class="user">
-				Hello, <%= link_to(@current_user.realname, admin_user_url(@current_user)) %>
-				<%= link_separator %>
-				<%= link_to( "Log out", logout_admin_users_path ) %>
-			</div>
-		<% end -%>
-		<div class="tabs">
-			<% if @current_user && @admin_menu -%>
-				<%= header_tabs(:class => :pages) -%>
-				<%= header_tabs(:class => :pages_plugins) -%>
-				<%= header_tabs(:class => :custom) -%>
-				<%= header_tabs(:class => :account) -%>
-			<% end -%>
-		</div>
-	</div>
+  <%# Header %>
+  <div id="header">
+    <div id="logo"><%= link_to image_tag("pages/admin/icon.png"), '/admin' %></div>
+    <div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
+    <% if @current_user -%>
+      <div class="user">
+        Hello, <%= link_to(@current_user.realname, admin_user_url(@current_user)) %>
+        <%= link_separator %>
+        <%= link_to( "Log out", logout_admin_users_path ) %>
+      </div>
+    <% end -%>
+    <div class="tabs">
+      <% if @current_user && @admin_menu -%>
+        <%= header_tabs(:class => :pages) -%>
+        <%= header_tabs(:class => :pages_plugins) -%>
+        <%= header_tabs(:class => :custom) -%>
+        <%= header_tabs(:class => :account) -%>
+      <% end -%>
+    </div>
+  </div>
 
-	<%# Error and notice flashes %>
-	<% [:error, :notice].select{|f| flash[f]}.each do |flash_level| %>
-		<div id="flash-<%= flash_level %>"><%= flash[flash_level] %></div>
-	<% end %>
+  <%# Error and notice flashes %>
+  <% [:error, :notice].select{|f| flash[f]}.each do |flash_level| %>
+    <div id="flash-<%= flash_level %>"><%= flash[flash_level] %></div>
+  <% end %>
 
-	<%# Sidebar %>
-	<% if content_for?(:sidebar) %>
-		<div id="sidebar"><%= content_for(:sidebar) %></div>
-	<% end %>
+  <%# Sidebar %>
+  <% if content_for?(:sidebar) %>
+    <div id="sidebar"><%= content_for(:sidebar) %></div>
+  <% end %>
 
-	<%# Main content area %>
-	<div id="main">
+  <%# Main content area %>
+  <div id="main">
 
-		<%# Page description and content tabs area %>
-		<% if @page_description || @content_tabs %>
-			<div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
-				<% if @page_description_links -%>
-				<div class="links"><%= @page_description_links.html_safe %></div>
-				<% end %>
-				<h3><%= (@page_description || @page_title).html_safe %></h3>
-				<% if @content_tabs %>
-					<ul id="content-tabs">
-						<% @content_tabs.map do |t| %>
-							<li id="content-tab-link-<%= t[:key] %>">
-								<% if t[:options][:disabled] == true %>
-									<%= t[:name] %>
-								<% else %>
-									<%= link_to(t[:name], :anchor => "#{t[:key]}") %>
-								<% end %>
-							</li>
-						<% end %>
-					</ul>
-				<% end %>
-			</div>
-		<% end %>
+    <%# Page description and content tabs area %>
+    <% if @page_description || @content_tabs %>
+      <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+        <% if @page_description_links -%>
+        <div class="links"><%= @page_description_links.html_safe %></div>
+        <% end %>
+        <h3><%= (@page_description || @page_title).html_safe %></h3>
+        <% if @content_tabs %>
+          <ul id="content-tabs">
+            <% @content_tabs.map do |t| %>
+              <li id="content-tab-link-<%= t[:key] %>">
+                <% if t[:options][:disabled] == true %>
+                  <%= t[:name] %>
+                <% else %>
+                  <%= link_to(t[:name], :anchor => "#{t[:key]}") %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    <% end %>
 
-		<%# Template output %>
-		<%= yield %>
-	</div>
+    <%# Template output %>
+    <%= yield %>
+  </div>
 
-	<%# Javascript magic %>
-	<% if @content_tabs %><script type="text/javascript">
-		PagesAdmin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ") %>));
-	</script><% end %>
+  <%# Javascript magic %>
+  <% if @content_tabs %><script type="text/javascript">
+    PagesAdmin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ") %>));
+  </script><% end %>
 
-	<%# multiple domain tracking for usage statistics %>
-	<script type="text/javascript">
+  <%# multiple domain tracking for usage statistics %>
+  <script type="text/javascript">
 
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-5468672-21']);
-	  _gaq.push(['_setDomainName', 'none']);
-	  _gaq.push(['_setAllowLinker', true]);
-	  _gaq.push(['_trackPageview']);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5468672-21']);
+    _gaq.push(['_setDomainName', 'none']);
+    _gaq.push(['_setAllowLinker', true]);
+    _gaq.push(['_trackPageview']);
 
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
 
-	</script>
+  </script>
 
 </body>
 </html>

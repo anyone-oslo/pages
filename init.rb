@@ -5,8 +5,8 @@ PagesCore.init!
 
 # reCAPTCHA config
 Recaptcha.configure do |config|
-	config.public_key  = '***REMOVED***'
-	config.private_key = '***REMOVED***'
+  config.public_key  = '***REMOVED***'
+  config.private_key = '***REMOVED***'
 end
 
 # Initialize and configure Haml/Sass

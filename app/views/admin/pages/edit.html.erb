@@ -1,10 +1,10 @@
 <%
-	page_title       "Editing “" + @page.name.to_s + "”"
-	page_description "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@language, page))}.join(" &raquo; ")
+  page_title       "Editing “" + @page.name.to_s + "”"
+  page_description "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@language, page))}.join(" &raquo; ")
 
-	if PagesCore.config.localizations?
-		page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator)
-	end
+  if PagesCore.config.localizations?
+    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator)
+  end
 %>
 
 
@@ -12,9 +12,9 @@
 <%# #### SIDEBAR ########################################################### %>
 
 <% content_for :sidebar do %>
-	<%= form_for @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
-		<%= render :partial => 'edit_options', :locals => {:f => f} %>
-	<% end %>
+  <%= form_for @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
+    <%= render :partial => 'edit_options', :locals => {:f => f} %>
+  <% end %>
 <% end %>
 
 
@@ -23,115 +23,115 @@
 
 <%= form_for @page, :url => admin_page_url(@language, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
 
-	<div class="hiddenOptions">
-		<%= render :partial => 'edit_options', :locals => {:f => f} %>
-	</div>
+  <div class="hiddenOptions">
+    <%= render :partial => 'edit_options', :locals => {:f => f} %>
+  </div>
 
-	<%# #### CONTENT #### %>
-	<% content_tab "Content" do %>
-		<%= render :partial => 'edit_content', :locals => {:f => f} %>
-	<% end %>
+  <%# #### CONTENT #### %>
+  <% content_tab "Content" do %>
+    <%= render :partial => 'edit_content', :locals => {:f => f} %>
+  <% end %>
 
-	<%# #### IMAGES #### %>
-	<% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
-		<% content_tab "Images" do %>
-			<%= render :partial => 'edit_images', :locals => {:f => f} %>
-		<% end %>
-	<% end %>
-
-
-	<%# #### FILES #### %>
-	<% if @page.template_config.value(:files) %>
-		<% content_tab "Files" do %>
-			<% if @page.files? %>
-				<ul id="filelist">
-					<% @page.files.each do |file| %>
-						<li id="file_<%= file.id %>">
-							<%= image_tag 'pages/admin/drag-handle.gif', :class => :handle %>
-							<strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %>
-							(<%= link_to "Delete", admin_page_file_path( @language, @page, file ), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
-						</li>
-					<% end %>
-				</ul>
-				<%= sortable_element 'filelist', :url => reorder_admin_page_files_path( @language, @page ), :handle => 'handle' %>
-			<% else %>
-				<p>No files added yet.</p>
-			<% end %>
-			<p>
-				<%= link_to_function "Add new file", "Element.show('new-file');", :class => :create %>
-			</p>
-		<% end %>
-	<% end %>
+  <%# #### IMAGES #### %>
+  <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
+    <% content_tab "Images" do %>
+      <%= render :partial => 'edit_images', :locals => {:f => f} %>
+    <% end %>
+  <% end %>
 
 
-	<%# #### COMMENTS #### %>
-	<% if @page.template_config.value(:comments) %>
-		<% if @page.comments.count > 0 %>
-			<% content_tab "Comments" do %>
-				<%= render :partial => 'edit_comments', :locals => {:f => f} %>
-			<% end %>
-		<% else %>
-			<% content_tab "Comments", {:disabled => true} do %>
-				<p>No comments added.</p>
-			<% end %>
-		<% end %>
-	<% end %>
+  <%# #### FILES #### %>
+  <% if @page.template_config.value(:files) %>
+    <% content_tab "Files" do %>
+      <% if @page.files? %>
+        <ul id="filelist">
+          <% @page.files.each do |file| %>
+            <li id="file_<%= file.id %>">
+              <%= image_tag 'pages/admin/drag-handle.gif', :class => :handle %>
+              <strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %>
+              (<%= link_to "Delete", admin_page_file_path( @language, @page, file ), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
+            </li>
+          <% end %>
+        </ul>
+        <%= sortable_element 'filelist', :url => reorder_admin_page_files_path( @language, @page ), :handle => 'handle' %>
+      <% else %>
+        <p>No files added yet.</p>
+      <% end %>
+      <p>
+        <%= link_to_function "Add new file", "Element.show('new-file');", :class => :create %>
+      </p>
+    <% end %>
+  <% end %>
 
 
-	<div class="buttons">
-		<button type="button" id="previewButton">Preview</button>
-		<%= pages_button_to "Save changes" %>
-	</div>
+  <%# #### COMMENTS #### %>
+  <% if @page.template_config.value(:comments) %>
+    <% if @page.comments.count > 0 %>
+      <% content_tab "Comments" do %>
+        <%= render :partial => 'edit_comments', :locals => {:f => f} %>
+      <% end %>
+    <% else %>
+      <% content_tab "Comments", {:disabled => true} do %>
+        <p>No comments added.</p>
+      <% end %>
+    <% end %>
+  <% end %>
+
+
+  <div class="buttons">
+    <button type="button" id="previewButton">Preview</button>
+    <%= pages_button_to "Save changes" %>
+  </div>
 
 <% end %>
 
 <%# #### UPLOAD IMAGE #### %>
 <div id="new-image">
-	<h2>Upload images</h2>
-	<%= form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
+  <h2>Upload images</h2>
+  <%= form_for(@page.page_images.new, :url => admin_page_images_url(:language => @language, :page_id => @page), :html => {:multipart => true}) do |f| %>
 
-		<table>
-			<tr>
-				<th>File</th>
-				<th>Caption</th>
-			</tr>
-			<% 10.times do |i| %>
-				<tr class="">
-					<td>
-						<%= file_field_tag("page_images[#{i}][image]") %>
-					</td>
-					<td>
-						<%= text_field_tag("page_images[#{i}][byline]", '', :size => 48) %>
-					</td>
-				</tr>
-			<% end %>
-		</table>
+    <table>
+      <tr>
+        <th>File</th>
+        <th>Caption</th>
+      </tr>
+      <% 10.times do |i| %>
+        <tr class="">
+          <td>
+            <%= file_field_tag("page_images[#{i}][image]") %>
+          </td>
+          <td>
+            <%= text_field_tag("page_images[#{i}][byline]", '', :size => 48) %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
 
-		<p>
-			<%= submit_tag "Upload" %> or
-			<%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
-		</p>
-	<% end %>
+    <p>
+      <%= submit_tag "Upload" %> or
+      <%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
+    </p>
+  <% end %>
 </div>
 
 
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>
-	<div id="new-file" class="page_new_file">
-		<h2>Upload new file</h2>
-		<%= form_for((@new_file = PageFile.new), :url => admin_page_files_path(@language, @page), :html => {:multipart => true}) do |f| %>
-			<%= labelled_field f.text_field( :name, :size => 48 ), "Name",
-				:errors      => @new_file.errors[:name]
-			%>
-			<%= labelled_field f.text_field( :description, :size => 48 ), "Description",
-				:errors      => @new_file.errors[:name]
-			%>
-			<%= labelled_field f.file_field( :file ), "File",
-				:errors      => @new_file.errors[:file]
-			%>
-			<p>
-				<%= submit_tag "Upload" %> or <%= link_to_function "Cancel", "Element.hide('new-file');", :class => :cancel %>
-			</p>
-		<% end %>
-	</div>
+  <div id="new-file" class="page_new_file">
+    <h2>Upload new file</h2>
+    <%= form_for((@new_file = PageFile.new), :url => admin_page_files_path(@language, @page), :html => {:multipart => true}) do |f| %>
+      <%= labelled_field f.text_field( :name, :size => 48 ), "Name",
+        :errors      => @new_file.errors[:name]
+      %>
+      <%= labelled_field f.text_field( :description, :size => 48 ), "Description",
+        :errors      => @new_file.errors[:name]
+      %>
+      <%= labelled_field f.file_field( :file ), "File",
+        :errors      => @new_file.errors[:file]
+      %>
+      <p>
+        <%= submit_tag "Upload" %> or <%= link_to_function "Cancel", "Element.hide('new-file');", :class => :cancel %>
+      </p>
+    <% end %>
+  </div>
 <% end %>

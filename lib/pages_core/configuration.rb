@@ -5,6 +5,6 @@ require 'pages_core/configuration/proxy'
 require 'pages_core/configuration/site_configuration'
 
 module PagesCore
-	module Configuration
-	end
+  module Configuration
+  end
 end

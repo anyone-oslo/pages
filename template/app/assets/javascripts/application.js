@@ -1,4 +1,3 @@
 $(document).ready(function(){
-	// Do stuff here
+  // Do stuff here
 });
-

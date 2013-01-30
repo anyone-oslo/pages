@@ -1,51 +1,51 @@
 <style type="text/css">
-	h3 {
-		margin-top: 20px;
-		margin-bottom: 10px;
-		font-size: 18px;
-	}
-	pre {
-		background: #eee;
-		border: 1px solid #ccc;
-		padding: 8px;
-		background: #f8f8f8;
-	}
-	table {
-		border-collapse: collapse;
-	}
-	td {
-		border: 1px solid #ccc;
-		padding: 4px 20px 4px 8px;
-	}
+  h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  pre {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 8px;
+    background: #f8f8f8;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  td {
+    border: 1px solid #ccc;
+    padding: 4px 20px 4px 8px;
+  }
 </style>
 
 <table>
-	<tr>
-		<td><strong>Requested URL</strong></td>
-		<td><a href="<%= @error_report[:url] %>"><%= @error_report[:url] %></td>
-	</tr>
-	<tr>
-		<td><strong>Timestamp</strong></td>
-		<td><%= @error_report[:timestamp].to_s %></a></td>
-	</tr>
-	<tr>
-		<td><strong>Reported by</strong></td>
-		<td><a href="mailto:<%= @from %>"><%= @from %></a></td>
-	</tr>
-	<% if @error_report[:user] %>
-		<tr>
-			<td><strong>User account</strong></td>
-			<td>#<%= @error_report[:user].id %>: <%= @error_report[:user].username %> (<a href="mailto:<%= @error_report[:user].email %>"><%= @error_report[:user].email %></a>)</td>
-		</tr>
-	<% end %>
+  <tr>
+    <td><strong>Requested URL</strong></td>
+    <td><a href="<%= @error_report[:url] %>"><%= @error_report[:url] %></td>
+  </tr>
+  <tr>
+    <td><strong>Timestamp</strong></td>
+    <td><%= @error_report[:timestamp].to_s %></a></td>
+  </tr>
+  <tr>
+    <td><strong>Reported by</strong></td>
+    <td><a href="mailto:<%= @from %>"><%= @from %></a></td>
+  </tr>
+  <% if @error_report[:user] %>
+    <tr>
+      <td><strong>User account</strong></td>
+      <td>#<%= @error_report[:user].id %>: <%= @error_report[:user].username %> (<a href="mailto:<%= @error_report[:user].email %>"><%= @error_report[:user].email %></a>)</td>
+    </tr>
+  <% end %>
 </table>
 
 <h3>Message</h3>
 <pre><%= @error_report[:message].gsub('<', '&lt;').gsub('>', '&gt;') %></pre>
 
 <% if @description && !@description.empty? %>
-	<h3>Description of error</h3>
-	<pre><%= @description %></pre>
+  <h3>Description of error</h3>
+  <pre><%= @description %></pre>
 <% end %>
 
 <h3>Params</h3>
@@ -61,10 +61,10 @@
 
 <h3>Environment</h3>
 <table>
-	<% @error_report[:env].each do |key,value| %>
-		<tr>
-			<td><strong><%= key %></strong></td>
-			<td><%= (key == 'HTTP_COOKIE' ) ? value.split(/;[\s]*/).reject{|c| c =~ /^[\w\d]+_session=/}.join('<br />') : value %></td>
-		</tr>
-	<% end %>
+  <% @error_report[:env].each do |key,value| %>
+    <tr>
+      <td><strong><%= key %></strong></td>
+      <td><%= (key == 'HTTP_COOKIE' ) ? value.split(/;[\s]*/).reject{|c| c =~ /^[\w\d]+_session=/}.join('<br />') : value %></td>
+    </tr>
+  <% end %>
 </table>

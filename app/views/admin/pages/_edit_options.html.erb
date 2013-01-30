@@ -1,40 +1,40 @@
 <%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status",
-	:errors      => @page.errors[:status]
+  :errors      => @page.errors[:status]
 %>
 <div class="published_date">
-	<%= labelled_field (
-			f.date_select('published_at') +
-			'<br />' +
-			f.time_select('published_at')
-		),
-		"Date",
-		:errors      => @page.errors[:published_at]
-	%>
-	<p class="autopublish_notice">This page will publish later</p>
+  <%= labelled_field (
+      f.date_select('published_at') +
+      '<br />' +
+      f.time_select('published_at')
+    ),
+    "Date",
+    :errors      => @page.errors[:published_at]
+  %>
+  <p class="autopublish_notice">This page will publish later</p>
 </div>
 
 <%= labelled_field (
-		f.select(:user_id, @authors.map{|a| [a.realname, a.id]})
-	),
-	"Author",
-	:errors => @page.errors[:user_id]
+    f.select(:user_id, @authors.map{|a| [a.realname, a.id]})
+  ),
+  "Author",
+  :errors => @page.errors[:user_id]
 %>
 
 <% if @page.parent_page && @page.parent_page.news_page? %>
-	<div class="field">
-		<label>Pin to top</label>
-		<%= f.check_box(:pinned) %> Make post featured<br />
-	</div>
+  <div class="field">
+    <label>Pin to top</label>
+    <%= f.check_box(:pinned) %> Make post featured<br />
+  </div>
 <% end %>
 
 <% if @categories.length > 0 %>
-	<div class="field">
-		<label>Categories</label>
-		<% @categories.each do |category| %>
-			<%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %>
-			<%= category.name %><br />
-		<% end %>
-	</div>
+  <div class="field">
+    <label>Categories</label>
+    <% @categories.each do |category| %>
+      <%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %>
+      <%= category.name %><br />
+    <% end %>
+  </div>
 <% end %>
 
 <%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
@@ -44,32 +44,32 @@
 
 <div class="advanced_options">
 
-	<div class="field">
-		<label>Subpages</label>
-		Sort <%= f.select(:content_order, [ ['manually','position'], ['with the newest first','published_at DESC'] ] ) %><br />
-		<%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
-		<%= f.check_box(:news_page) %> Show in News<br />
-	</div>
-	<% if @page.template_config.value(:comments) %>
-		<p class="field">
-			<label>Comments</label>
-			<%= f.check_box(:comments_allowed) %> Enabled<br />
-		</p>
-	<% end %>
-	<%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
-	<%= labelled_field f.text_area(:redirect_to, :rows => 3), "Redirect",
-		:errors      => @page.errors[:redirect_to]
-	%>
-	<p class="field">
-		<label>Import subpages</label>
-		<%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
-	</p>
+  <div class="field">
+    <label>Subpages</label>
+    Sort <%= f.select(:content_order, [ ['manually','position'], ['with the newest first','published_at DESC'] ] ) %><br />
+    <%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
+    <%= f.check_box(:news_page) %> Show in News<br />
+  </div>
+  <% if @page.template_config.value(:comments) %>
+    <p class="field">
+      <label>Comments</label>
+      <%= f.check_box(:comments_allowed) %> Enabled<br />
+    </p>
+  <% end %>
+  <%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
+  <%= labelled_field f.text_area(:redirect_to, :rows => 3), "Redirect",
+    :errors      => @page.errors[:redirect_to]
+  %>
+  <p class="field">
+    <label>Import subpages</label>
+    <%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
+  </p>
 
 </div>
 
 <% if @page.id? && @page.name? %>
-	<div class="field">
-		<label>Page link</label>
-		<%= page_link @page %>
-	</div>
+  <div class="field">
+    <label>Page link</label>
+    <%= page_link @page %>
+  </div>
 <% end %>

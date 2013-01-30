@@ -1,76 +1,76 @@
 <%
-	page_title       "#{@user.realname}"
-	if @user == @current_user
-		page_description "You are viewing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
-	else
-		page_description "You are viewing " + link_to( "#{@user.realname}", admin_user_path( @user ) ) + "'s profile."
-	end
-	page_description_links [ ( link_to( "Edit", edit_admin_user_path( @user ) ) if @user.editable_by?( @current_user ) ), link_to( "View all users", admin_users_path ) ].compact.join( link_separator )
+  page_title       "#{@user.realname}"
+  if @user == @current_user
+    page_description "You are viewing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
+  else
+    page_description "You are viewing " + link_to( "#{@user.realname}", admin_user_path( @user ) ) + "'s profile."
+  end
+  page_description_links [ ( link_to( "Edit", edit_admin_user_path( @user ) ) if @user.editable_by?( @current_user ) ), link_to( "View all users", admin_users_path ) ].compact.join( link_separator )
 %>
 
 <% content_for :sidebar do %>
-	<h2>People</h2>
-	<% if @user.created_users.count > 0 -%>
-		<p><%= @user.realname %> has invited <%= @user.created_users.count %> users:</p>
-		<ul>
-			<% @user.created_users.each do |created_user| %>
-				<li><%= link_to created_user.realname, admin_user_url( created_user ) %></li>
-			<% end %>
-		</ul>
-	<% else -%>
-		<p><%= @user.realname %> hasn't invited any users.</p>
-	<% end -%>
+  <h2>People</h2>
+  <% if @user.created_users.count > 0 -%>
+    <p><%= @user.realname %> has invited <%= @user.created_users.count %> users:</p>
+    <ul>
+      <% @user.created_users.each do |created_user| %>
+        <li><%= link_to created_user.realname, admin_user_url( created_user ) %></li>
+      <% end %>
+    </ul>
+  <% else -%>
+    <p><%= @user.realname %> hasn't invited any users.</p>
+  <% end -%>
 <% end %>
 
 <div class="content">
-	<% if @user.image -%>
-		<div style="float: right;">
-			<%= editable_dynamic_image_tag(@user.image, :size => '150x150', :class => :thumbnail) %>
-		</div>
-	<% end -%>
-	<h2><%= @user.realname %></h2>
-	<table class="show">
-		<tr>
-			<th>Username:</th>
-			<td><%= @user.username %></td>
-		</tr>
-		<tr>
-			<th>Email address:</th>
-			<td><%= mail_to @user.email %></td>
-		</tr>
-		<tr>
-			<th>Mobile:</th>
-			<td><%= @user.mobile || "None" %></td>
-		</tr>
-		<tr>
-			<th>Web link:</th>
-			<td><%= @user.web_link? ? link_to( @user.web_link ) : "None" %></td>
-		</tr>
-		<% if @user.creator %>
-			<tr>
-				<th>Invited by:</th>
-				<td><%= link_to @user.creator.realname, admin_user_url( @user.creator ) %> <%= time_ago_in_words @user.created_at %> ago.</td>
-			</tr>
-		<% end %>
-		<% if @user.created_at? -%>
-			<tr>
-				<th>Member since:</th>
-				<td>
-					<%= @user.created_at.to_formatted_s :long %>
-				</td>
-			</tr>
-		<% end -%>
-		<% if @user.last_login_at? -%>
-			<tr>
-				<th>Last seen:</th>
-				<td>
-					<% if @user.is_online? -%>
-						Online now
-					<% else -%>
-						<%= time_ago_in_words @user.last_login_at %> ago, on <%= @user.last_login_at.to_formatted_s :long %>
-					<% end -%>
-				</td>
-			</tr>
-		<% end -%>
-	</table>
+  <% if @user.image -%>
+    <div style="float: right;">
+      <%= editable_dynamic_image_tag(@user.image, :size => '150x150', :class => :thumbnail) %>
+    </div>
+  <% end -%>
+  <h2><%= @user.realname %></h2>
+  <table class="show">
+    <tr>
+      <th>Username:</th>
+      <td><%= @user.username %></td>
+    </tr>
+    <tr>
+      <th>Email address:</th>
+      <td><%= mail_to @user.email %></td>
+    </tr>
+    <tr>
+      <th>Mobile:</th>
+      <td><%= @user.mobile || "None" %></td>
+    </tr>
+    <tr>
+      <th>Web link:</th>
+      <td><%= @user.web_link? ? link_to( @user.web_link ) : "None" %></td>
+    </tr>
+    <% if @user.creator %>
+      <tr>
+        <th>Invited by:</th>
+        <td><%= link_to @user.creator.realname, admin_user_url( @user.creator ) %> <%= time_ago_in_words @user.created_at %> ago.</td>
+      </tr>
+    <% end %>
+    <% if @user.created_at? -%>
+      <tr>
+        <th>Member since:</th>
+        <td>
+          <%= @user.created_at.to_formatted_s :long %>
+        </td>
+      </tr>
+    <% end -%>
+    <% if @user.last_login_at? -%>
+      <tr>
+        <th>Last seen:</th>
+        <td>
+          <% if @user.is_online? -%>
+            Online now
+          <% else -%>
+            <%= time_ago_in_words @user.last_login_at %> ago, on <%= @user.last_login_at.to_formatted_s :long %>
+          <% end -%>
+        </td>
+      </tr>
+    <% end -%>
+  </table>
 </div>

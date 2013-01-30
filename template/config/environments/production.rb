@@ -24,6 +24,6 @@ config.action_controller.page_cache_directory = Rails.root.join('public', 'cache
 
 ActionMailer::Base.delivery_method = :sendmail
 ActionMailer::Base.sendmail_settings = {
-	:location       => '/usr/sbin/sendmail',
-	:arguments      => '-i -t -f no-reply@<%= @site_domain %>'
+  :location       => '/usr/sbin/sendmail',
+  :arguments      => '-i -t -f no-reply@<%= @site_domain %>'
 }
