@@ -1,55 +1,55 @@
 <%
-	page_title       "Welcome"
-	page_description "Welcome to Pages"
+  page_title       "Welcome"
+  page_description "Welcome to Pages"
 %>
 
 <div class="content">
-	<p>Welcome to Pages! Before you can log on, we need to create the first user account. Please choose your desired username and password.</p>
+  <p>Welcome to Pages! Before you can log on, we need to create the first user account. Please choose your desired username and password.</p>
 </div>
 
 <% form_for :user, @user, :method => :post, :url => { :action => :welcome } do |f| %>
 
-	<%= labelled_field f.text_field( :realname ), "Your name", 
-		:errors => @user.errors[:realname] 
-	%>
-	<%= labelled_field f.text_field( :email ), "Email address", 
-		:errors => @user.errors[:email] 
-	%>
-	<%= labelled_field f.text_field( :username ), "Username", 
-		:errors => @user.errors[:username] 
-	%>
-	<%= labelled_field f.text_field( :password ), "Password", 
-		:description => link_to_function( "Click here", "jQuery('#user_password' ).val(random_password())" ) + " to generate a random password.",
-		:errors => @user.errors[:password] 
-	%>
-	<%= labelled_field f.text_field( :openid_url ), "OpenID URL", 
-		:errors => @user.errors[:openid_url] 
-	%>
-	<p>
-		<%= submit_tag 'Create' %>
-	</p>
-	
+  <%= labelled_field f.text_field( :realname ), "Your name", 
+    :errors => @user.errors[:realname] 
+  %>
+  <%= labelled_field f.text_field( :email ), "Email address", 
+    :errors => @user.errors[:email] 
+  %>
+  <%= labelled_field f.text_field( :username ), "Username", 
+    :errors => @user.errors[:username] 
+  %>
+  <%= labelled_field f.text_field( :password ), "Password", 
+    :description => link_to_function( "Click here", "jQuery('#user_password' ).val(random_password())" ) + " to generate a random password.",
+    :errors => @user.errors[:password] 
+  %>
+  <%= labelled_field f.text_field( :openid_url ), "OpenID URL", 
+    :errors => @user.errors[:openid_url] 
+  %>
+  <p>
+    <%= submit_tag 'Create' %>
+  </p>
+  
 <% end %>
 
 <script type="text/javascript">
-	jQuery(document).ready(function(){
-		jQuery('#user_username').focus(function(){
-			if(jQuery('#user_email').val() && !jQuery(this).val()){
-				var new_username = jQuery('#user_email').val();
-				if ( new_username.match( /@/ ) ) {
-					new_username = new_username.match( /(.*)@/ )[1];
-				}
-				jQuery(this).val(new_username);
-			}
-		});
-	});
-	function random_password() {
-		var password = "";
-		var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
-		var len = Math.round( Math.random() * 2) + 5;
-		for( var a = 0; a < len; a++ ) {
-			password += pool[Math.floor( Math.random() * pool.length )];
-		}
-		return password;
-	}
+  jQuery(document).ready(function(){
+    jQuery('#user_username').focus(function(){
+      if(jQuery('#user_email').val() && !jQuery(this).val()){
+        var new_username = jQuery('#user_email').val();
+        if ( new_username.match( /@/ ) ) {
+          new_username = new_username.match( /(.*)@/ )[1];
+        }
+        jQuery(this).val(new_username);
+      }
+    });
+  });
+  function random_password() {
+    var password = "";
+    var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
+    var len = Math.round( Math.random() * 2) + 5;
+    for( var a = 0; a < len; a++ ) {
+      password += pool[Math.floor( Math.random() * pool.length )];
+    }
+    return password;
+  }
 </script>

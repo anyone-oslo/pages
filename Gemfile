@@ -59,8 +59,8 @@ gem 'term-ansicolor'
 # Load gems from plugins
 plugins_dir = File.join(File.dirname(__FILE__), '..')
 Dir.entries(plugins_dir).each do |plugin|
-	plugin_gemfile = File.join(plugins_dir, plugin, 'Gemfile')
-	if File.exist?(plugin_gemfile) && plugin != "pages"
-		self.instance_eval(Bundler.read_file(plugin_gemfile.to_s), plugin_gemfile.to_s, 1)
-	end
+  plugin_gemfile = File.join(plugins_dir, plugin, 'Gemfile')
+  if File.exist?(plugin_gemfile) && plugin != "pages"
+    self.instance_eval(Bundler.read_file(plugin_gemfile.to_s), plugin_gemfile.to_s, 1)
+  end
 end

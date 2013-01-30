@@ -3,34 +3,34 @@
 <%= dynamic_image_tag( @image, :size => "300x200" ) %>
 
 <%= start_form_tag :action => 'update', :id => @image %>
-	<p>
-		<label for="image_folder">Title</label><br/>
-		<%= text_field 'image', 'title'  %>
-	</p>
+  <p>
+    <label for="image_folder">Title</label><br/>
+    <%= text_field 'image', 'title'  %>
+  </p>
 
-	<p>
-		<label for="image_byline">Byline</label><br/>
-		<%= text_field 'image', 'byline'  %>
-	</p>
+  <p>
+    <label for="image_byline">Byline</label><br/>
+    <%= text_field 'image', 'byline'  %>
+  </p>
 
-	<p>
-		<label for="image_description">Description</label><br/>
-		<%= text_area 'image', 'description', :rows => 4  %>
-	</p>
+  <p>
+    <label for="image_description">Description</label><br/>
+    <%= text_area 'image', 'description', :rows => 4  %>
+  </p>
 
-	<!--
-	<p>
-		<label for="image_imagefile">Replace image</label><br/>
-		<%= file_field("image", "imagefile") %>
-	</p>
-	-->
-	<p>
-		<%= submit_tag 'Save', :class => "button" %>
-	</p>
+  <!--
+  <p>
+    <label for="image_imagefile">Replace image</label><br/>
+    <%= file_field("image", "imagefile") %>
+  </p>
+  -->
+  <p>
+    <%= submit_tag 'Save', :class => "button" %>
+  </p>
 
-	<% if @image_formats %>
-		<label>Bildetag</label><br />
-		<textarea rows="4" cols="60" style="font-size: 0.8em;">&lt;img src="/images/<%= Vector2d.new( @image.size ).constrain_both( @image_formats.first ).round %>/<%= @image.id %>/<%= @image.filename %>" alt="<%= @image.title %>" /&gt;</textarea>
-	<% end %>
-	
+  <% if @image_formats %>
+    <label>Bildetag</label><br />
+    <textarea rows="4" cols="60" style="font-size: 0.8em;">&lt;img src="/images/<%= Vector2d.new( @image.size ).constrain_both( @image_formats.first ).round %>/<%= @image.id %>/<%= @image.filename %>" alt="<%= @image.title %>" /&gt;</textarea>
+  <% end %>
+  
 </form>

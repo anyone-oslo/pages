@@ -11,16 +11,16 @@ process_title = "delayed_job: "+RAILS_ROOT
 $0 = process_title
 
 class DelayedJobWorker < DaemonSpawn::Base
-	def start(args)
-		ENV['RAILS_ENV'] ||= args.first || 'development'
-		Dir.chdir RAILS_ROOT
-		require File.join('config', 'environment')
-		Delayed::Worker.new.start
-	end
+  def start(args)
+    ENV['RAILS_ENV'] ||= args.first || 'development'
+    Dir.chdir RAILS_ROOT
+    require File.join('config', 'environment')
+    Delayed::Worker.new.start
+  end
 
-	def stop
-		system("kill `cat #{RAILS_ROOT}/tmp/pids/delayed_job.pid`")
-	end
+  def stop
+    system("kill `cat #{RAILS_ROOT}/tmp/pids/delayed_job.pid`")
+  end
 end
 
 DelayedJobWorker.spawn!(:log_file => File.join(RAILS_ROOT, "log", "delayed_job.log"),

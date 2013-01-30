@@ -1,67 +1,67 @@
 <%
-	page_title       "New user"
-	page_description "You are inviting a new user", :create
+  page_title       "New user"
+  page_description "You are inviting a new user", :create
 %>
 
 <% sidebar do %>
-	<h2>Inviting a new user</h2>
-	<p>
-		An email with the login details will be sent.
-	</p>
+  <h2>Inviting a new user</h2>
+  <p>
+    An email with the login details will be sent.
+  </p>
 <% end %>
 
 <% form_for 'user', @user, :url => { :action => :create }, :html => { :method => :post } do |f| %>
 
-	<%= f.hidden_field :is_admin %>
-	<%= f.hidden_field :is_activated %>
+  <%= f.hidden_field :is_admin %>
+  <%= f.hidden_field :is_activated %>
 
-	<%= labelled_field f.text_field( :realname ), "Name", 
-		:errors => @user.errors[:realname] 
-	%>
-	<%= labelled_field f.text_field( :email ), "Email address", 
-		:errors => @user.errors[:email] 
-	%>
-	<%= labelled_field f.text_field( :username ), "Username", 
-		:errors => @user.errors[:username] 
-	%>
-	<%= labelled_field f.text_field( :password ), "Password", 
-		:description => link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
-		:errors => @user.errors[:password] 
-	%>
-	<p>
-		<%= submit_tag "Send invite", :class=> :button %> or <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>
-	</p>
+  <%= labelled_field f.text_field( :realname ), "Name", 
+    :errors => @user.errors[:realname] 
+  %>
+  <%= labelled_field f.text_field( :email ), "Email address", 
+    :errors => @user.errors[:email] 
+  %>
+  <%= labelled_field f.text_field( :username ), "Username", 
+    :errors => @user.errors[:username] 
+  %>
+  <%= labelled_field f.text_field( :password ), "Password", 
+    :description => link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
+    :errors => @user.errors[:password] 
+  %>
+  <p>
+    <%= submit_tag "Send invite", :class=> :button %> or <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>
+  </p>
 
 <% end %>
 
 <script type="text/javascript">
-	window.addEventListener( "load", function()
-	{
-		$( "user_password" ).value = random_password();
-		$( "user_username" ).onfocus = function()
-		{
-			if ( $( "user_email" ).value && !this.value )
-			{
-				var new_username = $( "user_email" ).value;
-				if ( new_username.match( /@/ ) )
-				{
-					new_username = new_username.match( /(.*)@/ )[1];
-				}
-				this.value = new_username;
-			}
-		}
-	}, true );
+  window.addEventListener( "load", function()
+  {
+    $( "user_password" ).value = random_password();
+    $( "user_username" ).onfocus = function()
+    {
+      if ( $( "user_email" ).value && !this.value )
+      {
+        var new_username = $( "user_email" ).value;
+        if ( new_username.match( /@/ ) )
+        {
+          new_username = new_username.match( /(.*)@/ )[1];
+        }
+        this.value = new_username;
+      }
+    }
+  }, true );
 
 
-	function random_password()
-	{
-		var password = "";
-		var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
-		var len = Math.round( Math.random() * 3) + 4;
-		for( var a = 0; a < len; a++ )
-		{
-			password += pool[Math.floor( Math.random() * pool.length )];
-		}
-		return password;
-	}
+  function random_password()
+  {
+    var password = "";
+    var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
+    var len = Math.round( Math.random() * 3) + 4;
+    for( var a = 0; a < len; a++ )
+    {
+      password += pool[Math.floor( Math.random() * pool.length )];
+    }
+    return password;
+  }
 </script>

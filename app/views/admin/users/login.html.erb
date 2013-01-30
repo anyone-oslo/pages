@@ -1,107 +1,107 @@
 <%
-	page_title       "Sign in"
-	page_description "Please enter your username and password to sign in"
-	add_body_class   "login"
+  page_title       "Sign in"
+  page_description "Please enter your username and password to sign in"
+  add_body_class   "login"
 -%>
 
 <% sidebar do -%>
-	<h2>Please note</h2>
-	<p>
-		Microsoft Internet Explorer 6 and 7 are not supported.
-	</p>
-	<p>
-		We recommend using one of the following browsers:
-	</p>
-	<ul>
-		<li><%= link_to 'Google Chrome', 'http://www.google.com/chrome' %></li>
-		<li><%= link_to 'Firefox', 'http://mozilla.com/firefox' %></li>
-		<li><%= link_to 'Safari', 'http://www.apple.com/safari/' %></li>
-	</ul>
-	<p>
-		Please <%= link_to "contact support", 'http://support.manualdesign.no/' %> if you experience problems logging in or using Pages.
-	</p>
+  <h2>Please note</h2>
+  <p>
+    Microsoft Internet Explorer 6 and 7 are not supported.
+  </p>
+  <p>
+    We recommend using one of the following browsers:
+  </p>
+  <ul>
+    <li><%= link_to 'Google Chrome', 'http://www.google.com/chrome' %></li>
+    <li><%= link_to 'Firefox', 'http://mozilla.com/firefox' %></li>
+    <li><%= link_to 'Safari', 'http://www.apple.com/safari/' %></li>
+  </ul>
+  <p>
+    Please <%= link_to "contact support", 'http://support.manualdesign.no/' %> if you experience problems logging in or using Pages.
+  </p>
 <% end -%>
 
 <div id="forgotPasswordForm">
-	<% form_tag({:controller => :users, :action => :new_password}) do %>
-		<h2>Forgot your password?</h2>
-		<p>
-			Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
-		</p>
-		<p>
-			<%= text_field_tag :username, '', :size => 48 %>
-			<button type="submit">Send</button>
-		</p>
-	<% end %>
+  <% form_tag({:controller => :users, :action => :new_password}) do %>
+    <h2>Forgot your password?</h2>
+    <p>
+      Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
+    </p>
+    <p>
+      <%= text_field_tag :username, '', :size => 48 %>
+      <button type="submit">Send</button>
+    </p>
+  <% end %>
 </div>
 
 <div id="loginForm">
 
-	<% form_tag login_admin_users_path, :id => 'loginRegular' do %>
-		<p>
-			<label>Username</label>
-			<%= text_field_tag :login_username %>
-		</p>
-		<p>
-			<label>Password</label>
-			<%= password_field_tag :login_password %>
-		</p>
-		<p>
-			<button type="submit">Sign in</button>
-		</p>
-		<ul class="login_links">
-			<li><%= link_to_function "<strong>Help!</strong> I forgot my password!", "forgot_password();" %></li>
-			<li><%= link_to_function "Sign in with OpenID", "toggleLoginMode();" %></li>
-		</ul>
-	<% end %>
+  <% form_tag login_admin_users_path, :id => 'loginRegular' do %>
+    <p>
+      <label>Username</label>
+      <%= text_field_tag :login_username %>
+    </p>
+    <p>
+      <label>Password</label>
+      <%= password_field_tag :login_password %>
+    </p>
+    <p>
+      <button type="submit">Sign in</button>
+    </p>
+    <ul class="login_links">
+      <li><%= link_to_function "<strong>Help!</strong> I forgot my password!", "forgot_password();" %></li>
+      <li><%= link_to_function "Sign in with OpenID", "toggleLoginMode();" %></li>
+    </ul>
+  <% end %>
 
-	<% form_tag openid_path, :id => 'loginOpenID' do %>
-		<%= hidden_field_tag :openid_success, admin_default_url %>
-		<%= hidden_field_tag :openid_fail, admin_default_url %>
-		<p>
-			<label>Enter your OpenID URL:</label>
-			<%= text_field_tag :openid_url, '', :class => 'openid_url' %>
-		</p>
-		<p>
-			<button type="submit">Sign in</button>
-		</p>
-		<ul class="login_links">
-			<li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
-			<li><%= link_to_function "Sign in with with username and password", "toggleLoginMode();" %></li>
-		</ul>
-	<% end %>
+  <% form_tag openid_path, :id => 'loginOpenID' do %>
+    <%= hidden_field_tag :openid_success, admin_default_url %>
+    <%= hidden_field_tag :openid_fail, admin_default_url %>
+    <p>
+      <label>Enter your OpenID URL:</label>
+      <%= text_field_tag :openid_url, '', :class => 'openid_url' %>
+    </p>
+    <p>
+      <button type="submit">Sign in</button>
+    </p>
+    <ul class="login_links">
+      <li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
+      <li><%= link_to_function "Sign in with with username and password", "toggleLoginMode();" %></li>
+    </ul>
+  <% end %>
 
 
 </div>
 
 
 <script type="text/javascript">
-	(function($){
-		
-		window.toggleLoginMode = function(){
-			if ($.cookie('login_mode') === 'openid') {
-				$('#loginOpenID').hide();
-				$('#loginRegular').show();
-				$.cookie('login_mode', 'regular', {expires: 1095});
-			} else {
-				$('#loginOpenID').show();
-				$('#loginRegular').hide();
-				$.cookie('login_mode', 'openid', {expires: 1095});
-			}
-		}
-		
-		if ($.cookie('login_mode') === 'openid') {
-			$('#loginRegular').hide();
-		} else {
-			$('#loginOpenID').hide();
-		}
+  (function($){
+    
+    window.toggleLoginMode = function(){
+      if ($.cookie('login_mode') === 'openid') {
+        $('#loginOpenID').hide();
+        $('#loginRegular').show();
+        $.cookie('login_mode', 'regular', {expires: 1095});
+      } else {
+        $('#loginOpenID').show();
+        $('#loginRegular').hide();
+        $.cookie('login_mode', 'openid', {expires: 1095});
+      }
+    }
+    
+    if ($.cookie('login_mode') === 'openid') {
+      $('#loginRegular').hide();
+    } else {
+      $('#loginOpenID').hide();
+    }
 
-		$('#forgotPasswordForm').hide();
+    $('#forgotPasswordForm').hide();
 
-		window.forgot_password = function() {
-			$('#forgotPasswordForm').show();
-			$('#loginForm').hide();
-			return false;
-		}
-	})(jQuery);
+    window.forgot_password = function() {
+      $('#forgotPasswordForm').show();
+      $('#loginForm').hide();
+      return false;
+    }
+  })(jQuery);
 </script>

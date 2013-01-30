@@ -138,7 +138,7 @@ jQuery.extend({
         }).appendTo(document.body).fadeTo(speed, opacity, callback);
 
 
-		/*
+    /*
         return jQuery('<div></div>').attr({
                 id: '__dimScreen'
                 ,fade_opacity: opacity
@@ -153,7 +153,7 @@ jQuery.extend({
             ,width: jQuery(document).attr('width') + 'px'
             ,zIndex: 999
         }).appendTo(document.body).fadeTo(speed, opacity, callback);
-		*/
+    */
     },
 
     //stops current dimming of the screen
@@ -175,59 +175,59 @@ jQuery.extend({
  * (c) 2006 Alex Brem <alex@0xab.cd> - http://blog.0xab.cd
  */
 (function() {
-	var fieldSelection = {
-		getSelection: function() {
-			var e = this.jquery ? this[0] : this;
-			return (
-				/* mozilla / dom 3.0 */
-				('selectionStart' in e && function() {
-					var l = e.selectionEnd - e.selectionStart;
-					return { start: e.selectionStart, end: e.selectionEnd, length: l, text: e.value.substr(e.selectionStart, l) };
-				}) ||
-				/* exploder */
-				(document.selection && function() {
-					e.focus();
-					var r = document.selection.createRange();
-					if (r == null) {
-						return { start: 0, end: e.value.length, length: 0 }
-					}
-					var re = e.createTextRange();
-					var rc = re.duplicate();
-					re.moveToBookmark(r.getBookmark());
-					rc.setEndPoint('EndToStart', re);
-					return { start: rc.text.length, end: rc.text.length + r.text.length, length: r.text.length, text: r.text };
-				}) ||
-				/* browser not supported */
-				function() {
-					return { start: 0, end: e.value.length, length: 0 };
-				}
-			)();
-		},
+  var fieldSelection = {
+    getSelection: function() {
+      var e = this.jquery ? this[0] : this;
+      return (
+        /* mozilla / dom 3.0 */
+        ('selectionStart' in e && function() {
+          var l = e.selectionEnd - e.selectionStart;
+          return { start: e.selectionStart, end: e.selectionEnd, length: l, text: e.value.substr(e.selectionStart, l) };
+        }) ||
+        /* exploder */
+        (document.selection && function() {
+          e.focus();
+          var r = document.selection.createRange();
+          if (r == null) {
+            return { start: 0, end: e.value.length, length: 0 }
+          }
+          var re = e.createTextRange();
+          var rc = re.duplicate();
+          re.moveToBookmark(r.getBookmark());
+          rc.setEndPoint('EndToStart', re);
+          return { start: rc.text.length, end: rc.text.length + r.text.length, length: r.text.length, text: r.text };
+        }) ||
+        /* browser not supported */
+        function() {
+          return { start: 0, end: e.value.length, length: 0 };
+        }
+      )();
+    },
 
-		replaceSelection: function() {
-			var e = this.jquery ? this[0] : this;
-			var text = arguments[0] || '';
-			return (
-				/* mozilla / dom 3.0 */
-				('selectionStart' in e && function() {
-					e.value = e.value.substr(0, e.selectionStart) + text + e.value.substr(e.selectionEnd, e.value.length);
-					return this;
-				}) ||
-				/* exploder */
-				(document.selection && function() {
-					e.focus();
-					document.selection.createRange().text = text;
-					return this;
-				}) ||
-				/* browser not supported */
-				function() {
-					e.value += text;
-					return this;
-				}
-			)();
-		}
-	};
-	jQuery.each(fieldSelection, function(i) { jQuery.fn[i] = this; });
+    replaceSelection: function() {
+      var e = this.jquery ? this[0] : this;
+      var text = arguments[0] || '';
+      return (
+        /* mozilla / dom 3.0 */
+        ('selectionStart' in e && function() {
+          e.value = e.value.substr(0, e.selectionStart) + text + e.value.substr(e.selectionEnd, e.value.length);
+          return this;
+        }) ||
+        /* exploder */
+        (document.selection && function() {
+          e.focus();
+          document.selection.createRange().text = text;
+          return this;
+        }) ||
+        /* browser not supported */
+        function() {
+          e.value += text;
+          return this;
+        }
+      )();
+    }
+  };
+  jQuery.each(fieldSelection, function(i) { jQuery.fn[i] = this; });
 })();
 
 /* jquery.jcrop.js */
@@ -478,4 +478,3 @@ window.setTimeout(attachAttempt,50);};img.src=loadsrc;}
 this.each(function(){if($(this).data('Jcrop')){if(options==='api'){return $(this).data('Jcrop');}
 else{$(this).data('Jcrop').setOptions(options);}}
 else{attachWhenDone(this);}});return this;};$.Jcrop.defaults={allowSelect:true,allowMove:true,allowResize:true,trackDocument:true,baseClass:'jcrop',addClass:null,bgColor:'black',bgOpacity:0.6,bgFade:false,borderOpacity:0.4,handleOpacity:0.5,handleSize:9,handleOffset:5,aspectRatio:0,keySupport:true,cornerHandles:true,sideHandles:true,drawBorders:true,dragEdges:true,fixedSupport:true,touchSupport:null,boxWidth:0,boxHeight:0,boundary:2,fadeTime:400,animationDelay:20,swingSpeed:3,minSelect:[0,0],maxSize:[0,0],minSize:[0,0],onChange:function(){},onSelect:function(){},onRelease:function(){}};}(jQuery));
-

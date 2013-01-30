@@ -1,59 +1,59 @@
 <%
-	@page_title = "Media Library"
+  @page_title = "Media Library"
 %>
 
 <div class="taskbar">
-	<div class="taskbar-group">
-		<h2>Tasks</h2>
-		<p>
-			<%= link_to_remote "New image",  { :url => {:action => "new" }, :update => "edit-container" }, :class => "button" %>
-			<%= link_to        "Clear cache", {:action => "clear_cache"}, :class => "button" %>
-		</p>
-	</div>
-	<div class="taskbar-group">
-		<h2>View options</h2>
-		<%= form_tag( { :controller => 'files', :action => 'list', :page => @pages.current.number } ) %>
-		<select name="orderby">
-			<%= options_for_select( { "Latest first" => "date_added DESC", "Alphabetically" => "name ASC", "Chronologically" => "date_added ASC" } ) %>
-		</select> sized 
-		<select name="size">
-			<%= options_for_select( ["100x100", "180x150", "200x200"], @size ) %>
-		</select> as 
-		<select name="filterset">
-			<%= options_for_select( @filtersets, @filterset ) %>
-		</select>
-		<%= submit_tag "Apply", :disabled => false, :class => "button" %>
-		</form>
-	</div>
-	<div class="taskbar-group">
-		<h2>Search images</h2>
-		<p>
-			<%= form_tag( { :controller => 'files', :action => 'list', :page => @pages.current.number } ) %>
-				<%= text_field 'search', 'keywords'  %>
-				<%= submit_tag "Search", :class => "button" %>
-			</form>
-		</p>
-	</div>
+  <div class="taskbar-group">
+    <h2>Tasks</h2>
+    <p>
+      <%= link_to_remote "New image",  { :url => {:action => "new" }, :update => "edit-container" }, :class => "button" %>
+      <%= link_to        "Clear cache", {:action => "clear_cache"}, :class => "button" %>
+    </p>
+  </div>
+  <div class="taskbar-group">
+    <h2>View options</h2>
+    <%= form_tag( { :controller => 'files', :action => 'list', :page => @pages.current.number } ) %>
+    <select name="orderby">
+      <%= options_for_select( { "Latest first" => "date_added DESC", "Alphabetically" => "name ASC", "Chronologically" => "date_added ASC" } ) %>
+    </select> sized 
+    <select name="size">
+      <%= options_for_select( ["100x100", "180x150", "200x200"], @size ) %>
+    </select> as 
+    <select name="filterset">
+      <%= options_for_select( @filtersets, @filterset ) %>
+    </select>
+    <%= submit_tag "Apply", :disabled => false, :class => "button" %>
+    </form>
+  </div>
+  <div class="taskbar-group">
+    <h2>Search images</h2>
+    <p>
+      <%= form_tag( { :controller => 'files', :action => 'list', :page => @pages.current.number } ) %>
+        <%= text_field 'search', 'keywords'  %>
+        <%= submit_tag "Search", :class => "button" %>
+      </form>
+    </p>
+  </div>
 </div>
 
 <div id="edit-container"></div>
 
 <div id="images" class="clearfix">
-	<% @images.each do |image| -%>
-	<div class="image">
-		<div class="image-box"><div class="image-thumbnail">
-			<%= link_to_remote( 
-					dynamic_image_tag( image, :size => @size, :filterset => @filterset ),
-					:url    => { :action => "edit", :id => image.id },
-					:update => "edit-container"
-			) %>
-			<% link_to( "Delete", { :action => "destroy", :id => image }, :method => :delete, :confirm => "Are you sure? There is no undo." ) %>
-		</div></div>
-		<div class="image-description">
-			<%= image.name %>
-		</div>
-	</div>
-	<% end -%>
+  <% @images.each do |image| -%>
+  <div class="image">
+    <div class="image-box"><div class="image-thumbnail">
+      <%= link_to_remote( 
+          dynamic_image_tag( image, :size => @size, :filterset => @filterset ),
+          :url    => { :action => "edit", :id => image.id },
+          :update => "edit-container"
+      ) %>
+      <% link_to( "Delete", { :action => "destroy", :id => image }, :method => :delete, :confirm => "Are you sure? There is no undo." ) %>
+    </div></div>
+    <div class="image-description">
+      <%= image.name %>
+    </div>
+  </div>
+  <% end -%>
 </div>
 
 <%= paginator( @pages ) %>

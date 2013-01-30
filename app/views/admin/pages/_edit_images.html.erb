@@ -1,43 +1,43 @@
-	<div class="page_images">
-		<div class="editor">
-			<div class="controls">
-				<div class="nav">
-					<%= link_to "Previous", '#', :class => :previous %>
-					<%= link_to "Next",     '#', :class => :next %>
-					<%= link_to "Close",    '#', :class => :close %>
-				</div>
-				<h4>Image Editor</h4>
-				<%= text_field_tag 'page_image[byline]', '', :class => 'caption', :placeholder => 'Write your caption/byline' %>
-				<%= check_box_tag 'page_image[primary]', '1', false %><label>Primary</label>
-				<%= hidden_field_tag 'page_image[crop_start]' %>
-				<%= hidden_field_tag 'page_image[crop_size]' %>
-				<button class="save">Save</button>
-				<%= link_to "Delete image", '#', :class => :delete %>
-			</div>
-			<div class="edit_image"></div>
-		</div>
+  <div class="page_images">
+    <div class="editor">
+      <div class="controls">
+        <div class="nav">
+          <%= link_to "Previous", '#', :class => :previous %>
+          <%= link_to "Next",     '#', :class => :next %>
+          <%= link_to "Close",    '#', :class => :close %>
+        </div>
+        <h4>Image Editor</h4>
+        <%= text_field_tag 'page_image[byline]', '', :class => 'caption', :placeholder => 'Write your caption/byline' %>
+        <%= check_box_tag 'page_image[primary]', '1', false %><label>Primary</label>
+        <%= hidden_field_tag 'page_image[crop_start]' %>
+        <%= hidden_field_tag 'page_image[crop_size]' %>
+        <button class="save">Save</button>
+        <%= link_to "Delete image", '#', :class => :delete %>
+      </div>
+      <div class="edit_image"></div>
+    </div>
 
-		<div class="uploadButton">
-			<p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
-		</div>
+    <div class="uploadButton">
+      <p><%= button_to_function "Upload images", "showAdditionalImageModal();" %></p>
+    </div>
 
-		<div class="no_images">
-			<p>No images have been uploaded.</p>
-		</div>
+    <div class="no_images">
+      <p>No images have been uploaded.</p>
+    </div>
 
-		<div class="primary_container">
-			<% if @page.image? && (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
-				<div class="image primary" data-page-image-id="<%= page_image.id %>">
-					<%= dynamic_image_tag(page_image.image, :size => '220x220', :crop => true, :upscale => true) %>
-				</div>
-			<% end %>
-		</div>
-		<div class="images clearfix">
-			<% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
-				<div class="image" data-page-image-id="<%= i.id %>">
-					<%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
-				</div>
-			<% end %>
-		</div>
+    <div class="primary_container">
+      <% if @page.image? && (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
+        <div class="image primary" data-page-image-id="<%= page_image.id %>">
+          <%= dynamic_image_tag(page_image.image, :size => '220x220', :crop => true, :upscale => true) %>
+        </div>
+      <% end %>
+    </div>
+    <div class="images clearfix">
+      <% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
+        <div class="image" data-page-image-id="<%= i.id %>">
+          <%= dynamic_image_tag(i.image, :size => '100x100', :crop => true, :upscale => true) %>
+        </div>
+      <% end %>
+    </div>
 
-	</div>
+  </div>
