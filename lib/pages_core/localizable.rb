@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'pages_core/localizable/active_record_extension'
 require 'pages_core/localizable/class_methods'
 require 'pages_core/localizable/configuration'
