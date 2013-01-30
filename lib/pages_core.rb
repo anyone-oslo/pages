@@ -123,7 +123,7 @@ module PagesCore
     end
 
     def configuration(key=nil, value=nil)
-      load_default_configuration unless self.class_variables.include?('@@configuration')
+      load_default_configuration unless defined? @@configuration
       if key
         configuration.send(key, value) if value != nil
         configuration.get(key)

@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require File.join(File.dirname(__FILE__), '../hash_extensions')
-require File.join(File.dirname(__FILE__), '../configuration')
-
 module PagesCore
   module Templates
     class Configuration < PagesCore::Configuration::Handler
