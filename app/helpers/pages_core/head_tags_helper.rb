@@ -179,9 +179,7 @@ module PagesCore::HeadTagsHelper
     output += output_block
     output += "</head>\n"
 
-    # Inject HTML
-    concat(output)
-    return ""
+    output.html_safe
   end
 
   def feed_tags(options={})

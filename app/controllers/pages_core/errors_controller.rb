@@ -13,11 +13,10 @@ class PagesCore::ErrorsController < ApplicationController
       @error_report = YAML.load_file(error_report_file)
       @from         = params[:email]
       @description  = params[:description]
-      @site_name    = PagesCore.config :site_name
       if @error_report[:user_id]
         @error_report[:user] = User.find(@error_report[:user_id]) rescue nil
       end
-      AdminMailer.deliver_error_report(:error_report => @error_report, :from => @from, :description => @description, :site_name => @site_name)
+      AdminMailer.error_report(@error_report, @from, @description).deliver
       @error_id = session[:error_report]
     end
   end

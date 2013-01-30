@@ -85,12 +85,8 @@ class PagesCore::Admin::UsersController < Admin::AdminController
         if user = User.find_by_username_or_email(params[:username].to_s)
           new_password = user.generate_new_password
           user.save
-          AdminMailer.deliver_new_password(
-            :user      => user,
-            :site_name => PagesCore.config(:site_name),
-            :password  => new_password,
-            :login_url => admin_default_url
-          )
+
+          AdminMailer.new_password(user, new_password, admin_default_url).deliver
           flash[:notice] = "A new password has been sent to your email address"
           redirect_to "/admin" and return
         end
@@ -117,7 +113,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
       @user = User.new( params[:user] )
       @user.creator  = @current_user
       if @user.save
-        AdminMailer.deliver_new_user( :user => @user, :site_name => PagesCore.config( :site_name ), :login_url => admin_default_url )
+        AdminMailer.new_user(@user, admin_default_url).deliver
         flash[:notice] = "#{@user.realname} has been invited."
         redirect_to :action => :index
       else
@@ -148,12 +144,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
       if @user.update_attributes( params[:user] )
         # Send an email notification if the username or password changes
         if ( params[:user][:username] && params[:user][:username] != original_username ) || ( params[:user][:password] && !params[:user][:password].blank? )
-          AdminMailer.deliver_user_changed(
-            :user       => @user,
-            :site_name  => PagesCore.config( :site_name ),
-            :login_url  => admin_default_url,
-            :updated_by => @current_user
-          )
+          AdminMailer.user_changed(@user, admin_default_url, @current_user).deliver
         end
         @current_user = @user if @user == @current_user
         if new_openid_url

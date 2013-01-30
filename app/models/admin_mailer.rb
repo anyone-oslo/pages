@@ -2,9 +2,7 @@
 
 class AdminMailer < ActionMailer::Base
 
-  def self.default_address
-    "support@manualdesign.no"
-  end
+  default :from => Proc.new { "support@manualdesign.no" }
 
   def generic_mailer( options )
     @recipients = options[:recipients] || AdminMailer.default_address
@@ -17,54 +15,48 @@ class AdminMailer < ActionMailer::Base
     @charset    = options[:charset]    || "utf-8"
   end
 
-  # Create placeholders for whichever e-mails you need to deal with.
-  # Override mail elements where necessary
-  #
-  # def contact_us( options )
-  #	 self.generic_mailer( options )
-  # end
-
-  def new_user( options=Hash.new )
-    options[:subject]    = "#{options[:site_name]} has invited you to Pages"
-    options[:recipients] = options[:user].email
-    options[:body] = { :user => options[:user], :site_name => options[:site_name], :login_url => options[:login_url] }
-    self.generic_mailer( options )
+  def error_report(error_report, from, description)
+    @error_report, @from, @description = error_report, from, description
+    short_message = @error_report[:message].gsub(/[\s\n]+/, ' ')[0..80]
+    mail(
+      :to      => 'system+error@manualdesign.no',
+      :from    => (!@from.empty? ? @from : 'support@manualdesign.no')
+      :subject => "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
+    )
   end
 
-  def user_changed( options=Hash.new )
-    options[:subject]    = "Your Pages account on #{options[:site_name]} has been edited"
-    options[:recipients] = options[:user].email
-    options[:body]       = options
-    self.generic_mailer( options )
+  def new_user(user, login_url)
+    @user, @login_url = user, login_url
+    mail(
+      :to      => @user.email,
+      :subject => "#{PagesCore.config(:site_name)} has invited you to Pages"
+    )
   end
 
-  def new_password( options={} )
-    options[:subject]    = "Your new password on #{options[:site_name]}"
-    options[:recipients] = options[:user].email
-    options[:body] = { :user => options[:user], :site_name => options[:site_name], :login_url => options[:login_url] }
-    self.generic_mailer( options )
+  def user_changed(user, login_url, updated_by)
+    @user, @login_url, @updated_by = user, login_url, updated_by
+    mail(
+      :to      => @user.email,
+      :subject => "Your Pages account on #{PagesCore.config(:site_name)} has been edited"
+    )
   end
 
-  def error_report(options={})
-    mailer_options = {}
-    short_message = options[:error_report][:message].gsub(/[\s\n]+/, ' ')[0..80]
-    mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Pages] "
-    mailer_options[:subject]   += "Error: #{short_message}" rescue "Unknown error"
-    mailer_options[:recipients] = "system+error@manualdesign.no"
-    mailer_options[:body]       = options
-    mailer_options[:from]       = options[:from] if options[:from] && !options[:from].empty?
-    content_type "text/html"
-    self.generic_mailer(mailer_options)
+  def new_password(user, password, login_url)
+    @user, @password, @login_url = user, password, login_url
+    mail(
+      :to      => @user.email,
+      :subject => "Your new password on #{PagesCore.config(:site_name)}"
+    )
   end
 
-  def comment_notification(recipients, options={})
-    mailer_options = {
-      :subject    => "[#{PagesCore.config(:site_name)}] New comment on #{options[:page].name.to_s}",
-      :recipients => recipients,
-      :from       => options[:comment].email,
-      :body       => options,
-    }
-    self.generic_mailer(mailer_options)
+  def comment_notification(recipient, page, comment, url)
+    @recipient, @page, @comment, @url = recipient, page, comment, url
+    mail(
+      :to      => recipient,
+      :from    => @comment.email,
+      :subject => "[#{PagesCore.config(:site_name)}] New comment on #{@page.name.to_s}"
+
+    )
   end
 
 end
