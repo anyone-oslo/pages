@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class DropNewsletterTables < ActiveRecord::Migration
+class DropFeeds < ActiveRecord::Migration
   def self.up
     drop_table :feeds
     drop_table :feed_items
