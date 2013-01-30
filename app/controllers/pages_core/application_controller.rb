@@ -64,7 +64,7 @@ class PagesCore::ApplicationController < ActionController::Base
 						end
 						hash
 					end
-					error_report[:session]   = session.instance_variable_get("@data")
+					error_report[:session]   = session.to_hash
 					error_report[:backtrace] = clean_backtrace(exception)
 					error_report[:timestamp] = Time.now
 					if @current_user
@@ -161,7 +161,7 @@ class PagesCore::ApplicationController < ActionController::Base
 
 			# Login with username and password
 			elsif params[:login_username] && params[:login_password]
-				if user = User.find_by_username(params[:login_username])
+				if user = User.find_by_username(params[:login_username].to_s)
 					if user.authenticate(:password => params[:login_password])
 						user.rehash_password!(params[:login_password]) if user.password_needs_rehash?
 						@current_user = user

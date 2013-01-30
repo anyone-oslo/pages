@@ -73,7 +73,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
 			# Are we queried by category?
 			if params[:category]
-				@category = Category.find_by_slug(params[:category])
+				@category = Category.find_by_slug(params[:category].to_s)
 				unless @category
 					flash[:notice] = "Cannot find that category"
 					redirect_to news_admin_pages_url(:language => @language) and return

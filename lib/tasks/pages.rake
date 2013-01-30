@@ -68,7 +68,7 @@ namespace :pages do
 	desc "Autopublish due pages"
 	task :autopublish => :environment do
 		published = Page.autopublish!
-		puts "Autopublished #{published.length} pages"
+		Rails.logger.info "Autopublished #{published.length} pages"
 	end
 
 	desc "Perform routine maintenance"

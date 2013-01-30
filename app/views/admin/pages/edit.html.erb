@@ -47,7 +47,7 @@
 				<ul id="filelist">
 					<% @page.files.each do |file| %>
 						<li id="file_<%= file.id %>">
-							<%= image_tag 'admin/drag-handle.gif', :class => :handle, :plugin => :pages %>
+							<%= image_tag 'pages/admin/drag-handle.gif', :class => :handle %>
 							<strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path( @language, @page, file ) %>
 							(<%= link_to "Delete", admin_page_file_path( @language, @page, file ), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
 						</li>

@@ -3,8 +3,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
-	<link rel="shortcut icon" href="/assets/pages/favicon.gif?" type="image/gif" />
-	<link rel="icon"          href="/assets/pages/favicon.gif?" type="image/gif" />
+	<link rel="shortcut icon" href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
+	<link rel="icon"          href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
 
 	<%= stylesheet_link_tag "pages/admin" %>
 	<%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
@@ -20,7 +20,7 @@
 
 	<%# Header %>
 	<div id="header">
-		<div id="logo"><%= link_to image_tag("admin/icon.png", :plugin => :pages), '/admin' %></div>
+		<div id="logo"><%= link_to image_tag("pages/admin/icon.png"), '/admin' %></div>
 		<div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
 		<% if @current_user -%>
 			<div class="user">

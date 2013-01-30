@@ -51,7 +51,7 @@
 #prevLink, #nextLink{
 	width:            49%;
 	height:           100%;
-	background:       transparent url(/assets/pages/admin/blank.gif) no-repeat;
+	background:       transparent url('<%= asset_path "pages/admin/blank.gif" %>') no-repeat;
 /* Trick IE into showing hover */
 	display:          block;
 }
@@ -64,10 +64,10 @@
 	float:            right;
 }
 #prevLink:hover, #prevLink:visited:hover {
-	background:       url(/assets/pages/admin/lightbox-prevlabel.gif) left 15% no-repeat;
+	background:       url('<%= asset_path "pages/admin/lightbox-prevlabel.gif" %>') left 15% no-repeat;
 }
 #nextLink:hover, #nextLink:visited:hover {
-	background:       url(/assets/pages/admin/lightbox-nextlabel.gif) right 15% no-repeat;
+	background:       url('<%= asset_path "pages/admin/lightbox-nextlabel.gif" %>') right 15% no-repeat;
 }
 
 

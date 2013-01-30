@@ -238,7 +238,7 @@ function EditableImage(link, options){
 		openEditor : function() {
 			// Dim the screen and create the loading dialog
 			jQuery.dimScreen(200, 0.90);
-			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"/assets/pages/admin/loading-modal.gif\" /> Loading image editor&hellip;</div>");
+			jQuery('body').append("<div id=\"modalLoadingNotice\"><img src=\"<%= asset_path "pages/admin/loading-modal.gif" %>\" /> Loading image editor&hellip;</div>");
 			jQuery('#modalLoadingNotice').centerOnScreen().hide().fadeIn(200);
 
 			// Create the container
@@ -526,6 +526,7 @@ PagesAdmin.contentTabs = {
 				jQuery('#content-tabs a').each(function(){
 					jQuery(this).click(function(){
 						PagesAdmin.contentTabs.showFromURL(this.href);
+						return false;
 					});
 				});
 			}

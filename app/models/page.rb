@@ -837,7 +837,7 @@ class Page < ActiveRecord::Base
 			attributes = Hash.from_xml(page_xml.to_s)['page']
 			attributes.merge!({'parent_page_id' => self.id})
 			if attributes.has_key?('author_email')
-				author = User.exists?(:email => attributes['author_email']) ? User.find_by_email(attributes['author_email']): self.author
+				author = User.exists?(:email => attributes['author_email']) ? User.find_by_email(attributes['author_email'].to_s): self.author
 				attributes.delete('author_email')
 			else
 				author = self.author
@@ -869,7 +869,7 @@ class Page < ActiveRecord::Base
 	# Set categories from string
 	def category_names=(names)
 		if names
-			names = names.split(/[\s]*,[\s]*/).reject{|n| n.blank?}
+			names = names.to_s.split(/[\s]*,[\s]*/).reject{|n| n.blank?}
 			if names.length > 0
 				categories = names.map do |name|
 					cat = Category.exists?(:name => name) ? Category.find_by_name(name) : Category.create(:name => name)

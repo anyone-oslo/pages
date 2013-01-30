@@ -145,12 +145,37 @@ module PagesCore::HeadTagsHelper
 			output += "\t<meta name=\"keywords\" content=\"#{options[:meta_keywords]}\" />\n"
 		end
 
-		if page = @page
-			if page.image
-				# Facebook likes this
-				output += "\t<link rel=\"image_src\" href=\""+dynamic_image_url(page.image, :size => '400x', :only_path => false)+"\" />\n"
+		if @meta_image
+			options[:meta_image] = @meta_image
+		elsif @page && @page.image
+			options[:meta_image] = @page.image
+		end
+
+		if options[:meta_image]
+			if options[:meta_image].kind_of?(Image)
+				output += "\t<link rel=\"image_src\" href=\"" + dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false) + "\" />\n"
+			else
+				output += "\t<link rel=\"image_src\" href=\""  +options[:meta_image] + "\" />\n"
 			end
 		end
+
+
+		# Facebook meta tags
+	  output += "<meta property=\"og:type\" content=\"website\" />\n"
+	  output += "<meta property=\"og:site_name\" content=\"#{PagesCore.config(:site_name)}\" />\n"
+	  output += "<meta property=\"og:title\" content=\"#{options[:title]}\" />\n"
+		if options[:meta_image]
+			if options[:meta_image].kind_of?(Image)
+				output += "<meta property=\"og:image\" content=\""+dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false)+"\" />\n"
+			else
+				output += "<meta property=\"og:image\" content=\"" + options[:meta_image] + "\" />\n"
+			end
+		end
+		if options[:meta_description]
+			meta_description = html_escape(strip_tags(options[:meta_description]))
+			output += "<meta property=\"og:description\" content=\"#{meta_description}\" />\n"
+		end
+
 		output += output_block
 		output += "</head>\n"
 

@@ -22,7 +22,7 @@ module PagesCore::ApplicationHelper
 				page = options[:id]
 			elsif options[:id]
 				page = Page.find(options[:id]) rescue nil
-				page ||= Page.find_by_slug_and_locale(options[:id], @language)
+				page ||= Page.find_by_slug_and_language(options[:id].to_s, @language)
 			elsif @page
 				page = @page
 			end
@@ -107,7 +107,7 @@ module PagesCore::ApplicationHelper
 			if p.redirects?
 				url_options = p.redirect_to_options(options.merge({:language => p.working_language}))
 			else
-				url_options = options.merge({:controller => 'pages', :action => :show, :language => p.working_language, :id => p.to_param})
+				url_options = options.merge({:controller => '/pages', :action => :show, :language => p.working_language, :id => p.to_param})
 			end
 			url_for url_options
 		end

@@ -81,17 +81,19 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 		end
 
 		def new_password
-		end
-
-		def reset_password
-			if user = User.find_by_username_or_email(params[:username])
-				new_password = user.generate_new_password
-				user.save
-				AdminMailer.deliver_new_password( :user => user, :site_name => PagesCore.config( :site_name ), :password => new_password, :login_url => admin_default_url )
-				flash[:notice] = "A new password has been sent to your email address"
-				redirect_to "/admin" and return
-			else
-				redirect_to new_password_admin_users_url and return
+			if params[:username]
+				if user = User.find_by_username_or_email(params[:username].to_s)
+					new_password = user.generate_new_password
+					user.save
+					AdminMailer.deliver_new_password(
+						:user      => user,
+						:site_name => PagesCore.config(:site_name),
+						:password  => new_password,
+						:login_url => admin_default_url
+					)
+					flash[:notice] = "A new password has been sent to your email address"
+					redirect_to "/admin" and return
+				end
 			end
 		end
 

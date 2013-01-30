@@ -98,8 +98,8 @@ class User < ActiveRecord::Base
 
 		# Finds a user by either username or email address.
 		def find_by_username_or_email(string)
-			user   = self.find_by_username(string)
-			user ||= self.find_by_email(string)
+			user   = self.find_by_username(string.to_s)
+			user ||= self.find_by_email(string.to_s)
 			user
 		end
 
@@ -133,7 +133,7 @@ class User < ActiveRecord::Base
 		# created if it doesn't exist.
 		def authenticate_by_openid_url(openid_url)
 			return nil if openid_url.blank?
-			user = User.find_by_openid_url(openid_url)
+			user = User.find_by_openid_url(openid_url.to_s)
 			unless user
 				# Check special users
 				special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({:username => username})}
