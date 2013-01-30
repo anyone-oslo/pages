@@ -20,7 +20,7 @@ class AdminMailer < ActionMailer::Base
     short_message = @error_report[:message].gsub(/[\s\n]+/, ' ')[0..80]
     mail(
       :to      => 'system+error@manualdesign.no',
-      :from    => (!@from.empty? ? @from : 'support@manualdesign.no')
+      :from    => (!@from.empty? ? @from : 'support@manualdesign.no'),
       :subject => "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
     )
   end
