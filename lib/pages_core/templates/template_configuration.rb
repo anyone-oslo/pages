@@ -96,7 +96,7 @@ module PagesCore
             block.body        "Body",        :size => :large
             block.headline    "Headline",    :description => 'Optional, use if the headline should differ from the page name.', :size => :field
             block.excerpt     "Standfirst",  :description => 'An introductory paragraph before the start of the body.'
-             block.boxout      "Boxout",      :description => 'Part of the page, usually background info or facts related to the article.'
+            block.boxout      "Boxout",      :description => 'Part of the page, usually background info or facts related to the article.'
           end
         end
       end

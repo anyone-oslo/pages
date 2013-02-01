@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'delayed_job_active_record', '0.3.3'
 
   s.add_dependency 'rmagick', '2.12.2'
-  s.add_dependency 'dynamic_image-pages', ">= 0.0.5"
+  s.add_dependency 'dynamic_image-pages', ">= 0.0.7"
   #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
   # Assets
