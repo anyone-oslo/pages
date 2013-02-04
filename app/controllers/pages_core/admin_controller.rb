@@ -82,11 +82,13 @@ class PagesCore::AdminController < ApplicationController
     end
 
     # Register a menu item (for extending with custom controllers
-    def register_menu_item( name, url={}, class_name=:custom, options={} )
+    def register_menu_item(name, url={}, class_name=:custom, options={})
       @admin_menu      ||= []
-      url[:controller] ||= "admin/#{name.underscore}"
-      url[:action]     ||= 'index'
-      @admin_menu << { :name => name, :url => url, :class => class_name, :options => options }
+      if url.kind_of?(Hash)
+        url[:controller] ||= "admin/#{name.to_s.underscore}"
+        url[:action]     ||= 'index'
+      end
+      @admin_menu << {:name => name, :url => url, :class => class_name, :options => options}
     end
 
     # Add a stylesheet
