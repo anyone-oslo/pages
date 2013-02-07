@@ -13,10 +13,10 @@ namespace "#{application}".to_sym do
   end
 
   desc "Create symlinks"
-  task :symlink, :roles => [:web,:app] do
+  task :create_symlink, :roles => [:web,:app] do
     #run "ln -s #{deploy_to}/#{shared_dir}/some_dir #{deploy_to}/#{current_dir}/public/some_dir"
   end
 end
 
 after "deploy:setup",   "#{application}:setup"
-after "deploy:symlink", "#{application}:symlink"
+after "deploy:create_symlink", "#{application}:create_symlink"
