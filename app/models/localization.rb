@@ -73,12 +73,12 @@ class Localization < ActiveRecord::Base
     when "textile"
       converter = RedCloth.new( string + text )
       converter.hard_breaks = true
-      converter.to_html
+      converter.to_html.html_safe
     when "markdown"
       converter = BlueCloth.new( string + text)
-      converter.to_html
+      converter.to_html.html_safe
     else
-      string + text
+      (string + text).html_safe
     end
   end
 
@@ -92,12 +92,12 @@ class Localization < ActiveRecord::Base
     when "textile"
       converter = RedCloth.new( string )
       converter.hard_breaks = true
-      converter.to_html
+      converter.to_html.html_safe
     when "markdown"
       converter = BlueCloth.new( string )
-      converter.to_html
+      converter.to_html.html_safe
     else
-      string
+      string.html_safe
     end
   end
 
