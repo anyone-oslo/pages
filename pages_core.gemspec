@@ -31,9 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'ruby-openid'
   s.add_dependency 'httparty', '0.6.1' # For Campfire
 
-  s.add_dependency 'delayed_job', '3.0.5'
-  s.add_dependency 'delayed_job_active_record', '0.3.3'
-  s.add_dependency 'daemons', '1.1.0'
 
   s.add_dependency 'rmagick', '2.12.2'
   s.add_dependency 'dynamic_image-pages', ">= 0.0.7"
@@ -51,8 +48,13 @@ Gem::Specification.new do |s|
   # reCAPTCHA
   s.add_dependency "recaptcha", '0.3.4'
 
+  # Delayed Job
+  s.add_dependency 'delayed_job', '3.0.5'
+  s.add_dependency 'delayed_job_active_record', '0.3.3'
+  s.add_dependency 'daemons', '1.1.0'
+
   # Thinking Sphinx
-  s.add_dependency 'thinking-sphinx', '2.0.12'
+  s.add_dependency 'thinking-sphinx', '2.0.14'
   s.add_dependency 'ts-delayed-delta', '1.1.3'
 
   s.add_dependency 'term-ansicolor'
