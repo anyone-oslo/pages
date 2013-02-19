@@ -1,10 +1,11 @@
 // Frameworks
 //= require jquery
 //= require jquery_ujs
-//= require "pages/underscore"
-//= require "pages/jquery-ui"
+//= require jquery.ui.all
+//= require jquery.cookie
+//= require underscore
 
-// Vendor
+// Vendored libraries
 //= require "pages/jquery.libraries"
 
 //= require_tree "./admin"

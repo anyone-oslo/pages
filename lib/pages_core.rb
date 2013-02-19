@@ -14,6 +14,12 @@ require 'action_controller'
 require 'action_view'
 require 'action_mailer'
 
+# Assets
+require 'jquery/rails'
+require 'jquery/ui/rails'
+require 'jquery-cookie-rails'
+require 'underscore-rails'
+
 #require "rake"
 #require "mysql"
 #require "rdoc"
