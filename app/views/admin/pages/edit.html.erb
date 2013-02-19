@@ -58,7 +58,7 @@
         <p>No files added yet.</p>
       <% end %>
       <p>
-        <%= link_to_function "Add new file", "Element.show('new-file');", :class => :create %>
+        <%= link_to_function "Add new file", "$('#new-file').show();", :class => :create %>
       </p>
     <% end %>
   <% end %>

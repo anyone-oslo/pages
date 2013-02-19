@@ -66,7 +66,7 @@
     :errors => @user.errors[:username]
   %>
   <%= labelled_field f.text_field( :password ), "New password",
-    :description => "Leave the field blank if you do not wish to change the password. " + link_to_function( "Click here", "$( 'user_password' ).value = random_password()" ) + " to generate a random password.",
+    :description => "Leave the field blank if you do not wish to change the password. " + link_to_function( "Click here", "$('#user_password').val(random_password())" ) + " to generate a random password.",
     :errors => @user.errors[:password]
   %>
   <% if @user == @current_user %>

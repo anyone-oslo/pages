@@ -35,33 +35,26 @@
 <% end %>
 
 <script type="text/javascript">
-  window.addEventListener( "load", function()
-  {
-    $( "user_password" ).value = random_password();
-    $( "user_username" ).onfocus = function()
-    {
-      if ( $( "user_email" ).value && !this.value )
-      {
-        var new_username = $( "user_email" ).value;
-        if ( new_username.match( /@/ ) )
-        {
-          new_username = new_username.match( /(.*)@/ )[1];
-        }
-        this.value = new_username;
+  $(function() {
+    function random_password () {
+      var password = "";
+      var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
+      var len = Math.round(Math.random() * 3) + 4;
+      for (var a = 0; a < len; a++) {
+        password += pool[Math.floor(Math.random() * pool.length)];
       }
+      return password;
     }
-  }, true );
 
-
-  function random_password()
-  {
-    var password = "";
-    var pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
-    var len = Math.round( Math.random() * 3) + 4;
-    for( var a = 0; a < len; a++ )
-    {
-      password += pool[Math.floor( Math.random() * pool.length )];
-    }
-    return password;
-  }
+    $("#user_password").val(random_password());
+    $("#user_username").focus(function () {
+      if ($("#user_email" ).val() && !$(this).val()) {
+        var new_username = $("#user_email").val();
+        if (new_username.match(/@/)) {
+          new_username = new_username.match(/(.*)@/)[1];
+        }
+        $(this).val(new_username);
+      }
+    });
+  });
 </script>

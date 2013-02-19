@@ -19,7 +19,7 @@
     :errors => @user.errors[:username]
   %>
   <%= labelled_field f.text_field(:password), "Password",
-    :description => link_to_function( "Click here", "jQuery('#user_password' ).val(random_password())" ) + " to generate a random password.",
+    :description => link_to_function( "Click here", "$('#user_password').val(random_password())" ) + " to generate a random password.",
     :errors => @user.errors[:password]
   %>
   <%= labelled_field f.text_field(:openid_url), "OpenID URL",
@@ -32,14 +32,14 @@
 <% end %>
 
 <script type="text/javascript">
-  jQuery(document).ready(function(){
-    jQuery('#user_username').focus(function(){
-      if(jQuery('#user_email').val() && !jQuery(this).val()){
-        var new_username = jQuery('#user_email').val();
+  $(document).ready(function(){
+    $('#user_username').focus(function(){
+      if($('#user_email').val() && !$(this).val()){
+        var new_username = $('#user_email').val();
         if ( new_username.match( /@/ ) ) {
           new_username = new_username.match( /(.*)@/ )[1];
         }
-        jQuery(this).val(new_username);
+        $(this).val(new_username);
       }
     });
   });
