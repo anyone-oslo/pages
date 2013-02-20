@@ -15,15 +15,11 @@ require 'action_view'
 require 'action_mailer'
 
 # Assets
-require 'jquery/rails'
+require 'jquery/rails/engine'
 require 'jquery/ui/rails'
 require 'jquery-cookie-rails'
 require 'underscore-rails'
 require 'jcrop-rails'
-
-#require "rake"
-#require "mysql"
-#require "rdoc"
 
 require "bcrypt"
 require 'vector2d'
