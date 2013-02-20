@@ -19,6 +19,7 @@ require 'jquery/rails'
 require 'jquery/ui/rails'
 require 'jquery-cookie-rails'
 require 'underscore-rails'
+require 'jcrop-rails'
 
 #require "rake"
 #require "mysql"

@@ -40,9 +40,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'sass-rails'
   s.add_dependency 'json', '1.5.1'
   s.add_dependency 'coffee-script', '2.1.3'
-  s.add_dependency 'jquery-rails'
-  s.add_dependency 'jquery-ui-rails'
+  s.add_dependency 'jquery-rails', '2.1.4'    # Upgrade to newest when jcrop-rails is updated
+  s.add_dependency 'jquery-ui-rails', '3.0.1' # Upgrade to newest when jcrop-rails is updated
   s.add_dependency 'jquery-cookie-rails'
+  s.add_dependency 'jcrop-rails'
   s.add_dependency 'underscore-rails'
 
 
