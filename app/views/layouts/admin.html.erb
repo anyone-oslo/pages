@@ -10,11 +10,14 @@
   <%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
 
   <%= javascript_include_tag "pages/admin" %>
-  <%= admin_javascript_tags %>
   <%= csrf_meta_tag %>
 
 </head>
-<body class="<%= body_classes %>">
+<body class="<%= body_classes %>"
+      data-controller="<%= controller.class.to_s %>"
+      data-action="<%= controller.action_name %>"
+      data-language="<%= @language %>"
+>
 
   <%# Header %>
   <div id="header">

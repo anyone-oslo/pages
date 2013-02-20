@@ -28,19 +28,6 @@ module PagesCore::Admin::AdminHelper
     link_to(dynamic_image_tag(image, options), admin_image_path(image), :class => 'editableImage')
   end
 
-  def admin_javascript_tags
-    controller_name    = controller.class.to_s.demodulize
-    action_name        = params[:action]
-
-    output  = "<script type=\"text/javascript\">"
-    output += "  Admin.controller = Admin.#{controller_name};"
-    output += "  Admin.action     = \"#{action_name}\";"
-    output += "  Admin.language   = \"#{@language}\";" if @language
-    output += "</script>"
-
-    output.html_safe
-  end
-
   # Generate HTML for a field, with label and optionally description and errors.
   #
   # The options are:
