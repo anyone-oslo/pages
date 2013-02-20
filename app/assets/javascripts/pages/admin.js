@@ -13,40 +13,35 @@
 //= require_self
 //= require_tree "./admin"
 
-var PagesAdmin = {
+var Admin = {
 
   controller : false,
   action : false,
 
   init : function() {
-    if(PagesAdmin.contentTabs) {
-      PagesAdmin.contentTabs.init();
+    if(Admin.contentTabs) {
+      Admin.contentTabs.init();
     }
 
     // Call the controller action
-    if(PagesAdmin.controller) {
-      if(PagesAdmin.controller.init){
-        PagesAdmin.controller.init();
-      }
-      if(PagesAdmin.action && PagesAdmin.controller[PagesAdmin.action+"_action"]) {
-        PagesAdmin.controller[PagesAdmin.action+"_action"]();
+    if(Admin.controller) {
+      if(Admin.action && Admin.controller[Admin.action]) {
+        Admin.controller[Admin.action]();
       }
     }
   }
 }
 
-var Admin = PagesAdmin;
-
-PagesAdmin.contentTabs = {
+Admin.contentTabs = {
 
   tabs : new Array(),
   ids : new Array(),
 
   show : function(tab_id) {
-    var tabs = PagesAdmin.contentTabs.tabs;
+    var tabs = Admin.contentTabs.tabs;
     var tab = tabs[tab_id];
     if(tab) {
-      $.each(PagesAdmin.contentTabs.ids, function(i){
+      $.each(Admin.contentTabs.ids, function(i){
         if(tabs[this]) {
           $(tabs[this]).hide();
         } else {
@@ -63,15 +58,15 @@ PagesAdmin.contentTabs = {
     var tab_expression = /#(.*)$/
     if(url.toString().match(tab_expression)){
       var tab_id = url.toString().match(tab_expression)[1];
-      if(PagesAdmin.contentTabs.tabs[tab_id]){
-        PagesAdmin.contentTabs.show(tab_id);
+      if(Admin.contentTabs.tabs[tab_id]){
+        Admin.contentTabs.show(tab_id);
       }
     }
   },
 
   enable : function(tab_ids) {
-    var tabs = PagesAdmin.contentTabs.tabs;
-    PagesAdmin.contentTabs.ids = tab_ids;
+    var tabs = Admin.contentTabs.tabs;
+    Admin.contentTabs.ids = tab_ids;
     $.each(tab_ids, function(i) {
       var tab_id = this;
       $("#content-tab-"+this).each(function(i){
@@ -79,20 +74,20 @@ PagesAdmin.contentTabs = {
         tabs[tab_id] = this;
       });
     });
-    PagesAdmin.contentTabs.show(tab_ids[0]);
-    PagesAdmin.contentTabs.showFromURL(document.location);
+    Admin.contentTabs.show(tab_ids[0]);
+    Admin.contentTabs.showFromURL(document.location);
   },
 
   init : function() {
     if($('#content-tabs').length > 0) {
       $('#content-tabs a').each(function(){
         $(this).click(function(){
-          PagesAdmin.contentTabs.showFromURL(this.href);
+          Admin.contentTabs.showFromURL(this.href);
           return false;
         });
       });
     }
-    window.showContentTab = PagesAdmin.contentTabs.show;
+    window.showContentTab = Admin.contentTabs.show;
   }
 }
 
@@ -103,5 +98,5 @@ $(function () {
     $(document.body).addClass('with_sidebar');
   }
 
-  PagesAdmin.init();
+  Admin.init();
 });

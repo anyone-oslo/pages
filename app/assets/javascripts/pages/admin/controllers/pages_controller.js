@@ -1,8 +1,6 @@
 Admin.PagesController = {
-  init : function() {
-  },
 
-  index_action : function() {
+  index : function() {
 
     $('#reorder_link').click(function(){
       var link = this;
@@ -60,17 +58,17 @@ Admin.PagesController = {
 
   },
 
-  new_action : function() {
+  new : function() {
   },
 
-  new_news_action : function() {
+  new_news : function() {
   },
 
-  show_action : function () {
-    this.edit_action();
+  show : function () {
+    this.edit();
   },
 
-  edit_action : function() {
+  edit : function() {
     $('.advanced_options').hide();
     $('.advanced_toggle').click(function () {
       $('.advanced_options').slideToggle();
