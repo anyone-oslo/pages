@@ -55,7 +55,7 @@ p.error_id {
   color:               #DCDBD2;
 }
 
-input.text, textarea {
+input[type=text], textarea {
   vertical-align: top;
   border:              1px solid #c4c2bb;
   color:               #444;

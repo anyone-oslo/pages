@@ -51,7 +51,7 @@ form .field_with_errors label {
 }
 
 
-textarea, input.text {
+textarea, #main input[type="text"] {
   border:        1px solid #d4d4d4;
   background:    #fff url('<%= asset_path "pages/admin/formelement-bg.gif" %>') repeat-x;
   padding:       8px 10px;
@@ -66,6 +66,6 @@ textarea, input.text {
   min-width: 200px;
 }
 
-input[type=text].large, input[type=password].large {
+#main input[type=text].large, #main input[type=password].large {
   font-size: 1.4em;
 }

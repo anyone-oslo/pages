@@ -1,4 +1,4 @@
-window.EditableImage = (link, options) ->
+EditableImage = (link, options) ->
 
   # Default options
   settings = $.extend(
@@ -118,3 +118,5 @@ window.EditableImage = (link, options) ->
   $(link).click ->
     @editableImage.openEditor()
     false
+
+$ -> $("a.editableImage").each -> new EditableImage(this)
