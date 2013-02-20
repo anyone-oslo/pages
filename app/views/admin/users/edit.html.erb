@@ -1,11 +1,11 @@
 <%
   page_title       "Editing user: #{@user.realname}"
   if @user == @current_user
-    page_description "You are editing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
+    page_description "You are editing " + link_to("your own", [:admin, @user]) + " profile."
   else
-    page_description "You are editing " + link_to( "#{@user.realname}", admin_user_path( @user ) ) + "'s profile."
+    page_description "You are editing " + link_to("#{@user.realname}", [:admin, user]) + "'s profile."
   end
-  page_description_links link_to( "View all users", admin_users_path )
+  page_description_links link_to("View all users", admin_users_path)
 %>
 
 <% content_for :sidebar do %>
@@ -22,64 +22,49 @@
   <% end %>
 <% end %>
 
-
-<%= form_for @user, :url => {:action => :update}, :html => {:method => :put, :multipart => true} do |f| %>
+<%= form_for [:admin, @user], :html => {:multipart => true}, :builder => PagesCore::FormBuilder do |f| %>
 
   <%= f.hidden_field :is_admin %>
 
-
   <h2>Account details</h2>
-  <%= labelled_field f.text_field( :realname ), "Name",
-    :errors => @user.errors[:realname]
-  %>
-  <%= labelled_field f.text_field( :email ), "Email address",
-    :errors => @user.errors[:email]
-  %>
-  <%= labelled_field f.text_field( :mobile ), "Mobile",
-    :errors => @user.errors[:mobile]
-  %>
-  <%= labelled_field f.text_field( :web_link ), "Web site",
-    :errors => @user.errors[:web_link]
-  %>
-
+  <%= f.labelled_text_field :realname %>
+  <%= f.labelled_text_field :email %>
+  <%= f.labelled_text_field :mobile %>
+  <%= f.labelled_text_field :web_link %>
 
   <h2>Picture</h2>
   <% if @user.image %>
     <p id="user-image-info">
-      <%= (@user==@current_user) ? "You already have" : "#{@user.realname} already has" %> a profile picture. You can
+      <%= (@user==@current_user) ? "You already have" : "#{@user.realname} already has" %> a profile picture.
+      You can
       <%= link_to "delete it", delete_image_admin_user_path(@user), :method => :delete, :class => :delete %>
       or upload a new file below to replace it.
     </p>
   <% end %>
-  <%= labelled_field f.file_field( :image ), "Image file",
-    :errors => @user.errors[:image]
-  %>
 
+  <%= f.labelled_file_field :image %>
 
   <h2>Login options</h2>
-  <%= labelled_field f.text_field( :username ), "Username",
-    :errors => @user.errors[:username]
-  %>
-  <%= labelled_field f.text_field(:password), "New password",
-    :description => "Leave the field blank if you do not wish to change the password. " + link_to_function("Click here", "", :class => :generate_password) + " to generate a random password.",
-    :errors => @user.errors[:password]
-  %>
+  <%= f.labelled_text_field :username %>
+  <%= f.labelled_text_field :password, 'Change password' %>
+  <p>
+    Leave the password blank if you do not wish to change the password.
+    <%= link_to_function("Click here", "", :class => :generate_password) %>
+    to generate a random password.
+  </p>
 
   <% if @user == @current_user %>
-    <%= labelled_field f.text_field(:openid_url), "OpenID URL",
-      :errors => @user.errors[:openid_url]
-    %>
-  <% end %>
-  <% unless @user == @current_user || !@user.is_deletable? %>
-  <div class="field">
-    <%= f.check_box :is_activated %> The user account is activated<br />
-  </div>
+    <%= f.labelled_text_field :openid_url %>
   <% end %>
 
+  <% unless @user == @current_user || !@user.is_deletable? %>
+    <p>
+      <%= f.check_box :is_activated %> The user account is activated<br />
+    </p>
+  <% end %>
 
   <p>
-    <%= submit_tag "Save", :class=> :button %>
+    <button type="submit">Save</button>
   </p>
 
 <% end %>
-

@@ -10,26 +10,25 @@
   </p>
 <% end %>
 
-<%= form_for @user, :url => {:action => :create}, :html => {:method => :post} do |f| %>
+<%= form_for [:admin, @user], :builder => PagesCore::FormBuilder do |f| %>
 
   <%= f.hidden_field :is_admin %>
   <%= f.hidden_field :is_activated %>
 
-  <%= labelled_field f.text_field(:realname), "Name",
-    :errors => @user.errors[:realname]
-  %>
-  <%= labelled_field f.text_field(:email), "Email address",
-    :errors => @user.errors[:email]
-  %>
-  <%= labelled_field f.text_field(:username), "Username",
-    :errors => @user.errors[:username]
-  %>
-  <%= labelled_field f.text_field(:password), "Password",
-    :description => link_to_function("Click here", "", :class => :generate_password) + " to generate a random password.",
-    :errors => @user.errors[:password]
-  %>
+  <%= f.labelled_text_field :realname %>
+  <%= f.labelled_text_field :email %>
+  <%= f.labelled_text_field :username %>
+
+  <%= f.labelled_text_field :password %>
   <p>
-    <%= submit_tag "Send invite", :class=> :button %> or <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>
+    <%= link_to_function("Click here", "", :class => :generate_password) %>
+    to generate a random password.
+  </p>
+
+  <p>
+    <button type="submit">Send invite</button>
+    or
+    <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>
   </p>
 
 <% end %>

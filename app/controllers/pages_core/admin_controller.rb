@@ -4,6 +4,7 @@
 # and other common code for the Admin set of controllers.
 class PagesCore::AdminController < ApplicationController
 
+  before_filter :set_i18n_locale
   before_filter :require_authentication
   before_filter :build_admin_tabs
   before_filter :restore_persistent_params
@@ -20,6 +21,10 @@ class PagesCore::AdminController < ApplicationController
   end
 
   protected
+
+    def set_i18n_locale
+      I18n.locale = :en
+    end
 
     # Verifies the login. Redirects to users/welcome if the users table is empty. If not, renders the login screen.
     def require_authentication

@@ -7,26 +7,22 @@
   <p>Welcome to Pages! Before you can log on, we need to create the first user account. Please choose your desired username and password.</p>
 </div>
 
-<%= form_for @user, :method => :post, :url => create_first_admin_users_path do |f| %>
+<%= form_for [:admin, @user], :url => create_first_admin_users_path, :builder => PagesCore::FormBuilder do |f| %>
 
-  <%= labelled_field f.text_field(:realname), "Your name",
-    :errors => @user.errors[:realname]
-  %>
-  <%= labelled_field f.text_field(:email), "Email address",
-    :errors => @user.errors[:email]
-  %>
-  <%= labelled_field f.text_field(:username), "Username",
-    :errors => @user.errors[:username]
-  %>
-  <%= labelled_field f.text_field( :password ), "Password",
-    :description => link_to_function("Click here", "", :class => :generate_password) + " to generate a random password.",
-    :errors => @user.errors[:password]
-  %>
-  <%= labelled_field f.text_field(:openid_url), "OpenID URL",
-    :errors => @user.errors[:openid_url]
-  %>
+  <%= f.labelled_text_field :realname, "Your name" %>
+  <%= f.labelled_text_field :email %>
+  <%= f.labelled_text_field :username %>
+
+  <%= f.labelled_text_field :password %>
   <p>
-    <%= submit_tag 'Create' %>
+    <%= link_to_function("Click here", "", :class => :generate_password) %>
+    to generate a random password.
+  </p>
+
+  <%= f.labelled_text_field :openid_url %>
+
+  <p>
+    <button type="submit">Get started</button>
   </p>
 
 <% end %>

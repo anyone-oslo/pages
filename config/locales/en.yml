@@ -1,0 +1,9 @@
+en:
+  activerecord:
+    attributes:
+      user:
+        realname: Name
+        email: Email address
+        openid_url: OpenID URL
+        web_link: Web site
+        image: Profile picture

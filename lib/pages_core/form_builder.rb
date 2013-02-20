@@ -29,7 +29,7 @@ module PagesCore
       if errors_on?(attribute)
         label_text += " <span class=\"error\">#{first_error_on(attribute)}</span>"
       end
-      label_tag = content_tag 'label', label_text, :for => [object.class.to_s.underscore, attribute].join('_')
+      label_tag = content_tag 'label', label_text.html_safe, :for => [object.class.to_s.underscore, attribute].join('_')
 
       content_tag 'div', label_tag + content, :class => classes.join(' ')
     end
