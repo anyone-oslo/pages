@@ -24,52 +24,6 @@ $.extend({
     }
 });
 
-(function($){
-  $.BehaviorDetector = {
-    register: function(selector, behavior){
-      if(!$(this).data('behaviors')){
-        $(this).data('behaviors', {});
-      }
-      var behaviors = $(this).data('behaviors');
-      if(!behaviors[selector]){
-        behaviors[selector] = [];
-      }
-      behaviors[selector].push(behavior);
-    },
-    run: function(){
-      if($(this).data('behaviors')){
-        for(var selector in $(this).data('behaviors')){
-          for(var a = 0; a < $(this).data('behaviors')[selector].length; a++){
-            var behavior = $(this).data('behaviors')[selector][a];
-            $(selector).filter(function(){
-              return !$(this).data('appliedBehaviors') || $.inArray(behavior, $(this).data('appliedBehaviors'));
-            }).each(function(){
-              $(this).each(behavior);
-              if(!$(this).data('appliedBehaviors')){
-                $(this).data('appliedBehaviors', []);
-              }
-              $(this).data('appliedBehaviors').push(behavior);
-              return this
-            });
-          }
-        }
-      }
-    }
-  };
-  $.fn.onDetect = function(behavior){
-    $.BehaviorDetector.register(this.selector, behavior);
-    $.BehaviorDetector.run();
-    return this;
-  };
-  $(document).ready(function(){
-    $.BehaviorDetector.run();
-  });
-  $(document.body).bind('modified', function(){
-    $.BehaviorDetector.run();
-  });
-})(jQuery);
-
-
 var Modal = {
   container: false,
   makeContainer: function(){
@@ -99,7 +53,6 @@ var Modal = {
     $(this.container).html('<div class="container">'+options.text+'</div>');
     this.position();
     $(document.body).append('<div id="modalOverlay"/>');
-    $(document.body).trigger('modified');
     $('#modalOverlay').show().click(function(){Modal.clear();}).css({
       position: 'absolute', top: 0, left: 0, width: $(document).width()+'px', height: $(document).height()+'px', 'z-index': 19,
       'background-color': '#000000', opacity: 0
