@@ -42,8 +42,9 @@ class PagesCore::Admin::UsersController < Admin::AdminController
     end
 
     def welcome
-      unless User.count == 0
-        raise "Account holder already created"
+      if User.any?
+        flash[:error] = "Account holder already exists"
+        redirect_to admin_users_url and return
       end
       @user = User.new
     end

@@ -29,7 +29,9 @@
       Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
     </p>
     <p>
-      <%= text_field_tag :username, '', :size => 48 %>
+      <%= text_field_tag :username, '', :class => :large %>
+    </p>
+    <p>
       <button type="submit">Send</button>
     </p>
   <% end %>
@@ -40,18 +42,18 @@
   <%= form_tag login_admin_users_path, :id => 'loginRegular' do %>
     <p>
       <label>Username</label>
-      <%= text_field_tag :login_username %>
+      <%= text_field_tag :login_username, '', :class => :large %>
     </p>
     <p>
       <label>Password</label>
-      <%= password_field_tag :login_password %>
+      <%= password_field_tag :login_password, '', :class => :large %>
     </p>
     <p>
       <button type="submit">Sign in</button>
     </p>
     <ul class="login_links">
-      <li><%= link_to_function "<strong>Help!</strong> I forgot my password!".html_safe, "forgot_password();" %></li>
-      <li><%= link_to_function "Sign in with OpenID", "toggleLoginMode();" %></li>
+      <li><%= link_to_function "<strong>Help!</strong> I forgot my password!".html_safe, "", :class => :forgot_password %></li>
+      <li><%= link_to_function "Sign in with OpenID", "", :class => :toggle_login %></li>
     </ul>
   <% end %>
 
@@ -60,46 +62,15 @@
     <%= hidden_field_tag :openid_fail, admin_default_url %>
     <p>
       <label>Enter your OpenID URL:</label>
-      <%= text_field_tag :openid_url, '', :class => 'openid_url' %>
+      <%= text_field_tag :openid_url, '', :class => 'openid_url large' %>
     </p>
     <p>
       <button type="submit">Sign in</button>
     </p>
     <ul class="login_links">
       <li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
-      <li><%= link_to_function "Sign in with with username and password", "toggleLoginMode();" %></li>
+      <li><%= link_to_function "Sign in with with username and password", "", :class => :toggle_login %></li>
     </ul>
   <% end %>
 
-
 </div>
-
-
-<script type="text/javascript">
-  window.toggleLoginMode = function(){
-    if ($.cookie('login_mode') === 'openid') {
-      $('#loginOpenID').hide();
-      $('#loginRegular').show();
-      $.cookie('login_mode', 'regular', {expires: 1095});
-    } else {
-      $('#loginOpenID').show();
-      $('#loginRegular').hide();
-      $.cookie('login_mode', 'openid', {expires: 1095});
-    }
-  }
-
-
-  if ($.cookie('login_mode') === 'openid') {
-    $('#loginRegular').hide();
-  } else {
-    $('#loginOpenID').hide();
-  }
-
-  $('#forgotPasswordForm').hide();
-
-  window.forgot_password = function() {
-    $('#forgotPasswordForm').show();
-    $('#loginForm').hide();
-    return false;
-  }
-</script>

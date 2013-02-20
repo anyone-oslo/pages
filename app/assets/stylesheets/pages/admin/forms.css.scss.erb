@@ -48,21 +48,24 @@ form .field_with_errors label {
 }
 
 
-textarea, #main input[type="text"] {
-  border:        1px solid #d4d4d4;
-  background:    #fff url('<%= asset_path "pages/admin/formelement-bg.gif" %>') repeat-x;
-  padding:       8px 10px;
-  line-height:   1.4;
-  font-family:   Helvetica, Arial, sans-serif;
-  font-size:     13px;
+#main {
+
+  input[type=text], input[type=password], textarea {
+    border:        1px solid #d4d4d4;
+    background:    #fff url('<%= asset_path "pages/admin/formelement-bg.gif" %>') repeat-x;
+    padding:       8px 10px;
+    line-height:   1.4;
+    font-family:   Helvetica, Arial, sans-serif;
+    font-size:     13px;
+  }
+
+  input[type=text], input[type=password] {
+    width: 100%;
+    max-width: 450px;
+    min-width: 200px;
+    &.large {
+      font-size: 1.4em;
+    }
+  }
 }
 
-#main input[type=text], #main input[type=password] {
-  width: 100%;
-  max-width: 450px;
-  min-width: 200px;
-}
-
-#main input[type=text].large, #main input[type=password].large {
-  font-size: 1.4em;
-}
