@@ -1,0 +1,120 @@
+window.EditableImage = (link, options) ->
+
+  # Default options
+  settings = $.extend(
+    resourceURL: link.href
+    width: 800
+  , options)
+
+  @editableImage =
+    settings: settings
+    link: link
+    linkedImage: $(link).children("img")[0]
+    resourceURL: settings.resourceURL
+    editorDialog: false
+    imageData: false
+    previewURL: false
+    cropStartX: false
+    cropStartY: false
+    cropWidth: false
+    cropHeight: false
+    getScale: ->
+      @settings.width / @imageData.original_width
+
+    openEditor: ->
+
+      # Dim the screen and create the loading dialog
+      $.dimScreen 200, 0.90
+      $("body").append "<div id=\"modalLoadingNotice\"><img src=\"<%= image_path('pages/admin/loading-modal.gif') %>\" /> Loading image editor&hellip;</div>"
+      $("#modalLoadingNotice").centerOnScreen().hide().fadeIn 200
+
+      # Create the container
+      $("#editableImageEditor").remove()
+      $("body").append "<div id=\"editableImageEditor\" class=\"modalWindow\"></div>"
+
+      # Load data
+      binding = this
+      unless @imageData
+        $.getJSON @resourceURL + ".js", (json) ->
+          binding.imageData = json
+          binding.populateEditor()
+
+      else
+        @populateEditor()
+
+    populateEditor: ->
+      $("#editableImageEditor").empty().append("<img id=\"editableImageEditorImage\" />").append("<div id=\"editableImageEditorControls\" class=\"controls\" />").hide()
+      $("#editableImageEditorControls").append("<input type=\"button\" id=\"editableImageEditorSubmit\" value=\"Save\" />").append "<input type=\"button\" id=\"editableImageEditorClose\" value=\"Cancel\" />"
+      @previewURL = @linkedImage.src.replace(@linkedImage.src.match(/([\d]*x[\d]*)/)[1], "original/" + @settings.width + "x")
+      @previewURL = @previewURL.replace(/([\?\d])*$/, "")
+      binding = this
+      $("#editableImageEditorImage").each ->
+        @src = binding.previewURL
+
+      $("#editableImageEditorSubmit").click ->
+        binding.submit()
+
+      $("#editableImageEditorClose").click ->
+        binding.closeEditor()
+
+      onCrop = (coords) ->
+        binding.cropStartX = coords.x
+        binding.cropStartY = coords.y
+        binding.cropWidth = coords.w
+        binding.cropHeight = coords.h
+
+      $("#editableImageEditorImage").load ->
+        $("#modalLoadingNotice").fadeOut 100
+        $("#editableImageEditor").show().centerOnScreen()
+        jCropOptions =
+          onChange: onCrop
+          onSelect: onCrop
+
+        imageData = binding.imageData
+        if imageData.cropped
+          crop_start_x = Math.round(imageData.crop_start_x * binding.getScale())
+          crop_start_y = Math.round(imageData.crop_start_y * binding.getScale())
+          crop_end_x = crop_start_x + Math.round(imageData.crop_width * binding.getScale())
+          crop_end_y = crop_start_y + Math.round(imageData.crop_height * binding.getScale())
+          jCropOptions["setSelect"] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y]
+
+        # console.log(jCropOptions);
+        $("#editableImageEditorImage").Jcrop jCropOptions
+
+
+    closeEditor: ->
+      $("#modalLoadingNotice").remove()
+      $("#editableImageEditor").remove()
+      @imageData = false
+      $.dimScreenStop()
+
+    refreshLinkedImage: (size) ->
+      imageUrl = @linkedImage.src.replace(/\?.*$/, "") + "?" + (new Date().getTime())
+      @linkedImage.src = imageUrl
+
+    submit: ->
+      cropped = (if (not @cropWidth or not @cropHeight) then 0 else 1)
+      crop_start = false
+      crop_size = false
+      put_options = false
+      if cropped
+        crop_size = Math.floor(@cropWidth / @getScale()) + "x" + Math.floor(@cropHeight / @getScale())
+        crop_start = Math.floor(@cropStartX / @getScale()) + "x" + Math.floor(@cropStartY / @getScale())
+        put_options =
+          "image[cropped]": cropped
+          "image[crop_size]": crop_size
+          "image[crop_start]": crop_start
+      else
+        put_options = "image[cropped]": cropped
+      binding = this
+      $.put @resourceURL + ".json", put_options, (json) ->
+        binding.refreshLinkedImage crop_size
+        binding.closeEditor()
+
+
+
+  # Apply onClick behaviour
+  link.editableImage = @editableImage
+  $(link).click ->
+    @editableImage.openEditor()
+    false
