@@ -176,6 +176,10 @@ namespace :pages do
 
     desc "Update migrations"
     task :migrations => :environment do
+      if removed_migrations = PagesCore::Plugin.remove_old_migrations!
+        puts "\n#{removed_migrations.length} old migrations removed"
+      end
+
       new_migrations = PagesCore::Plugin.mirror_migrations!
       if new_migrations.any?
         puts "\n#{new_migrations.length} new migrations added, now run rake db:migrate"
