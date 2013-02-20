@@ -33,7 +33,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     def load_news_pages
       @news_pages = Page.news_pages(:language => @language)
       unless @news_pages && @news_pages.length > 0
-        flash[:notice] = "No pages have been flagged as news pages"
         redirect_to admin_pages_url(:language => @language) and return
       end
     end
