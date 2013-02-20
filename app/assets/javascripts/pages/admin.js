@@ -18,11 +18,7 @@ var PagesAdmin = {
   controller : false,
   action : false,
 
-  sniffBrowser : function() {
-  },
-
   init : function() {
-    PagesAdmin.sniffBrowser();
     if(PagesAdmin.contentTabs) {
       PagesAdmin.contentTabs.init();
     }
@@ -101,21 +97,6 @@ PagesAdmin.contentTabs = {
 }
 
 $(function () {
-
-  // Sniff browser and add classes
-  if (navigator) {
-    $.each(Array("WebKit","Gecko","Firefox"), function(){
-      if( navigator.userAgent.match( new RegExp(this+"\\/[\\d]+", 'i'))) {
-        $(document.body).addClass(this.toLowerCase());
-      }
-    });
-    if(navigator.userAgent.match("MSIE")) {
-      $(document.body).addClass('msie')
-    };
-    if( navigator.userAgent.match("MSIE 7") ) {
-      $(document.body).addClass('msie7');
-    }
-  }
 
   // Detect the sidebar and add the appropriate class to the document element.
   if($('#sidebar').length > 0){
