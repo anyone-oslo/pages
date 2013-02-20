@@ -60,7 +60,7 @@
         <% if @content_tabs %>
           <ul id="content-tabs">
             <% @content_tabs.map do |t| %>
-              <li id="content-tab-link-<%= t[:key] %>">
+              <li id="content-tab-link-<%= t[:key] %>" data-tab-name="<%= t[:key] %>">
                 <% if t[:options][:disabled] == true %>
                   <%= t[:name] %>
                 <% else %>
@@ -76,13 +76,6 @@
     <%# Template output %>
     <%= yield %>
   </div>
-
-  <%# Javascript magic %>
-  <% if @content_tabs %>
-    <script type="text/javascript">
-      Admin.contentTabs.enable(new Array(<%= @content_tabs.map{ |t| "'#{t[:key]}'" }.join(", ").html_safe %>));
-    </script>
-  <% end %>
 
   <%# multiple domain tracking for usage statistics %>
   <script type="text/javascript">
