@@ -177,17 +177,4 @@ class PagesCore::Frontend::PagesController < FrontendController
       render_page
     end
 
-    def sitemap
-      if params[:root_id]
-        page = Page.find( params[:root_id] ) rescue nil
-        if page
-          @pages = page.pages(:language => @language)
-        end
-      end
-      unless @pages
-        @pages = Page.root_pages(:language => @language)
-      end
-      render :layout => false
-    end
-
 end

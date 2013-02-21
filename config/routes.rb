@@ -8,7 +8,6 @@ Rails.application.routes.draw do
       get  'search'
       post 'search'
       post 'preview'
-      get  'sitemap'
     end
     member do
       post 'add_comment'
