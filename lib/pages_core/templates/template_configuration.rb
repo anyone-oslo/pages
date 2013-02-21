@@ -6,6 +6,12 @@ module PagesCore
     class TemplateConfiguration
       attr_reader :template_name
 
+      class << self
+        def all_blocks
+          self.new(:index).all_blocks
+        end
+      end
+
       def initialize(template_name)
         @template_name = template_name.to_sym
       end

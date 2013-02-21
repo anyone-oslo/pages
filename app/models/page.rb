@@ -28,6 +28,11 @@ class Page < ActiveRecord::Base
     attribute :excerpt
     attribute :headline
     attribute :boxout
+
+    # Get attributes from the template configuration
+    PagesCore::Templates::TemplateConfiguration.all_blocks.each do |block|
+      attribute block
+    end
   end
 
   # Page status labels
