@@ -2,7 +2,7 @@
 
 class PagesCore::Admin::UsersController < Admin::AdminController
 
-  before_filter :require_authentication, :except => [:new_password, :welcome, :create_first]
+  before_filter :require_authentication, :except => [:new_password, :welcome, :create_first, :login]
   before_filter :find_user,       :only => [:edit, :update, :show, :destroy, :delete_image, :update_openid]
   before_filter :verify_editable, :only => [:delete_image, :update, :destroy, :edit, :update_openid]
 
@@ -95,7 +95,9 @@ class PagesCore::Admin::UsersController < Admin::AdminController
     end
 
     def login
-      redirect_to admin_default_url
+      if @current_user
+        redirect_to admin_default_url
+      end
     end
 
     def logout

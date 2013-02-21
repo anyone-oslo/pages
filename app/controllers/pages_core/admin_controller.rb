@@ -32,7 +32,7 @@ class PagesCore::AdminController < ApplicationController
         if User.count < 1
           redirect_to :controller => :users, :action => :welcome and return false
         else
-          render :template => 'admin/users/login' and return false
+          redirect_to login_admin_users_url and return
         end
       end
     end
