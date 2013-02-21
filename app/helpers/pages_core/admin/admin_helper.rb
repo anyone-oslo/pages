@@ -69,6 +69,7 @@ module PagesCore::Admin::AdminHelper
       output += "<p>"+dynamic_image_tag( form.object.send(method), :size => '120x100' )+"</p>"
     end
     output += labelled_field(form.file_field(method), label, { :errors => form.object.errors[method] }.merge(options))
+    output.html_safe
   end
 
   def body_classes
