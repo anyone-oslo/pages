@@ -68,12 +68,13 @@ module PagesCore
             cache_dirs = [cache_base_dir]
           end
           cache_dirs.each do |cache_dir|
+            cache_dir = cache_dir.to_s
             if File.exist?(cache_dir)
               kill_patterns = self.config.patterns
               paths = []
               Find.find(cache_dir+"/") do |path|
                 Find.prune if path =~ Regexp.new("^#{cache_dir}/dynamic_image") # Ignore dynamic image
-                file = path.to_s.gsub(Regexp.new("^#{cache_dir}"), "")
+                file = path.gsub(Regexp.new("^#{cache_dir}"), "")
                 kill_patterns.each do |p|
                   if file =~ p && File.exist?( path )
                     swept_files << path
