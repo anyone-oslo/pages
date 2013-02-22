@@ -3,30 +3,6 @@
 module PagesCore
   module StringExtensions
 
-    # Convert any string to ASCII
-    def convert_to_ascii
-      @@ascii_converter ||= Iconv.new("ASCII//TRANSLIT", "UTF-8")
-      string = self.dup
-
-      # Do tuned translation first.
-      [
-        ['Ö','O'],  ['ö','o'],
-        ['Æ','AE'], ['æ','ae'],
-        ['Ø','OE'], ['ø','oe'],
-        ['Å','AA'], ['å','aa'],
-      ].each{ |s,r| string.gsub!(s,r) }
-
-      # Translate each char with iconv. This is done on char level
-      # in order to trap errors.
-      chars = (string.respond_to?(:mb_chars)) ? string.mb_chars : string.chars
-
-      string = chars.map do |char|
-        @@ascii_converter.iconv(char) rescue '?'
-      end.join
-
-      return string
-    end
-
     # Truncate string to max_length, retaining words. If the first word is shorter than max_length,
         # it will be shortened. An optional end_string can be supplied, which will be appended to the
         # string if it has been truncated.
@@ -52,10 +28,6 @@ module PagesCore
       self.strip.gsub(/^https?:\/\//, '')
     end
 
-    # Iconv wrapper
-    def iconv(to, from)
-      Iconv.iconv(to, from, self)
-    end
   end
 end
 

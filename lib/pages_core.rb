@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'digest/sha1'
-require 'iconv'
 require 'find'
 require 'open-uri'
 require 'pathname'

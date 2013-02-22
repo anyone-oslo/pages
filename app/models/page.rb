@@ -411,7 +411,7 @@ class Page < ActiveRecord::Base
 
     # Convert a string to an URL friendly slug
     def string_to_slug(string)
-      slug = string.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
+      slug = string.downcase.gsub(/[^\w\s]/,'')
       slug = slug.split( /[^\w\d\-]+/ ).compact.join( "_" )
     end
 
@@ -895,7 +895,7 @@ class Page < ActiveRecord::Base
   end
 
   def slug
-    self.class.string_to_slug( self.name.to_s )
+    self.class.string_to_slug(self.name.to_s)
   end
 
   def to_param

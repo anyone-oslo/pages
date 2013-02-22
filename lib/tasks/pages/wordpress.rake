@@ -83,7 +83,8 @@ namespace :pages do
             hash = {}
             row.each_with_index do |value, i|
               if @convert_encoding
-                value = Iconv.conv(@convert_to, @convert_from, value)
+                raise "Need to fix encoding conversion"
+                #value = Iconv.conv(@convert_to, @convert_from, value)
               end
               hash[@table_fields[table_name][i]] = value
             end

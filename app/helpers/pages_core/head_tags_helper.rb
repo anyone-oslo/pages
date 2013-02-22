@@ -96,7 +96,7 @@ module PagesCore::HeadTagsHelper
 
     #output += "\t"+javascript_include_tag(
     if options.has_key?(:javascript)
-      options[:javascript].each do |js|
+      Array(options[:javascript]).each do |js|
         if js.kind_of?(Array)
           output += "\t" + javascript_include_tag(js.first, js.last) + "\n"
         else

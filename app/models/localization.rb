@@ -25,32 +25,15 @@ class Localization < ActiveRecord::Base
   end
 
   class << self
-    def fetch_simple_array_from_sql( name, options={} )
-      sql = ActiveRecord::Base.connection();
-      options.symbolize_keys!
-      query = "SELECT DISTINCT `#{name}` FROM `#{self.table_name}`"
-      conditions = []
-      conditions << "localizable_type = '#{options[:type]}'"     if options.has_key? :type
-      conditions << "localizable_id   = #{options[:id]}"         if options.has_key? :id
-      conditions << "name          = '#{options[:name]}'"     if options.has_key? :name
-      conditions << "filter        = '#{options[:filter]}'"   if options.has_key? :filter
-      conditions << "locale      = '#{options[:locale]}'" if options.has_key? :locale
-      query += " WHERE "+conditions.join( ' AND ' ) if conditions.length > 0
-      rows = []
-      result = sql.execute( query );
-      while row = result.fetch_row
-        rows << row
-      end
-      rows.flatten.sort
+
+    def locales
+      self.select('locale').uniq.map{ |l| l.locale }
     end
 
-    def locales( options={} )
-      self.fetch_simple_array_from_sql( 'locale', options )
+    def names
+      self.select('name').uniq.map{ |l| l.name }
     end
 
-    def names( options={} )
-      self.fetch_simple_array_from_sql( 'name', options )
-    end
   end
 
   def filter

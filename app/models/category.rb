@@ -6,7 +6,7 @@ class Category < ActiveRecord::Base
   acts_as_list
 
   before_save do |cat|
-    cat.slug = cat.name.dup.convert_to_ascii.downcase.gsub(/[^\w\s]/,'')
+    cat.slug = cat.name.downcase.gsub(/[^\w\s]/,'')
     cat.slug = cat.slug.split( /[^\w\d\-]+/ ).compact.join( "-" )
   end
 

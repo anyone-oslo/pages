@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreatePagesTables < ActiveRecord::Migration
   def change
     create_table "accounts" do |t|

@@ -86,7 +86,7 @@ module PagesCore::Admin::AdminHelper
     @body_classes << class_name
   end
 
-  def header_tabs( options={} )
+  def header_tabs(options={})
     options = {
       :class => :pages
     }.merge(options)
@@ -97,8 +97,10 @@ module PagesCore::Admin::AdminHelper
     current_tab = menu_items.select { |menu_item|
       if menu_item[:options] && menu_item[:options][:current]
         menu_item[:options][:current].call
-      else
+      elsif menu_item[:url].is_a?(Hash)
         menu_item[:url][:controller] == controller.class.controller_path
+      else
+        menu_item[:url].gsub(/^\//, '') == controller.class.controller_path.inspect
       end
     }.first
 
@@ -112,7 +114,6 @@ module PagesCore::Admin::AdminHelper
           controller_name = ""
           logger.warn "Cannot get controller name from #{menu_item.inspect}"
         end
-        action_name = menu_item[:url][:action]
 
         classes << "current" if menu_item == current_tab
 
