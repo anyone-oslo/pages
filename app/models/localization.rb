@@ -1,22 +1,7 @@
 # encoding: utf-8
 
-# Patch older versions of RedCloth to fix Textile hard breaking
-if Object.const_defined?("RedCloth") && RedCloth.kind_of?(Class)
-  class RedCloth < String
-    def hard_break( text )
-      lines = text.split( /[\n]{2,}/m ).collect do |line|
-        line.gsub!( /\n/, "<br />\n" ) unless ( line.match( /^[\s]*(\*|#|\|)[\s]/ ) || line.match( /\|[\s]*$/ ) )
-        line
-      end.join( "\n\n" ) if hard_breaks
-      text.replace lines
-      end
-  end
-end
-
 class Localization < ActiveRecord::Base
   belongs_to :localizable, :polymorphic => true
-
-  #validates_presence_of :value
 
   validate do |localization|
     if !localization[:filter] || localization[:filter].blank?
@@ -41,8 +26,8 @@ class Localization < ActiveRecord::Base
   end
 
 
-  def to_s #( options={} )
-    text = self.value || ""
+  def to_s
+    self.value || ""
   end
 
   def to_html_with( text, options={} )
@@ -54,11 +39,10 @@ class Localization < ActiveRecord::Base
 
     case self.filter
     when "textile"
-      converter = RedCloth.new( string + text )
-      converter.hard_breaks = true
+      converter = RedCloth.new(string + text)
       converter.to_html.html_safe
     when "markdown"
-      converter = BlueCloth.new( string + text)
+      converter = BlueCloth.new(string + text)
       converter.to_html.html_safe
     else
       (string + text).html_safe
@@ -73,8 +57,7 @@ class Localization < ActiveRecord::Base
 
     case self.filter
     when "textile"
-      converter = RedCloth.new( string )
-      converter.hard_breaks = true
+      converter = RedCloth.new(string)
       converter.to_html.html_safe
     when "markdown"
       converter = BlueCloth.new( string )
@@ -85,15 +68,11 @@ class Localization < ActiveRecord::Base
   end
 
   def empty?
-    ( self.to_s.empty? ) ? true : false
+    self.to_s.empty?
   end
 
   def translate(locale)
-    localization = self.class.find( :first, :conditions => [ "localizable_id = ? AND localizable_type = ? AND name = ? AND locale = ?", self.localizable_id, self.localizable_type, self.name, locale ] )
-    #if localization == nil
-    #	localization = self.class.new( { :localizable_id => self.localizable_id, :localizable_type => self.localizable_type, :name => self.name, :locale => locale } )
-    #end
-    localization
+    localizable.localizations.where(:name => self.name, :locale => locale).first
   end
 
 end
