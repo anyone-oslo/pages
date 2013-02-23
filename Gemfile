@@ -1,6 +1,25 @@
 source "http://rubygems.org"
 source "http://gems.manualdesign.no/gems"
 
+gemspec
+
 gem 'mysql2'
 
-gemspec
+group :development do
+  gem 'combustion'
+  gem 'sdoc'
+  gem 'rb-fsevent'
+  gem 'ruby_gntp'
+  gem 'guard'
+  gem 'guard-spork'
+  gem 'guard-rspec'
+end
+
+group :test, :development do
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
+  gem 'fuubar'
+  gem 'factory_girl'
+  gem 'spork'
+end

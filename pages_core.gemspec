@@ -58,13 +58,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'capistrano'
   s.add_dependency 'term-ansicolor'
   s.add_dependency 'httparty', '~> 0.10.2' # For Campfire
-
-  # Development
-  s.add_development_dependency 'mysql2'
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'factory_girl'
-  s.add_development_dependency 'factory_girl_rails'
-  s.add_development_dependency 'combustion', '>= 0.3.2'
-  s.add_development_dependency 'sdoc', '>= 0.3.0'
-
 end
