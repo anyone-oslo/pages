@@ -5,6 +5,7 @@ require 'pages_core/localizable/class_methods'
 require 'pages_core/localizable/configuration'
 require 'pages_core/localizable/instance_methods'
 require 'pages_core/localizable/localizer'
+require 'pages_core/localizable/scope_extension'
 
 module PagesCore
 

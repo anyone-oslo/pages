@@ -18,7 +18,7 @@ module PagesCore
         self.localizer.locale
       end
 
-      # Getter for locale
+      # Setter for locale
       #
       #  page.locale = 'no' # => 'no'
       #
