@@ -10,23 +10,32 @@ describe PagesCore::HtmlFormatter do
   end
 
   describe "#to_html" do
-    it "converts a string to HTML" do
-      PagesCore::HtmlFormatter.new("Hello world")
-        .to_html
-        .should == "<p>Hello world</p>"
+    let(:string) { "Hello world" }
+    let(:options) { {} }
+
+    subject { PagesCore::HtmlFormatter.new(string, options).to_html }
+
+    it { should == "<p>Hello world</p>" }
+    its(:html_safe?) { should be_true }
+
+    context "with line breaks" do
+      let(:string) { "Hello\nworld" }
+      it { should == "<p>Hello<br />\nworld</p>" }
     end
 
-    it "converts line breaks to hard breaks" do
-      PagesCore::HtmlFormatter.new("Hello\nworld")
-        .to_html
-        .should == "<p>Hello<br />\nworld</p>"
+    describe "with :shorten" do
+      let(:options) { {shorten: 4} }
+      it { should == "<p>Hello&#8230;</p>" }
     end
 
-    it "outputs HTML safe strings" do
-      PagesCore::HtmlFormatter.new("Hello world")
-        .to_html
-        .html_safe?
-        .should be_true
+    describe "with :append" do
+      let(:options) { {append: "again"} }
+      it { should == "<p>Hello world again</p>" }
+    end
+
+    describe "with :shorten and :append" do
+      let(:options) { {shorten: 4, append: "again"} }
+      it { should == "<p>Hello&#8230; again</p>" }
     end
   end
 

@@ -9,10 +9,18 @@ module PagesCore
 
     def initialize(string, options={})
       @string = string
+      @options = options
     end
 
     def to_html
-      RedCloth.new(@string).to_html.html_safe
+      string = @string
+      if @options[:shorten] && string.length > @options[:shorten]
+        string = string[0..@options[:shorten]] + "..."
+      end
+      if @options[:append]
+        string += " #{@options[:append]}"
+      end
+      RedCloth.new(string).to_html.html_safe
     end
   end
 end
