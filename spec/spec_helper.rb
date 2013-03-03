@@ -6,7 +6,7 @@ Spork.prefork do
 
   Bundler.require :default, :development
 
-  #Spork.trap_method(Rails::Application, :eager_load!)
+  Spork.trap_method(Rails::Application, :eager_load!)
 
   Combustion.initialize!
   FactoryGirl.find_definitions

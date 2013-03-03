@@ -5,7 +5,7 @@ class Localization < ActiveRecord::Base
 
   validate do |localization|
     if !localization[:filter] || localization[:filter].blank?
-      localization.filter = PagesCore.config( :text_filter ).to_s
+      localization.filter = PagesCore.config(:text_filter).to_s
     end
   end
 
@@ -25,46 +25,19 @@ class Localization < ActiveRecord::Base
     ( self[:filter] && !self[:filter].blank? ) ? self[:filter] : PagesCore.config( :text_filter ).to_s
   end
 
-
   def to_s
     self.value || ""
   end
 
-  def to_html_with( text, options={} )
-    text = " " + text
-    string = self.to_s
-    if options.has_key?( :shorten ) && string.length > options[:shorten]
-      string = string[0..options[:shorten]] + "..."
-    end
-
-    case self.filter
-    when "textile"
-      converter = RedCloth.new(string + text)
-      converter.to_html.html_safe
-    when "markdown"
-      converter = BlueCloth.new(string + text)
-      converter.to_html.html_safe
-    else
-      (string + text).html_safe
-    end
+  def to_html_with(append, options={})
+    options = {
+      :append => append
+    }.merge(options)
+    PagesCore::HtmlFormatter.to_html(self.to_s, options)
   end
 
-  def to_html( options={} )
-    string = self.to_s
-    if options.has_key?( :shorten ) && string.length > options[:shorten]
-      string = string[0..options[:shorten]] + "..."
-    end
-
-    case self.filter
-    when "textile"
-      converter = RedCloth.new(string)
-      converter.to_html.html_safe
-    when "markdown"
-      converter = BlueCloth.new( string )
-      converter.to_html.html_safe
-    else
-      string.html_safe
-    end
+  def to_html(options={})
+    PagesCore::HtmlFormatter.to_html(self.to_s, options)
   end
 
   def empty?
