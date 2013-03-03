@@ -29,17 +29,6 @@ class Localization < ActiveRecord::Base
     self.value || ""
   end
 
-  def to_html_with(append, options={})
-    options = {
-      :append => append
-    }.merge(options)
-    PagesCore::HtmlFormatter.to_html(self.to_s, options)
-  end
-
-  def to_html(options={})
-    PagesCore::HtmlFormatter.to_html(self.to_s, options)
-  end
-
   def empty?
     self.to_s.empty?
   end

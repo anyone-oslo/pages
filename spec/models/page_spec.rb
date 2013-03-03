@@ -38,7 +38,7 @@ describe Page do
   it 'should return a blank Localization for uninitialized columns' do
     page = Page.new
     page.body?.should be_false
-    page.body.should be_a(Localization)
+    page.body.should be_a(String)
   end
 
   describe 'with an excerpt' do
@@ -51,18 +51,18 @@ describe Page do
     end
 
     it 'excerpt should be a localization' do
-      page.excerpt.should be_kind_of(Localization)
+      page.excerpt.should be_kind_of(String)
       page.excerpt.to_s.should == 'My test page'
     end
 
     it 'should be changed when saved' do
-      page.update_attribute(:excerpt, 'Hi')
+      page.update_attributes(:excerpt => 'Hi')
       page.reload
       page.excerpt.to_s.should == 'Hi'
     end
 
     it 'should remove the localization when nilified' do
-      page.update_attribute(:excerpt, nil)
+      page.update_attributes(:excerpt => nil)
       page.valid?.should be_true
       page.reload
       page.excerpt?.should be_false

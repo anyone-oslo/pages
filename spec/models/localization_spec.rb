@@ -38,34 +38,6 @@ describe Localization do
     end
   end
 
-  describe "#to_html" do
-    let(:localization) { create(:localization, value: "Hello world") }
-
-    context "with no options" do
-      subject { localization.to_html }
-      it { should == "<p>Hello world</p>" }
-    end
-
-    context "with :shorten" do
-      subject { localization.to_html(shorten: 4) }
-      it { should == "<p>Hello&#8230;</p>" }
-    end
-  end
-
-  describe "#to_html_with" do
-    let(:localization) { create(:localization, value: "Hello world") }
-
-    context "with no options" do
-      subject { localization.to_html_with('again') }
-      it { should == "<p>Hello world again</p>" }
-    end
-
-    context "with :shorten" do
-      subject { localization.to_html_with('Read more', shorten: 4) }
-      it { should == "<p>Hello&#8230; Read more</p>" }
-    end
-  end
-
   describe "#empty?" do
     subject { localization.empty? }
 

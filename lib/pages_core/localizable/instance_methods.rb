@@ -105,7 +105,7 @@ module PagesCore
             when "="
               localizer.set(requested_attribute.to_sym, args.first)
             else
-              localizer.get(requested_attribute.to_sym)
+              localizer.get(requested_attribute.to_sym).to_s
             end
           else
             super
