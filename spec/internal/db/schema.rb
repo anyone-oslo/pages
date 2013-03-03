@@ -83,20 +83,6 @@ ActiveRecord::Schema.define(:version => 20120621112244) do
     t.datetime "updated_at"
   end
 
-  create_table "images_imagesets", :force => true do |t|
-    t.integer "relation_id"
-    t.integer "imageset_id"
-    t.integer "image_id"
-    t.integer "position"
-  end
-
-  create_table "imagesets", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.datetime "created_at"
-    t.integer  "user_id"
-  end
-
   create_table "page_comments", :force => true do |t|
     t.integer  "page_id"
     t.string   "remote_ip"
