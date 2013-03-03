@@ -238,7 +238,6 @@ ActiveRecord::Schema.define(:version => 20120621112244) do
     t.string   "localizable_type"
     t.string   "name"
     t.string   "locale"
-    t.string   "filter"
     t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"

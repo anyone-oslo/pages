@@ -3,12 +3,6 @@
 class Localization < ActiveRecord::Base
   belongs_to :localizable, :polymorphic => true
 
-  validate do |localization|
-    if !localization[:filter] || localization[:filter].blank?
-      localization.filter = PagesCore.config(:text_filter).to_s
-    end
-  end
-
   class << self
 
     def locales
@@ -19,10 +13,6 @@ class Localization < ActiveRecord::Base
       self.select('name').uniq.map{ |l| l.name }
     end
 
-  end
-
-  def filter
-    ( self[:filter] && !self[:filter].blank? ) ? self[:filter] : PagesCore.config( :text_filter ).to_s
   end
 
   def to_s
