@@ -1,11 +1,13 @@
 require 'rubygems'
-#require 'bundler'
 
 require 'spork'
 
 Spork.prefork do
 
   Bundler.require :default, :development
+
+  #Spork.trap_method(Rails::Application, :eager_load!)
+
   Combustion.initialize!
   FactoryGirl.find_definitions
 
@@ -39,6 +41,9 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  FactoryGirl.reload
+  PagesCore.load_dependencies!
+
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}

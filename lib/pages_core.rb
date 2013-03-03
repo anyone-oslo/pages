@@ -43,34 +43,33 @@ require "recaptcha/rails"
 require 'thinking-sphinx'
 require 'thinking_sphinx/deltas/delayed_delta'
 
-# -----
-
-# Included in lib/
-require 'acts_as_taggable'
-require 'language'
-
-# Load ./pages_core/*.rb
-require 'pages_core/plugin'
-
-require 'pages_core/array_extensions'
-require 'pages_core/cache_sweeper'
-require 'pages_core/configuration'
-require 'pages_core/engine'
-require 'pages_core/hash_extensions'
-require 'pages_core/html_formatter'
-require 'pages_core/localizable'
-require 'pages_core/methoded_hash'
-require 'pages_core/pages_plugin'
-require 'pages_core/paginates'
-require 'pages_core/string_extensions'
-require 'pages_core/templates'
-require 'pages_core/version'
 
 module PagesCore
   class << self
+
+    def load_dependencies!
+      load 'acts_as_taggable.rb'
+      load 'language.rb'
+
+      load 'pages_core/plugin.rb'
+
+      load 'pages_core/array_extensions.rb'
+      load 'pages_core/cache_sweeper.rb'
+      load 'pages_core/configuration.rb'
+      load 'pages_core/engine.rb'
+      load 'pages_core/hash_extensions.rb'
+      load 'pages_core/html_formatter.rb'
+      load 'pages_core/localizable.rb'
+      load 'pages_core/methoded_hash.rb'
+      load 'pages_core/pages_plugin.rb'
+      load 'pages_core/paginates.rb'
+      load 'pages_core/string_extensions.rb'
+      load 'pages_core/templates.rb'
+      load 'pages_core/version.rb'
+    end
+
     def init!
-      # Register default mime types
-      Mime::Type.register "application/rss+xml", 'rss'
+      load_dependencies!
 
       # Register with PagesConsole
       PagesCore.register_with_pages_console
@@ -138,3 +137,5 @@ module PagesCore
   end
 
 end
+
+PagesCore.init!

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require 'pages_core/templates/block_configuration'
-require 'pages_core/templates/configuration'
-require 'pages_core/templates/template_configuration'
+load 'pages_core/templates/block_configuration.rb'
+load 'pages_core/templates/configuration.rb'
+load 'pages_core/templates/template_configuration.rb'
 
 module PagesCore
   module Templates

@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require 'pages_core/localizable/active_record_extension'
-require 'pages_core/localizable/class_methods'
-require 'pages_core/localizable/configuration'
-require 'pages_core/localizable/instance_methods'
-require 'pages_core/localizable/localizer'
-require 'pages_core/localizable/scope_extension'
+load 'pages_core/localizable/active_record_extension.rb'
+load 'pages_core/localizable/class_methods.rb'
+load 'pages_core/localizable/configuration.rb'
+load 'pages_core/localizable/instance_methods.rb'
+load 'pages_core/localizable/localizer.rb'
+load 'pages_core/localizable/scope_extension.rb'
 
 module PagesCore
 
