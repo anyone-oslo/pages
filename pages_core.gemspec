@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
   s.add_dependency 'pages_console', '~> 0.4.13'
   s.add_dependency 'ruby-openid', '~> 2.2.3'
+  s.add_dependency 'vector2d'
   s.add_dependency 'dynamic_image-pages', '>= 0.0.13'
 
   # Assets
