@@ -72,7 +72,7 @@ module PagesCore
       load_dependencies!
 
       # Register with PagesConsole
-      PagesCore.register_with_pages_console
+      #PagesCore.register_with_pages_console
     end
 
     def version
