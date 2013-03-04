@@ -8,7 +8,7 @@ class PagesCore::ApplicationController < ActionController::Base
     rescue_from ActiveRecord::RecordNotFound,         :with => :handle_exception
     rescue_from ActionController::RoutingError,       :with => :handle_exception
     rescue_from ActionController::UnknownController,  :with => :handle_exception
-    rescue_from ActionController::UnknownAction,      :with => :handle_exception
+    rescue_from AbstractController::ActionNotFound,   :with => :handle_exception
   end
 
   # Actions added to the SKIP_FILTERS array will be bypassed by filters.
@@ -46,6 +46,16 @@ class PagesCore::ApplicationController < ActionController::Base
       $0 = "#{@@default_process_title}: Idle (#{@@number_of_requests} reqs)"
     end
 
+    def log_error(exception)
+      trace = exception.backtrace
+      ActiveSupport::Deprecation.silence do
+        message = "\n#{exception.class} (#{exception.message}):\n"
+        message << exception.annoted_source_code.to_s if exception.respond_to?(:annoted_source_code)
+        message << "  " << trace.join("\n  ")
+        logger.fatal("#{message}\n\n")
+      end
+    end
+
     def handle_exception(exception)
       begin
         log_error exception
@@ -65,7 +75,7 @@ class PagesCore::ApplicationController < ActionController::Base
             hash
           end
           error_report[:session]   = session.to_hash
-          error_report[:backtrace] = clean_backtrace(exception)
+          error_report[:backtrace] = Rails.backtrace_cleaner.send(:filter, exception.backtrace)
           error_report[:timestamp] = Time.now
           if @current_user
             error_report[:user_id] = @current_user.id

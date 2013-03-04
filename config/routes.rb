@@ -86,6 +86,13 @@ Rails.application.routes.draw do
   match '/admin' => redirect{|env, req| "/admin/#{Language.default}/pages/news"}, :as => 'admin_default'
   #match '/admin' => 'admin#redirect', :as => 'admin_default'
 
+  # Errors
+  resources :errors do
+    collection do
+      post 'report'
+    end
+  end
+
   # Legacy routes
   match '/comments/:action/:type/:id', :controller => 'comments'
 
