@@ -58,8 +58,8 @@ class Admin.Controllers.UsersController extends Admin.Controllers.Base
   # Generates a random password
   random_password: ->
     password = ""
-    pool = "1234567890abcdefghijkmnopqrstuvwxyz1234567890ABCDEFGHJKLMNOPQRSTUVWXYZ1234567890!@#$%&*_+=?:;"
-    len = 12
+    pool = "23456789abcdefghjkmnpqrstuvwxyz1234567890ABCDEFGHJKLMNPQRSTUVWXYZ1234567890!@+=?"
+    len = 10
     a = 0
 
     while a < len
