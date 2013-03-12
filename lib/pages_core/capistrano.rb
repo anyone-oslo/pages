@@ -6,6 +6,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
   set :remote_user, "rails" unless variables.has_key?(:remote_user)
 
+  set :ssh_options, { :forward_agent => true }
+
   set :runner,      remote_user
   set :user,        remote_user
   set :use_sudo,    false
@@ -13,7 +15,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :web_server,  :apache2
 
   set :scm,                   "git"
-  set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.git"
+
+  if variables.has_key?(:github) && github
+    set :repository, "git@github.com:manualdesign/#{application}.git"
+  else
+    set :repository, "rails@manualdesign.no:~/git/sites/#{application}.git"
+  end
+
   set :deploy_via,            :remote_cache
   set :git_enable_submodules, 1
 
