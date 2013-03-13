@@ -34,7 +34,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :monit_delayed_job, "#{application}_delayed_job"
   set :monit_sphinx,      "#{application}_sphinx"
 
-  set :campfire_room, 302048 unless variables.has_key?(:campfire_room)
+  set :campfire_room, 555476 unless variables.has_key?(:campfire_room)
 
   role :web, remote_host
   role :app, remote_host
