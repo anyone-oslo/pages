@@ -47,7 +47,7 @@
       </div></li>
     </ul>
   <% elsif subpages.length > 0 %>
-    <ul <%= 'class="reorderable"' if page.reorderable_children? %> parent_page_id="<%= page.id %>"><% subpages.each do |subpage| %>
+    <ul <%= 'class="reorderable"'.html_safe if page.reorderable_children? %> parent_page_id="<%= page.id %>"><% subpages.each do |subpage| %>
       <%= render :partial => "pagelisting", :locals => { :page => subpage } %>
     <% end %></ul>
   <% else %>
