@@ -6,6 +6,8 @@ require File.join(File.dirname(__FILE__), 'lib/campfire')
 set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
 set :remote_user, "rails" unless variables.has_key?(:remote_user)
 
+set :ssh_options, { :forward_agent => true }
+
 set :runner,      remote_user
 set :user,        remote_user
 set :use_sudo,    false
