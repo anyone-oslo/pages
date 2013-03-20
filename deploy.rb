@@ -15,7 +15,12 @@ set :deploy_to,   "/var/www/#{application}" unless variables.has_key?(:deploy_to
 set :web_server,  :apache2
 
 set :scm,                   "git"
-set :repository,            "rails@manualdesign.no:~/git/sites/#{application}.git"
+if variables.has_key?(:github) && github
+  set :repository, "git@github.com:manualdesign/#{application}.git"
+else
+  set :repository, "rails@manualdesign.no:~/git/sites/#{application}.git"
+end
+
 set :deploy_via,            :remote_cache
 set :git_enable_submodules, 1
 
