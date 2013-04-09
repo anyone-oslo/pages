@@ -3,9 +3,9 @@
 %>
 <div class="published_date">
   <%= labelled_field (
-      f.date_select('published_at') +
+      f.date_select(:published_at) +
       '<br />'.html_safe +
-      f.time_select('published_at')
+      f.time_select(:published_at)
     ),
     "Date",
     :errors      => @page.errors[:published_at]
