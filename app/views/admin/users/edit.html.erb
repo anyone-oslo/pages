@@ -3,7 +3,7 @@
   if @user == @current_user
     page_description "You are editing " + link_to("your own", [:admin, @user]) + " profile."
   else
-    page_description "You are editing " + link_to("#{@user.realname}", [:admin, user]) + "'s profile."
+    page_description "You are editing " + link_to("#{@user.realname}", [:admin, @user]) + "'s profile."
   end
   page_description_links link_to("View all users", admin_users_path)
 %>
