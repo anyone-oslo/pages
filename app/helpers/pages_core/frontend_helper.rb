@@ -44,11 +44,11 @@ module PagesCore::FrontendHelper
   def nav_list_item(page, options={})
       options[:selected_class] ||= 'selected'
         if page.redirects? && page.redirect_to_options.kind_of?(Hash) && page.redirect_to_options[:controller] == params[:controller]
-      "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>"
+      "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>".html_safe
     elsif @page && page.is_or_is_ancestor?(@page)
-      "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>"
+      "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>".html_safe
     else
-      "<li>#{nav_link(page)}</li>"
+      "<li>#{nav_link(page)}</li>".html_safe
     end
   end
 end
