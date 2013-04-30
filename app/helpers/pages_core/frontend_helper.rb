@@ -5,6 +5,10 @@ module PagesCore::FrontendHelper
     @root_pages ||= Page.root_pages(:language => @language)
   end
 
+  def root_page
+    @root_page ||= root_pages.first
+  end
+
   def formatted_date(date, options={})
     date = date.to_date
     options.symbolize_keys!
