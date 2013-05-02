@@ -29,7 +29,6 @@ module PagesCore
           localizations.first
         else
           localization = @model.localizations.new(:locale => get_options[:locale].to_s, :name => attribute.to_s)
-          @model.localizations << localization
           localization
         end
       end

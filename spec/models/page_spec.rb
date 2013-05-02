@@ -61,7 +61,7 @@ describe Page do
 
     it 'should remove the unnecessary locales' do
       page.locales.should =~ ['en', 'nb']
-      page.update_attributes(excerpt: nil)
+      page.update_attributes(excerpt: '')
       page.locales.should =~ ['nb']
     end
   end
