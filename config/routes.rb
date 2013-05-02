@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     member do
       post 'add_comment'
     end
-    resources :page_files
+    resources :files, :controller => 'page_files'
   end
   match '/pages/:language/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }
 
