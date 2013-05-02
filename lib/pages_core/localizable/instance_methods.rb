@@ -10,6 +10,12 @@ module PagesCore
     #
     module InstanceMethods
 
+      # Returns all locales saved for this page.
+      #
+      def locales
+        self.localizer.locales
+      end
+
       # Getter for locale
       #
       #  page.locale # => 'en'

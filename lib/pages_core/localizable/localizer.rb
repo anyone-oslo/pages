@@ -6,13 +6,16 @@ module PagesCore
     class Localizer
       attr_accessor :locale
       def initialize(model)
-        @model                 = model
-        @configuration         = model.class.localizable_configuration
-        @unsaved_localizations = []
+        @model         = model
+        @configuration = model.class.localizable_configuration
       end
 
       def has_attribute?(attribute)
         @configuration.has_attribute?(attribute)
+      end
+
+      def locales
+        @model.localizations.map(&:locale).uniq
       end
 
       def locale?

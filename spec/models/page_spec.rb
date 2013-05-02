@@ -22,6 +22,12 @@ describe Page do
     it { should_not include(english_page) }
   end
 
+  describe ".locales" do
+    let(:page) { Page.create(:excerpt => {'en' => 'My test page', 'nb' => 'Testside'}, :locale => 'en') }
+    subject { page.locales }
+    it { should =~ ['en', 'nb'] }
+  end
+
   describe 'with ancestors' do
     let(:root)   { Page.create }
     let(:parent) { Page.create(:parent => root) }
@@ -51,6 +57,12 @@ describe Page do
       page.excerpt?.should be_true
       page.excerpt.to_s.should == 'My test page'
       page.localize('nb').excerpt.to_s.should == 'Testside'
+    end
+
+    it 'should remove the unnecessary locales' do
+      page.locales.should =~ ['en', 'nb']
+      page.update_attributes(excerpt: nil)
+      page.locales.should =~ ['nb']
     end
   end
 
