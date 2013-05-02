@@ -3,6 +3,25 @@
 require 'spec_helper'
 
 describe Page do
+
+  describe ".published" do
+    let!(:published_page) { create(:page) }
+    let!(:hidden_page) { create(:page, status: 3) }
+    let!(:autopublish_page) { create(:page, published_at: (Time.now + 2.hours)) }
+    subject { Page.published }
+    it { should include(published_page) }
+    it { should_not include(hidden_page) }
+    it { should_not include(autopublish_page) }
+  end
+
+  describe ".localized" do
+    let!(:norwegian_page) { Page.create(name: 'Test', locale: 'nb') }
+    let!(:english_page) { Page.create(name: 'Test', locale: 'en') }
+    subject { Page.localized('nb') }
+    it { should include(norwegian_page) }
+    it { should_not include(english_page) }
+  end
+
   describe 'with ancestors' do
     let(:root)   { Page.create }
     let(:parent) { Page.create(:parent => root) }

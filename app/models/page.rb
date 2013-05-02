@@ -107,6 +107,7 @@ class Page < ActiveRecord::Base
     set_property :group_concat_max_len => 16.megabytes
   end
 
+  scope :published, lambda { where(:status => 2, :autopublish => false) }
 
   # ---- CLASS METHODS ------------------------------------------------------
 
