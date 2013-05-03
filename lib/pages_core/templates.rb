@@ -2,6 +2,7 @@
 
 load 'pages_core/templates/block_configuration.rb'
 load 'pages_core/templates/configuration.rb'
+load 'pages_core/templates/controller_actions.rb'
 load 'pages_core/templates/template_configuration.rb'
 
 module PagesCore

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class PagesCore::Frontend::PagesController < FrontendController
+  include PagesCore::Templates::ControllerActions
 
   if PagesCore.config(:page_cache)
     caches_page :index
@@ -49,7 +50,13 @@ class PagesCore::Frontend::PagesController < FrontendController
       # Call template method
       template = @page.template
       template = "index" unless PagesCore::Templates.names.include?(template)
-      self.method("template_#{template}").call if self.methods.include?("template_#{template}")
+
+      if self.methods.include?("template_#{template}")
+        ActiveSupport::Deprecation.warn "template_[template] actions are deprecated."
+        self.method("template_#{template}").call
+      end
+
+      run_template_actions_for(template, @page)
 
       if @redirect
         return
