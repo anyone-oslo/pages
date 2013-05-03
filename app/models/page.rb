@@ -200,6 +200,8 @@ class Page < ActiveRecord::Base
     #   news_posts.previous_page # => 2
     #   news_posts.last_page => 11
     def get_pages(options={})
+      ActiveSupport::Deprecation.warn "Loading subpages with Page.get_pages is deprecated, use ARel scopes instead."
+
       options, find_options = get_pages_options(options)
 
       # Pagination
@@ -668,16 +670,24 @@ class Page < ActiveRecord::Base
   end
 
   # Get subpages
-  def pages(options={})
-    return [] if self.new_record? && !options.has_key?(:parent)
-    options[:parent] ||= self.id
-    if self.news_page?
-      options[:order] ||= "pinned DESC, #{self.content_order}"
+  def pages(options=nil)
+    if options.kind_of?(Hash)
+      return [] if self.new_record? && !options.has_key?(:parent)
+      options[:parent] ||= self.id
+      if self.news_page?
+        options[:order] ||= "pinned DESC, #{self.content_order}"
+      else
+        options[:order] ||= self.content_order
+      end
+      options[:locale] ||= self.locale if self.locale
+      Page.get_pages(options)
     else
-      options[:order] ||= self.content_order
+      subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
+      if self.locale?
+        subpages = subpages.localized(self.locale)
+      end
+      subpages
     end
-    options[:locale] ||= self.locale if self.locale
-    Page.get_pages(options)
   end
 
   # Count subpages

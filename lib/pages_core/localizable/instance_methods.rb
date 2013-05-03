@@ -32,6 +32,12 @@ module PagesCore
         self.localizer.locale = locale
       end
 
+      # Returns true if this page has a locale set
+      #
+      def locale?
+        self.localizer.locale?
+      end
+
       # Returns a copy of the model with a different locale.
       #
       #  localized = page.localize('en')
