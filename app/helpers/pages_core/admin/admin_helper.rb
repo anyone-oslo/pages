@@ -14,7 +14,7 @@ module PagesCore::Admin::AdminHelper
             check_box_tag("tag-#{tag.id}", 1, options[:tagged].include?(tag)) +
             content_tag(:span, tag.name, :class => :name)
           end
-        end.join
+        end.join.html_safe
       end +
       content_tag(:div, :class => 'add_tag_form') do
         text_field_tag('add_tag', options[:placeholder], :class => 'add_tag') +
