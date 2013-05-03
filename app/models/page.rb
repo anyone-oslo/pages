@@ -19,7 +19,7 @@ class Page < ActiveRecord::Base
   has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
 
   acts_as_list :scope => :parent_page
-  acts_as_tree :order => :position, :foreign_key => :parent_page_id
+  acts_as_tree :foreign_key => :parent_page_id
   acts_as_taggable
 
   localizable do
