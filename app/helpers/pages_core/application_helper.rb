@@ -85,7 +85,8 @@ module PagesCore::ApplicationHelper
   end
 
   def page_link(page, options={})
-    page.translate( @language ) do |p|
+    options[:language] ||= @language
+    page.localize(options[:language]) do |p|
       options[:title] ||= p.name.to_s
       if options.has_key? :unless
         options[:if] = (options[:unless]) ? false : true
@@ -96,20 +97,19 @@ module PagesCore::ApplicationHelper
       if p.redirects?
         link_to options[:title], p.redirect_to_options({:language => p.working_language}), :class => options[:class]
       else
-        link_to options[:title], {:controller => 'pages', :action => :show, :language => p.working_language, :id => p}, :class => options[:class]
+        link_to options[:title], page_path(options[:language], page), :class => options[:class]
       end
     end
   end
 
   def page_url(page, options={})
     options[:language] ||= @language
-    page.translate(options[:language]) do |p|
+    page.localize(options[:language]) do |p|
       if p.redirects?
-        url_options = p.redirect_to_options(options.merge({:language => p.working_language}))
+        url_for p.redirect_to_options(options.merge({:language => p.working_language}))
       else
-        url_options = options.merge({:controller => '/pages', :action => :show, :language => p.working_language, :id => p.to_param})
+        super options[:language], page
       end
-      url_for url_options
     end
   end
 
