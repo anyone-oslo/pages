@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
     resources :files, :controller => 'page_files'
   end
-  match '/pages/:language/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }
+  match '/pages/:language/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
 
   # OpenID
   resource :openid, :controller => 'openid' do
