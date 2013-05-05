@@ -44,7 +44,7 @@ class PagesCore::AdminController < ApplicationController
           "News", hash_for_news_admin_pages_path({:language => @language}), :pages,
           :current => Proc.new {
             params[:controller] == 'admin/pages' &&
-            (params[:action] == 'news' || (@page && @page.parent_page && @page.parent_page.news_page?))
+            (params[:action] == 'news' || (@page && @page.parent && @page.parent.news_page?))
           }
         )
       end

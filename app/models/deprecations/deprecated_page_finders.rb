@@ -316,6 +316,21 @@ module Deprecations
 
     end
 
+    def files?
+      ActiveSupport::Deprecation.warn "Page#files? is deprecated, use Page#files.any? instead."
+      files.any?
+    end
+
+    def images?
+      ActiveSupport::Deprecation.warn "Page#images? is deprecated, use Page#images.any? instead."
+      images.any?
+    end
+
+    def parent_page
+      ActiveSupport::Deprecation.warn "Page#parent_page is deprecated, use Page#parent instead."
+      parent
+    end
+
     private
 
     def get_pages_with_hash(options={})

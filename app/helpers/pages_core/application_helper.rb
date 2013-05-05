@@ -171,7 +171,7 @@ module PagesCore::ApplicationHelper
 
   def unique_page(page_name, &block)
     language = @language || Language.default
-    page = Page.find_unique(page_name)
+    page = Page.where(:unique_name => page_name).first
     if page && block_given?
       output = capture(page, &block)
       concat(output)

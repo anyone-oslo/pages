@@ -43,7 +43,7 @@
   <%# #### FILES #### %>
   <% if @page.template_config.value(:files) %>
     <%= content_tab "Files" do %>
-      <% if @page.files? %>
+      <% if @page.files.any? %>
         <ul id="filelist">
           <% @page.files.each do |file| %>
             <li id="file_<%= file.id %>">

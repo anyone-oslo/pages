@@ -37,7 +37,6 @@ class Page < ActiveRecord::Base
 
   # Page status labels
   STATUS_LABELS         = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
-  AUTOPUBLISH_FUZZINESS = 2.minutes
 
   validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
@@ -88,7 +87,7 @@ class Page < ActiveRecord::Base
 
   define_index do
     # Fields
-    indexes localizations.body,                   :as => :localization_bodies
+    indexes localizations.body,              :as => :localization_bodies
     indexes categories.name,                 :as => :category_names
     indexes tags.name,                       :as => :tag_names
     indexes [author.realname, author.email], :as => :author_name
@@ -99,7 +98,6 @@ class Page < ActiveRecord::Base
     has user_id, parent_page_id
     has status, template
     has autopublish, feed_enabled
-
     has categories(:id), :as => :category_ids
     has tags(:id), :as => :tag_ids
 
@@ -108,21 +106,16 @@ class Page < ActiveRecord::Base
   end
 
   scope :published, lambda { where(:status => 2, :autopublish => false) }
+  scope :visible,   lambda { where('status < 4') }
 
   # ---- CLASS METHODS ------------------------------------------------------
 
   class << self
-
-    # Finds page with unique name
-    def find_unique(name)
-      find_by_unique_name(name.to_s)
-    end
-
     # Finds pages due for auto publishing and publishes them.
     def autopublish!(options={})
-      timestamp  = Time.now + (options[:fuzziness] || AUTOPUBLISH_FUZZINESS)
-      pages      = self.find(:all, :conditions => ['autopublish = 1 AND published_at < ?', timestamp])
-      pages.each {|p| p.update_attribute(:autopublish, false)}
+      Page.where('autopublish = ? AND published_at <?', true, (Time.now + 2.minutes)).each do |p|
+        p.update_attributes(:autopublish => false)
+      end
     end
 
     # Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
@@ -167,8 +160,6 @@ class Page < ActiveRecord::Base
 
   end
 
-
-
   # ---- INSTANCE METHODS ---------------------------------------------------
 
   def tag_list=(tag_list)
@@ -186,50 +177,24 @@ class Page < ActiveRecord::Base
       parent
     end
   end
-  alias_method :parent_page, :parent
 
   alias_method :acts_as_tree_ancestors, :ancestors
 
   # Finds this page's ancestors
   def ancestors
-    ancestors = self.acts_as_tree_ancestors
-    if self.locale
-      ancestors = ancestors.map{|a| a.localize(self.locale) }
-    end
-    ancestors
-  end
-
-  def is_ancestor?(page)
-    page.ancestors.include?(self)
+    self.acts_as_tree_ancestors.map { |p| p.localize(self.locale) }
   end
 
   def is_or_is_ancestor?(page)
-    (page == self || self.is_ancestor?(page)) ? true : false
+    (page == self || page.ancestors.include?(self)) ? true : false
   end
 
   def excerpt_or_body
-    if self.excerpt?
-      self.excerpt
-    else
-      self.body
-    end
+    excerpt? ? excerpt : body
   end
 
   def headline_or_name
-      if self.headline?
-          self.headline
-        else
-            self.name
-        end
-    end
-
-  def is_extended?
-    (self.excerpt? && self.body?) ? true : false
-  end
-
-  # Does this page have any files?
-  def files?
-    (!self.files.empty?) ? true : false
+    headline? ? headline : name
   end
 
   def default_template
@@ -295,23 +260,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-  # Count subpages
-  def count_pages(options={})
-    options[:parent] ||= self.id
-    options[:order]  ||= self.content_order
-    options[:locale] ||= self.locale if self.locale
-    Page.count_pages(options)
-  end
-  alias_method :pages_count, :count_pages
-
-  # Count subpages by year and month
-  def count_pages_by_year_and_month(options={})
-    options = options.dup
-    options[:parent] ||= self
-    Page.count_pages_by_year_and_month(options)
-  end
-  alias_method :pages_count_by_year_and_month, :count_pages_by_year_and_month
-
   # Get this page's root page.
   def root_page
     root_page = self
@@ -328,25 +276,6 @@ class Page < ActiveRecord::Base
       return true if compare == page
     end
     return false
-  end
-
-  # Get sibling by offset (most likely +1 or -1)
-  def sibling_by_offset(offset, options={})
-    return nil unless self.parent
-    siblings = self.parent.pages(options)
-    raise "self not found in collection" unless siblings.include? self
-    index    = siblings.index(self) + offset
-    (index >= 0 && index < siblings.length) ? siblings[index] : nil
-  end
-
-  # Get the next sibling
-  def next_sibling(options={})
-    sibling_by_offset(1, options)
-  end
-
-  # Get the previous
-  def previous_sibling(options={})
-    sibling_by_offset(-1, options)
   end
 
   # Return the status of the page as a string
@@ -371,11 +300,11 @@ class Page < ActiveRecord::Base
   end
 
   def extended?
-    self.excerpt?
+    excerpt?
   end
 
   def blank?
-    !self.body?
+    !body?
   end
 
   # Get publication date, which defaults to the creation date
@@ -406,12 +335,12 @@ class Page < ActiveRecord::Base
 
   # Returns true if this page's children is reorderable
   def reorderable_children?
-    (!self.content_order? || (self.content_order =~ /position/)) ? true : false
+    !self.content_order? || self.content_order =~ /position/
   end
 
   # Returns true if this page is reorderable
   def reorderable?
-    (!self.parent || !self.parent.content_order? || (self.parent.content_order =~ /position/)) ? true : false
+    !self.parent || !self.parent.content_order? || self.parent.content_order =~ /position/
   end
 
   # Imports subpages from XML
@@ -437,21 +366,6 @@ class Page < ActiveRecord::Base
     created_pages
   end
 
-  def method_missing(method_name, *args)
-    name = method_name.to_s
-    # Booleans
-    if(n = name.match(/(.*)\?/))
-      downcase_labels = STATUS_LABELS.collect{|l| l.downcase }
-      if downcase_labels.include?(n[1].downcase)
-        return (self.status == downcase_labels.index(n[1].downcase)) ? true : false
-      else
-        super
-      end
-    else
-      super
-    end
-  end
-
   # Set categories from string
   def category_names=(names)
     if names
@@ -465,14 +379,24 @@ class Page < ActiveRecord::Base
     end
   end
 
-  # Does this page have images?
-  def images?
-    self.images.count > 0
+  def draft?
+    status == 0
   end
 
-  # Is this page published?
+  def reviewed?
+    status == 1
+  end
+
   def published?
-    (self.status == 2 && !self.autopublish?) ? true : false
+    status == 2 && !autopublish?
+  end
+
+  def hidden?
+    status == 3
+  end
+
+  def deleted?
+    status == 4
   end
 
   def to_param
@@ -485,14 +409,13 @@ class Page < ActiveRecord::Base
   end
 
   def empty?
-    ((self.body.to_s + self.excerpt.to_s).strip.empty?) ? true : false
+    !body? && !excerpt?
   end
 
-  alias_method :ar_to_xml, :to_xml
   def to_xml(options = {})
     default_except = [:comments_count, :byline, :delta, :last_comment_at, :image_id]
     options[:except] = (options[:except] ? options[:except] + default_except : default_except)
-    ar_to_xml(options) do |xml|
+    super(options) do |xml|
       self.all_fields.each do |localizable_name|
         xml.tag!(localizable_name.to_sym) do |field|
           self.languages_for_field(localizable_name).each do |language|
