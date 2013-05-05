@@ -36,7 +36,6 @@ require 'json'
 require 'coffee-script'
 
 require 'acts_as_list'
-require 'acts_as_tree'
 
 require "recaptcha/rails"
 

@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
 
   # ActiveRecord extensions
   s.add_dependency 'acts_as_list'
-  s.add_dependency 'acts_as_tree', '~> 0.2.0' # This is the latest version with Ruby 1.8 support
 
   # reCAPTCHA
   s.add_dependency 'recaptcha', '~> 0.3.4'
