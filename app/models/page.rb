@@ -2,6 +2,7 @@
 
 class Page < ActiveRecord::Base
   include Deprecations::DeprecatedPageFinders
+  include PagesCore::PageTree
 
   serialize :redirect_to
 
@@ -19,7 +20,6 @@ class Page < ActiveRecord::Base
   has_many :files, :class_name => 'PageFile', :dependent => :destroy, :order => :position
 
   acts_as_list :scope => :parent_page
-  acts_as_tree :foreign_key => :parent_page_id
   acts_as_taggable
 
   localizable do
@@ -109,20 +109,12 @@ class Page < ActiveRecord::Base
   scope :visible,    lambda { where('status < 4') }
   scope :news_pages, lambda { visible.where(:news_page => true) }
 
-  # ---- CLASS METHODS ------------------------------------------------------
-
   class << self
     # Finds pages due for auto publishing and publishes them.
     def autopublish!(options={})
       Page.where('autopublish = ? AND published_at <?', true, (Time.now + 2.minutes)).each do |p|
         p.update_attributes(:autopublish => false)
       end
-    end
-
-    # Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
-    def root_pages(options={})
-      options[:parent] ||= :root
-      Page.get_pages(options)
     end
 
     # Find all published and feed enabled pages
@@ -136,36 +128,10 @@ class Page < ActiveRecord::Base
       Page::STATUS_LABELS.each_index{|i| labels << [Page::STATUS_LABELS[i],i]}
       labels
     end
-
   end
-
-  # ---- INSTANCE METHODS ---------------------------------------------------
 
   def tag_list=(tag_list)
     tag_with(tag_list)
-  end
-
-  alias_method :acts_as_tree_parent, :parent
-
-  # Get this page's parent page.
-  def parent
-    parent = acts_as_tree_parent
-    if parent && parent.kind_of?(Page)
-      parent.localize(self.locale)
-    else
-      parent
-    end
-  end
-
-  alias_method :acts_as_tree_ancestors, :ancestors
-
-  # Finds this page's ancestors
-  def ancestors
-    self.acts_as_tree_ancestors.map { |p| p.localize(self.locale) }
-  end
-
-  def is_or_is_ancestor?(page)
-    (page == self || page.ancestors.include?(self)) ? true : false
   end
 
   def excerpt_or_body
@@ -237,24 +203,6 @@ class Page < ActiveRecord::Base
       end
       subpages
     end
-  end
-
-  # Get this page's root page.
-  def root_page
-    root_page = self
-    while root_page.parent
-      root_page = root_page.parent
-    end
-    root_page
-  end
-
-  def is_child_of(page)
-    compare = self
-    while compare.parent
-      compare = compare.parent
-      return true if compare == page
-    end
-    return false
   end
 
   # Return the status of the page as a string

@@ -38,7 +38,7 @@ describe Page do
     end
 
     it 'is a child of root' do
-      page.is_child_of(root).should be_true
+      page.ancestors.should include(root)
     end
 
     it 'has both as ancestors' do

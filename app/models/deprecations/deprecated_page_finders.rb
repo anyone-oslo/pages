@@ -96,6 +96,13 @@ module Deprecations
         pages
       end
 
+      # Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
+      def root_pages(options={})
+        ActiveSupport::Deprecation.warn "Page.root_pages is deprecated, use Page.roots instead."
+        options[:parent] ||= :root
+        Page.get_pages(options)
+      end
+
       def search_paginated(query, options={})
         ActiveSupport::Deprecation.warn "Page.search_paginated is deprecated, use a pagination gem instead."
         options[:page] = (options[:page] || 1).to_i
@@ -326,9 +333,25 @@ module Deprecations
       images.any?
     end
 
+    # Returns true if this page is a child of the given page.
+    def is_child_of(page)
+      ActiveSupport::Deprecation.warn "Page#is_child_of is deprecated, use Page#ancestors.include? instead."
+      ancestors.include?(page)
+    end
+
+    def is_or_is_ancestor?(page)
+      ActiveSupport::Deprecation.warn "Page#is_or_is_ancestor?(page) is deprecated, use page.self_and_ancestors.include? instead."
+      page.self_and_ancestors.include?(self)
+    end
+
     def parent_page
       ActiveSupport::Deprecation.warn "Page#parent_page is deprecated, use Page#parent instead."
       parent
+    end
+
+    def root_page
+      ActiveSupport::Deprecation.warn "Page#root_page is deprecated, use Page#root instead."
+      root
     end
 
     private

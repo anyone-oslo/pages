@@ -2,7 +2,7 @@
 
 module PagesCore::FrontendHelper
   def root_pages
-    @root_pages ||= Page.root_pages(:language => @language)
+    @root_pages ||= Page.roots.localized(@language).published
   end
 
   def root_page
@@ -49,7 +49,7 @@ module PagesCore::FrontendHelper
       options[:selected_class] ||= 'selected'
         if page.redirects? && page.redirect_to_options.kind_of?(Hash) && page.redirect_to_options[:controller] == params[:controller]
       "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>".html_safe
-    elsif @page && page.is_or_is_ancestor?(@page)
+    elsif @page && @page.self_and_ancestors.include?(page)
       "<li class=\"#{options[:selected_class]}\">#{nav_link(page)}</li>".html_safe
     else
       "<li>#{nav_link(page)}</li>".html_safe

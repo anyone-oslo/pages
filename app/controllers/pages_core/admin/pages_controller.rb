@@ -40,13 +40,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   public
 
     def index
-      @root_pages = Page.root_pages(
-        :drafts        => true,
-        :hidden        => true,
-        :all_languages => true,
-        :autopublish   => true,
-        :language      => @language
-      )
+      @root_pages = Page.roots.map { |page| page.localize(@language) }
       respond_to do |format|
         format.html
         format.xml do
