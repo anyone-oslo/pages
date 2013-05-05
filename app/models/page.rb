@@ -3,6 +3,7 @@
 class Page < ActiveRecord::Base
   include Deprecations::DeprecatedPageFinders
   include PagesCore::PageTree
+  include PagesCore::Templateable
 
   serialize :redirect_to
 
@@ -40,10 +41,6 @@ class Page < ActiveRecord::Base
 
   validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
-
-  validate do |page|
-    page.template ||= page.default_template
-  end
 
   attr_accessor :image_url, :image_description
 
@@ -142,50 +139,6 @@ class Page < ActiveRecord::Base
     headline? ? headline : name
   end
 
-  def default_template
-    if self.parent
-      t = self.parent.default_subtemplate
-    else
-      default_value   = PagesCore::Templates.configuration.get(:default, :template, :value)
-      default_options = PagesCore::Templates.configuration.get(:default, :template, :options)
-      if  default_options && default_options[:root]
-        t = default_options[:root]
-      elsif default_value && default_value != :autodetect
-        t = default_value
-      end
-    end
-    t ||= :index
-  end
-
-  def default_subtemplate
-    tpl = nil
-    default_template = PagesCore::Templates.configuration.get(:default, :template, :value)
-    if self.template_config.value(:sub_template)
-      tpl = self.template_config.value(:sub_template)
-    elsif default_template && default_template != :autodetect
-      tpl = default_template
-    else
-      # Autodetect sub template
-      reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
-      base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
-      tpl = PagesCore::Templates.names.select{ |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
-      # Try to singularize the base template if the subtemplate could not be found.
-      unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
-        tpl = PagesCore::Templates.names.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
-      end
-    end
-    # Inherit template by default
-    tpl ||= self.template
-  end
-
-  def template_config
-    PagesCore::Templates::TemplateConfiguration.new(self.template)
-  end
-
-  def template
-    (self[:template] && !self[:template].blank?) ? self[:template] : self.default_template.to_s
-  end
-
   # Does this page have an image?
   def image?
     self.image_id?
@@ -220,10 +173,6 @@ class Page < ActiveRecord::Base
     elsif new_status.kind_of?(Numeric)
       write_attribute(:status, new_status.to_i)
     end
-  end
-
-  def template=(template_file)
-    write_attribute('template', template_file)
   end
 
   def extended?
