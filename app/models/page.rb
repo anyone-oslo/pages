@@ -39,27 +39,9 @@ class Page < ActiveRecord::Base
   validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
 
-  attr_accessor :image_url, :image_description
-
   before_save do |page|
     page.published_at ||= Time.now
     page.autopublish = (page.published_at > Time.now) ? true : false
-
-    if page.image_url && !page.image_url.blank?
-      temp_path = File.join(File.dirname(__FILE__), '../../../../../tmp')
-      target_filename = page.image_url.split("/").last
-      target_file = File.join(temp_path, target_filename)
-      `curl -o #{target_file} #{page.image_url}`
-      page.image = File.open(target_file)
-      `rm #{target_file}`
-    end
-    if page.image_description && !page.image_description.blank?
-      begin
-        page.image.update_attribute(:description, page.image_description)
-      rescue
-        # Alert?
-      end
-    end
     page.delta = true
   end
 

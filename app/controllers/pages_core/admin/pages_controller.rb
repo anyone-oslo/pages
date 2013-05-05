@@ -148,13 +148,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
       if @page.update_attributes(params[:page])
         @page.update_attribute(:comments_allowed, @page.template_config.value(:comments_allowed))
         @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
-        if params[:page_image_description]
-          begin
-            @page.image.update_attribute(:description, params[:page_image_description])
-          rescue
-            # Alert?
-          end
-        end
         redirect_to edit_admin_page_url(@language, @page)
       else
         render :action => :new
@@ -175,13 +168,6 @@ class PagesCore::Admin::PagesController < Admin::AdminController
       params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
       if @page.update_attributes(params[:page])
         @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
-        if params[:page_image_description]
-          begin
-            @page.image.update_attribute(:description, params[:page_image_description])
-          rescue
-            # Alert?
-          end
-        end
         @page.save
         flash[:notice] = "Your changes were saved"
         flash[:save_performed] = true
