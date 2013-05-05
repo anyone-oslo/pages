@@ -105,8 +105,9 @@ class Page < ActiveRecord::Base
     set_property :group_concat_max_len => 16.megabytes
   end
 
-  scope :published, lambda { where(:status => 2, :autopublish => false) }
-  scope :visible,   lambda { where('status < 4') }
+  scope :published,  lambda { where(:status => 2, :autopublish => false) }
+  scope :visible,    lambda { where('status < 4') }
+  scope :news_pages, lambda { visible.where(:news_page => true) }
 
   # ---- CLASS METHODS ------------------------------------------------------
 
@@ -122,28 +123,6 @@ class Page < ActiveRecord::Base
     def root_pages(options={})
       options[:parent] ||= :root
       Page.get_pages(options)
-    end
-
-    # Finds all news pages (pages with the news_page bit on).
-    #
-    # === Parameters
-    # * <tt>:locale</tt> - Set locale for the resulting pages.
-    def news_pages(options={})
-      ps = Page.find(:all, :conditions => ['news_page = 1 AND status < 4'], :order => 'published_at ASC')
-      if options.has_key?(:language)
-        options[:locale] = options[:language]
-        options.delete(:language)
-        logger.warn "DEPRECEATED: Option :language is deprecated, use :locale"
-      end
-      if options[:locale]
-        ps = ps.map{|p| p.locale = options[:locale]; p}
-      end
-      ps
-    end
-
-    # Are there any news pages?
-    def news_pages?
-      (Page.count(:all, :conditions => ['news_page = 1 AND status < 4']) > 0) ? true : false
     end
 
     # Find all published and feed enabled pages

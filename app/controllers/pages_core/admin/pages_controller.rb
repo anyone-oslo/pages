@@ -9,7 +9,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   ]
   before_filter :application_languages
   before_filter :load_categories
-  before_filter :load_news_pages, :only => [:news, :new_news]
+  before_filter :find_news_pages, :only => [:news, :new_news]
 
   protected
 
@@ -30,9 +30,9 @@ class PagesCore::Admin::PagesController < Admin::AdminController
       @categories = Category.find(:all, :order => [:name])
     end
 
-    def load_news_pages
-      @news_pages = Page.news_pages(:language => @language)
-      unless @news_pages && @news_pages.length > 0
+    def find_news_pages
+      @news_pages = Page.news_pages.localized(@language)
+      if !@news_pages.any?
         redirect_to admin_pages_url(:language => @language) and return
       end
     end
@@ -57,7 +57,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
     def news
       # Redirect away if no news pages has been configured
-      unless Page.news_pages?
+      unless Page.news_pages.any?
         redirect_to admin_pages_url(:language => @language) and return
       end
 
@@ -67,7 +67,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
         :all_languages => true,
         :autopublish   => true,
         :language      => @language,
-        :parent        => @news_pages
+        :parent        => @news_pages.to_a
       }
 
       # Are we queried by category?
