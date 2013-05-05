@@ -153,38 +153,6 @@ class Page < ActiveRecord::Base
       (Page.count(:all, :conditions => ['news_page = 1 AND status < 4']) > 0) ? true : false
     end
 
-    # Find a page by slug and locale
-    def find_by_slug_and_locale(slug, locale)
-      locale = locale.to_s
-      slug   = slug.to_s
-
-      # Search legacy slug localizations
-      if localization = Localization.find(
-          :first,
-          :conditions => ['name = "slug" AND localizable_type = ? AND body = ? AND locale = ?', self.to_s, slug, locale]
-        )
-        page = localization.localizable
-
-      # Search page names
-      else
-        localizations = Localization.find(
-          :all,
-          :conditions => [ "name = 'name' AND localizable_type = '#{self.to_s}' AND locale = ?", locale]
-        )
-        localizations = localizations.select{|tb| Page.string_to_slug( tb.body ) == slug}
-        if localizations.length > 0
-          page = localizations.first.localizable
-        end
-      end
-      page ? page.localize(locale) : nil
-    end
-
-    # Convert a string to an URL friendly slug
-    def string_to_slug(string)
-      slug = string.downcase.gsub(/[^\w\s]/,'')
-      slug = slug.split( /[^\w\d\-]+/ ).compact.join( "_" )
-    end
-
     # Find all published and feed enabled pages
     def enabled_feeds(locale, options={})
       conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
@@ -507,12 +475,9 @@ class Page < ActiveRecord::Base
     (self.status == 2 && !self.autopublish?) ? true : false
   end
 
-  def slug
-    self.class.string_to_slug(self.name.to_s)
-  end
-
   def to_param
-    "#{id}-#{self.slug}"
+    slug = self.name.downcase.gsub(/[^\w\s]/, '').split(/[^\w\d\-]+/).compact.join( "_" )
+    "#{id}-#{slug}"
   end
 
   def content_order

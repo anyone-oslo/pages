@@ -28,7 +28,6 @@ class PagesCore::Frontend::PagesController < FrontendController
         if params[:id]
           @page = Page.find(params[:id]) rescue nil
           @page ||= unique_page(params[:id])
-          @page ||= Page.find_by_slug_and_locale(params[:id].to_s, @language)
         end
       end
     end
