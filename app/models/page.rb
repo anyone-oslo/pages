@@ -2,6 +2,7 @@
 
 class Page < ActiveRecord::Base
   include Deprecations::DeprecatedPageFinders
+  include PagesCore::HumanizableParam
   include PagesCore::PageTree
   include PagesCore::Templateable
 
@@ -247,8 +248,7 @@ class Page < ActiveRecord::Base
   end
 
   def to_param
-    slug = self.name.downcase.gsub(/[^\w\s]/, '').split(/[^\w\d\-]+/).compact.join( "_" )
-    "#{id}-#{slug}"
+    humanized_param(self.name)
   end
 
   def content_order
