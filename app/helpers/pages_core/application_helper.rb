@@ -22,7 +22,7 @@ module PagesCore::ApplicationHelper
         page = options[:id]
       elsif options[:id]
         page = Page.find(options[:id]) rescue nil
-        page ||= Page.find_by_slug_and_language(options[:id].to_s, @language)
+        page ||= Page.find_by_slug_and_locale(options[:id].to_s, @language)
       elsif @page
         page = @page
       end
