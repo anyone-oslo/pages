@@ -1,4 +1,4 @@
-<%= labelled_field f.select( :status, Page.status_labels_for_options ), "Status",
+<%= labelled_field f.select(:status, Page.status_labels.invert), "Status",
   :errors      => @page.errors[:status]
 %>
 <div class="published_date">

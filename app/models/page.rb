@@ -36,9 +36,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-  # Page status labels
-  STATUS_LABELS         = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"]
-
   validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
 
@@ -120,10 +117,14 @@ class Page < ActiveRecord::Base
       Page.find(:all, :conditions => conditions).collect{|p| p.locale = locale.to_s; p}
     end
 
-    def status_labels_for_options
-      labels = Array.new
-      Page::STATUS_LABELS.each_index{|i| labels << [Page::STATUS_LABELS[i],i]}
-      labels
+    def status_labels
+      {
+        0 => "Draft",
+        1 => "Reviewed",
+        2 => "Published",
+        3 => "Hidden",
+        4 => "Deleted"
+      }
     end
   end
 
@@ -160,19 +161,11 @@ class Page < ActiveRecord::Base
 
   # Return the status of the page as a string
   def status_label
-    STATUS_LABELS[self.status]
+    self.class.status_labels[self.status]
   end
 
-  # Set the page status
-  def set_status(new_status)
-    new_status = new_status.to_i if new_status.kind_of?(String) && new_status.match(/^[\d]+$/)
-    if( new_status.kind_of?(String) || new_status.kind_of?(Symbol))
-      new_status = new_status.to_s
-      index = STATUS_LABELS.collect{|l| l.downcase}.index(new_status.downcase)
-      write_attribute(:status, index) unless index.nil?
-    elsif new_status.kind_of?(Numeric)
-      write_attribute(:status, new_status.to_i)
-    end
+  def flag_as_deleted!
+    update_attributes(:status => 4)
   end
 
   def extended?

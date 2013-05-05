@@ -194,15 +194,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
     def destroy
       @page = Page.find(params[:id])
-      @page.set_status(:deleted)
-      @page.save
-      redirect_to admin_pages_url(:language => @language)
-    end
-
-    def set_status
-      @page = Page.find(params[:id])
-      @page.set_status(params[:status])
-      @page.save
+      @page.flag_as_deleted!
       redirect_to admin_pages_url(:language => @language)
     end
 
