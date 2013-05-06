@@ -8,33 +8,29 @@ class Page < ActiveRecord::Base
 
   serialize :redirect_to
 
-  belongs_to :author,
-             :class_name => "User",
-             :foreign_key => :user_id
+  belongs_to :author, class_name: "User", foreign_key: :user_id
 
-  has_and_belongs_to_many :categories,
-                          :join_table => 'pages_categories'
+  has_and_belongs_to_many :categories, join_table: 'pages_categories'
 
   belongs_to_image :image
 
-  has_many :page_images,
-           :order => 'position ASC'
+  has_many :page_images, order: 'position ASC'
 
   has_many :images,
-           :through => :page_images,
-           :order => 'position ASC',
-           :conditions => '`page_images`.`primary` = 0'
+           through:    :page_images,
+           order:      'position ASC',
+           conditions: '`page_images`.`primary` = 0'
 
   has_many :comments,
-           :class_name => 'PageComment',
-           :dependent => :destroy
+           class_name: 'PageComment',
+           dependent:  :destroy
 
   has_many :files,
-           :class_name => 'PageFile',
-           :dependent => :destroy,
-           :order => :position
+           class_name: 'PageFile',
+           dependent:  :destroy,
+           order:      :position
 
-  acts_as_list :scope => :parent_page
+  acts_as_list scope: :parent_page
   acts_as_taggable
 
   localizable do
@@ -50,8 +46,8 @@ class Page < ActiveRecord::Base
     end
   end
 
-  validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
-  validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
+  validates_format_of     :unique_name, with: /^[\w\d_\-]+$/, allow_nil: true, allow_blank: true
+  validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
   before_validation :published_at
   before_validation :set_autopublish
@@ -60,40 +56,40 @@ class Page < ActiveRecord::Base
 
   define_index do
     # Fields
-    indexes localizations.body,              :as => :localization_bodies
-    indexes categories.name,                 :as => :category_names
-    indexes tags.name,                       :as => :tag_names
-    indexes [author.realname, author.email], :as => :author_name
-    indexes [comments.name, comments.body],  :as => :comments
+    indexes localizations.body,              as: :localization_bodies
+    indexes categories.name,                 as: :category_names
+    indexes tags.name,                       as: :tag_names
+    indexes [author.realname, author.email], as: :author_name
+    indexes [comments.name, comments.body],  as: :comments
 
     # Attributes
     has published_at, created_at, updated_at
     has user_id, parent_page_id
     has status, template
     has autopublish, feed_enabled
-    has categories(:id), :as => :category_ids
-    has tags(:id), :as => :tag_ids
+    has categories(:id), as: :category_ids
+    has tags(:id), as: :tag_ids
 
-    set_property :delta => :delayed
-    set_property :group_concat_max_len => 16.megabytes
+    set_property delta: :delayed
+    set_property group_concat_max_len: 16.megabytes
   end
 
-  scope :published,  lambda { where(:status => 2, :autopublish => false) }
-  scope :visible,    lambda { where('status < 4') }
-  scope :news_pages, lambda { visible.where(:news_page => true) }
+  scope :published,  -> { where(status: 2, autopublish: false) }
+  scope :visible,    -> { where('status < 4') }
+  scope :news_pages, -> { visible.where(news_page: true) }
 
   class << self
     # Finds pages due for auto publishing and publishes them.
     def autopublish!(options={})
       Page.where('autopublish = ? AND published_at <?', true, (Time.now + 2.minutes)).each do |p|
-        p.update_attributes(:autopublish => false)
+        p.update_attributes(autopublish: false)
       end
     end
 
     # Find all published and feed enabled pages
     def enabled_feeds(locale, options={})
       conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
-      Page.find(:all, :conditions => conditions).collect{|p| p.locale = locale.to_s; p}
+      Page.find(:all, conditions: conditions).collect{|p| p.locale = locale.to_s; p}
     end
 
     def status_labels
@@ -149,7 +145,7 @@ class Page < ActiveRecord::Base
   end
 
   def flag_as_deleted!
-    update_attributes(:status => 4)
+    update_attributes(status: 4)
   end
 
   # Get publication date, which defaults to the creation date
@@ -197,7 +193,7 @@ class Page < ActiveRecord::Base
       attributes = Hash.from_xml(page_xml.to_s)['page']
       attributes.merge!({'parent_page_id' => self.id})
       if attributes.has_key?('author_email')
-        author = User.exists?(:email => attributes['author_email']) ? User.find_by_email(attributes['author_email'].to_s): self.author
+        author = User.exists?(email: attributes['author_email']) ? User.find_by_email(attributes['author_email'].to_s): self.author
         attributes.delete('author_email')
       else
         author = self.author
@@ -246,25 +242,25 @@ class Page < ActiveRecord::Base
       self.all_fields.each do |localizable_name|
         xml.tag!(localizable_name.to_sym) do |field|
           self.languages_for_field(localizable_name).each do |language|
-            field.tag!(language.to_sym, self.get_localization(localizable_name, :language => language).to_s)
+            field.tag!(language.to_sym, self.get_localization(localizable_name, language: language).to_s)
           end
         end
       end
-      self.tags.to_xml(:builder => xml, :skip_instruct => true, :only => [:name])
+      self.tags.to_xml(builder: xml, skip_instruct: true, only: [:name])
       if options[:images]
         xml.images do |images_xml|
-          self.page_images.each{|page| page.to_xml(:builder => images_xml, :skip_instruct => true, :only => [:image_id, :primary])}
+          self.page_images.each{|page| page.to_xml(builder: images_xml, skip_instruct: true, only: [:image_id, :primary])}
         end
       end
       if options[:comments]
         xml.comments do |comments_xml|
-          self.comments.each{|comment| comment.to_xml(:except => [:page_id], :builder => comments_xml, :skip_instruct => true)}
+          self.comments.each{|comment| comment.to_xml(except: [:page_id], builder: comments_xml, skip_instruct: true)}
         end
       end
       if options[:pages]
-        subpages = (options[:pages] == :all) ? self.pages(:all => true) : self.pages
+        subpages = (options[:pages] == :all) ? self.pages(all: true) : self.pages
         xml.pages do |pages_xml|
-          self.pages.each{|page| page.to_xml(options.merge({:builder => pages_xml, :skip_instruct => true}))}
+          self.pages.each{|page| page.to_xml(options.merge({builder: pages_xml, skip_instruct: true}))}
         end
       end
     end
@@ -274,10 +270,10 @@ class Page < ActiveRecord::Base
 
   def ensure_page_images_contains_primary_image
     if image_id? && image_id_changed?
-      if page_image = page_images.where(:image_id => image_id).first
-        page_image.update_attributes(:primary => true)
+      if page_image = page_images.where(image_id: image_id).first
+        page_image.update_attributes(primary: true)
       else
-        page_images.create(:image_id => image_id, :primary => true)
+        page_images.create(image_id: image_id, primary: true)
       end
     end
   end
