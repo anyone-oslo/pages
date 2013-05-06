@@ -3,6 +3,10 @@
 require File.join(File.dirname(__FILE__), '../campfire.rb')
 
 Capistrano::Configuration.instance(:must_exist).load do
+  set :default_environment, {
+    'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
+  }
+
   set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
   set :remote_user, "rails" unless variables.has_key?(:remote_user)
 

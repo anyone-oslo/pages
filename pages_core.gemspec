@@ -13,6 +13,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "."
 
+  s.required_ruby_version = Gem::Requirement.new(">= 1.9.2")
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
