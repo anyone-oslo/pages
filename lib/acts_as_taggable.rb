@@ -74,6 +74,10 @@ module ActiveRecord
           end
         end
 
+        def tag_list=(tag_list)
+          tag_with(tag_list)
+        end
+
         def tag_list
           #tags.collect { |tag| tag.name.include?(" ") ? "'#{tag.name}'" : tag.name }.join(", ")
           tags.map{|t| t.name }.join(", ")

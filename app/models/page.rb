@@ -53,7 +53,7 @@ class Page < ActiveRecord::Base
   validates_format_of     :unique_name, :with => /^[\w\d_\-]+$/, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :unique_name, :allow_nil => true, :allow_blank => true
 
-  before_validation :ensure_published_at
+  before_validation :published_at
   before_validation :set_autopublish
   before_save       :set_delta
   after_save        :ensure_page_images_contains_primary_image
@@ -107,9 +107,14 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def tag_list=(tag_list)
-    tag_with(tag_list)
+  def extended?
+    excerpt? && body?
   end
+
+  def empty?
+    !body? && !excerpt?
+  end
+  alias :blank? :empty?
 
   def excerpt_or_body
     excerpt? ? excerpt : body
@@ -145,14 +150,6 @@ class Page < ActiveRecord::Base
 
   def flag_as_deleted!
     update_attributes(:status => 4)
-  end
-
-  def extended?
-    excerpt?
-  end
-
-  def blank?
-    !body?
   end
 
   # Get publication date, which defaults to the creation date
@@ -214,19 +211,6 @@ class Page < ActiveRecord::Base
     created_pages
   end
 
-  # Set categories from string
-  def category_names=(names)
-    if names
-      names = names.to_s.split(/[\s]*,[\s]*/).reject{|n| n.blank?}
-      if names.length > 0
-        categories = names.map do |name|
-          cat = Category.exists?(:name => name) ? Category.find_by_name(name) : Category.create(:name => name)
-        end
-      end
-      self.categories = categories
-    end
-  end
-
   def draft?
     status == 0
   end
@@ -253,10 +237,6 @@ class Page < ActiveRecord::Base
 
   def content_order
     self[:content_order] || 'position'
-  end
-
-  def empty?
-    !body? && !excerpt?
   end
 
   def to_xml(options = {})
@@ -300,10 +280,6 @@ class Page < ActiveRecord::Base
         page_images.create(:image_id => image_id, :primary => true)
       end
     end
-  end
-
-  def ensure_published_at
-    published_at ||= Time.now
   end
 
   def set_autopublish
