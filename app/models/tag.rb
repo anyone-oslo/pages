@@ -6,16 +6,16 @@ class Tag < ActiveRecord::Base
   class << self
       def tags_and_suggestions_for(taggable, options={})
         options = {
-          :limit => 100
+          limit: 100
         }.merge(options)
         tags = taggable.tags
         if taggable.tags.length < options[:limit]
           suggestions = Tag.all(
-            :select => 'tags.*, count(tags.id) as counter',
-            :joins => :taggings,
-            :group => 'tags.id',
-            :order => 'counter DESC',
-            :limit => options[:limit]
+            select: 'tags.*, count(tags.id) as counter',
+            joins: :taggings,
+            group: 'tags.id',
+            order: 'counter DESC',
+            limit: options[:limit]
           ).reject{|s| tags.include?(s)}
           if suggestions.length > 0
             tags += suggestions[0...(options[:limit] - tags.length)]
@@ -57,7 +57,7 @@ class Tag < ActiveRecord::Base
   end
 
   def on(taggable)
-    taggings.create :taggable => taggable
+    taggings.create(taggable: taggable)
   end
 
   def ==(comparison_object)

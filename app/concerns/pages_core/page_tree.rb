@@ -4,21 +4,21 @@ module PagesCore
 
     included do
       belongs_to :parent,
-                 :class_name  => 'Page',
-                 :foreign_key => :parent_page_id,
-                 :inverse_of  => :children
+                 class_name:  'Page',
+                 foreign_key: :parent_page_id,
+                 inverse_of:  :children
 
       has_many   :children,
-                 :class_name  => 'Page',
-                 :foreign_key => :parent_page_id,
-                 :inverse_of  => :parent,
-                 :dependent   => :destroy
+                 class_name:  'Page',
+                 foreign_key: :parent_page_id,
+                 inverse_of:  :parent,
+                 dependent:   :destroy
     end
 
     module ClassMethods
       # Returns all root pages
       def roots
-        where(:parent_page_id => nil).order('position ASC')
+        where(parent_page_id: nil).order('position ASC')
       end
 
       # Returns the first root page

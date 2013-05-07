@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Localization < ActiveRecord::Base
-  belongs_to :localizable, :polymorphic => true
+  belongs_to :localizable, polymorphic: true
 
   class << self
 
@@ -24,7 +24,7 @@ class Localization < ActiveRecord::Base
   end
 
   def translate(locale)
-    localizable.localizations.where(:name => self.name, :locale => locale).first
+    localizable.localizations.where(name: self.name, locale: locale).first
   end
 
 end
