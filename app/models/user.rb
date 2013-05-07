@@ -72,61 +72,21 @@ class User < ActiveRecord::Base
     set_property delta: :delayed
   end
 
+  scope :sorted,      -> { order('realname ASC') }
+  scope :activated,   -> { sorted.where(is_activated: true) }
+  scope :deactivated, -> { sorted.where(is_activated: false) }
+  scope :admins,      -> { activated.where(is_admin: true) }
+
 
   ### Class methods #########################################################
 
   class << self
-
-    # Finds users by the first letter(s) of the username.
-    def find_by_first_letter(letters)
-      letters = "[#{letters}]"
-      self.find(
-        :all,
-        order: 'username',
-        conditions: ['is_deleted = 0 AND is_activated = 1 AND username REGEXP ?', "^" + letters]
-      )
-    end
-
-    # Finds a user by either id or username.
-    def find_by_id_or_username(id)
-      if id =~ /^[\d]+$/
-        self.find(id)
-      else
-        self.find(:first, conditions: ['username = ?', id])
-      end
-    end
 
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
       user   = self.find_by_username(string.to_s)
       user ||= self.find_by_email(string.to_s)
       user
-    end
-
-    # Finds newest users.
-    def latest(limit=5)
-      self.find(:all, limit: limit, conditions: ["is_deleted = ? AND is_activated = ?", false, true], order: 'created_at DESC')
-    end
-
-    # Finds logged in users, which is any user who has been active within
-    # the last 15 minutes.
-    def logged_in
-      self.find(:all, order: 'last_login_at DESC', conditions: ['last_login_at > ?', 15.minutes.ago])
-    end
-
-    # Finds all active admins.
-    def admin_users
-      self.find(:all, conditions: 'is_activated = 1 AND is_admin = 1',  order: 'realname ASC')
-    end
-
-    # Finds deactivated user accounts
-    def find_deactivated
-      self.find(:all, conditions: {is_activated: false}, order: 'realname ASC')
-    end
-
-    # Counts deactivated users.
-    def deactivated_count
-      self.count(:all, conditions: {is_activated: false})
     end
 
     # Finds a user by openid_url. If the URL is one of the SPECIAL_USERs, the account is
@@ -177,7 +137,6 @@ class User < ActiveRecord::Base
     self.confirm_password = self.password = pass
     pass
   end
-
 
   # Hashes self.password and stores it in the hashed_password column.
   def hash_password

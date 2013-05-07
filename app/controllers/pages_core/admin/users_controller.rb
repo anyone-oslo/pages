@@ -2,9 +2,9 @@
 
 class PagesCore::Admin::UsersController < Admin::AdminController
 
-  before_filter :require_authentication, :except => [:new_password, :welcome, :create_first, :login]
-  before_filter :find_user,       :only => [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_filter :verify_editable, :only => [:delete_image, :update, :destroy, :edit, :update_openid]
+  before_filter :require_authentication, except: [:new_password, :welcome, :create_first, :login]
+  before_filter :find_user,       only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
+  before_filter :verify_editable, only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
   protected
 
@@ -26,19 +26,18 @@ class PagesCore::Admin::UsersController < Admin::AdminController
     end
 
     def index
+      @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}
       respond_to do |format|
         format.html do
-          @users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true}).reject{|user| user.email.match(/@manualdesign\.no/)}
         end
         format.xml do
-          #@users = User.find(:all, :order => 'realname')
           render :xml => @users.to_xml
         end
       end
     end
 
     def deactivated
-      @users = User.find_deactivated
+      @users = User.deactivated
     end
 
     def welcome
