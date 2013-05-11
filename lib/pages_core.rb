@@ -52,6 +52,7 @@ module PagesCore
 
       load 'pages_core/plugin.rb'
 
+      load 'pages_core/archive_finder.rb'
       load 'pages_core/array_extensions.rb'
       load 'pages_core/cache_sweeper.rb'
       load 'pages_core/configuration.rb'

@@ -4,6 +4,12 @@ require 'spec_helper'
 
 describe Page do
 
+  describe ".archive_finder" do
+    subject { Page.archive_finder }
+    it { should be_a(PagesCore::ArchiveFinder) }
+    its(:timestamp_attribute) { should == :published_at }
+  end
+
   describe ".published" do
     let!(:published_page) { create(:page) }
     let!(:hidden_page) { create(:page, status: 3) }

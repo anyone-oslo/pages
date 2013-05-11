@@ -79,6 +79,11 @@ class Page < ActiveRecord::Base
   scope :news_pages, -> { visible.where(news_page: true) }
 
   class << self
+
+    def archive_finder
+      PagesCore::ArchiveFinder.new(scoped, timestamp: :published_at)
+    end
+
     # Finds pages due for auto publishing and publishes them.
     def autopublish!(options={})
       Page.where('autopublish = ? AND published_at <?', true, (Time.now + 2.minutes)).each do |p|
