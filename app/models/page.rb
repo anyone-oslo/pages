@@ -279,7 +279,8 @@ class Page < ActiveRecord::Base
   end
 
   def set_autopublish
-    autopublish = (page.published_at > Time.now)
+    self.autopublish = published_at? && published_at > Time.now
+    true
   end
 
   def set_delta

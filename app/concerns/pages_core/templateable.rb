@@ -14,8 +14,6 @@ module PagesCore
       !self[:template].blank? ? self[:template] : default_template
     end
 
-    private
-
     def default_subtemplate
       tpl = nil
       default_template = PagesCore::Templates.configuration.get(:default, :template, :value)
@@ -36,6 +34,8 @@ module PagesCore
       # Inherit template by default
       tpl ||= self.template
     end
+
+    private
 
     def default_template
       if self.parent
