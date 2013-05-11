@@ -2,6 +2,7 @@
 
 class PagesCore::Admin::PagesController < Admin::AdminController
 
+  before_filter :require_news_pages, only: [:news]
   before_filter :find_page, only: [
     :show, :edit, :preview, :update, :destroy, :reorder,
     :delete_comment,
@@ -21,51 +22,19 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def news
-    # Redirect away if no news pages has been configured
-    unless Page.news_pages.any?
-      redirect_to admin_pages_url(@language) and return
+    @archive_finder = Page.where(parent_page_id: @news_pages)
+                          .visible
+                          .order('published_at DESC')
+                          .in_locale(@language)
+                          .archive_finder
+
+    if params[:year] && params[:month]
+      @year, @month = params[:year].to_i, params[:month].to_i
+    else
+      @year, @month = @archive_finder.latest_year_and_month
     end
 
-    count_options = {
-      :drafts        => true,
-      :hidden        => true,
-      :all_languages => true,
-      :autopublish   => true,
-      :language      => @language,
-      :parent        => @news_pages.to_a
-    }
-
-    # Are we queried by category?
-    if params[:category]
-      @category = Category.find_by_slug(params[:category].to_s)
-      unless @category
-        flash[:notice] = "Cannot find that category"
-        redirect_to news_admin_pages_url(:language => @language) and return
-      end
-      count_options[:category] = @category
-    end
-    @archive_count = Page.count_pages_by_year_and_month(count_options)
-
-    # Set @year and @month from params, default to the last available one
-    last_year  = !@archive_count.empty? ? @archive_count.keys.last.to_i : Time.now.year
-    last_month = (@archive_count && @archive_count[last_year]) ? @archive_count[last_year].keys.last.to_i : Time.now.month
-
-    @year  = (params[:year]  || last_year).to_i
-    @month = (params[:month] || last_month).to_i
-
-    # Let's check that there's data for the queried @year and @month
-    unless @archive_count.empty?
-      unless @archive_count[@year] && @archive_count[@year][@month] && @archive_count[@year][@month] > 0
-        flash[:notice] = "No news posted in the given range"
-        redirect_to news_admin_pages_url(:language => @language) and return
-      end
-    end
-
-    # Make the range
-    @published_range = (starts_at = DateTime.new(@year, @month, 1))...(starts_at.end_of_month)
-
-    # And grab the pages
-    @news_items = Page.get_pages(count_options.merge({:published_within => @published_range, :order => 'published_at DESC'}))
+    @pages = @archive_finder.by_year_and_month(@year, @month)
   end
 
   def list
@@ -192,9 +161,16 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def find_news_pages
-    @news_pages = Page.news_pages.localized(@language)
+    @news_pages = Page.news_pages.in_locale(@language)
     if !@news_pages.any?
       redirect_to admin_pages_url(:language => @language) and return
+    end
+  end
+
+  # Redirect away if no news pages has been configured
+  def require_news_pages
+    unless Page.news_pages.any?
+      redirect_to admin_pages_url(@language) and return
     end
   end
 

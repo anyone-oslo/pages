@@ -1,7 +1,7 @@
 <%
   month_names = %w{January February March April May June July August September October November December}
   page_title "News"
-  page_description "<em>#{month_names[@month-1]} #{@year}</em>"
+  page_description "<em>#{month_names[@month - 1]} #{@year}</em>"
 
   if PagesCore.config.localizations?
     page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_news_admin_pages_path(:language => l))}.join(link_separator)
@@ -16,10 +16,10 @@
       <%= submit_tag "Go", :name => nil %>
     <% end %>
   </p>
-  <% @archive_count.to_a.reverse.each do |year, months| %>
+  <% @archive_finder.years.each do |year| %>
     <h2><%= year %><%= ": #{@category.name}" if @category %></h2>
     <ul>
-      <% months.to_a.reverse.each do |month,page_count| %>
+      <% @archive_finder.months_in_year_with_count(year).each do |month, page_count| %>
         <li><% if year == @year && month == @month %>
           <strong><%= month_names[month-1] %></strong> (<%= page_count %>)</strong>
         <% else %>
@@ -30,7 +30,7 @@
   <% end %>
 <% end %>
 
-<% if @news_items.length > 0 %>
+<% if @pages.any? %>
   <table class="list news_item_list">
     <tr>
       <th>Name</th>
@@ -38,7 +38,7 @@
       <th>Author</th>
       <th>Section</th>
     </tr>
-    <% @news_items.each do |page| %><tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
+    <% @pages.each do |page| %><tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
       <td class="name">
         <%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'name_link') %>
         <% if page.autopublish? %>
