@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe PagesCore::StringExtensions do
+describe PagesCore::Extensions::StringExtensions do
   let(:string) { "Hello world" }
 
   subject { string }
 
-  it { should be_a(PagesCore::StringExtensions) }
+  it { should be_a(PagesCore::Extensions::StringExtensions) }
 
   describe "#to_html" do
 
