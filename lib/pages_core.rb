@@ -48,7 +48,6 @@ module PagesCore
   class << self
 
     def load_dependencies!
-      load 'acts_as_taggable.rb'
       load 'language.rb'
 
       load 'pages_core/plugin.rb'

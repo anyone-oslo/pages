@@ -4,6 +4,7 @@ class Page < ActiveRecord::Base
   include Deprecations::DeprecatedPageFinders
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
+  include PagesCore::Taggable
   include PagesCore::Templateable
 
   serialize :redirect_to
@@ -31,7 +32,6 @@ class Page < ActiveRecord::Base
            order:      :position
 
   acts_as_list scope: :parent_page
-  acts_as_taggable
 
   localizable do
     attribute :name

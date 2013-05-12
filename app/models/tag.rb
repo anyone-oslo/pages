@@ -24,8 +24,12 @@ class Tag < ActiveRecord::Base
         tags
       end
 
-    def parse(tag_list)
-      tag_list.strip.split(/[\s]*,[\s]*/).delete_if{|t| t.empty?}
+    def parse(*tags)
+      Array(tags).flatten
+        .map{ |tag| tag.kind_of?(Tag) ? tag.name : tag }
+        .map{ |tag| tag.split(",") }
+        .flatten
+        .map{ |tag| tag.strip }
     end
   end
 
