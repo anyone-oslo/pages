@@ -43,9 +43,7 @@ module PagesCore
 
     # Returns the root node of the tree.
     def root
-      node = self
-      node = node.parent while node.parent
-      node
+      self_and_ancestors.last
     end
 
     # Returns ancestors and current node itself.
