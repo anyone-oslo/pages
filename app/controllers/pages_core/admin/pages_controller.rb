@@ -60,7 +60,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
   def import_xml
     if request.post? && params[:xmlfile]
-      @created_pages = @page.import_xml(params[:xmlfile].read)
+      @created_page = PagesCore::Serializations::PageXmlImporter.new(@page, params[:xmlfile].read).import!
     end
   end
 

@@ -189,29 +189,6 @@ class Page < ActiveRecord::Base
     !self.parent || !self.parent.content_order? || self.parent.content_order =~ /position/
   end
 
-  # Imports subpages from XML
-  def import_xml(xmldata)
-    created_pages = []
-    require 'rexml/document'
-    doc = REXML::Document.new(xmldata)
-    doc.elements.each('pages/page') do |page_xml|
-      attributes = Hash.from_xml(page_xml.to_s)['page']
-      attributes.merge!({'parent_page_id' => self.id})
-      if attributes.has_key?('author_email')
-        author = User.exists?(email: attributes['author_email']) ? User.find_by_email(attributes['author_email'].to_s): self.author
-        attributes.delete('author_email')
-      else
-        author = self.author
-      end
-      page = Page.new.localize(self.locale)
-      page.author = author
-      if page.update_attributes(attributes)
-        created_pages << page
-      end
-    end
-    created_pages
-  end
-
   def draft?
     status == 0
   end
