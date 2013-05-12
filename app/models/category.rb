@@ -5,13 +5,17 @@ class Category < ActiveRecord::Base
   validates_presence_of :name
   acts_as_list
 
-  before_save do |cat|
-    cat.slug = cat.name.downcase.gsub(/[^\w\s]/,'')
-    cat.slug = cat.slug.split( /[^\w\d\-]+/ ).compact.join( "-" )
+  before_save :set_slug
+  after_save :trigger_delta_indexing
+
+  private
+
+  def set_slug
+    self.slug = name.downcase.gsub(/[^\w\s]/, '').split(/[^\w\d\-]+/).compact.join('-')
   end
 
-  after_save do |cat|
-    cat.pages.each do |page|
+  def trigger_delta_indexing
+    pages.each do |page|
       page.update_attributes(delta: true)
     end
   end
