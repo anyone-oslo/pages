@@ -16,8 +16,8 @@
 window.Admin =
   Controllers: {}
 
-  language: ->
-    $('body').data('language')
+  locale: ->
+    $('body').data('locale')
 
   controllerName: ->
     $('body').data('controller').replace(/^Admin::/, '')

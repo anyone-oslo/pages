@@ -1,8 +1,8 @@
 <%
   page_title       "“" + @page.name.to_s + "” : XML Import"
-  page_description "Importing XML to " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path( :id => page, :language => @language )) }.join( " &raquo; " )
+  page_description "Importing XML to " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@locale, page)) }.join( " &raquo; " )
   if PagesCore.config( :localizations )
-    page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path( :id => @page, :language => l ) ) }.join( link_separator )
+    page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path(@locale, @page) ) }.join( link_separator )
   end
 
 %>
@@ -23,7 +23,7 @@
   <div class="content"><p><%= @created_pages.length %> pages were imported.</p></div>
 <% end %>
 
-<%= form_tag import_xml_admin_page_path(:language => @language, :id => @page), :multipart => true do %>
+<%= form_tag import_xml_admin_page_path(@locale, @page), :multipart => true do %>
   <%= labelled_field file_field_tag(:xmlfile), "XML file" %>
   <p><%= submit_tag "Upload" %></p>
 <% end %>

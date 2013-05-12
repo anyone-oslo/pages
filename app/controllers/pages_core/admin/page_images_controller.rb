@@ -12,7 +12,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
         @page = Page.find(params[:page_id])
       rescue ActiveRecord::RecordNotFound
         flash[:notice] = "Could not find PageImage with ID ##{params[:id]}"
-        redirect_to admin_pages_path(@language) and return
+        redirect_to admin_pages_path(@locale) and return
       end
     end
 
@@ -21,7 +21,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
         @page_image = @page.page_images.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         flash[:notice] = "Could not find PageImage with ID ##{params[:id]}"
-        redirect_to admin_page_path(@language, @page) and return
+        redirect_to admin_page_path(@locale, @page) and return
       end
     end
 
@@ -63,7 +63,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
           @page.page_images.create(attributes) if attributes[:image] && attributes[:image] != ""
         end
       end
-      redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+      redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
     end
 
     def update
@@ -75,7 +75,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
         respond_to do |format|
           format.html do
             flash[:notice] = "The image was updated"
-            redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+            redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
           end
           format.json do
             render :json => @page_image.to_json
@@ -91,7 +91,7 @@ class PagesCore::Admin::PageImagesController < Admin::AdminController
       respond_to do |format|
         format.html do
           flash[:notice] = "The image was deleted"
-          redirect_to admin_page_path(:language => @language, :id => @page, :anchor => 'images') and return
+          redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
         end
         format.json do
           render :json => @page_image.to_json

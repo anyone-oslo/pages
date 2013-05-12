@@ -16,7 +16,7 @@ module PagesCore::ApplicationHelper
     (options[:controller] == 'pages' && options[:action] =~ /^(index|show)$/) ? true : false
   end
 
-  def hash_for_translated_route( options, target_language )
+  def hash_for_translated_route(options, target_locale)
     if is_page_route?(options)
       if options[:id].kind_of?(Page)
         page = options[:id]
@@ -26,18 +26,17 @@ module PagesCore::ApplicationHelper
         page = @page
       end
       if page
-        options = options.merge(:id => page.translate( target_language ).to_param, :action => 'show')
+        options = options.merge(:id => page.localize(target_locale).to_param, :action => 'show')
       end
     end
-    options = options.merge({:language => target_language})
+    options = options.merge({locale: target_locale})
   end
 
   def page_file_link(file, options={})
-    options[:language] ||= @language
     if file.format?
-      formatted_page_file_path(@language,file.page,file, :format => file.format)
+      formatted_page_file_path(@locale, file.page, file, format: file.format)
     else
-      page_file_path(@language,file.page,file)
+      page_file_path(@locale, file.page, file)
     end
   end
 
@@ -69,8 +68,11 @@ module PagesCore::ApplicationHelper
   end
 
   def page_link(page, options={})
-    options[:language] ||= @language
-    page.localize(options[:language]) do |p|
+    if options[:language]
+      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
+    end
+    options[:locale] ||= options[:language] ||= @locale
+    page.localize(options[:locale]) do |p|
       options[:title] ||= p.name.to_s
       if options.has_key? :unless
         options[:if] = (options[:unless]) ? false : true
@@ -79,20 +81,23 @@ module PagesCore::ApplicationHelper
         return options[:title]
       end
       if p.redirects?
-        link_to options[:title], p.redirect_to_options({:language => p.working_language}), :class => options[:class]
+        link_to options[:title], p.redirect_to_options({locale: p.locale}), :class => options[:class]
       else
-        link_to options[:title], page_path(options[:language], page), :class => options[:class]
+        link_to options[:title], page_path(options[:locale], page), :class => options[:class]
       end
     end
   end
 
   def page_url(page, options={})
-    options[:language] ||= @language
-    page.localize(options[:language]) do |p|
+    if options[:language]
+      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
+    end
+    options[:locale] ||= options[:language] ||= @locale
+    page.localize(options[:locale]) do |p|
       if p.redirects?
-        url_for p.redirect_to_options(options.merge({:language => p.working_language}))
+        url_for p.redirect_to_options(options.merge({locale: p.locale}))
       else
-        super options[:language], page
+        super options[:locale], page
       end
     end
   end
@@ -170,13 +175,13 @@ module PagesCore::ApplicationHelper
     end
 
   def unique_page(page_name, &block)
-    language = @language || Language.default
+    locale = @locale || Language.default
     page = Page.where(:unique_name => page_name).first
     if page && block_given?
       output = capture(page, &block)
       concat(output)
     end
-    (page) ? page.translate(language) : nil
+    (page) ? page.localize(locale) : nil
   end
 
   # Sets a page title

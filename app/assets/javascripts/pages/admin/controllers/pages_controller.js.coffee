@@ -24,7 +24,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
           $(list).children("li").each ->
             new_order.push $(this).attr("page_id")
 
-          reorder_url = "/admin/" + Admin.language() + "/pages/reorder_pages"
+          reorder_url = "/admin/" + Admin.locale() + "/pages/reorder_pages"
           $.get reorder_url,
             ids: new_order
           , (data) ->
@@ -104,7 +104,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     $("#previewButton").click ->
       button = this
       form = $(button).closest("form").get(0)
-      previewUrl = "/" + Admin.language() + "/pages/preview"
+      previewUrl = "/" + Admin.locale() + "/pages/preview"
 
       # Rewrite the form and submit
       form.oldAction = form.action

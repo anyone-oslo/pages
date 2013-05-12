@@ -2,7 +2,7 @@
 
 module PagesCore::FrontendHelper
   def root_pages
-    @root_pages ||= Page.roots.localized(@language).published
+    @root_pages ||= Page.roots.localized(@locale).published
   end
 
   def root_page
@@ -19,7 +19,7 @@ module PagesCore::FrontendHelper
 
     options[:include_day] ||= false
     options[:short_month], options[:short_day] = true if options[:short]
-    if @language.to_s == 'nor'
+    if @locale.to_s == 'nor'
       months = ( !options[:short_month] ) ? %w{januar februar mars april mai juni juli august september oktober november desember} : %w{jan feb mar apr mai jun jul aug sep okt nov des}
       days   = ( !options[:short_day] )   ? %w{søndag mandag tirsdag onsdag torsdag fredag lørdag} : %w{søn man tir ons tor fre lør}
     else

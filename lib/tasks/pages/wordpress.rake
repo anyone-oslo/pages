@@ -202,7 +202,7 @@ namespace :pages do
             end
           end
 
-          post[:page] = Page.new.translate(import_language)
+          post[:page] = Page.new.localize(import_language)
 
           if params[:post_author]
             params[:user_id] = users[params[:post_author]].id

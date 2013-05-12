@@ -14,9 +14,9 @@ class PagesCore::AdminController < ApplicationController
 
   def redirect
     if Page.news_pages.any?
-      redirect_to news_admin_pages_url(:language => @language)
+      redirect_to news_admin_pages_url(@locale)
     else
-      redirect_to admin_pages_url(:language => @language)
+      redirect_to admin_pages_url(@locale)
     end
   end
 
@@ -41,14 +41,14 @@ class PagesCore::AdminController < ApplicationController
     def build_admin_tabs
       if Page.news_pages.any?
         register_menu_item(
-          "News", hash_for_news_admin_pages_path({:language => @language}), :pages,
+          "News", hash_for_news_admin_pages_path(@locale), :pages,
           :current => Proc.new {
             params[:controller] == 'admin/pages' &&
             (params[:action] == 'news' || (@page && @page.parent && @page.parent.news_page?))
           }
         )
       end
-      register_menu_item "Pages", hash_for_admin_pages_path({:language => @language}), :pages
+      register_menu_item "Pages", hash_for_admin_pages_path(@locale), :pages
       register_menu_item "Users", hash_for_admin_users_path, :account
 
       # Register menu items from plugins

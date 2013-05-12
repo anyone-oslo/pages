@@ -17,7 +17,7 @@ class PagesCore::ApplicationController < ActionController::Base
 
   before_filter :domain_cache
   before_filter :authenticate,               :except => SKIP_FILTERS
-  before_filter :get_language,               :except => SKIP_FILTERS
+  before_filter :set_locale,                 :except => SKIP_FILTERS
   after_filter  :set_headers,                :except => SKIP_FILTERS
   after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
   after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
@@ -128,16 +128,19 @@ class PagesCore::ApplicationController < ActionController::Base
       end
     end
 
-    # Sets @language from params[:language], with Language.default as fallback
-    def get_language
-      @language = params[:language] || Language.default
+    # Sets @locale from params[:locale], with Language.default as fallback
+    def set_locale
+      if params[:language]
+        ActiveSupport::Deprecation.warn "params[:language] is deprecated, use params[:locale]"
+      end
+      @language = @locale = params[:locale] || params[:language] || Language.default
     end
 
     # Sends HTTP headers (Content-Language etc) to the client.
     # This method is automatically run from an after_filter.
     def set_headers
       # Set the language header
-      headers['Content-Language'] = Language.definition(@language.to_s).iso639_1 rescue nil if @language
+      headers['Content-Language'] = Language.definition(@locale.to_s).iso639_1 rescue nil if @locale
     end
 
     # Performs garbage collection if the proper flags have been set.

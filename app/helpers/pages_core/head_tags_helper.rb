@@ -35,12 +35,16 @@ module PagesCore::HeadTagsHelper
     # Evaluate the given block first
     output_block = block_given? ? capture(&block) : ''
 
+    if options[:language]
+      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
+    end
+
     # Get options
-    options[:language] ||= @language
+    options[:locale] ||= options[:language] ||= @locale
     options[:charset]  ||= "utf-8"
     options[:author]   ||= "Manual design (manualdesign.no)"
     options[:doctype]  ||= :xhtml
-    language_definition = Language.definition( options[:language] ).iso639_1 || "en"
+    language_definition = Language.definition(options[:locale]).iso639_1 || "en"
     unless options.has_key?( :title )
       options[:title] = PagesCore.config(:site_name)
       if @page_title
@@ -183,10 +187,10 @@ module PagesCore::HeadTagsHelper
   end
 
   def feed_tags(options={})
-    feeds = Page.enabled_feeds(@language, options)
+    feeds = Page.enabled_feeds(@locale, options)
     output = ''
     if feeds && feeds.length > 1
-      output += "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}\" href=\""+formatted_pages_url(:language => @language, :format => :rss)+"\" />\n"
+      output += "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}\" href=\""+formatted_pages_url(@locale, format: :rss)+"\" />\n"
     end
     output += feeds.map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
     output

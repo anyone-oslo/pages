@@ -12,7 +12,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   before_filter :find_news_pages, only: [:news, :new_news]
 
   def index
-    @root_pages = Page.roots.in_locale(@language).visible
+    @root_pages = Page.roots.in_locale(@locale).visible
     respond_to do |format|
       format.html
       format.xml do
@@ -25,7 +25,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     @archive_finder = Page.where(parent_page_id: @news_pages)
                           .visible
                           .order('published_at DESC')
-                          .in_locale(@language)
+                          .in_locale(@locale)
                           .archive_finder
 
     if params[:year] && params[:month]
@@ -38,7 +38,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def list
-    redirect_to admin_pages_url(:language => @language)
+    redirect_to admin_pages_url(@locale)
   end
 
   def reorder_pages
@@ -65,7 +65,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def new
-    @page = Page.new.translate(@language)
+    @page = Page.new.localize(@locale)
     if params[:parent]
       @page.parent = Page.find(params[:parent]) rescue nil
     elsif @news_pages
@@ -80,14 +80,14 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def create
-    @page = Page.new.translate(@language)
+    @page = Page.new.localize(@locale)
     params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
     @page.author = @current_user
 
     if @page.update_attributes(params[:page])
       @page.update_attribute(:comments_allowed, @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
-      redirect_to edit_admin_page_url(@language, @page)
+      redirect_to edit_admin_page_url(@locale, @page)
     else
       render :action => :new
     end
@@ -110,7 +110,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
       @page.save
       flash[:notice] = "Your changes were saved"
       flash[:save_performed] = true
-      redirect_to edit_admin_page_url( @language, @page )
+      redirect_to edit_admin_page_url(@locale, @page)
     else
       edit
       render :action => :edit
@@ -120,7 +120,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   def destroy
     @page = Page.find(params[:id])
     @page.flag_as_deleted!
-    redirect_to admin_pages_url(:language => @language)
+    redirect_to admin_pages_url(@locale)
   end
 
   def delete_comment
@@ -129,7 +129,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
       @comment.destroy
       flash[:notice] = "Comment deleted"
     end
-    redirect_to edit_admin_page_url(:language => @language, :id => @page, :anchor => 'comments')
+    redirect_to edit_admin_page_url(@locale, @page, anchor: 'comments')
   end
 
   def reorder
@@ -138,7 +138,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     elsif params[:direction] == "down"
       @page.move_lower
     end
-    redirect_to admin_pages_url(:language => @language)
+    redirect_to admin_pages_url(@locale)
   end
 
   private
@@ -149,10 +149,10 @@ class PagesCore::Admin::PagesController < Admin::AdminController
 
   def find_page
     begin
-      @page = Page.find(params[:id]).translate(@language)
+      @page = Page.find(params[:id]).localize(@locale)
     rescue ActiveRecord::RecordNotFound
       flash[:notice] = "Cannot load page with id ##{params[:id]}"
-      redirect_to admin_pages_url(:language => @language) and return
+      redirect_to admin_pages_url(@locale) and return
     end
   end
 
@@ -161,16 +161,16 @@ class PagesCore::Admin::PagesController < Admin::AdminController
   end
 
   def find_news_pages
-    @news_pages = Page.news_pages.in_locale(@language)
+    @news_pages = Page.news_pages.in_locale(@locale)
     if !@news_pages.any?
-      redirect_to admin_pages_url(:language => @language) and return
+      redirect_to admin_pages_url(@locale) and return
     end
   end
 
   # Redirect away if no news pages has been configured
   def require_news_pages
     unless Page.news_pages.any?
-      redirect_to admin_pages_url(@language) and return
+      redirect_to admin_pages_url(@locale) and return
     end
   end
 

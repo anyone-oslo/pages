@@ -3,7 +3,7 @@
   page_description "Viewing pages"
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(:language => l))}.join(link_separator)
+    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_admin_pages_path(l))}.join(link_separator)
   end
 %>
 
@@ -16,7 +16,7 @@
     <% end %>
   </p>
   <p>
-    You can also <%= link_to "create a new root page", new_admin_page_path(:language => @language) %>.
+    You can also <%= link_to "create a new root page", new_admin_page_path(@locale) %>.
   </p>
   <h2>Structure</h2>
   <p>

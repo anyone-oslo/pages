@@ -6,7 +6,7 @@
   end
   page_classes = ['page', 'page_listing']
   page_classes << 'hidden' unless page.published?
-  page_classes << 'page_without_language' unless page.name?
+  page_classes << 'page_without_locale' unless page.name?
 -%>
 <li page_id="<%= page.id %>">
   <% if page.reorderable? %>
@@ -15,9 +15,9 @@
   <% end %>
   <div class="<%= page_classes.join(' ') %>" id="pagelisting_<%= page.id %>">
     <% if page.published? %>
-      <%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'page_name') %>
+      <%= link_to(page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
     <% else %>
-      <%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'page_name') %>
+      <%= link_to(page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
       <small class="status">
         (<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)
       </small>
@@ -30,8 +30,8 @@
 
     <div class="actions">
       &mdash;
-      <%= link_to "Edit", edit_admin_page_url( @language, page ) %> /
-      <%= link_to "Create subpage", new_admin_page_url( :language => @language, :parent => page ) %>
+      <%= link_to "Edit", edit_admin_page_url(@locale, page) %> /
+      <%= link_to "Create subpage", new_admin_page_url(@locale, parent: page ) %>
       &mdash;
       <small>last updated <%= time_ago_in_words page.updated_at %> ago</small>
     </div>
@@ -42,7 +42,7 @@
         <em>(<%= page.children.visible.count %> items)</em>
         <div class="actions">
           &mdash;
-          <%= link_to "Create new", new_news_admin_pages_url(:language => @language, :parent => page) %>
+          <%= link_to "Create new", new_news_admin_pages_url(@locale, parent: page) %>
         </div>
       </div></li>
     </ul>

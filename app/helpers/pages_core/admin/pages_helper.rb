@@ -28,8 +28,8 @@ module PagesCore::Admin::PagesHelper
       p_name = page_names.map do |p|
         if p.dup.name?
           p.dup.name.to_s
-        elsif p.translate(Language.default).name?
-          "(#{p.translate(Language.default).name.to_s})"
+        elsif p.localize(Language.default).name?
+          "(#{p.localize(Language.default).name.to_s})"
         else
           "(Untitled)"
         end

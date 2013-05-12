@@ -4,7 +4,7 @@
   page_description "<em>#{month_names[@month - 1]} #{@year}</em>"
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_news_admin_pages_path(:language => l))}.join(link_separator)
+    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_news_admin_pages_path(l))}.join(link_separator)
   end
 %>
 
@@ -23,7 +23,7 @@
         <li><% if year == @year && month == @month %>
           <strong><%= month_names[month-1] %></strong> (<%= page_count %>)</strong>
         <% else %>
-          <%= link_to month_names[month-1], news_admin_pages_path(:language => @language, :month => month, :year => year, :category => ((@category) ? @category.slug : nil)) %> (<%= page_count %>)
+          <%= link_to month_names[month-1], news_admin_pages_path(@locale, month: month, year: year, category: ((@category) ? @category.slug : nil)) %> (<%= page_count %>)
         <% end %></li>
       <% end %>
     </ul>
@@ -40,7 +40,7 @@
     </tr>
     <% @pages.each do |page| %><tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
       <td class="name">
-        <%= link_to(page_name(page), edit_admin_page_url(@language, page), :class => 'name_link') %>
+        <%= link_to(page_name(page), edit_admin_page_url(@locale, page), :class => 'name_link') %>
         <% if page.autopublish? %>
           <br /><small>This page will be published <strong><%= smart_time(page.published_at, :always_include_time => true) %></strong></small>
         <% end %>

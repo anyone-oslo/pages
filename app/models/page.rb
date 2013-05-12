@@ -172,8 +172,18 @@ class Page < ActiveRecord::Base
     redirect = self.redirect_to
     if redirect.kind_of?(Hash)
       redirect.symbolize_keys!
-      options.delete :language unless redirect.has_key?(:language)
-      redirect.delete :language if options.has_key?(:language)
+      if options[:language]
+        ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
+        options[:locale] = options[:language]
+        options.delete(:language)
+      end
+      if redirect[:language]
+        redirect[:locale] = redirect[:language]
+        redirect.delete(:language)
+      end
+
+      options.delete :locale unless redirect.has_key?(:locale)
+      redirect.delete :locale if options.has_key?(:locale)
       redirect = options.merge(redirect)
     end
     redirect

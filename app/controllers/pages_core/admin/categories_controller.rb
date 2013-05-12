@@ -11,7 +11,7 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
         @category = Category.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         flash[:notice] = "Could not find Category with ID ##{params[:id]}"
-        redirect_to admin_pages_url(:language => @language) and return
+        redirect_to admin_pages_url(@locale) and return
       end
     end
 
@@ -33,7 +33,7 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
       @category = Category.create(params[:category])
       if @category.valid?
         flash[:notice] = "New category created"
-        redirect_to admin_pages_url(:language => @language) and return
+        redirect_to admin_pages_url(@locale) and return
       else
         render :action => :new
       end
@@ -45,7 +45,7 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
     def update
       if @category.update_attributes(params[:category])
         flash[:notice] = "Category was updated"
-        redirect_to admin_pages_url(:language => @language) and return
+        redirect_to admin_pages_url(@locale) and return
       else
         render :action => :edit
       end
@@ -54,7 +54,7 @@ class PagesCore::Admin::CategoriesController < Admin::AdminController
     def destroy
       @category.destroy
       flash[:notice] = "Category was deleted"
-      redirect_to admin_pages_url(:language => @language) and return
+      redirect_to admin_pages_url(@locale) and return
     end
 
 end

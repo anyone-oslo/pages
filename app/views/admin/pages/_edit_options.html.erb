@@ -62,7 +62,7 @@
   %>
   <p class="field">
     <label>Import subpages</label>
-    <%= link_to "Import subpages from XML", import_xml_admin_page_path(:language => @language, :id => @page) %>
+    <%= link_to "Import subpages from XML", import_xml_admin_page_path(@locale, @page) %>
   </p>
 
 </div>

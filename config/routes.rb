@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
 
   # Pages
-  resources :pages, :path => '/pages/:language' do
+  resources :pages, :path => "/pages/:locale" do
     collection do
       get  'search'
       post 'search'
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
     resources :files, :controller => 'page_files'
   end
-  match '/pages/:language/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
+  match '/pages/:locale/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
 
   # OpenID
   resource :openid, :controller => 'openid' do
@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     resources :categories
 
     # Pages
-    scope ":language" do
+    scope ":locale" do
       resources :pages do
         collection do
           get 'news'

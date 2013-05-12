@@ -38,10 +38,10 @@ class PagesCore::Frontend::PagesController < FrontendController
     end
 
     def render_page
-      @page.working_language = @language || Language.default
+      @page.locale = @locale || Language.default
 
       if @page.redirects?
-        redirect_to(@page.redirect_to_options({:language => @language})) and return
+        redirect_to(@page.redirect_to_options({locale: @locale})) and return
       end
 
       @page_title ||= @page.name.to_s
@@ -75,7 +75,7 @@ class PagesCore::Frontend::PagesController < FrontendController
     # Cache pages by hand. This is dirty, but it works.
     def cache_page_request
       status_code = response.status.to_i rescue nil
-      if status_code == 200 && PagesCore.config(:page_cache) && @page && @language
+      if status_code == 200 && PagesCore.config(:page_cache) && @page && @locale
         self.class.cache_page response.body, request.path
       end
     end
@@ -100,8 +100,8 @@ class PagesCore::Frontend::PagesController < FrontendController
         format.rss do
           @encoding   = (params[:encoding] ||= "UTF-8").downcase
           @title      = PagesCore.config(:site_name)
-          feeds       = Page.enabled_feeds(@language, {:include_hidden => true})
-          @feed_items = Page.where(:parent_page_id => feeds).order('publised_at DESC').published.limit(20).localized(@language)
+          feeds       = Page.enabled_feeds(@locale, {:include_hidden => true})
+          @feed_items = Page.where(:parent_page_id => feeds).order('publised_at DESC').published.limit(20).localized(@locale)
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
           render :template => 'feeds/pages', :layout => false
         end
@@ -119,7 +119,7 @@ class PagesCore::Frontend::PagesController < FrontendController
         end
         format.rss do
           @encoding = (params[:encoding] ||= "UTF-8").downcase
-          @page.working_language = @language || Language.default
+          @page.locale = @locale || Language.default
           @page_title ||= @page.name.to_s
           @title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
