@@ -61,7 +61,6 @@ module PagesCore
       load 'pages_core/hash_extensions.rb'
       load 'pages_core/html_formatter.rb'
       load 'pages_core/localizable.rb'
-      load 'pages_core/methoded_hash.rb'
       load 'pages_core/pages_plugin.rb'
       load 'pages_core/paginates.rb'
       load 'pages_core/string_extensions.rb'

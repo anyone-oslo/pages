@@ -22,12 +22,11 @@ module PagesCore
 
       # Returns the default configuration.
       def default_config
-        default = MethodedHash.new
-        default[:cache_path] = ActionController::Base.page_cache_directory
-        # TODO: Fix DynamicImage
-        default[:observe]    = [:page, :page_comment, :image]
-        default[:patterns]   = [/^\/index\.[\w]+$/, /^\/pages\/[\w]{2,3}[\/\.](.*)$/, /^\/[\w]{2,3}\/(.*)$/]
-        default
+        OpenStruct.new(
+          cache_path: ActionController::Base.page_cache_directory,
+          observe:    [:page, :page_comment, :image],
+          patterns:   [/^\/index\.[\w]+$/, /^\/pages\/[\w]{2,3}[\/\.](.*)$/, /^\/[\w]{2,3}\/(.*)$/]
+        )
       end
 
       # Returns the configuration. Accepts a block, ie:
