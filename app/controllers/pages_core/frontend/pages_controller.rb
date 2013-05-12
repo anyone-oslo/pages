@@ -101,7 +101,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           @encoding   = (params[:encoding] ||= "UTF-8").downcase
           @title      = PagesCore.config(:site_name)
           feeds       = Page.enabled_feeds(@language, {:include_hidden => true})
-          @feed_items = Page.get_pages(:paginate => {:page => 1, :per_page => 20}, :parent => feeds, :order => 'published_at DESC')
+          @feed_items = Page.where(:parent_page_id => feeds).order('publised_at DESC').published.limit(20).localized(@language)
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
           render :template => 'feeds/pages', :layout => false
         end
@@ -123,12 +123,8 @@ class PagesCore::Frontend::PagesController < FrontendController
           @page_title ||= @page.name.to_s
           @title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
-          if params[:category_name]
-            @category = Category.find_by_name(params[:category_name].to_s)
-            @feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20}, :category => @category)
-          else
-            @feed_items = @page.pages(:paginate => {:page => params[:page], :per_page => 20})
-          end
+          page = (params[:page] || 1).to_i
+          @feed_item = @page.pages.limit(20).offset((page - 1) * 20)
 
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
           render :template => 'feeds/pages', :layout => false
@@ -168,6 +164,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       params[:query] = params[:q] if params[:q]
       @search_query = params[:query] || ""
       normalized_query = @search_query.split(/\s+/).map{|p| "#{p}*"}.join(' ')
+      # TODO: Rewrite this
       @pages = Page.search_paginated(normalized_query, :page => params[:page], :conditions => {:status => 2}, :order => :published_at, :sort_mode => :desc)
     end
 

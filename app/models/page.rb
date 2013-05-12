@@ -244,10 +244,10 @@ class Page < ActiveRecord::Base
     default_except = [:comments_count, :byline, :delta, :last_comment_at, :image_id]
     options[:except] = (options[:except] ? options[:except] + default_except : default_except)
     super(options) do |xml|
-      self.all_fields.each do |localizable_name|
+      self.template_config.enabled_blocks.each do |localizable_name, block_options|
         xml.tag!(localizable_name.to_sym) do |field|
-          self.languages_for_field(localizable_name).each do |language|
-            field.tag!(language.to_sym, self.get_localization(localizable_name, language: language).to_s)
+          self.locales.each do |locale|
+            field.tag!(locale.to_sym, self.localize(locale).send(localizable_name))
           end
         end
       end
@@ -263,7 +263,7 @@ class Page < ActiveRecord::Base
         end
       end
       if options[:pages]
-        subpages = (options[:pages] == :all) ? self.pages(all: true) : self.pages
+        subpages = (options[:pages] == :all) ? self.children : self.pages
         xml.pages do |pages_xml|
           self.pages.each{|page| page.to_xml(options.merge({builder: pages_xml, skip_instruct: true}))}
         end

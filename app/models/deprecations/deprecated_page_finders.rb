@@ -49,6 +49,8 @@ module Deprecations
       #   news_posts.current_page # => 3
       #   news_posts.previous_page # => 2
       #   news_posts.last_page => 11
+
+      # TODO: Safe to remove, not used in plugin
       def get_pages(options={})
         ActiveSupport::Deprecation.warn "Page.get_pages is deprecated, use ARel scopes instead."
 
@@ -97,6 +99,7 @@ module Deprecations
       end
 
       # Finds pages at the root level. See <tt>Page.get_pages</tt> for options, this is equal to <tt>Page.get_pages(:parent => :root, ..)</tt>.
+      # TODO: Safe to remove, not used in plugin
       def root_pages(options={})
         ActiveSupport::Deprecation.warn "Page.root_pages is deprecated, use Page.roots instead."
         options[:parent] ||= :root
@@ -126,6 +129,7 @@ module Deprecations
       end
 
       # Count pages. See Page.get_pages for options.
+      # TODO: Safe to remove, not used in plugin
       def count_pages(options={}, find_options=nil)
         unless find_options
           options, find_options = get_pages_options(options)
@@ -139,6 +143,7 @@ module Deprecations
       end
 
       # Count subpages by year and month.
+      # TODO: Safe to remove, not used in plugin
       def count_pages_by_year_and_month(options={})
         ActiveSupport::Deprecation.warn "Page.count_pages_by_year_and_month is deprecated, rewrite."
         options[:all]           ||= false
@@ -209,6 +214,7 @@ module Deprecations
       private
 
       # Translates options for get_pages to options for find.
+      # TODO: Safe to remove, not used in plugin
       def get_pages_options(options={})
         options.symbolize_keys!
 
@@ -323,32 +329,38 @@ module Deprecations
 
     end
 
+    # TODO: Safe to remove, not used in plugin
     def files?
       ActiveSupport::Deprecation.warn "Page#files? is deprecated, use Page#files.any? instead."
       files.any?
     end
 
+    # TODO: Safe to remove, not used in plugin
     def images?
       ActiveSupport::Deprecation.warn "Page#images? is deprecated, use Page#images.any? instead."
       images.any?
     end
 
     # Returns true if this page is a child of the given page.
+    # TODO: Safe to remove, not used in plugin
     def is_child_of(page)
       ActiveSupport::Deprecation.warn "Page#is_child_of is deprecated, use Page#ancestors.include? instead."
       ancestors.include?(page)
     end
 
+    # TODO: Safe to remove, not used in plugin
     def is_or_is_ancestor?(page)
       ActiveSupport::Deprecation.warn "Page#is_or_is_ancestor?(page) is deprecated, use page.self_and_ancestors.include? instead."
       page.self_and_ancestors.include?(self)
     end
 
+    # TODO: Safe to remove, not used in plugin
     def parent_page
       ActiveSupport::Deprecation.warn "Page#parent_page is deprecated, use Page#parent instead."
       parent
     end
 
+    # TODO: Safe to remove, not used in plugin
     def root_page
       ActiveSupport::Deprecation.warn "Page#root_page is deprecated, use Page#root instead."
       root

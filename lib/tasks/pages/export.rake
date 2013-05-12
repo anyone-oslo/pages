@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'builder'
+
 namespace :pages do
   namespace :export do
     desc "Outputs all site content as XML"
@@ -16,7 +18,7 @@ namespace :pages do
             :persistent_data, :sms_sender, :token, :hashed_password
           ]
         )
-        Page.root_pages(:all => true).to_xml(
+        Page.roots.to_xml(
           :builder       => builder,
           :skip_instruct => true,
           :pages         => :all,
