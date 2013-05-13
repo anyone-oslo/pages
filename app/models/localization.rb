@@ -6,11 +6,11 @@ class Localization < ActiveRecord::Base
   class << self
 
     def locales
-      self.select('locale').uniq.map{ |l| l.locale }
+      self.select('DISTINCT locale').map(&:locale)
     end
 
     def names
-      self.select('name').uniq.map{ |l| l.name }
+      self.select('DISTINCT name').map(&:name)
     end
 
   end
