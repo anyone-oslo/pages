@@ -111,7 +111,7 @@ module PagesCore::ApplicationHelper
       if p.redirects?
         link_to options[:title], p.redirect_to_options({:language => p.working_language}), :class => options[:class]
       else
-        link_to options[:title], {:controller => 'pages', :action => :show, :language => p.working_language, :id => p}, :class => options[:class]
+        link_to options[:title], {:controller => '/pages', :action => :show, :language => p.working_language, :id => p}, :class => options[:class]
       end
     end
   end
