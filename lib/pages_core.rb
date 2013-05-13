@@ -5,6 +5,7 @@ require 'find'
 require 'open-uri'
 require 'pathname'
 require 'rexml/document'
+require 'ostruct'
 
 # -----
 
