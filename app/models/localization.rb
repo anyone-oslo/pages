@@ -1,16 +1,16 @@
 # encoding: utf-8
 
 class Localization < ActiveRecord::Base
-  belongs_to :localizable, :polymorphic => true
+  belongs_to :localizable, polymorphic: true
 
   class << self
 
     def locales
-      self.select('locale').uniq.map{ |l| l.locale }
+      self.select('DISTINCT locale').map(&:locale)
     end
 
     def names
-      self.select('name').uniq.map{ |l| l.name }
+      self.select('DISTINCT name').map(&:name)
     end
 
   end
@@ -24,7 +24,7 @@ class Localization < ActiveRecord::Base
   end
 
   def translate(locale)
-    localizable.localizations.where(:name => self.name, :locale => locale).first
+    localizable.localizations.where(name: self.name, locale: locale).first
   end
 
 end

@@ -22,7 +22,6 @@ module PagesCore::ApplicationHelper
         page = options[:id]
       elsif options[:id]
         page = Page.find(options[:id]) rescue nil
-        page ||= Page.find_by_slug_and_language(options[:id].to_s, @language)
       elsif @page
         page = @page
       end
@@ -40,21 +39,6 @@ module PagesCore::ApplicationHelper
     else
       page_file_path(@language,file.page,file)
     end
-  end
-
-  def translated_link(name, new_language)
-    language = @language || Language.default
-    overwrite_params = {}
-    overwrite_params[:language] = new_language
-    if(params[:slug])
-      page = Page.find_by_slug_and_locale(params[:slug], language)
-      page.working_language = new_language
-      overwrite_params[:slug] = page.slug.to_s
-      if overwrite_params[:slug] == ""
-        overwrite_params[:slug] = nil
-      end
-    end
-    link_to_unless_current name, :overwrite_params => overwrite_params
   end
 
   def smart_time(time, options={})
@@ -187,7 +171,7 @@ module PagesCore::ApplicationHelper
 
   def unique_page(page_name, &block)
     language = @language || Language.default
-    page = Page.find_unique(page_name)
+    page = Page.where(:unique_name => page_name).first
     if page && block_given?
       output = capture(page, &block)
       concat(output)

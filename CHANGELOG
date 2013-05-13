@@ -1,3 +1,60 @@
+3.0.0.alpha
+
+Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
+
+- Pages requires Ruby 1.9+, Ruby 1.8.7 is no longer supported
+- PagesCore is now a gem
+- Textbit and ActsAsTextable is removed in favor of Localization, with a new implementation
+- New class: PagesCore::HtmlFormatter converts a string to HTML using Textile
+- The getter methods for localized attributes now return pure strings rather than ActiveRecord objects,
+  thus making the implementation transparent.
+- Specifying filter is no longer supported on localizations
+- The :language keyword is deprecated everywhere, use :locale instead
+- Similar with @language, use @locale
+- Page.get_pages and related methods are deprecated, in favor of the new ARel scopes
+- acts_as_tree has been removed and replaced with a PageTree concern
+- acts_as_taggable has been removed and replaced with a Taggable concern
+- template_* methods in PagesController are deprecated, use the new template :template_name syntax
+- Combustion, RSpec, FactoryGirl and Guard has been introduced to facilitate testing
+- The old migrations have been merged, rake pages:update will clean up
+- Language.default defaults to English if no language has been configured
+- Sprockets has been removed again now that we're on Rails 3
+- MumboJumbo has been removed, use the built-in I18n feature instead
+- PagesCore.config.rss_fulltext enables full text in feeds
+- Campfire room is configurable in deploy.rb
+- Prototype has been removed, admin views might need updating
+- Admin now uses jQuery UJS
+- jQuery, jQuery UI, Jcrop and SWFObject is no longer bundled with the plugin
+- Internet Explorer 7 is no longer supported (but might work)
+- Admin javascripts have been refactored
+- params[:locale] now sets I18n.locale
+- Admin now redirects to the login page instead of rendering the form
+- PagesCore::FormBuilder now supports date picking and image uploads
+- rake db:fix_double_encoding fixes double UTF8 encoding in the database, handy when upgrading to the Mysql2 gem
+- Sites can be deployed from GitHub
+- Deployment uses SSH agent forwarding
+- Deployment is now rbenv aware
+- New class: PagesCore::ArchiveFinder for creating archive indexes
+- New helpers: root_pages and root_page. Don't load root pages with a filter.
+- New named route: paginated_page
+- Importing pages from XML has been moved to it's own class; PagesCore::Serializations::PageXmlImporter
+- Several unused methods in Page and User have been removed
+- Removed: PagesCore::ArrayExtensions
+- Removed: FeedsController, FeedItem and FeedBuilder
+- Removed: ImageSets
+- Removed: SmsSubscriber
+. Removed: Account
+- Removed: TamperedWithCookie monkey patch
+- Removed: country_select
+- Removed: DynamicText
+- Removed: XmlController
+- Removed: Admin::FilesController
+- Removed: Partials
+- Removed: i18n helper
+- Removed: EnumerableMapper
+- Removed: GenericMailer
+- Removed: sitemap
+
 2.3.0
 
 - Sikkerhetsoppdaterning: Rails 2.3.15, fikser for CVE-2012-5664, CVE-2013-155 og CVE-2013-156

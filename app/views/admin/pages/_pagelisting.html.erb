@@ -2,7 +2,7 @@
   if page.news_page?
     subpages = []
   else
-    subpages = page.pages(:drafts => true, :hidden => true, :all_languages => true, :autopublish => true)
+    subpages = page.children.visible.in_locale(page.locale)
   end
   page_classes = ['page', 'page_listing']
   page_classes << 'hidden' unless page.published?
@@ -39,7 +39,7 @@
   <% if page.news_page? %>
     <ul>
       <li><div class="page_listing">
-        <em>(<%= page.count_pages(:drafts => true, :hidden => true, :all_languages => true, :autopublish => true) %> items)</em>
+        <em>(<%= page.children.visible.count %> items)</em>
         <div class="actions">
           &mdash;
           <%= link_to "Create new", new_news_admin_pages_url(:language => @language, :parent => page) %>

@@ -4,6 +4,8 @@ require 'digest/sha1'
 require 'find'
 require 'open-uri'
 require 'pathname'
+require 'rexml/document'
+require 'ostruct'
 
 # -----
 
@@ -36,7 +38,6 @@ require 'json'
 require 'coffee-script'
 
 require 'acts_as_list'
-require 'acts_as_tree'
 
 require "recaptcha/rails"
 
@@ -48,22 +49,20 @@ module PagesCore
   class << self
 
     def load_dependencies!
-      load 'acts_as_taggable.rb'
       load 'language.rb'
 
       load 'pages_core/plugin.rb'
 
-      load 'pages_core/array_extensions.rb'
+      load 'pages_core/archive_finder.rb'
       load 'pages_core/cache_sweeper.rb'
       load 'pages_core/configuration.rb'
       load 'pages_core/engine.rb'
-      load 'pages_core/hash_extensions.rb'
+      load 'pages_core/extensions.rb'
       load 'pages_core/html_formatter.rb'
       load 'pages_core/localizable.rb'
-      load 'pages_core/methoded_hash.rb'
       load 'pages_core/pages_plugin.rb'
       load 'pages_core/paginates.rb'
-      load 'pages_core/string_extensions.rb'
+      load 'pages_core/serializations.rb'
       load 'pages_core/templates.rb'
       load 'pages_core/version.rb'
     end

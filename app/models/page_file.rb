@@ -13,11 +13,11 @@ class PageFile < ActiveRecord::Base
   }
 
   belongs_to :page
-  belongs_to :binary, :dependent => :destroy
+  belongs_to :binary, dependent: :destroy
 
   validates_presence_of :binary_id
 
-  acts_as_list :scope => :page
+  acts_as_list scope: :page
 
   localizable do
     attribute :description

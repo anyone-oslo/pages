@@ -11,12 +11,12 @@
   </p>
   <h2>Deactivated users</h2>
   <p>
-    <% if User.deactivated_count == 0 %>
+    <% if User.deactivated.count == 0 %>
       There are no deactivated user accounts.</p>
-    <% elsif User.deactivated_count == 1 %>
+    <% elsif User.deactivated.count == 1 %>
       There is <%= link_to "one deactivated user", deactivated_admin_users_path %>.
     <% else %>
-      There are <%= link_to "#{User.deactivated_count} deactivated users", deactivated_admin_users_path %>.
+      There are <%= link_to "#{User.deactivated.count} deactivated users", deactivated_admin_users_path %>.
     <% end %>
   </p>
 <% end %>

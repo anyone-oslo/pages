@@ -3,17 +3,17 @@
 class User < ActiveRecord::Base
 
   SPECIAL_USERS = {
-    'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/',            :realname => 'Inge Jørgensen'},
-    'thomas'    => {:email => 'thomas@manualdesign.no',    :openid_url => 'http://silverminken.myopenid.com/', :realname => 'Thomas Knutstad'}
+    'inge'   => { email: 'inge@manualdesign.no',   openid_url: 'http://elektronaut.no/',            realname: 'Inge Jørgensen' },
+    'thomas' => { email: 'thomas@manualdesign.no', openid_url: 'http://silverminken.myopenid.com/', realname: 'Thomas Knutstad' }
   }
 
 
   ### Relations #############################################################
 
-  belongs_to       :creator, :class_name => "User", :foreign_key => 'created_by'
-  has_many         :created_users, :class_name => "User", :foreign_key => 'created_by'
+  belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
+  has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
-  belongs_to_image :image, :foreign_key => :image_id
+  belongs_to_image :image, foreign_key: :image_id
 
 
   ### Attributes ############################################################
@@ -25,13 +25,13 @@ class User < ActiveRecord::Base
   ### Validations ###########################################################
 
   validates_presence_of   :username, :email, :realname
-  validates_uniqueness_of :username, :message => 'already in use'
-  validates_format_of     :username, :with => /^[-_\w\d@\.]+$/i, :message => "may only contain numbers, letters and '-_.@'"
-  validates_length_of     :username, :in => 3..32
-  validates_format_of     :email,    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => 'is not a valid email address'
-  validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
-  validates_presence_of   :password, :on => :create, :unless => Proc.new{|u| u.openid_url?}
-  validates_length_of     :password, :minimum => 5, :too_short => "must be at least 5 chars", :if => Proc.new { |user| !user.password.blank? }
+  validates_uniqueness_of :username, message: 'already in use'
+  validates_format_of     :username, with: /^[-_\w\d@\.]+$/i, message: "may only contain numbers, letters and '-_.@'"
+  validates_length_of     :username, in: 3..32
+  validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
+  validates_uniqueness_of :openid_url, allow_nil: true, allow_blank: true, message: 'is already registered.', case_sensitive: false
+  validates_presence_of   :password, on: :create, unless: Proc.new{|u| u.openid_url?}
+  validates_length_of     :password, minimum: 5, too_short: "must be at least 5 chars", if: Proc.new { |user| !user.password.blank? }
 
   validate do |user|
     # Normalize OpenID URL
@@ -58,75 +58,35 @@ class User < ActiveRecord::Base
   ### Callbacks #############################################################
 
   before_create     :generate_token
-  before_validation :hash_password, :on => :create
-  before_validation :create_password, :on => :create
+  before_validation :hash_password, on: :create
+  before_validation :create_password, on: :create
 
 
   ### Search index ##########################################################
 
   define_index do
     indexes username, realname, email, mobile
-    has :last_login_at, :type => :datetime
-    has :created_at, :type => :datetime
+    has :last_login_at, type: :datetime
+    has :created_at, type: :datetime
     has is_activated
-    set_property :delta => :delayed
+    set_property delta: :delayed
   end
+
+  scope :sorted,      -> { order('realname ASC') }
+  scope :activated,   -> { sorted.where(is_activated: true) }
+  scope :deactivated, -> { sorted.where(is_activated: false) }
+  scope :admins,      -> { activated.where(is_admin: true) }
 
 
   ### Class methods #########################################################
 
   class << self
 
-    # Finds users by the first letter(s) of the username.
-    def find_by_first_letter(letters)
-      letters = "[#{letters}]"
-      self.find(
-        :all,
-        :order      => 'username',
-        :conditions => ['is_deleted = 0 AND is_activated = 1 AND username REGEXP ?', "^" + letters]
-      )
-    end
-
-    # Finds a user by either id or username.
-    def find_by_id_or_username(id)
-      if id =~ /^[\d]+$/
-        self.find(id)
-      else
-        self.find(:first, :conditions => ['username = ?', id])
-      end
-    end
-
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
       user   = self.find_by_username(string.to_s)
       user ||= self.find_by_email(string.to_s)
       user
-    end
-
-    # Finds newest users.
-    def latest(limit=5)
-      self.find(:all, :limit => limit, :conditions => ["is_deleted = 0 AND is_activated = 1"], :order => 'created_at DESC')
-    end
-
-    # Finds logged in users, which is any user who has been active within
-    # the last 15 minutes.
-    def logged_in
-      self.find(:all, :order => 'last_login_at DESC', :conditions => ['last_login_at > ?', 15.minutes.ago])
-    end
-
-    # Finds all active admins.
-    def admin_users
-      self.find(:all, :conditions => 'is_activated = 1 AND is_admin = 1',  :order => 'realname ASC')
-    end
-
-    # Finds deactivated user accounts
-    def find_deactivated
-      self.find(:all, :conditions => {:is_activated => false}, :order => 'realname ASC')
-    end
-
-    # Counts deactivated users.
-    def deactivated_count
-      self.count(:all, :conditions => {:is_activated => false})
     end
 
     # Finds a user by openid_url. If the URL is one of the SPECIAL_USERs, the account is
@@ -136,11 +96,11 @@ class User < ActiveRecord::Base
       user = User.find_by_openid_url(openid_url.to_s)
       unless user
         # Check special users
-        special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({:username => username})}
+        special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({username: username})}
         if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
           special_user = special_users.detect{|u| u[:openid_url] == openid_url}
           unless user = User.find_by_username(special_user[:username])
-            user = User.create(special_user.merge({:is_activated => true, :is_admin => true}))
+            user = User.create(special_user.merge({is_activated: true, is_admin: true}))
           end
         end
       end
@@ -178,7 +138,6 @@ class User < ActiveRecord::Base
     pass
   end
 
-
   # Hashes self.password and stores it in the hashed_password column.
   def hash_password
      if self.password and !self.password.empty?
@@ -210,7 +169,7 @@ class User < ActiveRecord::Base
   #
   # Example:
   #
-  #   login = @user.authenticate(:password => 'unencrypted password')
+  #   login = @user.authenticate(password: 'unencrypted password')
   #
   def authenticate(options={})
     options.symbolize_keys!

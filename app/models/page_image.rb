@@ -3,14 +3,14 @@
 class PageImage < ActiveRecord::Base
 
   belongs_to :page
-  belongs_to_image :image#, :dependent => :destroy
+  belongs_to_image :image
 
   validates_presence_of :page_id, :image_id
 
   DELEGATED_ATTRIBUTES = [:name, :description, :byline, :crop_start, :crop_size]
   DELEGATED_ATTRIBUTES.each{|a| attr_accessor a}
 
-  acts_as_list :scope => :page
+  acts_as_list scope: :page
 
   validate do |page_image|
     if page_image.page && page_image.page.page_images.count < 1
@@ -66,29 +66,27 @@ class PageImage < ActiveRecord::Base
   end
 
   def name
-    @name ||= (self.image ? self.image.name : nil)
+    image.try(&:name)
   end
 
   def byline
-    @byline ||= (self.image ? self.image.byline : nil)
+    image.try(&:byline)
   end
 
   def description
-    @description ||= (self.image ? self.image.description : nil)
+    image.try(&:description)
   end
 
   def crop_start
-    @crop_start ||= (self.image ? self.image.crop_start : nil)
+    image.try(&:crop_start)
   end
 
   def crop_size
-    @crop_size ||= (self.image ? self.image.crop_size : nil)
+    image.try(&:crop_size)
   end
 
   def to_json(options={})
-    options = {
-      :include => [:image]
-    }.merge(options)
+    options = { include: [:image] }.merge(options)
     super(options)
   end
 

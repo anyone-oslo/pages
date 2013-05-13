@@ -2,7 +2,7 @@
 
 class PageComment < ActiveRecord::Base
 
-  belongs_to :page, :counter_cache => :comments_count
+  belongs_to :page, counter_cache: :comments_count
   attr_accessor :invalid_captcha
 
   def valid_captcha?
@@ -11,7 +11,7 @@ class PageComment < ActiveRecord::Base
 
   after_create do |page_comment|
     if page_comment.page && page_comment.valid?
-      page_comment.page.update_attribute(:last_comment_at, page_comment.created_at)
+      page_comment.page.update_attributes(last_comment_at: page_comment.created_at)
     end
   end
 

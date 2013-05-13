@@ -137,7 +137,7 @@ module PagesCore::HeadTagsHelper
     # META keywords
     if @meta_keywords
       options[:meta_keywords] = @meta_keywords
-    elsif @page && @page.tags?
+    elsif @page && @page.tags.any?
       options[:meta_keywords] = @page.tag_list
     end
     if options[:meta_keywords]

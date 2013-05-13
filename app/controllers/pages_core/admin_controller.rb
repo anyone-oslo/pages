@@ -13,7 +13,7 @@ class PagesCore::AdminController < ApplicationController
   layout "admin"
 
   def redirect
-    if Page.news_pages?
+    if Page.news_pages.any?
       redirect_to news_admin_pages_url(:language => @language)
     else
       redirect_to admin_pages_url(:language => @language)
@@ -39,12 +39,12 @@ class PagesCore::AdminController < ApplicationController
 
     # Builds the admin menu tabs.
     def build_admin_tabs
-      if Page.news_pages?
+      if Page.news_pages.any?
         register_menu_item(
           "News", hash_for_news_admin_pages_path({:language => @language}), :pages,
           :current => Proc.new {
             params[:controller] == 'admin/pages' &&
-            (params[:action] == 'news' || (@page && @page.parent_page && @page.parent_page.news_page?))
+            (params[:action] == 'news' || (@page && @page.parent && @page.parent.news_page?))
           }
         )
       end
