@@ -180,7 +180,7 @@ module PagesCore::HeadTagsHelper
       output += "<meta property=\"og:description\" content=\"#{meta_description}\" />\n"
     end
 
-    output += output_block
+    output += output_block unless output_block.blank?
     output += "</head>\n"
 
     output.html_safe
