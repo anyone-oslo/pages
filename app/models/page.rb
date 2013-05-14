@@ -74,6 +74,7 @@ class Page < ActiveRecord::Base
     set_property group_concat_max_len: 16.megabytes
   end
 
+  scope :by_date,    -> { order('published_at DESC') }
   scope :published,  -> { where(status: 2, autopublish: false) }
   scope :visible,    -> { where('status < 4') }
   scope :news_pages, -> { visible.where(news_page: true) }
