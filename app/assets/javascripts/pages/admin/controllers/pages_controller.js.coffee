@@ -122,7 +122,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     $("#previewButton").click ->
       button = this
       form = $(button).closest("form").get(0)
-      previewUrl = "/" + Admin.locale() + "/pages/preview"
+      previewUrl = $(this).data('url')
 
       # Rewrite the form and submit
       form.oldAction = form.action

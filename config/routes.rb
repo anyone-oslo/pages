@@ -7,10 +7,10 @@ Rails.application.routes.draw do
     collection do
       get  'search'
       post 'search'
-      post 'preview'
     end
     member do
       post 'add_comment'
+      put 'preview'
     end
     resources :files, :controller => 'page_files'
   end

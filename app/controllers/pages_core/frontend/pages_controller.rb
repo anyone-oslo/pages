@@ -8,7 +8,7 @@ class PagesCore::Frontend::PagesController < FrontendController
   end
 
   before_filter :load_root_pages
-  before_filter :find_page, :only => [:show]
+  before_filter :find_page, :only => [:show, :preview]
   after_filter  :cache_page_request, :only => [ :show ]
 
 
@@ -169,8 +169,15 @@ class PagesCore::Frontend::PagesController < FrontendController
     end
 
     def preview
-      @page = Page.new(params[:page])
-      @page.published_at ||= Time.now
+      unless @current_user
+        redirect_to page_url(@locale, @page) and return
+      end
+
+      preview_attributes = params[:page].merge(status: 2, published_at: Time.now, locale: @locale, redirect_to: nil)
+      preview_attributes.delete(:serialized_tags)
+
+      @page.attributes = preview_attributes
+
       render_page
     end
 
