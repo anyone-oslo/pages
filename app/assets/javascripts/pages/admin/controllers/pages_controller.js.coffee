@@ -61,7 +61,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
 
     checkStatus = ->
       pageStatus = $("#page-form-sidebar #page_status").val()
-      if pageStatus is 2
+      if pageStatus == "2"
         $("#page-form-sidebar .published_date").fadeIn()
       else
         $("#page-form-sidebar .published_date").hide()
