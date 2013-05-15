@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
 
   # Pages
-  resources :pages, :path => "/pages/:locale" do
+  resources :pages, :path => ":locale/pages" do
     collection do
       get  'search'
       post 'search'
@@ -14,7 +14,11 @@ Rails.application.routes.draw do
     end
     resources :files, :controller => 'page_files'
   end
-  match '/pages/:locale/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
+  match '/:locale/pages/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
+
+  # Redirect hack for backwards compatibility
+  get 'pages/:locale' => redirect("/%{locale}/pages"), :locale => /\w\w\w/
+  get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), :locale => /\w\w\w/
 
   # OpenID
   resource :openid, :controller => 'openid' do
