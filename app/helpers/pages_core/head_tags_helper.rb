@@ -153,13 +153,15 @@ module PagesCore::HeadTagsHelper
       options[:meta_image] = @meta_image
     elsif @page && @page.image
       options[:meta_image] = @page.image
+    elsif options[:default_meta_image]
+      options[:meta_image] = options[:default_meta_image]
     end
 
     if options[:meta_image]
       if options[:meta_image].kind_of?(Image)
         output += "\t<link rel=\"image_src\" href=\"" + dynamic_image_url(options[:meta_image], :size => '400x', :only_path => false) + "\" />\n"
       else
-        output += "\t<link rel=\"image_src\" href=\""  +options[:meta_image] + "\" />\n"
+        output += "\t<link rel=\"image_src\" href=\"" + options[:meta_image] + "\" />\n"
       end
     end
 
