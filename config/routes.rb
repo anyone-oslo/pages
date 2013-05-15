@@ -78,7 +78,7 @@ Rails.application.routes.draw do
         # Page Files
         resources :files, :controller => 'page_files' do
           collection do
-            get 'reorder'
+            post 'reorder'
           end
         end
       end
