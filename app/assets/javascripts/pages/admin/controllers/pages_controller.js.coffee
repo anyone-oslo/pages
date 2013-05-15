@@ -96,9 +96,27 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
 
     $("#page-form-sidebar").find("input,textarea,select").change replicateFormElement
     $("#new-image").hide()
+
     window.showAdditionalImageModal = ->
       Modal.show "<div class=\"uploadImages\">" + $("#new-image").html() + "</div>"
 
+    window.showFileUploadModal = ->
+      Modal.show "<div class=\"uploadImages\">" + $("#new-file").html() + "</div>"
+
+    # Reordering files
+    $(".filelist").each ->
+      list = this
+      $(list).sortable
+        axis: "y"
+        cursor: "move"
+        distance: 10
+        handle: ".drag_handle"
+        placeholder: "placeholder"
+        update: (event, ui) ->
+          $.post $(list).data('url'),
+            ids: ($(item).data('file-id') for item in $(list).find('li').get())
+          , (response) ->
+            $(list).effect "highlight", {}, 500
 
     # Previewing
     $("#previewButton").click ->

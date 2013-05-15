@@ -165,7 +165,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       @search_query = params[:query] || ""
       normalized_query = @search_query.split(/\s+/).map{|p| "#{p}*"}.join(' ')
       # TODO: Rewrite this
-      @pages = Page.search_paginated(normalized_query, :page => params[:page], :conditions => {:status => 2}, :order => :published_at, :sort_mode => :desc)
+      @pages = Page.search_paginated(normalized_query, :page => params[:page], :where => {:status => 2}, :order => :published_at, :sort_mode => :desc)
     end
 
     def preview

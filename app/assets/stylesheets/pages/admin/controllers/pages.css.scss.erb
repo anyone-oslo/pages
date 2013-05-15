@@ -47,6 +47,7 @@
   text-decoration: underline;
 }
 .drag_handle {
+  cursor: pointer;
   float: left;
   vertical-align: middle;
   margin-top: 5px;
@@ -149,10 +150,29 @@
   width: 124px;
 }
 
-#filelist {
+.filelist {
   list-style-type: none;
-  margin-left: 0; margin-right: 0; padding: 0;
-}
-#filelist {
-
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  li {
+    line-height: 30px;
+    border-top: 1px solid #ddd;
+    &:first-child {
+      border-top: 0px;
+    }
+    .actions {
+      float: right;
+    }
+    .drag_handle {
+      margin-right: 10px;
+    }
+  }
+  .placeholder {
+    height: 30px;
+  }
+  .ui-sortable-helper {
+    border: 1px solid #ddd !important;
+    background: rgba(250, 250, 250, 0.8);
+  }
 }

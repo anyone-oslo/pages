@@ -44,21 +44,22 @@
   <% if @page.template_config.value(:files) %>
     <%= content_tab "Files" do %>
       <% if @page.files.any? %>
-        <ul id="filelist">
+        <ul class="filelist" data-url="<%= reorder_admin_page_files_url(@locale, @page) %>">
           <% @page.files.each do |file| %>
-            <li id="file_<%= file.id %>">
-              <%= image_tag 'pages/admin/drag-handle.gif', :class => :handle %>
+            <li data-file-id="<%= file.id %>">
+              <span class="actions">
+                <%= link_to "Delete", admin_page_file_path(@locale, @page, file), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>
+              </span>
+              <div class="drag_handle"></div>
               <strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path(@locale, @page, file) %>
-              (<%= link_to "Delete", admin_page_file_path(@locale, @page, file), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>)
             </li>
           <% end %>
         </ul>
-        <%= sortable_element 'filelist', :url => reorder_admin_page_files_path(@locale, @page), :handle => 'handle' %>
       <% else %>
         <p>No files added yet.</p>
       <% end %>
       <p>
-        <%= link_to_function "Add new file", "$('#new-file').show();", :class => :create %>
+        <p><%= button_to_function "Upload file", "showFileUploadModal();" %></p>
       </p>
     <% end %>
   <% end %>
@@ -130,7 +131,8 @@
         :errors      => @new_file.errors[:file]
       %>
       <p>
-        <%= submit_tag "Upload" %> or <%= link_to_function "Cancel", "Element.hide('new-file');", :class => :cancel %>
+        <%= submit_tag "Upload" %> or
+        <%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
       </p>
     <% end %>
   </div>
