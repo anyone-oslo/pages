@@ -66,23 +66,23 @@ class PageImage < ActiveRecord::Base
   end
 
   def name
-    image.try(&:name)
+    @name ||= image.try(&:name)
   end
 
   def byline
-    image.try(&:byline)
+    @byline ||= image.try(&:byline)
   end
 
   def description
-    image.try(&:description)
+    @description ||= image.try(&:description)
   end
 
   def crop_start
-    image.try(&:crop_start)
+    @crop_start ||= image.try(&:crop_start)
   end
 
   def crop_size
-    image.try(&:crop_size)
+    @crop_size ||= image.try(&:crop_size)
   end
 
   def to_json(options={})
