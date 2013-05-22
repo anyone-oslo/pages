@@ -1,4 +1,0 @@
-development:
-  port: 3312
-production:
-  port: 3312

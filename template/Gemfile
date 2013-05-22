@@ -1,5 +1,0 @@
-# Load gems from plugins
-[File.join(File.dirname(__FILE__), 'vendor/plugins/pages/Gemfile').to_s].each{|f| self.instance_eval(Bundler.read_file(f), f, 1)}
-
-# Require your local gems here
-# gem 'dynamic_image'
