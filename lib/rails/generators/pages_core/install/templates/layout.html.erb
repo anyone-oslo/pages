@@ -1,0 +1,13 @@
+<%= head_tag(
+  :doctype            => :html5,
+  :locale             => @locale,
+  :javascript         => 'application',
+  :stylesheet         => ['application'],
+  :feed_tags          => :true,
+  :prepend_page_title => true
+) do %>
+<% end %>
+<body>
+  <%= yield %>
+</body>
+</html>
