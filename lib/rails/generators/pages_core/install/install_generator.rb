@@ -17,7 +17,7 @@ module PagesCore
         @default_sender ||= ask("Default sender? [no-reply@#{@domain_name}]")
         @default_sender = "no-reply@#{@domain_name}" if @default_sender.blank?
         @sphinx_port ||= ask("Sphinx port? [3312]")
-        @sphinx_port = "3312" if @app_name.blank?
+        @sphinx_port = "3312" if @sphinx_port.blank?
       end
 
       def create_apache_config
