@@ -4,7 +4,7 @@
 # Be sure to restart your web server when you modify this file.
 
 # Default language
-Language.default = Language.code_for_name("<%= @default_locale %>")
+Language.default = "<%= @default_locale %>"
 
 # Site configuration
 PagesCore.configure do |config|

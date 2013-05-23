@@ -87,7 +87,7 @@ Rails.application.routes.draw do
   end
 
   # Default admin route
-  match '/admin' => redirect{|env, req| "/admin/#{Language.default}/pages/news"}, :as => 'admin_default'
+  match '/admin' => redirect{ |env, req| "/admin/#{Language.default}/pages/news" }, :as => 'admin_default'
   #match '/admin' => 'admin#redirect', :as => 'admin_default'
 
   # Errors
