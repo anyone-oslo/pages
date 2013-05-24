@@ -90,7 +90,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
       newValue = this
       $("#page-form").find("[name=\"" + newValue.name + "\"]").each ->
         if newValue.type is "checkbox"
-          $(this).attr "checked", $(newValue).attr("checked")
+          $(this).prop "checked", $(newValue).prop("checked")
         else
           $(this).val $(newValue).val()
 
