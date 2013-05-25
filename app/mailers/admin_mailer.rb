@@ -2,60 +2,48 @@
 
 class AdminMailer < ActionMailer::Base
 
-  default :from => Proc.new { "support@manualdesign.no" }
-
-  def generic_mailer( options )
-    @recipients = options[:recipients] || AdminMailer.default_address
-    @from       = options[:from]       || AdminMailer.default_address
-    @cc         = options[:cc]         || ""
-    @bcc        = options[:bcc]        || ""
-    @subject    = options[:subject]    || ""
-    @body       = options[:body]       || {}
-    @headers    = options[:headers]    || {}
-    @charset    = options[:charset]    || "utf-8"
-  end
+  default from: Proc.new { "support@manualdesign.no" }
 
   def error_report(error_report, from, description)
     @error_report, @from, @description = error_report, from, description
     short_message = @error_report[:message].gsub(/[\s\n]+/, ' ')[0..80]
     mail(
-      :to      => 'system+error@manualdesign.no',
-      :from    => (!@from.empty? ? @from : 'support@manualdesign.no'),
-      :subject => "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
+      to:      'system+error@manualdesign.no',
+      from:    (!@from.empty? ? @from : 'support@manualdesign.no'),
+      subject: "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
     )
   end
 
   def new_user(user, login_url)
     @user, @login_url = user, login_url
     mail(
-      :to      => @user.email,
-      :subject => "#{PagesCore.config(:site_name)} has invited you to Pages"
+      to:      @user.email,
+      subject: "#{PagesCore.config(:site_name)} has invited you to Pages"
     )
   end
 
   def user_changed(user, login_url, updated_by)
     @user, @login_url, @updated_by = user, login_url, updated_by
     mail(
-      :to      => @user.email,
-      :subject => "Your Pages account on #{PagesCore.config(:site_name)} has been edited"
+      to:      @user.email,
+      subject: "Your Pages account on #{PagesCore.config(:site_name)} has been edited"
     )
   end
 
   def new_password(user, password, login_url)
     @user, @password, @login_url = user, password, login_url
     mail(
-      :to      => @user.email,
-      :subject => "Your new password on #{PagesCore.config(:site_name)}"
+      to:      @user.email,
+      subject: "Your new password on #{PagesCore.config(:site_name)}"
     )
   end
 
   def comment_notification(recipient, page, comment, url)
     @recipient, @page, @comment, @url = recipient, page, comment, url
     mail(
-      :to      => recipient,
-      :from    => @comment.email,
-      :subject => "[#{PagesCore.config(:site_name)}] New comment on #{@page.name.to_s}"
-
+      to:      recipient,
+      from:    @comment.email,
+      subject: "[#{PagesCore.config(:site_name)}] New comment on #{@page.name.to_s}"
     )
   end
 
