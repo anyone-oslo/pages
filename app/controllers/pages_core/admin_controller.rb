@@ -30,7 +30,7 @@ class PagesCore::AdminController < ApplicationController
     def require_authentication
       unless @current_user && @current_user_is_admin
         if User.count < 1
-          redirect_to :controller => :users, :action => :welcome and return false
+          redirect_to welcome_users_url and return
         else
           redirect_to login_admin_users_url and return
         end

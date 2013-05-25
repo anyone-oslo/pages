@@ -14,7 +14,7 @@ class PagesCore::FrontendController < ApplicationController
   #
   def load_root_pages
     @root_pages = Page.roots.localized(@locale).published
-    @rss_feeds = Page.find( :all, :conditions => 'feed_enabled = 1 AND status = 2' ).collect{ |p| p.localize(@locale) }
+    @rss_feeds = Page.where(feed_enabled: true).localized(@locale).published
   end
 
   private

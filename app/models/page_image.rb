@@ -28,11 +28,11 @@ class PageImage < ActiveRecord::Base
           '`primary` = 0',
           ['page_id = ? AND id != ?', page_image.page_id, page_image.id]
         )
-        page_image.page.update_attribute(:image_id, page_image.image_id)
+        page_image.page.update_attributes(image_id: page_image.image_id)
 
       # Clear image_id on the page if primary is toggled off
       else
-        page_image.page.update_attribute(:image_id, nil)
+        page_image.page.update_attributes(image_id: nil)
       end
     end
 
@@ -53,7 +53,7 @@ class PageImage < ActiveRecord::Base
 
   after_destroy do |page_image|
     if page_image.primary?
-      page_image.page.update_attribute(:image_id, nil)
+      page_image.page.update_attributes(image_id: nil)
     end
   end
 

@@ -45,7 +45,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     pages = params[:ids].map{|id| Page.find(id)}
     PagesCore::CacheSweeper.once do
       pages.each_with_index do |page, index|
-        page.update_attribute(:position, (index + 1))
+        page.update_attributes(position: (index + 1))
       end
     end
     if request.xhr?
@@ -85,7 +85,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     @page.author = @current_user
 
     if @page.update_attributes(params[:page])
-      @page.update_attribute(:comments_allowed, @page.template_config.value(:comments_allowed))
+      @page.update_attributes(comments_allowed: @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       redirect_to edit_admin_page_url(@locale, @page)
     else

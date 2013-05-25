@@ -60,7 +60,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
         @user = User.create(attributes)
         if @user.valid?
           @current_user = @user
-          @current_user.update_attribute(:last_login_at, Time.now)
+          @current_user.update_attributes(last_login_at: Time.now)
           session[:current_user_id] = @current_user.id
           set_authentication_cookies
 
@@ -169,7 +169,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
 
     def update_openid
       if session[:authenticated_openid_url]
-        @user.update_attribute(:openid_url, session[:authenticated_openid_url])
+        @user.update_attributes(openid_url: session[:authenticated_openid_url])
       end
       flash[:notice] = "Your changed to #{@user.realname} were saved."
       redirect_to admin_users_path
