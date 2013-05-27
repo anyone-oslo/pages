@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-cookie-rails'
   s.add_dependency 'jcrop-rails'
   s.add_dependency 'underscore-rails'
+  s.add_dependency 'uglifier'
 
   # ActiveRecord extensions
   s.add_dependency 'acts_as_list'
