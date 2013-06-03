@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 source 'http://rubygems.org'
-source 'http://gems.manualdesign.no/gems/'
-#source 'http://gems.github.com'
+source 'http://gems.manualdesign.no/'
 
 gem 'rake', '0.9.2.2'
 gem 'rails', '2.3.18'
