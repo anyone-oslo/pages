@@ -22,7 +22,7 @@ set :scm,                   "git"
 if variables.has_key?(:github) && github
   set :repository, "git@github.com:manualdesign/#{application}.git"
 else
-  set :repository, "rails@manualdesign.no:~/git/sites/#{application}.git"
+  set :repository, "rails@git.manualdesign.no:~/git/sites/#{application}.git"
 end
 
 set :deploy_via,            :remote_cache
@@ -176,36 +176,38 @@ namespace :log do
   end
 end
 
-before "deploy:cold", "deploy:setup_cold_deploy"
 
-#before "deploy:migrate", "pages:fix_migrations"
-
+# Setup
 after "deploy:setup",           "pages:create_shared_dirs"
-#after "deploy:create_symlink",         "pages:fix_permissions"
-after "deploy:create_symlink",         "pages:create_symlinks"
 
-# Sphinx
-before "deploy:create_symlink", "sphinx:stop"
-after "deploy:create_symlink", "sphinx:configure"
-after "deploy:restart", "sphinx:start"
+# Cold deploy
+before "deploy:cold",           "deploy:setup_cold_deploy"
+before "deploy:cold",           "without_services"
+before "deploy:cold",           "deploy:setup"
+after "deploy:cold",            "deploy"
+after "deploy:cold",            "deploy:create_database"
+after "deploy:cold",            "deploy:migrate"
+after "deploy:cold",            "deploy:services"
+after "deploy:cold",            "deploy:reload_webserver"
 
+# Symlinks
+after "deploy:finalize_update", "pages:symlinks"
+
+# Cache and assets
 after "deploy:restart",         "cache:flush"
 after "deploy:finalize_update", "deploy:ensure_binary_objects"
 after "deploy:finalize_update", "deploy:precompile_assets"
 
-# Cold deploy
-before "deploy:cold", "without_services"
-before "deploy:cold", "deploy:setup"
-after "deploy:cold", "deploy"
-after "deploy:cold", "deploy:create_database"
-after "deploy:cold", "deploy:migrate"
-after "deploy:cold", "deploy:services"
-after "deploy:cold", "deploy:reload_webserver"
+# Sphinx
+after "deploy:finalize_update", "sphinx:configure"
+after "deploy:start",           "sphinx:start"
+after "deploy:stop",            "sphinx:start"
+after "deploy:restart",         "sphinx:restart"
 
 # Delayed Job
-before "deploy:create_symlink", "delayed_job:stop"
-after "deploy:start", "delayed_job:start"
-after "deploy:stop", "delayed_job:stop"
-after "deploy:restart", "delayed_job:start"
+after "deploy:start",           "delayed_job:start"
+after "deploy:stop",            "delayed_job:stop"
+after "deploy:restart",         "delayed_job:restart"
 
-after "deploy:restart", "deploy:notify_campfire"
+# Campfire
+after "deploy:restart",         "deploy:notify_campfire"
