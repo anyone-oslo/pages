@@ -23,7 +23,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   if variables.has_key?(:github) && github
     set :repository, "git@github.com:manualdesign/#{application}.git"
   else
-    set :repository, "rails@manualdesign.no:~/git/sites/#{application}.git"
+    set :repository, "rails@git.manualdesign.no:~/git/sites/#{application}.git"
   end
 
   set :deploy_via,            :remote_cache
