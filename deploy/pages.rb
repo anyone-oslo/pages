@@ -14,7 +14,7 @@ namespace :pages do
   end
 
   desc "Create symlinks"
-  task :create_symlinks, :roles => [:web,:app] do
+  task :symlinks, :roles => [:web,:app] do
     run "ln -s #{deploy_to}/#{shared_dir}/cache #{release_path}/tmp/cache"
     run "ln -s #{deploy_to}/#{shared_dir}/sockets #{release_path}/tmp/sockets"
     run "ln -s #{deploy_to}/#{shared_dir}/sessions #{release_path}/tmp/sessions"
