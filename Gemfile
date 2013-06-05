@@ -22,7 +22,7 @@ gem 'daemon-spawn', '0.2.0'
 gem 'pages_console'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty', '0.6.1'
-gem 'delayed_job', '2.0.7'
+gem 'delayed_job', '2.0.8'
 
 # DynamicImage
 gem 'rmagick', '2.12.2', :require => 'RMagick'

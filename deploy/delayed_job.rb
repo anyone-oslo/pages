@@ -7,7 +7,7 @@ namespace :delayed_job do
       if use_monit
         run "sudo monit start #{monit_delayed_job}"
       else
-        run "cd #{deploy_to}/#{current_dir} && script/delayed_job start production"
+        run "cd #{deploy_to}/#{current_dir} && script/delayed_job start"
       end
     end
   end
@@ -18,7 +18,7 @@ namespace :delayed_job do
       if use_monit
         run "sudo monit stop #{monit_delayed_job}"
       else
-        run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop production"
+        run "cd #{deploy_to}/#{current_dir} && script/delayed_job stop"
       end
     end
   end
@@ -29,7 +29,7 @@ namespace :delayed_job do
       if use_monit
         run "sudo monit restart #{monit_delayed_job}"
       else
-        run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart production"
+        run "cd #{deploy_to}/#{current_dir} && script/delayed_job restart"
       end
     end
   end

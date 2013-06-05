@@ -109,16 +109,6 @@ namespace :pages do
         puts "* Added root route"
       end
 
-      if !File.exists?('script/delayed_job')
-        puts "Delayed job worker script not found, installing..."
-        File.open('script/delayed_job', 'w') do |fh|
-          fh.write("#!/usr/bin/env ruby\n")
-          fh.write("require File.join(File.dirname(__FILE__), '../vendor/plugins/pages/lib/delayed_job_worker.rb')\n")
-        end
-        `chmod +x script/delayed_job`
-        `git add script/delayed_job`
-      end
-
       # Passenger/RVM
       if !File.exists?('config/setup_load_paths.rb')
         puts "* setup_load_paths.rb not found, installing default..."
