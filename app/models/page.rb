@@ -56,7 +56,7 @@ class Page < ActiveRecord::Base
 
   define_index do
     # Fields
-    indexes localizations.body,              as: :localization_bodies
+    indexes localizations.value,             as: :localization_values
     indexes categories.name,                 as: :category_names
     indexes tags.name,                       as: :tag_names
     indexes [author.realname, author.email], as: :author_name
