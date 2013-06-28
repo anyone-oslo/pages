@@ -110,7 +110,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Reload webserver"
     task :reload_webserver, :roles => [:web] do
-        sudo "/etc/init.d/#{web_server} reload"
+      sudo "service #{web_server} reload"
     end
 
     desc "Update plugin migrations"
