@@ -83,8 +83,20 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Setup, configure the web server and deploy the application"
     task :cold, :roles => [:web] do
       #run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
+      #run "a2ensite #{application}"
+    end
+
+    desc "Enable application"
+    task :enable, :roles => [:web] do
       run "a2ensite #{application}"
     end
+    after "deploy:enable", "deploy:reload_webserver"
+
+    desc "Disable application"
+    task :disable, :roles => [:web] do
+      run "a2dissite #{application}"
+    end
+    after "deploy:disable", "deploy:reload_webserver"
 
     desc "Create database"
     task :create_database, :roles => [:web] do
