@@ -82,7 +82,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Setup, configure the web server and deploy the application"
     task :cold, :roles => [:web] do
-      run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
+      #run "echo \"Include #{current_path}/config/apache.conf\" > /etc/apache2/sites-available/#{application}"
       run "a2ensite #{application}"
     end
 
@@ -117,8 +117,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     after 'deploy:services', 'sphinx:configure'
     after 'deploy:services', 'sphinx:index'
-    after 'deploy:services', 'monit:configure'
-    after 'deploy:services', 'monit:restart'
+    #after 'deploy:services', 'monit:configure'
+    #after 'deploy:services', 'monit:restart'
 
     desc "Precompile assets"
     task :precompile_assets do
