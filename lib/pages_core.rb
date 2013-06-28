@@ -27,7 +27,6 @@ require "bcrypt"
 require 'vector2d'
 require 'RedCloth'
 require 'daemon-spawn'
-require 'pages_console'
 require 'openid'
 require 'delayed_job'
 
@@ -69,9 +68,6 @@ module PagesCore
 
     def init!
       load_dependencies!
-
-      # Register with PagesConsole
-      #PagesCore.register_with_pages_console
     end
 
     def version
@@ -85,16 +81,6 @@ module PagesCore
     def application_name
       dir = Rails.root.to_s
       dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
-    end
-
-    def register_with_pages_console
-      begin
-        require 'pages_console'
-        site = PagesConsole::Site.new(self.application_name, Rails.root.to_s)
-        PagesConsole.ping(site)
-      rescue MissingSourceFile
-        # Nothing to do, PagesConsole not installed.
-      end
     end
 
     def configure(options={}, &block)

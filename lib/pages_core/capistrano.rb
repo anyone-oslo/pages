@@ -117,8 +117,6 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     after 'deploy:services', 'sphinx:configure'
     after 'deploy:services', 'sphinx:index'
-    #after 'deploy:services', 'monit:configure'
-    #after 'deploy:services', 'monit:restart'
 
     desc "Precompile assets"
     task :precompile_assets do
