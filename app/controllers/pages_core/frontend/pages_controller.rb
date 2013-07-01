@@ -23,6 +23,15 @@ class PagesCore::Frontend::PagesController < FrontendController
       super
     end
 
+    def redirect_to(*args)
+      @already_rendered = true
+      super
+    end
+
+    def rendered?
+      @already_rendered
+    end
+
     def find_page
       unless @page
         if params[:id]
@@ -57,13 +66,9 @@ class PagesCore::Frontend::PagesController < FrontendController
 
       run_template_actions_for(template, @page)
 
-      if @redirect
-        return
-      end
-
       @page_template_layout = false if @disable_layout
 
-      unless @already_rendered
+      unless rendered?
         if self.instance_variables.include?('@page_template_layout')
           render :template => "pages/templates/#{template}", :layout => @page_template_layout
         else
