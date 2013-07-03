@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require "bundler/capistrano"
-require File.join(File.dirname(__FILE__), 'lib/campfire')
 
 set :default_environment, {
   'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
@@ -36,8 +35,6 @@ set :use_monit,         true unless variables.keys.include?(:use_monit)
 
 set :monit_delayed_job, "#{application}_delayed_job"
 set :monit_sphinx,      "#{application}_sphinx"
-
-set :campfire_room, 555476 unless variables.has_key?(:campfire_room)
 
 role :web, remote_host
 role :app, remote_host
@@ -124,20 +121,6 @@ namespace :deploy do
     run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
   end
 
-  desc "Notify Campfire"
-  task :notify_campfire, :roles => [:web] do
-    if campfire_room
-      username = `whoami`.chomp
-      repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
-      begin
-        room = Campfire.room(campfire_room)
-        room.message "[#{repo_name}] has been deployed by #{username}"
-      rescue Exception => e
-        puts "Campfire notification failed: #{e.message}"
-      end
-    end
-  end
-
 end
 
 namespace :cache do
@@ -208,6 +191,3 @@ after "deploy:restart",         "sphinx:restart"
 after "deploy:start",           "delayed_job:start"
 after "deploy:stop",            "delayed_job:stop"
 after "deploy:restart",         "delayed_job:restart"
-
-# Campfire
-after "deploy:restart",         "deploy:notify_campfire"
