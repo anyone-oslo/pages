@@ -8,6 +8,10 @@ gem 'rails', '2.3.18'
 gem 'mysql', '2.8.1'
 gem 'rdoc', '3.12'
 
+# This is explicitely held back for pages_console,
+# the 0.2.x series are the last compatible with Rails 2.3.
+gem 'mysql2', '~> 0.2.18'
+
 gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano'
 gem 'capistrano_colors'
