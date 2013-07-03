@@ -32,14 +32,6 @@ module PagesCore::ApplicationHelper
     options = options.merge({locale: target_locale})
   end
 
-  def page_file_link(file, options={})
-    if file.format?
-      formatted_page_file_path(@locale, file.page, file, format: file.format)
-    else
-      page_file_path(@locale, file.page, file)
-    end
-  end
-
   def smart_time(time, options={})
     options.symbolize_keys!
     options[:include_distance] ||= false
