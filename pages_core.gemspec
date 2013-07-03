@@ -59,5 +59,4 @@ Gem::Specification.new do |s|
   # Deployment
   s.add_dependency 'capistrano'
   s.add_dependency 'term-ansicolor'
-  s.add_dependency 'httparty', '~> 0.10.2' # For Campfire
 end

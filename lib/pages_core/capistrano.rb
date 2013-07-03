@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require File.join(File.dirname(__FILE__), '../campfire.rb')
-
 Capistrano::Configuration.instance(:must_exist).load do
   set :default_environment, {
     'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
@@ -37,8 +35,6 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   set :monit_delayed_job, "#{application}_delayed_job"
   set :monit_sphinx,      "#{application}_sphinx"
-
-  set :campfire_room, 555476 unless variables.has_key?(:campfire_room)
 
   role :web, remote_host
   role :app, remote_host
@@ -135,20 +131,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
     end
 
-    desc "Notify Campfire"
-    task :notify_campfire, :roles => [:web] do
-      if campfire_room
-        username = `whoami`.chomp
-        repo_name = repository.split('/').reverse[0..1].reverse.join('/').gsub(/\.git$/, '')
-        begin
-          room = Campfire.room(campfire_room)
-          room.message "[#{repo_name}] has been deployed by #{username}"
-        rescue Exception => e
-          puts "Campfire notification failed: #{e.message}"
-        end
-      end
-    end
-
   end
 
   namespace :cache do
@@ -218,8 +200,5 @@ Capistrano::Configuration.instance(:must_exist).load do
   after "deploy:start",           "delayed_job:start"
   after "deploy:stop",            "delayed_job:stop"
   after "deploy:restart",         "delayed_job:restart"
-
-  # Campfire
-  after "deploy:restart",         "deploy:notify_campfire"
 
 end
