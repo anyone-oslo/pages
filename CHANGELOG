@@ -55,6 +55,21 @@ Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
 - Removed: GenericMailer
 - Removed: sitemap
 
+2.3.1
+
+- Feeds can now optionally contain the full article text
+- Edit page now has a link to the page in the sidebar
+- All tabs converted to spaces
+- I18n.locale is automatically set from the URL params
+- Updated gem server URL for gems.manualdesign.no
+- Deployment: SSH agent is forwarded
+- Deployment: Deploying from GitHub is now supported
+- Deployment: Pages is now rbenv aware
+- Deployment: Campfire integration has been removed
+- Dependencies: Rails updated to 2.3.18
+- Dependencies: pages_console updated to utilize config file locking
+- Bugfix: published_at in the admin sidebar now works again
+
 2.3.0
 
 - Sikkerhetsoppdaterning: Rails 2.3.15, fikser for CVE-2012-5664, CVE-2013-155 og CVE-2013-156
