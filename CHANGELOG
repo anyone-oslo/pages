@@ -1,9 +1,10 @@
-3.0.0.alpha
-
-Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
+3.0.0
 
 - Pages requires Ruby 1.9+, Ruby 1.8.7 is no longer supported
 - PagesCore is now a gem
+- Pages is now installed with a generator. Run pages_core:install to install.
+- New interface for uploading files
+- Previewing loads the actual page, which means no more broken templates and missing images
 - Textbit and ActsAsTextable is removed in favor of Localization, with a new implementation
 - New class: PagesCore::HtmlFormatter converts a string to HTML using Textile
 - The getter methods for localized attributes now return pure strings rather than ActiveRecord objects,
@@ -20,14 +21,11 @@ Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
 - Language.default defaults to English if no language has been configured
 - Sprockets has been removed again now that we're on Rails 3
 - MumboJumbo has been removed, use the built-in I18n feature instead
-- PagesCore.config.rss_fulltext enables full text in feeds
-- Campfire room is configurable in deploy.rb
 - Prototype has been removed, admin views might need updating
 - Admin now uses jQuery UJS
 - jQuery, jQuery UI, Jcrop and SWFObject is no longer bundled with the plugin
 - Internet Explorer 7 is no longer supported (but might work)
 - Admin javascripts have been refactored
-- params[:locale] now sets I18n.locale
 - Admin now redirects to the login page instead of rendering the form
 - PagesCore::FormBuilder now supports date picking and image uploads
 - rake db:fix_double_encoding fixes double UTF8 encoding in the database, handy when upgrading to the Mysql2 gem
@@ -39,6 +37,9 @@ Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
 - New named route: paginated_page
 - Importing pages from XML has been moved to it's own class; PagesCore::Serializations::PageXmlImporter
 - Several unused methods in Page and User have been removed
+- head_tag now accepts an empty block
+- A default_meta_image can be specified in head_tag
+- Page routes have changed, the new prefix is /:locale/pages (was: /pages/:locale)
 - Removed: PagesCore::ArrayExtensions
 - Removed: FeedsController, FeedItem and FeedBuilder
 - Removed: ImageSets
@@ -57,7 +58,7 @@ Last documented commit: f48e03cd74c868389a25a74f0ae3ad14c6da1fc1
 
 2.3.1
 
-- Feeds can now optionally contain the full article text
+- PagesCore.config.rss_fulltext enables full text in feeds
 - Edit page now has a link to the page in the sidebar
 - All tabs converted to spaces
 - I18n.locale is automatically set from the URL params
