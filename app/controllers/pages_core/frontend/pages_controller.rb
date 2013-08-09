@@ -148,6 +148,8 @@ class PagesCore::Frontend::PagesController < FrontendController
         if PagesCore.config(:recaptcha) && !verify_recaptcha
           @comment.invalid_captcha = true
           render_page
+        elsif PagesCore.config(:comment_honeypot) && !params[:email].to_s.empty?
+          redirect_to page_url(@page) and return
         else
           @comment.save
           if PagesCore.config(:comment_notifications)
