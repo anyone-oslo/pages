@@ -26,6 +26,9 @@ PagesCore.configure do |config|
 
   # Uncomment to send notifications on comments
   #config :comment_notifications,  [:author, 'your@email.com']
+
+  # Uncomment to automatically close comments after 60 days
+  # config.close_comments_after 60.days
 end
 
 # Templates configuration

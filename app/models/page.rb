@@ -512,6 +512,13 @@ class Page < ActiveRecord::Base
 
   # ---- INSTANCE METHODS ---------------------------------------------------
 
+  def comments_allowed?
+    unless PagesCore.config.close_comments_after.nil?
+      return false if (Time.now - self.published_at) > PagesCore.config.close_comments_after
+    end
+    self[:comments_allowed]
+  end
+
   def fix_counter_cache!
     if comments_count != comments.count
       Page.update_counters(self.id, :comments_count => (comments.count - comments_count) )
