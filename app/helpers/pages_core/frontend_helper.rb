@@ -55,4 +55,8 @@ module PagesCore::FrontendHelper
       "<li>#{nav_link(page)}</li>".html_safe
     end
   end
+
+  def comment_honeypot_field
+    text_field_tag 'email', '', :class => 'comment_email'
+  end
 end

@@ -109,6 +109,13 @@ class Page < ActiveRecord::Base
     end
   end
 
+  def comments_allowed?
+    unless PagesCore.config.close_comments_after.nil?
+      return false if (Time.now - self.published_at) > PagesCore.config.close_comments_after
+    end
+    self[:comments_allowed]
+  end
+
   def extended?
     excerpt? && body?
   end
