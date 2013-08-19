@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     # Users
     resources :users do
       collection do
+        get 'deactivated'
         get  'new_password'
         post 'reset_password'
         get  'welcome'
@@ -42,6 +43,7 @@ Rails.application.routes.draw do
         get  'login'
         post 'login'
         get  'logout'
+        get 'deactivated'
       end
       member do
         delete 'delete_image'
