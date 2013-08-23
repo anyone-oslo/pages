@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'pages/:language/sitemap.xml',            :controller => 'pages', :action => 'sitemap'
   map.connect 'pages/:language/search',                 :controller => 'pages', :action => 'search'
   map.page    'pages/:language/:id',                    :controller => 'pages', :action => 'show'
-  map.page    'pages/:language/:id.rss',                :controller => 'pages', :action => 'show', :format => 'rss'
+  #map.page    'pages/:language/:id.rss',                :controller => 'pages', :action => 'show', :format => 'rss'
 
   map.connect 'pages/:language/:id/:page',              :controller => 'pages', :action => 'show', :requirements => { :page => /[\d]+/ }
 
