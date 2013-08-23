@@ -75,7 +75,7 @@ module PagesCore::ApplicationHelper
       if p.redirects?
         link_to options[:title], p.redirect_to_options({locale: p.locale}), :class => options[:class]
       else
-        link_to options[:title], page_path(options[:locale], page), :class => options[:class]
+        link_to options[:title], page_path(options[:locale], p), :class => options[:class]
       end
     end
   end
@@ -89,7 +89,7 @@ module PagesCore::ApplicationHelper
       if p.redirects?
         url_for p.redirect_to_options(options.merge({locale: p.locale}))
       else
-        super options[:locale], page
+        super options[:locale], p
       end
     end
   end
