@@ -121,7 +121,7 @@ module PagesCore::ApplicationHelper
     options[:locale] ||= options[:language] ||= (@locale || @language)
     page.translate(options[:locale]) do |p|
       if p.redirects?
-        p.redirect_path(options[:locale])
+        p.redirect_path(:locale => options[:locale])
       else
         super options[:locale], p
       end
