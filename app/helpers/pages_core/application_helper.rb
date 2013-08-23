@@ -73,7 +73,7 @@ module PagesCore::ApplicationHelper
         return options[:title]
       end
       if p.redirects?
-        link_to options[:title], p.redirect_to_options({locale: p.locale}), :class => options[:class]
+        link_to options[:title], p.redirect_path(locale: options[:locale]), :class => options[:class]
       else
         link_to options[:title], page_path(options[:locale], p), :class => options[:class]
       end
@@ -87,13 +87,12 @@ module PagesCore::ApplicationHelper
     options[:locale] ||= options[:language] ||= @locale
     page.localize(options[:locale]) do |p|
       if p.redirects?
-        url_for p.redirect_to_options(options.merge({locale: p.locale}))
+        p.redirect_path(options[:locale])
       else
         super options[:locale], p
       end
     end
   end
-
 
   def dynamic_lightbox_image(image, options={})
     options = {:fullsize => '640x480'}.merge(options).symbolize_keys!

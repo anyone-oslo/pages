@@ -50,7 +50,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       @page.locale = @locale || Language.default
 
       if @page.redirects?
-        redirect_to(@page.redirect_to_options({locale: @locale})) and return
+        redirect_to @page.redirect_path(:locale => @locale) and return
       end
 
       @page_title ||= @page.name.to_s

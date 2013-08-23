@@ -7,8 +7,6 @@ class Page < ActiveRecord::Base
   include PagesCore::Taggable
   include PagesCore::Templateable
 
-  serialize :redirect_to
-
   belongs_to :author, class_name: "User", foreign_key: :user_id
 
   has_and_belongs_to_many :categories, join_table: 'pages_categories'
@@ -46,6 +44,7 @@ class Page < ActiveRecord::Base
     end
   end
 
+  validates_format_of     :redirect_to, with: /\A(\/|https?:\/\/)/, allow_nil: true, allow_blank: true
   validates_format_of     :unique_name, with: /^[\w\d_\-]+$/, allow_nil: true, allow_blank: true
   validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
@@ -168,33 +167,18 @@ class Page < ActiveRecord::Base
 
   # Returns boolean true if page has a valid redirect
   def redirects?
-    return false if self.redirect_to == "0"
-    return true  if self.redirect_to.kind_of?(String) and !self.redirect_to.strip.empty?
-    return true  if self.redirect_to.kind_of?(Hash)   and !self.redirect_to.empty?
-    return false
+    self.redirect_to?
   end
 
-  # Take the given options and merge self.redirect_to with them. If self.redirect_to is a string, nothing will be merged.
-  def redirect_to_options(options={})
-    options.symbolize_keys!
-    redirect = self.redirect_to
-    if redirect.kind_of?(Hash)
-      redirect.symbolize_keys!
-      if options[:language]
-        ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
-        options[:locale] = options[:language]
-        options.delete(:language)
+  def redirect_path(params={})
+    path = self.redirect_to
+    if path.start_with? "/"
+      params.each do |key, value|
+        raise "redirect_url param must be a string" unless value.kind_of?(String)
+        path.gsub!("/:#{key.to_s}", "/#{value}")
       end
-      if redirect[:language]
-        redirect[:locale] = redirect[:language]
-        redirect.delete(:language)
-      end
-
-      options.delete :locale unless redirect.has_key?(:locale)
-      redirect.delete :locale if options.has_key?(:locale)
-      redirect = options.merge(redirect)
     end
-    redirect
+    path
   end
 
   # Returns true if this page's children is reorderable
