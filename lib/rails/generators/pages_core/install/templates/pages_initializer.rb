@@ -29,7 +29,7 @@ PagesCore.configure do |config|
   #config.close_comments_after 60.days
 
   # Enable comment honeypot.
-  # Add <%= comment_honeypot_field %> to your form and .comment_email { display: none; } to your CSS.
+  # Add <%%= comment_honeypot_field %> to your form and .comment_email { display: none; } to your CSS.
   #config.comment_honeypot :enabled
 end
 
