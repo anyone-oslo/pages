@@ -55,8 +55,12 @@ module PagesCore
       end
 
       def mirror_migrations!
+        target = Rails.root.join('db', 'migrate')
+        unless File.exists?(target)
+          FileUtils.mkdir_p(target)
+        end
         new_migrations.each do |migration|
-          FileUtils.cp migration, Rails.root.join('db', 'migrate')
+          FileUtils.cp migration, target
         end
       end
     end
