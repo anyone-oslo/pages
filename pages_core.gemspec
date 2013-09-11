@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'dynamic_image-pages', '>= 0.0.13'
 
   # Assets
+  s.add_dependency 'execjs', '~> 1.4'
   s.add_dependency 'sass-rails'
   s.add_dependency 'json'
   s.add_dependency 'coffee-script'
