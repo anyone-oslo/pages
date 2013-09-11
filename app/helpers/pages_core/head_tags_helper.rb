@@ -47,7 +47,7 @@ module PagesCore::HeadTagsHelper
     language_definition = Language.definition(options[:locale]).iso639_1 || "en"
     unless options.has_key?( :title )
       options[:title] = PagesCore.config(:site_name)
-      if @page_title
+      if @page_title && @page_title != options[:title]
         if options[:prepend_page_title]
           options[:title] = "#{@page_title} - #{options[:title]}"
         else
