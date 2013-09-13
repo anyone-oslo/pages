@@ -2,7 +2,7 @@
   if page.news_page?
     subpages = []
   else
-    subpages = page.children.visible.in_locale(page.locale)
+    subpages = page.children.visible.in_locale(page.locale).order(page.content_order)
   end
   page_classes = ['page', 'page_listing']
   page_classes << 'hidden' unless page.published?
