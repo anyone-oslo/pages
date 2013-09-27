@@ -51,9 +51,9 @@ gem 'acts_as_tree', '0.1.1'
 gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 
 # Thinking Sphinx
-gem 'riddle', '1.0.12'
-gem 'thinking-sphinx', '1.3.20'
-gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta'
+gem 'riddle'
+gem 'thinking-sphinx', '1.5.0'
+gem 'ts-delayed-delta', '1.1.3', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 gem 'term-ansicolor'
 
