@@ -36,7 +36,7 @@ gem 'dynamic_image-pages', :require => 'dynamic_image'
 # Assets
 gem 'sprockets', '2.4.5'
 gem 'sprockets-plugin'
-gem 'sprockets-helpers'
+gem 'sprockets-helpers', '0.7.2' # Hold this back until the fix for media: on stylesheet_link_tag is released
 gem 'sass', '3.2.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.2.0'
