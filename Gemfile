@@ -53,8 +53,9 @@ gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 # Thinking Sphinx
 gem 'riddle'
 gem 'thinking-sphinx', '1.5.0'
-gem 'ts-delayed-delta', '1.1.3', :require => 'thinking_sphinx/deltas/delayed_delta'
-
+gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta' # 1.1.2 and newer breaks
+                                                                                    # compatibility with
+                                                                                    # delayed_job 2.0.x
 gem 'term-ansicolor'
 
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
