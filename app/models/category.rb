@@ -8,6 +8,8 @@ class Category < ActiveRecord::Base
   before_save :set_slug
   after_save :trigger_delta_indexing
 
+  scope :by_name, -> { order("name ASC") }
+
   private
 
   def set_slug

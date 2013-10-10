@@ -57,6 +57,14 @@ module PagesCore::FrontendHelper
     end
   end
 
+  def search_query
+    @search_query
+  end
+
+  def search_category_id
+    @search_category_id
+  end
+
   def comment_honeypot_field
     text_field_tag 'email', '', :class => 'comment_email'
   end

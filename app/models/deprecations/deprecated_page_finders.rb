@@ -118,6 +118,10 @@ module Deprecations
         # TODO: Allow more fine-grained control over status filtering
         search_options[:with] = {:status => 2, :autopublish => 0}
 
+        if options[:category_id]
+          search_options[:with][:category_ids] = options[:category_id]
+        end
+
         pages = Page.search(query, search_options)
         PagesCore::Paginates.paginate(
           pages,
