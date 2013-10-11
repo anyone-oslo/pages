@@ -5,7 +5,7 @@ class UpdatePageRedirectTo < ActiveRecord::Migration
 
     pages = Page.where('redirect_to IS NOT NULL AND redirect_to != ""')
     pages.each do |page|
-      if page.redirect_to == "0"
+      if page.redirect_to == "0" || page.redirect_to == "--- \"\"\n"
         page.update_attributes(redirect_to: nil)
       elsif page.redirect_to.start_with?("---")
         options = YAML.load(page.redirect_to)
