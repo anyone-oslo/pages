@@ -106,6 +106,7 @@ module PagesCore
       config.page_cache          :enabled
       config.text_filter         :textile
 
+      config.default_author      nil
       #config.comment_notifications [:author, 'your@email.com']
     end
 

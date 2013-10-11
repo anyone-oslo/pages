@@ -78,7 +78,11 @@ class Admin::PagesController < Admin::AdminController
   def create
     @page = Page.new.localize(@locale)
     params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
-    @page.author = @current_user
+
+    if PagesCore.config(:default_author)
+      @page.author = User.find_by_email(PagesCore.config(:default_author))
+    end
+    @page.author ||= @current_user
 
     if @page.update_attributes(params[:page])
       @page.update_attributes(comments_allowed: @page.template_config.value(:comments_allowed))

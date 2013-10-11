@@ -22,6 +22,9 @@ PagesCore.configure do |config|
   # Will try to load images from production if they are missing in development
   #config.image_fallback_url "http://<%= @site_domain %>/"
 
+  # New pages will be created by the user with this email address:
+  # config.default_author "email@example.com"
+
   # Uncomment to send notifications on comments
   #config :comment_notifications,  [:author, 'your@email.com']
 
