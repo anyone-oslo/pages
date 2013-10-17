@@ -8,8 +8,14 @@
 
   <%= stylesheet_link_tag "pages/admin" %>
   <%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
+  <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
+    <%= stylesheet_link_tag "admin" %>
+  <% end %>
 
   <%= javascript_include_tag "pages/admin" %>
+  <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
+    <%= javascript_include_tag "admin" %>
+  <% end %>
   <%= csrf_meta_tag %>
 
 </head>
