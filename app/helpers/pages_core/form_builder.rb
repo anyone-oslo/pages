@@ -68,6 +68,11 @@ module PagesCore
       field_with_label(attribute, self.time_select(attribute, options), label_text)
     end
 
+    def labelled_select(attribute, choices, label_text=nil, options={})
+      label_text, options = parse_label_text_and_options(label_text, options)
+      field_with_label(attribute, self.select(attribute, choices, options), label_text)
+    end
+
     def labelled_check_box(attribute, label_text=nil, options={}, checked_value="1", unchecked_value="0")
       label_text, options = parse_label_text_and_options(label_text, options)
       field_with_label(attribute, self.check_box(attribute, options, checked_value, unchecked_value), label_text)
