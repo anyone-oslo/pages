@@ -52,6 +52,7 @@ class Page < ActiveRecord::Base
   before_validation :set_autopublish
   before_save       :set_delta
   after_save        :ensure_page_images_contains_primary_image
+  after_save        :queue_autopublisher
 
   define_index do
     # Fields
@@ -82,13 +83,6 @@ class Page < ActiveRecord::Base
 
     def archive_finder
       PagesCore::ArchiveFinder.new(scoped, timestamp: :published_at)
-    end
-
-    # Finds pages due for auto publishing and publishes them.
-    def autopublish!(options={})
-      Page.where('autopublish = ? AND published_at <?', true, (Time.now + 2.minutes)).each do |p|
-        p.update_attributes(autopublish: false)
-      end
     end
 
     # Find all published and feed enabled pages
@@ -289,6 +283,12 @@ class Page < ActiveRecord::Base
 
   def set_delta
     delta = true
+  end
+
+  def queue_autopublisher
+    if self.autopublish?
+      Autopublisher.queue!
+    end
   end
 
 end
