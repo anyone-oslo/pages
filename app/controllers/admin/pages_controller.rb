@@ -77,14 +77,13 @@ class Admin::PagesController < Admin::AdminController
 
   def create
     @page = Page.new.localize(@locale)
-    params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
 
     if PagesCore.config(:default_author)
       @page.author = User.find_by_email(PagesCore.config(:default_author))
     end
     @page.author ||= @current_user
 
-    if @page.update_attributes(params[:page])
+    if @page.update_attributes(page_params)
       @page.update_attributes(comments_allowed: @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       redirect_to edit_admin_page_url(@locale, @page)
@@ -104,10 +103,8 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def update
-    params[:page].delete(:image) if params[:page].has_key?(:image) && params[:page][:image].blank?
-    if @page.update_attributes(params[:page])
+    if @page.update_attributes(page_params)
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
-      @page.save
       flash[:notice] = "Your changes were saved"
       flash[:save_performed] = true
       redirect_to edit_admin_page_url(@locale, @page)
@@ -144,7 +141,9 @@ class Admin::PagesController < Admin::AdminController
   private
 
   def page_params
-    params[:page]
+    attributes = params[:page]
+    attributes.delete(:image) if attributes.has_key?(:image) && attributes[:image].blank?
+    attributes
   end
 
   def find_page
