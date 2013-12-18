@@ -24,7 +24,7 @@ class Page < ActiveRecord::Base
            class_name: 'PageComment',
            dependent:  :destroy
 
-  has_many :files,
+  has_many :page_files,
            class_name: 'PageFile',
            dependent:  :destroy,
            order:      :position
@@ -129,6 +129,10 @@ class Page < ActiveRecord::Base
 
   def excerpt_or_body
     excerpt? ? excerpt : body
+  end
+
+  def files
+    page_files.localized(self.locale)
   end
 
   def headline_or_name
