@@ -50,4 +50,24 @@ class PageFile < ActiveRecord::Base
     FORMATS[self.content_type]
   end
 
+  def filename_extension
+    if filename_extension?
+      self.filename.match(/\.(.*)$/)[1]
+    else
+      ""
+    end
+  end
+
+  def filename_extension?
+    self.filename =~ /\./
+  end
+
+  def to_param
+    if filename_extension?
+      "#{self.id}.#{self.filename_extension}"
+    else
+      "#{self.id}"
+    end
+  end
+
 end
