@@ -180,7 +180,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       }
       options[:category_id] = @search_category_id if @search_category_id
 
-      @pages = Page.search_paginated(normalized_query, options)
+      @pages = Page.search_paginated(normalized_query, options).map { |p| p.localize(@locale) }
     end
 
     def preview
