@@ -6,7 +6,7 @@ Pages is a CMS for Rails apps.
 
 Add pages_core to your Gemfile:
 
-```gem 'pages_core', :git => 'git@github.com:manualdesign/pages.git', :branch => 'master'```
+```gem 'pages_core', git: 'git@github.com:manualdesign/pages.git', branch: 'master'```
 
 Run Bundler:
 
