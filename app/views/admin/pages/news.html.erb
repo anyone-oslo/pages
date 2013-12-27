@@ -4,7 +4,7 @@
   page_description "<em>#{month_names[@month - 1]} #{@year}</em>"
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), hash_for_news_admin_pages_path(l))}.join(link_separator)
+    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), news_admin_pages_path(l))}.join(link_separator)
   end
 %>
 

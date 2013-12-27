@@ -41,15 +41,16 @@ class PagesCore::AdminController < ApplicationController
     def build_admin_tabs
       if Page.news_pages.any?
         register_menu_item(
-          "News", hash_for_news_admin_pages_path(@locale), :pages,
+          "News", news_admin_pages_path(@locale), :pages,
           :current => Proc.new {
             params[:controller] == 'admin/pages' &&
             (params[:action] == 'news' || (@page && @page.parent && @page.parent.news_page?))
           }
         )
       end
-      register_menu_item "Pages", hash_for_admin_pages_path(@locale), :pages
-      register_menu_item "Users", hash_for_admin_users_path, :account
+
+      register_menu_item "Pages", admin_pages_path(@locale), :pages
+      register_menu_item "Users", admin_users_path, :account
 
       # Register menu items from plugins
       PagesCore::Plugin.plugins.each do |plugin_class|
