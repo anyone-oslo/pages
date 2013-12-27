@@ -4,6 +4,23 @@ require 'digest/sha1'
 require 'tempfile'
 
 namespace :db do
+  desc "Convert timestamps to UTC"
+  task :convert_to_utc => :environment do
+    tables = ActiveRecord::Base.connection.execute("SHOW TABLES")
+    tables.each do |table_row|
+      table = table_row.first
+      columns = ActiveRecord::Base.connection.execute("DESC `#{table}`")
+      columns.each do |column_row|
+        column = column_row[0]
+        type = column_row[1]
+        if ["datetime", "time", "timestamp"].include?(type)
+          puts "Converting #{table}: #{column} (#{type})"
+          sql = "UPDATE `#{table}` SET `#{column}` = DATE_SUB(`#{column}`, INTERVAL 1 HOUR)"
+          ActiveRecord::Base.connection.execute(sql)
+        end
+      end
+    end
+  end
 
   desc "Copy production database to current environment"
   task :copy_from_production => :environment do
