@@ -45,7 +45,7 @@ class Page < ActiveRecord::Base
   end
 
   validates_format_of     :redirect_to, with: /\A(\/|https?:\/\/)/, allow_nil: true, allow_blank: true
-  validates_format_of     :unique_name, with: /^[\w\d_\-]+$/, allow_nil: true, allow_blank: true
+  validates_format_of     :unique_name, with: /\A[\w\d_\-]+\z/, allow_nil: true, allow_blank: true
   validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
   before_validation :published_at
