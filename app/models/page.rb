@@ -4,6 +4,7 @@ class Page < ActiveRecord::Base
   include Deprecations::DeprecatedPageFinders
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
+  include PagesCore::Sweepable
   include PagesCore::Taggable
   include PagesCore::Templateable
 

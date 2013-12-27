@@ -24,7 +24,7 @@ module PagesCore
       def default_config
         OpenStruct.new(
           cache_path: ActionController::Base.page_cache_directory,
-          observe:    [:page, :page_comment, :image],
+          observe:    [Page, PageComment, Image],
           patterns:   [/^\/index\.[\w]+$/, /^\/pages\/[\w]{2,3}[\/\.](.*)$/, /^\/[\w]{2,3}\/(.*)$/]
         )
       end
@@ -37,8 +37,22 @@ module PagesCore
       #   end
       def config
         @@configuration ||= self.default_config
-        yield @@configuration if block_given?
+        if block_given?
+          yield @@configuration
+          extend_observed_models!
+        end
         @@configuration
+      end
+
+      def extend_observed_models!
+        config.observe.each do |klass|
+          if klass.kind_of?(Symbol) || klass.kind_of?(String)
+            klass = klass.to_s.camelize.constantize
+          end
+          unless klass.include?(PagesCore::Sweepable)
+            klass.send(:include, PagesCore::Sweepable)
+          end
+        end
       end
 
       # Purge the entire pages cache
