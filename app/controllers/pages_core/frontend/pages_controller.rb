@@ -41,7 +41,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       @page.working_language = @language || Language.default
 
       if @page.redirects?
-        redirect_to(@page.redirect_to_options({:language => @language})) and return
+        redirect_to @page.redirect_path(:locale => @language) and return
       end
 
       @page_title ||= @page.name.to_s
@@ -148,6 +148,8 @@ class PagesCore::Frontend::PagesController < FrontendController
         if PagesCore.config(:recaptcha) && !verify_recaptcha
           @comment.invalid_captcha = true
           render_page
+        elsif PagesCore.config(:comment_honeypot) && !params[:email].to_s.empty?
+          redirect_to page_url(@page) and return
         else
           @comment.save
           if PagesCore.config(:comment_notifications)
@@ -168,7 +170,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       params[:query] = params[:q] if params[:q]
       @search_query = params[:query] || ""
       normalized_query = @search_query.split(/\s+/).map{|p| "#{p}*"}.join(' ')
-      @pages = Page.search_paginated(normalized_query, :page => params[:page], :conditions => {:status => 2}, :order => :published_at, :sort_mode => :desc)
+      @pages = Page.search_paginated(normalized_query, :page => params[:page], :with => {:status => 2}, :order => :published_at, :sort_mode => :desc)
     end
 
     def preview

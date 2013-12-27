@@ -13,14 +13,13 @@ gem 'rdoc', '3.12'
 gem 'mysql2', '~> 0.2.18'
 
 gem "bcrypt-ruby", :require => "bcrypt"
-gem 'capistrano'
+gem 'capistrano', '~> 2.15.4'
 gem 'capistrano_colors'
 gem 'vector2d'
 gem 'enumerable_mapper'
 gem 'hpricot', '0.8.6'
 gem 'simple-rss', '1.2.3'
 gem 'RedCloth', '4.2.9'
-gem 'rmagick', '2.13.2', :require => 'RMagick'
 gem 'unicode', '0.3.1'
 gem 'daemon-spawn', '0.2.0'
 gem 'pages_console', '~> 0.4.16'
@@ -29,14 +28,13 @@ gem 'httparty', '0.6.1'
 gem 'delayed_job', '2.0.8'
 
 # DynamicImage
-gem 'rmagick', '2.12.2', :require => 'RMagick'
 gem 'dynamic_image-pages', :require => 'dynamic_image'
 #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
 # Assets
 gem 'sprockets', '2.4.5'
 gem 'sprockets-plugin'
-gem 'sprockets-helpers'
+gem 'sprockets-helpers', '0.7.2' # Hold this back until the fix for media: on stylesheet_link_tag is released
 gem 'sass', '3.2.1'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.2.0'
@@ -51,10 +49,11 @@ gem 'acts_as_tree', '0.1.1'
 gem "recaptcha", '0.3.4', :require => "recaptcha/rails"
 
 # Thinking Sphinx
-gem 'riddle', '1.0.12'
-gem 'thinking-sphinx', '1.3.20'
-gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta'
-
+gem 'riddle', '1.5.3'
+gem 'thinking-sphinx', '1.4.14'
+gem 'ts-delayed-delta', '1.1.1', :require => 'thinking_sphinx/deltas/delayed_delta' # 1.1.2 and newer breaks
+                                                                                    # compatibility with
+                                                                                    # delayed_job 2.0.x
 gem 'term-ansicolor'
 
 #gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
