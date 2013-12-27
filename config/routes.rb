@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
     resources :files, :controller => 'page_files'
   end
-  match '/:locale/pages/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
+  get '/:locale/pages/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
 
   # Redirect hack for backwards compatibility
   get 'pages/:locale' => redirect("/%{locale}/pages"), :locale => /\w\w\w/
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
           post 'import_xml'
         end
 
-        match 'new/:parent', :action => 'new'
+        get 'new/:parent', :action => 'new'
 
         # Page Images
         resources :images, :controller => 'page_images' do
@@ -89,8 +89,8 @@ Rails.application.routes.draw do
   end
 
   # Default admin route
-  match '/admin' => redirect{ |env, req| "/admin/#{Language.default}/pages/news" }, :as => 'admin_default'
-  #match '/admin' => 'admin#redirect', :as => 'admin_default'
+  get '/admin' => redirect{ |env, req| "/admin/#{Language.default}/pages/news" }, :as => 'admin_default'
+  #get '/admin' => 'admin#redirect', :as => 'admin_default'
 
   # Errors
   resources :errors do
@@ -100,6 +100,6 @@ Rails.application.routes.draw do
   end
 
   # Legacy routes
-  match '/comments/:action/:type/:id', :controller => 'comments'
+  get '/comments/:action/:type/:id', :controller => 'comments'
 
 end
