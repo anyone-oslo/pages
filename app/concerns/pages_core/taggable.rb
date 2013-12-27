@@ -32,7 +32,7 @@ module PagesCore
       Tag.transaction do
         taggings.destroy_all
         Tag.parse(list).each do |name|
-          Tag.find_or_create_by_name(name).on(self)
+          Tag.find_or_create_by(name: name).on(self)
         end
       end
     end

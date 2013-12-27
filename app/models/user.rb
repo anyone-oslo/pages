@@ -84,22 +84,21 @@ class User < ActiveRecord::Base
 
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
-      user   = self.find_by_username(string.to_s)
-      user ||= self.find_by_email(string.to_s)
-      user
+      where(username: string.to_s).first ||
+      where(email: string.to_s).first
     end
 
     # Finds a user by openid_url. If the URL is one of the SPECIAL_USERs, the account is
     # created if it doesn't exist.
     def authenticate_by_openid_url(openid_url)
       return nil if openid_url.blank?
-      user = User.find_by_openid_url(openid_url.to_s)
+      user = User.where(openid_url: openid_url.to_s).first
       unless user
         # Check special users
         special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({username: username})}
         if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
           special_user = special_users.detect{|u| u[:openid_url] == openid_url}
-          unless user = User.find_by_username(special_user[:username])
+          unless user = User.where(username: special_user[:username]).first
             user = User.create(special_user.merge({is_activated: true, is_admin: true}))
           end
         end

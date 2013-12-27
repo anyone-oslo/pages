@@ -12,7 +12,7 @@ module PagesCore
           attributes = attributes_from_xml.merge(parent_page_id: @page.id)
 
           if attributes.has_key?('author_email')
-            author = User.exists?(email: attributes['author_email']) ? User.find_by_email(attributes['author_email'].to_s): @page.author
+            author = User.where(email: attributes['author_email'].to_s).first || @page.author
             attributes.delete('author_email')
           else
             author = @page.author

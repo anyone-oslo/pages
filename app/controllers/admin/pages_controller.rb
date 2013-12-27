@@ -79,7 +79,7 @@ class Admin::PagesController < Admin::AdminController
     @page = Page.new.localize(@locale)
 
     if PagesCore.config(:default_author)
-      @page.author = User.find_by_email(PagesCore.config(:default_author))
+      @page.author = User.where(email: PagesCore.config(:default_author)).first
     end
     @page.author ||= @current_user
 

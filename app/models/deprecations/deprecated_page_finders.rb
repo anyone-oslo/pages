@@ -33,8 +33,8 @@ module Deprecations
       # Examples:
       #   Page.get_pages(:parent => :root)
       #   Page.get_pages(:parent => :root, :hidden => true, :drafts => true)
-      #   Page.get_pages(:parent => Page.find_by_template('news'), :published_after => 14.days.ago)
-      #   Page.get_pages(:parents => Page.news_pages, :category => Category.find_by_name('music'))
+      #   Page.get_pages(:parent => Page.where(template: 'news'), :published_after => 14.days.ago)
+      #   Page.get_pages(:parents => Page.news_pages, :category => Category.where(name: 'music'))
       #
       # == Pagination
       #
@@ -43,7 +43,7 @@ module Deprecations
       # to make views easier to write and more readable.
       #
       # Example:
-      #   news_posts = Page.get_pages(:parent => Page.find_by_template('news'), :paginate => {:page => 3, :per_page => 10})
+      #   news_posts = Page.get_pages(:parent => Page.where(template: 'news'), :paginate => {:page => 3, :per_page => 10})
       #   news_posts.paginated? # => true
       #   news_posts.pages # => 11
       #   news_posts.current_page # => 3

@@ -100,7 +100,7 @@ namespace :pages do
       get_rows(:users).each do |row|
         user_id = row['ID']
         if import_users
-          unless pages_user = User.find_by_username(row['user_nicename'])
+          unless pages_user = User.where(username: row['user_nicename']).first
             pages_user = User.create(
               :email        => row['user_email'],
               :username     => row['user_nicename'],
@@ -140,11 +140,11 @@ namespace :pages do
       end
       terms.each do |term_id, term|
         if term['type'] == 'category'
-          unless term['category'] = Category.find_by_name(term['name'])
+          unless term['category'] = Category.where(name: term['name']).first
             term['category'] = Category.create(:name => term['name'])
           end
         elsif term['type'] == 'tag'
-          unless term['tag'] = Tag.find_by_name(term['name'])
+          unless term['tag'] = Tag.where(name: term['name']).first
             term['tag'] = Tag.create(:name => term['name'])
           end
         end
