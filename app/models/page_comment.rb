@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class PageComment < ActiveRecord::Base
+  include PagesCore::Sweepable
 
   belongs_to :page, counter_cache: :comments_count
   attr_accessor :invalid_captcha
