@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
   s.add_dependency 'ruby-openid', '~> 2.2.3'
   s.add_dependency 'vector2d'
-  s.add_dependency 'dynamic_image-pages', '>= 0.0.13'
+  s.add_dependency 'dynamic_image-pages', '>= 0.0.16'
+  s.add_dependency 'rails-observers'
 
   # Default asset dependencies
   s.add_dependency 'sass-rails', '~> 4.0.0'
