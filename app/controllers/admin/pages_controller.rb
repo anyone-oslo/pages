@@ -141,9 +141,14 @@ class Admin::PagesController < Admin::AdminController
   private
 
   def page_params
-    attributes = params[:page]
-    attributes.delete(:image) if attributes.has_key?(:image) && attributes[:image].blank?
-    attributes
+    params.require(:page).permit(
+      Page.localized_attributes +
+      [
+        :template, :user_id, :status, :content_order,
+        :feed_enabled, :published_at, :redirect_to, :comments_allowed,
+        :image_link, :news_page, :unique_name, :pinned
+      ]
+    )
   end
 
   def find_page

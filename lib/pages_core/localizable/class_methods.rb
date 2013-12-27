@@ -23,6 +23,10 @@ module PagesCore
         in_locale(locale).where('localizations.locale = ?', locale)
       end
 
+      def localized_attributes
+        localizable_configuration.attributes.keys
+      end
+
       # Accessor for the configuration.
       def localizable_configuration
         @localizable_configuration ||= Localizable::Configuration.new

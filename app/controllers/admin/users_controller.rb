@@ -1,10 +1,10 @@
 # encoding: utf-8
 
 class Admin::UsersController < Admin::AdminController
-
   before_filter :require_authentication, except: [:new_password, :welcome, :create_first, :login]
-  before_filter :find_user,       only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_filter :verify_editable, only: [:delete_image, :update, :destroy, :edit, :update_openid]
+  before_filter :require_no_users,       only: [:welcome, :create_first]
+  before_filter :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
+  before_filter :verify_editable,        only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
   def index
     @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}
@@ -22,43 +22,32 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def welcome
-    if User.any?
-      flash[:error] = "Account holder already exists"
-      redirect_to admin_users_url and return
-    end
     @user = User.new
   end
 
   def create_first
-    if User.count == 0
-      attributes = params[:user].merge({:is_admin => true, :is_activated => true})
+    @user = User.create(user_params)
+    if @user.valid?
+      @current_user = @user
+      @current_user.update_attributes(last_login_at: Time.now)
+      session[:current_user_id] = @current_user.id
+      set_authentication_cookies
 
-      unless attributes[:openid_url].blank?
-        new_openid_url = attributes[:openid_url]
-        attributes.delete(:openid_url)
-      end
-
-      @user = User.create(attributes)
-      if @user.valid?
-        @current_user = @user
-        @current_user.update_attributes(last_login_at: Time.now)
-        session[:current_user_id] = @current_user.id
-        set_authentication_cookies
-
-        if new_openid_url
-          unless start_openid_session(new_openid_url,
-            :success   => update_openid_admin_user_url(@user),
-            :fail      => edit_admin_user_url(@user)
-          )
-            flash.now[:error] = "Not a valid OpenID URL"
-            render :action => :edit
-          end
+      # Start OpenID session
+      if params[:user][:openid_url]
+        unless start_openid_session(params[:user][:openid_url],
+          success: update_openid_admin_user_url(@user),
+          fail:    edit_admin_user_url(@user)
+        )
+          flash.now[:error] = "Not a valid OpenID URL"
+          render :action => :edit
         end
+      else
+        redirect_to admin_default_url
       end
     else
-      raise "Account holder already created"
+      redirect_to admin_default_url
     end
-    redirect_to admin_default_url and return
   end
 
   def new_password
@@ -93,8 +82,8 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def create
-    @user = User.new( params[:user] )
-    @user.creator  = @current_user
+    @user = User.new(user_params)
+    @user.creator = @current_user
     if @user.save
       AdminMailer.new_user(@user, admin_default_url).deliver
       flash[:notice] = "#{@user.realname} has been invited."
@@ -116,24 +105,17 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def update
-    original_username = @user.username
-
-    update_params = params[:user]
-    unless update_params[:openid_url].blank?
-      new_openid_url = update_params[:openid_url] if @user == @current_user && update_params[:openid_url] != @user.openid_url
-      update_params.delete(:openid_url)
-    end
-
-    if @user.update_attributes( params[:user] )
+    if @user.update_attributes(user_params)
       # Send an email notification if the username or password changes
-      if ( params[:user][:username] && params[:user][:username] != original_username ) || ( params[:user][:password] && !params[:user][:password].blank? )
+      if params[:user][:password] || @user.previous_changes[:name]
         AdminMailer.user_changed(@user, admin_default_url, @current_user).deliver
       end
-      @current_user = @user if @user == @current_user
-      if new_openid_url
-        unless start_openid_session(new_openid_url,
-          :success   => update_openid_admin_user_url(@user),
-          :fail      => edit_admin_user_url(@user)
+
+      # OpenID URL changed?
+      if @user == @current_user && params[:user][:openid_url] != @user.openid_url
+        unless start_openid_session(params[:user][:openid_url],
+          success: update_openid_admin_user_url(@user),
+          fail:    edit_admin_user_url(@user)
         )
           flash.now[:error] = "Not a valid OpenID URL"
           render :action => :edit
@@ -175,6 +157,20 @@ class Admin::UsersController < Admin::AdminController
 
   def find_user
     @user = User.find(params[:id])
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :realname, :email, :mobile, :web_link,
+      :image, :username, :password, :is_activated, :is_admin
+    )
+  end
+
+  def require_no_users
+    if User.any?
+      flash[:error] = "Account holder already exists"
+      redirect_to admin_users_url and return
+    end
   end
 
   def verify_editable

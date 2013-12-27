@@ -31,7 +31,7 @@ class Admin::PageFilesController < Admin::AdminController
 
   def create
     @page_file = @page.files.new
-    @page_file.update_attributes(params[:page_file].merge(locale: @locale))
+    @page_file.update_attributes(page_file_params.merge(locale: @locale))
     unless @page_file.valid?
       flash[:notice] = "Error uploading file!"
     end
@@ -42,7 +42,7 @@ class Admin::PageFilesController < Admin::AdminController
   end
 
   def update
-    if @page_file.update_attributes(params[:page_file])
+    if @page_file.update_attributes(page_file_params)
       flash[:notice] = "File updated"
     else
       flash[:notice] = "Error updating file!"
@@ -57,6 +57,10 @@ class Admin::PageFilesController < Admin::AdminController
   end
 
   protected
+
+  def page_file_params
+    params.require(:page_file).permit(:name, :filename, :file)
+  end
 
   def redirect_to_page
     redirect_to edit_admin_page_path(@locale, @page, anchor: 'files') and return

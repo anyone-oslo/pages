@@ -144,7 +144,8 @@ class PagesCore::Frontend::PagesController < FrontendController
         redirect_to "/" and return
       end
       remote_ip = request.env["REMOTE_ADDR"]
-      @comment = PageComment.new(params[:page_comment].merge({:remote_ip => remote_ip, :page_id => @page.id}))
+      page_comment_params = params.require(:page_comment).permit(:name, :email, :url, :body)
+      @comment = PageComment.new(page_comment_params.merge({:remote_ip => remote_ip, :page_id => @page.id}))
       if @page.comments_allowed?
         if PagesCore.config(:recaptcha) && !verify_recaptcha
           @comment.invalid_captcha = true

@@ -34,12 +34,14 @@ class Admin::PageImagesController < Admin::AdminController
   end
 
   def create
-    if params[:page_image]
-      @page.page_images.create(page_image_params)
-    elsif params[:page_images]
-      params[:page_images].each do |index, attributes|
-        @page.page_images.create(attributes) if attributes[:image] && attributes[:image] != ""
+    if page_images_params?
+      page_images_params.each do |index, attributes|
+        if attributes[:image]
+          @page.page_images.create(attributes)
+        end
       end
+    else
+      @page.page_images.create(page_image_params)
     end
     redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
   end
@@ -98,7 +100,15 @@ class Admin::PageImagesController < Admin::AdminController
   end
 
   def page_image_params
-    params[:page_image]
+    params.require(:page_image).permit(:image, :primary, :name, :description, :byline, :crop_start, :crop_size)
+  end
+
+  def page_images_params
+    params.permit(page_images: [:image, :primary, :name, :description, :byline, :crop_start, :crop_size])[:page_images]
+  end
+
+  def page_images_params?
+    params[:page_images] ? true : false
   end
 
   def page_images_as_json(page_images)

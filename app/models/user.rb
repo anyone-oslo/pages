@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
   ### Callbacks #############################################################
 
   before_create     :generate_token
+  before_create     :ensure_first_user_is_admin
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
@@ -225,6 +226,15 @@ class User < ActiveRecord::Base
     options[:except]  ||= [:hashed_password, :persistent_params]
     options[:include] ||= [:image]
     super options
+  end
+
+  protected
+
+  def ensure_first_user_is_admin
+    unless User.any?
+      self.is_admin = true
+      self.is_activated = true
+    end
   end
 
 end
