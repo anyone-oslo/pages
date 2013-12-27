@@ -16,6 +16,8 @@ require 'action_controller'
 require 'action_view'
 require 'action_mailer'
 
+require 'actionpack/page_caching'
+
 # Assets
 require 'jquery/rails/engine'
 require 'jquery/ui/rails'

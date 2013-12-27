@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'ruby-openid', '~> 2.2.3'
   s.add_dependency 'vector2d'
   s.add_dependency 'dynamic_image-pages', '>= 0.0.16'
-  s.add_dependency 'rails-observers'
+  s.add_dependency 'actionpack-page_caching'
 
   # Default asset dependencies
   s.add_dependency 'sass-rails', '~> 4.0.0'
