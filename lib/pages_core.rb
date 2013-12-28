@@ -54,6 +54,7 @@ module PagesCore
 
       load 'pages_core/plugin.rb'
 
+      load 'pages_core/admin_menu_item.rb'
       load 'pages_core/archive_finder.rb'
       load 'pages_core/cache_sweeper.rb'
       load 'pages_core/configuration.rb'

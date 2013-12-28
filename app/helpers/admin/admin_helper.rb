@@ -85,45 +85,6 @@ module Admin::AdminHelper
     @body_classes << class_name
   end
 
-  def header_tabs(options={})
-    options = {
-      :class => :pages
-    }.merge(options)
-
-    menu_items = @admin_menu.select{|i| i[:class] == options[:class]}
-
-    # Determine current menu item
-    current_tab = menu_items.select { |menu_item|
-      if menu_item[:options] && menu_item[:options][:current]
-        menu_item[:options][:current].call
-      elsif menu_item[:url].is_a?(Hash)
-        menu_item[:url][:controller] == controller.class.controller_path
-      else
-        menu_item[:url].gsub(/^\//, '') == controller.class.controller_path.inspect
-      end
-    }.first
-
-    # Build menu
-    if menu_items.length > 0
-      menu_items = menu_items.collect do |menu_item|
-        classes = []
-        begin
-          controller_name = menu_item[:url][:controller]
-        rescue
-          controller_name = ""
-          logger.warn "Cannot get controller name from #{menu_item.inspect}"
-        end
-
-        classes << "current" if menu_item == current_tab
-
-        link_to(menu_item[:name], menu_item[:url], :class => classes.join(' '))
-      end
-      ("<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>").html_safe
-    else
-      ""
-    end
-  end
-
   def page_title(title)
     @page_title = title
   end

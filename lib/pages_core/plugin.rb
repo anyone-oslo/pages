@@ -24,6 +24,10 @@ module PagesCore
         end
       end
 
+      def admin_menu_item(label, path, group=:custom, options={})
+        PagesCore::AdminMenuItem.register(label, path, group, options)
+      end
+
       def plugins
         @plugins ||= ::PagesCore::Plugin.subclasses.map do |class_name|
           class_name.to_s.split("::").inject(Object) do |klass, m|

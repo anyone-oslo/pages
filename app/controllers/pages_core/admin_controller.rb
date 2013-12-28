@@ -3,10 +3,8 @@
 # All admin controllers inherit Admin::AdminController, which provides layout, authorization
 # and other common code for the Admin set of controllers.
 class PagesCore::AdminController < ApplicationController
-
   before_action :set_i18n_locale
   before_action :require_authentication
-  before_action :build_admin_tabs
   before_action :restore_persistent_params
   after_action  :save_persistent_params
 
@@ -37,32 +35,6 @@ class PagesCore::AdminController < ApplicationController
       end
     end
 
-    # Builds the admin menu tabs.
-    def build_admin_tabs
-      if Page.news_pages.any?
-        register_menu_item(
-          "News", news_admin_pages_path(@locale), :pages,
-          :current => Proc.new {
-            params[:controller] == 'admin/pages' &&
-            (params[:action] == 'news' || (@page && @page.parent && @page.parent.news_page?))
-          }
-        )
-      end
-
-      register_menu_item "Pages", admin_pages_path(@locale), :pages
-      register_menu_item "Users", admin_users_path, :account
-
-      # Register menu items from plugins
-      PagesCore::Plugin.plugins.each do |plugin_class|
-        plugin = plugin_class.new
-        if plugin.respond_to?(:admin_menu_tabs)
-          plugin.admin_menu_tabs.each do |menu_item|
-            register_menu_item menu_item[:label], menu_item[:url], (menu_item[:group] || :pages_plugins)
-          end
-        end
-      end
-    end
-
     # Loads persistent params from user model and merges with session.
     def restore_persistent_params
       if @current_user and @current_user.persistent_data?
@@ -85,16 +57,6 @@ class PagesCore::AdminController < ApplicationController
     # Get name of class with in lowercase, with underscores.
     def self.underscore
       ActiveSupport::Inflector.underscore( self.to_s ).split( /\// ).last
-    end
-
-    # Register a menu item (for extending with custom controllers
-    def register_menu_item(name, url={}, class_name=:custom, options={})
-      @admin_menu      ||= []
-      if url.kind_of?(Hash)
-        url[:controller] ||= "admin/#{name.to_s.underscore}"
-        url[:action]     ||= 'index'
-      end
-      @admin_menu << {:name => name, :url => url, :class => class_name, :options => options}
     end
 
     # Add a stylesheet
