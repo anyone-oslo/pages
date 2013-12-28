@@ -7,9 +7,9 @@ class PagesCore::Frontend::PagesController < FrontendController
     caches_page :index
   end
 
-  before_filter :load_root_pages
-  before_filter :find_page, :only => [:show, :preview]
-  after_filter  :cache_page_request, :only => [ :show ]
+  before_action :load_root_pages
+  before_action :find_page, :only => [:show, :preview]
+  after_action  :cache_page_request, :only => [ :show ]
 
 
   protected

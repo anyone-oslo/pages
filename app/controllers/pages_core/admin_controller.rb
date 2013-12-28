@@ -4,11 +4,11 @@
 # and other common code for the Admin set of controllers.
 class PagesCore::AdminController < ApplicationController
 
-  before_filter :set_i18n_locale
-  before_filter :require_authentication
-  before_filter :build_admin_tabs
-  before_filter :restore_persistent_params
-  after_filter  :save_persistent_params
+  before_action :set_i18n_locale
+  before_action :require_authentication
+  before_action :build_admin_tabs
+  before_action :restore_persistent_params
+  after_action  :save_persistent_params
 
   layout "admin"
 

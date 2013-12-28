@@ -2,9 +2,9 @@
 
 class Admin::PageFilesController < Admin::AdminController
 
-  before_filter :find_page
-  before_filter :find_page_file,   only: [:show, :edit, :update, :destroy]
-  before_filter :redirect_to_page, only: [:index, :show, :new, :edit]
+  before_action :find_page
+  before_action :find_page_file,   only: [:show, :edit, :update, :destroy]
+  before_action :redirect_to_page, only: [:index, :show, :new, :edit]
 
   def index
   end

@@ -2,8 +2,8 @@
 
 class Admin::PageImagesController < Admin::AdminController
 
-  before_filter :find_page
-  before_filter :find_page_image, :only => [:show, :edit, :update, :destroy]
+  before_action :find_page
+  before_action :find_page_image, :only => [:show, :edit, :update, :destroy]
 
   def index
     @page_images = @page.page_images

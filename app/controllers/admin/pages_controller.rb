@@ -2,14 +2,14 @@
 
 class Admin::PagesController < Admin::AdminController
 
-  before_filter :require_news_pages, only: [:news]
-  before_filter :find_page, only: [
+  before_action :require_news_pages, only: [:news]
+  before_action :find_page, only: [
     :show, :edit, :preview, :update, :destroy, :reorder,
     :delete_comment,
     :import_xml
   ]
-  before_filter :find_categories
-  before_filter :find_news_pages, only: [:news, :new_news]
+  before_action :find_categories
+  before_action :find_news_pages, only: [:news, :new_news]
 
   def index
     @root_pages = Page.roots.in_locale(@locale).visible

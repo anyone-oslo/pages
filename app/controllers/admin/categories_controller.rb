@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Admin::CategoriesController < Admin::AdminController
-  before_filter :find_category, only: [:show, :edit, :update, :destroy]
+  before_action :find_category, only: [:show, :edit, :update, :destroy]
 
   def index
     @categories = Category.all

@@ -1,10 +1,10 @@
 # encoding: utf-8
 
 class Admin::UsersController < Admin::AdminController
-  before_filter :require_authentication, except: [:new_password, :welcome, :create_first, :login]
-  before_filter :require_no_users,       only: [:welcome, :create_first]
-  before_filter :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_filter :verify_editable,        only: [:delete_image, :update, :destroy, :edit, :update_openid]
+  before_action :require_authentication, except: [:new_password, :welcome, :create_first, :login]
+  before_action :require_no_users,       only: [:welcome, :create_first]
+  before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
+  before_action :verify_editable,        only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
   def index
     @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}

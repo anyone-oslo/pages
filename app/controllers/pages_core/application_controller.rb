@@ -15,15 +15,15 @@ class PagesCore::ApplicationController < ActionController::Base
   # Useful for actions that don't rely on PagesCore.
   SKIP_FILTERS = [:render_dynamic_image]
 
-  before_filter :domain_cache
-  before_filter :authenticate,               :except => SKIP_FILTERS
-  before_filter :set_locale,                 :except => SKIP_FILTERS
-  after_filter  :set_headers,                :except => SKIP_FILTERS
-  after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
-  after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
+  before_action :domain_cache
+  before_action :authenticate,               :except => SKIP_FILTERS
+  before_action :set_locale,                 :except => SKIP_FILTERS
+  after_action  :set_headers,                :except => SKIP_FILTERS
+  after_action  :set_authentication_cookies, :except => SKIP_FILTERS
+  after_action  :ensure_garbage_collection,  :except => SKIP_FILTERS
 
-  before_filter :set_process_title
-  after_filter  :unset_process_title
+  before_action :set_process_title
+  after_action  :unset_process_title
 
   protected
 
@@ -137,14 +137,14 @@ class PagesCore::ApplicationController < ActionController::Base
     end
 
     # Sends HTTP headers (Content-Language etc) to the client.
-    # This method is automatically run from an after_filter.
+    # This method is automatically run from an after_action.
     def set_headers
       # Set the language header
       headers['Content-Language'] = Language.definition(@locale.to_s).iso639_1 rescue nil if @locale
     end
 
     # Performs garbage collection if the proper flags have been set.
-    # This method is automatically run from an after_filter.
+    # This method is automatically run from an after_action.
     def ensure_garbage_collection
       unless DynamicImage.clean_dirty_memory
         # clean_dirty_memory returns true if it performs garbage collection,
@@ -165,7 +165,7 @@ class PagesCore::ApplicationController < ActionController::Base
     # Conversely, any controller can log in a user for the duration of the session by setting <tt>@current_user</tt>, the
     # mechanics are handled by <tt>set_authentication_cookies</tt>.
     #
-    # This method is automatically run from a before_filter.
+    # This method is automatically run from a before_action.
     def authenticate
       remote_ip = request.env['REMOTE_ADDR']
 

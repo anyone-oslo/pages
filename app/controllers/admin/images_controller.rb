@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Admin::ImagesController < Admin::AdminController
-  before_filter :find_image, only: [:show, :edit, :update, :destroy]
+  before_action :find_image, only: [:show, :edit, :update, :destroy]
 
   def index
   end
