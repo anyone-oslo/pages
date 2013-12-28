@@ -27,7 +27,7 @@
   <% if @categories && @categories.length > 0 %>
     <ul>
       <% @categories.each do |category| %>
-        <li><%= category.name %> (<%= link_to "Delete", admin_category_path(category), :method => :delete, :class => :delete, :confirm => "Are you sure? There is no undo." %>)</li>
+        <li><%= category.name %> (<%= link_to "Delete", admin_category_path(category), method: :delete, class: :delete, data: {confirm: "Are you sure? There is no undo."} %>)</li>
       <% end %>
     </ul>
   <% end %>
@@ -41,7 +41,11 @@
     <% end %>
   </div>
   <div id="new-category-button">
-    <p><%= button_to_function "Add a new category", 'toggleNewCategory();' %></p>
+    <p>
+      <button type="button" class="toggle-category">
+        Add a new category
+      </button>
+    </p>
   </div>
   -->
 <% end %>

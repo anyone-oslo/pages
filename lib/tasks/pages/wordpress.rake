@@ -37,7 +37,7 @@ namespace :pages do
       table_prefix    = get_input('Table prefix', 'wp')
       import_users    = get_input_yn('Import users', true)
       unless import_users
-        first_user_id = User.find(:first).id.to_s
+        first_user_id = User.first.id.to_s
         default_user_id = get_input('Author ID', first_user_id)
         default_user = User.find(default_user_id)
       end

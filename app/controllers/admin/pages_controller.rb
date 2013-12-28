@@ -93,7 +93,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def edit
-    @authors = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
+    @authors = User.activated
     # Make sure the page author is included in the dropdown
     # even if the account isn't active.
     if @authors.any? && @page.author
@@ -161,7 +161,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def find_categories
-    @categories = Category.find(:all, :order => [:name])
+    @categories = Category.order("name")
   end
 
   def find_news_pages

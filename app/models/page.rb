@@ -82,13 +82,13 @@ class Page < ActiveRecord::Base
   class << self
 
     def archive_finder
-      PagesCore::ArchiveFinder.new(scoped, timestamp: :published_at)
+      PagesCore::ArchiveFinder.new(all, timestamp: :published_at)
     end
 
     # Find all published and feed enabled pages
     def enabled_feeds(locale, options={})
-      conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
-      Page.find(:all, conditions: conditions).collect{|p| p.locale = locale.to_s; p}
+      conditions = (options[:include_hidden]) ? 'status IN (2,3)' : 'status = 2'
+      Page.where(feed_enabled: true).where(conditions).localized(locale)
     end
 
     def status_labels

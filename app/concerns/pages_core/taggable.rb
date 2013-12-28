@@ -11,7 +11,7 @@ module PagesCore
 
     module ClassMethods
       def tagged_with(*tags)
-        scoped.includes(:tags).where('tags.name IN (?)', Tag.parse(tags))
+        all.includes(:tags).where('tags.name IN (?)', Tag.parse(tags)).references(:tags)
       end
 
       def find_tagged_with(tags)

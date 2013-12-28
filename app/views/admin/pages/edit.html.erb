@@ -48,7 +48,7 @@
           <% @page.files.each do |file| %>
             <li data-file-id="<%= file.id %>">
               <span class="actions">
-                <%= link_to "Delete", admin_page_file_path(@locale, @page, file), :class => :delete, :method => :delete, :confirm => 'Are you sure? There is no undo.' %>
+                <%= link_to "Delete", admin_page_file_path(@locale, @page, file), class: :delete, method: :delete, data: {confirm: 'Are you sure? There is no undo.'} %>
               </span>
               <div class="drag_handle"></div>
               <strong><%= file.name %></strong> &ndash; <%= link_to file.filename, page_file_path(@locale, @page, file) %>
@@ -59,7 +59,9 @@
         <p>No files added yet.</p>
       <% end %>
       <p>
-        <p><%= button_to_function "Upload file", "showFileUploadModal();" %></p>
+        <button type="button" class="upload-file-button">
+          Upload file
+        </button>
       </p>
     <% end %>
   <% end %>
@@ -80,8 +82,12 @@
 
 
   <div class="buttons">
-    <button type="button" id="previewButton" data-url="<%= preview_page_url(@page.locale, @page) %>">Preview</button>
-    <%= pages_button_to "Save changes" %>
+    <button type="button" id="previewButton" data-url="<%= preview_page_url(@page.locale, @page) %>">
+      Preview
+    </button>
+    <button type="submit">
+      Save changes
+    </button>
   </div>
 
 <% end %>
@@ -110,7 +116,7 @@
 
     <p>
       <%= submit_tag "Upload" %> or
-      <%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
+      <%= link_to "Cancel", "#", class: "cancel clear-modal" %>
     </p>
   <% end %>
 </div>
@@ -132,7 +138,7 @@
       %>
       <p>
         <%= submit_tag "Upload" %> or
-        <%= link_to_function "Cancel", "Modal.clear();", :class => :cancel %>
+        <%= link_to "Cancel", "#", class: "cancel clear-modal" %>
       </p>
     <% end %>
   </div>
