@@ -62,17 +62,6 @@ class User < ActiveRecord::Base
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
-
-  ### Search index ##########################################################
-
-  define_index do
-    indexes username, realname, email, mobile
-    has :last_login_at, type: :datetime
-    has :created_at, type: :datetime
-    has is_activated
-    set_property delta: :delayed
-  end
-
   scope :sorted,      -> { order('realname ASC') }
   scope :activated,   -> { sorted.where(is_activated: true) }
   scope :deactivated, -> { sorted.where(is_activated: false) }

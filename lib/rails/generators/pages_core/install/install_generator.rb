@@ -75,7 +75,7 @@ module PagesCore
       end
 
       def create_sphinx_config
-        template 'sphinx.yml', File.join('config/sphinx.yml')
+        template 'thinking_sphinx.yml', File.join('config/thinking_sphinx.yml')
       end
     end
   end

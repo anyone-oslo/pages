@@ -17,3 +17,9 @@ And generate the config files:
 ```rails g pages_core:install```
 
 Now visit /admin and create your user account.
+
+## Upgrading
+
+### From 3.0.0
+
+* ThinkingSphinx configuration file has changed from config/sphinx.yml to config/thinking_sphinx.yml.
