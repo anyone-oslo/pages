@@ -12,7 +12,7 @@
 <%# #### SIDEBAR ########################################################### %>
 
 <% content_for :sidebar do %>
-  <%= form_for @page, :html => {:class => :edit_page, :id => 'page-form-sidebar'} do |f| %>
+  <%= form_for @page, url: admin_page_url(@locale, @page), html: {class: :edit_page, id: 'page-form-sidebar'} do |f| %>
     <%= render :partial => 'edit_options', :locals => {:f => f} %>
   <% end %>
 <% end %>
