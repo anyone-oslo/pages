@@ -29,7 +29,7 @@ class Admin::UsersController < Admin::AdminController
     @user = User.create(user_params)
     if @user.valid?
       @current_user = @user
-      @current_user.update_attributes(last_login_at: Time.now)
+      @current_user.update(last_login_at: Time.now)
       session[:current_user_id] = @current_user.id
       set_authentication_cookies
 
@@ -105,7 +105,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def update
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       # Send an email notification if the username or password changes
       if params[:user][:password] || @user.previous_changes[:name]
         AdminMailer.user_changed(@user, admin_default_url, @current_user).deliver
@@ -132,7 +132,7 @@ class Admin::UsersController < Admin::AdminController
 
   def update_openid
     if session[:authenticated_openid_url]
-      @user.update_attributes(openid_url: session[:authenticated_openid_url])
+      @user.update(openid_url: session[:authenticated_openid_url])
     end
     flash[:notice] = "Your changed to #{@user.realname} were saved."
     redirect_to admin_users_url

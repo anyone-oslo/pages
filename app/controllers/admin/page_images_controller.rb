@@ -17,7 +17,7 @@ class Admin::PageImagesController < Admin::AdminController
   def reorder
     @page_images = params[:ids].map{|id| PageImage.find(id)}
     @page_images.each_with_index do |pi, i|
-      pi.update_attributes(position: i)
+      pi.update(position: i)
     end
     respond_to do |format|
       format.json do
@@ -47,7 +47,7 @@ class Admin::PageImagesController < Admin::AdminController
   end
 
   def update
-    if @page_image.update_attributes(page_image_params)
+    if @page_image.update(page_image_params)
 
       # Empty the cache
       #PagesCore::CacheSweeper.sweep_image!(@page_image.image_id)

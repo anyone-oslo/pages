@@ -13,7 +13,7 @@ class Admin::PageFilesController < Admin::AdminController
     if params[:ids]
       files = Array(params[:ids]).map{ |id| PageFile.find(id) }
       files.each_with_index do |file, index|
-        file.update_attributes(position: index)
+        file.update(position: index)
       end
     end
     if request.xhr?
@@ -31,7 +31,7 @@ class Admin::PageFilesController < Admin::AdminController
 
   def create
     @page_file = @page.files.new
-    @page_file.update_attributes(page_file_params.merge(locale: @locale))
+    @page_file.update(page_file_params.merge(locale: @locale))
     unless @page_file.valid?
       flash[:notice] = "Error uploading file!"
     end
@@ -42,7 +42,7 @@ class Admin::PageFilesController < Admin::AdminController
   end
 
   def update
-    if @page_file.update_attributes(page_file_params)
+    if @page_file.update(page_file_params)
       flash[:notice] = "File updated"
     else
       flash[:notice] = "Error updating file!"

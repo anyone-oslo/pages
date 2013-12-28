@@ -41,7 +41,7 @@ class Admin::PagesController < Admin::AdminController
     pages = params[:ids].map{|id| Page.find(id)}
     PagesCore::CacheSweeper.once do
       pages.each_with_index do |page, index|
-        page.update_attributes(position: (index + 1))
+        page.update(position: (index + 1))
       end
     end
     if request.xhr?
@@ -83,8 +83,8 @@ class Admin::PagesController < Admin::AdminController
     end
     @page.author ||= @current_user
 
-    if @page.update_attributes(page_params)
-      @page.update_attributes(comments_allowed: @page.template_config.value(:comments_allowed))
+    if @page.update(page_params)
+      @page.update(comments_allowed: @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       redirect_to edit_admin_page_url(@locale, @page)
     else
@@ -103,7 +103,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def update
-    if @page.update_attributes(page_params)
+    if @page.update(page_params)
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       flash[:notice] = "Your changes were saved"
       flash[:save_performed] = true

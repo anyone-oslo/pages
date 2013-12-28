@@ -28,11 +28,11 @@ class PageImage < ActiveRecord::Base
           '`primary` = 0',
           ['page_id = ? AND id != ?', page_image.page_id, page_image.id]
         )
-        page_image.page.update_attributes(image_id: page_image.image_id)
+        page_image.page.update(image_id: page_image.image_id)
 
       # Clear image_id on the page if primary is toggled off
       else
-        page_image.page.update_attributes(image_id: nil)
+        page_image.page.update(image_id: nil)
       end
     end
 
@@ -47,13 +47,13 @@ class PageImage < ActiveRecord::Base
       if image_attributes[:crop_size] && image_attributes[:crop_size] != page_image.image.original_size
         image_attributes[:cropped] = true
       end
-      page_image.image.update_attributes(image_attributes)
+      page_image.image.update(image_attributes)
     end
   end
 
   after_destroy do |page_image|
     if page_image.primary?
-      page_image.page.update_attributes(image_id: nil)
+      page_image.page.update(image_id: nil)
     end
   end
 

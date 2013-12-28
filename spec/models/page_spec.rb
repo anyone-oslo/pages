@@ -67,7 +67,7 @@ describe Page do
 
     it 'should remove the unnecessary locales' do
       page.locales.should =~ ['en', 'nb']
-      page.update_attributes(excerpt: '')
+      page.update(excerpt: '')
       page.locales.should =~ ['nb']
     end
   end
@@ -93,13 +93,13 @@ describe Page do
     end
 
     it 'should be changed when saved' do
-      page.update_attributes(:excerpt => 'Hi')
+      page.update(:excerpt => 'Hi')
       page.reload
       page.excerpt.to_s.should == 'Hi'
     end
 
     it 'should remove the localization when nilified' do
-      page.update_attributes(:excerpt => nil)
+      page.update(:excerpt => nil)
       page.valid?.should be_true
       page.reload
       page.excerpt?.should be_false

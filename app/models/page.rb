@@ -164,7 +164,7 @@ class Page < ActiveRecord::Base
   end
 
   def flag_as_deleted!
-    update_attributes(status: 4)
+    update(status: 4)
   end
 
   # Get publication date, which defaults to the creation date
@@ -273,7 +273,7 @@ class Page < ActiveRecord::Base
   def ensure_page_images_contains_primary_image
     if image_id? && image_id_changed?
       if page_image = page_images.where(image_id: image_id).first
-        page_image.update_attributes(primary: true)
+        page_image.update(primary: true)
       else
         page_images.create(image_id: image_id, primary: true)
       end

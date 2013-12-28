@@ -242,11 +242,11 @@ namespace :pages do
 
           if post['post_type'] =~ /^page$/
             if post['post_parent'] && posts[post['post_parent']] && posts[post['post_parent']][:page]
-              post[:page].update_attributes(parent_page_id: posts[post['post_parent']][:page].id)
+              post[:page].update(parent_page_id: posts[post['post_parent']][:page].id)
             end
           else
             if post_parent_id && post_parent_id =~ /^[\d]+$/
-              post[:page].update_attributes(parent_page_id: post_parent_id.to_i)
+              post[:page].update(parent_page_id: post_parent_id.to_i)
             end
           end
 
@@ -284,7 +284,7 @@ namespace :pages do
                       if post[:page].image
                         post[:page].images << image
                       else
-                        post[:page].update_attributes(image_id: image.id)
+                        post[:page].update(image_id: image.id)
                       end
                     end
                   rescue

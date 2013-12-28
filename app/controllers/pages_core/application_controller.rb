@@ -200,7 +200,7 @@ class PagesCore::ApplicationController < ActionController::Base
 
         # Update the user record
         if !@current_user.last_login_at || @current_user.last_login_at < 10.minutes.ago
-          @current_user.update_attributes(last_login_at: Time.now)
+          @current_user.update(last_login_at: Time.now)
         end
         set_authentication_cookies(:force => false)
 

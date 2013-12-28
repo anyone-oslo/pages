@@ -29,7 +29,7 @@ class Admin::CategoriesController < Admin::AdminController
   end
 
   def update
-    if @category.update_attributes(category_params)
+    if @category.update(category_params)
       flash[:notice] = "Category was updated"
       redirect_to admin_pages_url(@locale)
     else

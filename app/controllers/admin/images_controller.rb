@@ -22,7 +22,7 @@ class Admin::ImagesController < Admin::AdminController
   end
 
   def update
-    @image.update_attributes(image_params)
+    @image.update(image_params)
     respond_to do |format|
       format.json { render text: @image.to_json, layout: false }
     end

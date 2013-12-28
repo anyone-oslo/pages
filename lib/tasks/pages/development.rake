@@ -42,7 +42,7 @@ namespace :pages do
         end
 
         page = Page.new
-        page.update_attributes(create_options)
+        page.update(create_options)
       end
     end
 

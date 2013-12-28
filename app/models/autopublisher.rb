@@ -5,7 +5,7 @@ class Autopublisher
       if due_pages.any?
         PagesCore::CacheSweeper.once do
           due_pages.each do |p|
-            p.update_attributes(autopublish: false)
+            p.update(autopublish: false)
           end
         end
       end

@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
   end
 
   def rehash_password!(password)
-    self.update_attributes(hashed_password: User.encrypt_password(password))
+    self.update(hashed_password: User.encrypt_password(password))
   end
 
   def password_needs_rehash?
@@ -218,7 +218,7 @@ class User < ActiveRecord::Base
 
   # Purge persistent params
   def purge_preferences!
-    self.update_attributes(persistent_data: {})
+    self.update(persistent_data: {})
   end
 
   # Serialize user to XML
