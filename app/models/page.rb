@@ -14,21 +14,20 @@ class Page < ActiveRecord::Base
 
   belongs_to_image :image
 
-  has_many :page_images, order: 'position ASC'
+  has_many :page_images, -> { order("position") }
 
   has_many :images,
-           through:    :page_images,
-           order:      'position ASC',
-           conditions: '`page_images`.`primary` = 0'
+           -> { where("`page_images`.`primary` = ?", false).order("position") },
+           through:    :page_images
 
   has_many :comments,
            class_name: 'PageComment',
            dependent:  :destroy
 
   has_many :page_files,
+           -> { order("position") },
            class_name: 'PageFile',
-           dependent:  :destroy,
-           order:      :position
+           dependent:  :destroy
 
   acts_as_list scope: :parent_page
 
