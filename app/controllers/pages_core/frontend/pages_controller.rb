@@ -59,11 +59,6 @@ class PagesCore::Frontend::PagesController < FrontendController
       template = @page.template
       template = "index" unless PagesCore::Templates.names.include?(template)
 
-      if self.methods.include?("template_#{template}")
-        ActiveSupport::Deprecation.warn "template_[template] actions are deprecated."
-        self.method("template_#{template}").call
-      end
-
       run_template_actions_for(template, @page)
 
       @page_template_layout = false if @disable_layout

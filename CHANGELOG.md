@@ -1,5 +1,9 @@
 # Changelog
 
+* #### Removed the template_* actions in PagesController
+
+  Use the new syntax introduced in 3.0 instead.
+
 * #### Removed deprecated APIs
 
   `Taggable.find_tagged_with`
