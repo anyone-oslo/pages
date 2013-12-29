@@ -20,6 +20,4 @@ Now visit /admin and create your user account.
 
 ## Upgrading
 
-### From 3.0.0
-
-* ThinkingSphinx configuration file has changed from config/sphinx.yml to config/thinking_sphinx.yml.
+Review the [changelog](CHANGELOG.md) for breaking changes.
