@@ -14,10 +14,7 @@ class PagesCore::ApplicationController < ActionController::Base
 
   # Sets @locale from params[:locale], with Language.default as fallback
   def set_locale
-    if params[:language]
-      ActiveSupport::Deprecation.warn "params[:language] is deprecated, use params[:locale]"
-    end
-    @language = @locale = params[:locale] || params[:language] || Language.default
+    @locale = params[:locale] || Language.default
   end
 
   def set_content_language_header

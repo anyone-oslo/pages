@@ -1,5 +1,9 @@
 # Changelog
 
+* #### Deprecated `:language` param removed
+
+  All instances must be replaced with `:locale`.
+
 * #### Removed SKIP_FILTERS
 
   SKIP_FILTERS in ApplicationController is no longer supported,

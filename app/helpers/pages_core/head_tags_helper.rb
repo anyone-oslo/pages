@@ -35,12 +35,8 @@ module PagesCore::HeadTagsHelper
     # Evaluate the given block first
     output_block = block_given? ? capture(&block) : ''
 
-    if options[:language]
-      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
-    end
-
     # Get options
-    options[:locale] ||= options[:language] ||= @locale
+    options[:locale]   ||= @locale
     options[:charset]  ||= "utf-8"
     options[:author]   ||= "Manual design (manualdesign.no)"
     options[:doctype]  ||= :xhtml

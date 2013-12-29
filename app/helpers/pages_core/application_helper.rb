@@ -60,10 +60,7 @@ module PagesCore::ApplicationHelper
   end
 
   def page_link(page, options={})
-    if options[:language]
-      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
-    end
-    options[:locale] ||= options[:language] ||= @locale
+    options[:locale] ||= @locale
     page.localize(options[:locale]) do |p|
       options[:title] ||= p.name.to_s
       if options.has_key? :unless
@@ -81,10 +78,7 @@ module PagesCore::ApplicationHelper
   end
 
   def page_url(page, options={})
-    if options[:language]
-      ActiveSupport::Deprecation.warn ":language option is deprecated, use :locale"
-    end
-    options[:locale] ||= options[:language] ||= @locale
+    options[:locale] ||= @locale
     page.localize(options[:locale]) do |p|
       if p.redirects?
         p.redirect_path(:locale => options[:locale])
