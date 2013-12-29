@@ -1,5 +1,11 @@
 # Changelog
 
+* #### Removed deprecated APIs
+
+  `Taggable.find_tagged_with`
+  `String#with_http`
+  `String#without_http`
+
 * #### Removed deprecated Page finder methods
 
   `Page#get_pages` and related methods no longer exists.
