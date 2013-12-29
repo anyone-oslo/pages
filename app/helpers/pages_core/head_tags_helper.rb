@@ -39,46 +39,32 @@ module PagesCore::HeadTagsHelper
     options[:locale]   ||= @locale
     options[:charset]  ||= "utf-8"
     options[:author]   ||= "Manual design (manualdesign.no)"
-    options[:doctype]  ||= :xhtml
     language_definition = Language.definition(options[:locale]).iso639_1 || "en"
     unless options.has_key?( :title )
       options[:title] = PagesCore.config(:site_name)
       if @page_title && @page_title != options[:title]
-        if options[:prepend_page_title]
-          options[:title] = "#{@page_title} - #{options[:title]}"
-        else
-          options[:title] = "#{options[:title]} - #{@page_title}"
-        end
+        options[:title] = "#{@page_title} - #{options[:title]}"
       end
     end
 
     # Build HTML
-    output  = ""
-    if options[:doctype] == :xhtml
-      output += "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-      output += "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language_definition}\" lang=\"#{language_definition}\">\n"
-      output += "<head>\n"
-      output += "	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=#{options[:charset]}\" />\n"
-      output += "	<meta http-equiv=\"Content-Language\" content=\"#{language_definition}\" />\n"
-      output += "	<meta name=\"author\" content=\"#{options[:author]}\" />\n"
-    elsif options[:doctype] == :html5
-      output += "<!doctype html>\n"
-      if options.has_key?(:modernizr)
-        output += "<!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"#{language_definition}\"> <!--<![endif]-->"
-      else
-        output += "<!--[if lt IE 7]>      <html class=\"lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if IE 7]>         <html class=\"lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if IE 8]>         <html class=\"lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
-        output += "<!--[if gt IE 8]><!--> <html lang=\"#{language_definition}\"> <!--<![endif]-->"
-      end
-      output += "<head>\n"
-      output += "	<meta charset=\"#{options[:charset]}\">\n"
-      output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n"
-      output += "	<meta name=\"author\" content=\"#{options[:author]}\">\n"
+    output = "<!doctype html>\n"
+    if options.has_key?(:modernizr)
+      output += "<!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"#{language_definition}\"> <!--<![endif]-->"
+    else
+      output += "<!--[if lt IE 7]>      <html class=\"lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if IE 7]>         <html class=\"lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if IE 8]>         <html class=\"lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
+      output += "<!--[if gt IE 8]><!--> <html lang=\"#{language_definition}\"> <!--<![endif]-->"
     end
+    output += "<head>\n"
+    output += "	<meta charset=\"#{options[:charset]}\">\n"
+    output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n"
+    output += "	<meta name=\"author\" content=\"#{options[:author]}\">\n"
+
     output += "	<title>#{options[:title]}</title>\n"
     if options.has_key? :stylesheet
       output += indent(stylesheet_link_tag(*options[:stylesheet]), 1) + "\n"

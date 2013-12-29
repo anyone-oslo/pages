@@ -1,5 +1,9 @@
 # Changelog
 
+* #### head_tag
+
+  Removed options: `:doctype`, `:prepend_page_title`
+
 * #### Deprecated helpers
 
   `hash_for_translated_route`
