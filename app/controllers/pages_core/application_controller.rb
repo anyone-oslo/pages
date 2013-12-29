@@ -6,13 +6,9 @@ class PagesCore::ApplicationController < ActionController::Base
   include PagesCore::ProcessTitler
   include PagesCore::OpenidHelper
 
-  # Actions added to the SKIP_FILTERS array will be bypassed by filters.
-  # Useful for actions that don't rely on PagesCore.
-  SKIP_FILTERS = [:render_dynamic_image]
-
   before_action :domain_cache
-  before_action :set_locale,                 :except => SKIP_FILTERS
-  after_action  :set_headers,                :except => SKIP_FILTERS
+  before_action :set_locale
+  after_action  :set_content_language_header
 
   protected
 
@@ -31,10 +27,9 @@ class PagesCore::ApplicationController < ActionController::Base
     @language = @locale = params[:locale] || params[:language] || Language.default
   end
 
-  # Sends HTTP headers (Content-Language etc) to the client.
-  # This method is automatically run from an after_action.
-  def set_headers
-    # Set the language header
-    headers['Content-Language'] = Language.definition(@locale.to_s).iso639_1 rescue nil if @locale
+  def set_content_language_header
+    if @locale && definition = Language.definition(@locale.to_s)
+      headers['Content-Language'] = definition.iso639_1
+    end
   end
 end

@@ -1,5 +1,10 @@
 # Changelog
 
+* #### Removed SKIP_FILTERS
+
+  SKIP_FILTERS in ApplicationController is no longer supported,
+  override individual actions if needed.
+
 * #### Removed the template_* actions in PagesController
 
   Use the new syntax introduced in 3.0 instead.
