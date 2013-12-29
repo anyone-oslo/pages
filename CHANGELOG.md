@@ -2,7 +2,7 @@
 
 * #### head_tag
 
-  Removed options: `:doctype`, `:prepend_page_title`
+  Removed options: `:doctype`, `:prepend_page_title`, `:modernizr`, `:charset`, `:author`, `:locale`
 
 * #### Deprecated helpers
 

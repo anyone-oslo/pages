@@ -36,11 +36,8 @@ module PagesCore::HeadTagsHelper
     output_block = block_given? ? capture(&block) : ''
 
     # Get options
-    options[:locale]   ||= @locale
-    options[:charset]  ||= "utf-8"
-    options[:author]   ||= "Manual design (manualdesign.no)"
-    language_definition = Language.definition(options[:locale]).iso639_1 || "en"
-    unless options.has_key?( :title )
+    language_definition = Language.definition(@locale).iso639_1 || "en"
+    unless options.has_key?(:title)
       options[:title] = PagesCore.config(:site_name)
       if @page_title && @page_title != options[:title]
         options[:title] = "#{@page_title} - #{options[:title]}"
@@ -48,22 +45,11 @@ module PagesCore::HeadTagsHelper
     end
 
     # Build HTML
-    output = "<!doctype html>\n"
-    if options.has_key?(:modernizr)
-      output += "<!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"#{language_definition}\"> <!--<![endif]-->"
-    else
-      output += "<!--[if lt IE 7]>      <html class=\"lt-ie9 lt-ie8 lt-ie7\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if IE 7]>         <html class=\"lt-ie9 lt-ie8\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if IE 8]>         <html class=\"lt-ie9\" lang=\"#{language_definition}\"> <![endif]-->"
-      output += "<!--[if gt IE 8]><!--> <html lang=\"#{language_definition}\"> <!--<![endif]-->"
-    end
+    output  = "<!doctype html>\n"
+    output += "<html lang=\"#{language}\">"
     output += "<head>\n"
-    output += "	<meta charset=\"#{options[:charset]}\">\n"
-    output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n"
-    output += "	<meta name=\"author\" content=\"#{options[:author]}\">\n"
+    output += "	<meta charset=\"utf-8\">\n"
+    output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
 
     output += "	<title>#{options[:title]}</title>\n"
     if options.has_key? :stylesheet
