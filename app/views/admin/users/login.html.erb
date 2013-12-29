@@ -52,8 +52,8 @@
       <button type="submit">Sign in</button>
     </p>
     <ul class="login_links">
-      <li><%= link_to_function "<strong>Help!</strong> I forgot my password!".html_safe, "", :class => :forgot_password %></li>
-      <li><%= link_to_function "Sign in with OpenID", "", :class => :toggle_login %></li>
+      <li><%= link_to "<strong>Help!</strong> I forgot my password!".html_safe, "#", class: :forgot_password %></li>
+      <li><%= link_to "Sign in with OpenID", "#", class: :toggle_login %></li>
     </ul>
   <% end %>
 
@@ -69,7 +69,7 @@
     </p>
     <ul class="login_links">
       <li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
-      <li><%= link_to_function "Sign in with with username and password", "", :class => :toggle_login %></li>
+      <li><%= link_to "Sign in with with username and password", "#", class: :toggle_login %></li>
     </ul>
   <% end %>
 

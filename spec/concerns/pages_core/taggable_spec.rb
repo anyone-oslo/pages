@@ -49,7 +49,7 @@ describe PagesCore::Taggable do
 
   describe "#serialized_tags=" do
     let(:json) { ['foo', 'bar'].to_json }
-    before { page.update_attributes(serialized_tags: json) }
+    before { page.update(serialized_tags: json) }
     specify { page.tags.count.should == 2 }
   end
 

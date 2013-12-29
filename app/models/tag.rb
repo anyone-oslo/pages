@@ -9,16 +9,15 @@ class Tag < ActiveRecord::Base
           limit: 100
         }.merge(options)
         tags = taggable.tags
-        if taggable.tags.length < options[:limit]
-          suggestions = Tag.all(
-            select: 'tags.*, count(tags.id) as counter',
-            joins: :taggings,
-            group: 'tags.id',
-            order: 'counter DESC',
-            limit: options[:limit]
-          ).reject{|s| tags.include?(s)}
-          if suggestions.length > 0
-            tags += suggestions[0...(options[:limit] - tags.length)]
+        if tags.count < options[:limit]
+          suggestions = Tag.joins(:taggings)
+                           .select("`tags`.*, COUNT(`tags`.id) AS counter")
+                           .group("`tags`.id")
+                           .order("counter DESC")
+                           .limit(options[:limit])
+          suggestions = suggestions.reject{|t| tags.include?(t)}
+          if suggestions.any?
+            tags = tags.to_a + suggestions[0...(options[:limit] - tags.length)]
           end
         end
         tags

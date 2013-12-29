@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Admin::CategoriesController < Admin::AdminController
-  before_filter :find_category, only: [:show, :edit, :update, :destroy]
+  before_action :find_category, only: [:show, :edit, :update, :destroy]
 
   def index
     @categories = Category.all
@@ -29,7 +29,7 @@ class Admin::CategoriesController < Admin::AdminController
   end
 
   def update
-    if @category.update_attributes(category_params)
+    if @category.update(category_params)
       flash[:notice] = "Category was updated"
       redirect_to admin_pages_url(@locale)
     else
@@ -46,7 +46,7 @@ class Admin::CategoriesController < Admin::AdminController
   protected
 
   def category_params
-    params[:category]
+    params.require(:category).permit(:name, :slug, :position)
   end
 
   def find_category

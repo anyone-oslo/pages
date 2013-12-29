@@ -38,6 +38,8 @@ window.Modal =
     ).animate
       opacity: 0.6
     , 100
+    $(@container).find(".clear-modal").click ->
+      Modal.clear()
 
   position: ->
     width = $(@container).width()

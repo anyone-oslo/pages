@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Page < ActiveRecord::Base
-  include Deprecations::DeprecatedPageFinders
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
   include PagesCore::Sweepable
@@ -14,21 +13,20 @@ class Page < ActiveRecord::Base
 
   belongs_to_image :image
 
-  has_many :page_images, order: 'position ASC'
+  has_many :page_images, -> { order("position") }
 
   has_many :images,
-           through:    :page_images,
-           order:      'position ASC',
-           conditions: '`page_images`.`primary` = 0'
+           -> { where("`page_images`.`primary` = ?", false).order("position") },
+           through:    :page_images
 
   has_many :comments,
            class_name: 'PageComment',
            dependent:  :destroy
 
   has_many :page_files,
+           -> { order("position") },
            class_name: 'PageFile',
-           dependent:  :destroy,
-           order:      :position
+           dependent:  :destroy
 
   acts_as_list scope: :parent_page
 
@@ -46,7 +44,7 @@ class Page < ActiveRecord::Base
   end
 
   validates_format_of     :redirect_to, with: /\A(\/|https?:\/\/)/, allow_nil: true, allow_blank: true
-  validates_format_of     :unique_name, with: /^[\w\d_\-]+$/, allow_nil: true, allow_blank: true
+  validates_format_of     :unique_name, with: /\A[\w\d_\-]+\z/, allow_nil: true, allow_blank: true
   validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
   before_validation :published_at
@@ -54,26 +52,6 @@ class Page < ActiveRecord::Base
   before_save       :set_delta
   after_save        :ensure_page_images_contains_primary_image
   after_save        :queue_autopublisher
-
-  define_index do
-    # Fields
-    indexes localizations.value,             as: :localization_values
-    indexes categories.name,                 as: :category_names
-    indexes tags.name,                       as: :tag_names
-    indexes [author.realname, author.email], as: :author_name
-    indexes [comments.name, comments.body],  as: :comments
-
-    # Attributes
-    has published_at, created_at, updated_at
-    has user_id, parent_page_id
-    has status, template
-    has autopublish, feed_enabled
-    has categories(:id), as: :category_ids
-    has tags(:id), as: :tag_ids
-
-    set_property delta: :delayed
-    set_property group_concat_max_len: 16.megabytes
-  end
 
   scope :by_date,    -> { order('published_at DESC') }
   scope :published,  -> { where(status: 2, autopublish: false) }
@@ -83,13 +61,13 @@ class Page < ActiveRecord::Base
   class << self
 
     def archive_finder
-      PagesCore::ArchiveFinder.new(scoped, timestamp: :published_at)
+      PagesCore::ArchiveFinder.new(all, timestamp: :published_at)
     end
 
     # Find all published and feed enabled pages
     def enabled_feeds(locale, options={})
-      conditions = (options[:include_hidden]) ? 'feed_enabled = 1 AND status IN (2,3)' : 'feed_enabled = 1 AND status = 2'
-      Page.find(:all, conditions: conditions).collect{|p| p.locale = locale.to_s; p}
+      conditions = (options[:include_hidden]) ? 'status IN (2,3)' : 'status = 2'
+      Page.where(feed_enabled: true).where(conditions).localized(locale)
     end
 
     def status_labels
@@ -147,16 +125,11 @@ class Page < ActiveRecord::Base
 
   # Get subpages
   def pages(options=nil)
-    if options.kind_of?(Hash)
-      # TODO: Remove this when the deprecated methods are removed.
-      get_pages_with_hash(options)
-    else
-      subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
-      if self.locale?
-        subpages = subpages.localized(self.locale)
-      end
-      subpages
+    subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
+    if self.locale?
+      subpages = subpages.localized(self.locale)
     end
+    subpages
   end
 
   # Return the status of the page as a string
@@ -165,7 +138,7 @@ class Page < ActiveRecord::Base
   end
 
   def flag_as_deleted!
-    update_attributes(status: 4)
+    update(status: 4)
   end
 
   # Get publication date, which defaults to the creation date
@@ -274,7 +247,7 @@ class Page < ActiveRecord::Base
   def ensure_page_images_contains_primary_image
     if image_id? && image_id_changed?
       if page_image = page_images.where(image_id: image_id).first
-        page_image.update_attributes(primary: true)
+        page_image.update(primary: true)
       else
         page_images.create(image_id: image_id, primary: true)
       end

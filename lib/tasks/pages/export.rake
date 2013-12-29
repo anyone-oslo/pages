@@ -10,7 +10,7 @@ namespace :pages do
       builder.instruct!
 
       xml_data = builder.export do
-        User.find(:all).to_xml(
+        User.all.to_xml(
           :builder       => builder,
           :skip_instruct => true,
           :except        => [

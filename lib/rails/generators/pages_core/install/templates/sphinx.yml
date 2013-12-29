@@ -1,4 +1,0 @@
-development:
-  port: <%= @sphinx_port %>
-production:
-  port: <%= @sphinx_port %>

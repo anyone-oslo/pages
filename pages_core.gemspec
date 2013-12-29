@@ -20,42 +20,43 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "rake", "~> 0.9.2"
-  s.add_dependency "rails", "~> 3.2.16"
+  s.add_dependency "rails", "~> 4.0.2"
 
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'RedCloth', '~> 4.2.9'
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
   s.add_dependency 'ruby-openid', '~> 2.2.3'
   s.add_dependency 'vector2d'
-  s.add_dependency 'dynamic_image-pages', '>= 0.0.13'
+  s.add_dependency 'dynamic_image-pages', '>= 0.0.16'
+  s.add_dependency 'actionpack-page_caching'
 
-  # Assets
-  s.add_dependency 'execjs', '~> 1.4'
-  s.add_dependency 'sass-rails'
-  s.add_dependency 'json'
-  s.add_dependency 'coffee-script'
-  s.add_dependency 'jquery-rails', '2.1.4'    # Version locked, upgrade to newest when jcrop-rails is updated
-  s.add_dependency 'jquery-ui-rails', '3.0.1' # Version locked, upgrade to newest when jcrop-rails is updated
+  # Default asset dependencies
+  s.add_dependency 'sass-rails', '~> 4.0.0'
+  s.add_dependency 'uglifier', '>= 1.3.0'
+  s.add_dependency 'coffee-rails', '~> 4.0.0'
+  s.add_dependency 'jquery-rails'
+  s.add_dependency 'jbuilder', '~> 1.2'
+
+  # Extra asset dependencies
+  s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'jquery-cookie-rails'
   s.add_dependency 'jcrop-rails'
   s.add_dependency 'underscore-rails'
-  s.add_dependency 'uglifier'
 
   # ActiveRecord extensions
   s.add_dependency 'acts_as_list'
 
   # reCAPTCHA
-  s.add_dependency 'recaptcha', '~> 0.3.4'
+  s.add_dependency 'recaptcha', '~> 0.3.5'
 
   # Delayed Job
-  s.add_dependency 'delayed_job', '~> 3.0.5'
-  s.add_dependency 'delayed_job_active_record', '~> 0.3.3'
+  s.add_dependency 'delayed_job', '~> 4.0.0'
+  s.add_dependency 'delayed_job_active_record', '~> 4.0.0'
   s.add_dependency 'daemons', '1.1.0'
 
   # Thinking Sphinx
-  s.add_dependency 'thinking-sphinx', '~> 2.0.14' # 3.0 has a new API
-  s.add_dependency 'ts-delayed-delta', '1.1.3'
+  s.add_dependency 'thinking-sphinx', "~> 3.0.6"
+  s.add_dependency 'ts-delayed-delta', "~> 2.0.0"
 
   # Deployment
   s.add_dependency 'capistrano'

@@ -85,45 +85,6 @@ module Admin::AdminHelper
     @body_classes << class_name
   end
 
-  def header_tabs(options={})
-    options = {
-      :class => :pages
-    }.merge(options)
-
-    menu_items = @admin_menu.select{|i| i[:class] == options[:class]}
-
-    # Determine current menu item
-    current_tab = menu_items.select { |menu_item|
-      if menu_item[:options] && menu_item[:options][:current]
-        menu_item[:options][:current].call
-      elsif menu_item[:url].is_a?(Hash)
-        menu_item[:url][:controller] == controller.class.controller_path
-      else
-        menu_item[:url].gsub(/^\//, '') == controller.class.controller_path.inspect
-      end
-    }.first
-
-    # Build menu
-    if menu_items.length > 0
-      menu_items = menu_items.collect do |menu_item|
-        classes = []
-        begin
-          controller_name = menu_item[:url][:controller]
-        rescue
-          controller_name = ""
-          logger.warn "Cannot get controller name from #{menu_item.inspect}"
-        end
-
-        classes << "current" if menu_item == current_tab
-
-        link_to(menu_item[:name], menu_item[:url], :class => classes.join(' '))
-      end
-      ("<ul class=\"#{options[:class]}\">" + menu_items.map{ |item| "<li>#{item}</li>" }.join() + "</ul>").html_safe
-    else
-      ""
-    end
-  end
-
   def page_title(title)
     @page_title = title
   end
@@ -163,30 +124,6 @@ module Admin::AdminHelper
         #    "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">#{tab[:content]}</div>"
         ""
     end
-  end
-
-  def pages_button_to(name, options = {}, html_options = {})
-    html_options = html_options.stringify_keys
-    convert_boolean_attributes!(html_options, %w( disabled ))
-
-    method_tag = ''
-    if (method = html_options.delete('method')) && %w{put delete}.include?(method.to_s)
-      method_tag = tag('input', :type => 'hidden', :name => '_method', :value => method.to_s)
-    end
-
-    form_method = method.to_s == 'get' ? 'get' : 'post'
-
-    if confirm = html_options.delete("confirm")
-      html_options["onclick"] = "return #{confirm_javascript_function(confirm)};"
-    end
-
-    url = options.is_a?(String) ? options : self.url_for(options)
-    name ||= url
-
-    html_options.merge!( "type" => "submit" )
-
-    ("<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\">" +
-    method_tag + content_tag( "button", name, html_options ) + "</form>").html_safe
   end
 
   def link_separator

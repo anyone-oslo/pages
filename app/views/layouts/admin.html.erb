@@ -37,11 +37,11 @@
       </div>
     <% end -%>
     <div class="tabs">
-      <% if @current_user && @admin_menu -%>
-        <%= header_tabs(:class => :pages) -%>
-        <%= header_tabs(:class => :pages_plugins) -%>
-        <%= header_tabs(:class => :custom) -%>
-        <%= header_tabs(:class => :account) -%>
+      <% if @current_user %>
+        <%= header_tabs(:pages) %>
+        <%= header_tabs(:pages_plugins) %>
+        <%= header_tabs(:custom) %>
+        <%= header_tabs(:account) %>
       <% end -%>
     </div>
   </div>

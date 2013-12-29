@@ -2,14 +2,14 @@
 
 class Admin::PagesController < Admin::AdminController
 
-  before_filter :require_news_pages, only: [:news]
-  before_filter :find_page, only: [
+  before_action :require_news_pages, only: [:news]
+  before_action :find_page, only: [
     :show, :edit, :preview, :update, :destroy, :reorder,
     :delete_comment,
     :import_xml
   ]
-  before_filter :find_categories
-  before_filter :find_news_pages, only: [:news, :new_news]
+  before_action :find_categories
+  before_action :find_news_pages, only: [:news, :new_news]
 
   def index
     @root_pages = Page.roots.in_locale(@locale).visible
@@ -41,7 +41,7 @@ class Admin::PagesController < Admin::AdminController
     pages = params[:ids].map{|id| Page.find(id)}
     PagesCore::CacheSweeper.once do
       pages.each_with_index do |page, index|
-        page.update_attributes(position: (index + 1))
+        page.update(position: (index + 1))
       end
     end
     if request.xhr?
@@ -83,8 +83,8 @@ class Admin::PagesController < Admin::AdminController
     end
     @page.author ||= @current_user
 
-    if @page.update_attributes(page_params)
-      @page.update_attributes(comments_allowed: @page.template_config.value(:comments_allowed))
+    if @page.update(page_params)
+      @page.update(comments_allowed: @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       redirect_to edit_admin_page_url(@locale, @page)
     else
@@ -93,7 +93,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def edit
-    @authors = User.find(:all, :order => 'realname', :conditions => {:is_activated => true})
+    @authors = User.activated
     # Make sure the page author is included in the dropdown
     # even if the account isn't active.
     if @authors.any? && @page.author
@@ -103,7 +103,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def update
-    if @page.update_attributes(page_params)
+    if @page.update(page_params)
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       flash[:notice] = "Your changes were saved"
       flash[:save_performed] = true
@@ -141,9 +141,14 @@ class Admin::PagesController < Admin::AdminController
   private
 
   def page_params
-    attributes = params[:page]
-    attributes.delete(:image) if attributes.has_key?(:image) && attributes[:image].blank?
-    attributes
+    params.require(:page).permit(
+      Page.localized_attributes +
+      [
+        :template, :user_id, :status, :content_order,
+        :feed_enabled, :published_at, :redirect_to, :comments_allowed,
+        :image_link, :news_page, :unique_name, :pinned
+      ]
+    )
   end
 
   def find_page
@@ -156,7 +161,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def find_categories
-    @categories = Category.find(:all, :order => [:name])
+    @categories = Category.order("name")
   end
 
   def find_news_pages

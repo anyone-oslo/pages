@@ -2,7 +2,7 @@
   page_title       "“" + @page.name.to_s + "” : XML Import"
   page_description "Importing XML to " + [@page.ancestors,@page].flatten.map{ |page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@locale, page)) }.join( " &raquo; " )
   if PagesCore.config( :localizations )
-    page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), hash_for_edit_admin_page_path(@locale, @page) ) }.join( link_separator )
+    page_description_links "In " + @available_languages.map{ |l| link_to_unless_current( Language.name_for_code( l ), edit_admin_page_path(@locale, @page) ) }.join( link_separator )
   end
 
 %>

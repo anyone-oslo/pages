@@ -65,7 +65,7 @@ module PagesCore
 
       # Sweep all cached pages later
       def sweep_later!
-        self.send_later(:sweep!)
+        self.delay.sweep!
       end
 
       # Sweep all cached pages

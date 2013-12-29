@@ -16,6 +16,8 @@ require 'action_controller'
 require 'action_view'
 require 'action_mailer'
 
+require 'actionpack/page_caching'
+
 # Assets
 require 'jquery/rails/engine'
 require 'jquery/ui/rails'
@@ -52,6 +54,7 @@ module PagesCore
 
       load 'pages_core/plugin.rb'
 
+      load 'pages_core/admin_menu_item.rb'
       load 'pages_core/archive_finder.rb'
       load 'pages_core/cache_sweeper.rb'
       load 'pages_core/configuration.rb'

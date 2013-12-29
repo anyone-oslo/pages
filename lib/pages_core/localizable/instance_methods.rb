@@ -72,7 +72,7 @@ module PagesCore
       #
       #  Page.create(:name => 'My Page', :locale => 'en')
       #
-      def assign_attributes(new_attributes, options={})
+      def assign_attributes(new_attributes)
         if new_attributes.is_a?(Hash)
           attributes = new_attributes.stringify_keys
           self.locale = attributes['language'] if attributes.has_key?('language')

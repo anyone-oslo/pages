@@ -11,12 +11,7 @@ module PagesCore
 
     module ClassMethods
       def tagged_with(*tags)
-        scoped.includes(:tags).where('tags.name IN (?)', Tag.parse(tags))
-      end
-
-      def find_tagged_with(tags)
-        ActiveSupport::Deprecation.warn "find_tagged_with is deprecated, use the tagged_with scope."
-        self.tagged_with(tags)
+        all.includes(:tags).where('tags.name IN (?)', Tag.parse(tags)).references(:tags)
       end
     end
 

@@ -5,7 +5,7 @@ module PagesCore
   # The module doesn't do any pagination on it's own, the logic should be handled by the finders.
   #
   # Example:
-  #   @users = User.find(:all, :limit => 20, :offset => 20)
+  #   @users = User.limit(20).offset(20)
   #   PagesCore::Paginates.paginate(@users, :current_page => 2, :pages => 5, :per_page => 20)
   #
   # Now, in the view, you could do:

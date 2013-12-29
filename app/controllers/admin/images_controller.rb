@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Admin::ImagesController < Admin::AdminController
-  before_filter :find_image, only: [:show, :edit, :update, :destroy]
+  before_action :find_image, only: [:show, :edit, :update, :destroy]
 
   def index
   end
@@ -22,7 +22,7 @@ class Admin::ImagesController < Admin::AdminController
   end
 
   def update
-    @image.update_attributes(image_params)
+    @image.update(image_params)
     respond_to do |format|
       format.json { render text: @image.to_json, layout: false }
     end
@@ -34,7 +34,7 @@ class Admin::ImagesController < Admin::AdminController
   protected
 
   def image_params
-    params[:image]
+    params.require(:image).permit(:name, :byline, :description, :imagefile, :hotspot, :crop_start, :crop_size)
   end
 
   def find_image

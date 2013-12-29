@@ -5,12 +5,12 @@ class PagesCore::FrontendController < ApplicationController
 
   include ApplicationHelper
 
-  before_filter :set_i18n_locale
+  before_action :set_i18n_locale
 
   # Loads @root_pages and @rss_feeds. To automatically load these in your own controllers,
   # add the following line to your controller definition:
   #
-  #   before_filter :load_root_pages
+  #   before_action :load_root_pages
   #
   def load_root_pages
     @root_pages = Page.roots.localized(@locale).published

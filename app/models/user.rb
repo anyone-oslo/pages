@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 
   validates_presence_of   :username, :email, :realname
   validates_uniqueness_of :username, message: 'already in use'
-  validates_format_of     :username, with: /^[-_\w\d@\.]+$/i, message: "may only contain numbers, letters and '-_.@'"
+  validates_format_of     :username, with: /\A[-_\w\d@\.]+\z/i, message: "may only contain numbers, letters and '-_.@'"
   validates_length_of     :username, in: 3..32
   validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
   validates_uniqueness_of :openid_url, allow_nil: true, allow_blank: true, message: 'is already registered.', case_sensitive: false
@@ -58,19 +58,9 @@ class User < ActiveRecord::Base
   ### Callbacks #############################################################
 
   before_create     :generate_token
+  before_create     :ensure_first_user_is_admin
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
-
-
-  ### Search index ##########################################################
-
-  define_index do
-    indexes username, realname, email, mobile
-    has :last_login_at, type: :datetime
-    has :created_at, type: :datetime
-    has is_activated
-    set_property delta: :delayed
-  end
 
   scope :sorted,      -> { order('realname ASC') }
   scope :activated,   -> { sorted.where(is_activated: true) }
@@ -145,7 +135,7 @@ class User < ActiveRecord::Base
   end
 
   def rehash_password!(password)
-    self.update_attributes(hashed_password: User.encrypt_password(password))
+    self.update(hashed_password: User.encrypt_password(password))
   end
 
   def password_needs_rehash?
@@ -217,7 +207,7 @@ class User < ActiveRecord::Base
 
   # Purge persistent params
   def purge_preferences!
-    self.update_attributes(persistent_data: {})
+    self.update(persistent_data: {})
   end
 
   # Serialize user to XML
@@ -225,6 +215,15 @@ class User < ActiveRecord::Base
     options[:except]  ||= [:hashed_password, :persistent_params]
     options[:include] ||= [:image]
     super options
+  end
+
+  protected
+
+  def ensure_first_user_is_admin
+    unless User.any?
+      self.is_admin = true
+      self.is_activated = true
+    end
   end
 
 end

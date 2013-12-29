@@ -20,7 +20,7 @@ module PagesCore
 
           page = Page.new.localize(@page.locale)
           page.author = author
-          if page.update_attributes(attributes)
+          if page.update(attributes)
             created_pages << page
           end
         end

@@ -7,9 +7,9 @@ class PagesCore::Frontend::PagesController < FrontendController
     caches_page :index
   end
 
-  before_filter :load_root_pages
-  before_filter :find_page, :only => [:show, :preview]
-  after_filter  :cache_page_request, :only => [ :show ]
+  before_action :load_root_pages
+  before_action :find_page, :only => [:show, :preview]
+  after_action  :cache_page_request, :only => [ :show ]
 
 
   protected
@@ -58,11 +58,6 @@ class PagesCore::Frontend::PagesController < FrontendController
       # Call template method
       template = @page.template
       template = "index" unless PagesCore::Templates.names.include?(template)
-
-      if self.methods.include?("template_#{template}")
-        ActiveSupport::Deprecation.warn "template_[template] actions are deprecated."
-        self.method("template_#{template}").call
-      end
 
       run_template_actions_for(template, @page)
 
@@ -144,7 +139,8 @@ class PagesCore::Frontend::PagesController < FrontendController
         redirect_to "/" and return
       end
       remote_ip = request.env["REMOTE_ADDR"]
-      @comment = PageComment.new(params[:page_comment].merge({:remote_ip => remote_ip, :page_id => @page.id}))
+      page_comment_params = params.require(:page_comment).permit(:name, :email, :url, :body)
+      @comment = PageComment.new(page_comment_params.merge({:remote_ip => remote_ip, :page_id => @page.id}))
       if @page.comments_allowed?
         if PagesCore.config(:recaptcha) && !verify_recaptcha
           @comment.invalid_captcha = true

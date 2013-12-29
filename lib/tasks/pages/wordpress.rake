@@ -37,7 +37,7 @@ namespace :pages do
       table_prefix    = get_input('Table prefix', 'wp')
       import_users    = get_input_yn('Import users', true)
       unless import_users
-        first_user_id = User.find(:first).id.to_s
+        first_user_id = User.first.id.to_s
         default_user_id = get_input('Author ID', first_user_id)
         default_user = User.find(default_user_id)
       end
@@ -242,11 +242,11 @@ namespace :pages do
 
           if post['post_type'] =~ /^page$/
             if post['post_parent'] && posts[post['post_parent']] && posts[post['post_parent']][:page]
-              post[:page].update_attributes(parent_page_id: posts[post['post_parent']][:page].id)
+              post[:page].update(parent_page_id: posts[post['post_parent']][:page].id)
             end
           else
             if post_parent_id && post_parent_id =~ /^[\d]+$/
-              post[:page].update_attributes(parent_page_id: post_parent_id.to_i)
+              post[:page].update(parent_page_id: post_parent_id.to_i)
             end
           end
 
@@ -284,7 +284,7 @@ namespace :pages do
                       if post[:page].image
                         post[:page].images << image
                       else
-                        post[:page].update_attributes(image_id: image.id)
+                        post[:page].update(image_id: image.id)
                       end
                     end
                   rescue

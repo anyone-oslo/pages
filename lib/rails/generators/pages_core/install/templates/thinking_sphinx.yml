@@ -1,0 +1,4 @@
+development:
+  mysql41: <%= @sphinx_port %>
+production:
+  mysql41: <%= @sphinx_port %>

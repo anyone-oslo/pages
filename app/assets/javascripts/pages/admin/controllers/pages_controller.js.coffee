@@ -41,7 +41,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     $(".page .actions").css "visibility", "hidden"
 
     # Toggling of the new category input
-    window.toggleNewCategory = ->
+    $("toggle-category").click ->
       $("#new-category").toggle()
       $("#new-category-button").toggle()
 
@@ -97,10 +97,10 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     $("#page-form-sidebar").find("input,textarea,select").change replicateFormElement
     $("#new-image").hide()
 
-    window.showAdditionalImageModal = ->
+    $(".upload-images-button").click ->
       Modal.show "<div class=\"uploadImages\">" + $("#new-image").html() + "</div>"
 
-    window.showFileUploadModal = ->
+    $(".upload-file-button").click ->
       Modal.show "<div class=\"uploadImages\">" + $("#new-file").html() + "</div>"
 
     # Reordering files

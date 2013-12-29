@@ -21,7 +21,7 @@ describe Category do
     it "should update delta indexes on page" do
       page.update_column(:delta, false)
       page.reload.delta.should be_false
-      category.update_attributes(name: 'New name')
+      category.update(name: 'New name')
       page.reload.delta.should be_true
     end
   end

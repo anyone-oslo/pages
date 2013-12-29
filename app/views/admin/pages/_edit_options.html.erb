@@ -40,7 +40,7 @@
 <%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
 
 
-<%= link_to_function 'Advanced options', 'return false;', :class => 'advanced_toggle' %>
+<%= link_to "Advanced options", "#", class: "advanced_toggle" %>
 
 <div class="advanced_options">
 

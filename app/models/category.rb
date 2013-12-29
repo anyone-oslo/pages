@@ -18,7 +18,7 @@ class Category < ActiveRecord::Base
 
   def trigger_delta_indexing
     pages.each do |page|
-      page.update_attributes(delta: true)
+      page.update(delta: true)
     end
   end
 end

@@ -2,7 +2,7 @@
 
 class PagesCore::Frontend::PageFilesController < FrontendController
 
-  before_filter :find_page_file, :only => [:show, :edit, :update, :destroy]
+  before_action :find_page_file, :only => [:show, :edit, :update, :destroy]
 
   protected
 
