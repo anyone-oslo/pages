@@ -1,6 +1,18 @@
 # Changelog
 
-* #### Deprecated `:language` param removed
+* #### Deprecated helpers
+
+  `hash_for_translated_route`
+  `indent`
+  `labelled_field`
+  `smart_time`
+  `formatted_date`
+  `formatted_time`
+  `nav_link`
+  `nav_list_item`
+  `video_embed`
+
+* #### Removed deprecated `:language` param
 
   All instances must be replaced with `:locale`.
 
