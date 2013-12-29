@@ -1,17 +1,6 @@
 # encoding: utf-8
 
 module PagesCore::HeadTagsHelper
-
-  def include_stylesheet(source, options={})
-    @include_stylesheets ||= []
-    @include_stylesheets << [source, options]
-  end
-
-  def include_javascript(source, options={})
-    @include_javascripts ||= []
-    @include_javascripts << [source, options]
-  end
-
   def google_analytics_tags(account_id)
     javascript_tag("
       var _gaq = _gaq || [];
@@ -56,17 +45,6 @@ module PagesCore::HeadTagsHelper
       output += indent(stylesheet_link_tag(*options[:stylesheet]), 1) + "\n"
     end
 
-    if @include_stylesheets
-      output += @include_stylesheets.map do |source, source_options|
-        ie = source_options.delete(:ie)
-        source_output = stylesheet_link_tag(source, source_options)
-        source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
-        indent(source_output, 1)
-      end.join("\n")
-      output += "\n"
-    end
-
-    #output += "\t"+javascript_include_tag(
     if options.has_key?(:javascript)
       Array(options[:javascript]).each do |js|
         if js.kind_of?(Array)
@@ -75,17 +53,6 @@ module PagesCore::HeadTagsHelper
           output += "\t" + javascript_include_tag(js) + "\n"
         end
       end
-    end
-    #output += indent(javascript_include_tag(*options[:javascript] ), 1) + "\n" if options.has_key? :javascript
-
-    if @include_javascripts
-      output += @include_javascripts.map do |source, source_options|
-        ie = source_options.delete(:ie)
-        source_output = javascript_include_tag(source)
-        source_output = "<!--[if #{ie}]>#{source_output}<![endif]-->" if ie
-        indent(source_output, 1)
-      end.join("\n")
-      output += "\n"
     end
 
     if options[:feed_tags] && options[:feed_tags] == :include_hidden
