@@ -1,5 +1,9 @@
 # Changelog
 
+* #### Removed deprecated Page finder methods
+
+  `Page#get_pages` and related methods no longer exists.
+
 * #### New API for admin menu items
 
   Menu items are no longer defined in the controller, but rather

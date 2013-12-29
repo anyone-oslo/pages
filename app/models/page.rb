@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Page < ActiveRecord::Base
-  include Deprecations::DeprecatedPageFinders
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
   include PagesCore::Sweepable
@@ -126,16 +125,11 @@ class Page < ActiveRecord::Base
 
   # Get subpages
   def pages(options=nil)
-    if options.kind_of?(Hash)
-      # TODO: Remove this when the deprecated methods are removed.
-      get_pages_with_hash(options)
-    else
-      subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
-      if self.locale?
-        subpages = subpages.localized(self.locale)
-      end
-      subpages
+    subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
+    if self.locale?
+      subpages = subpages.localized(self.locale)
     end
+    subpages
   end
 
   # Return the status of the page as a string
