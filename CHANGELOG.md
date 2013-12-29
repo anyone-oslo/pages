@@ -1,6 +1,10 @@
 # Changelog
 
-* #### head_tag
+* #### `document_title` helper
+
+  Usage: `document_title = "Dashboard"`
+
+* #### `head_tag`
 
   Removed options: `:doctype`, `:prepend_page_title`, `:modernizr`, `:charset`, `:author`, `:locale`
 

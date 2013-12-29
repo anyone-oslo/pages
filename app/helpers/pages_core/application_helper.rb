@@ -66,10 +66,4 @@ module PagesCore::ApplicationHelper
     end
     (page) ? page.localize(locale) : nil
   end
-
-  # Sets a page title
-  def page_title(title)
-    @page_title = title
-  end
-
 end

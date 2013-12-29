@@ -1,6 +1,19 @@
 # encoding: utf-8
 
 module PagesCore::HeadTagsHelper
+  def document_title
+    [@document_title, PagesCore.config(:sitename)].compact.uniq.join(" - ")
+  end
+
+  def document_title?
+    @document_title ? true : false
+  end
+
+  def document_title=(title)
+    @document_title = title
+  end
+  alias_method :page_title, :document_title
+
   def google_analytics_tags(account_id)
     javascript_tag("
       var _gaq = _gaq || [];
@@ -26,12 +39,6 @@ module PagesCore::HeadTagsHelper
 
     # Get options
     language_definition = Language.definition(@locale).iso639_1 || "en"
-    unless options.has_key?(:title)
-      options[:title] = PagesCore.config(:site_name)
-      if @page_title && @page_title != options[:title]
-        options[:title] = "#{@page_title} - #{options[:title]}"
-      end
-    end
 
     # Build HTML
     output  = "<!doctype html>\n"
@@ -40,7 +47,8 @@ module PagesCore::HeadTagsHelper
     output += "	<meta charset=\"utf-8\">\n"
     output += "	<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
 
-    output += "	<title>#{options[:title]}</title>\n"
+    output += "	<title>#{options[:title] || document_title}</title>\n"
+
     if options.has_key? :stylesheet
       output += indent(stylesheet_link_tag(*options[:stylesheet]), 1) + "\n"
     end
