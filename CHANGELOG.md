@@ -9,6 +9,7 @@
   `Taggable.find_tagged_with`
   `String#with_http`
   `String#without_http`
+  `ApplicationController#redirect_back_or_to`
 
 * #### Removed deprecated Page finder methods
 

@@ -23,19 +23,6 @@ class PagesCore::ApplicationController < ActionController::Base
     end
   end
 
-  # Redirect to the previous page, falling back to the options specified if that fails.
-  # Example:
-  #
-  #   redirect_back_or_to "/"
-  #
-  def redirect_back_or_to(options={}, response_status={})
-    begin
-      redirect_to :back
-    rescue #RedirectBackError
-      redirect_to options, response_status
-    end
-  end
-
   # Sets @locale from params[:locale], with Language.default as fallback
   def set_locale
     if params[:language]
