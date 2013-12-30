@@ -36,7 +36,7 @@ module PagesCore::Deprecations
 
     def nav_link(page)
       ActiveSupport::Deprecation.warn "nav_link is deprecated, use link_to"
-      link_to page.name.to_s, page_url(page)
+      link_to page.name.to_s, page_url(@locale, page)
     end
 
     def nav_list_item(page, options={})

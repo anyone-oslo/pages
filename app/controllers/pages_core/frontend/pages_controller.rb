@@ -147,19 +147,19 @@ class PagesCore::Frontend::PagesController < FrontendController
           @comment.invalid_captcha = true
           render_page
         elsif PagesCore.config(:comment_honeypot) && !params[:email].to_s.empty?
-          redirect_to page_url(@page) and return
+          redirect_to page_url(@locale, @page) and return
         else
           @comment.save
           if PagesCore.config(:comment_notifications)
             recipients = PagesCore.config(:comment_notifications).map{|r| r = @page.author.realname_and_email if r == :author; r }.uniq
             recipients.each do |r|
-              AdminMailer.comment_notification(r, @page, @comment, page_url(@page)).deliver
+              AdminMailer.comment_notification(r, @page, @comment, page_url(@locale, @page)).deliver
             end
           end
-          redirect_to page_url(@page) and return
+          redirect_to page_url(@locale, @page) and return
         end
       else
-        redirect_to page_url(@page) and return
+        redirect_to page_url(@locale, @page) and return
       end
     end
 

@@ -26,13 +26,19 @@ module PagesCore::ApplicationHelper
     end
   end
 
-  def page_url(page, options={})
-    options[:locale] ||= @locale
-    page.localize(options[:locale]) do |p|
+  def page_url(page_or_locale, page=nil, options={})
+    if page
+      locale = page_or_locale
+    else
+      ActiveSupport::Deprecation.warn "Calling page_url without locale is deprecated"
+      locale = options[:locale] || @locale
+      page = page_or_locale
+    end
+    page.localize(locale) do |p|
       if p.redirects?
-        p.redirect_path(:locale => options[:locale])
+        p.redirect_path(locale: locale)
       else
-        super options[:locale], p
+        super locale, p, options
       end
     end
   end

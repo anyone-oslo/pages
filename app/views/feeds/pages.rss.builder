@@ -12,13 +12,13 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
     for item in @feed_items
       xml.item do
         xml.title       { xml.cdata! item.name.to_s }
-        xml.link        page_url( item, :only_path => false )
+        xml.link        page_url(@locale, item, :only_path => false )
         if PagesCore.config.rss_fulltext?
           xml.description { xml.cdata! item.body.to_html }
         else
           xml.description { xml.cdata! (item.extended? ? item.excerpt : item.body).to_html }
         end
-        xml.guid        page_url( item, :only_path => false )
+        xml.guid        page_url(@locale, item, :only_path => false )
         xml.pubDate     item.published_at.to_formatted_s( :rfc822 )
         xml.tag!("dc:creator", item.author.realname )
         if item.image

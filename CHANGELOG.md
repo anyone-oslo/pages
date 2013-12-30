@@ -1,5 +1,15 @@
 # Changelog
 
+* #### Locale should be specified with page_url
+
+  Previously:
+
+  page_url(page)
+
+  Now:
+
+  page_url(@locale, page)
+
 * #### `head_tag` helper
 
   The `head_tag` helper has been rewritten. Passing options
