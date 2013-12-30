@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module PagesCore::FrontendHelper
-  include PagesCore::Deprecations::DeprecatedFrontendHelpers
+  include PagesCore::Deprecations::DeprecatedFrontendHelper
 
   def root_pages
     @root_pages ||= Page.roots.localized(@locale).published
