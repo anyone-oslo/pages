@@ -54,7 +54,7 @@ class PagesCore::Frontend::PagesController < FrontendController
         redirect_to @page.redirect_path(:locale => @locale) and return
       end
 
-      document_title = @page.name unless document_title?
+      document_title(@page.name) unless document_title?
 
       # Call template method
       template = @page.template
@@ -121,7 +121,7 @@ class PagesCore::Frontend::PagesController < FrontendController
         format.rss do
           @encoding = (params[:encoding] ||= "UTF-8").downcase
           @page.locale = @locale || Language.default
-          document_title = @page.name unless document_title?
+          document_title(@page.name) unless document_title?
           @title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
           page = (params[:page] || 1).to_i

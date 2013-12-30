@@ -1,12 +1,17 @@
 # Changelog
 
-* #### `document_title` helper
+* #### `head_tag` helper
 
-  Usage: `document_title = "Dashboard"`
+  The `head_tag` helper has been rewritten. Passing options
+  has been deprecated, instead use the new helpers:
 
-* #### `head_tag`
+  `default_meta_image`
+  `document_title`
+  `meta_description`
+  `meta_image`
+  `meta_keywords`
 
-  Removed options: `:doctype`, `:prepend_page_title`, `:modernizr`, `:charset`, `:author`, `:locale`
+  See [the new layout template](lib/rails/generators/pages_core/install/templates/layout.html.erb) for samples.
 
 * #### Deprecated helpers
 
