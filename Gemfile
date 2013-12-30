@@ -1,9 +1,12 @@
 source "http://rubygems.org"
 source "http://gems.manualdesign.no"
 
+gem 'mysql2'
+
 gemspec
 
-gem 'mysql2'
+# Workaround until jcrop-rails is updated
+gem 'jcrop-rails', git: 'git@github.com:westonplatter/jcrop-rails.git', branch: 'master'
 
 group :development do
   gem 'combustion'
