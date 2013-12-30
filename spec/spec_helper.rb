@@ -1,18 +1,24 @@
-require 'rubygems'
+# encoding: utf-8
 
+require 'rubygems'
+require 'bundler/setup'
 require 'spork'
 
 Spork.prefork do
 
-  Bundler.require :default, :development
+  ENV["RAILS_ENV"] = 'test'
 
-  Spork.trap_method(Rails::Application, :eager_load!)
+  require 'combustion'
+  require 'capybara/rspec'
 
-  Combustion.initialize!
-  FactoryGirl.find_definitions
+  Combustion.initialize! :all
 
+  require 'capybara/rails'
   require 'rspec/rails'
   require 'rspec/autorun'
+
+  Delayed::Worker.backend = :active_record
+  FactoryGirl.find_definitions
 
   RSpec.configure do |config|
     # == Mock Framework
