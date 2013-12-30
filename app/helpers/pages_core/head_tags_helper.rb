@@ -1,67 +1,67 @@
 # encoding: utf-8
 
 module PagesCore::HeadTagsHelper
-  def default_meta_image(image=nil)
-    @default_meta_image = image if image
-    @default_meta_image
+
+  # Sets a default image to use for meta tags. Supports
+  # both paths and Image objects.
+  #
+  #  default_meta_image image_path("facebook-share.png")
+  #  default_meta_image root_page.image
+  #
+  def default_meta_image(*args)
+    if args.any?
+      @default_meta_image = args.first
+    else
+      @default_meta_image
+    end
   end
 
+  # Returns true if default meta image has been set.
   def default_meta_image?
     default_meta_image ? true : false
   end
 
-  def document_title(title=nil)
-    @document_title = title if title
-    [@document_title, PagesCore.config(:site_name)].compact.uniq.join(" - ")
+  # Sets a document title.
+  #
+  #  document_title "Dashboard"
+  #
+  def document_title(*args)
+    if args.any?
+      @document_title = args.first
+    else
+      safe_join([@document_title, PagesCore.config(:site_name)].compact.uniq, " - ")
+    end
   end
   alias_method :page_title, :document_title
 
+  # Returns true if document title has been set.
   def document_title?
     @document_title ? true : false
   end
 
-  def meta_description(description=nil)
-    @meta_description = description if description
-    description = @meta_description
-    if @page && !@page.excerpt.empty?
-      description ||= @page.excerpt
-    end
-    html_escape(strip_tags(description))
-  end
-
-  def meta_description?
-    !meta_description.blank?
-  end
-
-  def meta_image(image=nil)
-    @meta_image = image if image
-    image   = @meta_image
-    image ||= @page.try(&:image)
-    image ||= default_meta_image
-    if image.kind_of?(Image)
-      dynamic_image_url(image, :size => '1200x', only_path: false)
-    else
-      image
+  # Generates links for all RSS feeds. Specify
+  # :include_hidden to also include hidden pages.
+  #
+  #  feed_tags
+  #  feed_tags include_hidden: true
+  #
+  def feed_tags(options={})
+    feeds = Page.enabled_feeds(@locale, options)
+    if feeds.any?
+      feed_tags = [rss_link_tag(PagesCore.config(:site_name), pages_url(@locale, format: :rss))]
+      if feeds.count < 1
+        feed_tags += feeds.map do |page|
+          rss_link_tag("#{PagesCore.config(:site_name)}: #{page.name}", page_url(@locale, page, format: :rss))
+        end
+      end
+      safe_join(feed_tags, "\n")
     end
   end
 
-  def meta_image?
-    !meta_image.blank? || default_meta_image?
-  end
-
-  def meta_keywords(keywords=nil)
-    @meta_keywords = keywords if keywords
-    keywords = @meta_keywords
-    if @page && @page.tags.any?
-      keywords ||= @page.tag_list
-    end
-    html_escape(strip_tags(keywords))
-  end
-
-  def meta_keywords?
-    !meta_keywords.blank?
-  end
-
+  # Outputs Google Analytics tracking code.
+  #
+  #  google_analytics_tags "UA-12345678-1"
+  #
   def google_analytics_tags(account_id)
     javascript_tag("
       var _gaq = _gaq || [];
@@ -76,95 +76,165 @@ module PagesCore::HeadTagsHelper
     ")
   end
 
-  def typekit_tags(kit_id)
-    javascript_include_tag("http://use.typekit.com/#{kit_id}.js") +
-    javascript_tag("try{Typekit.load();}catch(e){}")
-  end
-
+  # Outputs a HTML5 doctype and head tags, with document title
+  # and relevant meta tags. Takes a block which will be placed
+  # inside <head>.
+  #
+  #  <%= head_tag do %>
+  #    <%= stylesheet_link_tag "application" %>
+  #    <%= javascript_include_tag "application" %>
+  #    <%= feed_tags %>
+  #  <% end %>
+  #
   def head_tag(options={}, &block)
     deprecate_head_tag_options(options, caller)
 
     # The block output must be captured first
-    block_output = block_given? ? capture(&block) : ""
+    block_output = block_given? ? capture(&block) : nil
 
-    output  = "<!doctype html>\n"
-    output += "<html lang=\"#{iso638_1_locale}\">\n"
-    output += "<head>\n"
-    output += "<meta charset=\"utf-8\">\n"
-    output += "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
-    output += "<title>#{document_title}</title>\n"
-
-    if meta_description?
-      output += "<meta name=\"description\" content=\"#{meta_description}\" />\n"
+    "<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe +
+    content_tag(:head) do
+      safe_join([
+        tag(:meta, charset: "utf-8"),
+        tag(:meta, "http-equiv" => "X-UA-Compatible", :content => "IE=edge"),
+        content_tag(:title, document_title),
+        (tag(:meta, name: "description", content: meta_description) if meta_description?),
+        (tag(:meta, name: "keywords", content: meta_keywords) if meta_keywords?),
+        (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
+        (deprecated_head_tags(options) if options.any?),
+        open_graph_tags,
+        block_output
+      ].compact, "\n")
     end
-
-    if meta_keywords?
-      output += "<meta name=\"keywords\" content=\"#{meta_keywords}\" />\n"
-    end
-
-    if meta_image?
-      output += "<link rel=\"image_src\" href=\"#{meta_image}\" />\n"
-    end
-
-    output += deprecated_head_tags(options) if options.any?
-    output += open_graph_tags
-
-    output += block_output
-    output += "</head>\n"
-
-    output.html_safe
   end
 
-  def feed_tags(options={})
-    feeds = Page.enabled_feeds(@locale, options)
-    output = ''
-    if feeds.any?
-      output += "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}\" href=\""+formatted_pages_url(@locale, format: :rss)+"\" />\n"
+  # Sets a description for meta tags.
+  #
+  #   meta_description "This is an awesome site"
+  #
+  def meta_description(*args)
+    if args.any?
+      @meta_description = args.first
+    else
+      description = @meta_description
+      if @page && !@page.excerpt.empty?
+        description ||= @page.excerpt
+      end
+      strip_tags(description)
     end
-    output += feeds.map{ |p| "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"#{PagesCore.config(:site_name)}: #{p.name.to_s}\" href=\""+page_url( p, :only_path => false, :format => :rss )+"\" />" }.join("\n")
-    output
   end
 
+  # Returns true if meta description has been set.
+  def meta_description?
+    !meta_description.blank?
+  end
+
+  # Sets an image to use for meta tags. Supports
+  # both paths and Image objects.
+  #
+  #   meta_image image_path("facebook-share.png")
+  #   meta_image @page.image
+  #
+  def meta_image(*args)
+    if args.any?
+      @meta_image = args.first
+    else
+      image   = @meta_image
+      image ||= @page.try(&:image)
+      image ||= default_meta_image
+      if image.kind_of?(Image)
+        dynamic_image_url(image, :size => '1200x', only_path: false)
+      else
+        image
+      end
+    end
+  end
+
+  # Returns true if meta image has been set.
+  def meta_image?
+    !meta_image.blank? || default_meta_image?
+  end
+
+  # Sets keywords for meta tags.
+  #
+  #   meta_keywords "cialis viagra"
+  #
+  def meta_keywords(*args)
+    if args.any?
+      @meta_keywords = Array(args.first).join(" ")
+    else
+      keywords = @meta_keywords
+      if @page && @page.tags.any?
+        keywords ||= @page.tag_list
+      end
+      strip_tags(keywords)
+    end
+  end
+
+  # Returns true if meta keywords have been set.
+  def meta_keywords?
+    !meta_keywords.blank?
+  end
+
+  # Outputs Open Graph tags for Facebook.
   def open_graph_tags
-    output = ""
-    output += "<meta property=\"og:type\" content=\"website\" />\n"
-    output += "<meta property=\"og:site_name\" content=\"#{PagesCore.config(:site_name)}\" />\n"
-    output += "<meta property=\"og:title\" content=\"#{document_title}\" />\n"
-    output += "<meta property=\"og:image\" content=\"#{meta_image}\" />\n" if meta_image?
-    output += "<meta property=\"og:description\" content=\"#{meta_description}\" />\n" if meta_description?
-    output
+    properties = {
+      type:        "website",
+      site_name:   PagesCore.config(:site_name),
+      title:       document_title,
+      image:       (meta_image if meta_image?),
+      description: (meta_description if meta_description?)
+    }
+    safe_join(properties.delete_if { |_, content| content.nil? }.map do |name, content|
+      tag(:meta, property: "og:#{name}", content: content)
+    end, "\n")
+  end
+
+  # Generates a link to an RSS feed.
+  #
+  #  rss_link_tag "My feed", "feed.rss"
+  #
+  def rss_link_tag(title, href)
+    tag(:link, rel: "alternate", type: "application/rss+xml", title: title, href: href)
+  end
+
+  # Outputs Typekit tags.
+  #
+  #  typekit_tags "aadgrag"
+  #
+  def typekit_tags(kit_id)
+    safe_join([
+      javascript_include_tag("http://use.typekit.com/#{kit_id}.js"),
+      javascript_tag("try{Typekit.load();}catch(e){}")
+    ], "\n")
   end
 
   protected
 
-  def iso638_1_locale
-    Language.definition(@locale).iso639_1 || "en"
-  end
-
   def deprecated_head_tags(options={})
-    output = ""
+    tags << []
 
     if options.has_key?(:stylesheet)
-      output += stylesheet_link_tag(*options[:stylesheet]) + "\n"
+      tags << stylesheet_link_tag(*options[:stylesheet])
     end
 
     if options.has_key?(:javascript)
       Array(options[:javascript]).each do |js|
         if js.kind_of?(Array)
-          output += javascript_include_tag(js.first, js.last) + "\n"
+          tags << javascript_include_tag(js.first, js.last)
         else
-          output += javascript_include_tag(js) + "\n"
+          tags << javascript_include_tag(js)
         end
       end
     end
 
     if options[:feed_tags] && options[:feed_tags] == :include_hidden
-      output += feed_tags(:include_hidden => true)
+      tags << feed_tags(:include_hidden => true)
     elsif options[:feed_tags]
-      output += feed_tags
+      tags << feed_tags
     end
 
-    output
+    safe_join(tags, "\n")
   end
 
   def deprecate_head_tag_options(options, callstack)
