@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore::Deprecations
   module DeprecatedFrontendHelper
     def formatted_date(date, options={})

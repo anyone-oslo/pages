@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 FactoryGirl.define do
   sequence :email do |n|
     "person#{n}@example.com"

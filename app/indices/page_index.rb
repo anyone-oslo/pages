@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 ThinkingSphinx::Index.define :page, with: :active_record, delta: ThinkingSphinx::Deltas::DelayedDelta do
   indexes localizations.value,             as: :localization_values
   indexes categories.name,                 as: :category_names

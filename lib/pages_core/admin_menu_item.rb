@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
   class AdminMenuItem
     attr_reader :label, :path, :group, :options
