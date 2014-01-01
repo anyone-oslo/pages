@@ -32,6 +32,9 @@ class Admin::PagesController < Admin::AdminController
       @year, @month = params[:year].to_i, params[:month].to_i
     else
       @year, @month = @archive_finder.latest_year_and_month
+      unless @year && @month
+        @year, @month = Time.now.year, Time.now.month
+      end
     end
 
     @pages = @archive_finder.by_year_and_month(@year, @month)
