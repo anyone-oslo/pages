@@ -85,7 +85,7 @@ class Admin::PageImagesController < Admin::AdminController
     begin
       @page = Page.find(params[:page_id])
     rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find PageImage with ID ##{params[:id]}"
+      flash[:notice] = "Could not find Page with ID ##{params[:page_id]}"
       redirect_to admin_pages_path(@locale) and return
     end
   end

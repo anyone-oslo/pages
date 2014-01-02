@@ -63,7 +63,6 @@ Rails.application.routes.draw do
           get 'reorder_pages'
         end
         member do
-          get  'delete_comment'
           get  'import_xml'
           post 'import_xml'
         end
@@ -82,6 +81,10 @@ Rails.application.routes.draw do
           collection do
             post 'reorder'
           end
+        end
+
+        # Page Files
+        resources :comments, :controller => 'page_comments' do
         end
       end
     end

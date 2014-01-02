@@ -12,7 +12,7 @@
           from <%= c.remote_ip %>
         </p>
         <p>
-          <%= link_to "Delete comment", delete_comment_admin_page_url(@locale, @page, c), class: :delete, data: {confirm: "Are you sure?"} %>
+          <%= link_to "Delete comment", admin_page_comment_url(@locale, @page, c), class: :delete, data: {confirm: "Are you sure?"}, method: :delete %>
         </p>
       </td>
       <td><%= c.body %></td>

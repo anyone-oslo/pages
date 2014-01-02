@@ -4,9 +4,7 @@ class Admin::PagesController < Admin::AdminController
 
   before_action :require_news_pages, only: [:news]
   before_action :find_page, only: [
-    :show, :edit, :preview, :update, :destroy, :reorder,
-    :delete_comment,
-    :import_xml
+    :show, :edit, :preview, :update, :destroy, :reorder, :import_xml
   ]
   before_action :find_categories
   before_action :find_news_pages, only: [:news, :new_news]
@@ -121,15 +119,6 @@ class Admin::PagesController < Admin::AdminController
     @page = Page.find(params[:id])
     @page.flag_as_deleted!
     redirect_to admin_pages_url(@locale)
-  end
-
-  def delete_comment
-    @comment = @page.comments.select{|c| c.id == params[:comment_id].to_i}.first
-    if @comment
-      @comment.destroy
-      flash[:notice] = "Comment deleted"
-    end
-    redirect_to edit_admin_page_url(@locale, @page, anchor: 'comments')
   end
 
   def reorder
