@@ -2,7 +2,7 @@
 
 class Admin::UsersController < Admin::AdminController
 
-  before_filter :require_authentication, except: [:new_password, :welcome, :create_first, :login]
+  before_filter :require_authentication, except: [:new_password, :welcome, :create_first, :login, :reset_password]
   before_filter :find_user,       only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
   before_filter :verify_editable, only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
@@ -62,6 +62,9 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def new_password
+  end
+
+  def reset_password
     if params[:username]
       if user = User.find_by_username_or_email(params[:username].to_s)
         new_password = user.generate_new_password
@@ -69,7 +72,7 @@ class Admin::UsersController < Admin::AdminController
 
         AdminMailer.new_password(user, new_password, admin_default_url).deliver
         flash[:notice] = "A new password has been sent to your email address"
-        redirect_to "/admin" and return
+        redirect_to login_admin_users_path and return
       end
     end
   end
