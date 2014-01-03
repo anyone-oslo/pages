@@ -23,7 +23,7 @@
 <% end %>
 
 <div id="forgotPasswordForm">
-  <%= form_tag({:controller => :users, :action => :new_password}) do %>
+  <%= form_tag(reset_password_admin_users_path, method: :post) do %>
     <h2>Forgot your password?</h2>
     <p>
       Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
