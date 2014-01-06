@@ -2,7 +2,7 @@
 
 module PagesCore
   class PagesPlugin < Plugin
-    paths['db/migrate'] = 'template/db/migrate'
+    paths['db/migrate'] = 'db/migrate'
 
     admin_menu_item "News",  Proc.new { news_admin_pages_path(@locale) }, :pages,
       if:      Proc.new { Page.news_pages.any? },
