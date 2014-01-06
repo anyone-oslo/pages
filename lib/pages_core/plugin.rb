@@ -48,23 +48,13 @@ module PagesCore
         removed_migrations.select{|m| File.exists?(Rails.root.join('db', 'migrate', m))}
       end
 
-      def new_migrations
-        migrations.reject{|m| File.exists?(Rails.root.join('db', 'migrate', m.basename))}
+      def existing_migrations
+        migrations.map{|m| Rails.root.join('db', 'migrate', m.basename)}.select{|m| File.exists?(m)}
       end
 
       def remove_old_migrations!
-        existing_removed_migrations.each do |migration|
+        (existing_removed_migrations + existing_migrations).each do |migration|
           File.unlink Rails.root.join('db', 'migrate', migration)
-        end
-      end
-
-      def mirror_migrations!
-        target = Rails.root.join('db', 'migrate')
-        unless File.exists?(target)
-          FileUtils.mkdir_p(target)
-        end
-        new_migrations.each do |migration|
-          FileUtils.cp migration, target
         end
       end
     end
