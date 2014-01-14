@@ -61,6 +61,10 @@ module PagesCore
         template 'deploy.rb', File.join('config/deploy.rb')
       end
 
+      def create_delayed_job_script
+        template 'delayed_job', File.join('script/delayed_job')
+      end
+
       def create_delayed_job_initializer
         template 'delayed_job_initializer.rb', File.join('config/initializers/delayed_job.rb')
       end
