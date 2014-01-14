@@ -6,15 +6,15 @@ Pages is a CMS for Rails apps.
 
 Add pages_core to your Gemfile:
 
-```gem 'pages_core', git: 'git@github.com:manualdesign/pages.git', branch: 'master'```
+    gem 'pages_core', git: 'git@github.com:manualdesign/pages.git', branch: 'master'
 
 Run Bundler:
 
-```bundle install```
+    bundle install
 
 And generate the config files:
 
-```rails g pages_core:install```
+    rails g pages_core:install
 
 Now visit /admin and create your user account.
 
