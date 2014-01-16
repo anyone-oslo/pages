@@ -3,7 +3,7 @@
 #= require jquery_ujs
 #= require jquery.ui.all
 #= require jquery.cookie
-#= require jcrop
+#= require jquery.Jcrop
 #= require underscore
 
 # Vendored assets

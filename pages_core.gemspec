@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   # Extra asset dependencies
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'jquery-cookie-rails'
-  s.add_dependency 'jcrop-rails'
+  s.add_dependency 'jcrop-rails-v2'
   s.add_dependency 'underscore-rails'
 
   # ActiveRecord extensions
@@ -59,6 +59,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'ts-delayed-delta', "~> 2.0.0"
 
   # Deployment
-  s.add_dependency 'capistrano'
+  s.add_dependency 'capistrano', "~> 2.0"
   s.add_dependency 'term-ansicolor'
 end

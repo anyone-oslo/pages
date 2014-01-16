@@ -23,7 +23,7 @@ require 'jquery/rails/engine'
 require 'jquery/ui/rails'
 require 'jquery-cookie-rails'
 require 'underscore-rails'
-require 'jcrop-rails'
+require 'jcrop/rails/v2'
 
 require "bcrypt"
 require 'vector2d'
