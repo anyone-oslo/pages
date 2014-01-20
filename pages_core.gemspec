@@ -57,8 +57,4 @@ Gem::Specification.new do |s|
   # Thinking Sphinx
   s.add_dependency 'thinking-sphinx', "~> 3.0.6"
   s.add_dependency 'ts-delayed-delta', "~> 2.0.0"
-
-  # Deployment
-  s.add_dependency 'capistrano', "~> 2.0"
-  s.add_dependency 'term-ansicolor'
 end
