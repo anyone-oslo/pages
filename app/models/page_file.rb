@@ -52,7 +52,7 @@ class PageFile < ActiveRecord::Base
 
   def filename_extension
     if filename_extension?
-      self.filename.match(/\.(.*)$/)[1]
+      self.filename.match(/\.([^\.]+)$/)[1]
     else
       ""
     end
