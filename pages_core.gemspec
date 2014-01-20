@@ -56,8 +56,4 @@ Gem::Specification.new do |s|
   # Thinking Sphinx
   s.add_dependency 'thinking-sphinx', '~> 2.0.14' # 3.0 has a new API
   s.add_dependency 'ts-delayed-delta', '1.1.3'
-
-  # Deployment
-  s.add_dependency 'capistrano'
-  s.add_dependency 'term-ansicolor'
 end

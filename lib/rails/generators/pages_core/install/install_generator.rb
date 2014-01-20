@@ -20,11 +20,6 @@ module PagesCore
         @sphinx_port = "3312" if @sphinx_port.blank?
       end
 
-      def create_apache_config
-        get_configuration!
-        template 'apache.conf', File.join('config/apache.conf')
-      end
-
       def create_application_controller
         template 'application_controller.rb', File.join('app/controllers/application_controller.rb')
       end
@@ -49,16 +44,8 @@ module PagesCore
         copy_file 'default_page_template.html.erb', File.join('app/views/pages/templates/index.html.erb')
       end
 
-      def create_capfile
-        template 'Capfile', File.join('Capfile')
-      end
-
       def create_layout
         copy_file 'layout.html.erb', File.join('app/views/layouts/application.html.erb')
-      end
-
-      def create_deploy_config
-        template 'deploy.rb', File.join('config/deploy.rb')
       end
 
       def create_delayed_job_script
