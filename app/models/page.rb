@@ -133,7 +133,7 @@ class Page < ActiveRecord::Base
   end
 
   def files
-    page_files.localized(self.locale)
+    page_files.in_locale(self.locale)
   end
 
   def headline_or_name
