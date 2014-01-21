@@ -22,6 +22,10 @@ module PagesCore
         @sphinx_port = "3312" if @sphinx_port.blank?
       end
 
+      def add_gem_source
+        add_source 'http://gems.manualdesign.no/'
+      end
+
       def create_application_controller
         template 'application_controller.rb', File.join('app/controllers/application_controller.rb')
       end
