@@ -57,6 +57,7 @@ module PagesCore
 
       def enabled_blocks
         blocks = self.value(:enabled_blocks)
+        blocks = [:name] + blocks unless blocks.include?(:name)
         if block_given?
           blocks.each{|block_name| yield block_name, self.block(block_name)}
         end
@@ -99,10 +100,11 @@ module PagesCore
           default.text_filter      :textile
           default.enabled_blocks   [:headline, :excerpt, :body]
           default.blocks do |block|
-            block.body        "Body",        :size => :large
-            block.headline    "Headline",    :description => 'Optional, use if the headline should differ from the page name.', :size => :field
-            block.excerpt     "Standfirst",  :description => 'An introductory paragraph before the start of the body.'
-            block.boxout      "Boxout",      :description => 'Part of the page, usually background info or facts related to the article.'
+            block.name     "Name",       size: :field, description: "This is the name of the page, and it will also be the name of the link to this page.", class: "page_title"
+            block.body     "Body",       size: :large
+            block.headline "Headline",   description: 'Optional, use if the headline should differ from the page name.', size: :field
+            block.excerpt  "Standfirst", description: 'An introductory paragraph before the start of the body.'
+            block.boxout   "Boxout",     description: 'Part of the page, usually background info or facts related to the article.'
           end
         end
       end
