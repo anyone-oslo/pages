@@ -93,7 +93,7 @@ module PagesCore
         config.default do |default|
           default.template         :autodetect, :root => 'index'
           default.image            :enabled, :linkable => false
-          default.comments         :enabled
+          default.comments         :disabled
           default.comments_allowed :enabled
           default.files            :disabled
           default.images           :disabled

@@ -55,9 +55,9 @@ PagesCore::Templates.configure do |config|
     # default.files            :disabled                     # Files are disabled by default
     # default.images           :disabled                     # Additional images are disabled by default
     # default.text_filter      :textile                      # Use textile as default text filter
-    # default.comments         :enabled                      # Enables/disables the comments functionality
+    # default.comments         :disabled                     # Enables/disables the comments functionality
     # default.comments_allowed :enabled                      # Default comments_allowed value for new pages
-    # default.tags             :disabled
+    # default.tags             :disabled                     # Enables/disables tagging
     # default.enabled_blocks [:headline, :excerpt, :body]    # Only use the blocks enabled here by default
   end
 
