@@ -99,6 +99,7 @@ module PagesCore
           default.images           :disabled
           default.text_filter      :textile
           default.enabled_blocks   [:headline, :excerpt, :body]
+          default.tags             :disabled
           default.blocks do |block|
             block.name     "Name",       size: :field, description: "This is the name of the page, and it will also be the name of the link to this page.", class: "page_title"
             block.body     "Body",       size: :large
