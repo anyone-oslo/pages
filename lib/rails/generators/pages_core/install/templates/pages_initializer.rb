@@ -74,7 +74,7 @@ PagesCore::Templates.configure do |config|
   # config.template(:news_page, :news_page_with_video) do |t|
   #   t.blocks do |block|
   #     # Rename the excerpt block for this template and make it large.
-  #     block.excerpt     "Intro", :size => :large
+  #     block.excerpt     "Intro", :size => :large, :placeholder => "Intro text"
   #     # Make the body required.
   #     block.body        "Body", :required => true
   #       # Define a video embed block. Note: This is only the definition,
