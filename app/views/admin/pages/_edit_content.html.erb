@@ -13,7 +13,7 @@
     <%= labelled_field f.text_area(
         block_name,
         rows:        (block_options[:size] == :large ? 15 : 5),
-        class:       ['text', block_options[:class]].join(" "),
+        class:       ['rich', block_options[:class]].join(" "),
         placeholder: block_options[:placeholder]
       ),
       block_options[:title],
