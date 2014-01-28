@@ -40,6 +40,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           @page ||= unique_page(params[:id])
         end
       end
+      @page.locale = @locale || Language.default
     end
 
     # Set a different layout for a page template
@@ -48,8 +49,6 @@ class PagesCore::Frontend::PagesController < FrontendController
     end
 
     def render_page
-      @page.locale = @locale || Language.default
-
       if @page.redirects?
         redirect_to @page.redirect_path(:locale => @locale) and return
       end
@@ -79,6 +78,18 @@ class PagesCore::Frontend::PagesController < FrontendController
       if status_code == 200 && PagesCore.config(:page_cache) && @page && @locale
         self.class.cache_page response.body, request.path
       end
+    end
+
+    def page_params
+      params.require(:page).permit(
+        Page.localized_attributes +
+        [
+          :template, :user_id, :status, :content_order,
+          :feed_enabled, :published_at, :redirect_to, :comments_allowed,
+          :image_link, :news_page, :unique_name, :pinned,
+          :parent_page_id
+        ]
+      )
     end
 
   public
@@ -120,7 +131,6 @@ class PagesCore::Frontend::PagesController < FrontendController
         end
         format.rss do
           @encoding = (params[:encoding] ||= "UTF-8").downcase
-          @page.locale = @locale || Language.default
           document_title(@page.name) unless document_title?
           @title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
 
@@ -185,10 +195,7 @@ class PagesCore::Frontend::PagesController < FrontendController
         redirect_to page_url(@locale, @page) and return
       end
 
-      preview_attributes = params[:page].merge(status: 2, published_at: Time.now, locale: @locale, redirect_to: nil)
-      preview_attributes.delete(:serialized_tags)
-
-      @page.attributes = preview_attributes
+      @page.attributes = page_params.merge(status: 2, published_at: Time.now, locale: @locale, redirect_to: nil)
 
       render_page
     end
