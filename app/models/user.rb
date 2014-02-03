@@ -7,12 +7,12 @@ class User < ActiveRecord::Base
     'thomas' => { email: 'thomas@manualdesign.no', openid_url: 'http://silverminken.myopenid.com/', realname: 'Thomas Knutstad' }
   }
 
-
   ### Relations #############################################################
 
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
   has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
+  has_many         :roles
   belongs_to_image :image, foreign_key: :image_id
 
 
