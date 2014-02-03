@@ -6,6 +6,7 @@ class Admin::PagesController < Admin::AdminController
   before_action :find_page, only: [
     :show, :edit, :preview, :update, :destroy, :reorder, :import_xml
   ]
+  before_action :require_authorization_for_page, only: [:show, :edit, :update, :destroy]
   before_action :find_categories
   before_action :find_news_pages, only: [:news, :new_news]
 
@@ -39,6 +40,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def reorder_pages
+    raise NotAuthorized unless policy(Page).reorder?
     pages = params[:ids].map{|id| Page.find(id)}
     PagesCore::CacheSweeper.once do
       pages.each_with_index do |page, index|
@@ -56,12 +58,14 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def import_xml
+    raise NotAuthorized unless policy(Page).import_xml?
     if request.post? && params[:xmlfile]
       @created_page = PagesCore::Serializations::PageXmlImporter.new(@page, params[:xmlfile].read).import!
     end
   end
 
   def new
+    raise NotAuthorized unless policy(Page).new?
     @page = Page.new.localize(@locale)
     if params[:parent]
       @page.parent = Page.find(params[:parent]) rescue nil
@@ -72,11 +76,13 @@ class Admin::PagesController < Admin::AdminController
 
   # TODO: Should be refactored
   def new_news
+    raise NotAuthorized unless policy(Page).new?
     new
     render :action => :new
   end
 
   def create
+    raise NotAuthorized unless policy(Page).create?
     @page = Page.new.localize(@locale)
 
     if PagesCore.config(:default_author)
@@ -121,15 +127,6 @@ class Admin::PagesController < Admin::AdminController
     redirect_to admin_pages_url(@locale)
   end
 
-  def reorder
-    if params[:direction] == "up"
-      @page.move_higher
-    elsif params[:direction] == "down"
-      @page.move_lower
-    end
-    redirect_to admin_pages_url(@locale)
-  end
-
   private
 
   def page_params
@@ -171,4 +168,7 @@ class Admin::PagesController < Admin::AdminController
     end
   end
 
+  def require_authorization_for_page
+    verify_policy(@page)
+  end
 end

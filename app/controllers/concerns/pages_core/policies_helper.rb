@@ -7,7 +7,8 @@ module PagesCore
     end
 
     def policy(record)
-      "#{record.class}Policy".constantize.new(current_user, record)
+      policy_class = record.kind_of?(Class) ? "#{record}Policy" : "#{record.class}Policy"
+      policy_class.constantize.new(current_user, record)
     end
 
     def verify_policy(record)
