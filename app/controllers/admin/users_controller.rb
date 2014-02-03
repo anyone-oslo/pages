@@ -4,7 +4,7 @@ class Admin::UsersController < Admin::AdminController
   before_action :require_authentication, except: [:new_password, :welcome, :create_first, :login, :reset_password]
   before_action :require_no_users,       only: [:welcome, :create_first]
   before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_action :verify_editable,        only: [:delete_image, :update, :destroy, :edit, :update_openid]
+  before_action :require_authorization,  only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
   def index
     @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}
@@ -79,9 +79,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def new
-    @user = User.new
-    @user.is_admin     = true
-    @user.is_activated = true
+    @user = User.new(is_activated: true)
   end
 
   def create
@@ -165,7 +163,7 @@ class Admin::UsersController < Admin::AdminController
   def user_params
     params.require(:user).permit(
       :realname, :email, :mobile, :web_link,
-      :image, :username, :password, :is_activated, :is_admin
+      :image, :username, :password, :is_activated
     )
   end
 
@@ -176,11 +174,7 @@ class Admin::UsersController < Admin::AdminController
     end
   end
 
-  def verify_editable
-    unless @user.editable_by?(current_user)
-      flash[:error] = "Only the account holder can edit this person"
-      redirect_to admin_user_url(@user) and return
-    end
+  def require_authorization
+    verify_policy(@user)
   end
-
 end

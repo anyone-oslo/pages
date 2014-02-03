@@ -51,7 +51,6 @@ class User < ActiveRecord::Base
       user.hash_password
     end
     user.web_link = "http://" + user.web_link if user.web_link? and !(user.web_link =~ /^[\w]+:\/\//)
-    user.is_admin = true if user.is_super_admin?
   end
 
 
@@ -65,7 +64,6 @@ class User < ActiveRecord::Base
   scope :sorted,      -> { order('realname ASC') }
   scope :activated,   -> { sorted.where(is_activated: true) }
   scope :deactivated, -> { sorted.where(is_activated: false) }
-  scope :admins,      -> { activated.where(is_admin: true) }
 
 
   ### Class methods #########################################################
@@ -89,7 +87,7 @@ class User < ActiveRecord::Base
         if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
           special_user = special_users.detect{|u| u[:openid_url] == openid_url}
           unless user = User.where(username: special_user[:username]).first
-            user = User.create(special_user.merge({is_activated: true, is_admin: true}))
+            user = User.create(special_user.merge({is_activated: true}))
           end
         end
       end
@@ -185,11 +183,8 @@ class User < ActiveRecord::Base
     "#{self.realname} <#{self.email}>"
   end
 
-  # Is this user editable by the given user?
-  def editable_by?(user)
-    return false unless user
-    return false if !user.is_special? && self.is_special?
-    (user == self or user.is_special? or user.is_super_admin?) ? true : false
+  def has_role?(role_name)
+    self.roles.names.include?(role_name.to_s)
   end
 
   # Is this user currently online?
@@ -220,8 +215,8 @@ class User < ActiveRecord::Base
   protected
 
   def ensure_first_user_is_admin
+    # TODO: Make role
     unless User.any?
-      self.is_admin = true
       self.is_activated = true
     end
   end
