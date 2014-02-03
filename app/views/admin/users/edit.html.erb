@@ -24,8 +24,6 @@
 
 <%= form_for [:admin, @user], :html => {:multipart => true}, :builder => PagesCore::FormBuilder do |f| %>
 
-  <%= f.hidden_field :is_admin %>
-
   <h2>Account details</h2>
   <%= f.labelled_text_field :realname %>
   <%= f.labelled_text_field :email %>

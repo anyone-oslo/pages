@@ -26,8 +26,7 @@ class PagesCore::AdminController < ApplicationController
 
     # Verifies the login. Redirects to users/welcome if the users table is empty. If not, renders the login screen.
     def require_authentication
-      # TODO: Replace with policy
-      unless @current_user && @current_user_is_admin
+      unless logged_in?
         if User.count < 1
           redirect_to welcome_admin_users_url and return
         else
