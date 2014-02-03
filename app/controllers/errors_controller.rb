@@ -21,4 +21,8 @@ class ErrorsController < ApplicationController
     end
   end
 
+  def show
+    render_error params[:id].to_i
+  end
+
 end

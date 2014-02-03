@@ -7,6 +7,7 @@ module PagesCore
     included do
       unless Rails.application.config.consider_all_requests_local
         rescue_from Exception,                           with: :handle_exception
+        rescue_from PagesCore::NotAuthorized,            with: :handle_exception
         rescue_from ActiveRecord::RecordNotFound,        with: :handle_exception
         rescue_from ActionController::RoutingError,      with: :handle_exception
         rescue_from ActionController::UnknownController, with: :handle_exception
@@ -44,6 +45,8 @@ module PagesCore
         log_error exception
         if exception.kind_of?(ActionController::RoutingError)
           render_error 404
+        elsif exception.kind_of?(PagesCore::NotAuthorized)
+          render_error 403
         else
           # Generate the error report
           error_report = {}

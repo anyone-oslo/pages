@@ -47,6 +47,8 @@ require 'thinking_sphinx/deltas/delayed_delta'
 
 
 module PagesCore
+  class NotAuthorized < StandardError; end
+
   class << self
 
     def load_dependencies!
