@@ -82,7 +82,7 @@ class Admin::PagesController < Admin::AdminController
     if PagesCore.config(:default_author)
       @page.author = User.where(email: PagesCore.config(:default_author)).first
     end
-    @page.author ||= @current_user
+    @page.author ||= current_user
 
     if @page.update(page_params)
       @page.update(comments_allowed: @page.template_config.value(:comments_allowed))

@@ -29,8 +29,8 @@ class Admin::UsersController < Admin::AdminController
     @user = User.create(user_params)
     if @user.valid?
       @current_user = @user
-      @current_user.update(last_login_at: Time.now)
-      session[:current_user_id] = @current_user.id
+      current_user.update(last_login_at: Time.now)
+      session[:current_user_id] = current_user.id
       set_authentication_cookies
 
       # Start OpenID session
@@ -67,7 +67,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def login
-    if @current_user
+    if logged_in?
       redirect_to admin_default_url
     end
   end
@@ -86,7 +86,7 @@ class Admin::UsersController < Admin::AdminController
 
   def create
     @user = User.new(user_params)
-    @user.creator = @current_user
+    @user.creator = current_user
     if @user.save
       AdminMailer.new_user(@user, admin_default_url).deliver
       flash[:notice] = "#{@user.realname} has been invited."
@@ -111,11 +111,11 @@ class Admin::UsersController < Admin::AdminController
     if @user.update(user_params)
       # Send an email notification if the username or password changes
       if params[:user][:password] || @user.previous_changes[:name]
-        AdminMailer.user_changed(@user, admin_default_url, @current_user).deliver
+        AdminMailer.user_changed(@user, admin_default_url, current_user).deliver
       end
 
       # OpenID URL changed?
-      if @user == @current_user && params[:user][:openid_url] != @user.openid_url
+      if @user == current_user && params[:user][:openid_url] != @user.openid_url
         unless start_openid_session(params[:user][:openid_url],
           success: update_openid_admin_user_url(@user),
           fail:    edit_admin_user_url(@user)
@@ -177,7 +177,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def verify_editable
-    unless @user.editable_by?(@current_user)
+    unless @user.editable_by?(current_user)
       flash[:error] = "Only the account holder can edit this person"
       redirect_to admin_user_url(@user) and return
     end

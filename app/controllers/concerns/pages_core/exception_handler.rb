@@ -23,7 +23,7 @@ module PagesCore
       options[:status] ||= error if error.kind_of? Numeric
       options[:template] ||= "errors/#{error}"
       options[:layout] ||= 'errors'
-      @email = (@current_user) ? @current_user.email : ""
+      @email = logged_in? ? current_user.email : ""
       render options
     end
 
@@ -60,8 +60,8 @@ module PagesCore
           error_report[:session]   = session.to_hash
           error_report[:backtrace] = Rails.backtrace_cleaner.send(:filter, exception.backtrace)
           error_report[:timestamp] = Time.now
-          if @current_user
-            error_report[:user_id] = @current_user.id
+          if logged_in?
+            error_report[:user_id] = current_user.id
           end
 
           sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)

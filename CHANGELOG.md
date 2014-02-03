@@ -1,5 +1,9 @@
 # Changelog
 
+* #### Removed @current_user_is_admin
+
+  Use the new policies instead
+
 * #### Locale should be specified with page_url
 
   Previously:

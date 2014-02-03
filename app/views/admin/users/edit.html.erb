@@ -1,6 +1,6 @@
 <%
   page_title       "Editing user: #{@user.realname}"
-  if @user == @current_user
+  if @user == current_user
     page_description "You are editing " + link_to("your own", [:admin, @user]) + " profile."
   else
     page_description "You are editing " + link_to("#{@user.realname}", [:admin, @user]) + "'s profile."
@@ -13,7 +13,7 @@
   <p>
     A notification will be sent by email if the username or password fields are changed.
   </p>
-  <% if @user != @current_user && @user.is_deletable? %>
+  <% if @user != current_user && @user.is_deletable? %>
     <h2>Preventing access</h2>
     <p>
       Unchecking the <cite>This account is activated</cite> box will effectively disable
@@ -35,7 +35,7 @@
   <h2>Picture</h2>
   <% if @user.image %>
     <p id="user-image-info">
-      <%= (@user==@current_user) ? "You already have" : "#{@user.realname} already has" %> a profile picture.
+      <%= (@user==current_user) ? "You already have" : "#{@user.realname} already has" %> a profile picture.
       You can
       <%= link_to "delete it", delete_image_admin_user_path(@user), :method => :delete, :class => :delete %>
       or upload a new file below to replace it.
@@ -53,11 +53,11 @@
     to generate a random password.
   </p>
 
-  <% if @user == @current_user %>
+  <% if @user == current_user %>
     <%= f.labelled_text_field :openid_url %>
   <% end %>
 
-  <% unless @user == @current_user || !@user.is_deletable? %>
+  <% unless @user == current_user || !@user.is_deletable? %>
     <p>
       <%= f.check_box :is_activated %> The user account is activated<br />
     </p>
