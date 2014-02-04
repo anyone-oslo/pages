@@ -1,17 +1,52 @@
 class UserPolicy < Policy
-  def edit?
-    user == record || user.has_role?(:users)
+  module Collection
+    def index?
+      true
+    end
+
+    def deactivated?
+      index?
+    end
+
+    def new?
+      user.has_role?(:users) || !User.any?
+    end
+
+    def create?
+      new?
+    end
+    def create_first?
+      new?
+    end
+
+    def manage?
+      user.has_role?(:users)
+    end
   end
 
-  alias_method :show?, :edit?
-  alias_method :delete_image?, :edit?
-  alias_method :update_openid?, :edit?
+  module Member
+    def edit?
+      user == record || user.has_role?(:users)
+    end
 
-  def policies?
-    user.has_role?(:users)
-  end
+    def show?
+      edit?
+    end
 
-  def destroy?
-    user.has_role?(:users)
+    def delete_image?
+      edit?
+    end
+
+    def update_openid?
+      edit?
+    end
+
+    def policies?
+      user.has_role?(:users)
+    end
+
+    def destroy?
+      user.has_role?(:users)
+    end
   end
 end

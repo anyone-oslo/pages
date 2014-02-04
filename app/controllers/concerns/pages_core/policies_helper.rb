@@ -25,12 +25,8 @@ module PagesCore
       end
     end
 
-    def policy(record)
-      if record.kind_of?(Class)
-        "#{record}CollectionPolicy".constantize.new(current_user)
-      else
-        "#{record.class}Policy".constantize.new(current_user, record)
-      end
+    def policy(object)
+      Policy.for(current_user, object)
     end
 
     def verify_policy(record)

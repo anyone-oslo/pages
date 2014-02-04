@@ -1,9 +1,25 @@
 class PageImagePolicy < Policy
-  def show?
-    true
+  module Collection
+    def index?
+      true
+    end
+
+    def reorder?
+      user.has_role?(:pages)
+    end
+
+    def new?
+      user.has_role?(:pages)
+    end
   end
 
-  def edit?
-    user.has_role?(:pages)
+  module Member
+    def show?
+      true
+    end
+
+    def edit?
+      user.has_role?(:pages)
+    end
   end
 end
