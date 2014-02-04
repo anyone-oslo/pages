@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
   ### Callbacks #############################################################
 
   before_create     :generate_token
-  before_create     :ensure_first_user_is_admin
+  before_create     :ensure_first_user_has_all_roles
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
@@ -225,10 +225,12 @@ class User < ActiveRecord::Base
 
   protected
 
-  def ensure_first_user_is_admin
-    # TODO: Make role
+  def ensure_first_user_has_all_roles
     unless User.any?
       self.is_activated = true
+      Role.roles.each do |role|
+        self.roles.new(name: role.name)
+      end
     end
   end
 
