@@ -24,6 +24,8 @@
     to generate a random password.
   </p>
 
+  <%= render partial: "access_control", locals: { user: @user, f: f } %>
+
   <p>
     <button type="submit">Send invite</button>
     or

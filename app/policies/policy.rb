@@ -14,6 +14,11 @@ class Policy
     false
   end
 
-  alias_method :update?, :edit?
-  alias_method :destroy?, :edit?
+  def update?
+    edit?
+  end
+
+  def destroy?
+    edit?
+  end
 end

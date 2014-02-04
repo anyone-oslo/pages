@@ -1,0 +1,14 @@
+<% if policy(user).policies? %>
+  <h2>
+    Access control
+  </h2>
+  <p>
+    <% unless user == current_user || !user.is_deletable? || user.new_record? %>
+      <%= f.check_box :is_activated %> The user account is activated<br />
+    <% end %>
+    <% Role.roles.each do |role| %>
+      <%= check_box_tag "user[role_names][]", role.name, user.has_role?(role.name.to_sym) %>
+      <%= role.description %><br>
+    <% end %>
+  </p>
+<% end %>

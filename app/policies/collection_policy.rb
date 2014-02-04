@@ -5,10 +5,15 @@ class CollectionPolicy
     @user = user
   end
 
+  def index?
+    false
+  end
+
   def new?
     false
   end
 
-  alias_method :index?, :new?
-  alias_method :create?, :new?
+  def create?
+    new?
+  end
 end

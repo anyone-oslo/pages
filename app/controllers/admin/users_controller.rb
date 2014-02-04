@@ -7,7 +7,7 @@ class Admin::UsersController < Admin::AdminController
   before_action :require_authorization,  only: [:delete_image, :update, :destroy, :edit, :update_openid]
 
   def index
-    @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}
+    @users = User.activated
     respond_to do |format|
       format.html do
       end
@@ -80,6 +80,9 @@ class Admin::UsersController < Admin::AdminController
 
   def new
     @user = User.new(is_activated: true)
+    Role.roles.each do |role|
+      @user.roles.new(name: role.name) if role.default
+    end
   end
 
   def create
@@ -126,6 +129,7 @@ class Admin::UsersController < Admin::AdminController
         redirect_to admin_users_url
       end
     else
+      raise @user.roles.inspect
       flash.now[:error] = "There were problems saving your changes."
       render :action => :edit
     end
@@ -161,10 +165,14 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def user_params
-    params.require(:user).permit(
+    permitted_params = [
       :realname, :email, :mobile, :web_link,
-      :image, :username, :password, :is_activated
-    )
+      :image, :username, :password
+    ]
+    if policy(User).manage?
+      permitted_params += [:is_activated, role_names: []]
+    end
+    params.require(:user).permit(permitted_params)
   end
 
   def require_no_users

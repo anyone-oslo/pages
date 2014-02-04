@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
   has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
-  has_many         :roles
+  has_many         :roles, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id
 
 
@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
   end
 
   def has_role?(role_name)
-    self.roles.names.include?(role_name.to_s)
+    self.roles.map(&:name).include?(role_name.to_s)
   end
 
   # Is this user currently online?
@@ -203,6 +203,17 @@ class User < ActiveRecord::Base
   # Purge persistent params
   def purge_preferences!
     self.update(persistent_data: {})
+  end
+
+  def role_names=(names)
+    new_roles = names.map do |name|
+      if has_role?(name)
+        self.roles.where(name: name).first
+      else
+        self.roles.new(name: name)
+      end
+    end
+    self.roles = new_roles
   end
 
   # Serialize user to XML

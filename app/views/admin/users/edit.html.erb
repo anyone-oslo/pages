@@ -55,11 +55,7 @@
     <%= f.labelled_text_field :openid_url %>
   <% end %>
 
-  <% unless @user == current_user || !@user.is_deletable? %>
-    <p>
-      <%= f.check_box :is_activated %> The user account is activated<br />
-    </p>
-  <% end %>
+  <%= render partial: "access_control", locals: { user: @user, f: f } %>
 
   <p>
     <button type="submit">Save</button>

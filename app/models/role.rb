@@ -6,11 +6,11 @@ class Role < ActiveRecord::Base
             inclusion:  { in: Proc.new { Role.roles.map(&:name) } }
 
   class << self
-    def define(name, description)
+    def define(name, description, default=false)
       if roles.map(&:name).include?(name.to_s)
         raise ArgumentError, "Tried to define role :#{role}, but a role by that name already exists"
       else
-        roles << OpenStruct.new(name: name.to_s, description: description)
+        roles << OpenStruct.new(name: name.to_s, description: description, default: default)
       end
     end
 
@@ -26,8 +26,8 @@ class Role < ActiveRecord::Base
 
     def default_roles
       [
-        OpenStruct.new(name: "users", description: "Can manage users"),
-        OpenStruct.new(name: "pages", description: "Can manage pages")
+        OpenStruct.new(name: "users", description: "Can manage users", default: false),
+        OpenStruct.new(name: "pages", description: "Can manage pages", default: true)
       ]
     end
   end
