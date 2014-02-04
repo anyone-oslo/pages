@@ -11,6 +11,5 @@ class UserPolicy < Policy
   end
 
   alias_method :delete_image?, :edit?
-  alias_method :update?, :edit?
   alias_method :update_openid?, :edit?
 end
