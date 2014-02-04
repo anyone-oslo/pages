@@ -105,7 +105,6 @@ namespace :pages do
               :email        => row['user_email'],
               :username     => row['user_nicename'],
               :realname     => row['display_name'],
-              :is_admin     => true,
               :is_activated => true
             )
             pages_user.generate_new_password

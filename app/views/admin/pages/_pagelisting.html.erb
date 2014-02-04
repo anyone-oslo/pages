@@ -15,9 +15,9 @@
   <% end %>
   <div class="<%= page_classes.join(' ') %>" id="pagelisting_<%= page.id %>">
     <% if page.published? %>
-      <%= link_to(page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
+      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
     <% else %>
-      <%= link_to(page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
+      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
       <small class="status">
         (<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)
       </small>
@@ -29,9 +29,14 @@
     <% end %>
 
     <div class="actions">
-      &mdash;
-      <%= link_to "Edit", edit_admin_page_url(@locale, page) %> /
-      <%= link_to "Create subpage", new_admin_page_url(@locale, parent: page ) %>
+      <% if policy(page).edit? %>
+        &mdash;
+        <%= link_to "Edit", edit_admin_page_url(@locale, page) %>
+      <% end %>
+      <% if policy(Page).new? %>
+         /
+        <%= link_to "Create subpage", new_admin_page_url(@locale, parent: page ) %>
+      <% end %>
       &mdash;
       <small>last updated <%= time_ago_in_words page.updated_at %> ago</small>
     </div>
@@ -41,8 +46,10 @@
       <li><div class="page_listing">
         <em>(<%= page.children.visible.count %> items)</em>
         <div class="actions">
-          &mdash;
-          <%= link_to "Create new", new_news_admin_pages_url(@locale, parent: page) %>
+          <% if policy(Page).new? %>
+            &mdash;
+            <%= link_to "Create new", new_news_admin_pages_url(@locale, parent: page) %>
+          <% end %>
         </div>
       </div></li>
     </ul>

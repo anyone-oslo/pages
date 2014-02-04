@@ -6,6 +6,7 @@ class PagesCore::ApplicationController < ActionController::Base
   include PagesCore::ExceptionHandler
   include PagesCore::ProcessTitler
   include PagesCore::OpenidHelper
+  include PagesCore::PoliciesHelper
 
   before_action :set_locale
   after_action  :set_content_language_header

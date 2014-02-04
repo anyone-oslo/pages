@@ -1,5 +1,13 @@
 # Changelog
 
+* #### Added roles and policies
+
+  See https://github.com/manualdesign/pages/wiki/Roles-and-access-control
+
+* #### Removed @current_user_is_admin
+
+  Use the new policies instead
+
 * #### Locale should be specified with page_url
 
   Previously:

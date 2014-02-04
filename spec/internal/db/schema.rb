@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130823133208) do
+ActiveRecord::Schema.define(version: 20140203183900) do
 
   create_table "binaries", force: true do |t|
     t.string "sha1_hash"
@@ -148,6 +148,15 @@ ActiveRecord::Schema.define(version: 20130823133208) do
   add_index "pages_categories", ["category_id"], name: "index_pages_categories_on_category_id", using: :btree
   add_index "pages_categories", ["page_id"], name: "index_pages_categories_on_page_id", using: :btree
 
+  create_table "roles", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["user_id"], name: "index_roles_on_user_id", using: :btree
+
   create_table "sessions", force: true do |t|
     t.string   "session_id"
     t.text     "data"
@@ -180,9 +189,7 @@ ActiveRecord::Schema.define(version: 20130823133208) do
     t.datetime "last_login_at"
     t.integer  "created_by"
     t.datetime "created_at"
-    t.boolean  "is_admin"
     t.text     "persistent_data"
-    t.boolean  "sms_sender"
     t.boolean  "is_activated",    default: false, null: false
     t.boolean  "is_deleted",      default: false, null: false
     t.string   "token"
@@ -190,8 +197,6 @@ ActiveRecord::Schema.define(version: 20130823133208) do
     t.string   "mobile"
     t.string   "web_link"
     t.integer  "image_id"
-    t.boolean  "is_reviewer",     default: false, null: false
-    t.boolean  "is_super_admin",  default: false, null: false
     t.boolean  "delta",           default: false, null: false
     t.string   "openid_url"
   end

@@ -7,6 +7,7 @@ module PagesCore
     included do
       unless Rails.application.config.consider_all_requests_local
         rescue_from Exception,                           with: :handle_exception
+        rescue_from PagesCore::NotAuthorized,            with: :handle_exception
         rescue_from ActiveRecord::RecordNotFound,        with: :handle_exception
         rescue_from ActionController::RoutingError,      with: :handle_exception
         rescue_from ActionController::UnknownController, with: :handle_exception
@@ -23,7 +24,7 @@ module PagesCore
       options[:status] ||= error if error.kind_of? Numeric
       options[:template] ||= "errors/#{error}"
       options[:layout] ||= 'errors'
-      @email = (@current_user) ? @current_user.email : ""
+      @email = logged_in? ? current_user.email : ""
       render options
     end
 
@@ -44,6 +45,8 @@ module PagesCore
         log_error exception
         if exception.kind_of?(ActionController::RoutingError)
           render_error 404
+        elsif exception.kind_of?(PagesCore::NotAuthorized)
+          render_error 403
         else
           # Generate the error report
           error_report = {}
@@ -60,8 +63,8 @@ module PagesCore
           error_report[:session]   = session.to_hash
           error_report[:backtrace] = Rails.backtrace_cleaner.send(:filter, exception.backtrace)
           error_report[:timestamp] = Time.now
-          if @current_user
-            error_report[:user_id] = @current_user.id
+          if logged_in?
+            error_report[:user_id] = current_user.id
           end
 
           sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)

@@ -29,15 +29,15 @@
   <div id="header">
     <div id="logo"><%= link_to image_tag("pages/admin/icon.png"), '/admin' %></div>
     <div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
-    <% if @current_user -%>
+    <% if logged_in? -%>
       <div class="user">
-        Hello, <%= link_to(@current_user.realname, admin_user_url(@current_user)) %>
+        Hello, <%= link_to(current_user.realname, admin_user_url(current_user)) %>
         <%= link_separator %>
         <%= link_to( "Log out", logout_admin_users_path ) %>
       </div>
     <% end -%>
     <div class="tabs">
-      <% if @current_user %>
+      <% if logged_in? %>
         <%= header_tabs(:pages) %>
         <%= header_tabs(:pages_plugins) %>
         <%= header_tabs(:custom) %>

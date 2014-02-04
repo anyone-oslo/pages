@@ -6,6 +6,9 @@ class Admin::PageFilesController < Admin::AdminController
   before_action :find_page_file,   only: [:show, :edit, :update, :destroy]
   before_action :redirect_to_page, only: [:index, :show, :new, :edit]
 
+  require_authorization PageFile, proc { @page_file },
+                        collection: [:index, :reorder, :new, :create]
+
   def index
   end
 

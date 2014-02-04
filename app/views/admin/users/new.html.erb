@@ -12,7 +12,6 @@
 
 <%= form_for [:admin, @user], :builder => PagesCore::FormBuilder do |f| %>
 
-  <%= f.hidden_field :is_admin %>
   <%= f.hidden_field :is_activated %>
 
   <%= f.labelled_text_field :realname %>
@@ -24,6 +23,8 @@
     <%= link_to("Click here", "#", class: :generate_password) %>
     to generate a random password.
   </p>
+
+  <%= render partial: "access_control", locals: { user: @user, f: f } %>
 
   <p>
     <button type="submit">Send invite</button>

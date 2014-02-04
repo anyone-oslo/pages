@@ -9,6 +9,9 @@ class Admin::PagesController < Admin::AdminController
   before_action :find_categories
   before_action :find_news_pages, only: [:news, :new_news]
 
+  require_authorization Page, proc { @page },
+                        collection: [:index, :news, :new, :new_news, :create, :reorder_pages, :import_xml]
+
   def index
     @root_pages = Page.roots.in_locale(@locale).visible
     respond_to do |format|
@@ -82,7 +85,7 @@ class Admin::PagesController < Admin::AdminController
     if PagesCore.config(:default_author)
       @page.author = User.where(email: PagesCore.config(:default_author)).first
     end
-    @page.author ||= @current_user
+    @page.author ||= current_user
 
     if @page.update(page_params)
       @page.update(comments_allowed: @page.template_config.value(:comments_allowed))
@@ -118,15 +121,6 @@ class Admin::PagesController < Admin::AdminController
   def destroy
     @page = Page.find(params[:id])
     @page.flag_as_deleted!
-    redirect_to admin_pages_url(@locale)
-  end
-
-  def reorder
-    if params[:direction] == "up"
-      @page.move_higher
-    elsif params[:direction] == "down"
-      @page.move_lower
-    end
     redirect_to admin_pages_url(@locale)
   end
 
@@ -170,5 +164,4 @@ class Admin::PagesController < Admin::AdminController
       redirect_to admin_pages_url(@locale) and return
     end
   end
-
 end

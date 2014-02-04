@@ -7,15 +7,25 @@ module PagesCore
     included do
       before_action :authenticate
       after_action  :set_authentication_cookies
+      helper_method :current_user, :logged_in?
     end
 
     # The session and cookie data is set in an after filter, since the data might have been changed by the controller.
     def set_authentication_cookies(options={})
-      if @current_user
-        session[:current_user_id] = @current_user.id
+      if current_user
+        session[:current_user_id] = current_user.id
       end
     end
 
+    # Returns the current user if logged in, or nil.
+    def current_user
+      @current_user
+    end
+
+    # Returns true if the user is logged in.
+    def logged_in?
+      current_user ? true : false
+    end
 
     # Deauthenticate user; unset the instance variables, crumble cookies and optionally reset the session.
     # This is called from <tt>/users/logout</tt>, and <tt>authenticate</tt> if login fails.
@@ -72,15 +82,13 @@ module PagesCore
 
       end
 
-      if @current_user
+      if current_user
 
         # Update the user record
-        if !@current_user.last_login_at || @current_user.last_login_at < 10.minutes.ago
-          @current_user.update(last_login_at: Time.now)
+        if !current_user.last_login_at || current_user.last_login_at < 10.minutes.ago
+          current_user.update(last_login_at: Time.now)
         end
         set_authentication_cookies(:force => false)
-
-        @current_user_is_admin = @current_user.is_admin?
 
         # Bounce through a redirect if the request isn't a get
         #if login_attempted && !request.get?

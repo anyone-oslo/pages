@@ -26,7 +26,7 @@ class PagesCore::AdminController < ApplicationController
 
     # Verifies the login. Redirects to users/welcome if the users table is empty. If not, renders the login screen.
     def require_authentication
-      unless @current_user && @current_user_is_admin
+      unless logged_in?
         if User.count < 1
           redirect_to welcome_admin_users_url and return
         else
@@ -37,17 +37,17 @@ class PagesCore::AdminController < ApplicationController
 
     # Loads persistent params from user model and merges with session.
     def restore_persistent_params
-      if @current_user and @current_user.persistent_data?
+      if current_user and current_user.persistent_data?
         session[:persistent_params] ||= Hash.new
-        session[:persistent_params] = @current_user.persistent_data.merge( session[:persistent_params] )
+        session[:persistent_params] = current_user.persistent_data.merge( session[:persistent_params] )
       end
     end
 
     # Saves persistent params from session to User model if applicable.
     def save_persistent_params
-      if @current_user and session[:persistent_params]
-        @current_user.persistent_data = session[:persistent_params]
-        @current_user.save
+      if current_user and session[:persistent_params]
+        current_user.persistent_data = session[:persistent_params]
+        current_user.save
       end
     end
 

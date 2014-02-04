@@ -191,7 +191,7 @@ class PagesCore::Frontend::PagesController < FrontendController
     end
 
     def preview
-      unless @current_user
+      unless logged_in?
         redirect_to page_url(@locale, @page) and return
       end
 

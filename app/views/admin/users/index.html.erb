@@ -5,10 +5,12 @@
 
 
 <% content_for :sidebar do %>
-  <h2>Invite</h2>
-  <p>
-    <%= link_to "Invite someone to Pages", new_admin_user_path %>
-  </p>
+  <% if policy(User).new? %>
+    <h2>Invite</h2>
+    <p>
+      <%= link_to "Invite someone to Pages", new_admin_user_path %>
+    </p>
+  <% end %>
   <h2>Deactivated users</h2>
   <p>
     <% if User.deactivated.count == 0 %>

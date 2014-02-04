@@ -4,10 +4,13 @@ class Admin::UsersController < Admin::AdminController
   before_action :require_authentication, except: [:new_password, :welcome, :create_first, :login, :reset_password]
   before_action :require_no_users,       only: [:welcome, :create_first]
   before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_action :verify_editable,        only: [:delete_image, :update, :destroy, :edit, :update_openid]
+
+  require_authorization User, proc { @user },
+                        member:     [:delete_image, :update, :destroy, :edit, :update_openid],
+                        collection: [:index, :deactivated, :new, :create, :create_first]
 
   def index
-    @users = User.activated.reject{|user| user.email.match(/@manualdesign\.no/)}
+    @users = User.activated
     respond_to do |format|
       format.html do
       end
@@ -29,8 +32,8 @@ class Admin::UsersController < Admin::AdminController
     @user = User.create(user_params)
     if @user.valid?
       @current_user = @user
-      @current_user.update(last_login_at: Time.now)
-      session[:current_user_id] = @current_user.id
+      current_user.update(last_login_at: Time.now)
+      session[:current_user_id] = current_user.id
       set_authentication_cookies
 
       # Start OpenID session
@@ -67,7 +70,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def login
-    if @current_user
+    if logged_in?
       redirect_to admin_default_url
     end
   end
@@ -79,14 +82,15 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def new
-    @user = User.new
-    @user.is_admin     = true
-    @user.is_activated = true
+    @user = User.new(is_activated: true)
+    Role.roles.each do |role|
+      @user.roles.new(name: role.name) if role.default
+    end
   end
 
   def create
     @user = User.new(user_params)
-    @user.creator = @current_user
+    @user.creator = current_user
     if @user.save
       AdminMailer.new_user(@user, admin_default_url).deliver
       flash[:notice] = "#{@user.realname} has been invited."
@@ -111,11 +115,11 @@ class Admin::UsersController < Admin::AdminController
     if @user.update(user_params)
       # Send an email notification if the username or password changes
       if params[:user][:password] || @user.previous_changes[:name]
-        AdminMailer.user_changed(@user, admin_default_url, @current_user).deliver
+        AdminMailer.user_changed(@user, admin_default_url, current_user).deliver
       end
 
       # OpenID URL changed?
-      if @user == @current_user && params[:user][:openid_url] != @user.openid_url
+      if @user == current_user && params[:user][:openid_url] != @user.openid_url
         unless start_openid_session(params[:user][:openid_url],
           success: update_openid_admin_user_url(@user),
           fail:    edit_admin_user_url(@user)
@@ -128,6 +132,7 @@ class Admin::UsersController < Admin::AdminController
         redirect_to admin_users_url
       end
     else
+      raise @user.roles.inspect
       flash.now[:error] = "There were problems saving your changes."
       render :action => :edit
     end
@@ -163,10 +168,14 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def user_params
-    params.require(:user).permit(
+    permitted_params = [
       :realname, :email, :mobile, :web_link,
-      :image, :username, :password, :is_activated, :is_admin
-    )
+      :image, :username, :password
+    ]
+    if policy(User).manage?
+      permitted_params += [:is_activated, role_names: []]
+    end
+    params.require(:user).permit(permitted_params)
   end
 
   def require_no_users
@@ -175,12 +184,4 @@ class Admin::UsersController < Admin::AdminController
       redirect_to admin_users_url and return
     end
   end
-
-  def verify_editable
-    unless @user.editable_by?(@current_user)
-      flash[:error] = "Only the account holder can edit this person"
-      redirect_to admin_user_url(@user) and return
-    end
-  end
-
 end

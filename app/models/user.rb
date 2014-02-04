@@ -7,12 +7,12 @@ class User < ActiveRecord::Base
     'thomas' => { email: 'thomas@manualdesign.no', openid_url: 'http://silverminken.myopenid.com/', realname: 'Thomas Knutstad' }
   }
 
-
   ### Relations #############################################################
 
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
   has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
+  has_many         :roles, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id
 
 
@@ -51,21 +51,19 @@ class User < ActiveRecord::Base
       user.hash_password
     end
     user.web_link = "http://" + user.web_link if user.web_link? and !(user.web_link =~ /^[\w]+:\/\//)
-    user.is_admin = true if user.is_super_admin?
   end
 
 
   ### Callbacks #############################################################
 
   before_create     :generate_token
-  before_create     :ensure_first_user_is_admin
+  before_create     :ensure_first_user_has_all_roles
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
-  scope :sorted,      -> { order('realname ASC') }
-  scope :activated,   -> { sorted.where(is_activated: true) }
-  scope :deactivated, -> { sorted.where(is_activated: false) }
-  scope :admins,      -> { activated.where(is_admin: true) }
+  scope :by_name,     -> { order('realname ASC') }
+  scope :activated,   -> { by_name.includes(:roles).where(is_activated: true) }
+  scope :deactivated, -> { by_name.includes(:roles).where(is_activated: false) }
 
 
   ### Class methods #########################################################
@@ -89,7 +87,7 @@ class User < ActiveRecord::Base
         if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
           special_user = special_users.detect{|u| u[:openid_url] == openid_url}
           unless user = User.where(username: special_user[:username]).first
-            user = User.create(special_user.merge({is_activated: true, is_admin: true}))
+            user = User.create(special_user.merge({is_activated: true}))
           end
         end
       end
@@ -185,11 +183,8 @@ class User < ActiveRecord::Base
     "#{self.realname} <#{self.email}>"
   end
 
-  # Is this user editable by the given user?
-  def editable_by?(user)
-    return false unless user
-    return false if !user.is_special? && self.is_special?
-    (user == self or user.is_special? or user.is_super_admin?) ? true : false
+  def has_role?(role_name)
+    self.roles.map(&:name).include?(role_name.to_s)
   end
 
   # Is this user currently online?
@@ -210,6 +205,17 @@ class User < ActiveRecord::Base
     self.update(persistent_data: {})
   end
 
+  def role_names=(names)
+    new_roles = names.map do |name|
+      if has_role?(name)
+        self.roles.where(name: name).first
+      else
+        self.roles.new(name: name)
+      end
+    end
+    self.roles = new_roles
+  end
+
   # Serialize user to XML
   def to_xml(options={})
     options[:except]  ||= [:hashed_password, :persistent_params]
@@ -219,10 +225,12 @@ class User < ActiveRecord::Base
 
   protected
 
-  def ensure_first_user_is_admin
+  def ensure_first_user_has_all_roles
     unless User.any?
-      self.is_admin = true
       self.is_activated = true
+      Role.roles.each do |role|
+        self.roles.new(name: role.name)
+      end
     end
   end
 
