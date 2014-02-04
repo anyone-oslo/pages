@@ -3,6 +3,7 @@ class UserPolicy < Policy
     user == record || user.has_role?(:users)
   end
 
+  alias_method :show?, :edit?
   alias_method :delete_image?, :edit?
   alias_method :update_openid?, :edit?
 

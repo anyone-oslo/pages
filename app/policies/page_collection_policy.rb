@@ -12,6 +12,6 @@ class PageCollectionPolicy < CollectionPolicy
   end
 
   alias_method :new_news?, :create?
-  alias_method :reorder?, :create?
+  alias_method :reorder_pages?, :create?
   alias_method :import_xml?, :create?
 end

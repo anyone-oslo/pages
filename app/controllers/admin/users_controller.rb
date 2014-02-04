@@ -4,7 +4,10 @@ class Admin::UsersController < Admin::AdminController
   before_action :require_authentication, except: [:new_password, :welcome, :create_first, :login, :reset_password]
   before_action :require_no_users,       only: [:welcome, :create_first]
   before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
-  before_action :require_authorization,  only: [:delete_image, :update, :destroy, :edit, :update_openid]
+
+  require_authorization User, proc { @user },
+                        member:     [:delete_image, :update, :destroy, :edit, :update_openid],
+                        collection: [:index, :deactivated, :new, :create, :create_first]
 
   def index
     @users = User.activated
@@ -180,9 +183,5 @@ class Admin::UsersController < Admin::AdminController
       flash[:error] = "Account holder already exists"
       redirect_to admin_users_url and return
     end
-  end
-
-  def require_authorization
-    verify_policy(@user)
   end
 end

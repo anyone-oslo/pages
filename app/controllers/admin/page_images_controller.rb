@@ -5,6 +5,9 @@ class Admin::PageImagesController < Admin::AdminController
   before_action :find_page
   before_action :find_page_image, :only => [:show, :edit, :update, :destroy]
 
+  require_authorization PageImage, proc { @page_image },
+                        collection: [:index, :reorder, :new, :create]
+
   def index
     @page_images = @page.page_images
     respond_to do |format|

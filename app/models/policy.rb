@@ -6,7 +6,7 @@ class Policy
     @record = record
   end
 
-  def show
+  def show?
     false
   end
 
