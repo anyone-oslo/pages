@@ -11,7 +11,7 @@ class Admin::PagesController < Admin::AdminController
   before_action :find_news_pages, only: [:news, :new_news]
 
   def index
-    @root_pages = Page.roots.in_locale(@locale).visible
+    @root_pages = Page.roots.in_locale(@locale).visible.includes(:author)
     respond_to do |format|
       format.html
       format.xml do
@@ -24,6 +24,7 @@ class Admin::PagesController < Admin::AdminController
     @archive_finder = Page.where(parent_page_id: @news_pages)
                           .visible
                           .order('published_at DESC')
+                          .includes(:author)
                           .in_locale(@locale)
                           .archive_finder
 

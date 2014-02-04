@@ -61,9 +61,9 @@ class User < ActiveRecord::Base
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
-  scope :sorted,      -> { order('realname ASC') }
-  scope :activated,   -> { sorted.where(is_activated: true) }
-  scope :deactivated, -> { sorted.where(is_activated: false) }
+  scope :by_name,     -> { order('realname ASC') }
+  scope :activated,   -> { by_name.includes(:roles).where(is_activated: true) }
+  scope :deactivated, -> { by_name.includes(:roles).where(is_activated: false) }
 
 
   ### Class methods #########################################################
