@@ -32,6 +32,7 @@ class Policy
       if const_defined?(:Collection)
         policy.extend const_get(:Collection)
       end
+      collection
     end
 
     def member(user, record)
