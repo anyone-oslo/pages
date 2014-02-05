@@ -2,7 +2,7 @@
 
 module PagesCore
   module Templates
-    class Configuration < PagesCore::Configuration::Handler
+    class Configuration < PagesCore::Templates::ConfigurationHandler
       VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template, :comments, :comments_allowed, :tags
 
       handle :default do |instance, name, *args|

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 module PagesCore
-  module Configuration
-    class Handler
+  module Templates
+    class ConfigurationHandler
       class << self
         def handle(method_name, &handle_block)
           @@handle_blocks ||= {}
@@ -21,7 +21,7 @@ module PagesCore
 
       def method_missing(method_name, *args, &block)
         if @@handle_blocks && @@handle_blocks.keys.include?(method_name)
-          proxy = PagesCore::Configuration::Proxy.new(@@handle_blocks[method_name], self)
+          proxy = PagesCore::Templates::ConfigurationProxy.new(@@handle_blocks[method_name], self)
           block.call(proxy) if block
           proxy
         elsif @@default_handler
@@ -32,7 +32,7 @@ module PagesCore
       end
 
       def proxy(proxy_block=nil, &callback)
-        proxy_object = PagesCore::Configuration::Proxy.new(callback)
+        proxy_object = PagesCore::Templates::ConfigurationProxy.new(callback)
         proxy_block.call(proxy_object) if proxy_block
         proxy_object
       end
