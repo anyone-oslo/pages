@@ -89,44 +89,19 @@ module PagesCore
     end
 
     def configure(options={}, &block)
-      if block_given?
-        if options[:reset] == :defaults
-          load_default_configuration
-        elsif options[:reset] === true
-          @@configuration = PagesCore::Configuration::SiteConfiguration.new
-        end
-        yield self.configuration if block_given?
-      else
-        # Legacy
-        options.each do |key,value|
-          self.config(key, value)
-        end
-      end
+      yield configuration if block_given?
     end
 
-    def load_default_configuration
-      @@configuration = PagesCore::Configuration::SiteConfiguration.new
-
-      config.localizations       :disabled
-      config.page_cache          :enabled
-      config.text_filter         :textile
-
-      config.default_author      nil
-      #config.comment_notifications [:author, 'your@email.com']
-    end
-
-    def configuration(key=nil, value=nil)
-      load_default_configuration unless defined? @@configuration
+    def configuration(key=nil, *args)
+      @configuration ||= PagesCore::Configuration::Pages.new
       if key
-        configuration.send(key, value) if value != nil
-        configuration.get(key)
+        @configuration.send(key, *args)
       else
-        @@configuration
+        @configuration
       end
     end
     alias :config :configuration
   end
-
 end
 
 PagesCore.init!

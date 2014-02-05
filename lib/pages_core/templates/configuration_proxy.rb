@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 module PagesCore
-  module Configuration
-    class Proxy
+  module Templates
+    class ConfigurationProxy
       def initialize(callback, parent=nil)
         @callback = callback
         @parent = parent
