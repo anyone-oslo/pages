@@ -37,4 +37,29 @@ namespace :db do
     puts "Done!"
     temp_file.close!
   end
+
+  desc "Fixes double UTF-8 encoding"
+  task :fix_double_encoding => :environment do
+    config = Rails.configuration.database_configuration[Rails.env]
+
+    puts "Dumping database..."
+    temp_file = Tempfile.new(config['database'])
+    if config['password']
+      dump_command = "mysqldump -u #{config['username']} -p#{config['password']}"
+    else
+      dump_command = "mysqldump -u #{config['username']}"
+    end
+    `#{dump_command} --opt --quote-names --skip-set-charset --default-character-set=latin1 -h #{config['host']} --max_allowed_packet=100M #{config['database']} > #{temp_file.path}`
+
+    puts "Importing database dump"
+    if config['password']
+      mysql_command = "mysql -u #{config['username']} -p#{config['password']}"
+    else
+      mysql_command = "mysql -u #{config['username']}"
+    end
+    `#{mysql_command} -h #{config['host']} --default-character-set=utf8 #{config['database']} < #{temp_file.path}`
+
+    puts "Done!"
+    temp_file.close!
+  end
 end
