@@ -38,8 +38,15 @@ class Textbit < ActiveRecord::Base
       query += " WHERE "+conditions.join( ' AND ' ) if conditions.length > 0
       rows = []
       result = sql.execute( query );
-      while row = result.fetch_row
-        rows << row
+
+      if result.kind_of?(Mysql2::Result)
+        result.each do |row|
+          rows << row
+        end
+      else
+        while row = result.fetch_row
+          rows << row
+        end
       end
       rows.flatten.sort
     end

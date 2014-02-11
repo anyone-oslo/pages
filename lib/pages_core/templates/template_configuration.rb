@@ -102,7 +102,7 @@ module PagesCore
       end
 
       def configuration
-        load_default_configuration unless self.class_variables.include?('@@configuration')
+        load_default_configuration unless defined? @@configuration
         @@configuration
       end
       alias :config :configuration

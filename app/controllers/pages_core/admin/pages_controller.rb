@@ -28,7 +28,7 @@ class PagesCore::Admin::PagesController < Admin::AdminController
     end
 
     def load_categories
-      @categories = Category.find(:all, :order => [:name])
+      @categories = Category.find(:all, :order => "name")
     end
 
     def load_news_pages
