@@ -1,0 +1,72 @@
+<div class="login-form">
+
+  <div class="login-tab password">
+    <%= form_tag session_path do %>
+      <%= hidden_field_tag :success_url, success_url %>
+      <%= hidden_field_tag :login_url,   login_url %>
+      <p>
+        <label>Username</label>
+        <%= text_field_tag :username, '' %>
+      </p>
+      <p>
+        <label>Password</label>
+        <%= password_field_tag :password, '' %>
+      </p>
+      <p>
+        <button type="submit">Sign in</button>
+      </p>
+      <ul>
+        <li>
+          <%= link_to "<b>Help!</b> I forgot my password!".html_safe, login_url, class: 'show-password-reset' %>
+        </li>
+        <li>
+          <%= link_to "Sign in with OpenID", login_url, class: 'show-openid' %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+
+  <div class="login-tab openid">
+    <%= form_tag openid_path do %>
+      <%= hidden_field_tag :openid_success, success_url %>
+      <%= hidden_field_tag :openid_fail,    login_url %>
+      <p>
+        <label>Enter your OpenID URL</label>
+        <%= text_field_tag :openid_url, '', class: 'openid-url' %>
+      </p>
+      <p>
+        <button type="submit">Sign in</button>
+      </p>
+      <ul class="login_links">
+        <li>
+          <%= link_to "What is OpenID?", "http://openid.net/" %>
+        </li>
+        <li>
+          <%= link_to "Sign in with with username and password", login_url, class: 'show-password' %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+
+  <div class="login-tab password-reset">
+    <%= form_tag password_reset_path do %>
+      <%= hidden_field_tag :login_url, login_url %>
+      <h2>
+        Forgot your password?
+      </h2>
+      <p>
+        Don't worry, it happens.
+        Enter your username or email address below,
+        and we'll send you a new password.
+      </p>
+      <p>
+        <%= text_field_tag :username, '' %>
+      </p>
+      <p>
+        <button type="submit">
+          Send
+        </button>
+      </p>
+    <% end %>
+  </div>
+</div>

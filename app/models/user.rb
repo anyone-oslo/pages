@@ -70,6 +70,15 @@ class User < ActiveRecord::Base
 
   class << self
 
+    def authenticate(username, password:)
+      if user = User.find_by_username_or_email(username)
+        if user.can_login? && user.valid_password?(password)
+          user.rehash_password!(password) if user.password_needs_rehash?
+          user
+        end
+      end
+    end
+
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
       where(username: string.to_s).first ||
@@ -151,28 +160,19 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Authenticate user, returns a true if successful. Only works if the user is activated and not deleted.
-  # Returns false if authentication fails.
-  #
-  # Example:
-  #
-  #   login = @user.authenticate(password: 'unencrypted password')
-  #
-  def authenticate(options={})
-    options.symbolize_keys!
-    return false if self.is_deleted? or !self.is_activated
+  def can_login?
+    !self.is_deleted? && self.is_activated?
+  end
 
-    # Authentication by password
-    if options[:password]
-      # Legacy SHA1
-      if self.hashed_password.length <= 40
-        if self.hashed_password == Digest::SHA1.hexdigest(options[:password])
-          return true
-        end
-      else
-        if BCrypt::Password.new(self.hashed_password) == options[:password]
-          return true
-        end
+  def valid_password?(password)
+    # Legacy SHA1
+    if self.hashed_password.length <= 40
+      if self.hashed_password == Digest::SHA1.hexdigest(pasword)
+        return true
+      end
+    else
+      if BCrypt::Password.new(self.hashed_password) == password
+        return true
       end
     end
 

@@ -20,6 +20,10 @@ Rails.application.routes.draw do
   get 'pages/:locale' => redirect("/%{locale}/pages"), :locale => /\w\w\w/
   get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), :locale => /\w\w\w/
 
+  # Authentication
+  resource :session,        only: [:create, :destroy]
+  resource :password_reset, only: [:create]
+
   # OpenID
   resource :openid, :controller => 'openid' do
     member do
@@ -36,13 +40,9 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         get 'deactivated'
-        get  'new_password'
-        post 'reset_password'
         get  'welcome'
         post 'create_first'
         get  'login'
-        post 'login'
-        get  'logout'
         get 'deactivated'
       end
       member do

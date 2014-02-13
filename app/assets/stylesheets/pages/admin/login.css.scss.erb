@@ -1,30 +1,17 @@
 body.login {
-
   #header {
     height: 55px;
   }
+}
 
-  #loginForm {
-    padding-top: 10px;
-  }
-  #loginForm .openid_url {
-    background: white url('<%= image_path "pages/admin/login-openid.gif" %>') 10px 11px no-repeat;
+#main .login-form {
+  padding-top: 10px;
+
+  input.openid-url {
+    background-image: url('<%= image_path "pages/admin/login-openid.gif" %>');
+    background-position: 10px 11px;
+    background-repeat: no-repeat;
     padding-left: 32px;
-  }
-  .forgot_password_link {
-    padding-left: 6px;
-  }
-
-  .login_links {
-    margin: 0; padding: 0;
-    list-style-position: inside;
-    list-style-type: disc;
-    color: #ccc;
-    line-height: 1.5;
-  }
-  .login_links li {
-    margin: 0; padding: 0;
-    font-size: 1.2em;
   }
 
   label {
@@ -35,5 +22,18 @@ body.login {
     color: #444;
   }
 
+  ul {
+    margin: 0px;
+    padding: 0px;
+    margin-top: 30px;
+    list-style-position: inside;
+    list-style-type: disc;
+    color: #ccc;
+    line-height: 1.5;
+    li {
+      margin: 0px;
+      padding: 0px;
+      font-size: 1.2em;
+    }
+  }
 }
-

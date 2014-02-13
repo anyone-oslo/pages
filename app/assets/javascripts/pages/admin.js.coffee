@@ -11,6 +11,7 @@
 #= require jquery.fieldselection
 
 #= require_self
+#= require pages/login_form
 #= require pages/admin/controllers/base
 #= require pages/admin/controllers/pages_controller
 #= require pages/admin/controllers/users_controller

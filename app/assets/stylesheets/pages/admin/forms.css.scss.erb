@@ -63,9 +63,11 @@ form .field_with_errors label {
     width: 100%;
     max-width: 450px;
     min-width: 200px;
-    &.large {
-      font-size: 1.4em;
-    }
   }
 }
 
+input[type=text], input[type=password] {
+  &.large, #main .login-form & {
+    font-size: 1.4em;
+  }
+}

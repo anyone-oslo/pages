@@ -1,32 +1,5 @@
 class Admin.Controllers.UsersController extends Admin.Controllers.Base
 
-  # Login action
-  login: ->
-
-    # Toggle regular/OpenID link
-    $('.toggle_login').click ->
-      if $.cookie("login_mode") is "openid"
-        $("#loginOpenID").hide()
-        $("#loginRegular").show()
-        $.cookie "login_mode", "regular",
-          expires: 1095
-      else
-        $("#loginOpenID").show()
-        $("#loginRegular").hide()
-        $.cookie "login_mode", "openid",
-          expires: 1095
-
-    # Show password recovery
-    $('.forgot_password').click ->
-      $("#forgotPasswordForm").show()
-      $("#loginForm").hide()
-
-    $("#forgotPasswordForm").hide()
-    if $.cookie("login_mode") is "openid"
-      $("#loginRegular").hide()
-    else
-      $("#loginOpenID").hide()
-
   # New action
   new: ->
     controller = this

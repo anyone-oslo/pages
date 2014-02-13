@@ -33,7 +33,7 @@
       <div class="user">
         Hello, <%= link_to(current_user.realname, admin_user_url(current_user)) %>
         <%= link_separator %>
-        <%= link_to( "Log out", logout_admin_users_path ) %>
+        <%= logout_link "Log out", login_url: login_admin_users_path %>
       </div>
     <% end -%>
     <div class="tabs">

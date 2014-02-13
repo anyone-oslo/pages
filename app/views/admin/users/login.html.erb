@@ -22,55 +22,5 @@
   </p>
 <% end %>
 
-<div id="forgotPasswordForm">
-  <%= form_tag(reset_password_admin_users_path, method: :post) do %>
-    <h2>Forgot your password?</h2>
-    <p>
-      Don't worry, it happens. Enter your <strong>username</strong> or <strong>email address</strong> below, and we'll email you a new password.
-    </p>
-    <p>
-      <%= text_field_tag :username, '', :class => :large %>
-    </p>
-    <p>
-      <button type="submit">Send</button>
-    </p>
-  <% end %>
-</div>
 
-<div id="loginForm">
-
-  <%= form_tag login_admin_users_path, :id => 'loginRegular' do %>
-    <p>
-      <label>Username</label>
-      <%= text_field_tag :login_username, '', :class => :large %>
-    </p>
-    <p>
-      <label>Password</label>
-      <%= password_field_tag :login_password, '', :class => :large %>
-    </p>
-    <p>
-      <button type="submit">Sign in</button>
-    </p>
-    <ul class="login_links">
-      <li><%= link_to "<strong>Help!</strong> I forgot my password!".html_safe, "#", class: :forgot_password %></li>
-      <li><%= link_to "Sign in with OpenID", "#", class: :toggle_login %></li>
-    </ul>
-  <% end %>
-
-  <%= form_tag openid_path, :id => 'loginOpenID' do %>
-    <%= hidden_field_tag :openid_success, admin_default_url %>
-    <%= hidden_field_tag :openid_fail, admin_default_url %>
-    <p>
-      <label>Enter your OpenID URL:</label>
-      <%= text_field_tag :openid_url, '', :class => 'openid_url large' %>
-    </p>
-    <p>
-      <button type="submit">Sign in</button>
-    </p>
-    <ul class="login_links">
-      <li><%= link_to "What is OpenID?", "http://openid.net/" %></li>
-      <li><%= link_to "Sign in with with username and password", "#", class: :toggle_login %></li>
-    </ul>
-  <% end %>
-
-</div>
+<%= login_form(success_url: admin_default_path, login_url: login_admin_users_path) %>
