@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rake", "~> 0.9.2"
-  s.add_dependency "rails", "~> 3.2.16"
+  s.add_dependency "rails", "~> 3.2.17"
 
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'RedCloth', '~> 4.2.9'
