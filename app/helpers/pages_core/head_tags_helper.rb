@@ -103,6 +103,7 @@ module PagesCore::HeadTagsHelper
         (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
         (deprecated_head_tags(options) if options.any?),
         open_graph_tags,
+        csrf_meta_tags,
         block_output
       ].compact, "\n")
     end
