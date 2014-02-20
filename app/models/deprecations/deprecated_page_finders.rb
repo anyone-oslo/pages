@@ -110,6 +110,10 @@ module Deprecations
         ActiveSupport::Deprecation.warn "Page.search_paginated is deprecated, use a pagination gem instead."
         options[:page] = (options[:page] || 1).to_i
 
+        if locale = options[:locale]
+          options.delete(:locale)
+        end
+
         search_options = {
           :per_page   => 20,
           :include    => [:localizations, :categories, :image, :author]
@@ -123,6 +127,13 @@ module Deprecations
         end
 
         pages = Page.search(query, search_options)
+
+        if locale
+          pages.each_with_index do |p, i|
+            pages[i].locale = locale
+          end
+        end
+
         PagesCore::Paginates.paginate(
           pages,
           :current_page => options[:page],
