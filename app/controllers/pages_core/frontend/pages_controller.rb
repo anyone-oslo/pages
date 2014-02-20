@@ -183,11 +183,12 @@ class PagesCore::Frontend::PagesController < FrontendController
       options = {
         page:      params[:page],
         order:     :published_at,
-        sort_mode: :desc
+        sort_mode: :desc,
+        locale:    @locale
       }
       options[:category_id] = @search_category_id if @search_category_id
 
-      @pages = Page.search_paginated(normalized_query, options).map { |p| p.localize(@locale) }
+      @pages = Page.search_paginated(normalized_query, options)
     end
 
     def preview
