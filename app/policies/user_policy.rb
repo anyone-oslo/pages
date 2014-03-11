@@ -9,18 +9,19 @@ class UserPolicy < Policy
     end
 
     def new?
-      user.has_role?(:users) || !User.any?
+      (!User.any?) || user.has_role?(:users)
     end
 
     def create?
       new?
     end
+
     def create_first?
       new?
     end
 
     def manage?
-      user.has_role?(:users)
+      new?
     end
   end
 
