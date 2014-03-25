@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'vector2d'
   s.add_dependency 'dynamic_image-pages', '>= 0.0.16'
   s.add_dependency 'actionpack-page_caching'
+  s.add_dependency 'active_model_serializers', '~> 0.8.0'
 
   # Default asset dependencies
   s.add_dependency 'sass-rails', '~> 4.0.0'
