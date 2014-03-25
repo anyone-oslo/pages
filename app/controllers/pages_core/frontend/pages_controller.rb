@@ -140,6 +140,9 @@ class PagesCore::Frontend::PagesController < FrontendController
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
           render :template => 'feeds/pages', :layout => false
         end
+        format.json do
+          render json: @page
+        end
       end
     end
 

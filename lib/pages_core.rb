@@ -17,6 +17,7 @@ require 'action_view'
 require 'action_mailer'
 
 require 'actionpack/page_caching'
+require 'active_model_serializers'
 
 # Assets
 require 'jquery/rails/engine'
