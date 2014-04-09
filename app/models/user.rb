@@ -25,11 +25,11 @@ class User < ActiveRecord::Base
   ### Validations ###########################################################
 
   validates_presence_of   :username, :email, :realname
-  validates_uniqueness_of :username, message: 'already in use'
+  validates_uniqueness_of :username
   validates_format_of     :username, with: /\A[-_\w\d@\.]+\z/i, message: "may only contain numbers, letters and '-_.@'"
   validates_length_of     :username, in: 3..32
   validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
-  validates_uniqueness_of :openid_url, allow_nil: true, allow_blank: true, message: 'is already registered.', case_sensitive: false
+  validates_uniqueness_of :openid_url, allow_nil: true, allow_blank: true, case_sensitive: false
   validates_presence_of   :password, on: :create, unless: Proc.new{|u| u.openid_url?}
   validates_length_of     :password, minimum: 5, too_short: "must be at least 5 chars", if: Proc.new { |user| !user.password.blank? }
 
@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
 
   # Generate a new token.
   def generate_token
-    self.token = Digest::SHA1.hexdigest(self.username + Time.now.to_s)
+    self.token = SecureRandom.hex(16)
   end
 
   # Create the first password
