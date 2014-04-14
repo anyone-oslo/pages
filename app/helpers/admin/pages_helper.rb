@@ -27,8 +27,8 @@ module Admin::PagesHelper
       p_name = page_names.map do |p|
         if p.dup.name?
           p.dup.name.to_s
-        elsif p.localize(Language.default).name?
-          "(#{p.localize(Language.default).name.to_s})"
+        elsif p.localize(I18n.default_locale.to_s).name?
+          "(#{p.localize(I18n.default_locale.to_s).name.to_s})"
         else
           "(Untitled)"
         end

@@ -53,8 +53,6 @@ module PagesCore
   class << self
 
     def load_dependencies!
-      load 'language.rb'
-
       load 'pages_core/plugin.rb'
 
       load 'pages_core/admin_menu_item.rb'

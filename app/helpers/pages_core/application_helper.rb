@@ -64,7 +64,7 @@ module PagesCore::ApplicationHelper
   end
 
   def unique_page(page_name, &block)
-    locale = @locale || Language.default
+    locale = @locale || I18n.default_locale.to_s
     page = Page.where(:unique_name => page_name).first
     if page && block_given?
       output = capture(page, &block)

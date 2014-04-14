@@ -12,8 +12,6 @@ module PagesCore
         @app_name = default_app_name if @app_name.blank?
         @site_name ||= ask("Site name? [#{@app_name.humanize}]")
         @site_name = "#{@app_name.humanize}" if @site_name.blank?
-        @default_locale ||= ask("Default locale? [nor]")
-        @default_locale = "nor" if @default_locale.blank?
         @domain_name ||= ask("Domain name? [#{@app_name}.no]")
         @domain_name = "#{@app_name}.no" if @domain_name.blank?
         @default_sender ||= ask("Default sender? [no-reply@#{@domain_name}]")

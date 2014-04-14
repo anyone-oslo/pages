@@ -43,7 +43,7 @@ namespace :pages do
       end
       import_pages    = get_input_yn('Import pages', true)
       post_parent_id  = get_input('Parent page for posts', 'root')
-      import_language = get_input('Language', Language.default)
+      import_language = get_input('Language', I18n.default_locale.to_s)
       import_images   = get_input_yn('Import images', true)
       import_comments = get_input_yn('Import comments', true)
       import_youtube  = get_input_yn('Import video embed tags', true)

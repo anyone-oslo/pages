@@ -92,7 +92,7 @@ Rails.application.routes.draw do
   end
 
   # Default admin route
-  get '/admin' => redirect{ |env, req| "/admin/#{Language.default}/pages/news" }, :as => 'admin_default'
+  get '/admin' => redirect{ |env, req| "/admin/#{I18n.default_locale.to_s}/pages/news" }, :as => 'admin_default'
   #get '/admin' => 'admin#redirect', :as => 'admin_default'
 
   # Errors

@@ -13,14 +13,19 @@ class PagesCore::ApplicationController < ActionController::Base
 
   protected
 
-  # Sets @locale from params[:locale], with Language.default as fallback
+  # Sets @locale from params[:locale], with I18n.default_locale as fallback
   def set_locale
-    @locale = params[:locale] || Language.default
+    legacy_locales = {
+      'nor' => 'nb',
+      'eng' => 'en'
+    }
+    @locale = params[:locale] || I18n.default_locale.to_s
+    @locale = legacy_locales[@locale] if legacy_locales[@locale]
   end
 
   def set_content_language_header
-    if @locale && definition = Language.definition(@locale.to_s)
-      headers['Content-Language'] = definition.iso639_1
+    if @locale
+      headers['Content-Language'] = @locale
     end
   end
 end

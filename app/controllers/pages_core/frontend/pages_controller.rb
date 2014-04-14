@@ -40,7 +40,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           @page ||= unique_page(params[:id])
         end
       end
-      @page.locale = @locale || Language.default
+      @page.locale = @locale || I18n.default_locale.to_s
     end
 
     # Set a different layout for a page template

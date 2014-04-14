@@ -3,9 +3,6 @@
 # Configuration file for Pages CMS
 # Be sure to restart your web server when you modify this file.
 
-# Default language
-Language.default = "<%= @default_locale %>"
-
 # Site configuration
 PagesCore.configure do |config|
   # Site name and default mail sender

@@ -6,7 +6,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
     xml.title(@title)
     xml.link(url_for(:controller => 'pages', :action => 'index', :only_path => false))
     xml.description "Recent items"
-    xml.language Language.definition(@locale).iso639_1
+    xml.language @locale
     xml.generator "Pages"
     xml.ttl "40"
     for item in @feed_items
