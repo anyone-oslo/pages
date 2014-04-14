@@ -6,6 +6,7 @@ module PagesCore
       setting :site_name,             :string,  "Pages Site"
       setting :default_sender,        :string
       setting :localizations,         :boolean, false
+      setting :locales,               :hash
       setting :text_filter,           :symbol, :textile
       setting :page_cache,            :boolean, true
       setting :domain_based_cache,    :boolean, false

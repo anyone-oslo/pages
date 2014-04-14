@@ -3,7 +3,7 @@
   page_description "Viewing pages"
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), admin_pages_path(l))}.join(link_separator)
+    page_description_links 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, admin_pages_path(l) }.join(link_separator)
   end
 %>
 

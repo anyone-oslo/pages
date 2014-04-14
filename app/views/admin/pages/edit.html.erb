@@ -3,7 +3,7 @@
   page_description "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@locale, page))}.join(" &raquo; ")
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + @available_languages.map{|l| link_to_unless_current(Language.name_for_code(l), edit_admin_page_path(l, @page))}.join(link_separator)
+    page_description_links 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, edit_admin_page_path(l, @page) }.join(link_separator)
   end
 %>
 

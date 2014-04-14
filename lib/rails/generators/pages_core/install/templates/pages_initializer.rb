@@ -14,6 +14,7 @@ PagesCore.configure do |config|
 
   # Uncomment the options below to toggle them
   #config.localizations :enabled       # Enable localizations
+  #config.locales(nb: 'Norwegian', en: 'English')
   #config.recaptcha :enabled           # Enable ReCAPTCHA
   #config.page_cache :disabled         # Disable page cache (not recommended)
   #config.domain_based_cache :enabled  # Enable domain based page cache (for multiple domains)
