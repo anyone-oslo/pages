@@ -9,12 +9,6 @@ rescue LoadError
   puts "Delayed job not installed"
 end
 
-begin
-  require 'thinking_sphinx/tasks'
-rescue LoadError
-  puts "You can't load Thinking Sphinx tasks unless the thinking-sphinx gem is installed."
-end
-
 namespace :pages do
 
   namespace :error_reports do
