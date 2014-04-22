@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "rails", "~> 4.0.3"
+  s.add_dependency "rails", "~> 4.1.0"
 
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'RedCloth', '~> 4.2.9'
@@ -56,6 +56,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'daemons', '1.1.0'
 
   # Thinking Sphinx
-  s.add_dependency 'thinking-sphinx', "~> 3.0.6"
-  s.add_dependency 'ts-delayed-delta', "~> 2.0.0"
+  s.add_dependency 'thinking-sphinx', "~> 3.1.1"
+  s.add_dependency 'ts-delayed-delta', "~> 2.0.2"
 end
