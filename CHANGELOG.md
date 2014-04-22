@@ -1,3 +1,7 @@
+* #### Updated to Rails 4.1
+
+  Now runs on Rails 4.1.
+
 * #### Language module removed
 
   The Language module has been removed, use I18n.default_locale
