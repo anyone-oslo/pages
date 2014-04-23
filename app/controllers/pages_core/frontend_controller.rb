@@ -20,11 +20,7 @@ class PagesCore::FrontendController < ApplicationController
   private
 
   def set_i18n_locale
-    if @locale == 'nor'
-      I18n.locale = :nb
-    else
-      I18n.locale = :en
-    end
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 
 end
