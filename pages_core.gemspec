@@ -31,6 +31,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'actionpack-page_caching'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
 
+  # Locales
+  s.add_dependency 'rails-i18n', '~> 4.0.0'
+
   # Default asset dependencies
   s.add_dependency 'sass-rails', '~> 4.0.0'
   s.add_dependency 'uglifier', '>= 1.3.0'
