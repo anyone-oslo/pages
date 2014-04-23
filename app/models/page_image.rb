@@ -24,10 +24,8 @@ class PageImage < ActiveRecord::Base
       # Make sure only one PageImage can be the primary,
       # then update image_id on the page.
       if page_image.primary?
-        PageImage.update_all(
-          '`primary` = 0',
-          ['page_id = ? AND id != ?', page_image.page_id, page_image.id]
-        )
+        PageImage.where()
+        page_image.page.page_images.where("id != ?", page_image.id).update_all(primary: false)
         page_image.page.update(image_id: page_image.image_id)
 
       # Clear image_id on the page if primary is toggled off
