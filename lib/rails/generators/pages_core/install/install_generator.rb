@@ -48,10 +48,6 @@ module PagesCore
         copy_file 'default_page_template.html.erb', File.join('app/views/pages/templates/index.html.erb')
       end
 
-      def create_layout
-        copy_file 'layout.html.erb', File.join('app/views/layouts/application.html.erb')
-      end
-
       def create_delayed_job_script
         template 'delayed_job', File.join('script/delayed_job')
       end

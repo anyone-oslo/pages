@@ -1,0 +1,33 @@
+@mixin hidpi {
+  @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
+  only screen and (min-device-pixel-ratio : 1.5) {
+    html.backgroundsize & {
+      @content;
+    }
+  }
+}
+
+@mixin breakpoint-min($width) {
+  @media screen and (min-width: ($width + 1px)) {
+    @content;
+  }
+}
+
+@mixin breakpoint-max($width) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin breakpoint-min-max($min-width, $max-width) {
+  @media screen and (min-width: ($min-width + 1px)) and (max-width: ($max-width)) {
+    @content;
+  }
+}
+
+// Sample breakpoint
+
+// $breakpoint-mobile: 600px;
+// @mixin breakpoint-mobile($offset: 0px) {
+//   @include breakpoint-max(($breakpoint-mobile + $offset)) { @content; }
+// }
