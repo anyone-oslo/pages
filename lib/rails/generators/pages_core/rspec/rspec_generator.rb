@@ -8,11 +8,10 @@ module PagesCore
 
       def setup_gems
         gem_group :development do
+          gem 'spring-commands-rspec'
           gem 'guard'
-          gem 'guard-spork'
+          gem 'guard-spring'
           gem 'guard-rspec'
-          gem 'rb-fsevent'
-          gem 'ruby_gntp'
         end
         gem_group :test, :development do
           gem 'rspec-rails'
@@ -22,7 +21,6 @@ module PagesCore
           gem 'fuubar'
           gem 'timecop'
           gem 'factory_girl_rails'
-          gem 'spork'
         end
       end
 
@@ -31,7 +29,7 @@ module PagesCore
       end
 
       def setup_rspec
-        create_file File.join('.rspec'), "--colour --drb"
+        create_file File.join('.rspec'), "--colour"
         create_file File.join("spec/controllers/.keep")
         create_file File.join("spec/factories/.keep")
         create_file File.join("spec/models/.keep")
