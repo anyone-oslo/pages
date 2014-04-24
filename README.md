@@ -4,6 +4,12 @@ Pages is a CMS for Rails apps.
 
 ## Installation
 
+### Using the template
+
+    rails new [app name] -T -d mysql -m ~/Dev/gems/pages/template.rb
+
+### Using the generators
+
 Add pages_core to your Gemfile:
 
     gem 'pages_core', git: 'git@github.com:manualdesign/pages.git', branch: 'master'
