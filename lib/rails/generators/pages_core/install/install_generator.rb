@@ -72,6 +72,10 @@ module PagesCore
       def create_sphinx_config
         template 'thinking_sphinx.yml', File.join('config/thinking_sphinx.yml')
       end
+
+      def create_gitignore
+        template 'gitignore.erb', File.join('.gitignore')
+      end
     end
   end
 end
