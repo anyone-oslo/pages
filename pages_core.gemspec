@@ -35,11 +35,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails-i18n', '~> 4.0.0'
 
   # Default asset dependencies
-  s.add_dependency 'sass-rails', '~> 4.0.0'
+  s.add_dependency 'sass-rails', '~> 4.0.3'
   s.add_dependency 'uglifier', '>= 1.3.0'
   s.add_dependency 'coffee-rails', '~> 4.0.0'
   s.add_dependency 'jquery-rails'
-  s.add_dependency 'jbuilder', '~> 1.2'
+  s.add_dependency 'jbuilder', '~> 2.0'
 
   # Extra asset dependencies
   s.add_dependency 'jquery-ui-rails'
