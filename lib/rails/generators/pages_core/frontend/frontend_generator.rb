@@ -12,7 +12,7 @@ module PagesCore
       end
 
       def create_layout
-        template 'layout.html.erb', File.join('app/views/layouts/application.html.erb')
+        copy_file 'layout.html.erb', File.join('app/views/layouts/application.html.erb')
       end
 
       def create_application_css
