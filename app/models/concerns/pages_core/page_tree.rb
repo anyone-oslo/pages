@@ -15,6 +15,10 @@ module PagesCore
                  foreign_key: :parent_page_id,
                  inverse_of:  :parent,
                  dependent:   :destroy
+
+      # This must be included after the belongs_to call in order
+      # to override the .parent method.
+      include PagesCore::PageTree::InstanceMethods
     end
 
     module ClassMethods
@@ -29,31 +33,32 @@ module PagesCore
       end
     end
 
-    # Returns list of ancestors, starting from parent until root.
-    #
-    #   subchild1.ancestors # => [child1, root]
-    def ancestors
-      node, nodes = self, []
-      nodes << node = node.parent while node.parent
-      nodes
-    end
+    module InstanceMethods
+      # Returns list of ancestors, starting from parent until root.
+      #
+      #   subchild1.ancestors # => [child1, root]
+      def ancestors
+        node, nodes = self, []
+        nodes << node = node.parent while node.parent
+        nodes
+      end
 
-    # Returns the pages parent
-    def parent
-      super.try { |node| node.localize(self.locale) }
-    end
+      # Returns the pages parent
+      def parent
+        super.try { |node| node.localize(self.locale) }
+      end
 
-    # Returns the root node of the tree.
-    def root
-      self_and_ancestors.last
-    end
+      # Returns the root node of the tree.
+      def root
+        self_and_ancestors.last
+      end
 
-    # Returns ancestors and current node itself.
-    #
-    #   subchild1.self_and_ancestors # => [subchild1, child1, root]
-    def self_and_ancestors
-      [self] + self.ancestors
+      # Returns ancestors and current node itself.
+      #
+      #   subchild1.self_and_ancestors # => [subchild1, child1, root]
+      def self_and_ancestors
+        [self] + self.ancestors
+      end
     end
-
   end
 end
