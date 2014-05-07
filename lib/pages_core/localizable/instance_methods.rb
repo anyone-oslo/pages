@@ -29,6 +29,7 @@ module PagesCore
       #  page.locale = 'no' # => 'no'
       #
       def locale=(locale)
+        @localizer = Localizer.new(self)
         self.localizer.locale = locale
       end
 
@@ -63,6 +64,7 @@ module PagesCore
       # but returns the model instead of the locale and is chainable.
       #
       def localize!(locale)
+        @localizer = Localizer.new(self)
         self.localizer.locale = locale
         self
       end
