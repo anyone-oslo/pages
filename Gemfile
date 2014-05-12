@@ -17,7 +17,7 @@ end
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.6.1'
   gem 'capybara'
   gem 'fuubar'
   gem 'factory_girl'
