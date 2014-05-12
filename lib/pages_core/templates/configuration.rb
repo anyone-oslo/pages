@@ -3,7 +3,6 @@
 module PagesCore
   module Templates
     class Configuration < PagesCore::Templates::ConfigurationHandler
-      VALID_TEMPLATE_OPTIONS = :template, :image, :images, :files, :text_filter, :blocks, :enabled_blocks, :sub_template, :comments, :comments_allowed, :tags
 
       handle :default do |instance, name, *args|
         if name == :blocks
@@ -13,6 +12,13 @@ module PagesCore
         else
           instance.configure_template(:_defaults, name, *args)
         end
+      end
+
+      def valid_template_options
+        [
+          :template, :image, :images, :files, :text_filter, :blocks,
+          :enabled_blocks, :sub_template, :comments, :comments_allowed, :tags
+        ]
       end
 
       def configure_block(template_name, block_name, title=false, options={})
@@ -29,7 +35,7 @@ module PagesCore
       def configure_template(template_name, setting, value, options={})
         template_name = template_name.to_sym
         setting = setting.to_sym
-        if VALID_TEMPLATE_OPTIONS.include?(setting)
+        if valid_template_options.include?(setting)
           value = true  if value == :enabled
           value = false if value == :disabled
           template_config = {
