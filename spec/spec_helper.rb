@@ -16,6 +16,7 @@ Spork.prefork do
   require 'capybara/rails'
   require 'rspec/rails'
   require 'rspec/autorun'
+  require 'thinking_sphinx/test'
 
   Delayed::Worker.backend = :active_record
   FactoryGirl.find_definitions
@@ -42,6 +43,14 @@ Spork.prefork do
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
+
+    config.before(:suite) do
+      # Ensure sphinx directories exist for the test environment
+      ThinkingSphinx::Test.init
+      # Configure and start Sphinx, and automatically
+      # stop Sphinx at the end of the test suite.
+      ThinkingSphinx::Test.start_with_autostop
+    end
   end
 
 end

@@ -6,7 +6,7 @@ class Category < ActiveRecord::Base
   acts_as_list
 
   before_save :set_slug
-  after_save :trigger_delta_indexing
+  after_save ThinkingSphinx::RealTime.callback_for(:pages, [:page])
 
   scope :by_name, -> { order("name ASC") }
 
@@ -14,11 +14,5 @@ class Category < ActiveRecord::Base
 
   def set_slug
     self.slug = name.downcase.gsub(/[^\w\s]/, '').split(/[^\w\d\-]+/).compact.join('-')
-  end
-
-  def trigger_delta_indexing
-    pages.each do |page|
-      page.update(delta: true)
-    end
   end
 end

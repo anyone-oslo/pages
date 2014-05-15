@@ -3,6 +3,7 @@
 class Page < ActiveRecord::Base
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
+  include PagesCore::SearchablePage
   include PagesCore::Sweepable
   include PagesCore::Taggable
   include PagesCore::Templateable
@@ -49,9 +50,9 @@ class Page < ActiveRecord::Base
 
   before_validation :published_at
   before_validation :set_autopublish
-  before_save       :set_delta
   after_save        :ensure_page_images_contains_primary_image
   after_save        :queue_autopublisher
+  after_save        ThinkingSphinx::RealTime.callback_for(:page)
 
   scope :by_date,    -> { order('published_at DESC') }
   scope :published,  -> { where(status: 2, autopublish: false) }
@@ -202,7 +203,7 @@ class Page < ActiveRecord::Base
 
   def to_xml(options = {})
     # Always skip these
-    options[:except] = [:comments_count, :byline, :delta, :last_comment_at, :image_id] + Array(options[:except])
+    options[:except] = [:comments_count, :byline, :last_comment_at, :image_id] + Array(options[:except])
 
     super(options) do |xml|
 
@@ -257,10 +258,6 @@ class Page < ActiveRecord::Base
   def set_autopublish
     self.autopublish = published_at? && published_at > Time.now
     true
-  end
-
-  def set_delta
-    delta = true
   end
 
   def queue_autopublisher

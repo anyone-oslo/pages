@@ -1,3 +1,8 @@
+* #### Realtime indexes
+
+  Pages now uses the realtime indexes feature of Sphinx, rather than
+  relying on DelayedJob. This requires that a Sphinx process is always running.
+
 * #### Updated to Rails 4.1
 
   Now runs on Rails 4.1.

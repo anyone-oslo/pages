@@ -46,7 +46,6 @@ require 'acts_as_list'
 require "recaptcha/rails"
 
 require 'thinking-sphinx'
-require 'thinking_sphinx/deltas/delayed_delta'
 
 module PagesCore
   class NotAuthorized < StandardError; end
