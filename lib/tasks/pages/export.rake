@@ -14,7 +14,7 @@ namespace :pages do
           :builder       => builder,
           :skip_instruct => true,
           :except        => [
-            :delta, :is_super_admin, :is_venue_admin, :is_reviewer,
+            :is_super_admin, :is_venue_admin, :is_reviewer,
             :persistent_data, :sms_sender, :token, :hashed_password
           ]
         )

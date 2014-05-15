@@ -1,18 +1,26 @@
 # encoding: utf-8
 
-ThinkingSphinx::Index.define :page, with: :active_record, delta: ThinkingSphinx::Deltas::DelayedDelta do
-  indexes localizations.value,             as: :localization_values
-  indexes categories.name,                 as: :category_names
-  indexes tags.name,                       as: :tag_names
-  indexes [author.realname, author.email], as: :author_name
-  indexes [comments.name, comments.body],  as: :comments
+ThinkingSphinx::Index.define :page, with: :real_time do
+  indexes localization_values
+  indexes category_names
+  indexes tag_list
+  indexes author.realname, as: :author_name
+  indexes author.email,    as: :author_email
+  indexes comment_names
+  indexes comment_bodies
 
-  has published_at, created_at, updated_at
-  has user_id, parent_page_id
-  has status, template
-  has autopublish, feed_enabled
-  has categories(:id), as: :category_ids
-  has tags(:id), as: :tag_ids
+  has category_ids,   type: :integer, multi: true
+  has tag_ids,        type: :integer, multi: true
+
+  has published_at,   type: :timestamp
+  has created_at,     type: :timestamp
+  has updated_at,     type: :timestamp
+  has user_id,        type: :integer
+  has parent_page_id, type: :integer
+  has status,         type: :integer
+  has template,       type: :string
+  has autopublish,    type: :boolean
+  has feed_enabled,   type: :boolean
 
   set_property group_concat_max_len: 16.megabytes
 end

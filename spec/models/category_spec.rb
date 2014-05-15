@@ -16,15 +16,4 @@ describe Category do
     subject { category.slug }
     it { should == "test-category" }
   end
-
-  describe "delta indexing" do
-    let(:page) { create(:page) }
-    before { category.pages << page }
-    it "should update delta indexes on page" do
-      page.update_column(:delta, false)
-      page.reload.delta.should be_false
-      category.update(name: 'New name')
-      page.reload.delta.should be_true
-    end
-  end
 end

@@ -5,3 +5,6 @@ Gemfile.lock
 pkg/*
 doc/*
 tmp/*
+spec/internal/config/test.sphinx.conf
+spec/internal/db/sphinx
+spec/internal/tmp/*

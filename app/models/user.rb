@@ -62,6 +62,8 @@ class User < ActiveRecord::Base
   before_validation :hash_password, on: :create
   before_validation :create_password, on: :create
 
+  after_save ThinkingSphinx::RealTime.callback_for(:user)
+
   scope :by_name,     -> { order('realname ASC') }
   scope :activated,   -> { by_name.includes(:roles).where(is_activated: true) }
   scope :deactivated, -> { by_name.includes(:roles).where(is_activated: false) }

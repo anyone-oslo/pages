@@ -60,5 +60,4 @@ Gem::Specification.new do |s|
 
   # Thinking Sphinx
   s.add_dependency 'thinking-sphinx', "~> 3.1.1"
-  s.add_dependency 'ts-delayed-delta', "~> 2.0.2"
 end
