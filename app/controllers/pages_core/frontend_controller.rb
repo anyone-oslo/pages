@@ -20,7 +20,13 @@ class PagesCore::FrontendController < ApplicationController
   private
 
   def set_i18n_locale
-    I18n.locale = params[:locale] || I18n.default_locale
+    legacy_locales = {
+      'nor' => 'nb',
+      'eng' => 'en'
+    }
+    locale_param = params[:locale] || I18n.default_locale
+    locale_param = legacy_locales[locale_param] if legacy_locales[locale_param]
+    I18n.locale = locale_param
   end
 
 end
