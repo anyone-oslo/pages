@@ -15,7 +15,7 @@ module PagesCore
         end
         gem_group :test, :development do
           gem 'rspec-rails'
-          gem 'shoulda-matchers'
+          gem 'shoulda-matchers', require: false
           gem 'json_spec'
           gem 'capybara'
           gem 'timecop'
