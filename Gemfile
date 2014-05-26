@@ -19,7 +19,6 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 2.6.1'
   gem 'capybara'
-  gem 'fuubar'
   gem 'factory_girl'
   gem 'spork'
 end

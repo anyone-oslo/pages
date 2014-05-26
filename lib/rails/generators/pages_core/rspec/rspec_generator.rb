@@ -18,7 +18,6 @@ module PagesCore
           gem 'shoulda-matchers'
           gem 'json_spec'
           gem 'capybara'
-          gem 'fuubar'
           gem 'timecop'
           gem 'factory_girl_rails'
         end
