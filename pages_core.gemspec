@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
   s.add_dependency 'ruby-openid', '~> 2.5.0'
   s.add_dependency 'vector2d'
-  s.add_dependency 'dynamic_image-pages', '>= 0.0.16'
+  s.add_dependency 'dynamic_image-pages', '>= 0.0.22'
   s.add_dependency 'actionpack-page_caching'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
 
