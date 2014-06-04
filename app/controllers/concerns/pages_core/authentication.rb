@@ -30,7 +30,6 @@ module PagesCore
     def deauthenticate!
       @current_user  = nil
       session[:current_user_id] = nil
-      session[:authenticated_openid_url] = nil
     end
 
     protected
@@ -38,9 +37,6 @@ module PagesCore
     def start_authenticated_session
       if session[:current_user_id]
         user = User.where(id: session[:current_user_id]).first
-
-      elsif !session[:authenticated_openid_url].blank?
-        user = User.authenticate_by_openid_url(session[:authenticated_openid_url])
       end
 
       if user && user.can_login?

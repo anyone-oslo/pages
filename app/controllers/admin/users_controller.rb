@@ -3,10 +3,10 @@
 class Admin::UsersController < Admin::AdminController
   before_action :require_authentication, except: [:welcome, :create_first, :login]
   before_action :require_no_users,       only: [:welcome, :create_first]
-  before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image, :update_openid]
+  before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image]
 
   require_authorization User, proc { @user },
-                        member:     [:delete_image, :update, :destroy, :edit, :update_openid],
+                        member:     [:delete_image, :update, :destroy, :edit],
                         collection: [:index, :deactivated, :new, :create, :create_first]
 
   def index
@@ -32,22 +32,8 @@ class Admin::UsersController < Admin::AdminController
     @user = User.create(user_params)
     if @user.valid?
       authenticate!(@user)
-
-      # Start OpenID session
-      if params[:user][:openid_url]
-        unless start_openid_session(params[:user][:openid_url],
-          success: update_openid_admin_user_url(@user),
-          fail:    edit_admin_user_url(@user)
-        )
-          flash.now[:error] = "Not a valid OpenID URL"
-          render :action => :edit
-        end
-      else
-        redirect_to admin_default_url
-      end
-    else
-      redirect_to admin_default_url
     end
+    redirect_to admin_default_url
   end
 
   def login
@@ -93,32 +79,13 @@ class Admin::UsersController < Admin::AdminController
         AdminMailer.user_changed(@user, admin_default_url, current_user).deliver
       end
 
-      # OpenID URL changed?
-      if @user == current_user && params[:user][:openid_url] != @user.openid_url
-        unless start_openid_session(params[:user][:openid_url],
-          success: update_openid_admin_user_url(@user),
-          fail:    edit_admin_user_url(@user)
-        )
-          flash.now[:error] = "Not a valid OpenID URL"
-          render :action => :edit
-        end
-      else
-        flash[:notice] = "Your changed to #{@user.realname} were saved."
-        redirect_to admin_users_url
-      end
+      flash[:notice] = "Your changed to #{@user.realname} were saved."
+      redirect_to admin_users_url
     else
       raise @user.roles.inspect
       flash.now[:error] = "There were problems saving your changes."
       render :action => :edit
     end
-  end
-
-  def update_openid
-    if session[:authenticated_openid_url]
-      @user.update(openid_url: session[:authenticated_openid_url])
-    end
-    flash[:notice] = "Your changed to #{@user.realname} were saved."
-    redirect_to admin_users_url
   end
 
   def destroy

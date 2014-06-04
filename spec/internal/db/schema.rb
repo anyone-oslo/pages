@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140203183900) do
+ActiveRecord::Schema.define(version: 20140604142100) do
 
   create_table "binaries", force: true do |t|
     t.string "sha1_hash"
@@ -198,7 +198,6 @@ ActiveRecord::Schema.define(version: 20140203183900) do
     t.string   "web_link"
     t.integer  "image_id"
     t.boolean  "delta",           default: false, null: false
-    t.string   "openid_url"
   end
 
   add_index "users", ["delta"], name: "delta_index", using: :btree

@@ -24,13 +24,6 @@ Rails.application.routes.draw do
   resource :session,        only: [:create, :destroy]
   resource :password_reset, only: [:create]
 
-  # OpenID
-  resource :openid, :controller => 'openid' do
-    member do
-      get 'complete'
-    end
-  end
-
   namespace :admin do
 
     # Images
@@ -47,7 +40,6 @@ Rails.application.routes.draw do
       end
       member do
         delete 'delete_image'
-        get 'update_openid'
       end
     end
 

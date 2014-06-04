@@ -38,10 +38,6 @@ class UserPolicy < Policy
       edit?
     end
 
-    def update_openid?
-      edit?
-    end
-
     def policies?
       user.has_role?(:users)
     end

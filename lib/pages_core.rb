@@ -32,7 +32,6 @@ require "bcrypt"
 require 'vector2d'
 require 'RedCloth'
 require 'daemon-spawn'
-require 'openid'
 require 'delayed_job'
 
 require 'dynamic_image'
