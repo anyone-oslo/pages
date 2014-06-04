@@ -51,10 +51,6 @@
     to generate a random password.
   </p>
 
-  <% if @user == current_user %>
-    <%= f.labelled_text_field :openid_url %>
-  <% end %>
-
   <%= render partial: "access_control", locals: { user: @user, f: f } %>
 
   <p>

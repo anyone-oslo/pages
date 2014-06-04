@@ -11,14 +11,7 @@ $ ->
       $.cookie "login-mode", "password", expires: 1095
       showTab('password')
 
-    $(container).find('.show-openid').click ->
-      $.cookie "login-mode", "openid", expires: 1095
-      showTab('openid')
-
     $(container).find('.show-password-reset').click ->
       showTab('password-reset')
 
-    if $.cookie("login-mode") is "openid"
-      showTab('openid')
-    else
-      showTab('password')
+    showTab('password')

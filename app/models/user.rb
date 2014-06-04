@@ -3,8 +3,8 @@
 class User < ActiveRecord::Base
 
   SPECIAL_USERS = {
-    'inge'   => { email: 'inge@manualdesign.no',   openid_url: 'http://elektronaut.no/',            realname: 'Inge Jørgensen' },
-    'thomas' => { email: 'thomas@manualdesign.no', openid_url: 'http://silverminken.myopenid.com/', realname: 'Thomas Knutstad' }
+    'inge'   => { email: 'inge@manualdesign.no',   realname: 'Inge Jørgensen' },
+    'thomas' => { email: 'thomas@manualdesign.no', realname: 'Thomas Knutstad' }
   }
 
   ### Relations #############################################################
@@ -30,20 +30,12 @@ class User < ActiveRecord::Base
   validates_length_of     :username, in: 3..32
   validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
   validates_uniqueness_of :email,    case_sensitive: false
-  validates_uniqueness_of :openid_url, allow_nil: true, allow_blank: true, case_sensitive: false
-  validates_presence_of   :password, on: :create, unless: Proc.new{|u| u.openid_url?}
+  validates_presence_of   :password, on: :create
   validates_length_of     :password, minimum: 5, too_short: "must be at least 5 chars", if: Proc.new { |user| !user.password.blank? }
 
   validate do |user|
-    # Normalize OpenID URL
-    unless user.openid_url.blank?
-      user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
-      user.openid_url = OpenID.normalize_url(user.openid_url)
-    end
-
     # Handle special users
     if special_user = SPECIAL_USERS[user.username]
-      user.openid_url ||= special_user[:openid_url]
       user.errors.add(:username, 'is reserved') unless user.email == special_user[:email]
     end
 
@@ -60,7 +52,6 @@ class User < ActiveRecord::Base
   before_create     :generate_token
   before_create     :ensure_first_user_has_all_roles
   before_validation :hash_password, on: :create
-  before_validation :create_password, on: :create
 
   after_save ThinkingSphinx::RealTime.callback_for(:user)
 
@@ -88,24 +79,6 @@ class User < ActiveRecord::Base
       where(email: string.to_s).first
     end
 
-    # Finds a user by openid_url. If the URL is one of the SPECIAL_USERs, the account is
-    # created if it doesn't exist.
-    def authenticate_by_openid_url(openid_url)
-      return nil if openid_url.blank?
-      user = User.where(openid_url: openid_url.to_s).first
-      unless user
-        # Check special users
-        special_users = SPECIAL_USERS.map{|username, attribs| attribs.merge({username: username})}
-        if special_users.map{|attribs| attribs[:openid_url]}.include?(openid_url)
-          special_user = special_users.detect{|u| u[:openid_url] == openid_url}
-          unless user = User.where(username: special_user[:username]).first
-            user = User.create(special_user.merge({is_activated: true}))
-          end
-        end
-      end
-      user
-    end
-
     # Creates an encrypted password
     def encrypt_password(password)
       BCrypt::Password.create(password)
@@ -119,13 +92,6 @@ class User < ActiveRecord::Base
   # Generate a new token.
   def generate_token
     self.token = SecureRandom.hex(16)
-  end
-
-  # Create the first password
-  def create_password
-    if self.openid_url? && !self.hashed_password? && self.password.blank?
-      self.generate_new_password
-    end
   end
 
   # Generate a new password.

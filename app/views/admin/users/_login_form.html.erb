@@ -19,31 +19,6 @@
         <li>
           <%= link_to "<b>Help!</b> I forgot my password!".html_safe, login_url, class: 'show-password-reset' %>
         </li>
-        <li>
-          <%= link_to "Sign in with OpenID", login_url, class: 'show-openid' %>
-        </li>
-      </ul>
-    <% end %>
-  </div>
-
-  <div class="login-tab openid">
-    <%= form_tag openid_path do %>
-      <%= hidden_field_tag :openid_success, success_url %>
-      <%= hidden_field_tag :openid_fail,    login_url %>
-      <p>
-        <label>Enter your OpenID URL</label>
-        <%= text_field_tag :openid_url, '', class: 'openid-url' %>
-      </p>
-      <p>
-        <button type="submit">Sign in</button>
-      </p>
-      <ul class="login_links">
-        <li>
-          <%= link_to "What is OpenID?", "http://openid.net/" %>
-        </li>
-        <li>
-          <%= link_to "Sign in with with username and password", login_url, class: 'show-password' %>
-        </li>
       </ul>
     <% end %>
   </div>
