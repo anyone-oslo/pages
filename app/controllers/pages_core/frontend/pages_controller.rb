@@ -183,15 +183,24 @@ class PagesCore::Frontend::PagesController < FrontendController
       @search_category_id = params[:category_id]
       normalized_query = @search_query.split(/\s+/).map{|p| "#{p}*"}.join(' ')
 
-      options = {
-        page:      params[:page],
+      search_options = {
+        page:      (params[:page] || 1).to_i,
+        per_page:  20,
+        include:   [:localizations, :categories, :image, :author],
         order:     :published_at,
         sort_mode: :desc,
-        locale:    @locale
+        with: {
+          status:      2,
+          autopublish: 0
+        }
       }
-      options[:category_id] = @search_category_id if @search_category_id
 
-      @pages = Page.search_paginated(normalized_query, options)
+      if @search_category_id
+        search_options[:with][:category_ids] = @search_category_id
+      end
+
+      @pages = Page.search(normalized_query, search_options)
+      @pages = @pages.map { |p| p.localize(locale) }
     end
 
     def preview
