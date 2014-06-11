@@ -43,7 +43,7 @@ module PagesCore
     def handle_exception(exception)
       begin
         log_error exception
-        if exception.kind_of?(ActionController::RoutingError)
+        if exception.kind_of?(ActionController::RoutingError) || exception.kind_of?(ActiveRecord::RecordNotFound)
           render_error 404
         elsif exception.kind_of?(PagesCore::NotAuthorized)
           render_error 403
