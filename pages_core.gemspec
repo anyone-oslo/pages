@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'RedCloth', '~> 4.2.9'
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
   s.add_dependency 'vector2d'
-  s.add_dependency 'dynamic_image-pages', '>= 0.0.22'
+  s.add_dependency 'dynamic_image-pages', '>= 0.0.23'
   s.add_dependency 'actionpack-page_caching'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
 
