@@ -46,21 +46,11 @@ class Admin::PageCommentsController < Admin::AdminController
   protected
 
   def find_page
-    begin
-      @page = Page.find(params[:page_id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find Page with ID ##{params[:page_id]}"
-      redirect_to admin_pages_path(@locale) and return
-    end
+    @page = Page.find(params[:page_id])
   end
 
   def find_page_comment
-    begin
-      @page_comment = @page.comments.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find PageComment with ID ##{params[:id]}"
-      redirect_to admin_page_path(@locale, @page) and return
-    end
+    @page_comment = @page.comments.find(params[:id])
   end
 
   def page_comment_params

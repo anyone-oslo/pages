@@ -139,12 +139,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def find_page
-    begin
-      @page = Page.find(params[:id]).localize(@locale)
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Cannot load page with id ##{params[:id]}"
-      redirect_to admin_pages_url(@locale) and return
-    end
+    @page = Page.find(params[:id]).localize(@locale)
   end
 
   def find_categories

@@ -50,11 +50,6 @@ class Admin::CategoriesController < Admin::AdminController
   end
 
   def find_category
-    begin
-      @category = Category.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find Category with ID ##{params[:id]}"
-      redirect_to admin_pages_url(@locale) and return
-    end
+    @category = Category.find(params[:id])
   end
 end

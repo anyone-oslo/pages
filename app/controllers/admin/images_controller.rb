@@ -38,12 +38,7 @@ class Admin::ImagesController < Admin::AdminController
   end
 
   def find_image
-    begin
-      @image = Image.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:error] = "Cannot load Image with ID #{params[:id]}"
-      redirect_to admin_pages_url and return
-    end
+    @image = Image.find(params[:id])
   end
 
 end

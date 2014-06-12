@@ -70,21 +70,11 @@ class Admin::PageFilesController < Admin::AdminController
   end
 
   def find_page
-    begin
-      @page = Page.find(params[:page_id]).localize(@locale)
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find PageFile with ID ##{params[:id]}"
-      redirect_to admin_pages_path(@locale) and return
-    end
+    @page = Page.find(params[:page_id]).localize(@locale)
   end
 
   def find_page_file
-    begin
-      @page_file = @page.files.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Could not find PageFile with ID ##{params[:id]}"
-      redirect_to admin_page_path(@locale, @page) and return
-    end
+    @page_file = @page.files.find(params[:id])
   end
 
 end

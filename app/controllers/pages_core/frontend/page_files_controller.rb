@@ -7,12 +7,7 @@ class PagesCore::Frontend::PageFilesController < FrontendController
   protected
 
     def find_page_file
-      begin
-        @page_file = PageFile.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        flash[:notice] = "Could not find PageFile with ID ##{params[:id]}"
-        redirect_to page_files_url and return
-      end
+      @page_file = PageFile.find(params[:id])
     end
 
   public
