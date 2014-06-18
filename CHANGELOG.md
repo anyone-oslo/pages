@@ -1,3 +1,19 @@
+* #### Rails generator template
+
+  A template for generating new apps has been provided. To use it, run:
+
+  ```sh
+  rails new [app name] -T -d mysql -m /path/to/pages_core/template.rb
+  ```
+
+* #### OpenID removed
+
+  OpenID seems to be dead. All support has been removed.
+
+* #### Unique email addresses
+
+  Email addresses are now unique per user account
+
 * #### Realtime indexes
 
   Pages now uses the realtime indexes feature of Sphinx, rather than
