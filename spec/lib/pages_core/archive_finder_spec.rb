@@ -10,13 +10,19 @@ describe PagesCore::ArchiveFinder do
   let(:pages) { [page1, page2, page3, page4] }
   let(:archive_finder) { PagesCore::ArchiveFinder.new(Page.visible, timestamp: :published_at) }
 
-  describe "by_year_and_month" do
+  describe "#by_year" do
+    before { pages }
+    subject { archive_finder.by_year(2012) }
+    it { should =~ [page1, page2, page3] }
+  end
+
+  describe "#by_year_and_month" do
     before { pages }
     subject { archive_finder.by_year_and_month(2012, 4) }
     it { should =~ [page2, page3] }
   end
 
-  describe "latest_year_and_month" do
+  describe "#latest_year_and_month" do
     subject { archive_finder.latest_year_and_month }
     context "without items" do
       it { should be_nil }

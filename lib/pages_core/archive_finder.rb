@@ -6,9 +6,12 @@ module PagesCore
       @relation, @options = relation, options
     end
 
+    def by_year(year)
+      filter_by_time(range_for_year(year))
+    end
+
     def by_year_and_month(year, month)
-      date_time = DateTime.new(year.to_i, month.to_i, 1)
-      @relation.where("#{timestamp_attribute} >= ? AND #{timestamp_attribute} <= ?", date_time, date_time.end_of_month)
+      filter_by_time(range_for_year_and_month(year, month))
     end
 
     def latest_year_and_month
@@ -21,14 +24,14 @@ module PagesCore
     end
 
     def months_in_year(year)
-      range_for_year(year)
+      by_year(year)
         .select("DISTINCT MONTH(#{timestamp_attribute}) AS month")
         .order("month ASC")
         .map(&:month)
     end
 
     def months_in_year_with_count(year)
-      range_for_year(year)
+      by_year(year)
         .select("MONTH(#{timestamp_attribute}) AS month, COUNT(id) AS count")
         .group("MONTH(#{timestamp_attribute})")
         .order("month ASC")
@@ -47,9 +50,18 @@ module PagesCore
 
     private
 
+    def filter_by_time(range)
+      @relation.where("#{timestamp_attribute} >= ? AND #{timestamp_attribute} <= ?", range.first, range.last)
+    end
+
     def range_for_year(year)
       date_time = DateTime.new(year.to_i, 1, 1)
-      @relation.where("#{timestamp_attribute} >= ? AND #{timestamp_attribute} <= ?", date_time, date_time.end_of_year)
+      date_time..date_time.end_of_year
+    end
+
+    def range_for_year_and_month(year, month)
+      date_time = DateTime.new(year.to_i, month.to_i, 1)
+      date_time..date_time.end_of_month
     end
 
     def ordered_relation
