@@ -113,7 +113,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           @encoding   = (params[:encoding] ||= "UTF-8").downcase
           @title      = PagesCore.config(:site_name)
           feeds       = Page.enabled_feeds(@locale, {:include_hidden => true})
-          @feed_items = Page.where(:parent_page_id => feeds).order('publised_at DESC').published.limit(20).localized(@locale)
+          @feed_items = Page.where(:parent_page_id => feeds).order('published_at DESC').published.limit(20).localized(@locale)
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
           render :template => 'feeds/pages', :layout => false
         end
