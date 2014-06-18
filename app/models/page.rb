@@ -126,11 +126,15 @@ class Page < ActiveRecord::Base
 
   # Get subpages
   def pages(options=nil)
-    subpages = self.children.published.order(self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order)
     if self.locale?
-      subpages = subpages.localized(self.locale)
+      subpages.published.localized(self.locale)
+    else
+      subpages.published
     end
-    subpages
+  end
+
+  def subpages
+    self.children.order(pinned_content_order)
   end
 
   # Return the status of the page as a string
@@ -253,6 +257,10 @@ class Page < ActiveRecord::Base
         page_images.create(image_id: image_id, primary: true)
       end
     end
+  end
+
+  def pinned_content_order
+    self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order
   end
 
   def set_autopublish

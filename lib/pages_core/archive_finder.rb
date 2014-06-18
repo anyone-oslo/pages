@@ -25,17 +25,16 @@ module PagesCore
 
     def months_in_year(year)
       by_year(year)
-        .select("DISTINCT MONTH(#{timestamp_attribute}) AS month")
-        .order("month ASC")
-        .map(&:month)
+        .reorder("#{timestamp_attribute} ASC")
+        .group("MONTH(#{timestamp_attribute})")
+        .map { |record| record[timestamp_attribute].month }
     end
 
     def months_in_year_with_count(year)
       by_year(year)
-        .select("MONTH(#{timestamp_attribute}) AS month, COUNT(id) AS count")
         .group("MONTH(#{timestamp_attribute})")
-        .order("month ASC")
-        .map { |r| [r.month, r.count] }
+        .count
+        .to_a
     end
 
     def timestamp_attribute
@@ -43,9 +42,10 @@ module PagesCore
     end
 
     def years
-      @relation.select("DISTINCT YEAR(#{timestamp_attribute}) AS year")
-               .order("year ASC")
-               .map(&:year)
+      @relation
+        .reorder("#{timestamp_attribute} ASC")
+        .group("YEAR(#{timestamp_attribute})")
+        .map { |record| record[timestamp_attribute].year }
     end
 
     private
