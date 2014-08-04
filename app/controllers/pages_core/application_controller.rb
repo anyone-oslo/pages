@@ -20,7 +20,6 @@ class PagesCore::ApplicationController < ActionController::Base
   before_filter :set_locale,                 :except => SKIP_FILTERS
   after_filter  :set_headers,                :except => SKIP_FILTERS
   after_filter  :set_authentication_cookies, :except => SKIP_FILTERS
-  after_filter  :ensure_garbage_collection,  :except => SKIP_FILTERS
 
   before_filter :set_process_title
   after_filter  :unset_process_title
@@ -141,15 +140,6 @@ class PagesCore::ApplicationController < ActionController::Base
     def set_headers
       # Set the language header
       headers['Content-Language'] = Language.definition(@locale.to_s).iso639_1 rescue nil if @locale
-    end
-
-    # Performs garbage collection if the proper flags have been set.
-    # This method is automatically run from an after_filter.
-    def ensure_garbage_collection
-      unless DynamicImage.clean_dirty_memory
-        # clean_dirty_memory returns true if it performs garbage collection,
-        # no need to do it twice.
-      end
     end
 
     # === Authentication filter
