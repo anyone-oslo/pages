@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jbuilder', '~> 2.0'
 
   # Extra asset dependencies
-  s.add_dependency 'jquery-ui-rails'
+  s.add_dependency 'jquery-ui-rails', '~> 4.2.1'
   s.add_dependency 'jquery-cookie-rails'
   s.add_dependency 'jcrop-rails-v2'
   s.add_dependency 'underscore-rails'
