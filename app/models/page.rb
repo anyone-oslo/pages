@@ -48,8 +48,13 @@ class Page < ActiveRecord::Base
   validates_format_of     :unique_name, with: /\A[\w\d_\-]+\z/, allow_nil: true, allow_blank: true
   validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
+  validates :template, presence: true
+  validates :content_order, presence: true
+  validates :published_at, presence: true
+
   before_validation :published_at
   before_validation :set_autopublish
+  before_validation :set_content_order
   after_save        :ensure_page_images_contains_primary_image
   after_save        :queue_autopublisher
   after_save        ThinkingSphinx::RealTime.callback_for(:page)
@@ -148,7 +153,11 @@ class Page < ActiveRecord::Base
 
   # Get publication date, which defaults to the creation date
   def published_at
-    self[:published_at] ||= self.created_at
+    if self.created_at?
+      self[:published_at] ||= self.created_at
+    else
+      self[:published_at] ||= Time.now
+    end
   end
 
   # Returns boolean true if page has a valid redirect
@@ -266,6 +275,10 @@ class Page < ActiveRecord::Base
   def set_autopublish
     self.autopublish = published_at? && published_at > Time.now
     true
+  end
+
+  def set_content_order
+    self[:content_order] ||= 'position'
   end
 
   def queue_autopublisher

@@ -56,7 +56,7 @@ module PagesCore
     end
 
     def ensure_template
-      self.template ||= default_template
+      self[:template] ||= default_template
     end
   end
 end
