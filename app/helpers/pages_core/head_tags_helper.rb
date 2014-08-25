@@ -86,9 +86,7 @@ module PagesCore::HeadTagsHelper
   #    <%= feed_tags %>
   #  <% end %>
   #
-  def head_tag(options={}, &block)
-    deprecate_head_tag_options(options, caller)
-
+  def head_tag(&block)
     # The block output must be captured first
     block_output = block_given? ? capture(&block) : nil
 
@@ -101,7 +99,6 @@ module PagesCore::HeadTagsHelper
         (tag(:meta, name: "description", content: meta_description) if meta_description?),
         (tag(:meta, name: "keywords", content: meta_keywords) if meta_keywords?),
         (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
-        (deprecated_head_tags(options) if options.any?),
         open_graph_tags,
         csrf_meta_tags,
         block_output
@@ -212,73 +209,6 @@ module PagesCore::HeadTagsHelper
       javascript_include_tag("http://use.typekit.com/#{kit_id}.js"),
       javascript_tag("try{Typekit.load();}catch(e){}")
     ], "\n")
-  end
-
-  protected
-
-  def deprecated_head_tags(options={})
-    tags << []
-
-    if options.has_key?(:stylesheet)
-      tags << stylesheet_link_tag(*options[:stylesheet])
-    end
-
-    if options.has_key?(:javascript)
-      Array(options[:javascript]).each do |js|
-        if js.kind_of?(Array)
-          tags << javascript_include_tag(js.first, js.last)
-        else
-          tags << javascript_include_tag(js)
-        end
-      end
-    end
-
-    if options[:feed_tags] && options[:feed_tags] == :include_hidden
-      tags << feed_tags(:include_hidden => true)
-    elsif options[:feed_tags]
-      tags << feed_tags
-    end
-
-    safe_join(tags, "\n")
-  end
-
-  def deprecate_head_tag_options(options, callstack)
-    if options.has_key?(:title)
-      ActiveSupport::Deprecation.warn ":title option for head_tag is deprecated, use the document_title helper", callstack
-      document_title options[:title]
-    end
-
-    if options.has_key?(:meta_description)
-      ActiveSupport::Deprecation.warn ":meta_description option for head_tag is deprecated, use the meta_description helper", callstack
-      meta_description options[:meta_description]
-    end
-
-    if options.has_key?(:meta_keywords)
-      ActiveSupport::Deprecation.warn ":meta_keywords option for head_tag is deprecated, use the meta_keywords helper", callstack
-      meta_keywords options[:meta_keywords]
-    end
-
-    if options.has_key?(:meta_image)
-      ActiveSupport::Deprecation.warn ":meta_image option for head_tag is deprecated, use the meta_image helper", callstack
-      meta_image options[:meta_image]
-    end
-
-    if options.has_key?(:default_meta_image)
-      ActiveSupport::Deprecation.warn ":default_meta_image option for head_tag is deprecated, use the default_meta_image helper", callstack
-      default_meta_image options[:default_meta_image]
-    end
-
-    if options.has_key?(:javascript)
-      ActiveSupport::Deprecation.warn ":javascript option for head_tag is deprecated, use javascript_include_tag in the block", callstack
-    end
-
-    if options.has_key?(:stylesheet)
-      ActiveSupport::Deprecation.warn ":stylesheet option for head_tag is deprecated, use stylesheet_link_tag in the block", callstack
-    end
-
-    if options.has_key?(:feed_tags)
-      ActiveSupport::Deprecation.warn ":feed_tags option for head_tag is deprecated, use the feed_tags helper in the block", callstack
-    end
   end
 
 end
