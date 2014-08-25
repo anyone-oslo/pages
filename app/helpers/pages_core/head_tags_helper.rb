@@ -177,6 +177,10 @@ module PagesCore::HeadTagsHelper
     !meta_keywords.blank?
   end
 
+  def open_graph_properties
+    @_open_graph_properties ||= {}
+  end
+
   # Outputs Open Graph tags for Facebook.
   def open_graph_tags
     properties = {
@@ -185,7 +189,7 @@ module PagesCore::HeadTagsHelper
       title:       document_title,
       image:       (meta_image if meta_image?),
       description: (meta_description if meta_description?)
-    }
+    }.merge(open_graph_properties)
     safe_join(properties.delete_if { |_, content| content.nil? }.map do |name, content|
       tag(:meta, property: "og:#{name}", content: content)
     end, "\n")
