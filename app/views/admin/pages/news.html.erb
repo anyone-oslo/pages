@@ -42,7 +42,7 @@
       <td class="name">
         <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), :class => 'name_link') %>
         <% if page.autopublish? %>
-          <br /><small>This page will be published <strong><%= smart_time(page.published_at, :always_include_time => true) %></strong></small>
+          <br /><small>This page will be published <strong><%= publish_time(page.published_at) %></strong></small>
         <% end %>
       </td>
       <td>

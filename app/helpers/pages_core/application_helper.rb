@@ -4,8 +4,6 @@
 module PagesCore::ApplicationHelper
   include ActionView::Helpers::AssetTagHelper
   include DynamicImage::DynamicImageHelper
-  include PagesCore::Deprecations::DeprecatedHelper
-  include PagesCore::Deprecations::DeprecatedVideoHelper
   include PagesCore::HeadTagsHelper
 
   def page_link(page, options={})

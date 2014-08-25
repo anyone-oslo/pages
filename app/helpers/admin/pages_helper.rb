@@ -37,4 +37,21 @@ module Admin::PagesHelper
       page_name_cache[options][page.id] = p_name
     end
   end
+
+  def publish_time(time)
+    date_string = (time.to_date == Time.now.to_date) ? "at " : "on "
+
+    if time.to_date == Time.now.to_date
+      date_string += time.strftime("%H:%M")
+    elsif time.year == Time.now.year
+      date_string += time.strftime("%b %d")
+      date_string += time.strftime(" at %H:%M")
+    else
+      date_string += time.strftime("%b %d %Y")
+      date_string += time.strftime(" at %H:%M")
+    end
+
+    date_string
+  end
+
 end
