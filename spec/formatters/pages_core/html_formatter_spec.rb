@@ -24,7 +24,17 @@ describe PagesCore::HtmlFormatter do
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
-        it { should match(/<p><img alt=\"image\" height=\"200\" src=\"\/dynamic_image\/1\/320x200\/image-([\w\d]+).png\" width=\"320\" \/><\/p>/) }
+        it { should match(/<p><img alt=\"image\" height=\"200\" src=\"\/dynamic_image\/#{image.id}\/320x200\/image-([\w\d]+).png\" width=\"320\" \/><\/p>/) }
+      end
+
+      context "with size" do
+        let(:string) { "[image:#{image.id} size=\"100x100\"]" }
+        it { should match(/<p><img alt=\"image\" height=\"63\" src=\"\/dynamic_image\/#{image.id}\/100x63\/image-([\w\d]+).png\" width=\"100\" \/><\/p>/) }
+      end
+
+      context "with class name" do
+        let(:string) { "[image:#{image.id} class=\"float-left\"]" }
+        it { should match(/<p><img alt=\"image\" class=\"float-left\" height=\"200\" src=\"\/dynamic_image\/#{image.id}\/320x200\/image-([\w\d]+).png\" width=\"320\" \/><\/p>/) }
       end
 
       context "with non-existant image" do

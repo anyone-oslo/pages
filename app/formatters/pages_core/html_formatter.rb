@@ -31,12 +31,17 @@ module PagesCore
     private
 
     def parse_images(string)
-      image_expression = /\[image:(\d+)\]/
+      image_expression = /\[image:(\d+)([\s="\-_\w\d]*)?\]/
       string.gsub(image_expression).each do |str|
         id = str.match(image_expression)[1]
+        options = str.match(image_expression)[2]
+
+        size       = options.match(/size="(\d*x\d*)"/) ? $1 : "2000x2000"
+        class_name = options.match(/class="([\s\-_\w\d]+)"/) ? $1 : nil
+
         begin
           image = Image.find(id)
-          dynamic_image_tag(image, size: '2000x2000', crop: false, upscale: false, only_path: true)
+          dynamic_image_tag(image, size: size, crop: false, upscale: false, only_path: true, class: class_name)
         rescue ActiveRecord::RecordNotFound
           nil
         end
