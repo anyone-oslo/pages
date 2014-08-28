@@ -47,7 +47,7 @@
       </td>
       <td>
         <% if page.published? %>
-          <%= smart_time(page.published_at, :skip_prefix => true) %>
+          <%= l(page.published_at, format: :short) %>
         <% else %>
           <% if page.status_label == 'Published' %>
             <em>Not published</em>
