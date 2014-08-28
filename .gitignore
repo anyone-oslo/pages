@@ -9,3 +9,4 @@ spec/internal/config/test.sphinx.conf
 spec/internal/db/sphinx
 spec/internal/log/*.pid
 spec/internal/tmp/*
+spec/internal/db/binary-objects

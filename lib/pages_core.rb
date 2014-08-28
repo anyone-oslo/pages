@@ -60,7 +60,6 @@ module PagesCore
       load 'pages_core/configuration.rb'
       load 'pages_core/engine.rb'
       load 'pages_core/extensions.rb'
-      load 'pages_core/html_formatter.rb'
       load 'pages_core/localizable.rb'
       load 'pages_core/pages_plugin.rb'
       load 'pages_core/paginates.rb'

@@ -2,6 +2,10 @@
 
 module PagesCore
   class HtmlFormatter
+    include ActionView::Helpers::AssetTagHelper
+    include DynamicImage::DynamicImageHelper
+    include Rails.application.routes.url_helpers
+
     class << self
       def to_html(string, options={})
         self.new(string, options).to_html
@@ -32,7 +36,9 @@ module PagesCore
         id = str.match(image_expression)[1]
         begin
           image = Image.find(id)
-          dynamic_image_tag(image, size: '2000x2000', crop: false, upscale: false)
+          dynamic_image_tag(image, size: '2000x2000', crop: false, upscale: false, only_path: true)
+        rescue ActiveRecord::RecordNotFound
+          nil
         end
       end
     end
