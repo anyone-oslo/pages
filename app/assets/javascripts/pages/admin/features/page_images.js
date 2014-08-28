@@ -317,6 +317,7 @@
 
       $(container).on('click', '.image', function () {
         showImage(this);
+        return false;
       });
 
       $('.page_images .images').sortable({

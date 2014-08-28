@@ -31,16 +31,16 @@
 
     <div class="primary_container">
       <% if @page.image? && (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
-        <div class="image primary" data-page-image-id="<%= page_image.id %>">
+        <a class="image primary" data-page-image-id="<%= page_image.id %>" href="<%= dynamic_image_url page_image.image, size: '2000x2000' %>">
           <%= dynamic_image_tag(page_image.image, :size => '380x380', :crop => true, :upscale => true) %>
-        </div>
+        </a>
       <% end %>
     </div>
     <div class="images clearfix">
       <% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
-        <div class="image" data-page-image-id="<%= i.id %>">
+        <a class="image" data-page-image-id="<%= i.id %>" href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
           <%= dynamic_image_tag(i.image, :size => '240x240', :crop => true, :upscale => true) %>
-        </div>
+        </a>
       <% end %>
     </div>
 
