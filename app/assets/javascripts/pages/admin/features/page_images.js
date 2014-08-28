@@ -73,6 +73,8 @@
           // Show the editor
           $('.page_images .uploadButton').hide();
           $editor.find('#page_image_byline').val(imageData.image.byline);
+          $editor.find('.embed').val("[image:" + imageData.image.id + "]");
+
           if (imageData.primary) {
             $editor.find('#page_image_primary').attr('checked', 'checked');
           } else {

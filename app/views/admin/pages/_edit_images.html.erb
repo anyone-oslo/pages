@@ -8,6 +8,7 @@
         </div>
         <h4>Image Editor</h4>
         <%= text_field_tag 'page_image[byline]', '', :class => 'caption', :placeholder => 'Write your caption/byline' %>
+        <%= text_field_tag 'embed', '', :class => 'embed' %>
         <%= check_box_tag 'page_image[primary]', '1', false %><label>Primary</label>
         <%= hidden_field_tag 'page_image[crop_start]' %>
         <%= hidden_field_tag 'page_image[crop_size]' %>
