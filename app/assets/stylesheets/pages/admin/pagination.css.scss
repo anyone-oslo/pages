@@ -1,0 +1,22 @@
+$link-color: #1d7195;
+
+.pagination {
+  line-height: 20px;
+  a, .disabled, .current {
+    display: inline-block;
+    border: 1px solid $link-color;
+    text-decoration: none;
+    padding: 0px 5px;
+    font-style: normal;
+  }
+  .disabled {
+    border-color: #ccc;
+  }
+  .disabled, .gap {
+    color: #888;
+  }
+  .current, a:hover, a:focus {
+    background: $link-color;
+    color: #fff;
+  }
+}
