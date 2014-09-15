@@ -29,7 +29,17 @@ module PagesCore
 
       # Accessor for the configuration.
       def localizable_configuration
-        @localizable_configuration ||= Localizable::Configuration.new
+        @localizable_configuration ||= inherited_localizable_configuration
+      end
+
+      private
+
+      def inherited_localizable_configuration
+        if self.superclass.respond_to?(:localizable_configuration)
+          Localizable::Configuration.new(self.superclass.localizable_configuration.attributes.dup)
+        else
+          Localizable::Configuration.new
+        end
       end
     end
   end

@@ -4,6 +4,10 @@ module PagesCore
   module Localizable
 
     class Configuration
+      def initialize(attributes=nil)
+        @attributes = attributes
+      end
+
       def attribute(attribute_name, options={})
         attributes[attribute_name.to_sym] = options
       end
