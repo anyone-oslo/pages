@@ -6,7 +6,7 @@ class PagesCore::ImagesController < DynamicImage::ImagesController
   def render_missing_image
 
     # If :image_fallback_url is set, try grabbing the resource over HTTP
-    if PagesCore.config(:image_fallback_url)
+    if Rails.env.development? && PagesCore.config(:image_fallback_url)
       base_url = PagesCore.config.image_fallback_url.gsub(/\/$/, '')
       image_url = "#{base_url}#{request.path}"
 
