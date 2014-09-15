@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
   def valid_password?(password)
     # Legacy SHA1
     if self.hashed_password.length <= 40
-      if self.hashed_password == Digest::SHA1.hexdigest(pasword)
+      if self.hashed_password == Digest::SHA1.hexdigest(password)
         return true
       end
     else
