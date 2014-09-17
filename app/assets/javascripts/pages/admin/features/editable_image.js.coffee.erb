@@ -18,14 +18,15 @@ EditableImage = (link, options) ->
     cropStartY: false
     cropWidth: false
     cropHeight: false
+
     getScale: ->
       @settings.width / @imageData.original_width
 
     openEditor: ->
-
       # Dim the screen and create the loading dialog
       $.dimScreen 200, 0.90
-      $("body").append "<div id=\"modalLoadingNotice\"><img src=\"<%= image_path('pages/admin/loading-modal.gif') %>\" /> Loading image editor&hellip;</div>"
+
+      $("body").append("<div id=\"modalLoadingNotice\"><img src=\"<%= image_path('pages/admin/loading-modal.gif') %>\" /> Loading image editor&hellip;</div>")
       $("#modalLoadingNotice").centerOnScreen().hide().fadeIn 200
 
       # Create the container
@@ -43,11 +44,19 @@ EditableImage = (link, options) ->
         @populateEditor()
 
     populateEditor: ->
-      $("#editableImageEditor").empty().append("<img id=\"editableImageEditorImage\" />").append("<div id=\"editableImageEditorControls\" class=\"controls\" />").hide()
-      $("#editableImageEditorControls").append("<input type=\"button\" id=\"editableImageEditorSubmit\" value=\"Save\" />").append "<input type=\"button\" id=\"editableImageEditorClose\" value=\"Cancel\" />"
-      @previewURL = @linkedImage.src.replace(@linkedImage.src.match(/([\d]*x[\d]*)/)[1], "original/" + @settings.width + "x")
-      @previewURL = @previewURL.replace(/([\?\d])*$/, "")
+      $("#editableImageEditor")
+        .empty()
+        .append("<img id=\"editableImageEditorImage\" />")
+        .append("<div id=\"editableImageEditorControls\" class=\"controls\" />")
+        .hide()
+
+      $("#editableImageEditorControls")
+        .append("<input type=\"button\" id=\"editableImageEditorSubmit\" value=\"Save\" />")
+        .append "<input type=\"button\" id=\"editableImageEditorClose\" value=\"Cancel\" />"
+
+      @previewURL = $(link).data('preview-url')
       binding = this
+
       $("#editableImageEditorImage").each ->
         @src = binding.previewURL
 
@@ -78,7 +87,6 @@ EditableImage = (link, options) ->
           crop_end_y = crop_start_y + Math.round(imageData.crop_height * binding.getScale())
           jCropOptions["setSelect"] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y]
 
-        # console.log(jCropOptions);
         $("#editableImageEditorImage").Jcrop jCropOptions
 
 
@@ -101,8 +109,8 @@ EditableImage = (link, options) ->
         crop_size = Math.floor(@cropWidth / @getScale()) + "x" + Math.floor(@cropHeight / @getScale())
         crop_start = Math.floor(@cropStartX / @getScale()) + "x" + Math.floor(@cropStartY / @getScale())
         put_options =
-          "image[cropped]": cropped
-          "image[crop_size]": crop_size
+          "image[cropped]":    cropped
+          "image[crop_size]":  crop_size
           "image[crop_start]": crop_start
       else
         put_options = "image[cropped]": cropped

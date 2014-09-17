@@ -26,7 +26,13 @@ module PagesCore
 
       # Generates tags for an editable dynamic image.
       def editable_dynamic_image_tag(image, options={})
-        link_to(dynamic_image_tag(image, options), admin_image_path(image), :class => 'editableImage')
+        # TODO: This is a hack, dynamic_image_url doesn't handle sizing well with original: true
+        preview_url = dynamic_image_url(image, size: '800x', original: true, upscale: true).gsub(/\/800x[\d]+\//, '/800x/')
+        link_to(
+          dynamic_image_tag(image, options), admin_image_path(image),
+          :class             => 'editableImage',
+          'data-preview-url' => preview_url
+        )
       end
 
       # Generate HTML for a field, with label and optionally description and errors.
