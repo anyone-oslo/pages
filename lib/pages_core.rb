@@ -29,7 +29,6 @@ require 'underscore-rails'
 require 'jcrop/rails/v2'
 
 require "bcrypt"
-require 'vector2d'
 require 'RedCloth'
 require 'daemon-spawn'
 require 'delayed_job'
