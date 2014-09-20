@@ -56,10 +56,6 @@ module PagesCore
         template 'delayed_job_initializer.rb', File.join('config/initializers/delayed_job.rb')
       end
 
-      def create_dynamic_image_initializer
-        template 'dynamic_image_initializer.rb', File.join('config/initializers/dynamic_image.rb')
-      end
-
       def create_initializer_file
         get_configuration!
         template 'pages_initializer.rb', File.join('config/initializers/pages.rb')
