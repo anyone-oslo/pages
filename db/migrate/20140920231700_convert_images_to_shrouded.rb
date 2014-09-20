@@ -7,7 +7,7 @@ class ConvertImagesToShrouded < ActiveRecord::Migration
     change_column :images, :content_type, :string, null: false
     add_column :images, :content_length, :integer, null: false
     change_column :images, :filename, :string, null: false
-    add_column :images, :colorspace, :string
+    add_column :images, :colorspace, :string, null: false
     add_column :images, :real_width, :integer, null: false
     add_column :images, :real_height, :integer, null: false
     add_column :images, :crop_width, :integer
