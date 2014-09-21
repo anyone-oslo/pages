@@ -5,7 +5,7 @@ class PageImage < ActiveRecord::Base
   belongs_to :page
   belongs_to_image :image
 
-  validates_presence_of :page_id, :image_id
+  validates_presence_of :page_id
 
   accepts_nested_attributes_for :image
   validates_associated :image
