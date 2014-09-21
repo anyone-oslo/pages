@@ -41,26 +41,6 @@ module PagesCore::ApplicationHelper
     end
   end
 
-  def dynamic_lightbox_image(image, options={})
-    options = {:fullsize => '640x480'}.merge(options).symbolize_keys!
-    fullsize = options[:fullsize]
-    options.delete :fullsize
-    if options[:set]
-      rel = "lightbox[#{options[:set]}]"
-      options.delete :set
-    else
-      rel = "lightbox"
-    end
-
-    link_to(
-      dynamic_image_tag(image, options),
-      dynamic_image_url(image, :size => fullsize, :crop => false),
-      :title => options[:title] || image.name,
-      :rel => rel,
-      :target => '_blank'
-    )
-  end
-
   def unique_page(page_name, &block)
     locale = @locale || I18n.default_locale.to_s
     page = Page.where(:unique_name => page_name).first
