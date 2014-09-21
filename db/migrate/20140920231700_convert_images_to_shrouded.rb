@@ -21,7 +21,7 @@ class ConvertImagesToShrouded < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         Image.all.each do |image|
-          binary = Binary.find(image.original_binary_id || image.binary_id)
+          binary = Binary.find(image.binary_id)
           hash = binary.sha1_hash
 
           if binary_exist?(hash)
