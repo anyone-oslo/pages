@@ -3,7 +3,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
   include ActionView::Helpers::AssetTagHelper
-  include DynamicImage::DynamicImageHelper
+  include DynamicImage::Helper
   include PagesCore::HeadTagsHelper
 
   def page_link(page, options={})
