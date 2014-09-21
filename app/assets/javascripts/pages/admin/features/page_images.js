@@ -110,9 +110,16 @@
           ];
 
           var cropSize = [
-            imageData.image.crop_width,
-            imageData.image.crop_height
-          ];
+            (imageSize[0] - cropStart[0]),
+            (imageSize[1] - cropStart[1])
+          ]
+
+          if (imageData.image.crop_width && imageData.image.crop_height) {
+            cropSize = [
+              imageData.image.crop_width,
+              imageData.image.crop_height
+            ];
+          }
 
           var updateCrop = function (crop) {
             var start = [0, 0];
