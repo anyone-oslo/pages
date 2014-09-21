@@ -14,7 +14,9 @@ describe PagesCore::HtmlFormatter do
     let(:string) { "Hello world" }
     let(:options) { {} }
     let(:imagefile) { File.open(File.expand_path("../../../support/fixtures/image.png", __FILE__)) }
-    let(:image) { Image.create(imagefile: imagefile) }
+    let(:content_type) { "image/png" }
+    let(:uploaded_file) { Rack::Test::UploadedFile.new(imagefile, content_type) }
+    let(:image) { Image.create(file: uploaded_file) }
 
     subject { PagesCore::HtmlFormatter.new(string, options).to_html }
 
@@ -24,17 +26,17 @@ describe PagesCore::HtmlFormatter do
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
-        it { should match(/<p><img alt=\"image\" height=\"200\" src=\"\/dynamic_image\/#{image.id}\/320x200\/image-([\w\d]+).png\" width=\"320\" \/><\/p>/) }
+        it { should match(/<p><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
       end
 
       context "with size" do
         let(:string) { "[image:#{image.id} size=\"100x100\"]" }
-        it { should match(/<p><img alt=\"image\" height=\"63\" src=\"\/dynamic_image\/#{image.id}\/100x63\/image-([\w\d]+).png\" width=\"100\" \/><\/p>/) }
+        it { should match(/<p><img alt=\"Image\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/p>/) }
       end
 
       context "with class name" do
         let(:string) { "[image:#{image.id} class=\"float-left\"]" }
-        it { should match(/<p><img alt=\"image\" class=\"float-left\" height=\"200\" src=\"\/dynamic_image\/#{image.id}\/320x200\/image-([\w\d]+).png\" width=\"320\" \/><\/p>/) }
+        it { should match(/<p><img alt=\"Image\" class=\"float-left\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
       end
 
       context "with non-existant image" do

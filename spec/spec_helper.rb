@@ -51,8 +51,13 @@ Spork.prefork do
       # stop Sphinx at the end of the test suite.
       ThinkingSphinx::Test.start_with_autostop
     end
-  end
 
+    # Clean the Shrouded storage after each example
+    config.after(:each) do
+      storage_root = Rails.root.join('db', 'shrouded', 'test')
+      FileUtils.rm_rf(storage_root) if File.exists?(storage_root)
+    end
+  end
 end
 
 Spork.each_run do

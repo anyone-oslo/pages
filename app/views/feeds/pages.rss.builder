@@ -23,7 +23,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         xml.tag!("dc:creator", item.author.realname )
         if item.image
           image_size = item.image.data.length rescue 0
-          xml.enclosure :url => dynamic_image_url(item.image, :only_path => false), :length => image_size, :type => item.image.content_type
+          xml.enclosure url: dynamic_image_url(item.image, size: '2000x2000'), length: image_size, type: item.image.content_type
         end
       end
     end
