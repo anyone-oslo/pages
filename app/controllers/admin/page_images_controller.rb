@@ -93,7 +93,12 @@ class Admin::PageImagesController < Admin::AdminController
   end
 
   def page_image_params
-    params.require(:page_image).permit(:image, :primary, :name, :description, :byline, :crop_start, :crop_size)
+    params.require(:page_image).permit(
+      :image, :primary,
+      image_attributes: [
+        :id, :byline, :crop_start_x, :crop_start_y, :crop_width, :crop_height
+      ]
+    )
   end
 
   def page_images_params

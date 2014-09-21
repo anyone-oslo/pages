@@ -40,19 +40,12 @@
         return data;
       }
 
-      function parseSizeString (size) {
-        size = size.split('x');
-        var width  = parseInt(size[0], 10);
-        var height = parseInt(size[1], 10);
-        return [width, height];
-      }
-
       function getImageSize (imageId) {
-        return parseSizeString(getImageData(imageId).image.original_size);
+        var imageData = getImageData(imageId).image;
+        return [imageData.real_width, imageData.real_height];
       }
 
       function getImageURL (imageId, maxWidth, maxHeight) {
-        var originalSize = parseSizeString(imageData.image.original_size);
         return imageData;
       }
 
@@ -68,12 +61,14 @@
 
         if (image) {
           var imageId   = parseInt($(image).data('page-image-id'), 10);
+          var imageURL  = $(image).data('uncropped-url');
           var imageData = getImageData(imageId);
 
           // Show the editor
           $('.page_images .uploadButton').hide();
-          $editor.find('#page_image_byline').val(imageData.image.byline);
+          $editor.find('.caption').val(imageData.image.byline);
           $editor.find('.embed').val("[image:" + imageData.image.id + "]");
+          $editor.find('.image_id').val(imageData.image.id);
 
           if (imageData.primary) {
             $editor.find('#page_image_primary').attr('checked', 'checked');
@@ -102,12 +97,6 @@
           ];
 
           // Load the image
-          var imageURL = '/dynamic_image/' +
-            imageData.image.id +
-            '/original/' +
-            resizedSize[0] + 'x' + resizedSize[1] +
-            '/' + imageData.image.filename;
-
           $editor.find('.edit_image').html(
             '<img src="' +
             imageURL + '" width="' + resizedSize[0] +
@@ -115,8 +104,15 @@
           );
 
           // Handle cropping
-          var cropStart = parseSizeString(imageData.image.crop_start);
-          var cropSize  = parseSizeString(imageData.image.crop_size);
+          var cropStart = [
+            imageData.image.crop_start_x,
+            imageData.image.crop_start_y
+          ];
+
+          var cropSize = [
+            imageData.image.crop_width,
+            imageData.image.crop_height
+          ];
 
           var updateCrop = function (crop) {
             var start = [0, 0];
@@ -131,12 +127,10 @@
                 Math.floor(crop.h / scaleFactor)
               ];
             }
-            $editor.find('#page_image_crop_start').val(
-              start[0] + 'x' + start[1]
-            );
-            $editor.find('#page_image_crop_size').val(
-              size[0] + 'x' + size[1]
-            );
+            $editor.find('.crop_start_x').val(start[0]);
+            $editor.find('.crop_start_y').val(start[1]);
+            $editor.find('.crop_width').val(size[0]);
+            $editor.find('.crop_height').val(size[1]);
           };
 
           $editor.find('.edit_image img').Jcrop({
@@ -195,16 +189,6 @@
         return false;
       }
 
-      function reloadThumbnail () {
-        if (selectedImage && selectedImageId) {
-          // Changes the image URL to include the timestamp, which forces a reload
-          var imageData = getImageData(selectedImageId);
-          var timestamp = imageData.image.updated_at.replace(/[^\d]/g, '');
-          var imageUrl = $(selectedImage).find('img').attr('src').split('?')[0];
-          $(selectedImage).find('img').attr('src', imageUrl + '?' + timestamp);
-        }
-      }
-
       // Sorting images
       var saveImageOrder = function () {
         var ids = [];
@@ -253,16 +237,18 @@
         var savedImage = selectedImage;
         $editor.animate({opacity: 0.8}, 300);
         var data = {
-          'page_image[byline]':     $editor.find('#page_image_byline').val(),
-          'page_image[primary]':    $editor.find('#page_image_primary').is(':checked'),
-          'page_image[crop_start]': $editor.find('#page_image_crop_start').val(),
-          'page_image[crop_size]':  $editor.find('#page_image_crop_size').val(),
-          authenticity_token:       $("input[name=authenticity_token]").val()
+          'page_image[primary]': $editor.find('#page_image_primary').is(':checked'),
+          'page_image[image_attributes][id]': $editor.find('.image_id').val(),
+          'page_image[image_attributes][byline]': $editor.find('.caption').val(),
+          'page_image[image_attributes][crop_start_x]': $editor.find('.crop_start_x').val(),
+          'page_image[image_attributes][crop_start_y]': $editor.find('.crop_start_y').val(),
+          'page_image[image_attributes][crop_width]': $editor.find('.crop_width').val(),
+          'page_image[image_attributes][crop_height]': $editor.find('.crop_height').val(),
+          authenticity_token: $("input[name=authenticity_token]").val()
         };
         var url = baseURL + '/images/' + savedId + '.json';
         $.put(url, data, function (json) {
           updateImageData(json);
-          reloadThumbnail();
 
           // Shuffle primary image around
           if (json.primary && !$(savedImage).hasClass('primary')) {
