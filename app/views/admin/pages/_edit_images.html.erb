@@ -51,7 +51,10 @@
     </div>
     <div class="images clearfix">
       <% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
-        <a class="image" data-page-image-id="<%= i.id %>" href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
+        <a class="image"
+           data-page-image-id="<%= i.id %>"
+           data-uncropped-url="<%= uncropped_dynamic_image_path(i.image, size: '2000x2000') %>"
+           href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
           <%= dynamic_image_tag(i.image, :size => '240x240', :crop => true, :upscale => true) %>
         </a>
       <% end %>
