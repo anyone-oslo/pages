@@ -33,6 +33,7 @@ require 'RedCloth'
 require 'daemon-spawn'
 require 'delayed_job'
 
+require 'shrouded'
 require 'dynamic_image'
 
 require 'sass'

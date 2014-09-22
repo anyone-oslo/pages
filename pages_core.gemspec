@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'RedCloth', '~> 4.2.9'
   s.add_dependency 'daemon-spawn', '~> 0.2.0'
+  s.add_dependency 'shrouded', '~> 0.9.0'
   s.add_dependency 'dynamic_image', '~> 2.0.0.rc1'
   s.add_dependency 'actionpack-page_caching'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
