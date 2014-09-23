@@ -1,4 +1,4 @@
-class ConvertImagesToShrouded < ActiveRecord::Migration
+class ConvertImagesToDis < ActiveRecord::Migration
   class Image < ActiveRecord::Base; end
   class Binary < ActiveRecord::Base; end
 
@@ -27,7 +27,7 @@ class ConvertImagesToShrouded < ActiveRecord::Migration
           if binary_exist?(hash)
             f = binary_file(hash)
             image.content_length = f.size
-            image.content_hash = Shrouded::Storage.store("images", f)
+            image.content_hash = Dis::Storage.store("images", f)
             f.close
           else
             image.content_hash = hash

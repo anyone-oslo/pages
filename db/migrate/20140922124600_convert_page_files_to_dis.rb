@@ -1,4 +1,4 @@
-class ConvertPageFilesToShrouded < ActiveRecord::Migration
+class ConvertPageFilesToDis < ActiveRecord::Migration
   class PageFile < ActiveRecord::Base; end
   class Binary < ActiveRecord::Base; end
 
@@ -18,7 +18,7 @@ class ConvertPageFilesToShrouded < ActiveRecord::Migration
 
           if binary_exist?(hash)
             f = binary_file(hash)
-            page_file.content_hash = Shrouded::Storage.store("page_files", f)
+            page_file.content_hash = Dis::Storage.store("page_files", f)
             f.close
           else
             page_file.content_hash = hash

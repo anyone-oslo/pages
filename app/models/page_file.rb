@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class PageFile < ActiveRecord::Base
-  include Shrouded::Model
+  include Dis::Model
 
   belongs_to :page
 

@@ -52,9 +52,9 @@ Spork.prefork do
       ThinkingSphinx::Test.start_with_autostop
     end
 
-    # Clean the Shrouded storage after each example
+    # Clean the Dis storage after each example
     config.after(:each) do
-      storage_root = Rails.root.join('db', 'shrouded', 'test')
+      storage_root = Rails.root.join('db', 'dis', 'test')
       FileUtils.rm_rf(storage_root) if File.exists?(storage_root)
     end
   end
