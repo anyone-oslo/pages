@@ -34,7 +34,7 @@ class Admin::ImagesController < Admin::AdminController
   protected
 
   def image_params
-    params.require(:image).permit(:name, :byline, :description, :imagefile, :hotspot, :crop_start, :crop_size, :cropped)
+    params.require(:image).permit(:name, :byline, :description, :file, :crop_start_x, :crop_start_y, :crop_height, :crop_width)
   end
 
   def find_image

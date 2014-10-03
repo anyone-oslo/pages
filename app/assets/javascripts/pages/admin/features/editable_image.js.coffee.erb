@@ -20,7 +20,7 @@ EditableImage = (link, options) ->
     cropHeight: false
 
     getScale: ->
-      @settings.width / @imageData.original_width
+      @settings.width / @imageData.real_width
 
     openEditor: ->
       # Dim the screen and create the loading dialog
@@ -80,12 +80,17 @@ EditableImage = (link, options) ->
           onSelect: onCrop
 
         imageData = binding.imageData
-        if imageData.cropped
-          crop_start_x = Math.round(imageData.crop_start_x * binding.getScale())
-          crop_start_y = Math.round(imageData.crop_start_y * binding.getScale())
+        crop_start_x = Math.round(imageData.crop_start_x * binding.getScale())
+        crop_start_y = Math.round(imageData.crop_start_y * binding.getScale())
+
+        if imageData.crop_width && imageData.crop_height
           crop_end_x = crop_start_x + Math.round(imageData.crop_width * binding.getScale())
           crop_end_y = crop_start_y + Math.round(imageData.crop_height * binding.getScale())
-          jCropOptions["setSelect"] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y]
+        else
+          crop_end_x = Math.round(imageData.real_width * binding.getScale())
+          crop_end_y = Math.round(imageData.real_height * binding.getScale())
+
+        jCropOptions["setSelect"] = [crop_start_x, crop_start_y, crop_end_x, crop_end_y]
 
         $("#editableImageEditorImage").Jcrop jCropOptions
 
@@ -96,27 +101,14 @@ EditableImage = (link, options) ->
       @imageData = false
       $.dimScreenStop()
 
-    refreshLinkedImage: (size) ->
-      imageUrl = @linkedImage.src.replace(/\?.*$/, "") + "?" + (new Date().getTime())
-      @linkedImage.src = imageUrl
-
     submit: ->
-      cropped = (if (not @cropWidth or not @cropHeight) then 0 else 1)
-      crop_start = false
-      crop_size = false
-      put_options = false
-      if cropped
-        crop_size = Math.floor(@cropWidth / @getScale()) + "x" + Math.floor(@cropHeight / @getScale())
-        crop_start = Math.floor(@cropStartX / @getScale()) + "x" + Math.floor(@cropStartY / @getScale())
-        put_options =
-          "image[cropped]":    cropped
-          "image[crop_size]":  crop_size
-          "image[crop_start]": crop_start
-      else
-        put_options = "image[cropped]": cropped
+      put_options =
+        "image[crop_start_x]": Math.floor(@cropStartX / @getScale())
+        "image[crop_start_y]": Math.floor(@cropStartY / @getScale())
+        "image[crop_width]":   Math.floor(@cropWidth / @getScale())
+        "image[crop_height]":  Math.floor(@cropHeight / @getScale())
       binding = this
       $.put @resourceURL + ".json", put_options, (json) ->
-        binding.refreshLinkedImage crop_size
         binding.closeEditor()
 
 

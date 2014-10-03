@@ -5,10 +5,10 @@ class PageImage < ActiveRecord::Base
   belongs_to :page
   belongs_to_image :image
 
-  validates_presence_of :page_id, :image_id
+  validates_presence_of :page_id
 
-  DELEGATED_ATTRIBUTES = [:name, :description, :byline, :crop_start, :crop_size]
-  DELEGATED_ATTRIBUTES.each{|a| attr_accessor a}
+  accepts_nested_attributes_for :image
+  validates_associated :image
 
   acts_as_list scope: :page
 
@@ -33,20 +33,6 @@ class PageImage < ActiveRecord::Base
         page_image.page.update(image_id: nil)
       end
     end
-
-    image_attributes = {}
-    DELEGATED_ATTRIBUTES.each do |attribute|
-      page_image_attribute = page_image.send(attribute)
-      if !page_image_attribute.nil? && page_image_attribute != page_image.image.attributes[attribute]
-        image_attributes[attribute] = page_image_attribute
-      end
-    end
-    if image_attributes.length > 0
-      if image_attributes[:crop_size] && image_attributes[:crop_size] != page_image.image.original_size
-        image_attributes[:cropped] = true
-      end
-      page_image.image.update(image_attributes)
-    end
   end
 
   after_destroy do |page_image|
@@ -63,29 +49,8 @@ class PageImage < ActiveRecord::Base
     end
   end
 
-  def name
-    @name ||= image.try(&:name)
-  end
-
-  def byline
-    @byline ||= image.try(&:byline)
-  end
-
-  def description
-    @description ||= image.try(&:description)
-  end
-
-  def crop_start
-    @crop_start ||= image.try(&:crop_start)
-  end
-
-  def crop_size
-    @crop_size ||= image.try(&:crop_size)
-  end
-
   def to_json(options={})
     options = { include: [:image] }.merge(options)
     super(options)
   end
-
 end

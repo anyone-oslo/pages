@@ -2,6 +2,8 @@
 
 Rails.application.routes.draw do
 
+  image_resources :images, path: "dynamic_images/:digest(/:size)"
+
   # Pages
   resources :pages, :path => ":locale/pages" do
     collection do
