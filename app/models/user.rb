@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
   has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
+  has_many         :password_reset_tokens, dependent: :destroy
   has_many         :roles, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id
 
