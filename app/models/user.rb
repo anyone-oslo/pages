@@ -40,6 +40,10 @@ class User < ActiveRecord::Base
       user.errors.add(:username, 'is reserved') unless user.email == special_user[:email]
     end
 
+    if !user.password.blank? && user.password != user.confirm_password
+      user.errors.add(:confirm_password, 'does not match')
+    end
+
     # Check password
     if user.password and !user.password.empty?
       user.hash_password

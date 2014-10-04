@@ -24,15 +24,15 @@
   </div>
 
   <div class="login-tab password-reset">
-    <%= form_tag password_reset_path do %>
+    <%= form_tag password_resets_path do %>
       <%= hidden_field_tag :login_url, login_url %>
       <h2>
         Forgot your password?
       </h2>
       <p>
         Don't worry, it happens.
-        Enter your username or email address below,
-        and we'll send you a new password.
+        Enter your email address below,
+        and we'll send you a link where you can reset your password.
       </p>
       <p>
         <%= text_field_tag :username, '' %>

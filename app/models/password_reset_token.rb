@@ -10,7 +10,7 @@ class PasswordResetToken < ActiveRecord::Base
 
   class << self
     def default_expiration
-      48.hours
+      24.hours
     end
 
     def expire!

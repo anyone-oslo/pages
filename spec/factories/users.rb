@@ -6,5 +6,6 @@ FactoryGirl.define do
     realname "John Doe"
     email
     password "secret"
+    confirm_password "secret"
   end
 end

@@ -51,7 +51,7 @@ describe PasswordResetToken do
 
   describe "#expires_at" do
     subject { password_reset_token.expires_at }
-    it { should be_within(30).of(Time.now + 48.hours) }
+    it { should be_within(30).of(Time.now + 24.hours) }
   end
 
   describe "#token" do
