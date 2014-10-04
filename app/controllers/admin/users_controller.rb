@@ -74,11 +74,6 @@ class Admin::UsersController < Admin::AdminController
 
   def update
     if @user.update(user_params)
-      # Send an email notification if the username or password changes
-      if params[:user][:password] || @user.previous_changes[:name]
-        AdminMailer.user_changed(@user, admin_default_url, current_user).deliver
-      end
-
       flash[:notice] = "Your changed to #{@user.realname} were saved."
       redirect_to admin_users_url
     else

@@ -22,14 +22,6 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
-  def user_changed(user, login_url, updated_by)
-    @user, @login_url, @updated_by = user, login_url, updated_by
-    mail(
-      to:      @user.email,
-      subject: "Your account on #{PagesCore.config(:site_name)} has been edited"
-    )
-  end
-
   def password_reset(user, url)
     @user, @url = user, url
     mail(
