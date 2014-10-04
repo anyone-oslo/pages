@@ -107,10 +107,13 @@ class Admin::UsersController < Admin::AdminController
   def user_params
     permitted_params = [
       :realname, :email, :mobile, :web_link,
-      :image, :username, :password, :confirm_password
+      :image, :username
     ]
     if policy(User).manage?
       permitted_params += [:is_activated, role_names: []]
+    end
+    if @user && policy(@user).change_password?
+      permitted_params += [:password, :confirm_password]
     end
     params.require(:user).permit(permitted_params)
   end

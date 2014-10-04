@@ -46,4 +46,8 @@ class UserPolicy < Policy
       user.has_role?(:users)
     end
   end
+
+  def change_password?
+    user == record
+  end
 end

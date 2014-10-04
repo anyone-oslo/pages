@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
   validates_uniqueness_of :email,    case_sensitive: false
   validates_presence_of   :password, on: :create
-  validates_length_of     :password, minimum: 8, too_short: "must be at least 5 chars", if: Proc.new { |user| !user.password.blank? }
+  validates_length_of     :password, minimum: 8, if: Proc.new { |user| !user.password.blank? }
 
   validate do |user|
     # Handle special users
