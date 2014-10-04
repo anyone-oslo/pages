@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     if logged_in?
       redirect_to success_url
     else
-      flash[:notice] = "The provided username/password combination was not valid"
+      flash[:notice] = "The provided email address and password combination was not valid"
       redirect_to login_url
     end
   end

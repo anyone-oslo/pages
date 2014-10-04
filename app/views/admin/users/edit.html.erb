@@ -9,10 +9,6 @@
 %>
 
 <% content_for :sidebar do %>
-  <h2>Changing login details</h2>
-  <p>
-    A notification will be sent by email if the username or password fields are changed.
-  </p>
   <% if @user != current_user && @user.is_deletable? %>
     <h2>Preventing access</h2>
     <p>
@@ -42,9 +38,8 @@
 
   <%= f.labelled_file_field :image %>
 
-  <h2>Login options</h2>
-  <%= f.labelled_text_field :username %>
   <% if policy(@user).change_password? %>
+    <h2>Password</h2>
     <%= f.labelled_password_field :password, 'Change password' %>
     <%= f.labelled_password_field :confirm_password, 'Confirm password' %>
     <p>

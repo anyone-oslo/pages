@@ -35,7 +35,7 @@
   <% if @error_report[:user] %>
     <tr>
       <td><strong>User account</strong></td>
-      <td>#<%= @error_report[:user].id %>: <%= @error_report[:user].username %> (<a href="mailto:<%= @error_report[:user].email %>"><%= @error_report[:user].email %></a>)</td>
+      <td>#<%= @error_report[:user].id %>: <a href="mailto:<%= @error_report[:user].email %>"><%= @error_report[:user].email %></a></td>
     </tr>
   <% end %>
 </table>

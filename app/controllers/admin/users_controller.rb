@@ -85,7 +85,7 @@ class Admin::UsersController < Admin::AdminController
 
   def destroy
     @user = User.find( params[:id] )
-    flash[:notice] = "User <strong>#{@user.username}</strong> has been deleted"
+    flash[:notice] = "User <strong>#{@user.email}</strong> has been deleted"
     @user.destroy
     redirect_to admin_users_url
   end
@@ -106,8 +106,7 @@ class Admin::UsersController < Admin::AdminController
 
   def user_params
     permitted_params = [
-      :realname, :email, :mobile, :web_link,
-      :image, :username
+      :realname, :email, :mobile, :web_link, :image
     ]
     if policy(User).manage?
       permitted_params += [:is_activated, role_names: []]
