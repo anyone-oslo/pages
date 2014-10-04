@@ -22,8 +22,6 @@ class User < ActiveRecord::Base
 
   validates_presence_of   :username, :email, :realname
   validates_uniqueness_of :username, case_sensitive: false
-  validates_format_of     :username, with: /\A[-_\w\d@\.]+\z/i, message: "may only contain numbers, letters and '-_.@'"
-  validates_length_of     :username, in: 3..32
   validates_format_of     :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: 'is not a valid email address'
   validates_uniqueness_of :email,    case_sensitive: false
   validates_presence_of   :password, on: :create
@@ -46,6 +44,7 @@ class User < ActiveRecord::Base
 
   before_create     :generate_token
   before_create     :ensure_first_user_has_all_roles
+  before_validation :ensure_username
   before_validation :hash_password, on: :create
 
   after_save ThinkingSphinx::RealTime.callback_for(:user)
@@ -188,6 +187,10 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  def ensure_username
+    self.username ||= self.email
+  end
 
   def ensure_first_user_has_all_roles
     unless User.any?
