@@ -2,11 +2,6 @@
 
 class User < ActiveRecord::Base
 
-  SPECIAL_USERS = {
-    'inge'   => { email: 'inge@manualdesign.no',   realname: 'Inge Jørgensen' },
-    'thomas' => { email: 'thomas@manualdesign.no', realname: 'Thomas Knutstad' }
-  }
-
   ### Relations #############################################################
 
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
@@ -35,11 +30,6 @@ class User < ActiveRecord::Base
   validates_length_of     :password, minimum: 8, if: Proc.new { |user| !user.password.blank? }
 
   validate do |user|
-    # Handle special users
-    if special_user = SPECIAL_USERS[user.username]
-      user.errors.add(:username, 'is reserved') unless user.email == special_user[:email]
-    end
-
     if !user.password.blank? && user.password != user.confirm_password
       user.errors.add(:confirm_password, 'does not match')
     end
