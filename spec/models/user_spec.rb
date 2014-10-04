@@ -6,6 +6,7 @@ describe User do
   it { should belong_to(:creator) }
   it { should have_many(:created_users) }
   it { should have_many(:pages) }
+  it { should have_many(:password_reset_tokens).dependent(:destroy) }
   it { should have_many(:roles) }
   it { should belong_to(:image) }
 

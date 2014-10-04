@@ -1,0 +1,24 @@
+<%
+  page_title       "Reset password"
+  page_description "Please choose a new password to proceed"
+  add_body_class   "login"
+-%>
+
+<div class="login-form">
+  <%= form_for(@user, url: password_reset_path(@password_reset_token, token: @password_reset_token.token), class: 'form') do |f| %>
+    <p>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </p>
+    <p>
+      <%= f.label :confirm_password %>
+      <%= f.password_field :confirm_password %>
+    </p>
+    <p>
+      <button type="submit">
+        Change Password
+      </button>
+      or <%= link_to "Return to login screen", login_admin_users_path %>
+    </p>
+  <% end %>
+</div>

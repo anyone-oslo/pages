@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   belongs_to       :creator, class_name: "User", foreign_key: 'created_by'
   has_many         :created_users, class_name: "User", foreign_key: 'created_by'
   has_many         :pages
+  has_many         :password_reset_tokens, dependent: :destroy
   has_many         :roles, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id
 
@@ -37,6 +38,10 @@ class User < ActiveRecord::Base
     # Handle special users
     if special_user = SPECIAL_USERS[user.username]
       user.errors.add(:username, 'is reserved') unless user.email == special_user[:email]
+    end
+
+    if !user.password.blank? && user.password != user.confirm_password
+      user.errors.add(:confirm_password, 'does not match')
     end
 
     # Check password

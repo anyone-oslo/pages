@@ -82,7 +82,6 @@ class Admin::UsersController < Admin::AdminController
       flash[:notice] = "Your changed to #{@user.realname} were saved."
       redirect_to admin_users_url
     else
-      raise @user.roles.inspect
       flash.now[:error] = "There were problems saving your changes."
       render :action => :edit
     end
@@ -112,7 +111,7 @@ class Admin::UsersController < Admin::AdminController
   def user_params
     permitted_params = [
       :realname, :email, :mobile, :web_link,
-      :image, :username, :password
+      :image, :username, :password, :confirm_password
     ]
     if policy(User).manage?
       permitted_params += [:is_activated, role_names: []]
