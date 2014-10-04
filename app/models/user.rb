@@ -101,9 +101,9 @@ class User < ActiveRecord::Base
 
   # Generate a new password.
   def generate_new_password
-    collection = []; [[0,9],['a','z'],['A','Z']].each{|a| (a.first).upto(a.last){|c| collection << c.to_s}}
+    collection = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789!#$%&/()=?+-_".chars
     pass = ""
-    (6+rand(3)).times{ pass << collection[rand(collection.size)] }
+    20.times{ pass << collection[rand(collection.size)] }
     self.confirm_password = self.password = pass
     pass
   end

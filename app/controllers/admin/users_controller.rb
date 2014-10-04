@@ -52,6 +52,7 @@ class Admin::UsersController < Admin::AdminController
   def create
     @user = User.new(user_params)
     @user.creator = current_user
+    @user.generate_new_password
     if @user.save
       AdminMailer.new_user(@user, admin_default_url).deliver
       flash[:notice] = "#{@user.realname} has been invited."

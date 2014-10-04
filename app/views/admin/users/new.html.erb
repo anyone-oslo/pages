@@ -18,12 +18,6 @@
   <%= f.labelled_text_field :email %>
   <%= f.labelled_text_field :username %>
 
-  <%= f.labelled_text_field :password %>
-  <p>
-    <%= link_to("Click here", "#", class: :generate_password) %>
-    to generate a random password.
-  </p>
-
   <%= render partial: "access_control", locals: { user: @user, f: f } %>
 
   <p>
