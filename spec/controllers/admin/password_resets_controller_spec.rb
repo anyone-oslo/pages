@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PasswordResetsController do
+describe Admin::PasswordResetsController do
   let(:user) { create(:user) }
   let(:password_reset_token) { create(:password_reset_token) }
   let(:expired_password_reset_token) { create(:password_reset_token, expires_at: 2.days.ago) }
@@ -13,7 +13,7 @@ describe PasswordResetsController do
       specify { assigns(:user).should be_a(User) }
       specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       specify { last_email.to.should == [user.email] }
-      specify { last_email.body.encoded.should match(password_reset_with_token_url(
+      specify { last_email.body.encoded.should match(admin_password_reset_with_token_url(
         assigns(:password_reset_token).id,
         assigns(:password_reset_token).token,
         host: 'test.host'

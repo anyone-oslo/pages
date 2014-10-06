@@ -24,12 +24,13 @@ Rails.application.routes.draw do
 
   # Authentication
   resource :session, only: [:create, :destroy]
-  resources :password_resets, only: [:create, :show, :update]
-  controller :password_resets do
-    get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
-  end
 
   namespace :admin do
+    # Password resets
+    resources :password_resets, only: [:create, :show, :update]
+    controller :password_resets do
+      get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
+    end
 
     # Images
     resources :images

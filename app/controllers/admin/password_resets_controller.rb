@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class PasswordResetsController < Admin::AdminController
+class Admin::PasswordResetsController < Admin::AdminController
   before_action :find_password_reset_token, only: [:show, :update]
   before_action :check_for_expired_token, only: [:show, :update]
   before_action :require_authentication, except: [:create, :show, :update]
@@ -12,7 +12,7 @@ class PasswordResetsController < Admin::AdminController
       @password_reset_token = @user.password_reset_tokens.create
       AdminMailer.password_reset(
         @user,
-        password_reset_with_token_url(
+        admin_password_reset_with_token_url(
           @password_reset_token, @password_reset_token.token
         )
       ).deliver
