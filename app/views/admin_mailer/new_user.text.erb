@@ -1,7 +1,7 @@
-Welcome, <%= @user.realname %>!
+Welcome, <%= @user.name %>!
 
 <% if @user.creator -%>
-<%= @user.creator.realname %> has invited you to Pages on <%= PagesCore.config(:site_name) %>.
+<%= @user.creator.name %> has invited you to Pages on <%= PagesCore.config(:site_name) %>.
 <% else -%>
 You have been invited to Pages on <%= PagesCore.config(:site_name) %>.
 <% end -%>

@@ -4,8 +4,8 @@ ThinkingSphinx::Index.define :page, with: :real_time do
   indexes localization_values
   indexes category_names
   indexes tag_list
-  indexes author.realname, as: :author_name
-  indexes author.email,    as: :author_email
+  indexes author.name,  as: :author_name
+  indexes author.email, as: :author_email
   indexes comment_names
   indexes comment_bodies
 

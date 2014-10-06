@@ -19,7 +19,7 @@
     <% else %>
       <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), :class => 'page_name') %>
       <small class="status">
-        (<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.realname %><% end %>)
+        (<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.name %><% end %>)
       </small>
     <% end %>
 

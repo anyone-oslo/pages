@@ -43,7 +43,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def new
-    @user = User.new(is_activated: true)
+    @user = User.new(activated: true)
     Role.roles.each do |role|
       @user.roles.new(name: role.name) if role.default
     end
@@ -55,7 +55,7 @@ class Admin::UsersController < Admin::AdminController
     @user.generate_new_password
     if @user.save
       AdminMailer.new_user(@user, admin_default_url).deliver
-      flash[:notice] = "#{@user.realname} has been invited."
+      flash[:notice] = "#{@user.name} has been invited."
       redirect_to :action => :index
     else
       flash.now[:error] = "There were problems inviting this person."
@@ -75,7 +75,7 @@ class Admin::UsersController < Admin::AdminController
 
   def update
     if @user.update(user_params)
-      flash[:notice] = "Your changed to #{@user.realname} were saved."
+      flash[:notice] = "Your changed to #{@user.name} were saved."
       redirect_to admin_users_url
     else
       flash.now[:error] = "There were problems saving your changes."
@@ -106,10 +106,10 @@ class Admin::UsersController < Admin::AdminController
 
   def user_params
     permitted_params = [
-      :realname, :email, :mobile, :web_link, :image
+      :name, :email, :image
     ]
     if policy(User).manage?
-      permitted_params += [:is_activated, role_names: []]
+      permitted_params += [:activated, role_names: []]
     end
     if @user && policy(@user).change_password?
       permitted_params += [:password, :confirm_password]

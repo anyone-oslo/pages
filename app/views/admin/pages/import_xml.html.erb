@@ -15,7 +15,7 @@
   <h2>About this page</h2>
   <p>
     This page was last modified <%= time_ago_in_words @page.updated_at %> ago by
-    <%= link_to @page.author.realname, admin_user_path( @page.author ) %>.
+    <%= link_to @page.author.name, admin_user_path( @page.author ) %>.
   </p>
 <% end %>
 

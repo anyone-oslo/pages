@@ -2,11 +2,10 @@
 
 ThinkingSphinx::Index.define :user, with: :real_time do
   indexes username
-  indexes realname
+  indexes name
   indexes email
-  indexes mobile
 
   has last_login_at, type: :timestamp
   has created_at, type: :timestamp
-  has is_activated, type: :boolean
+  has activated, type: :boolean
 end

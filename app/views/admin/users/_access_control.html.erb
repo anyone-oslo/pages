@@ -4,7 +4,7 @@
   </h2>
   <p>
     <% if user != current_user %>
-      <%= f.check_box :is_activated %> The user account is activated<br />
+      <%= f.check_box :activated %> The user account is activated<br />
     <% end %>
     <% Role.roles.each do |role| %>
       <%= check_box_tag "user[role_names][]", role.name, user.has_role?(role.name.to_sym) %>

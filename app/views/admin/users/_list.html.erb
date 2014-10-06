@@ -9,11 +9,10 @@
 <% @users.each do |user| -%>
   <tr class="<%=
     classes = []
-    #classes << "disabled" unless user.is_activated?
     classes.join( " " )
    %>">
     <td>
-      <strong><%= link_to user.realname, admin_user_url( user ) %></strong>
+      <strong><%= link_to user.name, admin_user_url( user ) %></strong>
       <% if policy(user).edit? %>
         (<%= link_to "edit", edit_admin_user_url( user ), :class => :edit %>)
       <% end %>
@@ -23,7 +22,7 @@
     </td>
     <td><%= user.roles.map(&:to_s).to_sentence %></td>
     <td>
-      <% if user.is_online? -%>
+      <% if user.online? -%>
         <strong>Online now</strong>
       <% elsif user.last_login_at -%>
         <%= time_ago_in_words( user.last_login_at ) %> ago
@@ -34,7 +33,7 @@
     <td class="note">
       <%=
         notes = []
-        notes << "Deactivated" unless user.is_activated?
+        notes << "Deactivated" unless user.activated?
         notes.join( ", " )
       %>
     </td>

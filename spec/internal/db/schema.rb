@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604142100) do
+ActiveRecord::Schema.define(version: 20141006181300) do
 
   create_table "binaries", force: true do |t|
     t.string "sha1_hash"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20140604142100) do
     t.string   "name"
     t.string   "slug"
     t.integer  "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "categories", ["slug"], name: "index_categories_on_slug", using: :btree
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20140604142100) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "queue"
   end
 
@@ -45,21 +45,21 @@ ActiveRecord::Schema.define(version: 20140604142100) do
     t.string   "name"
     t.string   "byline"
     t.text     "description"
-    t.string   "filename"
-    t.string   "content_type"
-    t.integer  "folder"
-    t.integer  "user_id"
+    t.string   "filename",       null: false
+    t.string   "content_type",   null: false
     t.datetime "created_at"
-    t.text     "filters"
-    t.string   "original_size"
-    t.string   "hotspot"
-    t.integer  "binary_id"
-    t.string   "url"
-    t.boolean  "cropped",            default: false, null: false
-    t.string   "crop_start"
-    t.string   "crop_size"
-    t.integer  "original_binary_id"
     t.datetime "updated_at"
+    t.string   "content_hash",   null: false
+    t.integer  "content_length", null: false
+    t.string   "colorspace",     null: false
+    t.integer  "real_width",     null: false
+    t.integer  "real_height",    null: false
+    t.integer  "crop_width"
+    t.integer  "crop_height"
+    t.integer  "crop_start_x"
+    t.integer  "crop_start_y"
+    t.integer  "crop_gravity_x"
+    t.integer  "crop_gravity_y"
   end
 
   create_table "localizations", force: true do |t|
@@ -90,12 +90,12 @@ ActiveRecord::Schema.define(version: 20140604142100) do
     t.integer  "page_id"
     t.integer  "position"
     t.string   "name"
-    t.string   "filename"
-    t.string   "content_type"
-    t.integer  "filesize"
-    t.integer  "binary_id"
+    t.string   "filename",       null: false
+    t.string   "content_type",   null: false
+    t.integer  "content_length", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "content_hash",   null: false
   end
 
   create_table "page_images", force: true do |t|
@@ -126,14 +126,12 @@ ActiveRecord::Schema.define(version: 20140604142100) do
     t.string   "image_link"
     t.boolean  "news_page",        default: false, null: false
     t.boolean  "autopublish",      default: false, null: false
-    t.boolean  "delta",            default: false, null: false
     t.string   "unique_name"
     t.integer  "comments_count",   default: 0,     null: false
     t.datetime "last_comment_at"
     t.boolean  "pinned",           default: false, null: false
   end
 
-  add_index "pages", ["delta"], name: "delta_index", using: :btree
   add_index "pages", ["parent_page_id"], name: "index_pages_on_parent_page_id", using: :btree
   add_index "pages", ["position"], name: "index_pages_on_position", using: :btree
   add_index "pages", ["status", "parent_page_id", "position"], name: "for_find_page", using: :btree
@@ -148,6 +146,14 @@ ActiveRecord::Schema.define(version: 20140604142100) do
   add_index "pages_categories", ["category_id"], name: "index_pages_categories_on_category_id", using: :btree
   add_index "pages_categories", ["page_id"], name: "index_pages_categories_on_page_id", using: :btree
 
+  create_table "password_reset_tokens", force: true do |t|
+    t.integer  "user_id"
+    t.string   "token"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", force: true do |t|
     t.integer  "user_id"
     t.string   "name"
@@ -156,15 +162,6 @@ ActiveRecord::Schema.define(version: 20140604142100) do
   end
 
   add_index "roles", ["user_id"], name: "index_roles_on_user_id", using: :btree
-
-  create_table "sessions", force: true do |t|
-    t.string   "session_id"
-    t.text     "data"
-    t.datetime "updated_at"
-  end
-
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer "tag_id"
@@ -184,22 +181,14 @@ ActiveRecord::Schema.define(version: 20140604142100) do
   create_table "users", force: true do |t|
     t.string   "username"
     t.string   "hashed_password"
-    t.string   "realname"
+    t.string   "name"
     t.string   "email"
     t.datetime "last_login_at"
     t.integer  "created_by"
     t.datetime "created_at"
     t.text     "persistent_data"
-    t.boolean  "is_activated",    default: false, null: false
-    t.boolean  "is_deleted",      default: false, null: false
-    t.string   "token"
-    t.date     "born_on"
-    t.string   "mobile"
-    t.string   "web_link"
+    t.boolean  "activated",       default: false, null: false
     t.integer  "image_id"
-    t.boolean  "delta",           default: false, null: false
   end
-
-  add_index "users", ["delta"], name: "delta_index", using: :btree
 
 end

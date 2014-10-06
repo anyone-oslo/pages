@@ -9,7 +9,7 @@
 
 <%= form_for [:admin, @user], :url => create_first_admin_users_path, :builder => PagesCore::FormBuilder do |f| %>
 
-  <%= f.labelled_text_field :realname, "Your name" %>
+  <%= f.labelled_text_field :name, "Your name" %>
   <%= f.labelled_text_field :email %>
   <%= f.labelled_password_field :password %>
   <%= f.labelled_password_field :confirm_password %>

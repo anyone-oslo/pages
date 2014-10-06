@@ -12,9 +12,9 @@
 
 <%= form_for [:admin, @user], :builder => PagesCore::FormBuilder do |f| %>
 
-  <%= f.hidden_field :is_activated %>
+  <%= f.hidden_field :activated %>
 
-  <%= f.labelled_text_field :realname %>
+  <%= f.labelled_text_field :name %>
   <%= f.labelled_text_field :email %>
 
   <%= render partial: "access_control", locals: { user: @user, f: f } %>

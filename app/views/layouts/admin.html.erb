@@ -31,7 +31,7 @@
     <div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
     <% if logged_in? -%>
       <div class="user">
-        Hello, <%= link_to(current_user.realname, admin_user_url(current_user)) %>
+        Hello, <%= link_to(current_user.name, admin_user_url(current_user)) %>
         <%= link_separator %>
         <%= logout_link "Log out", login_url: login_admin_users_path %>
       </div>

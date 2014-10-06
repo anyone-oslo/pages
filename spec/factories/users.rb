@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :user do
-    realname "John Doe"
+    name "John Doe"
     email
     password "Correct Horse Battery Staple"
     confirm_password "Correct Horse Battery Staple"
