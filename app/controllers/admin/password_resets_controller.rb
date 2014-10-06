@@ -55,7 +55,7 @@ class Admin::PasswordResetsController < Admin::AdminController
       @password_reset_token = PasswordResetToken.find(params[:id])
     rescue ActiveRecord::RecordNotFound
     end
-    unless @password_reset_token && @password_reset_token.token == params[:token]
+    unless @password_reset_token && secure_compare(@password_reset_token.token, params[:token])
       flash[:notice] = "Invalid password reset request"
       redirect_to login_url and return
     end
