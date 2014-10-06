@@ -9,7 +9,7 @@
 %>
 
 <% content_for :sidebar do %>
-  <% if @user != current_user && @user.is_deletable? %>
+  <% if @user != current_user %>
     <h2>Preventing access</h2>
     <p>
       Unchecking the <cite>This account is activated</cite> box will effectively disable

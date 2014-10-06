@@ -155,14 +155,6 @@ class User < ActiveRecord::Base
     (self.last_login_at && self.last_login_at > 15.minutes.ago) ? true : false
   end
 
-  def is_special?
-    (self.email =~ /^(inge|thomas|alexander)@manualdesign\.no$/) ? true : false
-  end
-
-  def is_deletable?
-    !self.is_special?
-  end
-
   # Purge persistent params
   def purge_preferences!
     self.update(persistent_data: {})

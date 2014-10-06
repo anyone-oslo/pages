@@ -3,7 +3,7 @@
     Access control
   </h2>
   <p>
-    <% unless user == current_user || !user.is_deletable? || user.new_record? %>
+    <% if user != current_user %>
       <%= f.check_box :is_activated %> The user account is activated<br />
     <% end %>
     <% Role.roles.each do |role| %>
