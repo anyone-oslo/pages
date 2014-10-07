@@ -24,6 +24,10 @@ module PagesCore
         add_source 'http://gems.manualdesign.no/'
       end
 
+      def create_active_job_initializer
+        template 'active_job_initializer.rb', File.join('config/initializers/active_job.rb')
+      end
+
       def create_application_controller
         template 'application_controller.rb', File.join('app/controllers/application_controller.rb')
       end
