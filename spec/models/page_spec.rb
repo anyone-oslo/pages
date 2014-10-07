@@ -7,7 +7,7 @@ describe Page do
   describe ".archive_finder" do
     subject { Page.archive_finder }
     it { should be_a(PagesCore::ArchiveFinder) }
-    its(:timestamp_attribute) { should == :published_at }
+    specify { expect(subject.timestamp_attribute).to eq(:published_at) }
   end
 
   describe ".published" do
@@ -60,7 +60,7 @@ describe Page do
     let(:page) { Page.create(:excerpt => {'en' => 'My test page', 'nb' => 'Testside'}, :locale => 'en') }
 
     it 'should respond with the locale specific string' do
-      page.excerpt?.should be_true
+      page.excerpt?.should eq(true)
       page.excerpt.to_s.should == 'My test page'
       page.localize('nb').excerpt.to_s.should == 'Testside'
     end
@@ -74,7 +74,7 @@ describe Page do
 
   it 'should return a blank Localization for uninitialized columns' do
     page = Page.new
-    page.body?.should be_false
+    page.body?.should eq(false)
     page.body.should be_a(String)
   end
 
@@ -82,9 +82,9 @@ describe Page do
     let(:page) { Page.create(:excerpt => 'My test page', :locale => 'en') }
 
     it 'responds to excerpt?' do
-      page.excerpt?.should be_true
+      page.excerpt?.should eq(true)
       page.excerpt = nil
-      page.excerpt?.should be_false
+      page.excerpt?.should eq(false)
     end
 
     it 'excerpt should be a localization' do
@@ -100,9 +100,9 @@ describe Page do
 
     it 'should remove the localization when nilified' do
       page.update(:excerpt => nil)
-      page.valid?.should be_true
+      page.valid?.should eq(true)
       page.reload
-      page.excerpt?.should be_false
+      page.excerpt?.should eq(false)
     end
   end
 end

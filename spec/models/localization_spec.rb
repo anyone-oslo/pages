@@ -45,17 +45,17 @@ describe Localization do
 
     context "when value is empty" do
       let(:localization) { create(:localization, value: nil) }
-      it { should be_true }
+      it { should eq(true) }
     end
 
     context "when value is blank" do
       let(:localization) { create(:localization, value: "") }
-      it { should be_true }
+      it { should eq(true) }
     end
 
     context "when value is set" do
       let(:localization) { create(:localization, value: "Hello world") }
-      it { should be_false }
+      it { should eq(false) }
     end
   end
 

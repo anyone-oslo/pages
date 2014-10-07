@@ -40,12 +40,12 @@ describe PasswordResetToken do
     subject { password_reset_token.expired? }
 
     context "when token is valid" do
-      it { should be_false }
+      it { should eq(false) }
     end
 
     context "when token is expired" do
       let(:password_reset_token) { expired_password_reset_token }
-      it { should be_true }
+      it { should eq(true) }
     end
   end
 
@@ -56,6 +56,6 @@ describe PasswordResetToken do
 
   describe "#token" do
     subject { password_reset_token.token }
-    its(:length) { should == 64 }
+    specify { expect(subject.length).to eq(64) }
   end
 end

@@ -49,7 +49,7 @@ describe PagesCore::PageTree do
       let(:parent) { create(:page) }
       let(:page) { create(:page, parent: parent).localize('en') }
       it { should == parent }
-      its(:locale) { should == 'en' }
+      specify { expect(subject.locale).to eq('en') }
     end
   end
 

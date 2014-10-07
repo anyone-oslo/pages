@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::PasswordResetsController do
+describe Admin::PasswordResetsController, type: :controller do
   let(:user) { create(:user) }
   let(:password_reset_token) { create(:password_reset_token) }
   let(:expired_password_reset_token) { create(:password_reset_token, expires_at: 2.days.ago) }
@@ -48,7 +48,7 @@ describe Admin::PasswordResetsController do
       specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       it { should redirect_to(login_admin_users_url(host: 'test.host')) }
       specify { flash.now[:notice].should match(/Your password reset link has expired/) }
-      specify { assigns(:password_reset_token).destroyed?.should be_true }
+      specify { assigns(:password_reset_token).destroyed?.should eq(true) }
     end
 
     context "with a non-existant token" do
@@ -70,7 +70,7 @@ describe Admin::PasswordResetsController do
       specify { assigns(:current_user).should be_a(User) }
       it { should redirect_to(login_admin_users_url(host: 'test.host')) }
       specify { session[:current_user_id].should == password_reset_token.user.id }
-      specify { assigns(:password_reset_token).destroyed?.should be_true }
+      specify { assigns(:password_reset_token).destroyed?.should eq(true) }
     end
 
     context "without valid data" do
@@ -84,7 +84,7 @@ describe Admin::PasswordResetsController do
       it { should render_template(:show) }
       specify { assigns(:user).should be_a(User) }
       specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
-      specify { assigns(:password_reset_token).destroyed?.should be_false }
+      specify { assigns(:password_reset_token).destroyed?.should eq(false) }
     end
 
     context "without a valid token" do
@@ -107,7 +107,7 @@ describe Admin::PasswordResetsController do
       specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       it { should redirect_to(login_admin_users_url(host: 'test.host')) }
       specify { flash.now[:notice].should match(/Your password reset link has expired/) }
-      specify { assigns(:password_reset_token).destroyed?.should be_true }
+      specify { assigns(:password_reset_token).destroyed?.should eq(true) }
     end
   end
 end

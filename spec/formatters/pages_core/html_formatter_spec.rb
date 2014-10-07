@@ -21,7 +21,7 @@ describe PagesCore::HtmlFormatter do
     subject { PagesCore::HtmlFormatter.new(string, options).to_html }
 
     it { should == "<p>Hello world</p>" }
-    its(:html_safe?) { should be_true }
+    specify { expect(subject.html_safe?).to eq(true) }
 
     context "with image" do
       context "without attributes" do
