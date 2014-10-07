@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
+
 $:.push File.expand_path("../lib", __FILE__)
 require "pages_core/version"
 
@@ -13,12 +14,9 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "."
 
-  s.required_ruby_version = Gem::Requirement.new(">= 1.9.2")
+  s.required_ruby_version = '>= 1.9.2'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.files = Dir["{app,config,db,lib,vendor}/**/*", "Rakefile", "README.md", "template.rb"]
 
   s.add_dependency "rails", "~> 4.1.0"
 
