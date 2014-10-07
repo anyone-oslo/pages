@@ -3,7 +3,11 @@ module PagesCore
     extend ActiveSupport::Concern
 
     def has_role?(role_name)
-      self.roles.map(&:name).include?(role_name.to_s)
+      role_names.include?(role_name.to_s)
+    end
+
+    def role_names
+      self.roles.map(&:name)
     end
 
     def role_names=(names)

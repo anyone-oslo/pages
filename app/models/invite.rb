@@ -15,6 +15,15 @@ class Invite < ActiveRecord::Base
 
   validates :token, presence: true
 
+  def create_user(attributes)
+    user = User.create(attributes.merge(
+      role_names: role_names,
+      creator: self.user
+    ))
+    self.destroy if user.valid?
+    user
+  end
+
   private
 
   def ensure_token
