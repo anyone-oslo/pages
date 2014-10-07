@@ -20,7 +20,10 @@ describe PagesCore::HtmlFormatter do
     subject { PagesCore::HtmlFormatter.new(string, options).to_html }
 
     it { is_expected.to eq("<p>Hello world</p>") }
-    specify { expect(subject.html_safe?).to eq(true) }
+
+    it "should emit a HTML safe string" do
+      expect(subject.html_safe?).to eq(true)
+    end
 
     context "with image" do
       context "without attributes" do
