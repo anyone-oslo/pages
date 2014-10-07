@@ -6,7 +6,7 @@ describe Localization do
 
   let(:localization) { create(:localization) }
 
-  it { should belong_to(:localizable) }
+  it { is_expected.to belong_to(:localizable) }
 
   describe ".locales" do
     before do
@@ -14,7 +14,7 @@ describe Localization do
       create(:localization, locale: 'nb')
     end
     subject { Localization.locales }
-    it { should =~ ['en', 'nb'] }
+    it { is_expected.to match(['en', 'nb']) }
   end
 
   describe ".names" do
@@ -23,7 +23,7 @@ describe Localization do
       create(:localization, name: 'body')
     end
     subject { Localization.names }
-    it { should =~ ['title', 'body'] }
+    it { is_expected.to match(['title', 'body']) }
   end
 
   describe "#to_s" do
@@ -31,12 +31,12 @@ describe Localization do
 
     context "when value is nil" do
       let(:localization) { create(:localization, value: nil) }
-      it { should == "" }
+      it { is_expected.to eq("") }
     end
 
     context "when value is set" do
       let(:localization) { create(:localization, value: "Hello world") }
-      it { should == "Hello world" }
+      it { is_expected.to eq("Hello world") }
     end
   end
 
@@ -45,17 +45,17 @@ describe Localization do
 
     context "when value is empty" do
       let(:localization) { create(:localization, value: nil) }
-      it { should eq(true) }
+      it { is_expected.to eq(true) }
     end
 
     context "when value is blank" do
       let(:localization) { create(:localization, value: "") }
-      it { should eq(true) }
+      it { is_expected.to eq(true) }
     end
 
     context "when value is set" do
       let(:localization) { create(:localization, value: "Hello world") }
-      it { should eq(false) }
+      it { is_expected.to eq(false) }
     end
   end
 
@@ -67,8 +67,8 @@ describe Localization do
         value: "Bonjour tout le monde"
       )
     end
-    specify { localization.translate('fr').to_s.should == "Bonjour tout le monde" }
-    specify { localization.translate('en').to_s.should_not == "Bonjour tout le monde" }
+    specify { expect(localization.translate('fr').to_s).to eq("Bonjour tout le monde") }
+    specify { expect(localization.translate('en').to_s).not_to eq("Bonjour tout le monde") }
   end
 
 end

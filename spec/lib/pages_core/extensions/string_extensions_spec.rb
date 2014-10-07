@@ -7,18 +7,18 @@ describe PagesCore::Extensions::StringExtensions do
 
   subject { string }
 
-  it { should be_a(PagesCore::Extensions::StringExtensions) }
+  it { is_expected.to be_a(PagesCore::Extensions::StringExtensions) }
 
   describe "#to_html" do
 
     context "with no options" do
       subject { string.to_html }
-      it { should == "<p>Hello world</p>" }
+      it { is_expected.to eq("<p>Hello world</p>") }
     end
 
     context "with :shorten" do
       subject { string.to_html(shorten: 4) }
-      it { should == "<p>Hello&#8230;</p>" }
+      it { is_expected.to eq("<p>Hello&#8230;</p>") }
     end
   end
 
@@ -26,12 +26,12 @@ describe PagesCore::Extensions::StringExtensions do
 
     context "with no options" do
       subject { string.to_html_with('again') }
-      it { should == "<p>Hello world again</p>" }
+      it { is_expected.to eq("<p>Hello world again</p>") }
     end
 
     context "with :shorten" do
       subject { string.to_html_with('Read more', shorten: 4) }
-      it { should == "<p>Hello&#8230; Read more</p>" }
+      it { is_expected.to eq("<p>Hello&#8230; Read more</p>") }
     end
   end
 
