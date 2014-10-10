@@ -19,6 +19,12 @@
 
   `User#realname` is now `User#name`
 
+* #### Invites
+
+  User accounts are now created through invites.
+
+  This means all users get to pick their own login and password, and that passwords are never sent in plain text via email.
+
 * #### Password resets
 
   Password resets are now handled with password reset tokens.

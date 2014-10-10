@@ -26,6 +26,16 @@ Rails.application.routes.draw do
   resource :session, only: [:create, :destroy]
 
   namespace :admin do
+    # Invites
+    resources :invites do
+      member do
+        post :accept
+      end
+    end
+    controller :invites do
+      get '/invites/:id/:token' => :show, as: :invite_with_token
+    end
+
     # Password resets
     resources :password_resets, only: [:create, :show, :update]
     controller :password_resets do
@@ -39,10 +49,7 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         get 'deactivated'
-        get  'welcome'
-        post 'create_first'
-        get  'login'
-        get 'deactivated'
+        get 'login'
       end
       member do
         delete 'delete_image'

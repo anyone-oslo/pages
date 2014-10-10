@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141006181300) do
+ActiveRecord::Schema.define(version: 20141007173000) do
 
   create_table "binaries", force: true do |t|
     t.string "sha1_hash"
@@ -60,6 +60,22 @@ ActiveRecord::Schema.define(version: 20141006181300) do
     t.integer  "crop_start_y"
     t.integer  "crop_gravity_x"
     t.integer  "crop_gravity_y"
+  end
+
+  create_table "invite_roles", force: true do |t|
+    t.integer  "invite_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "invites", force: true do |t|
+    t.integer  "user_id"
+    t.string   "email"
+    t.string   "token"
+    t.datetime "sent_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "localizations", force: true do |t|

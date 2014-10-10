@@ -1,4 +1,4 @@
-<table class="list">
+<table class="users list">
   <tr>
     <th>Name</th>
     <th>Email</th>
@@ -6,6 +6,26 @@
     <th>Last seen</th>
     <th></th>
   </tr>
+<% @invites.each do |invite| %>
+  <tr class="invite">
+    <td></td>
+    <td>
+      <%= invite.email %>
+    </td>
+    <td>
+      <%= invite.roles.map(&:to_s).to_sentence %>
+    </td>
+    <td>
+      <% if invite.sent_at? %>
+        Invited
+        <%= time_ago_in_words(invite.sent_at) %> ago
+      <% end %>
+    </td>
+    <td>
+      <%= link_to "Cancel invite", [:admin, invite], method: 'delete', data: {confirm: "Are you sure?"}, class: 'delete' %>
+    </td>
+  </tr>
+<% end %>
 <% @users.each do |user| -%>
   <tr class="<%=
     classes = []
@@ -27,7 +47,7 @@
       <% elsif user.last_login_at -%>
         <%= time_ago_in_words( user.last_login_at ) %> ago
       <% else %>
-        <em>(Not logged in yet)</em>
+        Not logged in yet
       <% end -%>
     </td>
     <td class="note">

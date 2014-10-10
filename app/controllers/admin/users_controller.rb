@@ -1,16 +1,17 @@
 # encoding: utf-8
 
 class Admin::UsersController < Admin::AdminController
-  before_action :require_authentication, except: [:welcome, :create_first, :login]
-  before_action :require_no_users,       only: [:welcome, :create_first]
+  before_action :require_authentication, except: [:new, :create, :login]
+  before_action :require_no_users,       only: [:new, :create]
   before_action :find_user,              only: [:edit, :update, :show, :destroy, :delete_image]
 
   require_authorization User, proc { @user },
                         member:     [:delete_image, :update, :destroy, :edit],
-                        collection: [:index, :deactivated, :new, :create, :create_first]
+                        collection: [:index, :deactivated, :new, :create]
 
   def index
     @users = User.activated
+    @invites = Invite.all.order('created_at DESC')
     respond_to do |format|
       format.html do
       end
@@ -24,18 +25,6 @@ class Admin::UsersController < Admin::AdminController
     @users = User.deactivated
   end
 
-  def welcome
-    @user = User.new
-  end
-
-  def create_first
-    @user = User.create(user_params)
-    if @user.valid?
-      authenticate!(@user)
-    end
-    redirect_to admin_default_url
-  end
-
   def login
     if logged_in?
       redirect_to admin_default_url
@@ -43,23 +32,16 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def new
-    @user = User.new(activated: true)
-    Role.roles.each do |role|
-      @user.roles.new(name: role.name) if role.default
-    end
+    @user = User.new
   end
 
   def create
-    @user = User.new(user_params)
-    @user.creator = current_user
-    @user.generate_new_password
-    if @user.save
-      AdminMailer.new_user(@user, admin_default_url).deliver
-      flash[:notice] = "#{@user.name} has been invited."
-      redirect_to :action => :index
+    @user = User.create(user_params)
+    if @user.valid?
+      authenticate!(@user)
+      redirect_to admin_default_url
     else
-      flash.now[:error] = "There were problems inviting this person."
-      render :action => :new
+      render action: :new
     end
   end
 

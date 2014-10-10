@@ -1,28 +1,24 @@
 <%
-  page_title       "New user"
-  page_description "You are inviting a new user", :create
+  page_title       "Welcome"
+  page_description "Welcome to Pages"
 %>
 
-<% content_for :sidebar do %>
-  <h2>Inviting a new user</h2>
-  <p>
-    An email with the login details will be sent.
-  </p>
-<% end %>
+<div class="content">
+  <p>Welcome to Pages! Before you can log on, we need to create the first user account.</p>
+</div>
 
-<%= form_for [:admin, @user], :builder => PagesCore::FormBuilder do |f| %>
-
-  <%= f.hidden_field :activated %>
+<%= form_for [:admin, @user], builder: PagesCore::FormBuilder do |f| %>
 
   <%= f.labelled_text_field :name %>
   <%= f.labelled_text_field :email %>
-
-  <%= render partial: "access_control", locals: { user: @user, f: f } %>
+  <%= f.labelled_password_field :password %>
+  <%= f.labelled_password_field :confirm_password %>
 
   <p>
-    <button type="submit">Send invite</button>
-    or
-    <%= link_to "Cancel and go back", admin_users_path, :class => :cancel %>
+    <button type="submit">
+      Get started
+    </button>
   </p>
 
 <% end %>
+

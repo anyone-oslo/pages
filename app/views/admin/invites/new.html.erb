@@ -1,0 +1,16 @@
+<%
+  page_title "New invite"
+  page_description "New invite"
+%>
+
+<% content_for(:sidebar) do %>
+  &nbsp;
+<% end %>
+
+<%= form_for [:admin, @invite], builder: PagesCore::FormBuilder do |f| %>
+  <%= f.labelled_text_field :email %>
+  <%= render partial: "admin/users/access_control", locals: { user: @user, f: f } %>
+  <button type="submit">
+    Send invite
+  </button>
+<% end %>

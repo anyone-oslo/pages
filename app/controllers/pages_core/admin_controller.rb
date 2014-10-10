@@ -24,11 +24,11 @@ class PagesCore::AdminController < ApplicationController
       I18n.locale = :en
     end
 
-    # Verifies the login. Redirects to users/welcome if the users table is empty. If not, renders the login screen.
+    # Verifies the login. Redirects to users/new if the users table is empty. If not, renders the login screen.
     def require_authentication
       unless logged_in?
         if User.count < 1
-          redirect_to welcome_admin_users_url and return
+          redirect_to new_admin_user_url and return
         else
           redirect_to login_admin_users_url and return
         end

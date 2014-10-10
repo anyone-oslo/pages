@@ -1,0 +1,26 @@
+<%
+  page_title       "Welcome"
+  page_description "Welcome to Pages"
+%>
+
+<div class="content">
+  <p>
+    Welcome to Pages! Before you can log on, we need to create your user account.
+  </p>
+</div>
+
+<%= form_for @user, url: accept_admin_invite_path(@invite, token: @invite.token), builder: PagesCore::FormBuilder do |f| %>
+
+  <%= f.labelled_text_field :name %>
+  <%= f.labelled_text_field :email %>
+  <%= f.labelled_password_field :password %>
+  <%= f.labelled_password_field :confirm_password %>
+
+  <p>
+    <button type="submit">
+      Sign up
+    </button>
+  </p>
+
+<% end %>
+

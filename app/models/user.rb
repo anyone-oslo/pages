@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class User < ActiveRecord::Base
+  include PagesCore::HasRoles
+
   attr_accessor :password, :confirm_password
 
   belongs_to :creator, class_name: "User", foreign_key: 'created_by'
@@ -8,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :pages
   has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
+  has_many :invites, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id
 
   serialize :persistent_data
@@ -80,10 +83,6 @@ class User < ActiveRecord::Base
     "#{self.name} <#{self.email}>"
   end
 
-  def has_role?(role_name)
-    self.roles.map(&:name).include?(role_name.to_s)
-  end
-
   def online?
     (self.last_login_at && self.last_login_at > 15.minutes.ago) ? true : false
   end
@@ -94,17 +93,6 @@ class User < ActiveRecord::Base
 
   def realname
     name
-  end
-
-  def role_names=(names)
-    new_roles = names.map do |name|
-      if has_role?(name)
-        self.roles.where(name: name).first
-      else
-        self.roles.new(name: name)
-      end
-    end
-    self.roles = new_roles
   end
 
   def to_xml(options={})
