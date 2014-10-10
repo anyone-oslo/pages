@@ -20,7 +20,6 @@ describe Invite do
     context "when attributes are valid" do
       let(:attributes) { attributes_for(:user) }
 
-
       it { is_expected.to be_a(User) }
       it { is_expected.to be_valid }
 
@@ -30,6 +29,10 @@ describe Invite do
 
       it "should inherit the roles" do
         expect(subject.role_names).to eq(['users'])
+      end
+
+      it "should be activated" do
+        expect(subject.activated?).to eq(true)
       end
 
       it "should destroy the invite" do

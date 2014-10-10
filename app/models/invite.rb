@@ -18,7 +18,8 @@ class Invite < ActiveRecord::Base
   def create_user(attributes)
     user = User.create(attributes.merge(
       role_names: role_names,
-      creator: self.user
+      creator: self.user,
+      activated: true
     ))
     self.destroy if user.valid?
     user
