@@ -2,7 +2,7 @@ class Admin::InvitesController < Admin::AdminController
   before_action :require_authentication, except: [:accept]
   before_action :find_invite,            only: [:show, :edit, :update, :destroy, :accept]
 
-  require_authorization User, proc { @user },
+  require_authorization Invite, proc { @invite },
                         member:     [:show, :edit, :update, :destroy],
                         collection: [:index, :new, :create]
 
@@ -26,6 +26,12 @@ class Admin::InvitesController < Admin::AdminController
     else
       render action: :new
     end
+  end
+
+  def destroy
+    flash[:notice] = "The invite to <em>#{@invite.email}</em> has been deleted"
+    @invite.destroy
+    redirect_to admin_invites_url
   end
 
   private

@@ -11,6 +11,7 @@ class Admin::UsersController < Admin::AdminController
 
   def index
     @users = User.activated
+    @invites = Invite.all.order('created_at DESC')
     respond_to do |format|
       format.html do
       end
