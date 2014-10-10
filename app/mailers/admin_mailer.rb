@@ -14,14 +14,6 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
-  def new_user(user, login_url)
-    @user, @login_url = user, login_url
-    mail(
-      to:      @user.email,
-      subject: "#{PagesCore.config(:site_name)} has invited you to Pages"
-    )
-  end
-
   def password_reset(user, url)
     @user, @url = user, url
     mail(

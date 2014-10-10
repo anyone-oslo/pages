@@ -16,10 +16,6 @@ class UserPolicy < Policy
       new?
     end
 
-    def create_first?
-      new?
-    end
-
     def manage?
       new?
     end
