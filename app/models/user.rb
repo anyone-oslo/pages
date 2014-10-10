@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
 
   def hash_password
     unless password.blank?
-      hashed_password = encrypt_password(password)
+      self.hashed_password = encrypt_password(password)
     end
   end
 
