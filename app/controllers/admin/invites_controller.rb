@@ -1,6 +1,7 @@
 class Admin::InvitesController < Admin::AdminController
-  before_action :require_authentication, except: [:accept]
+  before_action :require_authentication, except: [:accept, :show]
   before_action :find_invite,            only: [:show, :edit, :update, :destroy, :accept]
+  before_action :require_valid_token,    only: [:show, :accept]
 
   require_authorization Invite, proc { @invite },
                         member:     [:show, :edit, :update, :destroy],
@@ -8,6 +9,9 @@ class Admin::InvitesController < Admin::AdminController
 
   def index
     redirect_to admin_users_url
+  end
+
+  def show
   end
 
   def new
@@ -42,5 +46,12 @@ class Admin::InvitesController < Admin::AdminController
 
   def invite_params
     params.require(:invite).permit(:email, role_names: [])
+  end
+
+  def require_valid_token
+    unless @invite && secure_compare(@invite.token, params[:token])
+      flash[:notice] = "Invalid invite token"
+      redirect_to login_url and return
+    end
   end
 end

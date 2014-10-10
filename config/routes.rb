@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   namespace :admin do
     # Invites
     resources :invites
+    controller :invites do
+      get '/invites/:id/:token' => :show, as: :invite_with_token
+    end
 
     # Password resets
     resources :password_resets, only: [:create, :show, :update]
