@@ -67,14 +67,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def generate_new_password
-    collection = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789!#$%&/()=?+-_".chars
-    pass = ""
-    20.times{ pass << collection[rand(collection.size)] }
-    self.confirm_password = self.password = pass
-    pass
-  end
-
   def can_login?
     self.activated?
   end
@@ -91,10 +83,6 @@ class User < ActiveRecord::Base
 
   def online?
     (self.last_login_at && self.last_login_at > 15.minutes.ago) ? true : false
-  end
-
-  def purge_preferences!
-    self.update(persistent_data: {})
   end
 
   def realname
