@@ -24,7 +24,7 @@ class Admin::InvitesController < Admin::AdminController
   def create
     @invite = current_user.invites.create(invite_params)
     if @invite.valid?
-      # TODO: send email
+      AdminMailer.invite(@invite, admin_invite_with_token_url(@invite, @invite.token)).deliver
       @invite.update(sent_at: Time.now)
       redirect_to admin_invites_url
     else

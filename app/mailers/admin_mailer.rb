@@ -38,6 +38,14 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
+  def invite(invite, url)
+    @invite, @url = invite, url
+    mail(
+      to:      @invite.email,
+      subject: "#{PagesCore.config(:site_name)} has invited you to Pages"
+    )
+  end
+
   private
 
   def default_headers
