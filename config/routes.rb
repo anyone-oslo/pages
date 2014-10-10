@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   resource :session, only: [:create, :destroy]
 
   namespace :admin do
+    # Invites
+    resources :invites
+
     # Password resets
     resources :password_resets, only: [:create, :show, :update]
     controller :password_resets do

@@ -22,4 +22,8 @@ class InvitePolicy < Policy
   def accept?
     true
   end
+
+  def policies?
+    user.has_role?(:users)
+  end
 end

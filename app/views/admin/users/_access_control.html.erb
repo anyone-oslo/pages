@@ -1,13 +1,13 @@
-<% if policy(user).policies? %>
+<% if policy(f.object).policies? %>
   <h2>
     Access control
   </h2>
   <p>
-    <% if user != current_user %>
+    <% if f.object.kind_of?(User) && f.object != current_user %>
       <%= f.check_box :activated %> The user account is activated<br />
     <% end %>
     <% Role.roles.each do |role| %>
-      <%= check_box_tag "user[role_names][]", role.name, user.has_role?(role.name.to_sym) %>
+      <%= check_box_tag "#{model_name_from_record_or_class(f.object).param_key}[role_names][]", role.name, f.object.has_role?(role.name.to_sym) %>
       <%= role.description %><br>
     <% end %>
   </p>
