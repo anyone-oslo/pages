@@ -27,7 +27,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     # Invites
-    resources :invites
+    resources :invites do
+      member do
+        post :accept
+      end
+    end
     controller :invites do
       get '/invites/:id/:token' => :show, as: :invite_with_token
     end

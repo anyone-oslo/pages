@@ -16,8 +16,10 @@
       <%= invite.roles.map(&:to_s).to_sentence %>
     </td>
     <td>
-      Invited
-      <%= time_ago_in_words(invite.sent_at) %> ago
+      <% if invite.sent_at? %>
+        Invited
+        <%= time_ago_in_words(invite.sent_at) %> ago
+      <% end %>
     </td>
     <td>
       <%= link_to "Cancel invite", [:admin, invite], method: 'delete', data: {confirm: "Are you sure?"}, class: 'delete' %>

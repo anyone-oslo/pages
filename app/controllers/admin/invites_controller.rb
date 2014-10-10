@@ -11,7 +11,18 @@ class Admin::InvitesController < Admin::AdminController
     redirect_to admin_users_url
   end
 
+  def accept
+    @user = @invite.create_user(user_params)
+    if @user.valid?
+      authenticate!(@user)
+      redirect_to admin_default_url
+    else
+      render action: :show
+    end
+  end
+
   def show
+    @user = User.new(email: @invite.email)
   end
 
   def new
@@ -33,7 +44,7 @@ class Admin::InvitesController < Admin::AdminController
   end
 
   def destroy
-    flash[:notice] = "The invite to <em>#{@invite.email}</em> has been deleted"
+    flash[:notice] = "The invite to #{@invite.email} has been deleted"
     @invite.destroy
     redirect_to admin_invites_url
   end
@@ -44,6 +55,10 @@ class Admin::InvitesController < Admin::AdminController
     @invite = Invite.find(params[:id])
   end
 
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :confirm_password)
+  end
+
   def invite_params
     params.require(:invite).permit(:email, role_names: [])
   end
@@ -51,7 +66,7 @@ class Admin::InvitesController < Admin::AdminController
   def require_valid_token
     unless @invite && secure_compare(@invite.token, params[:token])
       flash[:notice] = "Invalid invite token"
-      redirect_to login_url and return
+      redirect_to login_admin_users_url and return
     end
   end
 end
