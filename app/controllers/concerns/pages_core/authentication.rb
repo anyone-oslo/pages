@@ -21,9 +21,7 @@ module PagesCore
     end
 
     def authenticate!(user)
-      if !user.last_login_at || user.last_login_at < 10.minutes.ago
-        user.update(last_login_at: Time.now)
-      end
+      user.mark_active!
       @current_user = user
     end
 

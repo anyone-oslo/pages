@@ -79,6 +79,12 @@ class User < ActiveRecord::Base
     self.activated?
   end
 
+  def mark_active!
+    if !self.last_login_at? || self.last_login_at < 10.minutes.ago
+      self.update_columns(last_login_at: Time.now)
+    end
+  end
+
   def name_and_email
     "#{self.name} <#{self.email}>"
   end
