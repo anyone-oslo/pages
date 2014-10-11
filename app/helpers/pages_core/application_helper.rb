@@ -17,9 +17,9 @@ module PagesCore::ApplicationHelper
         return options[:title]
       end
       if p.redirects?
-        link_to options[:title], p.redirect_path(locale: options[:locale]), :class => options[:class]
+        link_to options[:title], p.redirect_path(locale: options[:locale]), class: options[:class]
       else
-        link_to options[:title], page_path(options[:locale], p), :class => options[:class]
+        link_to options[:title], page_path(options[:locale], p), class: options[:class]
       end
     end
   end
@@ -43,7 +43,7 @@ module PagesCore::ApplicationHelper
 
   def unique_page(page_name, &block)
     locale = @locale || I18n.default_locale.to_s
-    page = Page.where(:unique_name => page_name).first
+    page = Page.where(unique_name: page_name).first
     if page && block_given?
       output = capture(page, &block)
       concat(output)

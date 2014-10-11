@@ -23,27 +23,27 @@ module PagesCore
       end
 
       def get(attribute, options={})
-        get_options = {:locale => locale}.merge(options)
+        get_options = {locale: locale}.merge(options)
         localizations = @model.localizations.select{|l| l.name == attribute.to_s && l.locale == get_options[:locale].to_s}
         if localizations.length > 0
           localizations.first
         else
-          localization = @model.localizations.new(:locale => get_options[:locale].to_s, :name => attribute.to_s)
+          localization = @model.localizations.new(locale: get_options[:locale].to_s, name: attribute.to_s)
           localization
         end
       end
 
       def set(attribute, value, options={})
-        set_options = {:locale => locale}.merge(options)
+        set_options = {locale: locale}.merge(options)
         if value.is_a?(Hash)
           value.each do |loc, val|
-            set(attribute, val, :locale => loc)
+            set(attribute, val, locale: loc)
           end
         else
           unless set_options[:locale]
             raise ArgumentError, "Tried to set :#{attribute}, but no locale has been set"
           end
-          get(attribute, :locale => set_options[:locale]).value = value
+          get(attribute, locale: set_options[:locale]).value = value
         end
         value
       end

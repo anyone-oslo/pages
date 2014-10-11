@@ -84,7 +84,7 @@ module PagesCore
           render_error 500
         end
       rescue
-        render(:template => 'errors/500_critical', :status => 500, :layout => false) and return
+        render(template: 'errors/500_critical', status: 500, layout: false) and return
       end
     end
 

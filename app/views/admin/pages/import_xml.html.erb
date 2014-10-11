@@ -23,7 +23,7 @@
   <div class="content"><p><%= @created_pages.length %> pages were imported.</p></div>
 <% end %>
 
-<%= form_tag import_xml_admin_page_path(@locale, @page), :multipart => true do %>
+<%= form_tag import_xml_admin_page_path(@locale, @page), multipart: true do %>
   <%= labelled_field file_field_tag(:xmlfile), "XML file" %>
   <p><%= submit_tag "Upload" %></p>
 <% end %>

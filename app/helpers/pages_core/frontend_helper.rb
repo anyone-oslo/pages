@@ -18,6 +18,6 @@ module PagesCore::FrontendHelper
   end
 
   def comment_honeypot_field
-    text_field_tag 'email', '', :class => 'comment_email'
+    text_field_tag 'email', '', class: 'comment_email'
   end
 end

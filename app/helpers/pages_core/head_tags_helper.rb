@@ -94,7 +94,7 @@ module PagesCore::HeadTagsHelper
     content_tag(:head) do
       safe_join([
         tag(:meta, charset: "utf-8"),
-        tag(:meta, "http-equiv" => "X-UA-Compatible", :content => "IE=edge"),
+        tag(:meta, "http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
         content_tag(:title, document_title),
         (tag(:meta, name: "description", content: meta_description) if meta_description?),
         (tag(:meta, name: "keywords", content: meta_keywords) if meta_keywords?),
@@ -141,7 +141,7 @@ module PagesCore::HeadTagsHelper
       image ||= @page.try(&:image)
       image ||= default_meta_image
       if image.kind_of?(Image)
-        dynamic_image_url(image, :size => '1200x', only_path: false)
+        dynamic_image_url(image, size: '1200x', only_path: false)
       else
         image
       end

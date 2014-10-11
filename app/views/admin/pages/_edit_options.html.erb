@@ -1,5 +1,5 @@
 <%= labelled_field f.select(:status, Page.status_labels.invert), "Status",
-  :errors      => @page.errors[:status]
+  errors: @page.errors[:status]
 %>
 <div class="published_date">
   <%= labelled_field (
@@ -8,7 +8,7 @@
       f.time_select(:published_at)
     ),
     "Date",
-    :errors      => @page.errors[:published_at]
+    errors: @page.errors[:published_at]
   %>
   <p class="autopublish_notice">This page will publish later</p>
 </div>
@@ -17,7 +17,7 @@
     f.select(:user_id, @authors.map{|a| [a.name, a.id]})
   ),
   "Author",
-  :errors => @page.errors[:user_id]
+  errors: @page.errors[:user_id]
 %>
 
 <% if @page.parent && @page.parent.news_page? %>
@@ -37,7 +37,7 @@
   </div>
 <% end %>
 
-<%= labelled_field f.select( :template, available_templates_for_select ), "Template", :errors => @page.errors[:template] %>
+<%= labelled_field f.select( :template, available_templates_for_select ), "Template", errors: @page.errors[:template] %>
 
 
 <%= link_to "Advanced options", "#", class: "advanced_toggle" %>
@@ -56,8 +56,8 @@
       <%= f.check_box(:comments_allowed) %> Enabled<br />
     </p>
   <% end %>
-  <%= labelled_field f.text_field(:unique_name), "Unique name", :errors => @page.errors[:unique_name] %>
-  <%= labelled_field f.text_field(:redirect_to), "Redirect", :errors => @page.errors[:redirect_to] %>
+  <%= labelled_field f.text_field(:unique_name), "Unique name", errors: @page.errors[:unique_name] %>
+  <%= labelled_field f.text_field(:redirect_to), "Redirect", errors: @page.errors[:redirect_to] %>
   <p class="field">
     <label>Import subpages</label>
     <%= link_to "Import subpages from XML", import_xml_admin_page_path(@locale, @page) %>

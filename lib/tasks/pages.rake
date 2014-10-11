@@ -13,7 +13,7 @@ namespace :pages do
 
   namespace :error_reports do
     desc "Show error reports"
-    task :list => :environment do
+    task list: :environment do
       require 'term/ansicolor'
       include Term::ANSIColor
 
@@ -22,7 +22,7 @@ namespace :pages do
       if File.exists?(reports_dir)
         files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
         files.each do |f|
-          if report = YAML.load_file(File.join(reports_dir, f)).merge({:sha1_hash => f.gsub(/\.yml$/, '')}) rescue nil
+          if report = YAML.load_file(File.join(reports_dir, f)).merge({sha1_hash: f.gsub(/\.yml$/, '')}) rescue nil
             reports << report
           end
         end
@@ -43,7 +43,7 @@ namespace :pages do
     end
 
     desc "Clear all error reports"
-    task :clear => :environment do
+    task clear: :environment do
       reports_dir = Rails.root.join('log', 'error_reports')
       if File.exists?(reports_dir)
         files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
@@ -56,17 +56,17 @@ namespace :pages do
   end
 
   desc "Show error reports"
-  task :error_reports => "pages:error_reports:list" do
+  task error_reports: "pages:error_reports:list" do
   end
 
   desc "Autopublish due pages"
-  task :autopublish => :environment do
+  task autopublish: :environment do
     published = Autopublisher.run!
     Rails.logger.info "Autopublished #{published.length} pages"
   end
 
   desc "Perform routine maintenance"
-  task :maintenance => [:autopublish] do
+  task maintenance: [:autopublish] do
   end
 
 end

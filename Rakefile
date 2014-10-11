@@ -6,5 +6,5 @@ load 'rails/tasks/engine.rake'
 
 RSpec::Core::RakeTask.new
 
-task :default => :spec
-task :test => :spec
+task default: :spec
+task test: :spec

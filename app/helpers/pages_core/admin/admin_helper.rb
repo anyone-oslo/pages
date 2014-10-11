@@ -4,22 +4,22 @@ module PagesCore
   module Admin
     module AdminHelper
       def tag_editor_for(form_helper, item, field_name = :serialized_tags, options = {})
-        options[:tags]        ||= Tag.tags_and_suggestions_for(item, :limit => 20)
+        options[:tags]        ||= Tag.tags_and_suggestions_for(item, limit: 20)
         options[:tagged]      ||= item.tags
         options[:placeholder] ||= 'Add tag...'
-        content_tag(:div, :class => 'tag_editor clearfix') do
-          form_helper.hidden_field(field_name, :class => 'serialized_tags') +
-          content_tag(:div, :class => :tags) do
+        content_tag(:div, class: 'tag_editor clearfix') do
+          form_helper.hidden_field(field_name, class: 'serialized_tags') +
+          content_tag(:div, class: :tags) do
             options[:tags].map do |tag|
-              content_tag(:span, :class => :tag) do
+              content_tag(:span, class: :tag) do
                 check_box_tag("tag-#{tag.id}", 1, options[:tagged].include?(tag)) +
-                content_tag(:span, tag.name, :class => :name)
+                content_tag(:span, tag.name, class: :name)
               end
             end.join.html_safe
           end +
-          content_tag(:div, :class => 'add_tag_form') do
-            text_field_tag('add_tag', options[:placeholder], :class => 'add_tag') +
-            content_tag(:button, 'Add', :class => 'add_tag_button')
+          content_tag(:div, class: 'add_tag_form') do
+            text_field_tag('add_tag', options[:placeholder], class: 'add_tag') +
+            content_tag(:button, 'Add', class: 'add_tag_button')
           end
         end
       end
@@ -29,8 +29,8 @@ module PagesCore
         preview_url = uncropped_dynamic_image_url(image, size: '800x')
         link_to(
           dynamic_image_tag(image, options), admin_image_path(image),
-          :class             => 'editableImage',
-          'data-preview-url' => preview_url
+          class: 'editableImage',
+          data: { 'preview-url' => preview_url }
         )
       end
 
@@ -43,8 +43,8 @@ module PagesCore
       # An example:
       #   <%= form_for @user do |f| %>
       #     <%= labelled_field f.text_field(:username), "Username",
-      #                        :description => "Choose your username, minimum 4 characters",
-      #                        :errors => @user.errors[:username] %>
+      #                        description: "Choose your username, minimum 4 characters",
+      #                        errors: @user.errors[:username] %>
       #     <%= submit_tag "Save" %>
       #   <% end %>
       #
@@ -72,9 +72,9 @@ module PagesCore
         method ||= :image
         output = ''
         if form.object.send(method)
-          output += "<p>"+dynamic_image_tag( form.object.send(method), :size => '120x100' )+"</p>"
+          output += "<p>"+dynamic_image_tag( form.object.send(method), size: '120x100' )+"</p>"
         end
-        output += labelled_field(form.file_field(method), label, { :errors => form.object.errors[method] }.merge(options))
+        output += labelled_field(form.file_field(method), label, { errors: form.object.errors[method] }.merge(options))
         output.html_safe
       end
 
@@ -116,10 +116,10 @@ module PagesCore
         @content_tabs ||= []
         if block_given?
           tab = {
-            :name    => name.to_s.humanize,
-            :key     => name.to_s.underscore.gsub(/[\s]+/, '_'),
-            :options => options,
-            :content => capture(&block)
+            name:    name.to_s.humanize,
+            key:     name.to_s.underscore.gsub(/[\s]+/, '_'),
+            options: options,
+            content: capture(&block)
           }
           @content_tabs << tab
           tab_output = "<div class=\"content_tab\" id=\"content-tab-#{tab[:key]}\">"

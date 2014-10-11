@@ -18,7 +18,7 @@
   <% end %>
 <% end %>
 
-<%= form_for [:admin, @user], :html => {:multipart => true}, :builder => PagesCore::FormBuilder do |f| %>
+<%= form_for [:admin, @user], html: {multipart: true}, builder: PagesCore::FormBuilder do |f| %>
 
   <h2>Account details</h2>
   <%= f.labelled_text_field :name %>
@@ -29,7 +29,7 @@
     <p id="user-image-info">
       <%= (@user==current_user) ? "You already have" : "#{@user.name} already has" %> a profile picture.
       You can
-      <%= link_to "delete it", delete_image_admin_user_path(@user), :method => :delete, :class => :delete %>
+      <%= link_to "delete it", delete_image_admin_user_path(@user), method: :delete, class: :delete %>
       or upload a new file below to replace it.
     </p>
   <% end %>

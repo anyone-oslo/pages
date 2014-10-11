@@ -13,7 +13,7 @@
 
 <% content_for :sidebar do %>
   <%= form_for @page, url: admin_page_url(@locale, @page), html: {class: :edit_page, id: 'page-form-sidebar'} do |f| %>
-    <%= render :partial => 'edit_options', :locals => {:f => f} %>
+    <%= render partial: 'edit_options', locals: {f: f} %>
   <% end %>
 <% end %>
 
@@ -21,21 +21,21 @@
 
 <%# #### EDIT AREA ######################################################### %>
 
-<%= form_for @page, :url => admin_page_url(@locale, @page), :html => {:class => :edit_page, :id => 'page-form', :method => :put, :multipart => true} do |f| %>
+<%= form_for @page, url: admin_page_url(@locale, @page), html: {class: :edit_page, id: 'page-form', method: :put, multipart: true} do |f| %>
 
   <div class="hiddenOptions">
-    <%= render :partial => 'edit_options', :locals => {:f => f} %>
+    <%= render partial: 'edit_options', locals: {f: f} %>
   </div>
 
   <%# #### CONTENT #### %>
   <%= content_tab "Content" do %>
-    <%= render :partial => 'edit_content', :locals => {:f => f} %>
+    <%= render partial: 'edit_content', locals: {f: f} %>
   <% end %>
 
   <%# #### IMAGES #### %>
   <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
     <%= content_tab "Images" do %>
-      <%= render :partial => 'edit_images', :locals => {:f => f} %>
+      <%= render partial: 'edit_images', locals: {f: f} %>
     <% end %>
   <% end %>
 
@@ -71,10 +71,10 @@
   <% if @page.template_config.value(:comments) %>
     <% if @page.comments.count > 0 %>
       <%= content_tab "Comments" do %>
-        <%= render :partial => 'edit_comments', :locals => {:f => f} %>
+        <%= render partial: 'edit_comments', locals: {f: f} %>
       <% end %>
     <% else %>
-      <%= content_tab "Comments", {:disabled => true} do %>
+      <%= content_tab "Comments", {disabled: true} do %>
         <p>No comments added.</p>
       <% end %>
     <% end %>
@@ -95,7 +95,7 @@
 <%# #### UPLOAD IMAGE #### %>
 <div id="new-image">
   <h2>Upload images</h2>
-  <%= form_for(@page.page_images.new, :url => admin_page_images_url(@locale, @page), :html => {:multipart => true}) do |f| %>
+  <%= form_for(@page.page_images.new, url: admin_page_images_url(@locale, @page), html: {multipart: true}) do |f| %>
 
     <table>
       <tr>
@@ -108,7 +108,7 @@
             <%= file_field_tag("page_images[#{i}][image]") %>
           </td>
           <td>
-            <%= text_field_tag("page_images[#{i}][image_attributes][byline]", '', :size => 48) %>
+            <%= text_field_tag("page_images[#{i}][image_attributes][byline]", '', size: 48) %>
           </td>
         </tr>
       <% end %>
@@ -126,15 +126,15 @@
 <% if @page.template_config.value(:files) %>
   <div id="new-file" class="page_new_file">
     <h2>Upload new file</h2>
-    <%= form_for((@new_file = PageFile.new), :url => admin_page_files_path(@locale, @page), :html => {:multipart => true}) do |f| %>
-      <%= labelled_field f.text_field( :name, :size => 48 ), "Name",
-        :errors      => @new_file.errors[:name]
+    <%= form_for((@new_file = PageFile.new), url: admin_page_files_path(@locale, @page), html: {multipart: true}) do |f| %>
+      <%= labelled_field f.text_field( :name, size: 48 ), "Name",
+        errors: @new_file.errors[:name]
       %>
-      <%= labelled_field f.text_field( :description, :size => 48 ), "Description",
-        :errors      => @new_file.errors[:name]
+      <%= labelled_field f.text_field( :description, size: 48 ), "Description",
+        errors: @new_file.errors[:name]
       %>
       <%= labelled_field f.file_field( :file ), "File",
-        :errors      => @new_file.errors[:file]
+        errors: @new_file.errors[:file]
       %>
       <p>
         <%= submit_tag "Upload" %> or

@@ -11,9 +11,9 @@
   <% if policy(Page).new? %>
     <h2>New page</h2>
     <p>
-      <%= form_tag new_admin_page_path, :method => :get do %>
+      <%= form_tag new_admin_page_path, method: :get do %>
         In <%= select_tag 'parent', options_from_collection_for_select(@root_pages, 'id', 'name') %>
-        <%= submit_tag "Go", :name => nil %>
+        <%= submit_tag "Go", name: nil %>
       <% end %>
     </p>
     <p>
@@ -60,7 +60,7 @@
   <% else -%>
     <ul class="pagelist reorderable">
       <% @root_pages.each do |page| -%>
-        <%= render :partial => "pagelisting", :locals => { :page => page } %>
+        <%= render partial: "pagelisting", locals: { page: page } %>
       <% end -%>
     </ul>
   <% end -%>

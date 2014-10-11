@@ -9,8 +9,8 @@ class PagesCore::Frontend::PagesController < FrontendController
   end
 
   before_action :load_root_pages
-  before_action :find_page, :only => [:show, :preview]
-  after_action  :cache_page_request, :only => [ :show ]
+  before_action :find_page, only: [:show, :preview]
+  after_action  :cache_page_request, only: [ :show ]
 
 
   protected
@@ -50,7 +50,7 @@ class PagesCore::Frontend::PagesController < FrontendController
 
     def render_page
       if @page.redirects?
-        redirect_to @page.redirect_path(:locale => @locale) and return
+        redirect_to @page.redirect_path(locale: @locale) and return
       end
 
       document_title(@page.name) unless document_title?
@@ -65,9 +65,9 @@ class PagesCore::Frontend::PagesController < FrontendController
 
       unless rendered?
         if self.instance_variables.include?('@page_template_layout')
-          render :template => "pages/templates/#{template}", :layout => @page_template_layout
+          render template: "pages/templates/#{template}", layout: @page_template_layout
         else
-          render :template => "pages/templates/#{template}"
+          render template: "pages/templates/#{template}"
         end
       end
     end
@@ -112,10 +112,10 @@ class PagesCore::Frontend::PagesController < FrontendController
         format.rss do
           @encoding   = (params[:encoding] ||= "UTF-8").downcase
           @title      = PagesCore.config(:site_name)
-          feeds       = Page.enabled_feeds(@locale, {:include_hidden => true})
-          @feed_items = Page.where(:parent_page_id => feeds).order('published_at DESC').published.limit(20).localized(@locale)
+          feeds       = Page.enabled_feeds(@locale, {include_hidden: true})
+          @feed_items = Page.where(parent_page_id: feeds).order('published_at DESC').published.limit(20).localized(@locale)
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
-          render :template => 'feeds/pages', :layout => false
+          render template: 'feeds/pages', layout: false
         end
       end
     end
@@ -138,7 +138,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           @feed_item = @page.pages.limit(20).offset((page - 1) * 20)
 
           response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
-          render :template => 'feeds/pages', :layout => false
+          render template: 'feeds/pages', layout: false
         end
         format.json do
           render json: @page
@@ -154,7 +154,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       end
       remote_ip = request.env["REMOTE_ADDR"]
       page_comment_params = params.require(:page_comment).permit(:name, :email, :url, :body)
-      @comment = PageComment.new(page_comment_params.merge({:remote_ip => remote_ip, :page_id => @page.id}))
+      @comment = PageComment.new(page_comment_params.merge({remote_ip: remote_ip, page_id: @page.id}))
       if @page.comments_allowed?
         if PagesCore.config(:recaptcha) && !verify_recaptcha
           @comment.invalid_captcha = true

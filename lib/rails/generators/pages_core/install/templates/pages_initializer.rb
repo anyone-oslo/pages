@@ -41,15 +41,15 @@ PagesCore::Templates.configure do |config|
   config.default do |default|
     ### The block definitions here will be available for all templates.
     # default.blocks do |block|
-    #   block.headline    "Headline",   :description => 'The main statement, usually largest and boldest, describing the main story.', :size => :field
-    #   block.excerpt     "Standfirst", :description => 'An introductory paragraph before the start of the body.'
-    #   block.body        "Body",       :size => :large
-    #   block.boxout      "Boxout",     :description => 'Part of the page, usually background info or facts related to the article.'
+    #   block.headline    "Headline",   description: 'The main statement, usually largest and boldest, describing the main story.', size: :field
+    #   block.excerpt     "Standfirst", description: 'An introductory paragraph before the start of the body.'
+    #   block.body        "Body",       size: :large
+    #   block.boxout      "Boxout",     description: 'Part of the page, usually background info or facts related to the article.'
     # end
 
     ### These are the default options for all templates.
-    # default.template         :autodetect, :root => 'index' # Autodetect template, root template is 'index'.
-    # default.image            :enabled, :linkable => false  # Image is enabled by default, but not linkable
+    # default.template         :autodetect, root: 'index' # Autodetect template, root template is 'index'.
+    # default.image            :enabled, linkable: false  # Image is enabled by default, but not linkable
     # default.files            :disabled                     # Files are disabled by default
     # default.images           :disabled                     # Additional images are disabled by default
     # default.text_filter      :textile                      # Use textile as default text filter
@@ -73,15 +73,15 @@ PagesCore::Templates.configure do |config|
   # config.template(:news_page, :news_page_with_video) do |t|
   #   t.blocks do |block|
   #     # Rename the excerpt block for this template and make it large.
-  #     block.excerpt     "Intro", :size => :large, :placeholder => "Intro text"
+  #     block.excerpt     "Intro", size: :large, placeholder: "Intro text"
   #     # Make the body required.
-  #     block.body        "Body", :required => true
+  #     block.body        "Body", required: true
   #       # Define a video embed block. Note: This is only the definition,
   #       # enabled_blocks controls which blocks are used.
-  #     block.video_embed "Video embed", :description => 'Embed a video here'
+  #     block.video_embed "Video embed", description: 'Embed a video here'
   #   end
   #   t.enabled_blocks [:headline, :excerpt, :body, :boxout]
-  #   t.image          :enabled, :linkable => true    # Make image linkable
+  #   t.image          :enabled, linkable: true    # Make image linkable
   #   t.comments       :enabled                       # Enable comments
   # end
 

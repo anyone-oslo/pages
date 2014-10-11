@@ -7,7 +7,7 @@
   <link rel="icon"          href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
 
   <%= stylesheet_link_tag "pages/admin" %>
-  <%= stylesheet_link_tag "pages/admin/print", :media => 'print' %>
+  <%= stylesheet_link_tag "pages/admin/print", media: 'print' %>
   <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
     <%= stylesheet_link_tag "admin" %>
   <% end %>
@@ -73,7 +73,7 @@
                 <% if t[:options][:disabled] == true %>
                   <%= t[:name] %>
                 <% else %>
-                  <%= link_to(t[:name], :anchor => "#{t[:key]}") %>
+                  <%= link_to(t[:name], anchor: "#{t[:key]}") %>
                 <% end %>
               </li>
             <% end %>

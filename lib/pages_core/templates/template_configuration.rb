@@ -42,9 +42,9 @@ module PagesCore
 
       def block(block_name)
         block_options = {
-          :title    => block_name.to_s.humanize,
-          :optional => true,
-          :size     => :small
+          title:    block_name.to_s.humanize,
+          optional: true,
+          size:     :small
         }
         if default_block_options = config.get(*[:default, :blocks, block_name])
           block_options = block_options.deep_merge(default_block_options)
@@ -91,8 +91,8 @@ module PagesCore
 
         # Default template options
         config.default do |default|
-          default.template         :autodetect, :root => 'index'
-          default.image            :enabled, :linkable => false
+          default.template         :autodetect, root: 'index'
+          default.image            :enabled, linkable: false
           default.comments         :disabled
           default.comments_allowed :enabled
           default.files            :disabled

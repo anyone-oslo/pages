@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
   # Pages
-  resources :pages, :path => ":locale/pages" do
+  resources :pages, path: ":locale/pages" do
     collection do
       get  'search'
       post 'search'
@@ -14,13 +14,13 @@ Rails.application.routes.draw do
       post 'add_comment'
       put 'preview'
     end
-    resources :files, :controller => 'page_files'
+    resources :files, controller: 'page_files'
   end
-  get '/:locale/pages/:id/:page' => 'pages#show', :constraints => { :page => /\d+/ }, :as => :paginated_page
+  get '/:locale/pages/:id/:page' => 'pages#show', constraints: { page: /\d+/ }, as: :paginated_page
 
   # Redirect hack for backwards compatibility
-  get 'pages/:locale' => redirect("/%{locale}/pages"), :locale => /\w\w\w/
-  get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), :locale => /\w\w\w/
+  get 'pages/:locale' => redirect("/%{locale}/pages"), locale: /\w\w\w/
+  get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), locale: /\w\w\w/
 
   # Authentication
   resource :session, only: [:create, :destroy]
@@ -72,24 +72,24 @@ Rails.application.routes.draw do
           post 'import_xml'
         end
 
-        get 'new/:parent', :action => 'new'
+        get 'new/:parent', action: 'new'
 
         # Page Images
-        resources :images, :controller => 'page_images' do
+        resources :images, controller: 'page_images' do
           collection do
             put 'reorder'
           end
         end
 
         # Page Files
-        resources :files, :controller => 'page_files' do
+        resources :files, controller: 'page_files' do
           collection do
             post 'reorder'
           end
         end
 
         # Page Files
-        resources :comments, :controller => 'page_comments' do
+        resources :comments, controller: 'page_comments' do
         end
       end
     end
@@ -97,8 +97,8 @@ Rails.application.routes.draw do
   end
 
   # Default admin route
-  get '/admin' => redirect{ |env, req| "/admin/#{I18n.default_locale.to_s}/pages/news" }, :as => 'admin_default'
-  #get '/admin' => 'admin#redirect', :as => 'admin_default'
+  get '/admin' => redirect{ |env, req| "/admin/#{I18n.default_locale.to_s}/pages/news" }, as: 'admin_default'
+  #get '/admin' => 'admin#redirect', as: 'admin_default'
 
   # Errors
   resources :errors do
@@ -108,6 +108,6 @@ Rails.application.routes.draw do
   end
 
   # Legacy routes
-  get '/comments/:action/:type/:id', :controller => 'comments'
+  get '/comments/:action/:type/:id', controller: 'comments'
 
 end

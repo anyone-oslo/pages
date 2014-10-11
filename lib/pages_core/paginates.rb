@@ -6,15 +6,15 @@ module PagesCore
   #
   # Example:
   #   @users = User.limit(20).offset(20)
-  #   PagesCore::Paginates.paginate(@users, :current_page => 2, :pages => 5, :per_page => 20)
+  #   PagesCore::Paginates.paginate(@users, current_page: 2, pages: 5, per_page: 20)
   #
   # Now, in the view, you could do:
   #
-  #   <%= link_to_unless @pages.first_page? "Previous page", {:page => @users.previous_page}  %>
+  #   <%= link_to_unless @pages.first_page? "Previous page", {page: @users.previous_page}  %>
   #   <% @users.pages.each do |p| %>
-  #     <%= link_to_unless p == @users.current_page, p, {:page => p} %>
+  #     <%= link_to_unless p == @users.current_page, p, {page: p} %>
   #   <% end %>
-  #   <%= link_to_unless @pages.last_page? "Next page", {:page => @users.next_page}  %>
+  #   <%= link_to_unless @pages.last_page? "Next page", {page: @users.next_page}  %>
   module Paginates
     attr_accessor :paginated, :current_page, :pages, :per_page, :offset
 

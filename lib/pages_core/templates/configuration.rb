@@ -40,8 +40,8 @@ module PagesCore
           value = false if value == :disabled
           template_config = {
             setting => {
-              :value   => value,
-              :options => options
+              value:   value,
+              options: options
             }
           }
           if template_name == :_defaults

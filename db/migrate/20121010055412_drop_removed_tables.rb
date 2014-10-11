@@ -15,7 +15,7 @@ class DropRemovedTables < ActiveRecord::Migration
     create_table :mail_subscribers do |t|
       t.string   :email
       t.datetime :created_at
-      t.string   :group,      :default => "Default"
+      t.string   :group,      default: "Default"
     end
 
     create_table :mailings do |t|
@@ -24,9 +24,9 @@ class DropRemovedTables < ActiveRecord::Migration
       t.string   :subject
       t.text     :body
       t.datetime :created_at
-      t.boolean  :failed,       :default => false
+      t.boolean  :failed,       default: false
       t.string   :content_type
-      t.boolean  :in_progress,  :default => false, :null => false
+      t.boolean  :in_progress,  default: false, null: false
     end
 
     create_table :mailouts do |t|
@@ -50,7 +50,7 @@ class DropRemovedTables < ActiveRecord::Migration
       t.datetime :pubdate
       t.string   :author
     end
-    add_index :feed_items, [:feed_id], :name => :index_feed_items_on_feed_id
+    add_index :feed_items, [:feed_id], name: :index_feed_items_on_feed_id
 
     create_table :feeds do |t|
       t.string   :url
@@ -59,7 +59,7 @@ class DropRemovedTables < ActiveRecord::Migration
       t.text     :description
       t.datetime :refreshed_at
     end
-    add_index :feeds, [:url], :name => :index_feeds_on_url
+    add_index :feeds, [:url], name: :index_feeds_on_url
 
     create_table :accounts do |t|
       t.string   :name
@@ -70,7 +70,7 @@ class DropRemovedTables < ActiveRecord::Migration
       t.datetime :created_at
       t.datetime :updated_at
       t.datetime :last_billed_at
-      t.boolean  :is_activated, :default => true, :null => false
+      t.boolean  :is_activated, default: true, null: false
       t.string   :domain
     end
 

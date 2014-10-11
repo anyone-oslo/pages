@@ -4,7 +4,7 @@ namespace :pages do
   namespace :development do
 
     desc "Generate test pages"
-    task :generate_pages => :environment do
+    task generate_pages: :environment do
       required_vars = %w{NUMBER PARENT}
       required_vars.each do |var|
         unless ENV[var]
@@ -29,13 +29,13 @@ namespace :pages do
 
       number.times do
         create_options = {
-          :parent_page_id => parent_page.id,
-          :status  => 2,
-          :published_at => (Time.now - (rand(129600)).minutes),
-          :name    => titles[rand(titles.length)],
-          :excerpt => (0..(2+rand(3))).to_a.map{sentences[rand(sentences.length)]}.join(" "),
-          :body    => (0..(1+rand(4))).to_a.map{(0..(3+rand(6))).to_a.map{sentences[rand(sentences.length)]}.join(" ")}.join("\n\n"),
-          :author  => users[rand(users.length)]
+          parent_page_id: parent_page.id,
+          status:  2,
+          published_at: (Time.now - (rand(129600)).minutes),
+          name:    titles[rand(titles.length)],
+          excerpt: (0..(2+rand(3))).to_a.map{sentences[rand(sentences.length)]}.join(" "),
+          body:    (0..(1+rand(4))).to_a.map{(0..(3+rand(6))).to_a.map{sentences[rand(sentences.length)]}.join(" ")}.join("\n\n"),
+          author:  users[rand(users.length)]
         }
         if images.length > 0
           create_options[:image] = File.open(images[rand(images.length)])

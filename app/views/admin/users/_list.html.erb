@@ -34,7 +34,7 @@
     <td>
       <strong><%= link_to user.name, admin_user_url( user ) %></strong>
       <% if policy(user).edit? %>
-        (<%= link_to "edit", edit_admin_user_url( user ), :class => :edit %>)
+        (<%= link_to "edit", edit_admin_user_url( user ), class: :edit %>)
       <% end %>
     </td>
     <td>

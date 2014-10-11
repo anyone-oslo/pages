@@ -2,16 +2,16 @@
     <div class="editor">
       <div class="controls">
         <div class="nav">
-          <%= link_to "Previous", '#', :class => :previous %>
-          <%= link_to "Next",     '#', :class => :next %>
-          <%= link_to "Close",    '#', :class => :close %>
+          <%= link_to "Previous", '#', class: :previous %>
+          <%= link_to "Next",     '#', class: :next %>
+          <%= link_to "Close",    '#', class: :close %>
         </div>
         <h4>Image Editor</h4>
         <%= fields_for PageImage.new do |pi| %>
           <%= pi.fields_for :image_attributes, Image.new do |i| %>
             <%= i.hidden_field :id, class: 'image_id' %>
             <%= i.text_field :byline, class: 'caption', placeholder: 'Write your caption/byline' %>
-            <%= text_field_tag 'embed', '', :class => 'embed' %>
+            <%= text_field_tag 'embed', '', class: 'embed' %>
             <%= pi.check_box :primary %><label>Primary</label>
             <%= i.hidden_field :crop_start_x, class: 'crop_start_x' %>
             <%= i.hidden_field :crop_start_y, class: 'crop_start_y' %>
@@ -21,7 +21,7 @@
           <button class="save">
             Save
           </button>
-          <%= link_to "Delete image", '#', :class => :delete %>
+          <%= link_to "Delete image", '#', class: :delete %>
         <% end %>
       </div>
       <div class="edit_image"></div>
@@ -45,7 +45,7 @@
            data-page-image-id="<%= page_image.id %>"
            data-uncropped-url="<%= uncropped_dynamic_image_path(page_image.image, size: '2000x2000') %>"
            href="<%= dynamic_image_url page_image.image, size: '2000x2000' %>">
-          <%= dynamic_image_tag(page_image.image, :size => '380x380', :crop => true, :upscale => true) %>
+          <%= dynamic_image_tag(page_image.image, size: '380x380', crop: true, upscale: true) %>
         </a>
       <% end %>
     </div>
@@ -55,7 +55,7 @@
            data-page-image-id="<%= i.id %>"
            data-uncropped-url="<%= uncropped_dynamic_image_path(i.image, size: '2000x2000') %>"
            href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
-          <%= dynamic_image_tag(i.image, :size => '240x240', :crop => true, :upscale => true) %>
+          <%= dynamic_image_tag(i.image, size: '240x240', crop: true, upscale: true) %>
         </a>
       <% end %>
     </div>

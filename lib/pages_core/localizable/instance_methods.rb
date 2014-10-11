@@ -72,7 +72,7 @@ module PagesCore
       # assign_attributes from ActiveRecord is overridden to catch locale before
       # any other attributes are written. This enables the following construct:
       #
-      #  Page.create(:name => 'My Page', :locale => 'en')
+      #  Page.create(name: 'My Page', locale: 'en')
       #
       def assign_attributes(new_attributes)
         if new_attributes.is_a?(Hash)

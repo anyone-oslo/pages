@@ -3,7 +3,7 @@
 class Admin::PageImagesController < Admin::AdminController
 
   before_action :find_page
-  before_action :find_page_image, :only => [:show, :edit, :update, :destroy]
+  before_action :find_page_image, only: [:show, :edit, :update, :destroy]
 
   require_authorization PageImage, proc { @page_image },
                         collection: [:index, :reorder, :new, :create]
@@ -61,11 +61,11 @@ class Admin::PageImagesController < Admin::AdminController
           redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
         end
         format.json do
-          render :json => @page_image.to_json
+          render json: @page_image.to_json
         end
       end
     else
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -77,7 +77,7 @@ class Admin::PageImagesController < Admin::AdminController
         redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
       end
       format.json do
-        render :json => @page_image.to_json
+        render json: @page_image.to_json
       end
     end
   end

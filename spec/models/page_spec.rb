@@ -29,15 +29,15 @@ describe Page do
   end
 
   describe ".locales" do
-    let(:page) { Page.create(:excerpt => {'en' => 'My test page', 'nb' => 'Testside'}, :locale => 'en') }
+    let(:page) { Page.create(excerpt: {'en' => 'My test page', 'nb' => 'Testside'}, locale: 'en') }
     subject { page.locales }
     it { is_expected.to match(['en', 'nb']) }
   end
 
   describe 'with ancestors' do
     let(:root)   { Page.create }
-    let(:parent) { Page.create(:parent => root) }
-    let(:page)   { Page.create(:parent => parent) }
+    let(:parent) { Page.create(parent: root) }
+    let(:page)   { Page.create(parent: parent) }
 
     it 'belongs to the parent' do
       expect(page.parent).to eq(parent)
@@ -57,7 +57,7 @@ describe Page do
   end
 
   describe 'setting multiple locales' do
-    let(:page) { Page.create(:excerpt => {'en' => 'My test page', 'nb' => 'Testside'}, :locale => 'en') }
+    let(:page) { Page.create(excerpt: {'en' => 'My test page', 'nb' => 'Testside'}, locale: 'en') }
 
     it 'should respond with the locale specific string' do
       expect(page.excerpt?).to eq(true)
@@ -79,7 +79,7 @@ describe Page do
   end
 
   describe 'with an excerpt' do
-    let(:page) { Page.create(:excerpt => 'My test page', :locale => 'en') }
+    let(:page) { Page.create(excerpt: 'My test page', locale: 'en') }
 
     it 'responds to excerpt?' do
       expect(page.excerpt?).to eq(true)
@@ -93,13 +93,13 @@ describe Page do
     end
 
     it 'should be changed when saved' do
-      page.update(:excerpt => 'Hi')
+      page.update(excerpt: 'Hi')
       page.reload
       expect(page.excerpt.to_s).to eq('Hi')
     end
 
     it 'should remove the localization when nilified' do
-      page.update(:excerpt => nil)
+      page.update(excerpt: nil)
       expect(page.valid?).to eq(true)
       page.reload
       expect(page.excerpt?).to eq(false)

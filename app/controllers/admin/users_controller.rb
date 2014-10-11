@@ -16,7 +16,7 @@ class Admin::UsersController < Admin::AdminController
       format.html do
       end
       format.xml do
-        render :xml => @users.to_xml
+        render xml: @users.to_xml
       end
     end
   end
@@ -48,7 +48,7 @@ class Admin::UsersController < Admin::AdminController
   def show
     respond_to do |format|
       format.html
-      format.xml { render :xml => @user.to_xml }
+      format.xml { render xml: @user.to_xml }
     end
   end
 
@@ -61,7 +61,7 @@ class Admin::UsersController < Admin::AdminController
       redirect_to admin_users_url
     else
       flash.now[:error] = "There were problems saving your changes."
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -75,7 +75,7 @@ class Admin::UsersController < Admin::AdminController
   def delete_image
     @user.image.destroy
     respond_to do |format|
-      format.js   { render :text => "The profile picture has been deleted." }
+      format.js   { render text: "The profile picture has been deleted." }
       format.html { redirect_to(edit_admin_user_url(@user)) }
     end
   end

@@ -23,7 +23,7 @@ module PagesCore
 
     def image_file_field(attribute, options={})
       if object.send(attribute)
-        content_tag('p', @template.dynamic_image_tag(object.send(attribute), :size => '120x100')) +
+        content_tag('p', @template.dynamic_image_tag(object.send(attribute), size: '120x100')) +
         self.file_field(attribute, options)
       else
         self.file_field(attribute, options)
@@ -38,9 +38,9 @@ module PagesCore
       if errors_on?(attribute)
         label_text += " <span class=\"error\">#{first_error_on(attribute)}</span>"
       end
-      label_tag = content_tag 'label', label_text.html_safe, :for => [object.class.to_s.underscore, attribute].join('_')
+      label_tag = content_tag 'label', label_text.html_safe, for: [object.class.to_s.underscore, attribute].join('_')
 
-      content_tag 'div', label_tag + content, :class => classes.join(' ')
+      content_tag 'div', label_tag + content, class: classes.join(' ')
     end
 
     def labelled_text_field(attribute, label_text=nil, options={})

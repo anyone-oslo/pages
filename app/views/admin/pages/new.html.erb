@@ -7,7 +7,7 @@
     page_description "You are creating a new root page"
   end
 
-  @url_options = { :action => :new }
+  @url_options = { action: :new }
   @url_options[:parent] = @page.parent if @page.parent
 %>
 
@@ -15,14 +15,14 @@
 <% end %>
 
 
-<%= form_for @page, :url => admin_pages_url, :html => {:id => 'page_edit_form', :class => 'edit_page', :method => :post, :multipart => true} do |f| %>
+<%= form_for @page, url: admin_pages_url, html: {id: 'page_edit_form', class: 'edit_page', method: :post, multipart: true} do |f| %>
 
   <%= hidden_field_tag 'locale', @locale %>
   <%= f.hidden_field 'parent_page_id' if @page.parent %>
 
-  <%= labelled_field f.text_field( :name, :class => 'text page_title' ), "Page title",
-    :errors      => @page.errors[:name],
-    :description => "This is the name of the page, and it will also be the name of the link to this page."
+  <%= labelled_field f.text_field( :name, class: 'text page_title' ), "Page title",
+    errors: @page.errors[:name],
+    description: "This is the name of the page, and it will also be the name of the link to this page."
   %>
 
   <p><%= submit_tag "Continue" %></p>

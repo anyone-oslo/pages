@@ -49,13 +49,13 @@ class Admin::PagesController < Admin::AdminController
       end
     end
     if request.xhr?
-      render :text => 'ok'
+      render text: 'ok'
     end
   end
 
   def show
     edit
-    render :action => :edit
+    render action: :edit
   end
 
   def import_xml
@@ -76,7 +76,7 @@ class Admin::PagesController < Admin::AdminController
   # TODO: Should be refactored
   def new_news
     new
-    render :action => :new
+    render action: :new
   end
 
   def create
@@ -92,7 +92,7 @@ class Admin::PagesController < Admin::AdminController
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
       redirect_to edit_admin_page_url(@locale, @page)
     else
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -114,7 +114,7 @@ class Admin::PagesController < Admin::AdminController
       redirect_to edit_admin_page_url(@locale, @page)
     else
       edit
-      render :action => :edit
+      render action: :edit
     end
   end
 

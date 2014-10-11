@@ -24,7 +24,7 @@ module PagesCore
   #
   # == Usage
   #
-  #  page = Page.create(:name => 'Hello', :locale => 'en')
+  #  page = Page.create(name: 'Hello', locale: 'en')
   #  page.name?     # => true
   #  page.name.to_s # => 'Hello'
   #

@@ -5,7 +5,7 @@ require 'tempfile'
 
 namespace :db do
   desc "Convert timestamps to UTC"
-  task :convert_to_utc => :environment do
+  task convert_to_utc: :environment do
     tables = ActiveRecord::Base.connection.execute("SHOW TABLES")
     tables.each do |table_row|
       table = table_row.first
@@ -23,7 +23,7 @@ namespace :db do
   end
 
   desc "Copy production database to current environment"
-  task :copy_from_production => :environment do
+  task copy_from_production: :environment do
     db_config = YAML.load_file(Rails.root.join('config', 'database.yml'))
     temp_file = Tempfile.new(db_config[Rails.env]['database'])
     puts "Dumping remote database... (this might take a while)"
@@ -39,7 +39,7 @@ namespace :db do
   end
 
   desc "Fixes double UTF-8 encoding"
-  task :fix_double_encoding => :environment do
+  task fix_double_encoding: :environment do
     config = Rails.configuration.database_configuration[Rails.env]
 
     puts "Dumping database..."

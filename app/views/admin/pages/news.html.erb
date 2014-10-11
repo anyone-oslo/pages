@@ -11,9 +11,9 @@
 <% content_for :sidebar do %>
   <h2>New article</h2>
   <p>
-    <%= form_tag new_news_admin_pages_path, :method => :get do %>
-      In <%= select_tag 'parent', options_for_select(@news_pages.map{|p| [page_name(p, :include_parents => true).gsub("&raquo;", "»"), p.id] }) %>
-      <%= submit_tag "Go", :name => nil %>
+    <%= form_tag new_news_admin_pages_path, method: :get do %>
+      In <%= select_tag 'parent', options_for_select(@news_pages.map{|p| [page_name(p, include_parents: true).gsub("&raquo;", "»"), p.id] }) %>
+      <%= submit_tag "Go", name: nil %>
     <% end %>
   </p>
   <% @archive_finder.years.each do |year| %>
@@ -40,7 +40,7 @@
     </tr>
     <% @pages.each do |page| %><tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
       <td class="name">
-        <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), :class => 'name_link') %>
+        <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), class: 'name_link') %>
         <% if page.autopublish? %>
           <br /><small>This page will be published <strong><%= publish_time(page.published_at) %></strong></small>
         <% end %>
@@ -59,7 +59,7 @@
       <td>
         <%= link_to page.author.name, admin_user_path(page.author) %>
       </td>
-      <td><%= link_to_if(policy(page.parent).edit?, page_name(page.parent, :include_parents => true), news_admin_pages_path(:section => page.parent.id)) %></td>
+      <td><%= link_to_if(policy(page.parent).edit?, page_name(page.parent, include_parents: true), news_admin_pages_path(section: page.parent.id)) %></td>
     </tr><% end %>
   </table>
 <% else %>

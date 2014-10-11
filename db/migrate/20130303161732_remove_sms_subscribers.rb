@@ -8,7 +8,7 @@ class RemoveSmsSubscribers < ActiveRecord::Migration
   def self.down
     create_table "sms_subscribers" do |t|
       t.string   "msisdn"
-      t.string   "group", :default => "Default"
+      t.string   "group", default: "Default"
       t.datetime "created_at"
       t.datetime "updated_at"
     end
