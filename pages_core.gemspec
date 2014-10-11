@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'dis', '~> 0.9.0'
   s.add_dependency 'dynamic_image', '~> 2.0.0.beta1'
   s.add_dependency 'actionpack-page_caching'
-  s.add_dependency 'active_model_serializers', '~> 0.8.0'
+  s.add_dependency 'active_model_serializers', '~> 0.9.0'
 
   # Locales
   s.add_dependency 'rails-i18n', '~> 4.0.0'
@@ -57,7 +57,7 @@ Gem::Specification.new do |s|
   # Delayed Job
   s.add_dependency 'delayed_job', '~> 4.0.0'
   s.add_dependency 'delayed_job_active_record', '~> 4.0.0'
-  s.add_dependency 'daemons', '1.1.0'
+  s.add_dependency 'daemons', '~> 1.1.0'
 
   # Thinking Sphinx
   s.add_dependency 'thinking-sphinx', "~> 3.1.1"
