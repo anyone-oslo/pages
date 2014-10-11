@@ -63,7 +63,6 @@ module PagesCore
       load 'pages_core/localizable.rb'
       load 'pages_core/pages_plugin.rb'
       load 'pages_core/paginates.rb'
-      load 'pages_core/serializations.rb'
       load 'pages_core/templates.rb'
       load 'pages_core/version.rb'
     end

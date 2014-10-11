@@ -19,10 +19,6 @@ class PagePolicy < Policy
     def reorder_pages?
       create?
     end
-
-    def import_xml?
-      create?
-    end
   end
 
   module Member

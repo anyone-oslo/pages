@@ -4,13 +4,13 @@ class Admin::PagesController < Admin::AdminController
 
   before_action :require_news_pages, only: [:news]
   before_action :find_page, only: [
-    :show, :edit, :preview, :update, :destroy, :reorder, :import_xml
+    :show, :edit, :preview, :update, :destroy, :reorder
   ]
   before_action :find_categories
   before_action :find_news_pages, only: [:news, :new_news]
 
   require_authorization Page, proc { @page },
-                        collection: [:index, :news, :new, :new_news, :create, :reorder_pages, :import_xml]
+                        collection: [:index, :news, :new, :new_news, :create, :reorder_pages]
 
   def index
     @root_pages = Page.roots.in_locale(@locale).visible
@@ -56,12 +56,6 @@ class Admin::PagesController < Admin::AdminController
   def show
     edit
     render action: :edit
-  end
-
-  def import_xml
-    if request.post? && params[:xmlfile]
-      @created_page = PagesCore::Serializations::PageXmlImporter.new(@page, params[:xmlfile].read).import!
-    end
   end
 
   def new

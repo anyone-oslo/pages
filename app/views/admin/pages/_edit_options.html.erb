@@ -58,11 +58,6 @@
   <% end %>
   <%= labelled_field f.text_field(:unique_name), "Unique name", errors: @page.errors[:unique_name] %>
   <%= labelled_field f.text_field(:redirect_to), "Redirect", errors: @page.errors[:redirect_to] %>
-  <p class="field">
-    <label>Import subpages</label>
-    <%= link_to "Import subpages from XML", import_xml_admin_page_path(@locale, @page) %>
-  </p>
-
 </div>
 
 <% if @page.id? && @page.name? %>

@@ -67,10 +67,6 @@ Rails.application.routes.draw do
           get 'new_news' # TODO: Should be refactored
           get 'reorder_pages'
         end
-        member do
-          get  'import_xml'
-          post 'import_xml'
-        end
 
         get 'new/:parent', action: 'new'
 
