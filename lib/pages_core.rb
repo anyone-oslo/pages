@@ -1,50 +1,42 @@
 # encoding: utf-8
 
+# Ruby Standard Library
 require 'digest/sha1'
+require 'fileutils'
 require 'find'
 require 'open-uri'
 require 'pathname'
-require 'rexml/document'
 require 'ostruct'
 
-# -----
-
-# Framework
-require "rails"
+# Rails
+require 'rails'
 require 'active_record'
 require 'action_controller'
 require 'action_view'
 require 'action_mailer'
 
+# Gems
 require 'actionpack/page_caching'
 require 'active_model_serializers'
-
+require 'acts_as_list'
+require 'bcrypt'
+require 'coffee-script'
+require 'delayed_job'
+require 'dis'
+require 'dynamic_image'
+require 'json'
 require 'rails_i18n'
+require 'recaptcha/rails'
+require 'RedCloth'
+require 'sass'
+require 'thinking-sphinx'
 
-# Assets
+# Javascript
 require 'jquery/rails/engine'
 require 'jquery/ui/rails'
 require 'jquery-cookie-rails'
 require 'underscore-rails'
 require 'jcrop/rails/v2'
-
-require "bcrypt"
-require 'RedCloth'
-require 'daemon-spawn'
-require 'delayed_job'
-
-require 'dis'
-require 'dynamic_image'
-
-require 'sass'
-require 'json'
-require 'coffee-script'
-
-require 'acts_as_list'
-
-require "recaptcha/rails"
-
-require 'thinking-sphinx'
 
 module PagesCore
   class NotAuthorized < StandardError; end
@@ -77,11 +69,6 @@ module PagesCore
 
     def plugin_root
       Pathname.new(File.dirname(__FILE__)).join('..').expand_path
-    end
-
-    def application_name
-      dir = Rails.root.to_s
-      dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
     end
 
     def configure(options={}, &block)

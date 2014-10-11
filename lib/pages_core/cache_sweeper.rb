@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'fileutils'
-
 module PagesCore
   class CacheSweeper
     class << self
