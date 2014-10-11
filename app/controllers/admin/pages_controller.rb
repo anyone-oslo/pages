@@ -14,12 +14,6 @@ class Admin::PagesController < Admin::AdminController
 
   def index
     @root_pages = Page.roots.in_locale(@locale).visible
-    respond_to do |format|
-      format.html
-      format.xml do
-        render xml: @root_pages.to_xml(pages: true)
-      end
-    end
   end
 
   def news

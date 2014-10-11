@@ -214,48 +214,6 @@ class Page < ActiveRecord::Base
     self[:content_order] || 'position'
   end
 
-  def to_xml(options = {})
-    # Always skip these
-    options[:except] = [:comments_count, :byline, :last_comment_at, :image_id] + Array(options[:except])
-
-    super(options) do |xml|
-
-      # Localizations
-      self.template_config.enabled_blocks.each do |localizable_name, block_options|
-        xml.tag!(localizable_name.to_sym) do |field|
-          self.locales.each do |locale|
-            field.tag!(locale.to_sym, self.localize(locale).send(localizable_name))
-          end
-        end
-      end
-
-      # Tags
-      self.tags.to_xml(builder: xml, skip_instruct: true, only: [:name])
-
-      # Images
-      if options[:images]
-        xml.images do |images_xml|
-          self.page_images.each{ |page_image| page_image.to_xml(builder: images_xml, skip_instruct: true, only: [:image_id, :primary]) }
-        end
-      end
-
-      # Comments
-      if options[:comments]
-        xml.comments do |comments_xml|
-          self.comments.each{|comment| comment.to_xml(except: [:page_id], builder: comments_xml, skip_instruct: true)}
-        end
-      end
-
-      # Subpages
-      if options[:pages]
-        subpages = (options[:pages] == :all) ? self.children : self.pages
-        xml.pages do |pages_xml|
-          self.pages.each{ |page| page.to_xml(options.merge({builder: pages_xml, skip_instruct: true})) }
-        end
-      end
-    end
-  end
-
   private
 
   def ensure_page_images_contains_primary_image

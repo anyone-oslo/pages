@@ -12,13 +12,6 @@ class Admin::UsersController < Admin::AdminController
   def index
     @users = User.activated
     @invites = Invite.all.order('created_at DESC')
-    respond_to do |format|
-      format.html do
-      end
-      format.xml do
-        render xml: @users.to_xml
-      end
-    end
   end
 
   def deactivated
@@ -46,10 +39,6 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    respond_to do |format|
-      format.html
-      format.xml { render xml: @user.to_xml }
-    end
   end
 
   def edit

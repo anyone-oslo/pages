@@ -89,12 +89,6 @@ class User < ActiveRecord::Base
     name
   end
 
-  def to_xml(options={})
-    options[:except]  ||= [:hashed_password, :persistent_params]
-    options[:include] ||= [:image]
-    super options
-  end
-
   private
 
   def confirm_password_must_match
