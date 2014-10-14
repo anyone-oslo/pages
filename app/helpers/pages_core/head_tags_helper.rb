@@ -185,7 +185,8 @@ module PagesCore::HeadTagsHelper
       site_name:   PagesCore.config(:site_name),
       title:       document_title,
       image:       (meta_image if meta_image?),
-      description: (meta_description if meta_description?)
+      description: (meta_description if meta_description?),
+      url:         request.url
     }.merge(open_graph_properties)
     safe_join(properties.delete_if { |_, content| content.nil? }.map do |name, content|
       tag(:meta, property: "og:#{name}", content: content)
