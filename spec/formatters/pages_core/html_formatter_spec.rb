@@ -28,17 +28,17 @@ describe PagesCore::HtmlFormatter do
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
+        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
       end
 
       context "with size" do
         let(:string) { "[image:#{image.id} size=\"100x100\"]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/p>/) }
+        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/p>/) }
       end
 
       context "with class name" do
         let(:string) { "[image:#{image.id} class=\"float-left\"]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" class=\"float-left\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
+        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape float-left\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
       end
 
       context "with non-existant image" do

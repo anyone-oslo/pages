@@ -41,10 +41,21 @@ module PagesCore
 
         begin
           image = Image.find(id)
+          class_name = [image_class_name(image), class_name].compact
           dynamic_image_tag(image, size: size, crop: false, upscale: false, class: class_name)
         rescue ActiveRecord::RecordNotFound
           nil
         end
+      end
+    end
+
+    def image_class_name(image)
+      if image.size.x == image.size.y
+        "square"
+      elsif image.size.x > image.size.y
+        "landscape"
+      else
+        "portrait"
       end
     end
   end
