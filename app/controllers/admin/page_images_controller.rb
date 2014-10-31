@@ -51,10 +51,6 @@ class Admin::PageImagesController < Admin::AdminController
 
   def update
     if @page_image.update(page_image_params)
-
-      # Empty the cache
-      #PagesCore::CacheSweeper.sweep_image!(@page_image.image_id)
-
       respond_to do |format|
         format.html do
           flash[:notice] = "The image was updated"
