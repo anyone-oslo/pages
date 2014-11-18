@@ -1,12 +1,3 @@
-@mixin hidpi {
-  @media only screen and (-webkit-min-device-pixel-ratio : 1.5),
-  only screen and (min-device-pixel-ratio : 1.5) {
-    html.backgroundsize & {
-      @content;
-    }
-  }
-}
-
 @mixin breakpoint-min($width) {
   @media screen and (min-width: ($width + 1px)) {
     @content;
