@@ -7,14 +7,18 @@
 # Ignore bundler config.
 /.bundle
 
+/config/*.sphinx.conf
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
+/db/binary-objects
+/db/dis
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /log/error_reports
+/log/*.sphinx.pid
 /tmp
-
-public/dynamic_image
-db/binary-objects
+/public/dynamic_images
