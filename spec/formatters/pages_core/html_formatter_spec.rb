@@ -28,22 +28,28 @@ describe PagesCore::HtmlFormatter do
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/figure>/) }
       end
 
       context "with size" do
         let(:string) { "[image:#{image.id} size=\"100x100\"]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/p>/) }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/figure>/) }
       end
 
       context "with class name" do
         let(:string) { "[image:#{image.id} class=\"float-left\"]" }
-        it { is_expected.to match(/<p><img alt=\"Image\" class=\"landscape float-left\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/p>/) }
+        it { is_expected.to match(/<figure class=\"image landscape float-left\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/figure>/) }
       end
 
       context "with non-existant image" do
         let(:string) { "[image:31337]" }
         it { is_expected.to eq("") }
+      end
+
+      context "when image has a caption" do
+        let(:image) { Image.create(file: uploaded_file, byline: "This is a caption") }
+        let(:string) { "[image:#{image.id}]" }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><figcaption>This is a caption<\/figcaption><\/figure>/) }
       end
     end
 

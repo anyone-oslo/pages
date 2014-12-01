@@ -41,11 +41,24 @@ module PagesCore
 
         begin
           image = Image.find(id)
-          class_name = [image_class_name(image), class_name].compact
-          dynamic_image_tag(image, size: size, crop: false, upscale: false, class: class_name)
+          class_name = ['image', image_class_name(image), class_name].compact
+          content_tag(:figure,
+            dynamic_image_tag(image,
+                              size: size,
+                              crop: false,
+                              upscale: false) +
+              image_caption(image),
+            class: class_name
+          )
         rescue ActiveRecord::RecordNotFound
           nil
         end
+      end
+    end
+
+    def image_caption(image)
+      if image.byline?
+        content_tag(:figcaption, image.byline)
       end
     end
 
