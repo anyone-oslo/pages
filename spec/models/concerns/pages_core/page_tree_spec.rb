@@ -38,6 +38,25 @@ describe PagesCore::PageTree do
     end
   end
 
+  describe "#next_sibling" do
+    subject { page.next_sibling }
+
+    let(:root) { create(:page) }
+
+    context "when page has a next sibling" do
+      let!(:page) { create(:page, parent: root) }
+      let!(:second_last) { create(:page, parent: root) }
+      let!(:last) { create(:page, parent: root) }
+      it { is_expected.to eq(second_last) }
+    end
+
+    context "when page does not have a next sibling" do
+      let!(:first) { create(:page, parent: root) }
+      let!(:page) { create(:page, parent: root) }
+      it { is_expected.to eq(nil) }
+    end
+  end
+
   describe "#parent" do
     subject { page.parent }
 
@@ -50,6 +69,25 @@ describe PagesCore::PageTree do
       let(:page) { create(:page, parent: parent).localize('en') }
       it { is_expected.to eq(parent) }
       specify { expect(subject.locale).to eq('en') }
+    end
+  end
+
+  describe "#previous_sibling" do
+    subject { page.previous_sibling }
+
+    let(:root) { create(:page) }
+
+    context "when page has a previous sibling" do
+      let!(:first) { create(:page, parent: root) }
+      let!(:second) { create(:page, parent: root) }
+      let!(:page) { create(:page, parent: root) }
+      it { is_expected.to eq(second) }
+    end
+
+    context "when page does not have a previous sibling" do
+      let!(:page) { create(:page, parent: root) }
+      let!(:last) { create(:page, parent: root) }
+      it { is_expected.to eq(nil) }
     end
   end
 
@@ -82,6 +120,24 @@ describe PagesCore::PageTree do
       let(:page) { create(:page, parent: subpage) }
       it { is_expected.to eq([page, subpage, root]) }
     end
+  end
 
+  describe "#siblings" do
+    subject { page.siblings }
+    let(:root) { create(:page) }
+
+    context "when page is a subpage" do
+      let!(:first) { create(:page, parent: root) }
+      let!(:page) { create(:page, parent: root) }
+      let!(:third) { create(:page, parent: root) }
+      it { is_expected.to eq([first, page, third]) }
+    end
+
+    context "when page is a root page" do
+      let!(:first) { create(:page) }
+      let!(:page) { create(:page) }
+      let!(:third) { create(:page) }
+      it { is_expected.to eq([first, page, third]) }
+    end
   end
 end

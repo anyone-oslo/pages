@@ -43,9 +43,23 @@ module PagesCore
         nodes
       end
 
+      # Finds the page's next sibling. Returns nil if there isn't one.
+      def next_sibling
+        if siblings.any?
+          siblings[(siblings.index(self) + 1)...siblings.length].try(&:first)
+        end
+      end
+
       # Returns the pages parent
       def parent
         super.try { |node| node.localize(self.locale) }
+      end
+
+      # Finds the page's next sibling. Returns nil if there isn't one.
+      def previous_sibling
+        if siblings.any?
+          siblings[0...siblings.index(self)].try(&:last)
+        end
       end
 
       # Returns the root node of the tree.
@@ -58,6 +72,15 @@ module PagesCore
       #   subchild1.self_and_ancestors # => [subchild1, child1, root]
       def self_and_ancestors
         [self] + self.ancestors
+      end
+
+      # Returns all siblings, including self.
+      def siblings
+        if self.parent
+          self.parent.pages
+        else
+          self.class.roots.map { |node| node.localize(self.locale) }
+        end
       end
     end
   end
