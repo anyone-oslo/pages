@@ -195,12 +195,13 @@ class PagesCore::Frontend::PagesController < FrontendController
         }
       }
 
-      if @search_category_id
+      unless @search_category_id.blank?
         search_options[:with][:category_ids] = @search_category_id
       end
 
       @pages = Page.search(normalized_query, search_options)
-      @pages = @pages.map { |p| p.localize(locale) }
+      @pages.each { |p| p.localize!(locale) }
+      @pages
     end
 
     def preview
