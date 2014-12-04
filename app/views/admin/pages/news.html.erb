@@ -16,7 +16,7 @@
       <%= submit_tag "Go", name: nil %>
     <% end %>
   </p>
-  <% @archive_finder.years.each do |year| %>
+  <% @archive_finder.years.reverse.each do |year| %>
     <h2><%= year %><%= ": #{@category.name}" if @category %></h2>
     <ul>
       <% @archive_finder.months_in_year_with_count(year).each do |month, page_count| %>
