@@ -82,7 +82,7 @@ class Admin::UsersController < Admin::AdminController
     if policy(User).manage?
       permitted_params += [:activated, role_names: []]
     end
-    if @user && policy(@user).change_password?
+    if !User.any? || (@user && policy(@user).change_password?)
       permitted_params += [:password, :confirm_password]
     end
     params.require(:user).permit(permitted_params)
