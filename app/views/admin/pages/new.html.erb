@@ -12,19 +12,37 @@
 %>
 
 <% content_for :sidebar do %>
+  <%= form_for(@page,
+               url: admin_pages_url(@locale),
+               html: {class: :edit_page, id: 'page-form-sidebar'}) do |f| %>
+    <%= render partial: 'edit_options', locals: {f: f} %>
+  <% end %>
 <% end %>
 
+<%= form_for(@page,
+             url: admin_pages_url(@locale),
+             html: {
+               class: :edit_page,
+               id: 'page-form',
+               method: :post,
+               multipart: true
+             }
+) do |f| %>
 
-<%= form_for @page, url: admin_pages_url, html: {id: 'page_edit_form', class: 'edit_page', method: :post, multipart: true} do |f| %>
+  <div class="hiddenOptions">
+    <%= render partial: 'edit_options', locals: {f: f} %>
+  </div>
 
   <%= hidden_field_tag 'locale', @locale %>
   <%= f.hidden_field 'parent_page_id' if @page.parent %>
 
-  <%= labelled_field f.text_field( :name, class: 'text page_title' ), "Page title",
-    errors: @page.errors[:name],
-    description: "This is the name of the page, and it will also be the name of the link to this page."
-  %>
+  <%# #### CONTENT #### %>
+  <%= content_tab "Content" do %>
+    <%= render partial: 'edit_content', locals: {f: f} %>
+  <% end %>
 
-  <p><%= submit_tag "Continue" %></p>
+  <p>
+    <%= submit_tag "Save" %>
+  </p>
 
 <% end %>

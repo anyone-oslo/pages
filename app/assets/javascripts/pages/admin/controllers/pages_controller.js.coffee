@@ -48,8 +48,10 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     $("#new-category").hide()
 
   new: ->
+    @edit()
 
   new_news: ->
+    @edit()
 
   show: ->
     @edit()

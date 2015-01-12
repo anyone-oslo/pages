@@ -53,6 +53,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def new
+    @authors = User.activated
     @page = Page.new.localize(@locale)
     if params[:parent]
       @page.parent = Page.find(params[:parent]) rescue nil
