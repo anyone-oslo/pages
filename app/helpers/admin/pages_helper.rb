@@ -24,7 +24,7 @@ module Admin::PagesHelper
     else
       page_names = (options[:include_parents]) ? [page.ancestors, page].flatten : [page]
 
-      p_name = page_names.map do |p|
+      p_name = safe_join(page_names.map { |p|
         if p.dup.name?
           p.dup.name.to_s
         elsif p.localize(I18n.default_locale.to_s).name?
@@ -32,7 +32,7 @@ module Admin::PagesHelper
         else
           "(Untitled)"
         end
-      end.join(" &raquo; ")
+      }, " &raquo; ".html_safe)
 
       page_name_cache[options][page.id] = p_name
     end

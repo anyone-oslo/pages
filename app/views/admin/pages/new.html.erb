@@ -1,6 +1,6 @@
 <%
   if @page.parent
-    page_title "#{@page.parent.name} &raquo; New Page"
+    page_title "#{@page.parent.name} &raquo; New Page".html_safe
     page_description "<em>#{@page.parent.name}</em> &raquo; New Page"
   else
     page_title "Create new page"

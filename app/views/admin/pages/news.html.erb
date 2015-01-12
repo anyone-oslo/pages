@@ -59,7 +59,9 @@
       <td>
         <%= link_to page.author.name, admin_user_path(page.author) %>
       </td>
-      <td><%= link_to_if(policy(page.parent).edit?, page_name(page.parent, include_parents: true), news_admin_pages_path(section: page.parent.id)) %></td>
+      <td>
+        <%= link_to_if(policy(page.parent).edit?, page_name(page.parent, include_parents: true), news_admin_pages_path(section: page.parent.id)) %>
+      </td>
     </tr><% end %>
   </table>
 <% else %>
