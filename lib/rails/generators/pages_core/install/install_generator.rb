@@ -65,6 +65,16 @@ module PagesCore
         template 'pages_initializer.rb', File.join('config/initializers/pages.rb')
       end
 
+      def create_cache_sweeper_initializer
+        get_configuration!
+        template 'cache_sweeper_initializer.rb', File.join('config/initializers/cache_sweeper.rb')
+      end
+
+      def create_template_initializer
+        get_configuration!
+        template 'page_templates_initializer.rb', File.join('config/initializers/page_templates.rb')
+      end
+
       def create_sphinx_config
         template 'thinking_sphinx.yml', File.join('config/thinking_sphinx.yml')
       end
