@@ -38,10 +38,7 @@ class Page < ActiveRecord::Base
     attribute :headline
     attribute :boxout
 
-    # Get attributes from the template configuration
-    PagesCore::Templates::TemplateConfiguration.all_blocks.each do |block|
-      attribute block
-    end
+    dictionary -> { PagesCore::Templates::TemplateConfiguration.all_blocks }
   end
 
   validates_format_of :redirect_to,
