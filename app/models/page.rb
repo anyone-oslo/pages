@@ -68,6 +68,7 @@ class Page < ActiveRecord::Base
   scope :published,  -> { where(status: 2, autopublish: false) }
   scope :visible,    -> { where('status < 4') }
   scope :news_pages, -> { visible.where(news_page: true) }
+  scope :pinned,     -> { where(pinned: true) }
 
   class << self
 
