@@ -111,10 +111,13 @@ class Admin::PagesController < Admin::AdminController
 
   def build_page(locale)
     Page.new.localize(locale).tap do |page|
-      if PagesCore.config(:default_author)
-        page.author = User.where(email: PagesCore.config(:default_author)).first
-      end
-      page.author ||= current_user
+      page.author = default_author || current_user
+    end
+  end
+
+  def default_author
+    if PagesCore.config.default_author
+      page.author = User.where(email: PagesCore.config.default_author).first
     end
   end
 
