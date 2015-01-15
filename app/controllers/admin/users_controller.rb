@@ -16,6 +16,7 @@ class Admin::UsersController < Admin::AdminController
 
   def deactivated
     @users = User.deactivated
+    @invites = []
   end
 
   def login
