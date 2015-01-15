@@ -54,7 +54,7 @@ class Admin::PagesController < Admin::AdminController
 
   def new
     @authors = User.activated
-    @page = Page.new.localize(@locale)
+    @page = build_page(@locale)
     if params[:parent]
       @page.parent = Page.find(params[:parent]) rescue nil
     elsif @news_pages
@@ -69,13 +69,7 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def create
-    @page = Page.new.localize(@locale)
-
-    if PagesCore.config(:default_author)
-      @page.author = User.where(email: PagesCore.config(:default_author)).first
-    end
-    @page.author ||= current_user
-
+    @page = build_page(@locale)
     if @page.update(page_params)
       @page.update(comments_allowed: @page.template_config.value(:comments_allowed))
       @page.categories = (params[:category] && params[:category].length > 0) ? params[:category].map{|k,v| Category.find(k.to_i)} : []
@@ -114,6 +108,15 @@ class Admin::PagesController < Admin::AdminController
   end
 
   private
+
+  def build_page(locale)
+    Page.new.localize(locale).tap do |page|
+      if PagesCore.config(:default_author)
+        page.author = User.where(email: PagesCore.config(:default_author)).first
+      end
+      page.author ||= current_user
+    end
+  end
 
   def page_params
     params.require(:page).permit(
