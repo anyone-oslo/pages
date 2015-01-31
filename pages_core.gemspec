@@ -23,12 +23,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl", "~> 4.3.0"
   s.add_development_dependency "shoulda-matchers", "~> 2.7.0"
 
-  s.add_dependency "rails", "~> 4.1.0"
+  s.add_dependency "rails", "~> 4.2.0"
 
   s.add_dependency 'bcrypt-ruby'
   s.add_dependency 'RedCloth', '~> 4.2.9'
-  s.add_dependency 'dis', '~> 0.9.0'
-  s.add_dependency 'dynamic_image', '~> 2.0.0.beta1'
+  s.add_dependency 'dis', '~> 1.0.0'
+  s.add_dependency 'dynamic_image', '~> 2.0.0.beta6'
   s.add_dependency 'actionpack-page_caching'
   s.add_dependency 'active_model_serializers', '~> 0.9.0'
 
