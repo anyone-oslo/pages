@@ -15,7 +15,7 @@ class Admin::PasswordResetsController < Admin::AdminController
         admin_password_reset_with_token_url(
           @password_reset_token, @password_reset_token.token
         )
-      ).deliver
+      ).deliver_now
       flash[:notice] = "An email with further instructions has been sent"
     else
       flash[:notice] = "Couldn't find a user with that email address"

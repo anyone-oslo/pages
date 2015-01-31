@@ -166,7 +166,7 @@ class PagesCore::Frontend::PagesController < FrontendController
           if PagesCore.config(:comment_notifications)
             recipients = PagesCore.config(:comment_notifications).map{|r| r = @page.author.name_and_email if r == :author; r }.uniq
             recipients.each do |r|
-              AdminMailer.comment_notification(r, @page, @comment, page_url(@locale, @page)).deliver
+              AdminMailer.comment_notification(r, @page, @comment, page_url(@locale, @page)).deliver_now
             end
           end
           redirect_to page_url(@locale, @page) and return

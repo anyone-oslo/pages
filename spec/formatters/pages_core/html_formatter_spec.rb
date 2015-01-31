@@ -28,17 +28,17 @@ describe PagesCore::HtmlFormatter do
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
-        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/figure>/) }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" height=\"200\" \/><\/figure>/) }
       end
 
       context "with size" do
         let(:string) { "[image:#{image.id} size=\"100x100\"]" }
-        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"62\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" \/><\/figure>/) }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" src=\"\/dynamic_images\/([\w\d]+)\/100x62\/#{image.id}-([\w\d]+)\.png\" width=\"100\" height=\"62\" \/><\/figure>/) }
       end
 
       context "with class name" do
         let(:string) { "[image:#{image.id} class=\"float-left\"]" }
-        it { is_expected.to match(/<figure class=\"image landscape float-left\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><\/figure>/) }
+        it { is_expected.to match(/<figure class=\"image landscape float-left\"><img alt=\"Image\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" height=\"200\" \/><\/figure>/) }
       end
 
       context "with non-existant image" do
@@ -49,7 +49,7 @@ describe PagesCore::HtmlFormatter do
       context "when image has a caption" do
         let(:image) { Image.create(file: uploaded_file, byline: "This is a caption") }
         let(:string) { "[image:#{image.id}]" }
-        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" height=\"200\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" \/><figcaption>This is a caption<\/figcaption><\/figure>/) }
+        it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" height=\"200\" \/><figcaption>This is a caption<\/figcaption><\/figure>/) }
       end
     end
 
