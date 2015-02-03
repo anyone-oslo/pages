@@ -2,7 +2,6 @@
 
 # Methods added to this helper will be available to all templates in the application.
 module PagesCore::ApplicationHelper
-  include ActionView::Helpers::AssetTagHelper
   include DynamicImage::Helper
   include PagesCore::HeadTagsHelper
 
