@@ -49,7 +49,7 @@ class PagesCore::Frontend::PagesController < FrontendController
       # Call template method
       template = @page.template
       template = "index" unless PagesCore::Templates.names.include?(template)
-      self.method("template_#{template}").call if self.methods.include?("template_#{template}")
+      self.method("template_#{template}").call if self.respond_to?("template_#{template}")
 
       if @redirect
         return
