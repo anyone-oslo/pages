@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :assets do
   def ruby_rake_task(task, fork = true)
     env    = ENV['RAILS_ENV'] || 'production'

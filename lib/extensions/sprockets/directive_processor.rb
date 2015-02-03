@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Workaround for MumboJumbo overriding [] on String,
 # remove when MumboJumbo has been purged.
 module Sprockets

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 #module PagesGallery
 #  class Plugin < PagesCore::Plugin
 #    paths['db/migrate'] = 'template/db/migrate'

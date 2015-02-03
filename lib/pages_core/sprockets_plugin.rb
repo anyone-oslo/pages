@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module PagesCore
   class SprocketsPlugin < Sprockets::Plugin
     root File.expand_path("../../..", __FILE__)

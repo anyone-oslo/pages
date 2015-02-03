@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Overwrite some Asset Tag Helpers to use Sprockets
 module ActionView
   module Helpers

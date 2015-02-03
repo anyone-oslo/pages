@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Sprockets
   def self.env
     @env ||= begin
