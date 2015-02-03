@@ -16,8 +16,7 @@ module PagesCore
     def sweep_cache!
       if PagesCore::CacheSweeper.enabled
         if !self.cache_swept
-          PagesCore::CacheSweeper.sweep_image!(self) if self.kind_of?(Image)
-          PagesCore::CacheSweeper.delay.sweep!
+          PagesCore::SweepCacheJob.perform_later
           self.cache_swept = true
         end
       end

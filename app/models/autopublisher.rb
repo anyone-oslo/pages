@@ -16,7 +16,7 @@ class Autopublisher
 
     def queue!
       if queued_pages.any?
-        self.delay(run_at: queued_pages.first.published_at).run!
+        PagesCore::AutopublishJob.set(wait_until: queued_pages.first.published_at).perform_later
       end
     end
 

@@ -15,7 +15,7 @@ module PagesCore
 
       def once(&block)
         disable(&block)
-        sweep_later!
+        PagesCore::SweepCacheJob.perform_later
       end
 
       # Returns the default configuration.
@@ -61,11 +61,6 @@ module PagesCore
         end
       end
 
-      # Sweep all cached pages later
-      def sweep_later!
-        self.delay.sweep!
-      end
-
       # Sweep all cached pages
       def sweep!
         if self.enabled
@@ -100,33 +95,6 @@ module PagesCore
           return []
         end
       end
-
-      # Sweep cached dynamic image
-      def sweep_image!(image_id)
-        image_id = image_id.id if image_id.kind_of?(Image)
-
-        cache_base_dir = self.config.cache_path
-        if PagesCore.config(:domain_based_cache)
-          cache_dirs = Dir.entries(cache_base_dir).select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}.map{|d| File.join(cache_base_dir, d)}
-        else
-          cache_dirs = [cache_base_dir]
-        end
-
-        cache_dirs.each do |cache_dir|
-          image_dir = File.join(cache_dir, "dynamic_image/#{image_id}")
-          swept_files = []
-          if File.exist?(cache_dir) && File.exist?(image_dir)
-            Find.find( image_dir+"/" ) do |path|
-              if File.file?(path)
-                swept_files << path
-                FileUtils.rm_rf(path)
-              end
-            end
-          end
-        end
-        []
-      end
-
     end
     self.enabled ||= true
   end
