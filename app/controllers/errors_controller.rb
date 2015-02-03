@@ -16,7 +16,7 @@ class ErrorsController < ApplicationController
       if @error_report[:user_id]
         @error_report[:user] = User.find(@error_report[:user_id]) rescue nil
       end
-      AdminMailer.error_report(@error_report, @from, @description).deliver
+      AdminMailer.error_report(@error_report, @from, @description).deliver_now
       @error_id = session[:error_report]
     end
   end
