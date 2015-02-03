@@ -31,10 +31,10 @@ gem 'dynamic_image-pages', :require => 'dynamic_image'
 #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
 # Assets
-gem 'sprockets', '2.4.5'
+gem 'sprockets', '2.12.3'
 gem 'sprockets-plugin'
 gem 'sprockets-helpers', '0.7.2' # Hold this back until the fix for media: on stylesheet_link_tag is released
-gem 'sass', '3.2.7'
+gem 'sass', '3.2.19'
 gem 'json', '1.5.1'
 gem 'coffee-script', '2.2.0'
 gem 'coffee-script-source', '1.2.0'
