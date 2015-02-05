@@ -15,7 +15,6 @@ gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano', '~> 2.15.4'
 gem 'capistrano_colors'
 gem 'vector2d', '~> 1.1.2'
-gem 'enumerable_mapper'
 gem 'hpricot', '0.8.6'
 gem 'simple-rss', '1.2.3'
 gem 'RedCloth', '4.2.9'

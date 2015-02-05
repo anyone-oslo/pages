@@ -6,7 +6,7 @@ class PagesCore::Admin::PartialsController < Admin::AdminController
 
   def index
     #@partials = Partial.names.map{ |name| [ name, Partial.find_by_name( name ) ] }
-    @partials = Partial.find( :all, :order => :name ).mapped.translate( @language )
+    @partials = Partial.find( :all, :order => :name ).map{ |p| p.translate(@language) }
   end
 
   def show
