@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+module PagesCore
+end
+
 require 'digest/sha1'
 require 'iconv'
 require 'find'
