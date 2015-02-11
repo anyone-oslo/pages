@@ -40,7 +40,9 @@ namespace :assets do
       manifest_path = Pathname.new(Rails.public_path).join("assets", "manifest.json")
 
       manifest = Sprockets.manifest
-      manifest.compile
+      manifest.compile [ Proc.new { |filename, path|
+        !(File.basename(filename) =~ /^_/)
+      } ]
     end
 
     task :all do
