@@ -67,6 +67,11 @@ module PagesCore::ApplicationHelper
     link_to_unless_current name, :overwrite_params => overwrite_params
   end
 
+  # This is a lie. This isn't safe at all. But it makes code from Rails 3+ work.
+  def safe_join(array, sep=$,)
+    array.flatten.join(sep).html_safe
+  end
+
   def smart_time(time, options={})
     options.symbolize_keys!
     options[:include_distance] ||= false
