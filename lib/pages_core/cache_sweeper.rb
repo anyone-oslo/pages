@@ -61,7 +61,7 @@ module PagesCore
           swept_files = []
           if PagesCore.config(:domain_based_cache)
             cache_dirs = Dir.entries(cache_base_dir)
-            cache_dirs = cache_dirs.select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}
+            cache_dirs = cache_dirs.select{|d| !(d.match(/^\./)) && File.directory?(File.join(cache_base_dir, d))}
             cache_dirs = cache_dirs.map{|d| File.join(cache_base_dir, d)}
           else
             cache_dirs = [cache_base_dir]
@@ -71,10 +71,10 @@ module PagesCore
               kill_patterns = self.config.patterns
               paths = []
               Find.find(cache_dir+"/") do |path|
-                Find.prune if path =~ Regexp.new("^#{cache_dir}/dynamic_image") # Ignore dynamic image
+                Find.prune if path.match(Regexp.new("^#{cache_dir}/dynamic_image")) # Ignore dynamic image
                 file = path.gsub(Regexp.new("^#{cache_dir}"), "")
                 kill_patterns.each do |p|
-                  if file =~ p && File.exist?( path )
+                  if file.match(p) && File.exist?( path )
                     swept_files << path
                     FileUtils.rm_rf(path)
                   end
@@ -94,7 +94,7 @@ module PagesCore
 
         cache_base_dir = self.config.cache_path
         if PagesCore.config(:domain_based_cache)
-          cache_dirs = Dir.entries(cache_base_dir).select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}.map{|d| File.join(cache_base_dir, d)}
+          cache_dirs = Dir.entries(cache_base_dir).select{|d| !(d.match(/^\./)) && File.directory?(File.join(cache_base_dir, d))}.map{|d| File.join(cache_base_dir, d)}
         else
           cache_dirs = [cache_base_dir]
         end
