@@ -71,14 +71,17 @@ module PagesCore
               kill_patterns = self.config.patterns
               paths = []
               Find.find(cache_dir+"/") do |path|
-                path.force_encoding(Encoding::UTF_8) if path.respond_to?(:force_encoding)
-                Find.prune if path.match(Regexp.new("^#{cache_dir}/dynamic_image")) # Ignore dynamic image
-                file = path.gsub(Regexp.new("^#{cache_dir}"), "")
-                kill_patterns.each do |p|
-                  if file.match(p) && File.exist?( path )
-                    swept_files << path
-                    FileUtils.rm_rf(path)
+                begin
+                  Find.prune if path.match(Regexp.new("^#{cache_dir}/dynamic_image")) # Ignore dynamic image
+                  file = path.gsub(Regexp.new("^#{cache_dir}"), "")
+                  kill_patterns.each do |p|
+                    if file.match(p) && File.exist?( path )
+                      swept_files << path
+                      FileUtils.rm_rf(path)
+                    end
                   end
+                rescue
+                  # Failed to sweep
                 end
               end
             end
