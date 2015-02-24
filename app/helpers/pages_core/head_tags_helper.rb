@@ -138,8 +138,8 @@ module PagesCore::HeadTagsHelper
     if args.any?
       @meta_image = args.first
     else
-      image   = @meta_image
-      if !image && @page.image
+      image = @meta_image
+      if !image && @page && @page.image
         image = @page.image
       end
       image ||= default_meta_image
