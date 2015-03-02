@@ -34,6 +34,10 @@ class PagesCore::ApplicationController < ActionController::Base
           object.each_value { |o| traverse.call(o, block) }
         elsif object.kind_of?(Array)
           object.each { |o| traverse.call(o, block) }
+        elsif object.kind_of?(Tempfile)
+          [:original_path, :original_filename].each do |m|
+            block.call(object.send(m))
+          end
         else
           block.call(object)
         end
