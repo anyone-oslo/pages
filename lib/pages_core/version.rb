@@ -2,6 +2,6 @@
 
 module PagesCore
   unless PagesCore.const_defined?('VERSION')
-    VERSION = "3.4.0.alpha"
+    VERSION = "3.4.0"
   end
 end
