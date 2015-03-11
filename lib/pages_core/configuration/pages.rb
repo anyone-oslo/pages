@@ -16,6 +16,7 @@ module PagesCore
       setting :comment_notifications, :array,   []
       setting :close_comments_after,  :integer
       setting :comment_honeypot,      :boolean, false
+      setting :recaptcha,             :boolean, false
     end
   end
 end
