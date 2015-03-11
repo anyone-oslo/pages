@@ -5,22 +5,28 @@ Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
   # Pages
-  resources :pages, path: ":locale/pages" do
-    collection do
-      get  'search'
-      post 'search'
+  scope path: PagesCore.config.pages_path_scope do
+    resources :pages, path: ":locale/pages" do
+      collection do
+        get  'search'
+        post 'search'
+      end
+      member do
+        post 'add_comment'
+        put 'preview'
+      end
+      resources :files, controller: 'page_files'
     end
-    member do
-      post 'add_comment'
-      put 'preview'
-    end
-    resources :files, controller: 'page_files'
-  end
-  get '/:locale/pages/:id/:page' => 'pages#show', constraints: { page: /\d+/ }, as: :paginated_page
+    get '/:locale/pages/:id/:page' => 'pages#show', constraints: { page: /\d+/ }, as: :paginated_page
 
-  # Redirect hack for backwards compatibility
-  get 'pages/:locale' => redirect("/%{locale}/pages"), locale: /\w\w\w/
-  get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), locale: /\w\w\w/
+    # Redirect hack for backwards compatibility
+    get 'pages/:locale' => redirect("/%{locale}/pages"), locale: /\w\w\w/
+    get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), locale: /\w\w\w/
+
+    if PagesCore.config.pages_path_scope?
+      get "(/:locale)" => "pages#index"
+    end
+  end
 
   # Authentication
   resource :session, only: [:create, :destroy]
