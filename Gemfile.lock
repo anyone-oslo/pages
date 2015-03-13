@@ -12,7 +12,7 @@ PATH
       delayed_job (~> 4.0.0)
       delayed_job_active_record (~> 4.0.0)
       dis (~> 1.0.0)
-      dynamic_image (~> 2.0.0.beta6)
+      dynamic_image (~> 2.0.0.beta7)
       jbuilder (~> 2.0)
       jcrop-rails-v2
       jquery-cookie-rails
@@ -102,7 +102,7 @@ GEM
     dis (1.0.2)
       fog (~> 1.26.0)
       rails (~> 4.2.0)
-    dynamic_image (2.0.0.beta6)
+    dynamic_image (2.0.0.beta7)
       dis (~> 1.0.0)
       mini_magick (~> 3.8.1)
       rails (~> 4.2.0)
