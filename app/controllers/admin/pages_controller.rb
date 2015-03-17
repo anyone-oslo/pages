@@ -117,7 +117,7 @@ class Admin::PagesController < Admin::AdminController
 
   def default_author
     if PagesCore.config.default_author
-      page.author = User.where(email: PagesCore.config.default_author).first
+      User.where(email: PagesCore.config.default_author).first
     end
   end
 
