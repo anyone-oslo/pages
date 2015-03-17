@@ -3,10 +3,10 @@ $ ->
     ta = new jRichTextArea(this)
 
     ta.toolbar.addButton("Bold", ->
-      @textArea.wrapSelection "*"
+      @textArea.wrapSelection "<b>", "</b>"
 
     ).addButton("Italics", ->
-      @textArea.wrapSelection "_"
+      @textArea.wrapSelection "<i>", "</i>"
 
     ).addButton("Heading 2", ->
       @textArea.wrapSelection "h2. ", ""
@@ -38,4 +38,3 @@ $ ->
         @textArea.replaceSelection "!" + response + "!"
       else
         @textArea.replaceSelection "!" + selection + "!"
-
