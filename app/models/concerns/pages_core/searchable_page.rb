@@ -17,5 +17,9 @@ module PagesCore
     def comment_bodies
       comments.map(&:body)
     end
+
+    def published
+      published?
+    end
   end
 end

@@ -21,6 +21,7 @@ ThinkingSphinx::Index.define :page, with: :real_time do
   has template,       type: :string
   has autopublish,    type: :boolean
   has feed_enabled,   type: :boolean
+  has published,      type: :boolean
 
   set_property group_concat_max_len: 16.megabytes
 end
