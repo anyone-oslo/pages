@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe User do
   it { is_expected.to belong_to(:creator) }
@@ -28,17 +28,30 @@ describe User do
     subject { user.valid? }
 
     context "when passwords match" do
-      let(:user) { build(:user, password: 'validpassword', confirm_password: 'validpassword') }
+      let(:user) do
+        build(
+          :user,
+          password: "validpassword",
+          confirm_password: "validpassword"
+        )
+      end
       it { is_expected.to eq(true) }
     end
 
     context "when passwords don't match" do
-      let(:user) { build(:user, password: 'validpassword', confirm_password: 'invalidpassword') }
+      let(:user) do
+        build(
+          :user,
+          password: "validpassword",
+          confirm_password: "invalidpassword")
+      end
       it { is_expected.to eq(false) }
     end
 
     context "when confirm_password is omitted" do
-      let(:user) { build(:user, password: 'validpassword', confirm_password: nil) }
+      let(:user) do
+        build(:user, password: "validpassword", confirm_password: nil)
+      end
       it { is_expected.to eq(false) }
     end
   end

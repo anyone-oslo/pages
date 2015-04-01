@@ -14,16 +14,16 @@ class PasswordResetToken < ActiveRecord::Base
     end
 
     def expire!
-      self.expired.delete_all
+      expired.delete_all
     end
 
     def find_by_token(token)
-      self.active.where(token: token).first
+      active.where(token: token).first
     end
   end
 
   def expired?
-    self.expires_at < Time.now
+    expires_at < Time.now
   end
 
   private

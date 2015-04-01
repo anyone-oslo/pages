@@ -4,39 +4,39 @@
 
 PagesCore.configure do |config|
   # Site name and default mail sender
-  config.site_name      "<%= @site_name %>"
+  config.site_name "<%= @site_name %>"
   config.default_sender "<%= @default_sender %>"
 
   # Localizations (default: disabled)
-  #config.localizations :disabled
+  # config.localizations :disabled
 
   # Locales and names
-  #config.locales(nb: 'Norwegian', en: 'English')
+  # config.locales(nb: 'Norwegian', en: 'English')
 
   # ReCAPTCHA (default: disabled)
-  #config.recaptcha :disabled
+  # config.recaptcha :disabled
 
   # Page cache (default: enabled)
-  #config.page_cache :enabled
+  # config.page_cache :enabled
 
   # Domain based page cache (default: disabled)
-  #config.domain_based_cache :disabled
+  # config.domain_based_cache :disabled
 
   # Scoped path for pages (default: nil)
-  #config.pages_path_scope "/foo"
+  # config.pages_path_scope "/foo"
 
   # Fulltext in RSS feeds (default: disabled)
-  #config.rss_fulltext :disabled
+  # config.rss_fulltext :disabled
 
   # New pages will be created by the user with this email address:
-  #config.default_author "email@example.com"
+  # config.default_author "email@example.com"
 
   # Send notifications when new comments are posted
-  #config :comment_notifications,  [:author, 'your@email.com']
+  # config :comment_notifications,  [:author, 'your@email.com']
 
   # Automatically close comments after a certain amount of time has
   # passed. (default: disabled)
-  #config.close_comments_after 60.days
+  # config.close_comments_after 60.days
 
   # Comment honeypot.
   # Add <%%= comment_honeypot_field %> to your form

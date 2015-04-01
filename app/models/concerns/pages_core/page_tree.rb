@@ -6,15 +6,15 @@ module PagesCore
 
     included do
       belongs_to :parent,
-                 class_name:  'Page',
+                 class_name:  "Page",
                  foreign_key: :parent_page_id,
                  inverse_of:  :children
 
-      has_many   :children,
-                 class_name:  'Page',
-                 foreign_key: :parent_page_id,
-                 inverse_of:  :parent,
-                 dependent:   :destroy
+      has_many :children,
+               class_name:  "Page",
+               foreign_key: :parent_page_id,
+               inverse_of:  :parent,
+               dependent:   :destroy
 
       # This must be included after the belongs_to call in order
       # to override the .parent method.
@@ -24,7 +24,7 @@ module PagesCore
     module ClassMethods
       # Returns all root pages
       def roots
-        where(parent_page_id: nil).order('position ASC')
+        where(parent_page_id: nil).order("position ASC")
       end
 
       # Returns the first root page
@@ -45,21 +45,19 @@ module PagesCore
 
       # Finds the page's next sibling. Returns nil if there isn't one.
       def next_sibling
-        if siblings.any?
-          siblings[(siblings.index(self) + 1)...siblings.length].try(&:first)
-        end
+        return unless siblings.any?
+        siblings[(siblings.index(self) + 1)...siblings.length].try(&:first)
       end
 
       # Returns the pages parent
       def parent
-        super.try { |node| node.localize(self.locale) }
+        super.try { |node| node.localize(locale) }
       end
 
       # Finds the page's next sibling. Returns nil if there isn't one.
       def previous_sibling
-        if siblings.any?
-          siblings[0...siblings.index(self)].try(&:last)
-        end
+        return unless siblings.any?
+        siblings[0...siblings.index(self)].try(&:last)
       end
 
       # Returns the root node of the tree.
@@ -71,15 +69,15 @@ module PagesCore
       #
       #   subchild1.self_and_ancestors # => [subchild1, child1, root]
       def self_and_ancestors
-        [self] + self.ancestors
+        [self] + ancestors
       end
 
       # Returns all siblings, including self.
       def siblings
-        if self.parent
-          self.parent.pages
+        if parent
+          parent.pages
         else
-          self.class.roots.map { |node| node.localize(self.locale) }
+          self.class.roots.map { |node| node.localize(locale) }
         end
       end
     end

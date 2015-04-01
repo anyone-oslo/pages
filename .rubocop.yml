@@ -1,0 +1,20 @@
+AllCops:
+  Exclude:
+    - 'spec/internal/db/schema.rb'
+    - 'spec/internal/config/**/*'
+    - 'db/migrate/**/*'
+
+StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Documentation:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+ClassLength:
+  Enabled: false

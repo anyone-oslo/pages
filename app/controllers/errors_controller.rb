@@ -1,28 +1,41 @@
 # encoding: utf-8
 
 class ErrorsController < ApplicationController
-
-  layout 'errors'
+  layout "errors"
 
   skip_before_action :verify_authenticity_token
 
   def report
-    if session[:error_report]
-      error_report_dir  = Rails.root.join('log', 'error_reports')
-      error_report_file = error_report_dir.join("#{session[:error_report]}.yml")
-      @error_report = YAML.load_file(error_report_file)
-      @from         = params[:email]
-      @description  = params[:description]
-      if @error_report[:user_id]
-        @error_report[:user] = User.find(@error_report[:user_id]) rescue nil
-      end
-      AdminMailer.error_report(@error_report, @from, @description).deliver_now
-      @error_id = session[:error_report]
-    end
+    return unless session[:error_report]
+    deliver_error_report(error_report, params[:email], params[:description])
+    @error_id = session[:error_report]
   end
 
   def show
     render_error params[:id].to_i
   end
 
+  private
+
+  def deliver_error_report(report, from, description)
+    AdminMailer.error_report(report, from, description).deliver_now
+  end
+
+  def error_report
+    report = YAML.load_file(report_path)
+    if report[:user_id]
+      report[:user] = begin
+                        User.find(report[:user_id])
+                      rescue
+                        nil
+                      end
+    end
+    report
+  end
+
+  def error_report_path
+    Rails.root
+      .join("log", "error_reports")
+      .join("#{session[:error_report]}.yml")
+  end
 end

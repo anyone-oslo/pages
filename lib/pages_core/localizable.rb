@@ -1,14 +1,13 @@
 # encoding: utf-8
 
-load 'pages_core/localizable/active_record_extension.rb'
-load 'pages_core/localizable/class_methods.rb'
-load 'pages_core/localizable/configuration.rb'
-load 'pages_core/localizable/instance_methods.rb'
-load 'pages_core/localizable/localizer.rb'
-load 'pages_core/localizable/scope_extension.rb'
+load "pages_core/localizable/active_record_extension.rb"
+load "pages_core/localizable/class_methods.rb"
+load "pages_core/localizable/configuration.rb"
+load "pages_core/localizable/instance_methods.rb"
+load "pages_core/localizable/localizer.rb"
+load "pages_core/localizable/scope_extension.rb"
 
 module PagesCore
-
   # = Localizable
   #
   # Localizable allows any model to have localized attributes.

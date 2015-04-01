@@ -2,13 +2,13 @@
 
 class AdminMailer < ActionMailer::Base
   before_action :default_headers
-  default from: Proc.new { "\"Pages\" <support@manualdesign.no>" }
+  default from: proc { "\"Pages\" <support@manualdesign.no>" }
 
   def error_report(error_report, from, description)
     @error_report, @from, @description = error_report, from, description
-    short_message = @error_report[:message].gsub(/[\s\n]+/, ' ')[0..80]
+    short_message = @error_report[:message].gsub(/[\s\n]+/, " ")[0..80]
     mail(
-      to:      'system+error@manualdesign.no',
+      to:      "system+error@manualdesign.no",
       from:    "\"Error reports\" <system+error@manualdesign.no>",
       subject: "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
     )
@@ -26,7 +26,7 @@ class AdminMailer < ActionMailer::Base
     @recipient, @page, @comment, @url = recipient, page, comment, url
     mail(
       to:      recipient,
-      subject: "[#{PagesCore.config(:site_name)}] New comment on #{@page.name.to_s}"
+      subject: "[#{PagesCore.config(:site_name)}] New comment on #{@page.name}"
     )
   end
 

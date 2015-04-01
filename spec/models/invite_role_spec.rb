@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe InviteRole do
   it { is_expected.to belong_to(:invite) }
@@ -10,7 +10,7 @@ describe InviteRole do
 
   describe "#to_s" do
     subject { role.to_s }
-    let(:role) { InviteRole.new(name: 'foo') }
-    it { is_expected.to eq('Foo') }
+    let(:role) { InviteRole.new(name: "foo") }
+    it { is_expected.to eq("Foo") }
   end
 end

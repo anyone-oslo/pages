@@ -1,0 +1,73 @@
+# encoding: utf-8
+
+module PagesCore
+  module Admin
+    module LabelledFieldHelper
+      # Generate HTML for a field, with label and optionally description
+      # and errors.
+      #
+      # The options are:
+      # * <tt>:description</tt>: Description of the field
+      # * <tt>:errors</tt>:      Error messages for the attribute
+      #
+      # An example:
+      #   <%= form_for @user do |f| %>
+      #     <%= labelled_field f.text_field(:username), "Username",
+      #                        description: "Choose your username",
+      #                        errors: @user.errors[:username] %>
+      #     <%= submit_tag "Save" %>
+      #   <% end %>
+      #
+      def labelled_field(field, label, options = {})
+        content_tag(:div, class: labelled_field_class(options)) do
+          (
+           labelled_field_label(label, options) +
+             labelled_field_description(options[:description]) +
+             field +
+             (options[:check_box_description] || "")
+           ).html_safe
+        end
+      end
+
+      def image_upload_field(form, label, method = :image, options = {})
+        output = ""
+        if form.object.send(method)
+          output += "<p>" +
+            dynamic_image_tag(form.object.send(method), size: "120x100") +
+            "</p>"
+        end
+        output += labelled_field(
+          form.file_field(method),
+          label, { errors: form.object.errors[method] }.merge(options)
+        )
+        output.html_safe
+      end
+
+      private
+
+      def labelled_field_class(options = {})
+        if options[:errors] && options[:errors].any?
+          "field field_with_errors"
+        else
+          "field"
+        end
+      end
+
+      def labelled_field_label(label, options = {})
+        content_tag(:label) do
+          label + labelled_field_errors(options[:errors])
+        end
+      end
+
+      def labelled_field_description(str)
+        return "" unless str
+        content_tag(:p, str, class: "description")
+      end
+
+      def labelled_field_errors(errors)
+        return "" unless errors && errors.any?
+        content_tag(:span, class: "error") { Array(errors).last }
+      end
+    end
+  end
+end

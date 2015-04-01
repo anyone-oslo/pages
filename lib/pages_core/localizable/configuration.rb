@@ -2,13 +2,12 @@
 
 module PagesCore
   module Localizable
-
     class Configuration
-      def initialize(attributes=nil)
+      def initialize(attributes = nil)
         @attributes = attributes
       end
 
-      def attribute(attribute_name, options={})
+      def attribute(attribute_name, options = {})
         attribute_table[attribute_name.to_sym] = options
       end
 
@@ -20,7 +19,7 @@ module PagesCore
         dictionaries << dict
       end
 
-      def has_attribute?(attribute)
+      def attribute?(attribute)
         attributes.keys.include?(attribute)
       end
 
@@ -31,14 +30,16 @@ module PagesCore
       end
 
       def dictionary_attributes
-        dictionaries.map{ |l| l.call }.inject({}) do |attrs, list|
+        dictionaries.map(&:call).inject({}) do |attrs, list|
           attrs.merge(hashify(list))
         end
       end
 
       def hashify(list)
-        return list if list.kind_of?(Hash)
-        list.inject({}) { |h, k| h[k] = {}; h }
+        return list if list.is_a?(Hash)
+        list.each_with_object({}) do |e, a|
+          a[e] = {}
+        end
       end
 
       def attribute_table

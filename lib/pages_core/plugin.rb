@@ -1,66 +1,73 @@
 # encoding: utf-8
 
-#module PagesGallery
+# module PagesGallery
 #  class Plugin < PagesCore::Plugin
 #    paths['db/migrate'] = 'template/db/migrate'
 #  end
-#end
+# end
 
 module PagesCore
   class Plugin
-
     class << self
       attr_accessor :called_from, :paths
 
       def inherited(plugin)
         plugin.paths ||= {
-          'db/migrate'                    => 'db/migrate',
-          'config/removed_migrations.yml' => 'config/removed_migrations.yml'
+          "db/migrate"                    => "db/migrate",
+          "config/removed_migrations.yml" => "config/removed_migrations.yml"
         }
         plugin.called_from = begin
-          # Remove the line number from backtraces making sure we don't leave anything behind
-          call_stack = caller.map { |p| p.sub(/:\d+.*/, '') }
-          File.dirname(call_stack.detect { |p| p !~ %r[railties[\w.-]*/lib/rails|rack[\w.-]*/lib/rack] })
+          # Remove the line number from backtraces making sure we
+          # don't leave anything behind
+          call_stack = caller.map { |p| p.sub(/:\d+.*/, "") }
+          File.dirname(
+            call_stack.detect do |p|
+              p !~ %r{railties[\w.-]*/lib/rails|rack[\w.-]*/lib/rack}
+            end
+          )
         end
       end
 
-      def admin_menu_item(label, path, group=:custom, options={})
+      def admin_menu_item(label, path, group = :custom, options = {})
         PagesCore::AdminMenuItem.register(label, path, group, options)
       end
 
       def plugins
         @plugins ||= ::PagesCore::Plugin.subclasses.map do |class_name|
           class_name.to_s.split("::").inject(Object) do |klass, m|
-            klass = klass.const_get(m)
+            klass.const_get(m)
           end
         end
       end
 
       def migrations
-        plugins.map{|p| p.new.migrations}.flatten.compact
+        plugins.map { |p| p.new.migrations }.flatten.compact
       end
 
       def removed_migrations
-        plugins.map{|p| p.new.removed_migrations}.flatten.compact
+        plugins.map { |p| p.new.removed_migrations }.flatten.compact
       end
 
       def existing_removed_migrations
-        removed_migrations.select{|m| File.exists?(Rails.root.join('db', 'migrate', m))}
+        removed_migrations
+          .select { |m| File.exist?(Rails.root.join("db", "migrate", m)) }
       end
 
       def existing_migrations
-        migrations.map{|m| Rails.root.join('db', 'migrate', m.basename)}.select{|m| File.exists?(m)}
+        migrations
+          .map { |m| Rails.root.join("db", "migrate", m.basename) }
+          .select { |m| File.exist?(m) }
       end
 
       def remove_old_migrations!
         (existing_removed_migrations + existing_migrations).each do |migration|
-          File.unlink Rails.root.join('db', 'migrate', migration)
+          File.unlink Rails.root.join("db", "migrate", migration)
         end
       end
     end
 
     def root
-      @root ||= find_root_with_flag('app')
+      @root ||= find_root_with_subfolder("app")
     end
 
     def paths
@@ -68,43 +75,44 @@ module PagesCore
     end
 
     def migrations_path
-      root.join(paths['db/migrate'])
+      root.join(paths["db/migrate"])
     end
 
     def removed_migrations_path
-      root.join(paths['config/removed_migrations.yml'])
+      root.join(paths["config/removed_migrations.yml"])
     end
 
-    def has_migrations?
-      File.exists?(migrations_path) && File.directory?(migrations_path)
+    def migrations?
+      File.exist?(migrations_path) && File.directory?(migrations_path)
     end
 
     def migrations
-      Dir.entries(migrations_path).select{|f| f =~ /\.rb$/}.map{|f| migrations_path.join(f)}
+      Dir.entries(migrations_path)
+        .select { |f| f =~ /\.rb$/ }
+        .map { |f| migrations_path.join(f) }
     end
 
     def removed_migrations
-      if File.exists?(removed_migrations_path)
-        YAML.load_file(removed_migrations_path)
-      end
+      return unless File.exist?(removed_migrations_path)
+      YAML.load_file(removed_migrations_path)
     end
 
     protected
 
-      def find_root_with_flag(flag, default=nil)
-        root_path = self.class.called_from
+    def find_root_with_subfolder(subfolder)
+      root_path = self.class.called_from
 
-        while root_path && File.directory?(root_path) && !File.exist?("#{root_path}/#{flag}")
-          parent = File.dirname(root_path)
-          root_path = parent != root_path && parent
-        end
-
-        root = File.exist?("#{root_path}/#{flag}") ? root_path : default
-        raise "Could not find root path for #{self}" unless root
-
-        RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ?
-          Pathname.new(root).expand_path : Pathname.new(root).realpath
+      while root_path && File.directory?(root_path) &&
+          !File.exist?("#{root_path}/#{subfolder}")
+        parent = File.dirname(root_path)
+        root_path = parent != root_path && parent
       end
 
+      unless File.exist?("#{root_path}/#{subfolder}")
+        fail "Could not find root path for #{self}"
+      end
+
+      Pathname.new(root_path).realpath
+    end
   end
 end

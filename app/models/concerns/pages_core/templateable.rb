@@ -9,54 +9,77 @@ module PagesCore
     end
 
     def template_config
-      PagesCore::Templates::TemplateConfiguration.new(self.template)
+      PagesCore::Templates::TemplateConfiguration.new(template)
     end
 
     def template
-      !self[:template].blank? ? self[:template] : default_template
+      !self[:template].blank? ? self[:template] : inherited_or_default_template
     end
 
     def default_subtemplate
-      tpl = nil
-      default_template = PagesCore::Templates.configuration.get(:default, :template, :value)
-      if self.template_config.value(:sub_template)
-        tpl = self.template_config.value(:sub_template)
-      elsif default_template && default_template != :autodetect
-        tpl = default_template
-      else
-        # Autodetect sub template
-        reject_words = ['index', 'list', 'archive', 'liste', 'arkiv']
-        base_template = self.template.split(/_/).reject{|w| reject_words.include?(w) }.join(' ')
-        tpl = PagesCore::Templates.names.select { |t| t.match(Regexp.new('^'+Regexp.quote(base_template)+'_?(post|page|subpage|item)')) }.first rescue nil
-        # Try to singularize the base template if the subtemplate could not be found.
-        unless tpl and base_template == ActiveSupport::Inflector::singularize(base_template)
-          tpl = PagesCore::Templates.names.select{ |t| t.match(Regexp.new('^'+Regexp.quote(ActiveSupport::Inflector::singularize(base_template)))) }.first rescue nil
-        end
-      end
-      # Inherit template by default
-      tpl ||= self.template
+      template_config.value(:sub_template) ||
+        default_template ||
+        subtemplate_with_postfix ||
+        singularized_subtemplate ||
+        template
     end
 
     private
 
+    def singularized_subtemplate
+      singularized = ActiveSupport::Inflector.singularize(base_template)
+      return if base_template == singularized
+      find_template_by_expression(
+        Regexp.new("^" + Regexp.quote(singularized))
+      )
+    end
+
+    def subtemplate_with_postfix
+      find_template_by_expression(
+        Regexp.new(
+          "^" + Regexp.quote(base_template) + "_?(post|page|subpage|item)"
+        )
+      )
+    end
+
+    def base_template
+      template
+        .split(/_/)
+        .reject { |w| %w(index list archive liste arkiv).include?(w) }
+        .join(" ")
+    end
+
     def default_template
-      if self.parent
-        t = self.parent.default_subtemplate
-      else
-        default_value   = PagesCore::Templates.configuration.get(:default, :template, :value)
-        default_options = PagesCore::Templates.configuration.get(:default, :template, :options)
-        if  default_options && default_options[:root]
-          t = default_options[:root]
-        elsif default_value && default_value != :autodetect
-          t = default_value
-        end
+      configured = PagesCore::Templates.configuration.get(
+        :default, :template, :value
+      )
+      configured if configured != :autodetect
+    end
+
+    def find_template_by_expression(expr)
+      PagesCore::Templates
+        .names
+        .select { |t| t.match(expr) }
+        .try(&:first)
+    end
+
+    def inherited_or_default_template
+      default_options = PagesCore::Templates.configuration.get(
+        :default, :template, :options
+      )
+      if parent
+        t = parent.default_subtemplate
+      elsif default_options && default_options[:root]
+        t = default_options[:root]
+      elsif default_template
+        t = default_template
       end
       t ||= :index
       t.to_s
     end
 
     def ensure_template
-      self[:template] ||= default_template
+      self[:template] ||= inherited_or_default_template
     end
   end
 end

@@ -2,7 +2,6 @@
 
 module PagesCore
   module Localizable
-
     # = Localizable::ScopeExtension
     #
     # Injected into the Relation when Model.localized is called.

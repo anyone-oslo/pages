@@ -6,82 +6,127 @@ module PagesCore
       desc "Creates the Pages configuration"
       source_root File.expand_path("../templates", __FILE__)
 
-      def get_configuration!
-        default_app_name = Rails.root.to_s.split("/").last
-        @app_name ||= ask("App name? [#{default_app_name}]")
-        @app_name = default_app_name if @app_name.blank?
-        @site_name ||= ask("Site name? [#{@app_name.humanize}]")
-        @site_name = "#{@app_name.humanize}" if @site_name.blank?
-        @domain_name ||= ask("Domain name? [#{@app_name}.no]")
-        @domain_name = "#{@app_name}.no" if @domain_name.blank?
-        @default_sender ||= ask("Default sender? [no-reply@#{@domain_name}]")
-        @default_sender = "no-reply@#{@domain_name}" if @default_sender.blank?
-        @sphinx_port ||= ask("Sphinx port? [3312]")
-        @sphinx_port = "3312" if @sphinx_port.blank?
+      def default_app_name
+        Rails.root.to_s.split("/").last
+      end
+
+      def ask_with_default(question, default)
+        result = ask(question + " [#{default}]")
+        if result.blank?
+          default
+        else
+          result
+        end
+      end
+
+      def read_configuration!
+        @app_name ||= ask_with_default("App name?", default_app_name)
+        @site_name ||= ask_with_default("Site name?", @app_name.humanize)
+        @domain_name ||= ask_with_default("Domain name?", "#{@app_name}.no")
+
+        @default_sender ||= ask_with_default(
+          "Default sender?",
+          "no-reply@#{@domain_name}"
+        )
+
+        @sphinx_port ||= ask_with_default("Sphinx port?", "3312")
       end
 
       def add_gem_source
-        add_source 'http://gems.manualdesign.no/'
+        add_source "http://gems.manualdesign.no/"
       end
 
       def create_active_job_initializer
-        template 'active_job_initializer.rb', File.join('config/initializers/active_job.rb')
+        template(
+          "active_job_initializer.rb",
+          File.join("config/initializers/active_job.rb")
+        )
       end
 
       def create_application_controller
-        template 'application_controller.rb', File.join('app/controllers/application_controller.rb')
+        template(
+          "application_controller.rb",
+          File.join("app/controllers/application_controller.rb")
+        )
       end
 
       def create_application_helper
-        template 'application_helper.rb', File.join('app/helpers/application_helper.rb')
+        template(
+          "application_helper.rb",
+          File.join("app/helpers/application_helper.rb")
+        )
       end
 
       def create_frontend_controller
-        template 'frontend_controller.rb', File.join('app/controllers/frontend_controller.rb')
+        template(
+          "frontend_controller.rb",
+          File.join("app/controllers/frontend_controller.rb")
+        )
       end
 
       def create_frontend_helper
-        template 'frontend_helper.rb', File.join('app/helpers/frontend_helper.rb')
+        template(
+          "frontend_helper.rb",
+          File.join("app/helpers/frontend_helper.rb")
+        )
       end
 
       def create_pages_controller
-        template 'pages_controller.rb', File.join('app/controllers/pages_controller.rb')
+        template(
+          "pages_controller.rb",
+          File.join("app/controllers/pages_controller.rb")
+        )
       end
 
       def create_default_template
-        copy_file 'default_page_template.html.erb', File.join('app/views/pages/templates/index.html.erb')
+        copy_file(
+          "default_page_template.html.erb",
+          File.join("app/views/pages/templates/index.html.erb")
+        )
       end
 
       def create_delayed_job_script
-        template 'delayed_job', File.join('script/delayed_job')
-        File.chmod(0755, Rails.root.join('script/delayed_job'))
+        template "delayed_job", File.join("script/delayed_job")
+        File.chmod(0755, Rails.root.join("script/delayed_job"))
       end
 
       def create_delayed_job_initializer
-        template 'delayed_job_initializer.rb', File.join('config/initializers/delayed_job.rb')
+        template(
+          "delayed_job_initializer.rb",
+          File.join("config/initializers/delayed_job.rb")
+        )
       end
 
       def create_initializer_file
-        get_configuration!
-        template 'pages_initializer.rb', File.join('config/initializers/pages.rb')
+        read_configuration!
+        template(
+          "pages_initializer.rb",
+          File.join("config/initializers/pages.rb")
+        )
       end
 
       def create_cache_sweeper_initializer
-        get_configuration!
-        template 'cache_sweeper_initializer.rb', File.join('config/initializers/cache_sweeper.rb')
+        read_configuration!
+        template(
+          "cache_sweeper_initializer.rb",
+          File.join("config/initializers/cache_sweeper.rb")
+        )
       end
 
       def create_template_initializer
-        get_configuration!
-        template 'page_templates_initializer.rb', File.join('config/initializers/page_templates.rb')
+        read_configuration!
+        template(
+          "page_templates_initializer.rb",
+          File.join("config/initializers/page_templates.rb")
+        )
       end
 
       def create_sphinx_config
-        template 'thinking_sphinx.yml', File.join('config/thinking_sphinx.yml')
+        template "thinking_sphinx.yml", File.join("config/thinking_sphinx.yml")
       end
 
       def create_gitignore
-        template 'gitignore.erb', File.join('.gitignore')
+        template "gitignore.erb", File.join(".gitignore")
       end
     end
   end

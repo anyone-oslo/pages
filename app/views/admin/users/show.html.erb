@@ -1,11 +1,11 @@
 <%
-  page_title       "#{@user.name}"
+  self.page_title = "#{@user.name}"
   if @user == current_user
-    page_description "You are viewing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
+    self.page_description = "You are viewing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
   else
-    page_description "You are viewing " + link_to( "#{@user.name}", admin_user_path( @user ) ) + "'s profile."
+    self.page_description = "You are viewing " + link_to( "#{@user.name}", admin_user_path( @user ) ) + "'s profile."
   end
-  page_description_links [ ( link_to( "Edit", edit_admin_user_path( @user ) ) if policy(@user).edit? ), link_to( "View all users", admin_users_path ) ].compact.join( link_separator )
+  self.page_description_links = [ ( link_to( "Edit", edit_admin_user_path( @user ) ) if policy(@user).edit? ), link_to( "View all users", admin_users_path ) ].compact.join( link_separator )
 %>
 
 <% content_for :sidebar do %>

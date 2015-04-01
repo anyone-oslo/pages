@@ -9,7 +9,7 @@ class PagePolicy < Policy
     end
 
     def new?
-      user.has_role?(:pages)
+      user.role?(:pages)
     end
 
     def new_news?
@@ -27,7 +27,7 @@ class PagePolicy < Policy
     end
 
     def edit?
-      user.has_role?(:pages)
+      user.role?(:pages)
     end
   end
 end

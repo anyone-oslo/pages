@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class UpdatePageRedirectTo < ActiveRecord::Migration
-
   def self.up
     include Rails.application.routes.url_helpers
 
@@ -11,10 +10,10 @@ class UpdatePageRedirectTo < ActiveRecord::Migration
         page.update(redirect_to: nil)
       elsif page.redirect_to.start_with?("---")
         options = YAML.load(page.redirect_to)
-        path = url_for(options.merge({locale: ':locale', only_path: true}))
+        path = url_for(options.merge(locale: ":locale", only_path: true))
         page.update(redirect_to: path)
       elsif !(page.redirect_to =~ /\A(\/|https?:\/\/)/)
-        raise "Not a valid Page redirect_to: #{page.redirect_to.inspect}"
+        fail "Not a valid Page redirect_to: #{page.redirect_to.inspect}"
       end
     end
     change_column :pages, :redirect_to, :string

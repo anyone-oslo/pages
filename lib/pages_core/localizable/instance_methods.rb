@@ -2,18 +2,16 @@
 
 module PagesCore
   module Localizable
-
     # = Localizable::InstanceMethods
     #
     # This is the public API for all localizable models.
     # See Localizable for usage examples.
     #
     module InstanceMethods
-
       # Returns all locales saved for this page.
       #
       def locales
-        self.localizer.locales
+        localizer.locales
       end
 
       # Getter for locale
@@ -21,7 +19,7 @@ module PagesCore
       #  page.locale # => 'en'
       #
       def locale
-        self.localizer.locale
+        localizer.locale
       end
 
       # Setter for locale
@@ -30,13 +28,13 @@ module PagesCore
       #
       def locale=(locale)
         @localizer = Localizer.new(self)
-        self.localizer.locale = locale
+        localizer.locale = locale
       end
 
       # Returns true if this page has a locale set
       #
       def locale?
-        self.localizer.locale?
+        localizer.locale?
       end
 
       # Returns a copy of the model with a different locale.
@@ -65,7 +63,7 @@ module PagesCore
       #
       def localize!(locale)
         @localizer = Localizer.new(self)
-        self.localizer.locale = locale
+        localizer.locale = locale
         self
       end
 
@@ -77,8 +75,8 @@ module PagesCore
       def assign_attributes(new_attributes)
         if new_attributes.is_a?(Hash)
           attributes = new_attributes.stringify_keys
-          self.locale = attributes['language'] if attributes.has_key?('language')
-          self.locale = attributes['locale']   if attributes.has_key?('locale')
+          self.locale = attributes["language"] if attributes.key?("language")
+          self.locale = attributes["locale"]   if attributes.key?("locale")
         end
         super
       end
@@ -86,46 +84,47 @@ module PagesCore
       # A localized model responds to :foo, :foo= and :foo?
       #
       def respond_to?(method_name, *args)
-        requested_attribute, request_type = method_name.to_s.match( /(.*?)([\?=]?)$/ )[1..2]
-        localizer.has_attribute?(requested_attribute.to_sym) ? true : super
+        requested_attribute, _ = method_name.to_s.match(/(.*?)([\?=]?)$/)[1..2]
+        localizer.attribute?(requested_attribute.to_sym) ? true : super
       end
 
-      alias :translate  :localize
-      alias :translate! :localize!
-      alias :working_language  :locale
-      alias :working_language= :locale=
+      alias_method :translate,  :localize
+      alias_method :translate!, :localize!
+      alias_method :working_language,  :locale
+      alias_method :working_language=, :locale=
 
       protected
 
-        # Getter for the model's Localizer.
-        #
-        def localizer
-          @localizer ||= Localizer.new(self)
-        end
+      # Getter for the model's Localizer.
+      #
+      def localizer
+        @localizer ||= Localizer.new(self)
+      end
 
-        # Callback for cleaning up empty localizations.
-        # This is performed automatically when the model is saved.
-        #
-        def cleanup_localizations!
-          self.localizer.cleanup_localizations!
-        end
+      # Callback for cleaning up empty localizations.
+      # This is performed automatically when the model is saved.
+      #
+      def cleanup_localizations!
+        localizer.cleanup_localizations!
+      end
 
-        def method_missing(method_name, *args)
-          requested_attribute, request_type = method_name.to_s.match( /(.*?)([\?=]?)$/ )[1..2]
-          if localizer.has_attribute?(requested_attribute.to_sym)
-            case request_type
-            when "?"
-              localizer.has_value_for?(requested_attribute.to_sym)
-            when "="
-              localizer.set(requested_attribute.to_sym, args.first)
-            else
-              localizer.get(requested_attribute.to_sym).to_s
-            end
-          else
-            super
-          end
-        end
+      def method_missing(method_name, *args)
+        attr = method_to_attr(method_name)
+        super unless localizer.attribute?(attr)
 
+        case method_name.to_s
+        when /\?$/
+          localizer.value_for?(attr)
+        when /=$/
+          localizer.set(attr, args.first)
+        else
+          localizer.get(attr).to_s
+        end
+      end
+
+      def method_to_attr(method_name)
+        method_name.to_s.match(/(.*?)([\?=]?)$/)[1].to_sym
+      end
     end
   end
 end

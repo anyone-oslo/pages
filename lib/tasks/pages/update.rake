@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-require 'find'
-require 'open-uri'
+require "find"
+require "open-uri"
 
 namespace :pages do
   namespace :update do

@@ -2,17 +2,18 @@
 
 module PagesCore
   module Localizable
-
     # = Localizable::ClassMethods
     #
     # Class methods for all Localizable models.
     #
     module ClassMethods
-
       # Returns a scope where all records will be set to the given locale.
       #
       def in_locale(locale)
-        all.extending(Localizable::ScopeExtension).localize(locale).includes(:localizations)
+        all
+          .extending(Localizable::ScopeExtension)
+          .localize(locale)
+          .includes(:localizations)
       end
 
       # Returns a scope with only records matching the given locale.
@@ -20,7 +21,9 @@ module PagesCore
       #  Page.localized('en').first.locale # => 'en'
       #
       def localized(locale)
-        in_locale(locale).where('localizations.locale = ?', locale).references(:localizations)
+        in_locale(locale)
+          .where("localizations.locale = ?", locale)
+          .references(:localizations)
       end
 
       def localized_attributes
@@ -35,8 +38,10 @@ module PagesCore
       private
 
       def inherited_localizable_configuration
-        if self.superclass.respond_to?(:localizable_configuration)
-          Localizable::Configuration.new(self.superclass.localizable_configuration.attributes.dup)
+        if superclass.respond_to?(:localizable_configuration)
+          Localizable::Configuration.new(
+            superclass.localizable_configuration.attributes.dup
+          )
         else
           Localizable::Configuration.new
         end

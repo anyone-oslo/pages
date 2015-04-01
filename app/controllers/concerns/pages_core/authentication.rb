@@ -6,14 +6,12 @@ module PagesCore
 
     included do
       before_action :start_authenticated_session
-      after_action  :finalize_authenticated_session
+      after_action :finalize_authenticated_session
       helper_method :current_user, :logged_in?
     end
 
     # Returns the current user if logged in, or nil.
-    def current_user
-      @current_user
-    end
+    attr_reader :current_user
 
     # Returns true if the user is logged in.
     def logged_in?
@@ -37,15 +35,14 @@ module PagesCore
         user = User.where(id: session[:current_user_id]).first
       end
 
-      if user && user.can_login?
-        authenticate!(user)
-      end
+      return unless user && user.can_login?
+
+      authenticate!(user)
     end
 
     def finalize_authenticated_session
-      if current_user
-        session[:current_user_id] = current_user.id
-      end
+      return unless current_user
+      session[:current_user_id] = current_user.id
     end
   end
 end

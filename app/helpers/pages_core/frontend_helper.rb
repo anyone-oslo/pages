@@ -1,23 +1,21 @@
 # encoding: utf-8
 
-module PagesCore::FrontendHelper
-  def root_pages
-    @root_pages ||= Page.roots.localized(@locale).published
-  end
+module PagesCore
+  module FrontendHelper
+    def root_pages
+      @root_pages ||= Page.roots.localized(@locale).published
+    end
 
-  def root_page
-    @root_page ||= root_pages.first
-  end
+    def root_page
+      @root_page ||= root_pages.first
+    end
 
-  def search_query
-    @search_query
-  end
+    attr_reader :search_query
 
-  def search_category_id
-    @search_category_id
-  end
+    attr_reader :search_category_id
 
-  def comment_honeypot_field
-    text_field_tag 'email', '', class: 'comment_email'
+    def comment_honeypot_field
+      text_field_tag "email", "", class: "comment_email"
+    end
   end
 end

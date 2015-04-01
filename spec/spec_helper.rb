@@ -1,13 +1,13 @@
 # encoding: utf-8
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../internal/config/environment", __FILE__)
-require 'pry-rescue/rspec'
-require 'rspec/rails'
-require 'thinking_sphinx/test'
-require 'factory_girl'
-require 'shoulda-matchers'
+require "pry-rescue/rspec"
+require "rspec/rails"
+require "thinking_sphinx/test"
+require "factory_girl"
+require "shoulda-matchers"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -23,10 +23,10 @@ PagesCore.load_dependencies!
 
 RSpec.configure do |config|
   config.backtrace_exclusion_patterns = [
-    /\/lib\d*\/ruby\//,
+    %r{/lib\d*/ruby/},
     /bin\//,
     /spec\/spec_helper\.rb/,
-    /lib\/rspec\/(core|expectations|matchers|mocks)/
+    %r{lib/rspec/(core|expectations|matchers|mocks)}
   ]
 
   # ## Mock Framework
@@ -58,7 +58,7 @@ RSpec.configure do |config|
 
   # Clean the Dis storage after each example
   config.after(:each) do
-    storage_root = Rails.root.join('db', 'dis', 'test')
-    FileUtils.rm_rf(storage_root) if File.exists?(storage_root)
+    storage_root = Rails.root.join("db", "dis", "test")
+    FileUtils.rm_rf(storage_root) if File.exist?(storage_root)
   end
 end

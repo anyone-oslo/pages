@@ -1,217 +1,277 @@
 # encoding: utf-8
 
-class PagesCore::Frontend::PagesController < FrontendController
-  include PagesCore::Templates::ControllerActions
-  include PagesCore::HeadTagsHelper
+module PagesCore
+  module Frontend
+    class PagesController < ::FrontendController
+      include PagesCore::FrontendHelper
+      include PagesCore::Templates::ControllerActions
+      include PagesCore::HeadTagsHelper
 
-  if PagesCore.config(:page_cache)
-    caches_page :index
-  end
+      caches_page :index if PagesCore.config(:page_cache)
 
-  before_action :load_root_pages
-  before_action :find_page, only: [:show, :preview]
-  after_action  :cache_page_request, only: [ :show ]
+      before_action :load_root_pages
+      before_action :find_page, only: [:show, :preview, :add_comment]
+      after_action :cache_page_request, only: [:show]
 
-
-  protected
-
-    def preview?
-      @page.new_record?
-    end
-
-    def render(*args)
-      @already_rendered = true
-      super
-    end
-
-    def redirect_to(*args)
-      @already_rendered = true
-      super
-    end
-
-    def rendered?
-      @already_rendered
-    end
-
-    def find_page
-      unless @page
-        if params[:id]
-          @page = Page.find(params[:id]) rescue nil
-          @page ||= unique_page(params[:id])
+      def index
+        respond_to do |format|
+          format.html do
+            if self.respond_to?(:no_page_given)
+              no_page_given
+            elsif root_pages.any?
+              @page = root_pages.first
+              render_page
+            else
+              render_error 404
+            end
+          end
+          format.rss do
+            render_rss(all_feed_items)
+          end
         end
       end
-      @page.locale = @locale || I18n.default_locale.to_s
-    end
 
-    # Set a different layout for a page template
-    def page_template_layout(layout_name)
-      @page_template_layout = layout_name
-    end
-
-    def render_page
-      if @page.redirects?
-        redirect_to @page.redirect_path(locale: @locale) and return
+      def show
+        respond_to do |format|
+          format.html do
+            if @page && @page.published?
+              render_page
+            else
+              render_error 404
+            end
+          end
+          format.rss do
+            render_rss(
+              @page.pages.limit(20),
+              title: "#{PagesCore.config(:side_name)}: #{@page.name}"
+            )
+          end
+          format.json do
+            render json: @page
+          end
+        end
       end
 
-      document_title(@page.name) unless document_title?
+      # Add a comment to a page. Recaptcha is performed if
+      # PagesCore.config(:recaptcha) is set.
+      def add_comment
+        @comment = new_comment(@page)
 
-      # Call template method
-      template = @page.template
-      template = "index" unless PagesCore::Templates.names.include?(template)
+        unless captcha_verified?
+          @comment.invalid_captcha = true
+          render_page
+          return
+        end
 
-      run_template_actions_for(template, @page)
+        if @page.comments_allowed? && !honeypot_triggered?
+          @comment.save
+          if PagesCore.config(:comment_notifications)
+            deliver_comment_notifications(@page, @comment)
+          end
+        end
 
-      @page_template_layout = false if @disable_layout
+        redirect_to(page_url(@locale, @page))
+      end
 
-      unless rendered?
-        if self.instance_variables.include?('@page_template_layout')
-          render template: "pages/templates/#{template}", layout: @page_template_layout
+      # Search pages
+      def search
+        @search_query = params[:q] || params[:query] || ""
+        @search_category_id = params[:category_id]
+
+        @pages = Page.search(
+          normalize_search_query(@search_query),
+          search_options(@search_category_id)
+        )
+        @pages.each { |p| p.localize!(locale) }
+        @pages
+      end
+
+      def preview
+        redirect_to(page_url(@locale, @page)) && return unless logged_in?
+
+        @page.attributes = page_params.merge(
+          status: 2,
+          published_at: Time.now,
+          locale: @locale,
+          redirect_to: nil
+        )
+
+        render_page
+      end
+
+      private
+
+      def all_feed_items
+        Page
+          .where(
+            parent_page_id: Page.enabled_feeds(locale, include_hidden: true)
+          )
+          .order("published_at DESC")
+          .published
+          .limit(20)
+          .localized(locale)
+      end
+
+      def preview?
+        @page.new_record?
+      end
+
+      def render(*args)
+        @already_rendered = true
+        super
+      end
+
+      def redirect_to(*args)
+        @already_rendered = true
+        super
+      end
+
+      def rendered?
+        @already_rendered ? true : false
+      end
+
+      def page_template(page)
+        if PagesCore::Templates.names.include?(page.template)
+          page.template
+        else
+          "index"
+        end
+      end
+
+      def render_page
+        if @page.redirects?
+          redirect_to(@page.redirect_path(locale: @locale))
+          return
+        end
+
+        document_title(@page.name) unless document_title?
+
+        # Call template method
+        template = page_template(@page)
+
+        run_template_actions_for(template, @page)
+
+        @page_template_layout = false if @disable_layout
+
+        return if rendered?
+
+        if instance_variables.include?("@page_template_layout")
+          render(
+            template: "pages/templates/#{template}",
+            layout: @page_template_layout
+          )
         else
           render template: "pages/templates/#{template}"
         end
       end
-    end
 
-    # Cache pages by hand. This is dirty, but it works.
-    def cache_page_request
-      status_code = response.status.to_i rescue nil
-      if status_code == 200 && PagesCore.config(:page_cache) && @page && @locale
+      # Cache pages by hand. This is dirty, but it works.
+      def cache_page_request
+        status_code = response.status.try(&:to_i)
+        unless status_code == 200 &&
+            PagesCore.config(:page_cache) &&
+            @page && @locale
+          return
+        end
+
         self.class.cache_page response.body, request.path
       end
-    end
 
-    def page_params
-      params.require(:page).permit(
-        Page.localized_attributes +
+      def permitted_page_attributes
         [
           :template, :user_id, :status, :content_order,
           :feed_enabled, :published_at, :redirect_to, :comments_allowed,
           :image_link, :news_page, :unique_name, :pinned,
           :parent_page_id
         ]
-      )
-    end
+      end
 
-  public
+      def page_params
+        params.require(:page).permit(
+          Page.localized_attributes + permitted_page_attributes
+        )
+      end
 
-    def index
-      respond_to do |format|
-        format.html do
-          if self.respond_to?(:no_page_given)
-            no_page_given
-          else
-            @page = @root_pages.first rescue nil
-          end
+      def captcha_verified?
+        !PagesCore.config(:recaptcha) || verify_recaptcha
+      end
 
-          if @page
-            render_page
-          else
-            render_error 404 # TODO: friendly message here
-          end
-        end
-        format.rss do
-          @encoding   = (params[:encoding] ||= "UTF-8").downcase
-          @title      = PagesCore.config(:site_name)
-          feeds       = Page.enabled_feeds(@locale, {include_hidden: true})
-          @feed_items = Page.where(parent_page_id: feeds).order('published_at DESC').published.limit(20).localized(@locale)
-          response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
-          render template: 'feeds/pages', layout: false
+      def honeypot_triggered?
+        PagesCore.config(:comment_honeypot) && !params[:email].to_s.empty?
+      end
+
+      def remote_ip
+        request.env["REMOTE_ADDR"]
+      end
+
+      def new_comment(page)
+        PageComment.new(
+          page_comment_params.merge(remote_ip: remote_ip, page_id: page.id)
+        )
+      end
+
+      def comment_recipients(page)
+        PagesCore.config(:comment_notifications)
+          .map { |r| r == :author ? page.author.name_and_email : r }
+          .uniq
+      end
+
+      def deliver_comment_notifications(page, comment)
+        comment_recipients(page).each do |r|
+          AdminMailer.comment_notification(
+            r,
+            page,
+            comment,
+            page_url(locale, page)
+          ).deliver_now
         end
       end
-    end
 
-    def show
-      respond_to do |format|
-        format.html do
-          if @page && @page.published?
-            render_page
-          else
-            render_error 404
-          end
-        end
-        format.rss do
-          @encoding = (params[:encoding] ||= "UTF-8").downcase
-          document_title(@page.name) unless document_title?
-          @title = [PagesCore.config(:site_name), @page.name.to_s].join(": ")
-
-          page = (params[:page] || 1).to_i
-          @feed_item = @page.pages.limit(20).offset((page - 1) * 20)
-
-          response.headers['Content-Type'] = "application/rss+xml;charset=#{@encoding.upcase}";
-          render template: 'feeds/pages', layout: false
-        end
-        format.json do
-          render json: @page
-        end
+      def find_page
+        @page ||= find_page_by_id(params[:id]) || unique_page(params[:id])
+        @page.locale = @locale || I18n.default_locale.to_s
       end
-    end
 
-    # Add a comment to a page. Recaptcha is performed if PagesCore.config(:recaptcha) is set.
-    def add_comment
-      @page = Page.find(params[:id]) rescue nil
-      unless @page
-        redirect_to "/" and return
+      def find_page_by_id(id)
+        Page.find(id)
+      rescue
+        nil
       end
-      remote_ip = request.env["REMOTE_ADDR"]
-      page_comment_params = params.require(:page_comment).permit(:name, :email, :url, :body)
-      @comment = PageComment.new(page_comment_params.merge({remote_ip: remote_ip, page_id: @page.id}))
-      if @page.comments_allowed?
-        if PagesCore.config(:recaptcha) && !verify_recaptcha
-          @comment.invalid_captcha = true
-          render_page
-        elsif PagesCore.config(:comment_honeypot) && !params[:email].to_s.empty?
-          redirect_to page_url(@locale, @page) and return
-        else
-          @comment.save
-          if PagesCore.config(:comment_notifications)
-            recipients = PagesCore.config(:comment_notifications).map{|r| r = @page.author.name_and_email if r == :author; r }.uniq
-            recipients.each do |r|
-              AdminMailer.comment_notification(r, @page, @comment, page_url(@locale, @page)).deliver_now
-            end
-          end
-          redirect_to page_url(@locale, @page) and return
-        end
-      else
-        redirect_to page_url(@locale, @page) and return
+
+      def page_comment_params
+        params.require(:page_comment).permit(:name, :email, :url, :body)
       end
-    end
 
-    # Search pages
-    def search
-      params[:query] = params[:q] if params[:q]
-      @search_query = params[:query] || ""
-      @search_category_id = params[:category_id]
-      normalized_query = @search_query.split(/\s+/).map{|p| "#{p}*"}.join(' ')
+      def normalize_search_query(str)
+        str
+          .split(/\s+/)
+          .map { |p| "#{p}*" }
+          .join(" ")
+      end
 
-      search_options = {
-        page:      (params[:page] || 1).to_i,
-        per_page:  20,
-        include:   [:localizations, :categories, :image, :author],
-        order:     :published_at,
-        sort_mode: :desc,
-        with: {
-          status:      2,
-          autopublish: 0
+      def render_rss(items, title: nil)
+        @items, @title = items, title
+        response.headers["Content-Type"] = "application/rss+xml;charset=utf-8"
+        render template: "feeds/pages", layout: false
+      end
+
+      def search_options(category_id: nil)
+        options = {
+          page:      (params[:page] || 1).to_i,
+          per_page:  20,
+          include:   [:localizations, :categories, :image, :author],
+          order:     :published_at,
+          sort_mode: :desc,
+          with: {
+            status:      2,
+            autopublish: 0
+          }
         }
-      }
-
-      unless @search_category_id.blank?
-        search_options[:with][:category_ids] = @search_category_id
+        unless category_id.blank?
+          search_options[:with][:category_ids] = category_id
+        end
+        options
       end
-
-      @pages = Page.search(normalized_query, search_options)
-      @pages.each { |p| p.localize!(locale) }
-      @pages
     end
-
-    def preview
-      unless logged_in?
-        redirect_to page_url(@locale, @page) and return
-      end
-
-      @page.attributes = page_params.merge(status: 2, published_at: Time.now, locale: @locale, redirect_to: nil)
-
-      render_page
-    end
-
+  end
 end

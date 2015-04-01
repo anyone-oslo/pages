@@ -1,10 +1,10 @@
 <%
   month_names = %w{January February March April May June July August September October November December}
-  page_title "News"
-  page_description "<em>#{month_names[@month - 1]} #{@year}</em>"
+  self.page_title = "News"
+  self.page_description = "<em>#{month_names[@month - 1]} #{@year}</em>"
 
   if PagesCore.config.localizations?
-    page_description_links 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, news_admin_pages_path(l) }.join(link_separator)
+    self.page_description_links = 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, news_admin_pages_path(l) }.join(link_separator)
   end
 %>
 

@@ -1,32 +1,52 @@
 # encoding: utf-8
 
-load 'pages_core/templates/block_configuration.rb'
-load 'pages_core/templates/configuration_proxy.rb'
-load 'pages_core/templates/configuration_handler.rb'
-load 'pages_core/templates/configuration.rb'
-load 'pages_core/templates/controller_actions.rb'
-load 'pages_core/templates/template_configuration.rb'
+load "pages_core/templates/block_configuration.rb"
+load "pages_core/templates/configuration_proxy.rb"
+load "pages_core/templates/configuration_handler.rb"
+load "pages_core/templates/configuration.rb"
+load "pages_core/templates/controller_actions.rb"
+load "pages_core/templates/template_configuration.rb"
 
 module PagesCore
   module Templates
     class << self
       def names
-        unless (@@available_templates_cached ||= nil)
-          templates = [
-            PagesCore.plugin_root.join('app', 'views', 'pages', 'templates'),
-            Rails.root.join('app', 'views', 'pages', 'templates')
-          ].map do |location|
-            Dir.entries(location).select{|f| File.file?(File.join(location, f)) and !f.match(/^_/)} if File.exists?(location)
-          end
-          templates = templates.flatten.uniq.compact.sort.map{|f| f.gsub(/\.[\w\d\.]+$/,'')}
+        @names ||= find_all_templates
+      end
 
-          # Move the index template to the front
-          if templates.include?("index")
-            templates = ["index", templates.reject{|f| f == "index"}].flatten
-          end
-          @@available_templates_cached = templates
+      private
+
+      def template_paths
+        [
+          PagesCore.plugin_root.join("app", "views", "pages", "templates"),
+          Rails.root.join("app", "views", "pages", "templates")
+        ]
+      end
+
+      def template_files
+        template_paths
+          .select { |dir| File.exist?(dir) }
+          .flat_map { |dir| template_files_in_dir(dir) }
+          .uniq
+          .compact
+          .sort
+          .map { |f| f.gsub(/\.[\w\.]+$/, "") }
+      end
+
+      def template_files_in_dir(dir)
+        Dir.entries(dir).select { |f| template_file?(f, dir) }
+      end
+
+      def template_file?(file, dir)
+        File.file?(File.join(dir, file)) && !file.match(/^_/)
+      end
+
+      def find_all_templates
+        if template_files.include?("index")
+          ["index"] + (template_files - ["index"])
+        else
+          template_files
         end
-        return @@available_templates_cached
       end
     end
   end

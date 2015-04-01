@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module PagesCore
-  module PagesCore::ExceptionHandler
+  module ExceptionHandler
     extend ActiveSupport::Concern
 
     included do
@@ -15,15 +15,15 @@ module PagesCore
       end
     end
 
-    # Renders a fancy error page from app/views/errors. If the error name is numeric,
-    # it will also be set as the response status. Example:
+    # Renders a fancy error page from app/views/errors. If the error name
+    # is numeric, it will also be set as the response status. Example:
     #
     #   render_error 404
     #
-    def render_error(error, options={})
-      options[:status] ||= error if error.kind_of? Numeric
+    def render_error(error, options = {})
+      options[:status] ||= error if error.is_a? Numeric
       options[:template] ||= "errors/#{error}"
-      options[:layout] ||= 'errors'
+      options[:layout] ||= "errors"
       @email = logged_in? ? current_user.email : ""
       render options
     end
@@ -34,59 +34,78 @@ module PagesCore
       trace = exception.backtrace
       ActiveSupport::Deprecation.silence do
         message = "\n#{exception.class} (#{exception.message}):\n"
-        message << exception.annoted_source_code.to_s if exception.respond_to?(:annoted_source_code)
+        if exception.respond_to?(:annoted_source_code)
+          message << exception.annoted_source_code.to_s
+        end
         message << "  " << trace.join("\n  ")
         logger.fatal("#{message}\n\n")
       end
     end
 
-    def handle_exception(exception)
-      begin
-        log_error exception
-        if exception.kind_of?(ActionController::RoutingError) || exception.kind_of?(ActiveRecord::RecordNotFound)
-          render_error 404
-        elsif exception.kind_of?(PagesCore::NotAuthorized)
-          render_error 403
-        else
-          # Generate the error report
-          error_report = {}
-          error_report[:message]   = exception.to_s
-          error_report[:url]       = "http://"+request.env['HTTP_HOST']
-          error_report[:url]      += request.env['REQUEST_URI'] if request.env['REQUEST_URI']
-          error_report[:params]    = params
-          error_report[:env]       = request.env.inject({}) do |hash, value|
-            if value.first.kind_of?(String) && value.last.kind_of?(String)
-              hash[value.first] = value.last
-            end
-            hash
-          end
-          error_report[:session]   = session.to_hash
-          error_report[:backtrace] = Rails.backtrace_cleaner.send(:filter, exception.backtrace)
-          error_report[:timestamp] = Time.now
-          if logged_in?
-            error_report[:user_id] = current_user.id
-          end
-
-          sha1_hash = Digest::SHA1.hexdigest(error_report.to_yaml)
-
-          error_report_dir  = Rails.root.join('log', 'error_reports')
-          error_report_file = error_report_dir.join("#{sha1_hash}.yml")
-          `mkdir -p #{error_report_dir}` unless File.exists?(error_report_dir)
-
-          unless File.exists?(error_report_file)
-            File.open(error_report_file, 'w') do |fh|
-              fh.write error_report.to_yaml
-            end
-          end
-
-          session[:error_report] = sha1_hash
-          @error_id = sha1_hash
-          render_error 500
+    def env_as_object
+      request.env.each_with_object({}) do |hash, value|
+        if value.first.is_a?(String) && value.last.is_a?(String)
+          hash[value.first] = value.last
         end
-      rescue
-        render(template: 'errors/500_critical', status: 500, layout: false) and return
       end
     end
 
+    def filtered_backtrace(exception)
+      Rails.backtrace_cleaner.send(:filter, exception.backtrace)
+    end
+
+    def exception_url
+      [
+        "http://",
+        request.env["HTTP_HOST"],
+        request.env["REQUEST_URI"]
+      ].compact.join
+    end
+
+    def error_report(exception)
+      {
+        message: exception.to_s,
+        url: exception_url,
+        params: params,
+        env: env_as_object,
+        session: session.to_hash,
+        backtrace: filtered_backtrace,
+        timestamp: Time.now,
+        user_id: logged_in? ? current_user.id : nil
+      }
+    end
+
+    def write_error(str)
+      sha1_hash = Digest::SHA1.hexdigest(str)
+      error_report_dir  = Rails.root.join("log", "error_reports")
+      error_report_file = error_report_dir.join("#{sha1_hash}.yml")
+      `mkdir -p #{error_report_dir}` unless File.exist?(error_report_dir)
+
+      unless File.exist?(error_report_file)
+        File.open(error_report_file, "w") do |fh|
+          fh.write str
+        end
+      end
+      sha1_hash
+    end
+
+    def handle_exception(exception)
+      log_error exception
+      if exception.is_a?(ActionController::RoutingError) ||
+          exception.is_a?(ActiveRecord::RecordNotFound)
+        render_error 404
+      elsif exception.is_a?(PagesCore::NotAuthorized)
+        render_error 403
+      else
+        session[:error_report] = @error_id = write_error(
+          error_report(exception).to_yaml
+        )
+
+        render_error 500
+      end
+    rescue
+      render(template: "errors/500_critical", status: 500, layout: false)
+      return
+    end
   end
 end

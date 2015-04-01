@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :confirm_password
 
-  belongs_to :creator, class_name: "User", foreign_key: 'created_by'
-  has_many :created_users, class_name: "User", foreign_key: 'created_by'
+  belongs_to :creator, class_name: "User", foreign_key: "created_by"
+  has_many :created_users, class_name: "User", foreign_key: "created_by"
   has_many :pages
   has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
@@ -34,27 +34,24 @@ class User < ActiveRecord::Base
 
   before_validation :ensure_username
   before_validation :hash_password
-  before_create     :ensure_first_user_has_all_roles
+  before_create :ensure_first_user_has_all_roles
 
   after_save ThinkingSphinx::RealTime.callback_for(:user)
 
-  scope :by_name,     -> { order('name ASC') }
+  scope :by_name,     -> { order("name ASC") }
   scope :activated,   -> { by_name.includes(:roles).where(activated: true) }
   scope :deactivated, -> { by_name.includes(:roles).where(activated: false) }
 
   class << self
     def authenticate(email, password:)
-      if user = User.find_by_username_or_email(email)
-        if user.authenticate!(password)
-          user
-        end
-      end
+      user = User.find_by_username_or_email(email)
+      user if user.try { |u| u.authenticate!(password) }
     end
 
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
       where(username: string.to_s).first ||
-      where(email: string.to_s).first
+        where(email: string.to_s).first
     end
   end
 
@@ -72,17 +69,16 @@ class User < ActiveRecord::Base
   end
 
   def mark_active!
-    if !self.last_login_at? || self.last_login_at < 10.minutes.ago
-      self.update_columns(last_login_at: Time.now)
-    end
+    return if last_login_at && last_login_at < 10.minutes.ago
+    update_columns(last_login_at: Time.now)
   end
 
   def name_and_email
-    "#{self.name} <#{self.email}>"
+    "#{name} <#{email}>"
   end
 
   def online?
-    (self.last_login_at && self.last_login_at > 15.minutes.ago) ? true : false
+    (last_login_at && last_login_at > 15.minutes.ago) ? true : false
   end
 
   def realname
@@ -92,9 +88,8 @@ class User < ActiveRecord::Base
   private
 
   def confirm_password_must_match
-    if !password.blank? && password != confirm_password
-      errors.add(:confirm_password, 'does not match')
-    end
+    return if password.blank? || password == confirm_password
+    errors.add(:confirm_password, "does not match")
   end
 
   def encrypt_password(password)
@@ -102,42 +97,35 @@ class User < ActiveRecord::Base
   end
 
   def ensure_username
-    self.username ||= self.email
+    self.username ||= email
   end
 
   def ensure_first_user_has_all_roles
-    unless User.any?
-      self.activated = true
-      Role.roles.each do |role|
-        self.roles.new(name: role.name)
-      end
+    return if User.any?
+    self.activated = true
+    Role.roles.each do |role|
+      roles.new(name: role.name)
     end
   end
 
   def hash_password
-    unless password.blank?
-      self.hashed_password = encrypt_password(password)
-    end
+    self.hashed_password = encrypt_password(password) unless password.blank?
   end
 
   def password_needs_rehash?
-    self.hashed_password.length <= 40
+    hashed_password.length <= 40
   end
 
   def rehash_password!(password)
-    self.update(hashed_password: encrypt_password(password))
+    update(hashed_password: encrypt_password(password))
   end
 
   def valid_password?(password)
-    if self.hashed_password.length <= 40
-      if self.hashed_password == Digest::SHA1.hexdigest(password)
-        return true
-      end
+    if hashed_password.length <= 40
+      return true if hashed_password == Digest::SHA1.hexdigest(password)
     else
-      if BCrypt::Password.new(self.hashed_password) == password
-        return true
-      end
+      return true if BCrypt::Password.new(hashed_password) == password
     end
-    return false
+    false
   end
 end

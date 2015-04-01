@@ -1,13 +1,15 @@
 # encoding: utf-8
 
-class PagesCore::ImagesController < ApplicationController
-  include DynamicImage::Controller
+module PagesCore
+  class ImagesController < ApplicationController
+    include DynamicImage::Controller
 
-  caches_page :show, :uncropped, :original
+    caches_page :show, :uncropped, :original
 
-  private
+    private
 
-  def model
-    Image
+    def model
+      Image
+    end
   end
 end

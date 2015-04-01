@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PagesCore::Extensions::StringExtensions do
   let(:string) { "Hello world" }
@@ -10,7 +10,6 @@ describe PagesCore::Extensions::StringExtensions do
   it { is_expected.to be_a(PagesCore::Extensions::StringExtensions) }
 
   describe "#to_html" do
-
     context "with no options" do
       subject { string.to_html }
       it { is_expected.to eq("<p>Hello world</p>") }
@@ -23,16 +22,14 @@ describe PagesCore::Extensions::StringExtensions do
   end
 
   describe "#to_html_with" do
-
     context "with no options" do
-      subject { string.to_html_with('again') }
+      subject { string.to_html_with("again") }
       it { is_expected.to eq("<p>Hello world again</p>") }
     end
 
     context "with :shorten" do
-      subject { string.to_html_with('Read more', shorten: 4) }
+      subject { string.to_html_with("Read more", shorten: 4) }
       it { is_expected.to eq("<p>Hello&#8230; Read more</p>") }
     end
   end
-
 end

@@ -5,11 +5,11 @@ class PageImagePolicy < Policy
     end
 
     def reorder?
-      user.has_role?(:pages)
+      user.role?(:pages)
     end
 
     def new?
-      user.has_role?(:pages)
+      user.role?(:pages)
     end
   end
 
@@ -19,7 +19,7 @@ class PageImagePolicy < Policy
     end
 
     def edit?
-      user.has_role?(:pages)
+      user.role?(:pages)
     end
   end
 end

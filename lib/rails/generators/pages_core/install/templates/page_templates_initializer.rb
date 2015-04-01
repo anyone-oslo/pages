@@ -4,16 +4,15 @@
 
 # Templates configuration
 PagesCore::Templates.configure do |config|
-
   # Default configuration for all templates
   config.default do |default|
-
     # The block definitions here will be available for all templates.
     default.blocks do |block|
       block.headline(
         "Headline",
         size: :field,
-        description: "The main statement, usually largest and boldest, describing the main story."
+        description: "The main statement, usually largest and boldest, " \
+          "describing the main story."
       )
       block.excerpt(
         "Standfirst",
@@ -25,12 +24,13 @@ PagesCore::Templates.configure do |config|
       )
       block.boxout(
         "Boxout",
-        description: "Part of the page, usually background info or facts related to the article."
+        description: "Part of the page, usually background info or facts " \
+          "related to the article."
       )
     end
 
     # Default template (default: :autodetect, root: 'index')
-    default.template :autodetect, root: 'index'
+    default.template :autodetect, root: "index"
 
     # Enables image on page (default: :enabled, linkable: false)
     default.image :enabled, linkable: false
@@ -52,12 +52,12 @@ PagesCore::Templates.configure do |config|
 
     # Subpages will have this template. Will fall back to default.template
     # unless specified. (default: nil)
-    #default.sub_template :news_page
+    # default.sub_template :news_page
   end
 
   # Sample template configuration:
 
-  #config.template(:news_page, :archive_page) do |t|
+  # config.template(:news_page, :archive_page) do |t|
   #  t.blocks do |block|
   #    block.video_embed "Video embed", size: :field
   #  end

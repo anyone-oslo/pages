@@ -3,11 +3,10 @@
 module PagesCore
   class CacheSweeper
     class << self
-
       attr_accessor :enabled
 
-      def disable(&block)
-        old_value = self.enabled
+      def disable(&_block)
+        old_value = enabled
         self.enabled = false
         yield
         self.enabled = old_value
@@ -22,8 +21,12 @@ module PagesCore
       def default_config
         OpenStruct.new(
           cache_path: ActionController::Base.page_cache_directory,
-          observe:    [Page, PageComment, Image],
-          patterns:   [/^\/index\.[\w]+$/, /^\/pages\/[\w]{2,3}[\/\.](.*)$/, /^\/[\w]{2,3}\/(.*)$/]
+          observe: [Page, PageComment, Image],
+          patterns: [
+            /^\/index\.[\w]+$/,
+            %r{^/pages/[\w]{2,3}[/\.](.*)$},
+            %r{^/[\w]{2,3}/(.*)$}
+          ]
         )
       end
 
@@ -34,17 +37,17 @@ module PagesCore
       #     c.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
       #   end
       def config
-        @@configuration ||= self.default_config
+        @configuration ||= default_config
         if block_given?
-          yield @@configuration
+          yield @configuration
           extend_observed_models!
         end
-        @@configuration
+        @configuration
       end
 
       def extend_observed_models!
         config.observe.each do |klass|
-          if klass.kind_of?(Symbol) || klass.kind_of?(String)
+          if klass.is_a?(Symbol) || klass.is_a?(String)
             klass = klass.to_s.camelize.constantize
           end
           unless klass.include?(PagesCore::Sweepable)
@@ -55,47 +58,54 @@ module PagesCore
 
       # Purge the entire pages cache
       def purge!
-        cache_dir = self.config.cache_path
-        if File.exist?(cache_dir)
-          `rm -rf "#{cache_dir}/*"`
-        end
+        cache_dir = config.cache_path
+        `rm -rf "#{cache_dir}/*"` if File.exist?(cache_dir)
       end
 
       # Sweep all cached pages
       def sweep!
-        if self.enabled
-          cache_base_dir = self.config.cache_path
-          swept_files = []
-          if PagesCore.config(:domain_based_cache)
-            cache_dirs = Dir.entries(cache_base_dir)
-            cache_dirs = cache_dirs.select{|d| !(d =~ /^\./) && File.directory?(File.join(cache_base_dir, d))}
-            cache_dirs = cache_dirs.map{|d| File.join(cache_base_dir, d)}
-          else
-            cache_dirs = [cache_base_dir]
-          end
-          cache_dirs.each do |cache_dir|
-            cache_dir = cache_dir.to_s
-            if File.exist?(cache_dir)
-              kill_patterns = self.config.patterns
-              paths = []
-              Find.find(cache_dir+"/") do |path|
-                Find.prune if path =~ Regexp.new("^#{cache_dir}/dynamic_image[s]?") # Ignore dynamic image
-                file = path.gsub(Regexp.new("^#{cache_dir}"), "")
-                kill_patterns.each do |p|
-                  if file =~ p && File.exist?( path )
-                    swept_files << path
-                    FileUtils.rm_rf(path)
-                  end
-                end
-              end
-            end
-          end
-          return swept_files
+        return [] unless enabled
+        cache_dirs.flat_map { |d| sweep_dir(d)  }
+      end
+
+      private
+
+      def cache_dirs
+        if PagesCore.config(:domain_based_cache)
+          Dir.entries(config.cache_path)
+            .select { |d| visible_dir?(d) }
+            .map { |d| File.join(config.cache_path, d) }
+            .map(&:to_s)
         else
-          return []
+          [config.cache_path.to_s]
         end
       end
+
+      def visible_dir?(dir)
+        !(dir =~ /^\./) && File.directory?(File.join(config.cache_path, dir))
+      end
+
+      def sweep_dir(cache_dir)
+        return [] unless File.exist?(cache_dir)
+        swept_files = []
+        Find.find(cache_dir + "/") do |path|
+          Find.prune if skip_path?(path)
+          file = path.gsub(Regexp.new("^#{cache_dir}"), "")
+          config.patterns.each do |p|
+            if file =~ p && File.exist?(path)
+              swept_files << path
+              FileUtils.rm_rf(path)
+            end
+          end
+        end
+        swept_files
+      end
+
+      def skip_path?(path)
+        path =~ Regexp.new("^#{cache_dir}/dynamic_image[s]?")
+      end
     end
+
     self.enabled ||= true
   end
 end

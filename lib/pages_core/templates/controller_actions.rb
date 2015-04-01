@@ -24,7 +24,7 @@ module PagesCore
 
       def run_template_actions_for(template, *args)
         self.class.template_actions_for(template).each do |proc|
-          instance_exec *args, &proc
+          instance_exec(*args, &proc)
         end
       end
     end
