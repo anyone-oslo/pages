@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class PageImage < ActiveRecord::Base
-
   belongs_to :page
   belongs_to_image :image
 
@@ -11,6 +10,8 @@ class PageImage < ActiveRecord::Base
   validates_associated :image
 
   acts_as_list scope: :page
+
+  localizable
 
   validate do |page_image|
     if page_image.page && page_image.page.page_images.count < 1
@@ -47,6 +48,10 @@ class PageImage < ActiveRecord::Base
         page_image.destroy unless page_image.image
       end
     end
+  end
+
+  def image
+    super.localize(locale)
   end
 
   def to_json(options={})

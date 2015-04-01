@@ -47,7 +47,7 @@ describe PagesCore::HtmlFormatter do
       end
 
       context "when image has a caption" do
-        let(:image) { Image.create(file: uploaded_file, byline: "This is a caption") }
+        let(:image) { Image.create(file: uploaded_file, caption: "This is a caption", locale: I18n.locale) }
         let(:string) { "[image:#{image.id}]" }
         it { is_expected.to match(/<figure class=\"image landscape\"><img alt=\"Image\" src=\"\/dynamic_images\/([\w\d]+)\/320x200\/#{image.id}-([\w\d]+)\.png\" width=\"320\" height=\"200\" \/><figcaption>This is a caption<\/figcaption><\/figure>/) }
       end
