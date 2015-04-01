@@ -12,7 +12,7 @@ class Admin::PageImagesController < Admin::AdminController
     @page_images = @page.page_images
     respond_to do |format|
       format.json do
-        render json: page_images_as_json(@page_images)
+        render json: @page_images, each_serializer: Admin::PageImageSerializer
       end
     end
   end
@@ -24,7 +24,7 @@ class Admin::PageImagesController < Admin::AdminController
     end
     respond_to do |format|
       format.json do
-        render json: page_images_as_json(@page_images)
+        render json: @page_images, each_serializer: Admin::PageImageSerializer
       end
     end
   end
@@ -40,11 +40,11 @@ class Admin::PageImagesController < Admin::AdminController
     if page_images_params?
       page_images_params.each do |index, attributes|
         if attributes[:image]
-          @page.page_images.create(attributes)
+          @page.page_images.create(attributes.merge(locale: @locale))
         end
       end
     else
-      @page.page_images.create(page_image_params)
+      @page.page_images.create(page_image_params.merge(locale: @locale))
     end
     redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
   end
@@ -81,18 +81,18 @@ class Admin::PageImagesController < Admin::AdminController
   protected
 
   def find_page
-    @page = Page.find(params[:page_id])
+    @page = Page.find(params[:page_id]).localize(@locale)
   end
 
   def find_page_image
-    @page_image = @page.page_images.find(params[:id])
+    @page_image = @page.page_images.find(params[:id]).localize(@locale)
   end
 
   def page_image_params
     params.require(:page_image).permit(
       :image, :primary,
       image_attributes: [
-        :id, :byline, :crop_start_x, :crop_start_y, :crop_width, :crop_height
+        :id, :caption, :crop_start_x, :crop_start_y, :crop_width, :crop_height
       ]
     )
   end
@@ -100,7 +100,7 @@ class Admin::PageImagesController < Admin::AdminController
   def page_images_params
     params.permit(
       page_images: [:image, :primary, {
-        image_attributes: [:byline]
+        image_attributes: [:caption]
       }]
     )[:page_images]
   end
@@ -108,9 +108,4 @@ class Admin::PageImagesController < Admin::AdminController
   def page_images_params?
     params[:page_images] ? true : false
   end
-
-  def page_images_as_json(page_images)
-    '[' + page_images.map{|pi| pi.to_json}.join(', ') + ']'
-  end
-
 end

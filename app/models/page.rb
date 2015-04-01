@@ -18,16 +18,16 @@ class Page < ActiveRecord::Base
 
   has_many :images,
            -> { where("`page_images`.`primary` = ?", false).order("position") },
-           through:    :page_images
+           through: :page_images
 
   has_many :comments,
            class_name: 'PageComment',
-           dependent:  :destroy
+           dependent: :destroy
 
   has_many :page_files,
            -> { order("position") },
            class_name: 'PageFile',
-           dependent:  :destroy
+           dependent: :destroy
 
   acts_as_list scope: :parent_page
 
@@ -122,8 +122,20 @@ class Page < ActiveRecord::Base
     excerpt? ? excerpt : body
   end
 
+  def image
+    super.try { |i| i.localize(locale) }
+  end
+
+  def images
+    super.in_locale(locale)
+  end
+
+  def page_images
+    super.in_locale(locale)
+  end
+
   def files
-    page_files.in_locale(self.locale)
+    page_files.in_locale(locale)
   end
 
   def headline_or_name

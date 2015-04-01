@@ -1,12 +1,12 @@
 class PageImageSerializer < ActiveModel::Serializer
-  attributes :id, :image_id, :primary, :filename, :name, :byline, :created_at
+  attributes :id, :image_id, :primary, :filename, :caption, :created_at
 
   def name
     object.image.name
   end
 
-  def byline
-    object.image.byline
+  def caption
+    object.image.caption
   end
 
   def filename

@@ -15,7 +15,7 @@
 
       function loadImagesData () {
         $.getJSON(baseURL + '/images.json', function (json) {
-          imagesData = json;
+          imagesData = json["page_images"];
         });
       }
       loadImagesData();
@@ -66,7 +66,7 @@
 
           // Show the editor
           $('.page_images .uploadButton').hide();
-          $editor.find('.caption').val(imageData.image.byline);
+          $editor.find('.caption').val(imageData.image.caption);
           $editor.find('.embed').val("[image:" + imageData.image.id + "]");
           $editor.find('.image_id').val(imageData.image.id);
 
@@ -246,7 +246,7 @@
         var data = {
           'page_image[primary]': $editor.find('#page_image_primary').is(':checked'),
           'page_image[image_attributes][id]': $editor.find('.image_id').val(),
-          'page_image[image_attributes][byline]': $editor.find('.caption').val(),
+          'page_image[image_attributes][caption]': $editor.find('.caption').val(),
           'page_image[image_attributes][crop_start_x]': $editor.find('.crop_start_x').val(),
           'page_image[image_attributes][crop_start_y]': $editor.find('.crop_start_y').val(),
           'page_image[image_attributes][crop_width]': $editor.find('.crop_width').val(),

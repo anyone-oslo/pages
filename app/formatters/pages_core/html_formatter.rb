@@ -40,7 +40,7 @@ module PagesCore
         class_name = options.match(/class="([\s\-_\w\d]+)"/) ? $1 : nil
 
         begin
-          image = Image.find(id)
+          image = Image.find(id).localize(I18n.locale)
           class_name = ['image', image_class_name(image), class_name].compact
           content_tag(:figure,
             dynamic_image_tag(image,
@@ -57,8 +57,8 @@ module PagesCore
     end
 
     def image_caption(image)
-      if image.byline?
-        content_tag(:figcaption, image.byline)
+      if image.caption?
+        content_tag(:figcaption, image.caption)
       end
     end
 

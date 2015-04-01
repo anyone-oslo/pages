@@ -10,7 +10,7 @@
         <%= fields_for PageImage.new do |pi| %>
           <%= pi.fields_for :image_attributes, Image.new do |i| %>
             <%= i.hidden_field :id, class: 'image_id' %>
-            <%= i.text_field :byline, class: 'caption', placeholder: 'Write your caption/byline' %>
+            <%= i.text_field :caption, class: 'caption', placeholder: 'Write your caption/byline' %>
             <%= text_field_tag 'embed', '', class: 'embed' %>
             <%= pi.check_box :primary %><label>Primary</label>
             <%= i.hidden_field :crop_start_x, class: 'crop_start_x' %>

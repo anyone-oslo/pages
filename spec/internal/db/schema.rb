@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204130800) do
+ActiveRecord::Schema.define(version: 20150401131300) do
 
   create_table "binaries", force: :cascade do |t|
     t.string "sha1_hash", limit: 255
@@ -42,18 +42,15 @@ ActiveRecord::Schema.define(version: 20150204130800) do
   end
 
   create_table "images", force: :cascade do |t|
-    t.string   "name",           limit: 255
-    t.string   "byline",         limit: 255
-    t.text     "description",    limit: 65535
-    t.string   "filename",       limit: 255,   null: false
-    t.string   "content_type",   limit: 255,   null: false
+    t.string   "filename",       limit: 255, null: false
+    t.string   "content_type",   limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "content_hash",   limit: 255,   null: false
-    t.integer  "content_length", limit: 4,     null: false
-    t.string   "colorspace",     limit: 255,   null: false
-    t.integer  "real_width",     limit: 4,     null: false
-    t.integer  "real_height",    limit: 4,     null: false
+    t.string   "content_hash",   limit: 255, null: false
+    t.integer  "content_length", limit: 4,   null: false
+    t.string   "colorspace",     limit: 255, null: false
+    t.integer  "real_width",     limit: 4,   null: false
+    t.integer  "real_height",    limit: 4,   null: false
     t.integer  "crop_width",     limit: 4
     t.integer  "crop_height",    limit: 4
     t.integer  "crop_start_x",   limit: 4
