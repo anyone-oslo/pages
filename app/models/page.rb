@@ -184,7 +184,7 @@ class Page < ActiveRecord::Base
   end
 
   def redirect_path(params={})
-    path = self.redirect_to
+    path = self.redirect_to.dup
     if path.start_with? "/"
       params.each do |key, value|
         raise "redirect_url param must be a string" unless value.kind_of?(String)
