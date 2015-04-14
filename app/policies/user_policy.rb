@@ -9,7 +9,7 @@ class UserPolicy < Policy
     end
 
     def new?
-      (!User.any?) || user.has_role?(:users)
+      (!User.any?) || user.role?(:users)
     end
 
     def create?
@@ -23,7 +23,7 @@ class UserPolicy < Policy
 
   module Member
     def edit?
-      user == record || user.has_role?(:users)
+      user == record || user.role?(:users)
     end
 
     def show?
@@ -35,11 +35,11 @@ class UserPolicy < Policy
     end
 
     def policies?
-      user.has_role?(:users)
+      user.role?(:users)
     end
 
     def destroy?
-      user.has_role?(:users)
+      user.role?(:users)
     end
   end
 

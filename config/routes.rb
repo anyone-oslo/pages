@@ -1,31 +1,33 @@
 # encoding: utf-8
 
 Rails.application.routes.draw do
-
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
   # Pages
   scope path: PagesCore.config.pages_path_scope do
     resources :pages, path: ":locale/pages" do
       collection do
-        get  'search'
-        post 'search'
+        get "search"
+        post "search"
       end
       member do
-        post 'add_comment'
-        put 'preview'
+        post "add_comment"
+        put "preview"
       end
-      resources :files, controller: 'page_files'
+      resources :files, controller: "page_files"
     end
-    get '/:locale/pages/:id/:page' => 'pages#show', constraints: { page: /\d+/ }, as: :paginated_page
+
+    get(
+      "/:locale/pages/:id/:page" => "pages#show",
+      constraints: { page: /\d+/ }, as: :paginated_page
+    )
 
     # Redirect hack for backwards compatibility
-    get 'pages/:locale' => redirect("/%{locale}/pages"), locale: /\w\w\w/
-    get 'pages/:locale/*glob' => redirect("/%{locale}/pages/%{glob}"), locale: /\w\w\w/
+    get "pages/:locale" => redirect("/%{locale}/pages"), locale: /\w\w\w/
+    get "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
+        locale: /\w\w\w/
 
-    if PagesCore.config.pages_path_scope?
-      get "(/:locale)" => "pages#index"
-    end
+    get "(/:locale)" => "pages#index" if PagesCore.config.pages_path_scope?
   end
 
   # Authentication
@@ -39,13 +41,13 @@ Rails.application.routes.draw do
       end
     end
     controller :invites do
-      get '/invites/:id/:token' => :show, as: :invite_with_token
+      get "/invites/:id/:token" => :show, as: :invite_with_token
     end
 
     # Password resets
     resources :password_resets, only: [:create, :show, :update]
     controller :password_resets do
-      get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
+      get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
     end
 
     # Images
@@ -54,11 +56,11 @@ Rails.application.routes.draw do
     # Users
     resources :users do
       collection do
-        get 'deactivated'
-        get 'login'
+        get "deactivated"
+        get "login"
       end
       member do
-        delete 'delete_image'
+        delete "delete_image"
       end
     end
 
@@ -69,47 +71,50 @@ Rails.application.routes.draw do
     scope ":locale" do
       resources :pages do
         collection do
-          get 'news'
-          get 'new_news' # TODO: Should be refactored
-          get 'reorder_pages'
+          get "news"
+          get "new_news" # TODO: Should be refactored
+          get "reorder_pages"
         end
 
-        get 'new/:parent', action: 'new'
+        get "new/:parent", action: "new"
 
         # Page Images
-        resources :images, controller: 'page_images' do
+        resources :images, controller: "page_images" do
           collection do
-            put 'reorder'
+            put "reorder"
           end
         end
 
         # Page Files
-        resources :files, controller: 'page_files' do
+        resources :files, controller: "page_files" do
           collection do
-            post 'reorder'
+            post "reorder"
           end
         end
 
         # Page Files
-        resources :comments, controller: 'page_comments' do
+        resources :comments, controller: "page_comments" do
         end
       end
     end
-
   end
 
   # Default admin route
-  get '/admin' => redirect{ |env, req| "/admin/#{I18n.default_locale.to_s}/pages/news" }, as: 'admin_default'
-  #get '/admin' => 'admin#redirect', as: 'admin_default'
+  get(
+    "/admin" => redirect do |_env, _req|
+      "/admin/#{I18n.default_locale}/pages/news"
+    end,
+    as: "admin_default"
+  )
+  # get '/admin' => 'admin#redirect', as: 'admin_default'
 
   # Errors
   resources :errors do
     collection do
-      post 'report'
+      post "report"
     end
   end
 
   # Legacy routes
-  get '/comments/:action/:type/:id', controller: 'comments'
-
+  get "/comments/:action/:type/:id", controller: "comments"
 end

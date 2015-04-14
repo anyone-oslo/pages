@@ -7,7 +7,7 @@ module PagesCore
     end
 
     module ClassMethods
-      def require_authorization(collection, member, options={})
+      def require_authorization(collection, member, options = {})
         options = {
           collection: [:index, :new, :create],
           member:     [:show, :edit, :update, :destroy]
@@ -15,11 +15,9 @@ module PagesCore
         before_action do |controller|
           action = params[:action].to_sym
           if options[:collection].include?(action)
-            collection = controller.instance_eval(&collection) if collection.kind_of?(Proc)
-            verify_policy(collection)
+            verify_policy_with_proc(controller, collection)
           elsif options[:member].include?(action)
-            member = controller.instance_eval(&member) if member.kind_of?(Proc)
-            verify_policy(member)
+            verify_policy_with_proc(controller, member)
           end
         end
       end
@@ -29,10 +27,14 @@ module PagesCore
       Policy.for(current_user, object)
     end
 
+    def verify_policy_with_proc(controller, record)
+      record = controller.instance_eval(&record) if record.is_a?(Proc)
+      verify_policy(record)
+    end
+
     def verify_policy(record)
-      unless policy(record).public_send(params[:action] + "?")
-        raise PagesCore::NotAuthorized
-      end
+      return true if policy(record).public_send(params[:action] + "?")
+      fail PagesCore::NotAuthorized
     end
   end
 end

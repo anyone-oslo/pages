@@ -4,11 +4,11 @@ class InvitePolicy < Policy
   end
 
   def reorder?
-    user.has_role?(:users)
+    user.role?(:users)
   end
 
   def new?
-    user.has_role?(:users)
+    user.role?(:users)
   end
 
   def show?
@@ -16,7 +16,7 @@ class InvitePolicy < Policy
   end
 
   def edit?
-    user.has_role?(:users)
+    user.role?(:users)
   end
 
   def accept?
@@ -24,6 +24,6 @@ class InvitePolicy < Policy
   end
 
   def policies?
-    user.has_role?(:users)
+    user.role?(:users)
   end
 end

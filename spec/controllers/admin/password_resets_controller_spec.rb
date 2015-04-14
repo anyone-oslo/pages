@@ -1,9 +1,11 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Admin::PasswordResetsController, type: :controller do
   let(:user) { create(:user) }
   let(:password_reset_token) { create(:password_reset_token) }
-  let(:expired_password_reset_token) { create(:password_reset_token, expires_at: 2.days.ago) }
+  let(:expired_password_reset_token) do
+    create(:password_reset_token, expires_at: 2.days.ago)
+  end
 
   describe "POST create" do
     context "with an existing user" do
@@ -12,7 +14,9 @@ describe Admin::PasswordResetsController, type: :controller do
       it { is_expected.to redirect_to(login_admin_users_url) }
 
       it "should set the flash" do
-        expect(flash[:notice]).to match(/An email with further instructions has been sent/)
+        expect(flash[:notice]).to match(
+          /An email with further instructions has been sent/
+        )
       end
 
       it "should assign the user" do
@@ -25,10 +29,12 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it "should email the user" do
         expect(last_email.to).to eq([user.email])
-        expect(last_email.body.encoded).to match(admin_password_reset_with_token_url(
-          assigns(:password_reset_token).id,
-          assigns(:password_reset_token).token
-        ))
+        expect(last_email.body.encoded).to match(
+          admin_password_reset_with_token_url(
+            assigns(:password_reset_token).id,
+            assigns(:password_reset_token).token
+          )
+        )
       end
     end
 
@@ -42,14 +48,22 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "should set the flash" do
-        expect(flash[:notice]).to match(/Couldn't find a user with that email address/)
+        expect(flash[:notice]).to match(
+          /Couldn't find a user with that email address/
+        )
       end
     end
   end
 
   describe "GET show" do
     context "with a valid token" do
-      before { get :show, id: password_reset_token.id, token: password_reset_token.token }
+      before do
+        get(
+          :show,
+          id: password_reset_token.id,
+          token: password_reset_token.token
+        )
+      end
 
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
@@ -74,7 +88,13 @@ describe Admin::PasswordResetsController, type: :controller do
     end
 
     context "with an expired token" do
-      before { get :show, id: expired_password_reset_token.id, token: expired_password_reset_token.token }
+      before do
+        get(
+          :show,
+          id: expired_password_reset_token.id,
+          token: expired_password_reset_token.token
+        )
+      end
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
@@ -83,7 +103,9 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "should set the flash" do
-        expect(flash.now[:notice]).to match(/Your password reset link has expired/)
+        expect(flash.now[:notice]).to match(
+          /Your password reset link has expired/
+        )
       end
 
       it "should destroy the token" do
@@ -108,7 +130,7 @@ describe Admin::PasswordResetsController, type: :controller do
         put :update,
             id: password_reset_token.id,
             token: password_reset_token.token,
-            user: { password: 'new password', confirm_password: 'new password' }
+            user: { password: "new password", confirm_password: "new password" }
       end
 
       it { is_expected.to redirect_to(login_admin_users_url) }
@@ -132,10 +154,15 @@ describe Admin::PasswordResetsController, type: :controller do
 
     context "without valid data" do
       before do
-        put :update,
-            id: password_reset_token.id,
-            token: password_reset_token.token,
-            user: { password: 'new password', confirm_password: 'wrong password' }
+        put(
+          :update,
+          id: password_reset_token.id,
+          token: password_reset_token.token,
+          user: {
+            password: "new password",
+            confirm_password: "wrong password"
+          }
+        )
       end
 
       it { is_expected.to respond_with(:success) }
@@ -158,7 +185,7 @@ describe Admin::PasswordResetsController, type: :controller do
       before do
         put :update,
             id: password_reset_token.id,
-            user: { password: 'new password', confirm_password: 'new password' }
+            user: { password: "new password", confirm_password: "new password" }
       end
 
       it { is_expected.to redirect_to(login_admin_users_url) }
@@ -173,7 +200,7 @@ describe Admin::PasswordResetsController, type: :controller do
         put :update,
             id: expired_password_reset_token.id,
             token: expired_password_reset_token.token,
-            user: { password: 'new password', confirm_password: 'new password' }
+            user: { password: "new password", confirm_password: "new password" }
       end
 
       it { is_expected.to redirect_to(login_admin_users_url) }
@@ -183,7 +210,9 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "should set the flash" do
-        expect(flash.now[:notice]).to match(/Your password reset link has expired/)
+        expect(flash.now[:notice]).to match(
+          /Your password reset link has expired/
+        )
       end
 
       it "should destroy the token" do

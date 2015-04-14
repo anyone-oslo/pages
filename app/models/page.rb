@@ -10,7 +10,7 @@ class Page < ActiveRecord::Base
 
   belongs_to :author, class_name: "User", foreign_key: :user_id
 
-  has_and_belongs_to_many :categories, join_table: 'pages_categories'
+  has_and_belongs_to_many :categories, join_table: "pages_categories"
 
   belongs_to_image :image
 
@@ -21,12 +21,12 @@ class Page < ActiveRecord::Base
            through: :page_images
 
   has_many :comments,
-           class_name: 'PageComment',
+           class_name: "PageComment",
            dependent: :destroy
 
   has_many :page_files,
            -> { order("position") },
-           class_name: 'PageFile',
+           class_name: "PageFile",
            dependent: :destroy
 
   acts_as_list scope: :parent_page
@@ -42,7 +42,7 @@ class Page < ActiveRecord::Base
   end
 
   validates_format_of :redirect_to,
-                      with: /\A(\/|https?:\/\/)/,
+                      with: %r{\A(/|https?://)},
                       allow_nil: true,
                       allow_blank: true
 
@@ -60,25 +60,24 @@ class Page < ActiveRecord::Base
   before_validation :published_at
   before_validation :set_autopublish
   before_validation :set_content_order
-  after_save        :ensure_page_images_contains_primary_image
-  after_save        :queue_autopublisher
-  after_save        ThinkingSphinx::RealTime.callback_for(:page)
+  after_save :ensure_page_images_contains_primary_image
+  after_save :queue_autopublisher
+  after_save ThinkingSphinx::RealTime.callback_for(:page)
 
-  scope :by_date,    -> { order('published_at DESC') }
+  scope :by_date,    -> { order("published_at DESC") }
   scope :published,  -> { where(status: 2, autopublish: false) }
-  scope :visible,    -> { where('status < 4') }
+  scope :visible,    -> { where("status < 4") }
   scope :news_pages, -> { visible.where(news_page: true) }
   scope :pinned,     -> { where(pinned: true) }
 
   class << self
-
     def archive_finder
       PagesCore::ArchiveFinder.new(all, timestamp: :published_at)
     end
 
     # Find all published and feed enabled pages
-    def enabled_feeds(locale, options={})
-      conditions = (options[:include_hidden]) ? 'status IN (2,3)' : 'status = 2'
+    def enabled_feeds(locale, options = {})
+      conditions = (options[:include_hidden]) ? "status IN (2,3)" : "status = 2"
       Page.where(feed_enabled: true).where(conditions).localized(locale)
     end
 
@@ -97,7 +96,7 @@ class Page < ActiveRecord::Base
     if PagesCore.config.close_comments_after.nil?
       false
     else
-      (Time.now - self.published_at) > PagesCore.config.close_comments_after
+      (Time.now - published_at) > PagesCore.config.close_comments_after
     end
   end
 
@@ -116,7 +115,7 @@ class Page < ActiveRecord::Base
   def empty?
     !body? && !excerpt?
   end
-  alias :blank? :empty?
+  alias_method :blank?, :empty?
 
   def excerpt_or_body
     excerpt? ? excerpt : body
@@ -148,21 +147,21 @@ class Page < ActiveRecord::Base
   end
 
   # Get subpages
-  def pages(options=nil)
+  def pages(_options = nil)
     if self.locale?
-      subpages.published.localized(self.locale)
+      subpages.published.localized(locale)
     else
       subpages.published
     end
   end
 
   def subpages
-    self.children.order(pinned_content_order)
+    children.order(pinned_content_order)
   end
 
   # Return the status of the page as a string
   def status_label
-    self.class.status_labels[self.status]
+    self.class.status_labels[status]
   end
 
   def flag_as_deleted!
@@ -172,7 +171,7 @@ class Page < ActiveRecord::Base
   # Get publication date, which defaults to the creation date
   def published_at
     if self.created_at?
-      self[:published_at] ||= self.created_at
+      self[:published_at] ||= created_at
     else
       self[:published_at] ||= Time.now
     end
@@ -183,12 +182,12 @@ class Page < ActiveRecord::Base
     self.redirect_to?
   end
 
-  def redirect_path(params={})
-    path = self.redirect_to.dup
+  def redirect_path(params = {})
+    path = redirect_to.dup
     if path.start_with? "/"
       params.each do |key, value|
-        raise "redirect_url param must be a string" unless value.kind_of?(String)
-        path.gsub!("/:#{key.to_s}", "/#{value}")
+        fail "redirect_url param must be a string" unless value.is_a?(String)
+        path.gsub!("/:#{key}", "/#{value}")
       end
     end
     path
@@ -196,12 +195,12 @@ class Page < ActiveRecord::Base
 
   # Returns true if this page's children is reorderable
   def reorderable_children?
-    !self.content_order? || self.content_order =~ /position/
+    !self.content_order? || content_order =~ /position/
   end
 
   # Returns true if this page is reorderable
   def reorderable?
-    !self.parent || !self.parent.content_order? || self.parent.content_order =~ /position/
+    !parent || !parent.content_order? || parent.content_order =~ /position/
   end
 
   def draft?
@@ -225,27 +224,27 @@ class Page < ActiveRecord::Base
   end
 
   def to_param
-    humanized_param(self.name)
+    humanized_param(name)
   end
 
   def content_order
-    self[:content_order] || 'position'
+    self[:content_order] || "position"
   end
 
   private
 
   def ensure_page_images_contains_primary_image
-    if image_id? && image_id_changed?
-      if page_image = page_images.where(image_id: image_id).first
-        page_image.update(primary: true)
-      else
-        page_images.create(image_id: image_id, primary: true)
-      end
+    return if !image_id || !image_id.changed?
+    page_image = page_images.where(image_id: image_id).first
+    if page_image
+      page_image.update(primary: true)
+    else
+      page_images.create(image_id: image_id, primary: true)
     end
   end
 
   def pinned_content_order
-    self.news_page? ? "pinned DESC, #{self.content_order}" : self.content_order
+    self.news_page? ? "pinned DESC, #{content_order}" : content_order
   end
 
   def set_autopublish
@@ -254,13 +253,10 @@ class Page < ActiveRecord::Base
   end
 
   def set_content_order
-    self[:content_order] ||= 'position'
+    self[:content_order] ||= "position"
   end
 
   def queue_autopublisher
-    if self.autopublish?
-      Autopublisher.queue!
-    end
+    Autopublisher.queue! if self.autopublish?
   end
-
 end

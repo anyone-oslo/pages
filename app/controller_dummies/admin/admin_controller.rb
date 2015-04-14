@@ -1,4 +1,6 @@
 # encoding: utf-8
 
-class Admin::AdminController < PagesCore::AdminController #:nodoc:
+module Admin
+  class AdminController < PagesCore::AdminController #:nodoc:
+  end
 end

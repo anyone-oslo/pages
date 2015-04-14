@@ -3,9 +3,9 @@ class InviteRole < ActiveRecord::Base
   validates :name,
             presence:   true,
             uniqueness: { scope: :invite_id },
-            inclusion:  { in: Proc.new { Role.roles.map(&:name) } }
+            inclusion:  { in: proc { Role.roles.map(&:name) } }
 
   def to_s
-    self.name.humanize
+    name.humanize
   end
 end

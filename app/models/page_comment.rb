@@ -7,7 +7,7 @@ class PageComment < ActiveRecord::Base
   attr_accessor :invalid_captcha
 
   def valid_captcha?
-    (self.invalid_captcha) ? false : true
+    (invalid_captcha) ? false : true
   end
 
   after_create do |page_comment|
@@ -15,5 +15,4 @@ class PageComment < ActiveRecord::Base
       page_comment.page.update(last_comment_at: page_comment.created_at)
     end
   end
-
 end

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
 module PagesCore
-  unless PagesCore.const_defined?('VERSION')
-    VERSION = "3.4.1-alpha"
-  end
+  VERSION = "3.4.1-alpha" unless PagesCore.const_defined?("VERSION")
 end

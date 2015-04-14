@@ -6,11 +6,11 @@ class CreateRoles < ActiveRecord::Migration
   def define_roles(flag, role)
     connection.select_rows(
       "SELECT id
-       FROM #{connection.quote_table_name("users")}
+       FROM #{connection.quote_table_name('users')}
        WHERE #{connection.quote_column_name(flag)} = #{connection.quote(true)}"
     ).each do |u|
       connection.execute(
-        "INSERT INTO #{connection.quote_table_name("roles")} (user_id, name, created_at, updated_at)
+        "INSERT INTO #{connection.quote_table_name('roles')} (user_id, name, created_at, updated_at)
          VALUES (#{u[0]}, #{connection.quote(role)}, #{connection.quote(Time.now)}, #{connection.quote(Time.now)})"
       )
     end
@@ -19,11 +19,11 @@ class CreateRoles < ActiveRecord::Migration
   def undo_role(role, flag)
     connection.select_rows(
       "SELECT user_id
-       FROM #{connection.quote_table_name("roles")}
+       FROM #{connection.quote_table_name('roles')}
        WHERE name = #{connection.quote(role)}"
     ).each do |r|
       connection.execute(
-        "UPDATE #{connection.quote_table_name("users")}
+        "UPDATE #{connection.quote_table_name('users')}
          SET #{connection.quote_column_name(flag)} = #{connection.quote(true)}
          WHERE id = #{connection.quote(r[0])}"
       )

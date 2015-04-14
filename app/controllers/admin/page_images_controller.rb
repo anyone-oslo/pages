@@ -1,111 +1,115 @@
 # encoding: utf-8
 
-class Admin::PageImagesController < Admin::AdminController
+module Admin
+  class PageImagesController < Admin::AdminController
+    before_action :find_page
+    before_action :find_page_image, only: [:show, :edit, :update, :destroy]
 
-  before_action :find_page
-  before_action :find_page_image, only: [:show, :edit, :update, :destroy]
+    require_authorization(
+      PageImage,
+      proc { @page_image },
+      collection: [:index, :reorder, :new, :create]
+    )
 
-  require_authorization PageImage, proc { @page_image },
-                        collection: [:index, :reorder, :new, :create]
-
-  def index
-    @page_images = @page.page_images
-    respond_to do |format|
-      format.json do
-        render json: @page_images, each_serializer: Admin::PageImageSerializer
-      end
-    end
-  end
-
-  def reorder
-    @page_images = params[:ids].map{|id| PageImage.find(id)}
-    @page_images.each_with_index do |pi, i|
-      pi.update(position: i)
-    end
-    respond_to do |format|
-      format.json do
-        render json: @page_images, each_serializer: Admin::PageImageSerializer
-      end
-    end
-  end
-
-  def show
-  end
-
-  def new
-    @page_image = @page.page_images.new
-  end
-
-  def create
-    if page_images_params?
-      page_images_params.each do |index, attributes|
-        if attributes[:image]
-          @page.page_images.create(attributes.merge(locale: @locale))
+    def index
+      @page_images = @page.page_images
+      respond_to do |format|
+        format.json do
+          render json: @page_images, each_serializer: Admin::PageImageSerializer
         end
       end
-    else
-      @page.page_images.create(page_image_params.merge(locale: @locale))
     end
-    redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
-  end
 
-  def update
-    if @page_image.update(page_image_params)
+    def reorder
+      @page_images = params[:ids].map { |id| PageImage.find(id) }
+      @page_images.each_with_index do |pi, i|
+        pi.update(position: i)
+      end
+      respond_to do |format|
+        format.json do
+          render json: @page_images, each_serializer: Admin::PageImageSerializer
+        end
+      end
+    end
+
+    def show
+    end
+
+    def new
+      @page_image = @page.page_images.new
+    end
+
+    def create
+      if page_images_params?
+        page_images_params.each do |_index, attributes|
+          if attributes[:image]
+            @page.page_images.create(attributes.merge(locale: @locale))
+          end
+        end
+      else
+        @page.page_images.create(page_image_params.merge(locale: @locale))
+      end
+      redirect_to(admin_page_path(@locale, @page, anchor: "images"))
+    end
+
+    def update
+      if @page_image.update(page_image_params)
+        respond_to do |format|
+          format.html do
+            flash[:notice] = "The image was updated"
+            redirect_to(admin_page_path(@locale, @page, anchor: "images"))
+          end
+          format.json do
+            render json: @page_image.to_json
+          end
+        end
+      else
+        render action: :edit
+      end
+    end
+
+    def destroy
+      @page_image.destroy
       respond_to do |format|
         format.html do
-          flash[:notice] = "The image was updated"
-          redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
+          flash[:notice] = "The image was deleted"
+          redirect_to(admin_page_path(@locale, @page, anchor: "images"))
         end
         format.json do
           render json: @page_image.to_json
         end
       end
-    else
-      render action: :edit
     end
-  end
 
-  def destroy
-    @page_image.destroy
-    respond_to do |format|
-      format.html do
-        flash[:notice] = "The image was deleted"
-        redirect_to admin_page_path(@locale, @page, anchor: 'images') and return
-      end
-      format.json do
-        render json: @page_image.to_json
-      end
+    protected
+
+    def find_page
+      @page = Page.find(params[:page_id]).localize(@locale)
     end
-  end
 
-  protected
+    def find_page_image
+      @page_image = @page.page_images.find(params[:id]).localize(@locale)
+    end
 
-  def find_page
-    @page = Page.find(params[:page_id]).localize(@locale)
-  end
+    def page_image_params
+      params.require(:page_image).permit(
+        :image, :primary,
+        image_attributes: [
+          :id, :caption, :crop_start_x, :crop_start_y, :crop_width, :crop_height
+        ]
+      )
+    end
 
-  def find_page_image
-    @page_image = @page.page_images.find(params[:id]).localize(@locale)
-  end
+    def page_images_params
+      params.permit(
+        page_images: [:image, :primary, {
+          image_attributes: [:caption]
+        }]
+      )[:page_images]
+    end
 
-  def page_image_params
-    params.require(:page_image).permit(
-      :image, :primary,
-      image_attributes: [
-        :id, :caption, :crop_start_x, :crop_start_y, :crop_width, :crop_height
-      ]
-    )
-  end
-
-  def page_images_params
-    params.permit(
-      page_images: [:image, :primary, {
-        image_attributes: [:caption]
-      }]
-    )[:page_images]
-  end
-
-  def page_images_params?
-    params[:page_images] ? true : false
+    def page_images_params?
+      params[:page_images] ? true : false
+    end
   end
 end

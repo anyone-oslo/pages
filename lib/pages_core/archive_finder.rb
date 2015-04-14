@@ -2,7 +2,7 @@
 
 module PagesCore
   class ArchiveFinder
-    def initialize(relation, options={})
+    def initialize(relation, options = {})
       @relation, @options = relation, options
     end
 
@@ -51,7 +51,11 @@ module PagesCore
     private
 
     def filter_by_time(range)
-      @relation.where("#{timestamp_attribute} >= ? AND #{timestamp_attribute} <= ?", range.first, range.last)
+      @relation.where(
+        "#{timestamp_attribute} >= ? AND #{timestamp_attribute} <= ?",
+        range.first,
+        range.last
+      )
     end
 
     def range_for_year(year)

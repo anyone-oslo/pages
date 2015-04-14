@@ -2,16 +2,14 @@
 
 class SessionsController < ApplicationController
   def create
-    if params[:username] && params[:password]
-      if user = User.authenticate(params[:username], password: params[:password])
-        authenticate!(user)
-      end
-    end
+    user = find_user(params[:username], params[:password])
+    authenticate!(user) if user
 
     if logged_in?
       redirect_to success_url
     else
-      flash[:notice] = "The provided email address and password combination was not valid"
+      flash[:notice] = "The provided email address and password combination " \
+        "was not valid"
       redirect_to login_url
     end
   end
@@ -23,6 +21,10 @@ class SessionsController < ApplicationController
   end
 
   protected
+
+  def find_user(username, password)
+    User.authenticate(username, password: password) if username && password
+  end
 
   def success_url
     # TODO: Validate URL

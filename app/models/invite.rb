@@ -2,7 +2,7 @@ class Invite < ActiveRecord::Base
   include PagesCore::HasRoles
 
   belongs_to :user
-  has_many :roles, class_name: 'InviteRole', dependent: :destroy
+  has_many :roles, class_name: "InviteRole", dependent: :destroy
 
   before_validation :ensure_token
 
@@ -17,11 +17,11 @@ class Invite < ActiveRecord::Base
 
   def create_user(attributes)
     user = User.create(attributes.merge(
-      role_names: role_names,
-      creator: self.user,
-      activated: true
+                         role_names: role_names,
+                         creator: self.user,
+                         activated: true
     ))
-    self.destroy if user.valid?
+    destroy if user.valid?
     user
   end
 

@@ -2,13 +2,11 @@
 
 module PagesCore
   module Localizable
-
     # = Localizable::ActiveRecordExtension
     #
     # Extends ActiveRecord::Base with the localizable setup method.
     #
     module ActiveRecordExtension
-
       # Extends the model with Localizable features.
       # It takes an optional block as argument, which yields an instance of
       # Localizable::Configuration.
@@ -23,15 +21,18 @@ module PagesCore
       #  end
       #
       def localizable(&block)
-        unless self.kind_of?(Localizable::ClassMethods)
-          self.send :extend,  Localizable::ClassMethods
-          self.send :include, Localizable::InstanceMethods
-          has_many :localizations, as: :localizable, dependent: :destroy, autosave: true
+        unless self.is_a?(Localizable::ClassMethods)
+          send :extend,  Localizable::ClassMethods
+          send :include, Localizable::InstanceMethods
+          has_many(
+            :localizations,
+            as: :localizable,
+            dependent: :destroy,
+            autosave: true
+          )
           before_save :cleanup_localizations!
         end
-        if block_given?
-          localizable_configuration.instance_eval(&block)
-        end
+        localizable_configuration.instance_eval(&block) if block_given?
       end
     end
   end

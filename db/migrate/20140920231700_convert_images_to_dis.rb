@@ -64,7 +64,7 @@ class ConvertImagesToDis < ActiveRecord::Migration
   private
 
   def binary_file(hash)
-    File.open(binary_path(hash), 'rb')
+    File.open(binary_path(hash), "rb")
   end
 
   def binary_exist?(hash)
@@ -74,6 +74,6 @@ class ConvertImagesToDis < ActiveRecord::Migration
   def binary_path(hash)
     folder = hash[0...2]
     filename = hash[2..hash.length]
-    Rails.root.join('db', 'binary-objects', Rails.env, folder, filename)
+    Rails.root.join("db", "binary-objects", Rails.env, folder, filename)
   end
 end

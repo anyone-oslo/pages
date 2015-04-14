@@ -9,7 +9,7 @@ module PagesCore
         @settings ||= {}
       end
 
-      def self.setting(key, type, default=nil)
+      def self.setting(key, type, default = nil)
         settings[key] = OpenStruct.new(type: type, default: default)
 
         define_method key do |*args|
@@ -30,8 +30,8 @@ module PagesCore
       end
 
       def get(key)
-        raise InvalidConfigurationKey unless has_setting?(key)
-        if configuration.has_key?(key)
+        fail InvalidConfigurationKey unless setting?(key)
+        if configuration.key?(key)
           configuration[key]
         else
           self.class.settings[key].default
@@ -39,12 +39,13 @@ module PagesCore
       end
 
       def set(key, value)
-        unless has_setting?(key)
-          raise InvalidConfigurationKey
-        end
+        fail InvalidConfigurationKey unless setting?(key)
         value = parse_value(key, value)
         unless valid_type?(key, value)
-          raise ArgumentError, "expected #{self.class.settings[key].type}, got #{value.class}"
+          fail(
+            ArgumentError,
+            "expected #{self.class.settings[key].type}, got #{value.class}"
+          )
         end
         configuration[key] = value
       end
@@ -55,8 +56,8 @@ module PagesCore
         @configuration ||= {}
       end
 
-      def has_setting?(key)
-        self.class.settings.has_key?(key)
+      def setting?(key)
+        self.class.settings.key?(key)
       end
 
       def type_for(key)
@@ -66,9 +67,9 @@ module PagesCore
       def valid_type?(key, value)
         return true if value.nil?
         if type_for(key) == :boolean
-          value.kind_of?(TrueClass) || value.kind_of?(FalseClass)
+          value.is_a?(TrueClass) || value.is_a?(FalseClass)
         else
-          value.kind_of?(type_for(key).to_s.camelize.constantize)
+          value.is_a?(type_for(key).to_s.camelize.constantize)
         end
       end
 

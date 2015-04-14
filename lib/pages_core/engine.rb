@@ -2,7 +2,7 @@
 
 module PagesCore
   class Engine < Rails::Engine
-    initializer :active_job do |config|
+    initializer :active_job do |_config|
       ActiveJob::Base.queue_adapter = :delayed_job
     end
 
@@ -15,8 +15,13 @@ module PagesCore
     end
 
     # Enable asset precompilation
-    initializer :assets do |config|
-      Rails.application.config.assets.precompile += %w{pages/admin.js pages/admin.css pages/admin/print.css pages/errors.css}
+    initializer :assets do |_config|
+      Rails.application.config.assets.precompile += %w(
+        pages/admin.js
+        pages/admin.css
+        pages/admin/print.css
+        pages/errors.css
+      )
     end
   end
 end

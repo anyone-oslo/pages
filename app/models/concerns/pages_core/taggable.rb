@@ -11,12 +11,15 @@ module PagesCore
 
     module ClassMethods
       def tagged_with(*tags)
-        all.includes(:tags).where('tags.name IN (?)', Tag.parse(tags)).references(:tags)
+        all
+          .includes(:tags)
+          .where("tags.name IN (?)", Tag.parse(tags))
+          .references(:tags)
       end
     end
 
     def serialized_tags
-      tags.order('name ASC').map(&:name).to_json
+      tags.order("name ASC").map(&:name).to_json
     end
 
     def serialized_tags=(json)
@@ -37,8 +40,7 @@ module PagesCore
     end
 
     def tag_list
-      tags.order('name ASC').map{ |t| t.name }.join(", ")
+      tags.order("name ASC").map(&:name).join(", ")
     end
-
   end
 end

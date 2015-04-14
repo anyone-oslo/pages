@@ -10,6 +10,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'guard'
-  gem 'guard-rspec', require: false
+  gem "guard"
+  gem "guard-rspec", require: false
 end

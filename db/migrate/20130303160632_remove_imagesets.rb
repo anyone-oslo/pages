@@ -15,10 +15,10 @@ class RemoveImagesets < ActiveRecord::Migration
     end
 
     create_table "imagesets" do |t|
-      t.string   "name"
-      t.text     "description"
+      t.string "name"
+      t.text "description"
       t.datetime "created_at"
-      t.integer  "user_id"
+      t.integer "user_id"
     end
   end
 end

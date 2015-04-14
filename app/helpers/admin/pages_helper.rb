@@ -1,57 +1,49 @@
 # encoding: utf-8
 
-module Admin::PagesHelper
-  def page_name_cache
-    @page_name_cache ||= {}
-    @page_name_cache
-  end
+module Admin
+  module PagesHelper
+    def available_templates_for_select
+      PagesCore::Templates.names.collect do |template|
+        if template == "index"
+          ["[Default]", "index"]
+        else
+          [template.humanize, template]
+        end
+      end
+    end
 
-  def available_templates_for_select
-    PagesCore::Templates.names.collect do |template|
-      if template == "index"
-        [ "[Default]", "index" ]
+    def page_name(page, options = {})
+      page_names = if options[:include_parents]
+                     [page.ancestors, page].flatten
+                   else
+                     [page]
+                   end
+      safe_join(
+        page_names.map { |p| page_name_with_fallback(p) },
+        " &raquo; ".html_safe
+      )
+    end
+
+    def publish_time(time)
+      if time.year != Time.now.year
+        time.strftime("on %b %d %Y at %H:%M")
+      elsif time.to_date != Time.now.to_date
+        time.strftime("on %b %Y at %H:%M")
       else
-        [ template.humanize, template ]
+        time.strftime("at %H:%M")
+      end
+    end
+
+    private
+
+    def page_name_with_fallback(page)
+      if page.name?
+        page.name.to_s
+      elsif page.localize(I18n.default_locale.to_s).name?
+        "(#{page.localize(I18n.default_locale.to_s).name})"
+      else
+        "(Untitled)"
       end
     end
   end
-
-  def page_name(page, options={})
-    page_name_cache[options] ||= {}
-
-    if page_name_cache[options][page.id]
-      page_name_cache[options][page.id]
-    else
-      page_names = (options[:include_parents]) ? [page.ancestors, page].flatten : [page]
-
-      p_name = safe_join(page_names.map { |p|
-        if p.dup.name?
-          p.dup.name.to_s
-        elsif p.localize(I18n.default_locale.to_s).name?
-          "(#{p.localize(I18n.default_locale.to_s).name.to_s})"
-        else
-          "(Untitled)"
-        end
-      }, " &raquo; ".html_safe)
-
-      page_name_cache[options][page.id] = p_name
-    end
-  end
-
-  def publish_time(time)
-    date_string = (time.to_date == Time.now.to_date) ? "at " : "on "
-
-    if time.to_date == Time.now.to_date
-      date_string += time.strftime("%H:%M")
-    elsif time.year == Time.now.year
-      date_string += time.strftime("%b %d")
-      date_string += time.strftime(" at %H:%M")
-    else
-      date_string += time.strftime("%b %d %Y")
-      date_string += time.strftime(" at %H:%M")
-    end
-
-    date_string
-  end
-
 end

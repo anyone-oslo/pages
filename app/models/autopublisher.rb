@@ -2,8 +2,7 @@
 
 class Autopublisher
   class << self
-
-    def run!(options={})
+    def run!(_options = {})
       if due_pages.any?
         PagesCore::CacheSweeper.once do
           due_pages.each do |p|
@@ -15,19 +14,20 @@ class Autopublisher
     end
 
     def queue!
-      if queued_pages.any?
-        PagesCore::AutopublishJob.set(wait_until: queued_pages.first.published_at).perform_later
-      end
+      return unless queued_pages.any?
+      PagesCore::AutopublishJob
+        .set(wait_until: queued_pages.first.published_at)
+        .perform_later
     end
 
     protected
 
     def queued_pages
-      Page.where(autopublish: true).order('published_at ASC')
+      Page.where(autopublish: true).order("published_at ASC")
     end
 
     def due_pages
-      queued_pages.where('published_at < ?', (Time.now + 2.minutes))
+      queued_pages.where("published_at < ?", (Time.now + 2.minutes))
     end
   end
 end

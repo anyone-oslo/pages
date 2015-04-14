@@ -7,12 +7,12 @@ module PagesCore
     include Rails.application.routes.url_helpers
 
     class << self
-      def to_html(string, options={})
-        self.new(string, options).to_html
+      def to_html(string, options = {})
+        new(string, options).to_html
       end
     end
 
-    def initialize(string, options={})
+    def initialize(string, options = {})
       @string = string
       @options = options
     end
@@ -22,44 +22,55 @@ module PagesCore
       if @options[:shorten] && string.length > @options[:shorten]
         string = string[0..@options[:shorten]] + "..."
       end
-      if @options[:append]
-        string += " #{@options[:append]}"
-      end
+      string += " #{@options[:append]}" if @options[:append]
       RedCloth.new(string).to_html.html_safe
     end
 
     private
 
+    def image_expression
+      /\[image:(\d+)([\s="\-\w]*)?\]/
+    end
+
+    def embed_image(id, size:, class_name:)
+      image = Image.find(id).localize(I18n.locale)
+      class_name = ["image", image_class_name(image), class_name].compact
+      content_tag(
+        :figure,
+        dynamic_image_tag(
+          image,
+          size: size,
+          crop: false,
+          upscale: false
+        ) + image_caption(image),
+        class: class_name
+      )
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+
     def parse_images(string)
-      image_expression = /\[image:(\d+)([\s="\-_\w\d]*)?\]/
       string.gsub(image_expression).each do |str|
         id = str.match(image_expression)[1]
         options = str.match(image_expression)[2]
 
-        size       = options.match(/size="(\d*x\d*)"/) ? $1 : "2000x2000"
-        class_name = options.match(/class="([\s\-_\w\d]+)"/) ? $1 : nil
+        size  =  if options.match(/size="(\d*x\d*)"/)
+                   Regexp.last_match(1)
+                 else
+                   "2000x2000"
+                 end
 
-        begin
-          image = Image.find(id).localize(I18n.locale)
-          class_name = ['image', image_class_name(image), class_name].compact
-          content_tag(:figure,
-            dynamic_image_tag(image,
-                              size: size,
-                              crop: false,
-                              upscale: false) +
-              image_caption(image),
-            class: class_name
-          )
-        rescue ActiveRecord::RecordNotFound
-          nil
-        end
+        class_name = if options.match(/class="([\s\-\w]+)"/)
+                       Regexp.last_match(1)
+                     end
+
+        embed_image(id, size: size, class_name: class_name)
       end
     end
 
     def image_caption(image)
-      if image.caption?
-        content_tag(:figcaption, image.caption)
-      end
+      return unless image.caption?
+      content_tag(:figcaption, image.caption)
     end
 
     def image_class_name(image)

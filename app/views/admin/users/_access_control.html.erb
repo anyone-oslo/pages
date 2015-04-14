@@ -7,7 +7,7 @@
       <%= f.check_box :activated %> The user account is activated<br />
     <% end %>
     <% Role.roles.each do |role| %>
-      <%= check_box_tag "#{model_name_from_record_or_class(f.object).param_key}[role_names][]", role.name, f.object.has_role?(role.name.to_sym) %>
+      <%= check_box_tag "#{model_name_from_record_or_class(f.object).param_key}[role_names][]", role.name, f.object.role?(role.name.to_sym) %>
       <%= role.description %><br>
     <% end %>
   </p>

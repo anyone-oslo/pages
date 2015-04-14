@@ -1,38 +1,43 @@
 # encoding: utf-8
 
-require 'find'
-require 'open-uri'
+require "find"
+require "open-uri"
 
 begin
-  require 'delayed/tasks'
+  require "delayed/tasks"
 rescue LoadError
   puts "Delayed job not installed"
 end
 
 namespace :pages do
-
   namespace :error_reports do
     desc "Show error reports"
     task list: :environment do
-      require 'term/ansicolor'
+      require "term/ansicolor"
       include Term::ANSIColor
 
       reports = []
-      reports_dir = Rails.root.join('log', 'error_reports')
-      if File.exists?(reports_dir)
-        files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
+      reports_dir = Rails.root.join("log", "error_reports")
+      if File.exist?(reports_dir)
+        files = Dir.entries(reports_dir).select { |f| f =~ /\.yml$/ }
         files.each do |f|
-          if report = YAML.load_file(File.join(reports_dir, f)).merge({sha1_hash: f.gsub(/\.yml$/, '')}) rescue nil
-            reports << report
-          end
+          report = begin
+                     YAML
+                       .load_file(File.join(reports_dir, f))
+                       .merge(sha1_hash: f.gsub(/\.yml$/, ""))
+                   rescue
+                     nil
+                   end
+          reports << report if report
         end
       end
       if reports.length > 1
         puts
-        reports = reports.sort{|a, b| a[:timestamp] <=> b[:timestamp]}
+        reports = reports.sort { |a, b| a[:timestamp] <=> b[:timestamp] }
         reports.each do |report|
           message = report[:message].strip.split("\n").first
-          print "#{report[:timestamp]} ", "#{report[:sha1_hash]}".blue.bold, "\n"
+          print "#{report[:timestamp]} "
+          print "#{report[:sha1_hash]}".blue.bold, "\n"
           print "#{report[:url]}".green.bold, "\n"
           print "#{report[:params].inspect}\n".yellow
           print "#{message}\n\n"
@@ -44,9 +49,9 @@ namespace :pages do
 
     desc "Clear all error reports"
     task clear: :environment do
-      reports_dir = Rails.root.join('log', 'error_reports')
-      if File.exists?(reports_dir)
-        files = Dir.entries(reports_dir).select{|f| f =~ /\.yml$/}
+      reports_dir = Rails.root.join("log", "error_reports")
+      if File.exist?(reports_dir)
+        files = Dir.entries(reports_dir).select { |f| f =~ /\.yml$/ }
         files.each do |f|
           `rm #{File.join(reports_dir, f)}`
         end
@@ -68,5 +73,4 @@ namespace :pages do
   desc "Perform routine maintenance"
   task maintenance: [:autopublish] do
   end
-
 end

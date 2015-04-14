@@ -4,27 +4,24 @@ class Localization < ActiveRecord::Base
   belongs_to :localizable, polymorphic: true
 
   class << self
-
     def locales
-      self.select('DISTINCT locale').map(&:locale)
+      select("DISTINCT locale").map(&:locale)
     end
 
     def names
-      self.select('DISTINCT name').map(&:name)
+      select("DISTINCT name").map(&:name)
     end
-
   end
 
   def to_s
-    self.value || ""
+    value || ""
   end
 
   def empty?
-    self.to_s.empty?
+    to_s.empty?
   end
 
   def translate(locale)
-    localizable.localizations.where(name: self.name, locale: locale).first
+    localizable.localizations.where(name: name, locale: locale).first
   end
-
 end

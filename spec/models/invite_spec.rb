@@ -1,8 +1,12 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Invite do
   it { is_expected.to belong_to(:user) }
-  it { is_expected.to have_many(:roles).dependent(:destroy).class_name('InviteRole') }
+  it do
+    is_expected.to have_many(:roles)
+      .dependent(:destroy)
+      .class_name("InviteRole")
+  end
 
   it { is_expected.to validate_presence_of(:user_id) }
   it { is_expected.to validate_presence_of(:email) }
@@ -13,7 +17,7 @@ describe Invite do
   it { is_expected.not_to allow_value("foo").for(:email) }
 
   describe "#create_user" do
-    let!(:invite) { create(:invite, role_names: ['users']) }
+    let!(:invite) { create(:invite, role_names: ["users"]) }
     let!(:user) { invite.create_user(attributes) }
     subject { user }
 
@@ -28,7 +32,7 @@ describe Invite do
       end
 
       it "should inherit the roles" do
-        expect(subject.role_names).to eq(['users'])
+        expect(subject.role_names).to eq(["users"])
       end
 
       it "should be activated" do
@@ -41,7 +45,7 @@ describe Invite do
     end
 
     context "when attributes are invalid" do
-      let(:attributes) { attributes_for(:user).merge(email: 'foo') }
+      let(:attributes) { attributes_for(:user).merge(email: "foo") }
 
       it { is_expected.to be_a(User) }
       it { is_expected.not_to be_valid }

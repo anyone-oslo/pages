@@ -4,44 +4,50 @@ class Tag < ActiveRecord::Base
   has_many :taggings
 
   class << self
-      def tags_and_suggestions_for(taggable, options={})
-        options = {
-          limit: 100
-        }.merge(options)
-        tags = taggable.tags
-        if tags.count < options[:limit]
-          suggestions = Tag.joins(:taggings)
-                           .select("`tags`.*, COUNT(`tags`.id) AS counter")
-                           .group("`tags`.id")
-                           .order("counter DESC")
-                           .limit(options[:limit])
-          suggestions = suggestions.reject{|t| tags.include?(t)}
-          if suggestions.any?
-            tags = tags.to_a + suggestions[0...(options[:limit] - tags.length)]
-          end
-        end
-        tags
+    def tags_and_suggestions_for(taggable, options = {})
+      options = default_options.merge(options)
+      tags = taggable.tags
+      if tags.count < options[:limit]
+        suggested = suggestions(options)
+        tags = tags.to_a + suggested[0...(options[:limit] - tags.length)]
       end
+      tags
+    end
 
     def parse(*tags)
       Array(tags).flatten
-        .map{ |tag| tag.kind_of?(Tag) ? tag.name : tag }
-        .map{ |tag| tag.split(",") }
+        .map { |tag| tag.is_a?(Tag) ? tag.name : tag }
+        .map { |tag| tag.split(",") }
         .flatten
-        .map{ |tag| tag.strip }
+        .map(&:strip)
+    end
+
+    private
+
+    def suggestions(tags, options = {})
+      Tag.joins(:taggings)
+        .select("`tags`.*, COUNT(`tags`.id) AS counter")
+        .group("`tags`.id")
+        .order("counter DESC")
+        .limit(options[:limit])
+        .reject { |t| tags.include?(t) }
+    end
+
+    def default_options
+      { limit: 100 }
     end
   end
 
   def tagged
-    @tagged ||= taggings.collect { |tagging| tagging.taggable }
+    @tagged ||= taggings.collect(&:taggable)
   end
 
   def on(taggable)
     taggings.create(taggable: taggable)
   end
 
-  def ==(comparison_object)
-    super || name == comparison_object.to_s
+  def ==(other)
+    super || name == other.to_s
   end
 
   def to_s

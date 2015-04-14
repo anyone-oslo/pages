@@ -14,12 +14,10 @@ module PagesCore
     protected
 
     def sweep_cache!
-      if PagesCore::CacheSweeper.enabled
-        if !self.cache_swept
-          PagesCore::SweepCacheJob.perform_later
-          self.cache_swept = true
-        end
-      end
+      return unless PagesCore::CacheSweeper.enabled
+      return if cache_swept
+      PagesCore::SweepCacheJob.perform_later
+      self.cache_swept = true
     end
   end
 end

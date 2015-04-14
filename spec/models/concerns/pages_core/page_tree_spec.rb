@@ -1,14 +1,18 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PagesCore::PageTree do
   let(:page) { create(:page) }
 
   subject { page }
 
-  it { is_expected.to belong_to(:parent).class_name('Page') }
-  it { is_expected.to have_many(:children).class_name('Page').dependent(:destroy) }
+  it { is_expected.to belong_to(:parent).class_name("Page") }
+  it do
+    is_expected.to have_many(:children)
+      .class_name("Page")
+      .dependent(:destroy)
+  end
 
   describe ".roots" do
     let!(:pages) { [page, create(:page)] }
@@ -66,9 +70,9 @@ describe PagesCore::PageTree do
 
     context "with parent" do
       let(:parent) { create(:page) }
-      let(:page) { create(:page, parent: parent).localize('en') }
+      let(:page) { create(:page, parent: parent).localize("en") }
       it { is_expected.to eq(parent) }
-      specify { expect(subject.locale).to eq('en') }
+      specify { expect(subject.locale).to eq("en") }
     end
   end
 
