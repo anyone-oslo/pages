@@ -25,7 +25,7 @@ module PagesCore
 
     def set_content_language_header
       return unless locale
-      headers["Content-Language"] = locale
+      headers["Content-Language"] = locale.to_s
     end
   end
 end
