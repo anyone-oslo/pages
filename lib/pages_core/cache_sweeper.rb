@@ -89,7 +89,7 @@ module PagesCore
         return [] unless File.exist?(cache_dir)
         swept_files = []
         Find.find(cache_dir + "/") do |path|
-          Find.prune if skip_path?(path)
+          Find.prune if skip_path?(cache_dir, path)
           file = path.gsub(Regexp.new("^#{cache_dir}"), "")
           config.patterns.each do |p|
             if file =~ p && File.exist?(path)
@@ -101,7 +101,7 @@ module PagesCore
         swept_files
       end
 
-      def skip_path?(path)
+      def skip_path?(cache_dir, path)
         path =~ Regexp.new("^#{cache_dir}/dynamic_image[s]?")
       end
     end
