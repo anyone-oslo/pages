@@ -234,7 +234,7 @@ class Page < ActiveRecord::Base
   private
 
   def ensure_page_images_contains_primary_image
-    return if !image_id || !image_id.changed?
+    return if !image_id? || !image_id_changed?
     page_image = page_images.where(image_id: image_id).first
     if page_image
       page_image.update(primary: true)
