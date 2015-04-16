@@ -1,5 +1,6 @@
 class PageImageSerializer < ActiveModel::Serializer
-  attributes :id, :image_id, :primary, :filename, :caption, :created_at
+  include DynamicImage::Helper
+  attributes :id, :image_id, :primary, :filename, :caption, :created_at, :url
 
   def name
     object.image.name
@@ -19,5 +20,14 @@ class PageImageSerializer < ActiveModel::Serializer
 
   def created_at
     object.image.created_at
+  end
+
+  def url
+    dynamic_image_path(
+      object.image,
+      size: "2000x2000",
+      crop: false,
+      upscale: false
+    )
   end
 end
