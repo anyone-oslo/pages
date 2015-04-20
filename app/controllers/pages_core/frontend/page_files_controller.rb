@@ -10,8 +10,8 @@ module PagesCore
           render(text: "304 Not Modified", status: 304) && return
         end
 
-        if @page_file.created_at?
-          response.headers["Last-Modified"] = @page_file.created_at.httpdate
+        if @page_file.updated_at?
+          response.headers["Last-Modified"] = @page_file.updated_at.httpdate
         end
 
         send_data(
@@ -25,13 +25,12 @@ module PagesCore
       private
 
       def modified?(page_file)
-        if_modified_since &&
-          page_file.created_at? &&
-          page_file.created_at > if_modified_since
+        return true unless if_modified_since && page_file.updated_at?
+        page_file.update_at > if_modified_since
       end
 
       def if_modified_since
-        return nil unless request.env["HTTP_IF_MODIFIED_SINCE"]
+        return nil if request.env["HTTP_IF_MODIFIED_SINCE"].blank?
         Time.rfc2822(request.env["HTTP_IF_MODIFIED_SINCE"])
       end
 
