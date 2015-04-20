@@ -6,7 +6,7 @@ module PagesCore
       before_action :find_page_file, only: [:show, :edit, :update, :destroy]
 
       def show
-        if modified?(@page_file)
+        if !modified?(@page_file)
           render(text: "304 Not Modified", status: 304) && return
         end
 
@@ -25,8 +25,8 @@ module PagesCore
       private
 
       def modified?(page_file)
-        !if_modified_since ||
-          !page_file.created_at? ||
+        if_modified_since &&
+          page_file.created_at? &&
           page_file.created_at > if_modified_since
       end
 
