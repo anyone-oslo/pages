@@ -26,7 +26,7 @@ class ErrorsController < ApplicationController
   end
 
   def find_error_report
-    report = YAML.load_file(report_path)
+    report = YAML.load_file(error_report_path)
     if report[:user_id]
       report[:user] = begin
                         User.find(report[:user_id])
