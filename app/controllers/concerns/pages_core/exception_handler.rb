@@ -100,10 +100,13 @@ module PagesCore
         session[:error_report] = @error_id = write_error(
           error_report(exception).to_yaml
         )
+        logger.error "Logged error #{@error_id}"
 
         render_error 500
       end
-    rescue
+    rescue => error
+      logger.fatal "Error in handle_exception"
+      log_error(error)
       render(template: "errors/500_critical", status: 500, layout: false)
       return
     end
