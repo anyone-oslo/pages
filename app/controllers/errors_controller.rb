@@ -7,7 +7,11 @@ class ErrorsController < ApplicationController
 
   def report
     return unless session[:error_report]
-    deliver_error_report(error_report, params[:email], params[:description])
+    deliver_error_report(
+      find_error_report,
+      params[:email],
+      params[:description]
+    )
     @error_id = session[:error_report]
   end
 
@@ -21,7 +25,7 @@ class ErrorsController < ApplicationController
     AdminMailer.error_report(report, from, description).deliver_now
   end
 
-  def error_report
+  def find_error_report
     report = YAML.load_file(report_path)
     if report[:user_id]
       report[:user] = begin
