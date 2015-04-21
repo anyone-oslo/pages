@@ -69,7 +69,7 @@ module PagesCore
         params: params,
         env: env_as_object,
         session: session.to_hash,
-        backtrace: filtered_backtrace,
+        backtrace: filtered_backtrace(exception),
         timestamp: Time.now,
         user_id: logged_in? ? current_user.id : nil
       }
