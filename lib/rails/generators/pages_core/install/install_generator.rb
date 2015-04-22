@@ -10,26 +10,17 @@ module PagesCore
         Rails.root.to_s.split("/").last
       end
 
-      def ask_with_default(question, default)
-        result = ask(question + " [#{default}]")
-        if result.blank?
-          default
-        else
-          result
-        end
-      end
-
       def read_configuration!
-        @app_name ||= ask_with_default("App name?", default_app_name)
-        @site_name ||= ask_with_default("Site name?", @app_name.humanize)
-        @domain_name ||= ask_with_default("Domain name?", "#{@app_name}.no")
+        @app_name ||= ask_with_fallback("App name?", default_app_name)
+        @site_name ||= ask_with_fallback("Site name?", @app_name.humanize)
+        @domain_name ||= ask_with_fallback("Domain name?", "#{@app_name}.no")
 
-        @default_sender ||= ask_with_default(
+        @default_sender ||= ask_with_fallback(
           "Default sender?",
           "no-reply@#{@domain_name}"
         )
 
-        @sphinx_port ||= ask_with_default("Sphinx port?", "3312")
+        @sphinx_port ||= ask_with_fallback("Sphinx port?", "3312")
       end
 
       def add_gem_source
@@ -127,6 +118,17 @@ module PagesCore
 
       def create_gitignore
         template "gitignore.erb", File.join(".gitignore")
+      end
+
+      private
+
+      def ask_with_fallback(question, default)
+        result = ask(question + " [#{default}]")
+        if result.blank?
+          default
+        else
+          result
+        end
       end
     end
   end
