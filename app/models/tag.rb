@@ -8,7 +8,7 @@ class Tag < ActiveRecord::Base
       options = default_options.merge(options)
       tags = taggable.tags
       if tags.count < options[:limit]
-        suggested = suggestions(options)
+        suggested = suggestions(tags, options)
         tags = tags.to_a + suggested[0...(options[:limit] - tags.length)]
       end
       tags

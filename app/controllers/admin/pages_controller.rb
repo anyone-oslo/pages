@@ -123,7 +123,7 @@ module Admin
         :template, :user_id, :status, :content_order,
         :feed_enabled, :published_at, :redirect_to, :comments_allowed,
         :image_link, :news_page, :unique_name, :pinned,
-        :parent_page_id
+        :parent_page_id, :serialized_tags
       ]
     end
 
