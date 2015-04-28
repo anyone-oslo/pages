@@ -52,7 +52,7 @@ class PageImage < ActiveRecord::Base
   end
 
   def image
-    super.localize(locale)
+    super.localize!(locale)
   end
 
   def to_json(options = {})
