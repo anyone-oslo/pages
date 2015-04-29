@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Tag < ActiveRecord::Base
+  include PagesCore::HumanizableParam
   has_many :taggings
 
   class << self
@@ -48,6 +49,10 @@ class Tag < ActiveRecord::Base
 
   def ==(other)
     super || name == other.to_s
+  end
+
+  def to_param
+    humanized_param(name)
   end
 
   def to_s
