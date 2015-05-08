@@ -36,8 +36,8 @@ module Admin
 
     def image_params
       params.require(:image).permit(
-        :name, :caption, :description, :file, :crop_start_x, :crop_start_y,
-        :crop_height, :crop_width, :locale
+        :name, :alternative, :caption, :description, :file,
+        :crop_start_x, :crop_start_y, :crop_height, :crop_width, :locale
       )
     end
 

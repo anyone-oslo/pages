@@ -1,9 +1,14 @@
 class PageImageSerializer < ActiveModel::Serializer
   include DynamicImage::Helper
-  attributes :id, :image_id, :primary, :filename, :caption, :created_at, :url
+  attributes :id, :image_id, :primary, :filename
+  attributes :alternative, :caption, :created_at, :url
 
   def name
     object.image.name
+  end
+
+  def alternative
+    object.image.alternative
   end
 
   def caption

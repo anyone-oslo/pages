@@ -2,6 +2,7 @@ class Image < ActiveRecord::Base
   include DynamicImage::Model
 
   localizable do
+    attribute :alternative
     attribute :caption
   end
 

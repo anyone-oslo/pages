@@ -95,7 +95,8 @@ module Admin
       params.require(:page_image).permit(
         :image, :primary,
         image_attributes: [
-          :id, :caption, :crop_start_x, :crop_start_y, :crop_width, :crop_height
+          :id, :alternative, :caption,
+          :crop_start_x, :crop_start_y, :crop_width, :crop_height
         ]
       )
     end
@@ -103,7 +104,7 @@ module Admin
     def page_images_params
       params.permit(
         page_images: [:image, :primary, {
-          image_attributes: [:caption]
+          image_attributes: [:alternative, :caption]
         }]
       )[:page_images]
     end
