@@ -3,7 +3,11 @@
 %>
 <div class="published_date">
   <%= labelled_field (
-      f.date_select(:published_at, start_year: (Time.now.year - 20)) +
+      f.date_select(
+        :published_at,
+        start_year: (Time.now.year - 20),
+        end_year: (Time.now.year + 5)
+      ) +
       '<br />'.html_safe +
       f.time_select(:published_at)
     ),
