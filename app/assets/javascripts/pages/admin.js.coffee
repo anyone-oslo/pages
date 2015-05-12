@@ -5,6 +5,8 @@
 #= require jquery.cookie
 #= require jquery.Jcrop
 #= require underscore
+#= require react
+#= require react_ujs
 
 # Vendored assets
 #= require jquery.dimscreen
@@ -12,6 +14,7 @@
 
 #= require_self
 #= require pages/login_form
+#= require pages/admin/components
 #= require pages/admin/controllers/base
 #= require pages/admin/controllers/pages_controller
 #= require pages/admin/controllers/users_controller
