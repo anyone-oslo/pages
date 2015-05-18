@@ -1,16 +1,30 @@
   <div class="page_images">
+
     <div class="editor">
       <div class="controls">
         <div class="nav">
-          <%= link_to "Previous", '#', class: :previous %>
-          <%= link_to "Next",     '#', class: :next %>
           <%= link_to "Close",    '#', class: :close %>
         </div>
         <h4>Image Editor</h4>
         <%= fields_for PageImage.new do |pi| %>
           <%= pi.fields_for :image_attributes, Image.new do |i| %>
             <%= i.hidden_field :id, class: 'image_id' %>
-            <%= i.text_field :caption, class: 'caption', placeholder: 'Write your caption/byline' %>
+            <fieldset>
+              <label>
+                Alternative text
+              </label>
+              <%= i.text_field(:alternative,
+                               class: 'alternative',
+                               placeholder: 'Alternative text') %>
+            </fieldset>
+            <fieldset class="caption-fieldset">
+              <label>
+                Caption
+              </label>
+              <%= i.text_field(:caption,
+                               class: 'caption',
+                               placeholder: 'Write your caption/byline') %>
+            </fieldset>
             <%= text_field_tag 'embed', '', class: 'embed' %>
             <%= pi.check_box :primary %><label>Primary</label>
             <%= i.hidden_field :crop_start_x, class: 'crop_start_x' %>
@@ -18,13 +32,20 @@
             <%= i.hidden_field :crop_width, class: 'crop_width' %>
             <%= i.hidden_field :crop_height, class: 'crop_height' %>
           <% end %>
+
           <button class="save">
             Save
           </button>
+
           <%= link_to "Delete image", '#', class: :delete %>
         <% end %>
       </div>
-      <div class="edit_image"></div>
+      <div class="edit-image-container">
+        <%= link_to "", '#', class: :previous %>
+        <%= link_to "",     '#', class: :next %>
+        <div class="edit-image">
+        </div>
+      </div>
     </div>
 
     <div class="uploadButton">

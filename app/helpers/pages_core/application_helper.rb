@@ -4,8 +4,8 @@
 # in the application.
 module PagesCore
   module ApplicationHelper
-    include DynamicImage::Helper
     include PagesCore::HeadTagsHelper
+    include PagesCore::ImagesHelper
 
     def page_link(page, options = {})
       link_locale = options[:locale] || locale

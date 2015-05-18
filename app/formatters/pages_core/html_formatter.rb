@@ -3,7 +3,7 @@
 module PagesCore
   class HtmlFormatter
     include ActionView::Helpers::AssetTagHelper
-    include DynamicImage::Helper
+    include PagesCore::ImagesHelper
     include Rails.application.routes.url_helpers
 
     class << self

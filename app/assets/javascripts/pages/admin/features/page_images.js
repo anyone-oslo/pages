@@ -67,6 +67,7 @@
           // Show the editor
           $('.page_images .uploadButton').hide();
           $editor.find('.caption').val(imageData.image.caption);
+          $editor.find('.alternative').val(imageData.image.alternative);
           $editor.find('.embed').val("[image:" + imageData.image.id + "]");
           $editor.find('.image_id').val(imageData.image.id);
 
@@ -97,7 +98,7 @@
           ];
 
           // Load the image
-          $editor.find('.edit_image').html(
+          $editor.find('.edit-image').html(
             '<img src="' +
             imageURL + '" width="' + resizedSize[0] +
             '" height="' + resizedSize[1] + '" />'
@@ -140,7 +141,7 @@
             $editor.find('.crop_height').val(size[1]);
           };
 
-          $editor.find('.edit_image img').Jcrop({
+          $editor.find('.edit-image img').Jcrop({
             setSelect: [
               Math.floor(cropStart[0] * scaleFactor),
               Math.floor(cropStart[1] * scaleFactor),
@@ -247,6 +248,7 @@
           'page_image[primary]': $editor.find('#page_image_primary').is(':checked'),
           'page_image[image_attributes][id]': $editor.find('.image_id').val(),
           'page_image[image_attributes][caption]': $editor.find('.caption').val(),
+          'page_image[image_attributes][alternative]': $editor.find('.alternative').val(),
           'page_image[image_attributes][crop_start_x]': $editor.find('.crop_start_x').val(),
           'page_image[image_attributes][crop_start_y]': $editor.find('.crop_start_y').val(),
           'page_image[image_attributes][crop_width]': $editor.find('.crop_width').val(),
