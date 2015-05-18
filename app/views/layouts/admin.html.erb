@@ -1,107 +1,79 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Pages<% if @page_title %> : <%= @page_title %><% end %></title>
-  <link rel="shortcut icon" href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
-  <link rel="icon"          href="<%= asset_path 'pages/favicon.gif' %>" type="image/gif" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>
+      Pages
+      <% if @page_title %>
+        : <%= @page_title %>
+      <% end %>
+    </title>
 
-  <%= stylesheet_link_tag "pages/admin" %>
-  <%= stylesheet_link_tag "pages/admin/print", media: 'print' %>
-  <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
-    <%= stylesheet_link_tag "admin" %>
-  <% end %>
+    <link rel="shortcut icon"
+          href="<%= asset_path 'pages/favicon.gif' %>"
+          type="image/gif" />
+    <link rel="icon"
+          href="<%= asset_path 'pages/favicon.gif' %>"
+          type="image/gif" />
 
-  <%= javascript_include_tag "pages/admin" %>
-  <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
-    <%= javascript_include_tag "admin" %>
-  <% end %>
-  <%= csrf_meta_tag %>
+    <%= stylesheet_link_tag "pages/admin" %>
+    <%= stylesheet_link_tag "pages/admin/print", media: 'print' %>
 
-</head>
-<body class="<%= body_classes %>"
-      data-controller="<%= controller.class.to_s %>"
-      data-action="<%= controller.action_name %>"
-      data-locale="<%= @locale %>"
->
+    <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
+      <%= stylesheet_link_tag "admin" %>
+    <% end %>
 
-  <%# Header %>
-  <div id="header">
-    <div id="logo"><%= link_to image_tag("pages/admin/icon.png"), '/admin' %></div>
-    <div id="site-name"><h1><%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %></h1></div>
-    <% if logged_in? -%>
-      <div class="user">
-        Hello, <%= link_to(current_user.name, admin_user_url(current_user)) %>
-        <%= link_separator %>
-        <%= logout_link "Log out", login_url: login_admin_users_path %>
-      </div>
-    <% end -%>
-    <div class="tabs">
-      <% if logged_in? %>
-        <%= header_tabs(:pages) %>
-        <%= header_tabs(:pages_plugins) %>
-        <%= header_tabs(:custom) %>
-        <%= header_tabs(:account) %>
-      <% end -%>
-    </div>
-  </div>
+    <%= javascript_include_tag "pages/admin" %>
+    <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
+      <%= javascript_include_tag "admin" %>
+    <% end %>
 
-  <%# Error and notice flashes %>
-  <% [:error, :notice].select{|f| flash[f]}.each do |flash_level| %>
-    <div id="flash-<%= flash_level %>"><%= flash[flash_level] %></div>
-  <% end %>
+    <%= csrf_meta_tag %>
+  </head>
 
-  <%# Sidebar %>
-  <% if content_for?(:sidebar) %>
-    <div id="sidebar"><%= content_for(:sidebar) %></div>
-  <% end %>
+  <body class="<%= body_classes %>"
+        data-controller="<%= controller.class.to_s %>"
+        data-action="<%= controller.action_name %>"
+        data-locale="<%= @locale %>">
 
-  <%# Main content area %>
-  <div id="main">
+    <%= render partial: "layouts/admin/header" %>
 
-    <%# Page description and content tabs area %>
-    <% if @page_description || @content_tabs %>
-      <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
-        <% if @page_description_links -%>
-        <div class="links"><%= @page_description_links.html_safe %></div>
-        <% end %>
-        <h3><%= (@page_description || @page_title).html_safe %></h3>
-        <% if @content_tabs %>
-          <ul id="content-tabs">
-            <% @content_tabs.map do |t| %>
-              <li id="content-tab-link-<%= t[:key] %>" data-tab-name="<%= t[:key] %>">
-                <% if t[:options][:disabled] == true %>
-                  <%= t[:name] %>
-                <% else %>
-                  <%= link_to(t[:name], anchor: "#{t[:key]}") %>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-        <% end %>
+    <% if content_for?(:sidebar) %>
+      <div id="sidebar">
+        <%= content_for(:sidebar) %>
       </div>
     <% end %>
 
-    <%# Template output %>
-    <%= yield %>
-  </div>
+    <div id="main">
+      <% if @page_description || @content_tabs %>
+        <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+          <% if @page_description_links -%>
+            <div class="links">
+              <%= @page_description_links.html_safe %>
+            </div>
+          <% end %>
+          <h3>
+            <%= (@page_description || @page_title).html_safe %>
+          </h3>
+          <% if @content_tabs %>
+            <ul id="content-tabs">
+              <% @content_tabs.map do |t| %>
+                <li id="content-tab-link-<%= t[:key] %>" data-tab-name="<%= t[:key] %>">
+                  <% if t[:options][:disabled] == true %>
+                    <%= t[:name] %>
+                  <% else %>
+                    <%= link_to(t[:name], anchor: "#{t[:key]}") %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
 
-  <%# multiple domain tracking for usage statistics %>
-  <script type="text/javascript">
+      <%= yield %>
+    </div>
 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-5468672-21']);
-    _gaq.push(['_setDomainName', 'none']);
-    _gaq.push(['_setAllowLinker', true]);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-  </script>
-
-</body>
+    <%= render partial: "layouts/admin/analytics" %>
+  </body>
 </html>
