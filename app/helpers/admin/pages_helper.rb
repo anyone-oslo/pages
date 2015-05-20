@@ -2,6 +2,31 @@
 
 module Admin
   module PagesHelper
+    def page_block_field(form, block_name, block_options)
+      if block_options[:size] == :field
+        labelled_field(
+          form.text_field(
+            block_name,
+            class:       ['text', block_options[:class]].join(" "),
+            placeholder: block_options[:placeholder]
+          ),
+          block_options[:title],
+          errors:      form.object.errors[block_name],
+          description: block_options[:description]
+        )
+      else
+        labelled_field form.text_area(
+          block_name,
+          rows:        (block_options[:size] == :large ? 15 : 5),
+          class:       ['rich', block_options[:class]].join(" "),
+          placeholder: block_options[:placeholder]
+        ),
+          block_options[:title],
+          errors:      form.object.errors[block_name],
+          description: block_options[:description]
+      end
+    end
+
     def available_templates_for_select
       PagesCore::Templates.names.collect do |template|
         if template == "index"
