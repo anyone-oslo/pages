@@ -13,6 +13,7 @@ class Page < ActiveRecord::Base
   has_and_belongs_to_many :categories, join_table: "pages_categories"
 
   belongs_to_image :image
+  belongs_to_image :meta_image, class_name: "Image"
 
   has_many :page_images, -> { order("position") }
 

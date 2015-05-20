@@ -4,7 +4,8 @@ module Admin
   class PagesController < Admin::AdminController
     before_action :require_news_pages, only: [:news]
     before_action :find_page, only: [
-      :show, :edit, :preview, :update, :destroy, :reorder
+      :show, :edit, :preview, :update, :destroy, :reorder,
+      :delete_meta_image
     ]
     before_action :find_categories
     before_action :find_news_pages, only: [:news, :new_news]
@@ -105,6 +106,12 @@ module Admin
       redirect_to admin_pages_url(@locale)
     end
 
+    def delete_meta_image
+      @page.meta_image.destroy
+      flash[:notice] = "The image was deleted"
+      redirect_to edit_admin_page_url(@locale, @page, anchor: "metadata")
+    end
+
     private
 
     def build_page(locale)
@@ -123,7 +130,7 @@ module Admin
         :template, :user_id, :status, :content_order,
         :feed_enabled, :published_at, :redirect_to, :comments_allowed,
         :image_link, :news_page, :unique_name, :pinned,
-        :parent_page_id, :serialized_tags
+        :parent_page_id, :serialized_tags, :meta_image
       ]
     end
 

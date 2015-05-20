@@ -30,7 +30,8 @@
                id: 'page-form',
                method: :put,
                multipart: true
-             }
+             },
+             builder: PagesCore::FormBuilder
 ) do |f| %>
 
   <div class="hiddenOptions">

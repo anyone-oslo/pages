@@ -137,6 +137,7 @@ module PagesCore
         @meta_image = args.first
       else
         image   = @meta_image
+        image ||= @page.try(&:meta_image)
         image ||= @page.try(&:image)
         image ||= default_meta_image
         if image.is_a?(Image)
