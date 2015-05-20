@@ -13,6 +13,7 @@ class Page < ActiveRecord::Base
   has_and_belongs_to_many :categories, join_table: "pages_categories"
 
   belongs_to_image :image
+  belongs_to_image :meta_image, class_name: "Image"
 
   has_many :page_images, -> { order("position") }
 
@@ -37,6 +38,10 @@ class Page < ActiveRecord::Base
     attribute :excerpt
     attribute :headline
     attribute :boxout
+
+    attribute :meta_description
+    attribute :open_graph_title
+    attribute :open_graph_description
 
     dictionary -> { PagesCore::Templates::TemplateConfiguration.all_blocks }
   end

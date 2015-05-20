@@ -52,6 +52,14 @@ module PagesCore
         blocks
       end
 
+      def metadata_blocks
+        blocks = PagesCore::Templates.metadata_block_names
+        if block_given?
+          blocks.each { |block_name| yield block_name, block(block_name) }
+        end
+        blocks
+      end
+
       # Returns a list of all configured blocks
       def all_blocks
         (
@@ -119,6 +127,14 @@ module PagesCore
       end
       alias_method :config, :configuration
 
+      def metadata_block_names
+        [
+          :meta_description,
+          :open_graph_title,
+          :open_graph_description
+        ]
+      end
+
       private
 
       def default_block_configuration(default)
@@ -149,6 +165,24 @@ module PagesCore
             "Boxout",
             description: "Part of the page, usually background info or " \
               "facts related to the article."
+          )
+          block.meta_description(
+            "Description",
+            size: :small,
+            description: "Description for search engines. Will fall back to " \
+              "Standfirst if empty. Should be between 150-160 characters."
+          )
+          block.open_graph_title(
+            "Open Graph Title",
+            size: :field,
+            description: "Page title for Facebook sharing. Will fall back to " \
+              "the document title."
+          )
+          block.open_graph_description(
+            "Open Graph Description",
+            size: :small,
+            description: "Description for Facebook sharing. Will fall back " \
+              "to Description or Standfirst if empty."
           )
         end
       end

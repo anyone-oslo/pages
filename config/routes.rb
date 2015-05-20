@@ -76,6 +76,10 @@ Rails.application.routes.draw do
           get "reorder_pages"
         end
 
+        member do
+          delete "delete_meta_image"
+        end
+
         get "new/:parent", action: "new"
 
         # Page Images

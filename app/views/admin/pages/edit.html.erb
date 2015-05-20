@@ -30,7 +30,8 @@
                id: 'page-form',
                method: :put,
                multipart: true
-             }
+             },
+             builder: PagesCore::FormBuilder
 ) do |f| %>
 
   <div class="hiddenOptions">
@@ -90,6 +91,11 @@
     <% end %>
   <% end %>
 
+
+  <%# #### METADATA #### %>
+  <%= content_tab "Metadata" do %>
+    <%= render partial: 'edit_metadata', locals: {f: f} %>
+  <% end %>
 
   <div class="buttons">
     <button type="button" id="previewButton" data-url="<%= preview_page_url(@page.locale, @page) %>">

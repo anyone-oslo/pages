@@ -115,6 +115,7 @@ module PagesCore
         @meta_description = args.first
       else
         description = @meta_description
+        description ||= @page.meta_description if @page.try(&:meta_description?)
         description ||= @page.excerpt if @page && !@page.excerpt.empty?
         strip_tags(description)
       end
@@ -136,6 +137,7 @@ module PagesCore
         @meta_image = args.first
       else
         image   = @meta_image
+        image ||= @page.try(&:meta_image)
         image ||= @page.try(&:image)
         image ||= default_meta_image
         if image.is_a?(Image)
@@ -214,13 +216,29 @@ module PagesCore
 
     private
 
+    def default_open_graph_title
+      if @page.try(:open_graph_title?)
+        @page.open_graph_title
+      else
+        document_title
+      end
+    end
+
+    def default_open_graph_description
+      if @page.try(:open_graph_description?)
+        @page.open_graph_description
+      elsif meta_description?
+        meta_description
+      end
+    end
+
     def default_open_graph_properties
       {
         type:        "website",
         site_name:   PagesCore.config(:site_name),
-        title:       document_title,
+        title:       default_open_graph_title,
         image:       (meta_image if meta_image?),
-        description: (meta_description if meta_description?),
+        description: default_open_graph_description,
         url:         request.url
       }
     end

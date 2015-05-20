@@ -1,26 +1,5 @@
 <% @page.template_config.enabled_blocks do |block_name, block_options| %>
-  <% if block_options[:size] == :field %>
-    <%= labelled_field f.text_field(
-        block_name,
-        class:       ['text', block_options[:class]].join(" "),
-        placeholder: block_options[:placeholder]
-      ),
-      block_options[:title],
-      errors:      @page.errors[block_name],
-      description: block_options[:description]
-    %>
-  <% else %>
-    <%= labelled_field f.text_area(
-        block_name,
-        rows:        (block_options[:size] == :large ? 15 : 5),
-        class:       ['rich', block_options[:class]].join(" "),
-        placeholder: block_options[:placeholder]
-      ),
-      block_options[:title],
-      errors:      @page.errors[block_name],
-      description: block_options[:description]
-    %>
-  <% end %>
+  <%= page_block_field(f, block_name, block_options) %>
 <% end %>
 
 <% if !@page.new_record? && @page.template_config.value(:tags) %>
