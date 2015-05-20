@@ -162,7 +162,6 @@ module PagesCore
         @meta_keywords = Array(args.first).join(" ")
       else
         keywords = @meta_keywords
-        keywords ||= @page.meta_keywords if @page.try(&:meta_keywords?)
         keywords ||= @page.tag_list if @page && @page.tags.any?
         strip_tags(keywords)
       end

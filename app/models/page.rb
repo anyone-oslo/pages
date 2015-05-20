@@ -39,7 +39,6 @@ class Page < ActiveRecord::Base
     attribute :headline
     attribute :boxout
 
-    attribute :meta_keywords
     attribute :meta_description
     attribute :open_graph_title
     attribute :open_graph_description

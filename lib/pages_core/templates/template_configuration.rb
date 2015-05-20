@@ -129,7 +129,6 @@ module PagesCore
 
       def metadata_block_names
         [
-          :meta_keywords,
           :meta_description,
           :open_graph_title,
           :open_graph_description
@@ -166,12 +165,6 @@ module PagesCore
             "Boxout",
             description: "Part of the page, usually background info or " \
               "facts related to the article."
-          )
-          block.meta_keywords(
-            "Keywords",
-            size: :field,
-            description: "Comma separated keywords for search engines. " \
-              "Will fall back to page tags."
           )
           block.meta_description(
             "Description",
