@@ -80,7 +80,7 @@ module PagesCore
 
         @pages = Page.search(
           normalize_search_query(@search_query),
-          search_options(@search_category_id)
+          search_options(category_id: @search_category_id)
         )
         @pages.each { |p| p.localize!(locale) }
         @pages
@@ -268,7 +268,7 @@ module PagesCore
           }
         }
         unless category_id.blank?
-          search_options[:with][:category_ids] = category_id
+          options[:with][:category_ids] = category_id
         end
         options
       end
