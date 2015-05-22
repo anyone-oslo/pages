@@ -9,6 +9,7 @@ module PagesCore
 
       caches_page :index if PagesCore.config(:page_cache)
 
+      before_action :disable_xss_protection, only: [:preview]
       before_action :load_root_pages
       before_action :find_page, only: [:show, :preview, :add_comment]
       after_action :cache_page_request, only: [:show]
@@ -110,6 +111,13 @@ module PagesCore
           .published
           .limit(20)
           .localized(locale)
+      end
+
+      def disable_xss_protection
+        # Disabling this is probably not a good idea,
+        # but the header causes Chrome to choke when being
+        # redirected back after a submit and the page contains an iframe.
+        response.headers['X-XSS-Protection'] = "0"
       end
 
       def preview?
