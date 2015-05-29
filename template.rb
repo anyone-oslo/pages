@@ -8,7 +8,7 @@ end
 
 route "root to: 'pages#index'"
 
-run "echo '2.1.0' > .ruby-version"
+run "echo '2.2.2' > .ruby-version"
 
 run "bundle install"
 
