@@ -9,9 +9,6 @@ module PagesCore
       def setup_gems
         gem_group :development do
           gem "spring-commands-rspec"
-          gem "guard"
-          gem "guard-spring"
-          gem "guard-rspec"
         end
         gem_group :test, :development do
           gem "rspec-rails"
@@ -21,10 +18,6 @@ module PagesCore
           gem "timecop"
           gem "factory_girl_rails"
         end
-      end
-
-      def setup_guard
-        template "Guardfile", File.join("Guardfile")
       end
 
       def setup_rspec
