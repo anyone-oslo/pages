@@ -74,6 +74,24 @@ module PagesCore
       )
     end
 
+    def labelled_country_select(
+      attribute,
+      label_text = nil,
+      priority_or_options = {},
+      options = {},
+      html_options = {}
+    )
+      label_text, options = parse_label_text_and_options(
+        label_text,
+        priority_or_options.is_a?(Hash) ? priority_or_options : options
+      )
+      field_with_label(
+        attribute,
+        country_select(attribute, priority_or_options, options, html_options),
+        label_text
+      )
+    end
+
     def labelled_date_select(attribute, label_text = nil, options = {})
       label_text, options = parse_label_text_and_options(label_text, options)
       field_with_label(
