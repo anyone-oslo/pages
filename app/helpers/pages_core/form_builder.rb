@@ -81,10 +81,17 @@ module PagesCore
       options = {},
       html_options = {}
     )
-      label_text, options = parse_label_text_and_options(
-        label_text,
-        priority_or_options.is_a?(Hash) ? priority_or_options : options
-      )
+      if priority_or_options.is_a?(Hash)
+        label_text, priority_or_options = parse_label_text_and_options(
+          label_text,
+          priority_or_options
+        )
+      else
+        label_text, options = parse_label_text_and_options(
+          label_text,
+          options
+        )
+      end
       field_with_label(
         attribute,
         country_select(attribute, priority_or_options, options, html_options),
