@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
   end
 
   def mark_active!
-    return if last_login_at && last_login_at < 10.minutes.ago
+    return if last_login_at && last_login_at > 10.minutes.ago
     update_columns(last_login_at: Time.now)
   end
 
