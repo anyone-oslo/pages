@@ -9,7 +9,7 @@ module PagesCore
         tags = options[:tags] || Tag.tags_and_suggestions_for(item, limit: 20)
         tagged = options[:tagged] || item.tags
         options[:placeholder] ||= "Add tag..."
-        content_tag(:div, class: "tag_editor clearfix") do
+        content_tag(:div, class: "tag-editor clearfix") do
           form_helper.hidden_field(field_name, class: "serialized_tags") +
             tag_check_boxes(tags, tagged) +
             add_tag_button(options)
@@ -33,12 +33,12 @@ module PagesCore
       end
 
       def add_tag_button(options = {})
-        content_tag(:div, class: "add_tag_form") do
+        content_tag(:div, class: "add-tag-form") do
           text_field_tag(
             "add_tag",
             options[:placeholder],
-            class: "add_tag"
-          ) + content_tag(:button, "Add", class: "add_tag_button")
+            class: "add-tag"
+          ) + content_tag(:button, "Add", class: "add-tag-button")
         end
       end
     end

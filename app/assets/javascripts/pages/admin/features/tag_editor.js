@@ -12,38 +12,38 @@
       tagEditor.serializeField = $(tagEditor.container).find('.serialized_tags').get(0);
       tagEditor.findTags(true);
 
-      tagEditor.inputField = $(tagEditor.container).find('.add_tag').get(0);
-      $(tagEditor.container).find('.add_tag_button').click(function(){
+      tagEditor.inputField = $(tagEditor.container).find('.add-tag').get(0);
+      $(tagEditor.container).find('.add-tag-button').click(function(){
         tagEditor.addTag();
-        $(tagEditor.container).find('.add_tag').blur();
+        $(tagEditor.container).find('.add-tag').blur();
         return false;
       });
-      $(tagEditor.container).find('.add_tag').keydown(function(event){
+      $(tagEditor.container).find('.add-tag').keydown(function(event){
         if(event.which == 13){
           tagEditor.addTag();
           return false;
         }
       });
 
-      $(tagEditor.container).find('.add_tag').each(function(){
+      $(tagEditor.container).find('.add-tag').each(function(){
         var field = this;
         field.exampleText = $(field).val();
         $(field).addClass('example');
         $(field).focus(function(event){
-          $(tagEditor.container).find('.add_tag_button').fadeIn('fast');
+          $(tagEditor.container).find('.add-tag-button').fadeIn('fast');
           $(field).removeClass('example');
           if($(field).val() == field.exampleText){
             $(field).val('');
           }
         });
         $(field).blur(function(event){
-          $(tagEditor.container).find('.add_tag_button').fadeOut('fast');
+          $(tagEditor.container).find('.add-tag-button').fadeOut('fast');
           if(!$(field).val() || $(field).val() == field.exampleText){
             $(field).addClass('example').val(field.exampleText);
           }
         });
       });
-      $(tagEditor.container).find('.add_tag_button').hide();
+      $(tagEditor.container).find('.add-tag-button').hide();
     },
 
     addTag: function(){
@@ -145,13 +145,13 @@
         tagNames[tagNames.length] = '"' + this.name.replace('"', '\\"') + '"';
       })
       $(this.serializeField).val('['+tagNames.join(', ')+']');
-      $(this.container).find('.add_tag').attr('disabled', false);
+      $(this.container).find('.add-tag').attr('disabled', false);
     }
   });
 
   // Apply the tag editor to each instance
   $(function(){
-    $('.tag_editor').each(function(){
+    $('.tag-editor').each(function(){
       this.tagEditor = new TagEditor(this);
     });
   });
