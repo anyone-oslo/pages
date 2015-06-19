@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150401131300) do
+ActiveRecord::Schema.define(version: 20150520174300) do
 
   create_table "binaries", force: :cascade do |t|
     t.string "sha1_hash", limit: 255
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20150401131300) do
     t.integer  "comments_count",   limit: 4,   default: 0,     null: false
     t.datetime "last_comment_at"
     t.boolean  "pinned",           limit: 1,   default: false, null: false
+    t.integer  "meta_image_id",    limit: 4
   end
 
   add_index "pages", ["parent_page_id"], name: "index_pages_on_parent_page_id", using: :btree
