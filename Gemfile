@@ -9,7 +9,7 @@ gem 'rdoc', '3.12'
 
 # This is explicitely held back for pages_console,
 # the 0.2.x series are the last compatible with Rails 2.3.
-gem 'mysql2', '~> 0.2.18'
+gem 'mysql2', '~> 0.2.24'
 
 gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano', '~> 2.15.4'
@@ -34,7 +34,7 @@ gem 'sprockets', '2.12.3'
 gem 'sprockets-plugin'
 gem 'sprockets-helpers', '0.7.2' # Hold this back until the fix for media: on stylesheet_link_tag is released
 gem 'sass', '3.2.19'
-gem 'json', '1.5.1'
+gem 'json', '~> 1.8.3'
 gem 'coffee-script', '2.2.0'
 gem 'coffee-script-source', '1.2.0'
 #gem 'yui-compressor', :require => 'yui/compressor'
