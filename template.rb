@@ -1,9 +1,7 @@
-add_source "http://gems.manualdesign.no/"
-
 gem "pages_core", git: "git@github.com:manualdesign/pages.git", branch: "master"
 
 gem_group :development do
-  gem "manual_server", ">= 0.1.5"
+  gem "manual_server", git: "git@github.com:manualdesign/manual_server.git"
 end
 
 route "root to: 'pages#index'"
