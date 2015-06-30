@@ -191,7 +191,9 @@ class Page < ActiveRecord::Base
     path = redirect_to.dup
     if path.start_with? "/"
       params.each do |key, value|
-        fail "redirect_url param must be a string" unless value.is_a?(String)
+        unless value.is_a?(String) || value.is_a?(Symbol)
+          fail "redirect_url param must be a string or a symbol"
+        end
         path.gsub!("/:#{key}", "/#{value}")
       end
     end
