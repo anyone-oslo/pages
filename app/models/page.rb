@@ -95,6 +95,18 @@ class Page < ActiveRecord::Base
         4 => "Deleted"
       }
     end
+
+    def order_by_tags(tags)
+      joins(
+        "LEFT JOIN taggings ON taggings.taggable_id = pages.id AND " \
+          "taggable_type = \"Page\"",
+        "LEFT JOIN tags ON tags.id = taggings.tag_id AND tags.id IN (" +
+          tags.map(&:id).join(",") +
+          ")"
+      )
+        .group("pages.id, localizations.id")
+        .reorder("COUNT(tags.id) DESC, position ASC")
+    end
   end
 
   def comments_closed_after_time?
