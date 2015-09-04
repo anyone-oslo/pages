@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150520174300) do
+ActiveRecord::Schema.define(version: 20150904164200) do
 
   create_table "binaries", force: :cascade do |t|
     t.string "sha1_hash", limit: 255
@@ -196,7 +196,8 @@ ActiveRecord::Schema.define(version: 20150520174300) do
   add_index "taggings", ["taggable_type", "taggable_id"], name: "by_taggable", using: :btree
 
   create_table "tags", force: :cascade do |t|
-    t.string "name", limit: 255
+    t.string  "name",   limit: 255
+    t.boolean "pinned", limit: 1,   default: false, null: false
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree

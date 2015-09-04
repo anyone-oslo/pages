@@ -4,10 +4,13 @@ class Tag < ActiveRecord::Base
   include PagesCore::HumanizableParam
   has_many :taggings
 
+  scope :pinned, -> { where(pinned: true) }
+  scope :sorted, -> { order("pinned DESC, name ASC") }
+
   class << self
     def tags_and_suggestions_for(taggable, options = {})
       options = default_options.merge(options)
-      tags = taggable.tags
+      tags = (taggable.tags.sorted + pinned.sorted).uniq
       if tags.count < options[:limit]
         suggested = suggestions(tags, options)
         tags = tags.to_a + suggested[0...(options[:limit] - tags.length)]
