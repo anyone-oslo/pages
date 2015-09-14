@@ -26,7 +26,7 @@ module PagesCore
 
       def modified?(page_file)
         return true unless if_modified_since && page_file.updated_at?
-        page_file.update_at > if_modified_since
+        page_file.updated_at > if_modified_since
       end
 
       def if_modified_since
