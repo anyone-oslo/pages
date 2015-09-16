@@ -263,7 +263,7 @@ class Page < ActiveRecord::Base
   end
 
   def pinned_content_order
-    self.news_page? ? "pinned DESC, #{content_order}" : content_order
+    self.news_page? ? "pages.pinned DESC, #{content_order}" : content_order
   end
 
   def set_autopublish
