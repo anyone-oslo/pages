@@ -44,7 +44,7 @@ module PagesCore
       locale = @locale || I18n.default_locale.to_s
       page = Page.where(unique_name: page_name).first
       if page && block_given?
-        output = capture(page, &block)
+        output = capture(page.localize(locale), &block)
         concat(output)
       end
       (page) ? page.localize(locale) : nil
