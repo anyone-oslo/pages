@@ -12,6 +12,7 @@ module PagesCore
       before_action :disable_xss_protection, only: [:preview]
       before_action :load_root_pages
       before_action :find_page, only: [:show, :preview, :add_comment]
+      before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
 
       def index
@@ -111,6 +112,22 @@ module PagesCore
           .published
           .limit(20)
           .localized(locale)
+      end
+
+      def canonical_path(page)
+        if page.redirects?
+          page.redirect_path(locale: page.locale)
+        else
+          page_path(page.locale, page)
+        end
+      end
+
+      def canonicalize_url
+        unless @page.redirects?
+          if request.path != canonical_path(@page)
+            redirect_to canonical_path(@page)
+          end
+        end
       end
 
       def disable_xss_protection

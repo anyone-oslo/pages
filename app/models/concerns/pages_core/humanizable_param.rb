@@ -5,6 +5,7 @@ module PagesCore
     extend ActiveSupport::Concern
 
     def humanized_param(slug)
+      return id.to_s unless slug && !slug.blank?
       "#{id}-" + slug
         .gsub(/[\[\{]/, "(")
         .gsub(/[\]\}]/, ")")
