@@ -129,6 +129,7 @@ module PagesCore
 
       def metadata_block_names
         [
+          :meta_title,
           :meta_description,
           :open_graph_title,
           :open_graph_description
@@ -165,6 +166,12 @@ module PagesCore
             "Boxout",
             description: "Part of the page, usually background info or " \
               "facts related to the article."
+          )
+          block.meta_title(
+            "Title",
+            size: :field,
+            description: "Document title. Will fall back to the page name " \
+              "if empty."
           )
           block.meta_description(
             "Description",

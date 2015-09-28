@@ -169,7 +169,13 @@ module PagesCore
           return
         end
 
-        document_title(@page.name) unless document_title?
+        unless document_title?
+          if @page.meta_title?
+            document_title(@page.meta_title)
+          else
+            document_title(@page.name)
+          end
+        end
 
         # Call template method
         template = page_template(@page)
