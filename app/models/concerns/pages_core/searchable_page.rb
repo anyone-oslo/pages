@@ -18,6 +18,14 @@ module PagesCore
       comments.map(&:body)
     end
 
+    def file_names
+      files.map(&:name)
+    end
+
+    def file_filenames
+      files.map(&:filename)
+    end
+
     def published
       published?
     end

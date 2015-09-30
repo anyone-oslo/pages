@@ -8,6 +8,8 @@ ThinkingSphinx::Index.define :page, with: :real_time do
   indexes author.email, as: :author_email
   indexes comment_names
   indexes comment_bodies
+  indexes file_names
+  indexes file_filenames
 
   has category_ids,   type: :integer, multi: true
   has tag_ids,        type: :integer, multi: true

@@ -18,6 +18,8 @@ class PageFile < ActiveRecord::Base
 
   before_validation :set_name_from_filename
 
+  after_save ThinkingSphinx::RealTime.callback_for(:page_file)
+
   class << self
     def formats
       {
@@ -58,6 +60,10 @@ class PageFile < ActiveRecord::Base
     else
       "#{id}"
     end
+  end
+
+  def published
+    page.published
   end
 
   private
