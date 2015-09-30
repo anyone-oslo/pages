@@ -26,7 +26,7 @@ class Page < ActiveRecord::Base
            dependent: :destroy
 
   has_many :page_files,
-           -> { order("position") },
+           -> { order("position ASC") },
            class_name: "PageFile",
            dependent: :destroy
 
