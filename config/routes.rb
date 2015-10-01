@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   # Authentication
   resource :session, only: [:create, :destroy]
 
+  # Sitemap
+  resource :sitemap, only: [:show]
+
   namespace :admin do
     # Invites
     resources :invites do

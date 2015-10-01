@@ -24,6 +24,7 @@ module PagesCore
           observe: [Page, PageComment, Image],
           patterns: [
             /^\/index\.[\w]+$/,
+            /^\/sitemap\.[\w]+$/,
             %r{^/pages/[\w]{2,3}[/\.](.*)$},
             %r{^/[\w]{2,3}/(.*)$}
           ]
