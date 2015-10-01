@@ -2,6 +2,8 @@
 
 module PagesCore
   class SitemapsController < ApplicationController
+    caches_page :show
+
     def show
       @entries = formatted_entries
     end
