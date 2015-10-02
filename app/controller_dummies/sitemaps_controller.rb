@@ -1,4 +1,4 @@
 # encoding: utf-8
 
-class SitemapsController < PagesCore::PagesController #:nodoc:
+class SitemapsController < PagesCore::SitemapsController #:nodoc:
 end
