@@ -3,7 +3,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../internal/config/environment", __FILE__)
-require "pry-rescue/rspec"
 require "rspec/rails"
 require "thinking_sphinx/test"
 require "factory_girl"

@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     "template.rb"
   ]
 
-  s.add_development_dependency "mysql2"
+  s.add_development_dependency "mysql2", "~> 0.3.18"
   s.add_development_dependency "rspec-rails", "~> 3.1.0"
   s.add_development_dependency "factory_girl", "~> 4.3.0"
   s.add_development_dependency "shoulda-matchers", "~> 2.8.0"
