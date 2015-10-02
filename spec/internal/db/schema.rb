@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904164200) do
+ActiveRecord::Schema.define(version: 20151002174800) do
 
   create_table "binaries", force: :cascade do |t|
     t.string "sha1_hash", limit: 255
@@ -115,11 +115,21 @@ ActiveRecord::Schema.define(version: 20150904164200) do
     t.integer "page_id",  limit: 4
     t.integer "image_id", limit: 4
     t.integer "position", limit: 4
-    t.boolean "primary",  limit: 1, default: false, null: false
+    t.boolean "primary",            default: false, null: false
   end
 
   add_index "page_images", ["page_id", "primary"], name: "index_page_images_on_page_id_and_primary", using: :btree
   add_index "page_images", ["page_id"], name: "index_page_images_on_page_id", using: :btree
+
+  create_table "page_paths", force: :cascade do |t|
+    t.integer  "page_id",    limit: 4
+    t.string   "locale",     limit: 255
+    t.string   "path",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "page_paths", ["locale", "path"], name: "index_page_paths_on_locale_and_path", unique: true, using: :btree
 
   create_table "pages", force: :cascade do |t|
     t.integer  "parent_page_id",   limit: 4
@@ -131,18 +141,18 @@ ActiveRecord::Schema.define(version: 20150904164200) do
     t.integer  "user_id",          limit: 4
     t.integer  "status",           limit: 4,   default: 0,     null: false
     t.string   "content_order",    limit: 255
-    t.boolean  "feed_enabled",     limit: 1,   default: false, null: false
+    t.boolean  "feed_enabled",                 default: false, null: false
     t.datetime "published_at"
     t.string   "redirect_to",      limit: 255
     t.integer  "image_id",         limit: 4
-    t.boolean  "comments_allowed", limit: 1,   default: true,  null: false
+    t.boolean  "comments_allowed",             default: true,  null: false
     t.string   "image_link",       limit: 255
-    t.boolean  "news_page",        limit: 1,   default: false, null: false
-    t.boolean  "autopublish",      limit: 1,   default: false, null: false
+    t.boolean  "news_page",                    default: false, null: false
+    t.boolean  "autopublish",                  default: false, null: false
     t.string   "unique_name",      limit: 255
     t.integer  "comments_count",   limit: 4,   default: 0,     null: false
     t.datetime "last_comment_at"
-    t.boolean  "pinned",           limit: 1,   default: false, null: false
+    t.boolean  "pinned",                       default: false, null: false
     t.integer  "meta_image_id",    limit: 4
   end
 
@@ -197,7 +207,7 @@ ActiveRecord::Schema.define(version: 20150904164200) do
 
   create_table "tags", force: :cascade do |t|
     t.string  "name",   limit: 255
-    t.boolean "pinned", limit: 1,   default: false, null: false
+    t.boolean "pinned",             default: false, null: false
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
@@ -211,7 +221,7 @@ ActiveRecord::Schema.define(version: 20150904164200) do
     t.integer  "created_by",      limit: 4
     t.datetime "created_at"
     t.text     "persistent_data", limit: 65535
-    t.boolean  "activated",       limit: 1,     default: false, null: false
+    t.boolean  "activated",                     default: false, null: false
     t.integer  "image_id",        limit: 4
   end
 

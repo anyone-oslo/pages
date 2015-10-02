@@ -8,6 +8,7 @@ module PagesCore
       validates :path_segment, format: { with: /\A[[[:alnum:]]\-_]*\z/ }
       before_validation :ensure_no_path_segment_on_deletion
       after_save :ensure_path_segment
+      after_save :associate_page_path
     end
 
     def full_path
@@ -22,13 +23,6 @@ module PagesCore
       !self_and_ancestors.select { |p| !p.path_segment? }.any?
     end
 
-    private
-
-    def ensure_no_path_segment_on_deletion
-      return unless deleted?
-      self.path_segment = nil
-    end
-
     def ensure_path_segment
       return if deleted? || path_segment? || !name?
       if sibling_path_segments.include?(generated_path_segment)
@@ -36,6 +30,18 @@ module PagesCore
       else
         update path_segment: generated_path_segment
       end
+    end
+
+    private
+
+    def associate_page_path
+      return if deleted? || !full_path?
+      PagePath.associate(self)
+    end
+
+    def ensure_no_path_segment_on_deletion
+      return unless deleted?
+      self.path_segment = nil
     end
 
     def generated_path_segment
