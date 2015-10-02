@@ -10,6 +10,18 @@ module PagesCore
       after_save :ensure_path_segment
     end
 
+    def full_path
+      return nil unless full_path?
+      self_and_ancestors
+        .reverse
+        .map(&:path_segment)
+        .join("/")
+    end
+
+    def full_path?
+      !self_and_ancestors.select { |p| !p.path_segment? }.any?
+    end
+
     private
 
     def ensure_no_path_segment_on_deletion

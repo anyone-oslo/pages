@@ -50,4 +50,38 @@ describe PagesCore::PathablePage do
       it { is_expected.to eq(page_segment) }
     end
   end
+
+  describe "#full_path?" do
+    let(:page1) { create(:page, locale: "en", name: "Products") }
+    let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }
+    let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
+
+    subject { page3.full_path? }
+
+    context "when all parents have path segments" do
+      it { is_expected.to eq(true) }
+    end
+
+    context "when a parent is missing a path segment" do
+      let(:page1) { create(:page, locale: "en", name: "") }
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "#full_path" do
+    let(:page1) { create(:page, locale: "en", name: "Products") }
+    let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }
+    let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
+
+    subject { page3.full_path }
+
+    context "when all parents have path segments" do
+      it { is_expected.to eq("products/category/my-thing") }
+    end
+
+    context "when a parent is missing a path segment" do
+      let(:page1) { create(:page, locale: "en", name: "") }
+      it { is_expected.to eq(nil) }
+    end
+  end
 end
