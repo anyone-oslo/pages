@@ -3,6 +3,7 @@
 class Page < ActiveRecord::Base
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
+  include PagesCore::PathablePage
   include PagesCore::SearchablePage
   include PagesCore::Sweepable
   include PagesCore::Taggable
@@ -39,6 +40,7 @@ class Page < ActiveRecord::Base
     attribute :headline
     attribute :boxout
 
+    attribute :path_segment
     attribute :meta_description
     attribute :open_graph_title
     attribute :open_graph_description
