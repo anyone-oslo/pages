@@ -36,7 +36,7 @@ module PagesCore
 
     def associate_page_path
       return if deleted? || !full_path?
-      PagePath.associate(self)
+      PagePath.build(self)
     end
 
     def ensure_no_path_segment_on_deletion
