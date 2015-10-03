@@ -11,6 +11,7 @@ module PagesCore
 
       before_action :disable_xss_protection, only: [:preview]
       before_action :load_root_pages
+      before_action :find_page_by_path, only: [:show]
       before_action :find_page, only: [:show, :preview, :add_comment]
       before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
@@ -117,6 +118,12 @@ module PagesCore
       def canonical_path(page)
         if page.redirects?
           page.redirect_path(locale: page.locale)
+        elsif page.full_path?
+          if PagesCore.config.localizations?
+            URI.escape("/#{page.locale}/#{page.full_path}")
+          else
+            URI.escape("/#{page.full_path}")
+          end
         else
           page_path(page.locale, page)
         end
@@ -256,6 +263,11 @@ module PagesCore
             page_url(locale, page)
           ).deliver_now
         end
+      end
+
+      def find_page_by_path
+        return unless params[:path]
+        @page ||= PagePath.get(locale, params[:path]).try(&:page)
       end
 
       def find_page
