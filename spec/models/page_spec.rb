@@ -79,6 +79,7 @@ describe Page do
     it "should remove the unnecessary locales" do
       expect(page.locales).to match(%w(en nb))
       page.update(excerpt: "")
+      page.reload
       expect(page.locales).to match(["nb"])
     end
   end
