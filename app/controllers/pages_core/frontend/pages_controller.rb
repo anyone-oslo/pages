@@ -118,12 +118,6 @@ module PagesCore
       def canonical_path(page)
         if page.redirects?
           page.redirect_path(locale: page.locale)
-        elsif page.full_path?
-          if PagesCore.config.localizations?
-            URI.escape("/#{page.locale}/#{page.full_path}")
-          else
-            URI.escape("/#{page.full_path}")
-          end
         else
           page_path(page.locale, page)
         end

@@ -2,13 +2,13 @@
 
 module PagesCore
   module PagePathHelper
-    def page_path(locale, page)
+    def page_path(locale, page, options = {})
       page.localize(locale) do |p|
         if p.full_path?
           path = if PagesCore.config.localizations?
-                   "/#{locale}/" + p.full_path
+                   "/#{locale}/" + URI.escape(p.full_path)
                  else
-                   "/" + p.full_path
+                   "/" + URI.escape(p.full_path)
                  end
           if PagesCore.config.pages_path_scope?
             "/#{PagesCore.config.pages_path_scope}" + path
@@ -16,7 +16,7 @@ module PagesCore
             path
           end
         else
-          super
+          super(locale, p, options)
         end
       end
     end
@@ -37,7 +37,7 @@ module PagesCore
         elsif p.full_path
           "#{request.protocol}#{request.host_with_port}" + page_path(locale, p)
         else
-          super locale, p, options
+          super(locale, p, options)
         end
       end
     end
