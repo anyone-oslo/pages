@@ -86,12 +86,35 @@ module PagesCore
         !(dir =~ /^\./) && File.directory?(File.join(config.cache_path, dir))
       end
 
+      def locales
+        if PagesCore.config.locales
+          ([I18n.default_locale.to_s] +
+            PagesCore.config.locales.keys.map(&:to_s)).uniq
+        else
+          [I18n.default_locale.to_s]
+        end
+      end
+
       def sweep_dir(cache_dir)
         return [] unless File.exist?(cache_dir)
         swept_files = []
+
+        page_path_files = PagePath.all.flat_map do |p|
+          ["/#{p.path}.html"] +
+            locales.map { |l| "/#{l}/#{p.path}.html" }
+        end
+
         Find.find(cache_dir + "/") do |path|
           Find.prune if skip_path?(cache_dir, path)
           file = path.gsub(Regexp.new("^#{cache_dir}"), "")
+
+          # Page path kill
+          if page_path_files.include?(file) && File.exist?(path)
+            swept_files << path
+            FileUtils.rm_rf(path)
+          end
+
+          # Pattern kill
           config.patterns.each do |p|
             if file =~ p && File.exist?(path)
               swept_files << path
