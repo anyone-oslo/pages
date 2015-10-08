@@ -51,6 +51,29 @@ describe PagesCore::PathablePage do
     end
   end
 
+  describe "#pathable?" do
+    subject { page.pathable? }
+
+    context "when page has no parents" do
+      let(:page) { create(:page) }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when page has a parent without path segment" do
+      let(:parent) { create(:page, locale: "en", name: "") }
+      let(:page) { create(:page, locale: "en", parent: parent) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when page has a parent with path segment" do
+      let(:parent) { create(:page, locale: "en", name: "Products") }
+      let(:page) { create(:page, locale: "en", parent: parent) }
+
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe "#full_path?" do
     let(:page1) { create(:page, locale: "en", name: "Products") }
     let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }

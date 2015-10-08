@@ -32,6 +32,11 @@ module PagesCore
       end
     end
 
+    def pathable?
+      return true if !parent
+      parent.full_path?
+    end
+
     private
 
     def associate_page_path

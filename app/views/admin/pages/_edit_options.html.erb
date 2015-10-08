@@ -67,6 +67,7 @@
 <% if @page.id? && @page.name? %>
   <div class="field">
     <label>Page link</label>
-    <%= page_link @page %>
+    <%= link_to(page_path(@page.locale, @page),
+                page_path(@page.locale, @page)) %>
   </div>
 <% end %>
