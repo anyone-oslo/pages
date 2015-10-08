@@ -6,12 +6,12 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
     create(:page, locale: "nb", name: "Product", parent: parent_page)
   end
 
+  before { PagesCore.config.pages_path_scope = nil }
+
   describe "#page_path" do
     subject { helper.page_path("nb", page) }
 
     context "without page_path_scope" do
-      before { PagesCore.config.pages_path_scope = nil }
-
       context "when page has a page path" do
         context "and localizations are disabled" do
           before { PagesCore.config.localizations = :disabled }
