@@ -12,23 +12,30 @@ describe PagesCore::PathablePage do
   it { is_expected.to allow_value("føø-bar_123").for(:path_segment) }
   it { is_expected.not_to allow_value("with space").for(:path_segment) }
   it { is_expected.not_to allow_value("bang!").for(:path_segment) }
+  it { is_expected.not_to allow_value("pages").for(:path_segment) }
 
   describe "auto-generated path segment" do
     let(:page_name) { "ØØ Test 123!" }
-    let(:page_segment) { "øø-test-123" }
+    let(:path_segment) { "øø-test-123" }
     let(:page) { create(:page, locale: "nb", name: page_name) }
 
     subject { page.path_segment }
 
     context "defaulting" do
-      it { is_expected.to eq(page_segment) }
+      it { is_expected.to eq(path_segment) }
+    end
+
+    context "when colliding with an existing route" do
+      let(:page_name) { "Pages" }
+      let(:path_segment) { "pages" }
+      it { is_expected.to eq("#{path_segment}-#{page.id}") }
     end
 
     context "with existing path segment" do
       let!(:existing_page) { create(:page, locale: "nb", name: page_name) }
       let!(:page) { create(:page, locale: "nb", name: page_name) }
 
-      it { is_expected.to eq("#{page_segment}-#{page.id}") }
+      it { is_expected.to eq("#{path_segment}-#{page.id}") }
     end
 
     context "with existing path segment elsewhere" do
@@ -37,7 +44,7 @@ describe PagesCore::PathablePage do
       end
       let!(:page) { create(:page, locale: "nb", name: page_name) }
 
-      it { is_expected.to eq(page_segment) }
+      it { is_expected.to eq(path_segment) }
     end
 
     context "when page is deleted" do
@@ -47,7 +54,7 @@ describe PagesCore::PathablePage do
 
     context "when page name is changed" do
       before { page.update(name: "New name") }
-      it { is_expected.to eq(page_segment) }
+      it { is_expected.to eq(path_segment) }
     end
   end
 
@@ -100,6 +107,11 @@ describe PagesCore::PathablePage do
 
     context "when all parents have path segments" do
       it { is_expected.to eq("products/category/my-thing") }
+    end
+
+    context "with argument" do
+      subject { page3.full_path("argument") }
+      it { is_expected.to eq("products/category/argument") }
     end
 
     context "when a parent is missing a path segment" do

@@ -6,26 +6,35 @@ module PagesCore
 
     included do
       validates :path_segment, format: { with: /\A[[[:alnum:]]\-_]*\z/ }
+      validate :path_segment_cannot_be_routable
       before_validation :ensure_no_path_segment_on_deletion
       after_save :ensure_path_segment
       after_save :associate_page_path
     end
 
-    def full_path
-      return nil unless full_path?
-      self_and_ancestors
-        .reverse
-        .map(&:path_segment)
-        .join("/")
+    def full_path(last_segment = nil)
+      last_segment ||= path_segment
+      return nil unless full_path?(last_segment)
+      if parent
+        [parent.full_path, last_segment].join("/")
+      else
+        last_segment
+      end
     end
 
-    def full_path?
-      !self_and_ancestors.select { |p| !p.path_segment? }.any?
+    def full_path?(last_segment = nil)
+      last_segment ||= path_segment
+      if parent
+        parent.full_path? && !last_segment.blank?
+      else
+        !last_segment.blank?
+      end
     end
 
     def ensure_path_segment
       return if deleted? || path_segment? || !name?
-      if sibling_path_segments.include?(generated_path_segment)
+      if sibling_path_segments.include?(generated_path_segment) ||
+          page_path_matches_routes?(full_path(generated_path_segment))
         update path_segment: "#{generated_path_segment}-#{id}"
       else
         update path_segment: generated_path_segment
@@ -33,7 +42,7 @@ module PagesCore
     end
 
     def pathable?
-      return true if !parent
+      return true unless parent
       parent.full_path?
     end
 
@@ -56,6 +65,33 @@ module PagesCore
         .gsub(/(^\-|\-$)/, "")
         .mb_chars
         .downcase
+    end
+
+    def page_path_matches_routes?(page_path)
+      [
+        "/#{page_path}",
+        "/#{I18n.default_locale}/#{page_path}"
+      ].map { |p| recognizable_route?(p) }.any?
+    end
+
+    def page_path_route?(route)
+      route[:controller] == "pages" &&
+        route[:action] == "show" &&
+        !route[:path].blank?
+    end
+
+    def path_segment_cannot_be_routable
+      return unless full_path?
+      if page_path_matches_routes?(full_path)
+        errors.add(:path_segment, "can't match an existing URL")
+      end
+    end
+
+    def recognizable_route?(path)
+      route = Rails.application.routes.recognize_path(path)
+      !page_path_route?(route)
+    rescue ActionController::RoutingError
+      false
     end
 
     def sibling_path_segments
