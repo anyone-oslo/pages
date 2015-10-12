@@ -124,18 +124,16 @@ module PagesCore
       end
 
       def canonicalize_url
-        unless @page.redirects?
-          if request.path != canonical_path(@page)
-            redirect_to canonical_path(@page)
-          end
-        end
+        return if @page.redirects?
+        return unless request.path != canonical_path(@page)
+        redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 
       def disable_xss_protection
         # Disabling this is probably not a good idea,
         # but the header causes Chrome to choke when being
         # redirected back after a submit and the page contains an iframe.
-        response.headers['X-XSS-Protection'] = "0"
+        response.headers["X-XSS-Protection"] = "0"
       end
 
       def preview?
