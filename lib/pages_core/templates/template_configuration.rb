@@ -171,13 +171,13 @@ module PagesCore
             "Title",
             size: :field,
             description: "Document title. Will fall back to the page name " \
-              "if empty."
+              "if empty. Recommended length: Up to 56 characters."
           )
           block.meta_description(
             "Description",
             size: :small,
             description: "Description for search engines. Will fall back to " \
-              "Standfirst if empty. Should be between 150-160 characters."
+              "Standfirst if empty. Recommended length: Up to 156 characters."
           )
           block.open_graph_title(
             "Open Graph Title",
