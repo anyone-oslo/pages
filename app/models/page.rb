@@ -3,6 +3,7 @@
 class Page < ActiveRecord::Base
   include PagesCore::HumanizableParam
   include PagesCore::PageTree
+  include PagesCore::PathablePage
   include PagesCore::SearchablePage
   include PagesCore::Sweepable
   include PagesCore::Taggable
@@ -11,6 +12,7 @@ class Page < ActiveRecord::Base
   belongs_to :author, class_name: "User", foreign_key: :user_id
 
   has_and_belongs_to_many :categories, join_table: "pages_categories"
+  has_many :page_paths, dependent: :destroy
 
   belongs_to_image :image
   belongs_to_image :meta_image, class_name: "Image"
@@ -39,6 +41,7 @@ class Page < ActiveRecord::Base
     attribute :headline
     attribute :boxout
 
+    attribute :path_segment
     attribute :meta_description
     attribute :open_graph_title
     attribute :open_graph_description

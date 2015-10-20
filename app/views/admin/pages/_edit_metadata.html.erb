@@ -1,4 +1,26 @@
 <div class="field">
+  <% if f.object.pathable? %>
+    <%= labelled_field(f.text_field(:path_segment),
+                       "Path segment",
+                       description: "Only alpanumeric characters and dashes " \
+                         "are allowed.") %>
+  <% else %>
+    <div class="field">
+      <label>Path segment</label>
+      <p class="description">
+        Unable to add a path segment,
+        please add one to
+        <%= link_to("this page's parent",
+                    edit_admin_page_path(f.object.parent,
+                                         locale: f.object.locale,
+                                         anchor: "metadata")) %>
+        first.
+      </p>
+    </div>
+  <% end %>
+</div>
+
+<div class="field">
   <%= f.label_for :meta_image, "Image" %>
   <p class="description">
     Image displayed when sharing on social media.

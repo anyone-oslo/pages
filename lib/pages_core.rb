@@ -52,6 +52,7 @@ module PagesCore
       load "pages_core/engine.rb"
       load "pages_core/extensions.rb"
       load "pages_core/localizable.rb"
+      load "pages_core/page_path_constraint.rb"
       load "pages_core/pages_plugin.rb"
       load "pages_core/paginates.rb"
       load "pages_core/templates.rb"

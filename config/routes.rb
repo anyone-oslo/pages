@@ -122,6 +122,19 @@ Rails.application.routes.draw do
     end
   end
 
+  # Page path routing
+  scope path: PagesCore.config.pages_path_scope do
+    get(
+      ":locale/*path" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new
+    )
+    get(
+      "*path" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new,
+      defaults: { locale: I18n.default_locale.to_s }
+    )
+  end
+
   # Legacy routes
   get "/comments/:action/:type/:id", controller: "comments"
 end

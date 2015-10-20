@@ -11,6 +11,7 @@ module PagesCore
 
       before_action :disable_xss_protection, only: [:preview]
       before_action :load_root_pages
+      before_action :find_page_by_path, only: [:show]
       before_action :find_page, only: [:show, :preview, :add_comment]
       before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
@@ -123,18 +124,16 @@ module PagesCore
       end
 
       def canonicalize_url
-        unless @page.redirects?
-          if request.path != canonical_path(@page)
-            redirect_to canonical_path(@page)
-          end
-        end
+        return if @page.redirects?
+        return unless request.path != canonical_path(@page)
+        redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 
       def disable_xss_protection
         # Disabling this is probably not a good idea,
         # but the header causes Chrome to choke when being
         # redirected back after a submit and the page contains an iframe.
-        response.headers['X-XSS-Protection'] = "0"
+        response.headers["X-XSS-Protection"] = "0"
       end
 
       def preview?
@@ -256,6 +255,11 @@ module PagesCore
             page_url(locale, page)
           ).deliver_now
         end
+      end
+
+      def find_page_by_path
+        return unless params[:path]
+        @page ||= PagePath.get(locale, params[:path]).try(&:page)
       end
 
       def find_page

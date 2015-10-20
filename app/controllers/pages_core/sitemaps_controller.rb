@@ -2,6 +2,7 @@
 
 module PagesCore
   class SitemapsController < ApplicationController
+    include PagesCore::PagePathHelper
     caches_page :show
 
     def show
