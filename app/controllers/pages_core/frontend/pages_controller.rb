@@ -125,7 +125,9 @@ module PagesCore
 
       def canonicalize_url
         return if @page.redirects?
-        return unless request.path != canonical_path(@page)
+        return if request.path == canonical_path(@page)
+        # Don't canonicalize if any unknown params are present
+        return if (params.keys - %w(controller action path locale id)).any?
         redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 
