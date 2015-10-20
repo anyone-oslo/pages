@@ -125,6 +125,10 @@ Rails.application.routes.draw do
   # Page path routing
   scope path: PagesCore.config.pages_path_scope do
     get(
+      ":locale/*path/page/:page" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new
+    )
+    get(
       ":locale/*path" => "pages#show",
       constraints: PagesCore::PagePathConstraint.new
     )
