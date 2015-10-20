@@ -4,31 +4,29 @@ Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
   # Pages
-  scope path: PagesCore.config.pages_path_scope do
-    resources :pages, path: ":locale/pages" do
-      collection do
-        get "search"
-        post "search"
-      end
-      member do
-        post "add_comment"
-        put "preview"
-      end
-      resources :files, controller: "page_files"
+  resources :pages, path: ":locale/pages" do
+    collection do
+      get "search"
+      post "search"
     end
-
-    get(
-      "/:locale/pages/:id/:page" => "pages#show",
-      constraints: { page: /\d+/ }, as: :paginated_page
-    )
-
-    # Redirect hack for backwards compatibility
-    get "pages/:locale" => redirect("/%{locale}/pages"), locale: /\w\w\w/
-    get "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
-        locale: /\w\w\w/
-
-    get "(/:locale)" => "pages#index" if PagesCore.config.pages_path_scope?
+    member do
+      post "add_comment"
+      put "preview"
+    end
+    resources :files, controller: "page_files"
   end
+
+  get(
+    "/:locale/pages/:id/:page" => "pages#show",
+    constraints: { page: /\d+/ }, as: :paginated_page
+  )
+
+  # Redirect hack for backwards compatibility
+  get "pages/:locale" => redirect("/%{locale}/pages"), locale: /\w\w\w/
+  get(
+    "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
+    locale: /\w\w\w/
+  )
 
   # Authentication
   resource :session, only: [:create, :destroy]
@@ -123,21 +121,19 @@ Rails.application.routes.draw do
   end
 
   # Page path routing
-  scope path: PagesCore.config.pages_path_scope do
-    get(
-      ":locale/*path/page/:page" => "pages#show",
-      constraints: PagesCore::PagePathConstraint.new
-    )
-    get(
-      ":locale/*path" => "pages#show",
-      constraints: PagesCore::PagePathConstraint.new
-    )
-    get(
-      "*path" => "pages#show",
-      constraints: PagesCore::PagePathConstraint.new,
-      defaults: { locale: I18n.default_locale.to_s }
-    )
-  end
+  get(
+    ":locale/*path/page/:page" => "pages#show",
+    constraints: PagesCore::PagePathConstraint.new
+  )
+  get(
+    ":locale/*path" => "pages#show",
+    constraints: PagesCore::PagePathConstraint.new
+  )
+  get(
+    "*path" => "pages#show",
+    constraints: PagesCore::PagePathConstraint.new,
+    defaults: { locale: I18n.default_locale.to_s }
+  )
 
   # Legacy routes
   get "/comments/:action/:type/:id", controller: "comments"

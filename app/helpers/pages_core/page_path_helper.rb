@@ -5,15 +5,10 @@ module PagesCore
     def page_path(locale, page, options = {})
       page.localize(locale) do |p|
         if p.full_path?
-          path = if PagesCore.config.localizations?
-                   "/#{locale}/" + URI.escape(p.full_path)
-                 else
-                   "/" + URI.escape(p.full_path)
-                 end
-          if PagesCore.config.pages_path_scope?
-            "/#{PagesCore.config.pages_path_scope}" + path
+          if PagesCore.config.localizations?
+            "/#{locale}/" + URI.escape(p.full_path)
           else
-            path
+            "/" + URI.escape(p.full_path)
           end
         else
           super(locale, p, options)

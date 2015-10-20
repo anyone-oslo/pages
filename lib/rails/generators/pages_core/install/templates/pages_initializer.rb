@@ -22,9 +22,6 @@ PagesCore.configure do |config|
   # Domain based page cache (default: disabled)
   # config.domain_based_cache :disabled
 
-  # Scoped path for pages (default: nil)
-  # config.pages_path_scope "/foo"
-
   # Fulltext in RSS feeds (default: disabled)
   # config.rss_fulltext :disabled
 
