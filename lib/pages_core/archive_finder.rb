@@ -24,17 +24,14 @@ module PagesCore
     end
 
     def months_in_year(year)
-      by_year(year)
-        .reorder("#{timestamp_attribute} ASC")
-        .group("MONTH(#{timestamp_attribute})")
-        .map { |record| record[timestamp_attribute].month }
+      select_months(by_year(year)).map(&:to_i).sort
     end
 
     def months_in_year_with_count(year)
-      by_year(year)
-        .group("MONTH(#{timestamp_attribute})")
+      group_by_month(by_year(year))
         .count
         .to_a
+        .sort { |a, b| a.first <=> b.first }
     end
 
     def timestamp_attribute
@@ -42,13 +39,20 @@ module PagesCore
     end
 
     def years
-      @relation
-        .reorder("#{timestamp_attribute} ASC")
-        .group("YEAR(#{timestamp_attribute})")
-        .map { |record| record[timestamp_attribute].year }
+      select_years(@relation).map(&:to_i).sort
     end
 
     private
+
+    def group_by_month(relation)
+      if mysql?
+        relation.group("MONTH(#{timestamp_attribute})")
+      else
+        relation
+          .reorder("")
+          .group("date_part('month', #{timestamp_attribute})")
+      end
+    end
 
     def filter_by_time(range)
       @relation.where(
@@ -56,6 +60,10 @@ module PagesCore
         range.first,
         range.last
       )
+    end
+
+    def mysql?
+      ActiveRecord::Base.connection.adapter_name.downcase.starts_with?("mysql")
     end
 
     def range_for_year(year)
@@ -66,6 +74,26 @@ module PagesCore
     def range_for_year_and_month(year, month)
       date_time = DateTime.new(year.to_i, month.to_i, 1)
       date_time..date_time.end_of_month
+    end
+
+    def select_months(relation)
+      if mysql?
+        relation.pluck("DISTINCT MONTH(#{timestamp_attribute})")
+      else
+        relation
+          .reorder("")
+          .pluck("DISTINCT date_part('month', #{timestamp_attribute})")
+      end
+    end
+
+    def select_years(relation)
+      if mysql?
+        relation.pluck("DISTINCT YEAR(#{timestamp_attribute})")
+      else
+        relation
+          .reorder("")
+          .pluck("DISTINCT date_part('year', #{timestamp_attribute})")
+      end
     end
 
     def ordered_relation
