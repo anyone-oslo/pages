@@ -1,6 +1,18 @@
-test:
+mysql: &mysql
   adapter:  mysql2
-  database: pages_test
   encoding: utf8
   username: root
   password:
+
+postgres: &postgres
+  adapter: postgresql
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  host: localhost
+  database: pages_test
+  <<: *<%= ENV["DB"] || "mysql" %>
+
+test:
+  <<: *defaults
