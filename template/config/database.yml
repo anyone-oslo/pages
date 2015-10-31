@@ -3,7 +3,7 @@ development:
   database: <%= @database_development %>
   encoding: utf8
   username: root
-  password: 
+  password:
   host:     localhost
 
 test:
@@ -19,5 +19,5 @@ production:
   database: <%= @database_production %>
   encoding: utf8
   username: rails
-  password: ***REMOVED***
-  host:     server.manualdesign.no
+  password:
+  host:
