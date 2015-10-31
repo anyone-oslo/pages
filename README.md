@@ -27,3 +27,8 @@ Now visit /admin and create your user account.
 ## Upgrading
 
 Review the [changelog](CHANGELOG.md) for breaking changes.
+
+## License
+
+Pages is licensed under the
+[MIT License](http://www.opensource.org/licenses/MIT).
