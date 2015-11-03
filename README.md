@@ -1,5 +1,7 @@
 # Pages
 
+[![Build Status](https://travis-ci.org/manualdesign/pages.svg?branch=master)](https://travis-ci.org/manualdesign/pages) [![Code Climate](https://codeclimate.com/github/manualdesign/pages/badges/gpa.svg)](https://codeclimate.com/github/manualdesign/pages) [![Test Coverage](https://codeclimate.com/github/manualdesign/pages/badges/coverage.svg)](https://codeclimate.com/github/manualdesign/pages)
+
 ## Dependencies
 
 * Sphinx
