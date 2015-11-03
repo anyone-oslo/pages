@@ -1,32 +1,91 @@
-# PagesCore
+# Pages
 
-Pages is a CMS for Rails apps.
+## Dependencies
 
-## Installation
+* Sphinx
 
-### Using the template
+## Getting started
 
-    rails new [app name] -T -d mysql -m ~/Dev/gems/pages/template.rb
+Pages is a Ruby on Rails-based CMS tailored for Rails developers.
 
-### Using the generators
+The box does not include any themes or templates. Rather, it aims to
+make it as easy as possible to build your site from scratch, harnessing
+all the power of Rails and it's assets pipeline.
 
-Add pages_core to your Gemfile:
+To get started, you'll need a Rails app. A freshly generated one will
+do. Add it to your Gemfile:
 
-    gem 'pages_core', git: 'git@github.com:manualdesign/pages.git', branch: 'master'
+```ruby
+gem "pages_core"
+```
 
-Run Bundler:
+Next, run the installer (which will ask you a few questions), and then
+the migrations.
 
-    bundle install
+```sh
+bin/rails g pages_core:install
+bin/rake db:migrate
+```
 
-And generate the config files:
+You'll also need a running Sphinx process:
 
-    rails g pages_core:install
+```sh
+bin/rake ts:configure
+bin/rake ts:start
+```
 
-Now visit /admin and create your user account.
+You should now be ready to fire up the server and visit /admin to
+create your first user account.
 
-## Upgrading
+## Quick tour
 
-Review the [changelog](CHANGELOG.md) for breaking changes.
+Pages is all about the `Page` model - a site is a tree of Pages. Every
+page has a template (which corresponds to the files in
+`app/views/pages/templates`). Here's a sample template:
+
+```html
+<h1>
+  <%= @page.name %>
+</h1>
+
+<% if @page.excerpt? %>
+  <%= @page.excerpt.to_html %>
+<% end %>
+
+<% if @page.body? %>
+  <%= @page.body.to_html %>
+<% end %>
+
+<% if @page.pages.any? %>
+  <h2>
+    More stuff
+  </h2>
+  <ul>
+    <% @page.pages.each do |p| %>
+      <li>
+        <%= link_to p.name, page_path(locale, p) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+```
+
+Every template has one or more blocks of content, configured in
+the `page_templates.rb` initializer. `name`, `excerpt` and `body`
+in the example above are the defaults, but this is fully customizable
+along with other optional features like images, file uploads, tags and more.
+
+You'll also notice that the page links have a locale param. Pages does support
+localizations:
+
+```ruby
+@page.localize(:en).name # => "Hello"
+@page.localize(:fr).name # => "Bonjour"
+```
+
+All the helpers and controllers will automatically set the locale for
+you and it propagates across relations, so you'll rarely end up
+interacting with it directly in this fashion.
 
 ## License
 
