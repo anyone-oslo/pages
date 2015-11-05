@@ -102,7 +102,7 @@ class Page < ActiveRecord::Base
     def order_by_tags(tags)
       joins(
         "LEFT JOIN taggings ON taggings.taggable_id = pages.id AND " \
-          "taggable_type = \"Page\"",
+          "taggable_type = #{ActiveRecord::Base.connection.quote('Page')}",
         "LEFT JOIN tags ON tags.id = taggings.tag_id AND tags.id IN (" +
           tags.map(&:id).join(",") +
           ")"
