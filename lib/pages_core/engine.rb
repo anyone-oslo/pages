@@ -3,7 +3,11 @@
 module PagesCore
   class Engine < Rails::Engine
     initializer :active_job do |_config|
-      ActiveJob::Base.queue_adapter = :delayed_job
+      if Rails.env.test?
+        ActiveJob::Base.queue_adapter = :test
+      else
+        ActiveJob::Base.queue_adapter = :delayed_job
+      end
     end
 
     initializer :append_migrations do |app|

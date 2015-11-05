@@ -15,6 +15,7 @@ end
 
 require "rails_helper"
 require "rspec/rails"
+require "rspec/active_job"
 require "thinking_sphinx/test"
 require "factory_girl"
 require "shoulda-matchers"
@@ -76,6 +77,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   # config.include JsonSpec::Helpers
+  config.include RSpec::ActiveJob
   config.include MailerMacros
   config.before(:each) { reset_email }
 
@@ -87,10 +89,14 @@ RSpec.configure do |config|
     ThinkingSphinx::Test.start_with_autostop
   end
 
-  # Clean the Dis storage after each example
   config.after(:each) do
+    # Clean the Dis storage after each example
     storage_root = Rails.root.join("db", "dis", "test")
     FileUtils.rm_rf(storage_root) if File.exist?(storage_root)
+
+    # Reset the ActiveJob queue
+    ActiveJob::Base.queue_adapter.enqueued_jobs = []
+    ActiveJob::Base.queue_adapter.performed_jobs = []
   end
 end
 

@@ -267,6 +267,9 @@ GEM
     rake (10.4.2)
     recaptcha (0.3.6)
     riddle (1.5.12)
+    rspec-activejob (0.6.1)
+      activejob (>= 4.2)
+      rspec-mocks
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -337,5 +340,6 @@ DEPENDENCIES
   pry
   pry-rescue
   pry-stack_explorer
+  rspec-activejob
   rspec-rails (~> 3.3.0)
   shoulda-matchers (~> 3.0.0)
