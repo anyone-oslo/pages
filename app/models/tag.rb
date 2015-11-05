@@ -30,8 +30,8 @@ class Tag < ActiveRecord::Base
 
     def suggestions(tags, options = {})
       Tag.joins(:taggings)
-        .select("`tags`.*, COUNT(`tags`.id) AS counter")
-        .group("`tags`.id")
+        .select("tags.*, COUNT(tags.id) AS counter")
+        .group("tags.id")
         .order("counter DESC")
         .limit(options[:limit])
         .reject { |t| tags.include?(t) }

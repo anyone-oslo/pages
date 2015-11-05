@@ -22,7 +22,7 @@ describe Localization do
       create(:localization, name: "body")
     end
     subject { Localization.names }
-    it { is_expected.to match(%w(title body)) }
+    it { is_expected.to match(%w(body title)) }
   end
 
   describe "#to_s" do

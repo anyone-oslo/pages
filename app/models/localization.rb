@@ -5,11 +5,11 @@ class Localization < ActiveRecord::Base
 
   class << self
     def locales
-      select("DISTINCT locale").map(&:locale)
+      order("locale ASC").pluck("DISTINCT locale")
     end
 
     def names
-      select("DISTINCT name").map(&:name)
+      order("name ASC").pluck("DISTINCT name")
     end
   end
 
