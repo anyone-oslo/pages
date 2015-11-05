@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 RSpec.describe "PagesController routing", type: :routing do
   it "routes standard page URLs" do

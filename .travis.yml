@@ -12,8 +12,8 @@ services:
 rvm:
 - 2.2.3
 env:
-- DB=mysql
-- DB=postgres
+- CI=1 DB=mysql
+- CI=1 DB=postgres
 script:
 - bundle exec rspec spec
 before_script:

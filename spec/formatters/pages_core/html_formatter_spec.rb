@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe PagesCore::HtmlFormatter do
   describe ".to_html" do

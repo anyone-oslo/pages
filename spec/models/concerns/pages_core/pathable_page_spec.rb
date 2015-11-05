@@ -1,13 +1,12 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe PagesCore::PathablePage do
   let(:page) { create(:page, locale: "nb") }
 
   subject { page }
 
-  it { is_expected.to allow_value(nil).for(:path_segment) }
   it { is_expected.to allow_value("").for(:path_segment) }
   it { is_expected.to allow_value("føø-bar_123").for(:path_segment) }
   it { is_expected.not_to allow_value("with space").for(:path_segment) }

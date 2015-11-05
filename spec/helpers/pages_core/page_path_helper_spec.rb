@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 RSpec.describe PagesCore::PagePathHelper, type: :helper do
   let(:parent_page) { create(:page, locale: "nb", name: "Category") }

@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe PagePath do
   it { is_expected.to belong_to(:page) }
 
   it { is_expected.to validate_presence_of(:locale) }
   it { is_expected.to validate_presence_of(:path) }
-  it { is_expected.to validate_uniqueness_of(:path) }
+  it { is_expected.to validate_uniqueness_of(:path).scoped_to(:locale) }
 
   describe ".associate" do
     let(:page) { create(:page) }
