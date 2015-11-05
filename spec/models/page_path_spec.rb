@@ -10,7 +10,7 @@ describe PagePath do
   it { is_expected.to validate_uniqueness_of(:path).scoped_to(:locale) }
 
   describe ".associate" do
-    let(:page) { create(:page) }
+    let(:page) { create(:blank_page) }
     subject { PagePath.associate(page, locale: "nb", path: "foo") }
 
     context "when detecting locale/path" do

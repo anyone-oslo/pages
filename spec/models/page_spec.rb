@@ -9,6 +9,29 @@ describe Page do
     specify { expect(subject.timestamp_attribute).to eq(:published_at) }
   end
 
+  describe ".enabled_feeds" do
+    let(:options) { {} }
+    subject { Page.enabled_feeds(I18n.default_locale, options) }
+
+    context "with no pages" do
+      it { is_expected.to eq([]) }
+    end
+
+    context "with no arguments" do
+      let!(:page) { create(:page, feed_enabled: true) }
+      let!(:hidden) { create(:hidden_page, feed_enabled: true) }
+      let!(:other_locale) { create(:page, feed_enabled: true, locale: "fr") }
+      it { is_expected.to match_array([page]) }
+    end
+
+    context "with include_hidden" do
+      let(:options) { { include_hidden: true } }
+      let!(:page) { create(:page, feed_enabled: true) }
+      let!(:hidden) { create(:page, feed_enabled: true, status: 3) }
+      it { is_expected.to match_array([page, hidden]) }
+    end
+  end
+
   describe ".published" do
     let!(:published_page) { create(:page) }
     let!(:hidden_page) { create(:page, status: 3) }
@@ -19,6 +42,19 @@ describe Page do
     it { is_expected.to include(published_page) }
     it { is_expected.not_to include(hidden_page) }
     it { is_expected.not_to include(autopublish_page) }
+  end
+
+  describe ".order_by_tags" do
+    let(:foo) { Tag.create(name: "Foo") }
+    let(:bar) { Tag.create(name: "Bar") }
+    let(:baz) { Tag.create(name: "Baz") }
+    let!(:page1) { create(:page, tag_list: [baz]) }
+    let!(:page2) { create(:page, tag_list: [foo, bar]) }
+    let!(:page3) { create(:page, tag_list: [foo]) }
+
+    subject { Page.localized(I18n.default_locale).order_by_tags([foo, bar]) }
+
+    it { is_expected.to match_array([page3, page2, page1]) }
   end
 
   describe ".localized" do
@@ -115,6 +151,49 @@ describe Page do
       expect(page.valid?).to eq(true)
       page.reload
       expect(page.excerpt?).to eq(false)
+    end
+  end
+
+  describe "#extended?" do
+    subject { page.extended? }
+
+    context "with no attributes" do
+      let(:page) { build(:page) }
+      it { is_expected.to eq(false) }
+    end
+
+    context "with no body" do
+      let(:page) { build(:page, excerpt: "e") }
+      it { is_expected.to eq(false) }
+    end
+
+    context "with no excerpt" do
+      let(:page) { build(:page, body: "b") }
+      it { is_expected.to eq(false) }
+    end
+
+    context "with body and excerpt" do
+      let(:page) { build(:page, body: "b", excerpt: "e") }
+      it { is_expected.to eq(true) }
+    end
+  end
+
+  describe "#excerpt_or_body" do
+    subject { page.excerpt_or_body }
+
+    context "with no attributes" do
+      let(:page) { build(:page) }
+      it { is_expected.to eq("") }
+    end
+
+    context "with no excerpt" do
+      let(:page) { build(:page, body: "b") }
+      it { is_expected.to eq("b") }
+    end
+
+    context "with excerpt" do
+      let(:page) { build(:page, body: "b", excerpt: "e") }
+      it { is_expected.to eq("e") }
     end
   end
 end
