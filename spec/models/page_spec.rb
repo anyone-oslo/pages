@@ -76,6 +76,21 @@ describe Page do
     it { is_expected.to match(%w(en nb)) }
   end
 
+  describe ".status_labels" do
+    subject { Page.status_labels }
+    it "should return the status labels" do
+      expect(subject).to eq(
+        {
+          0 => "Draft",
+          1 => "Reviewed",
+          2 => "Published",
+          3 => "Hidden",
+          4 => "Deleted"
+        }
+      )
+    end
+  end
+
   describe "with ancestors" do
     let(:root)   { Page.create }
     let(:parent) { Page.create(parent: root) }
@@ -154,6 +169,86 @@ describe Page do
     end
   end
 
+  describe "#comments_closed_after_time?" do
+    subject { page.comments_closed_after_time? }
+
+    context "when close_comments_after is configured" do
+      before { PagesCore.config.close_comments_after = 14.days }
+
+      context "and page is past" do
+        let(:page) { build(:page, published_at: 15.days.ago) }
+        it { is_expected.to eq(true) }
+      end
+
+      context "and page isn't past" do
+        let(:page) { build(:page, published_at: 10.days.ago) }
+        it { is_expected.to eq(false) }
+      end
+    end
+
+    context "when close_comments_after is configured" do
+      before { PagesCore.config.close_comments_after = nil }
+
+      let(:page) { build(:page, published_at: 90.days.ago) }
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "#comments_allowed?" do
+    subject { page.comments_allowed? }
+
+    context "when comments are automatically closed" do
+      before { PagesCore.config.close_comments_after = 14.days }
+      let(:page) do
+        build(:page, published_at: 15.days.ago, comments_allowed: true)
+      end
+      it { is_expected.to eq(false) }
+    end
+
+    context "when comments haven't automatically been closed" do
+      let(:page) { build(:page, comments_allowed: true) }
+      it { is_expected.to eq(true) }
+    end
+  end
+
+  describe "#empty?" do
+    subject { page.empty? }
+
+    context "when page is empty" do
+      let(:page) { build(:page) }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when page has excerpt" do
+      let(:page) { build(:page, excerpt: "e") }
+      it { is_expected.to eq(false) }
+    end
+
+    context "when page has body" do
+      let(:page) { build(:page, body: "b") }
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "#excerpt_or_body" do
+    subject { page.excerpt_or_body }
+
+    context "with no attributes" do
+      let(:page) { build(:page) }
+      it { is_expected.to eq("") }
+    end
+
+    context "with no excerpt" do
+      let(:page) { build(:page, body: "b") }
+      it { is_expected.to eq("b") }
+    end
+
+    context "with excerpt" do
+      let(:page) { build(:page, body: "b", excerpt: "e") }
+      it { is_expected.to eq("e") }
+    end
+  end
+
   describe "#extended?" do
     subject { page.extended? }
 
@@ -175,25 +270,6 @@ describe Page do
     context "with body and excerpt" do
       let(:page) { build(:page, body: "b", excerpt: "e") }
       it { is_expected.to eq(true) }
-    end
-  end
-
-  describe "#excerpt_or_body" do
-    subject { page.excerpt_or_body }
-
-    context "with no attributes" do
-      let(:page) { build(:page) }
-      it { is_expected.to eq("") }
-    end
-
-    context "with no excerpt" do
-      let(:page) { build(:page, body: "b") }
-      it { is_expected.to eq("b") }
-    end
-
-    context "with excerpt" do
-      let(:page) { build(:page, body: "b", excerpt: "e") }
-      it { is_expected.to eq("e") }
     end
   end
 end

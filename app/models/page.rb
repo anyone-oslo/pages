@@ -128,10 +128,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def extended?
-    excerpt? && body?
-  end
-
   def empty?
     !body? && !excerpt?
   end
@@ -139,6 +135,10 @@ class Page < ActiveRecord::Base
 
   def excerpt_or_body
     excerpt? ? excerpt : body
+  end
+
+  def extended?
+    excerpt? && body?
   end
 
   def image
