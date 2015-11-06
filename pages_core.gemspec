@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jbuilder", "~> 2.0"
 
   # Extra asset dependencies
-  s.add_dependency "jquery-ui-rails", "~> 4.2.1"
+  s.add_dependency "jquery-ui-rails", "~> 5.0.0"
   s.add_dependency "jquery-cookie-rails"
   s.add_dependency "jcrop-rails-v2"
   s.add_dependency "underscore-rails"
@@ -59,12 +59,12 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_list"
 
   # reCAPTCHA
-  s.add_dependency "recaptcha", "~> 0.3.5"
+  s.add_dependency "recaptcha", "~> 0.4.0"
 
   # Delayed Job
-  s.add_dependency "delayed_job", "~> 4.0.0"
-  s.add_dependency "delayed_job_active_record", "~> 4.0.0"
-  s.add_dependency "daemons", "~> 1.1.0"
+  s.add_dependency "delayed_job", "~> 4.1.0"
+  s.add_dependency "delayed_job_active_record", "~> 4.1.0"
+  s.add_dependency "daemons", "~> 1.2.0"
 
   # Thinking Sphinx
   s.add_dependency "thinking-sphinx", "~> 3.1.1"
