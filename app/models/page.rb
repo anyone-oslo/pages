@@ -42,6 +42,7 @@ class Page < ActiveRecord::Base
     attribute :boxout
 
     attribute :path_segment
+    attribute :meta_title
     attribute :meta_description
     attribute :open_graph_title
     attribute :open_graph_description
