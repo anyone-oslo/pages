@@ -153,13 +153,13 @@
     visibility: none;
   }
 
-  #main & input[type=text],
-  #main & textarea {
+  main & input[type=text],
+  main & textarea {
     width: 100%;
     max-width: 100%;
   }
 
-  #main & input.page_title {
+  main & input.page_title {
     font-weight: bold;
     font-size: 1.4em;
     color: #222;

@@ -47,8 +47,4 @@ window.Admin =
 
 
 $ ->
-  # Detect the sidebar and add the appropriate class to the document element.
-  if $("#sidebar").length > 0
-    $(document.body).addClass "with-sidebar"
-
   Admin.init()

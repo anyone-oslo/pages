@@ -1,4 +1,4 @@
-<div id="header">
+<header>
   <div id="logo">
     <%= link_to image_tag("pages/admin/icon.png"), '/admin' %>
   </div>
@@ -22,7 +22,7 @@
       <%= header_tabs(:account) %>
     <% end -%>
   </div>
-</div>
+</header>
 
 <% if flash[:error] %>
   <div id="flash-error">

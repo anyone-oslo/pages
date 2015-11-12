@@ -36,44 +36,48 @@
         data-action="<%= controller.action_name %>"
         data-locale="<%= @locale %>">
 
-    <%= render partial: "layouts/admin/header" %>
+    <div class="wrapper">
 
-    <% if content_for?(:sidebar) %>
-      <div id="sidebar">
-        <%= content_for(:sidebar) %>
-      </div>
-    <% end %>
+      <%= render partial: "layouts/admin/header" %>
 
-    <div id="main">
-      <% if @page_description || @content_tabs %>
-        <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
-          <% if @page_description_links -%>
-            <div class="links">
-              <%= @page_description_links.html_safe %>
+      <div class="main-wrapper">
+        <main>
+          <% if @page_description || @content_tabs %>
+            <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+              <% if @page_description_links -%>
+                <div class="links">
+                  <%= @page_description_links.html_safe %>
+                </div>
+              <% end %>
+              <h3>
+                <%= (@page_description || @page_title).html_safe %>
+              </h3>
+              <% if @content_tabs %>
+                <ul id="content-tabs">
+                  <% @content_tabs.map do |t| %>
+                    <li id="content-tab-link-<%= t[:key] %>" data-tab-name="<%= t[:key] %>">
+                      <% if t[:options][:disabled] == true %>
+                        <%= t[:name] %>
+                      <% else %>
+                        <%= link_to(t[:name], anchor: "#{t[:key]}") %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
             </div>
           <% end %>
-          <h3>
-            <%= (@page_description || @page_title).html_safe %>
-          </h3>
-          <% if @content_tabs %>
-            <ul id="content-tabs">
-              <% @content_tabs.map do |t| %>
-                <li id="content-tab-link-<%= t[:key] %>" data-tab-name="<%= t[:key] %>">
-                  <% if t[:options][:disabled] == true %>
-                    <%= t[:name] %>
-                  <% else %>
-                    <%= link_to(t[:name], anchor: "#{t[:key]}") %>
-                  <% end %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
-        </div>
-      <% end %>
 
-      <%= yield %>
+          <%= yield %>
+        </main>
+
+        <% if content_for?(:sidebar) %>
+          <aside class="sidebar">
+            <%= content_for(:sidebar) %>
+          </aside>
+        <% end %>
+      </div>
     </div>
-
     <%= render partial: "layouts/admin/analytics" %>
   </body>
 </html>

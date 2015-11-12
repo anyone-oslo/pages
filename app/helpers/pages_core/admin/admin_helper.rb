@@ -20,7 +20,6 @@ module PagesCore
         classes = @body_classes || []
         classes << controller.class.underscore
         classes << "#{controller.action_name}_action"
-        classes << "with-sidebar" if content_for?(:sidebar)
         classes << "with_notice" if flash[:notice]
         classes.reverse.join(" ")
       end
