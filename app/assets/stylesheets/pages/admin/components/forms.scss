@@ -42,7 +42,7 @@ form .field_with_errors label {
   display:       table;
   padding:       1px;
   padding-right: 22px;
-  background:    transparent url('<%= asset_path "pages/admin/warning-icon.gif" %>') right 5px no-repeat;
+  background:    transparent image-url("pages/admin/warning-icon.gif") right 5px no-repeat;
 }
 .fieldWithErrors input, .fieldWithErrors textarea {
 }
@@ -52,7 +52,7 @@ form .field_with_errors label {
 
   input[type=text], input[type=password], textarea {
     border:        1px solid #d4d4d4;
-    background:    #fff url('<%= asset_path "pages/admin/formelement-bg.gif" %>') repeat-x;
+    background:    #fff image-url("pages/admin/formelement-bg.gif") repeat-x;
     padding:       8px 10px;
     line-height:   1.4;
     font-family:   Helvetica, Arial, sans-serif;

@@ -14,7 +14,7 @@
 <% content_for :sidebar do %>
   <%= form_for(@page,
                url: admin_pages_url(@locale),
-               html: {class: :edit_page, id: 'page-form-sidebar'}) do |f| %>
+               html: {class: "edit-page", id: 'page-form-sidebar'}) do |f| %>
     <%= render partial: 'edit_options', locals: {f: f} %>
   <% end %>
 <% end %>
@@ -22,14 +22,14 @@
 <%= form_for(@page,
              url: admin_pages_url(@locale),
              html: {
-               class: :edit_page,
+               class: "edit-page",
                id: 'page-form',
                method: :post,
                multipart: true
              }
 ) do |f| %>
 
-  <div class="hiddenOptions">
+  <div class="hidden-options">
     <%= render partial: 'edit_options', locals: {f: f} %>
   </div>
 

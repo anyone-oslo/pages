@@ -98,7 +98,7 @@
 }
 
 #header .tabs a:hover, #header .tabs a.current, #header .tabs a.current:visited {
-  background:      #fefefe url('<%= asset_path "pages/admin/header-tab-current-bg.gif" %>');
+  background:      #fefefe image-url("pages/admin/header-tab-current-bg.gif");
   border-left:     1px solid #fefefe;
   border-right:    1px solid #fefefe;
   color:           #000;

@@ -1,5 +1,5 @@
 body.with_sidebar {
-  background: #fff url(<%= asset_path 'pages/admin/sidebar-bg.gif' %>) top right repeat-y;
+  background: #fff image-url('pages/admin/sidebar-bg.gif') top right repeat-y;
 }
 
 body.with_sidebar #main {

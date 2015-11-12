@@ -3,7 +3,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
   index: ->
     $("#reorder_link").click ->
       link = this
-      list = $(".pagelist").get(0)
+      list = $(".page-list").get(0)
       if $(list).hasClass("reorder")
         $(link).html "Reorder pages"
         $(list).removeClass "reorder"
@@ -17,7 +17,7 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
         axis: "y"
         cursor: "move"
         distance: 10
-        handle: ".drag_handle"
+        handle: ".drag-handle"
         update: (event, ui) ->
           new_order = []
           parent_page_id = $(list).attr("parent_page_id")
@@ -57,20 +57,20 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
     @edit()
 
   edit: ->
-    $(".advanced_options").hide()
-    $(".advanced_toggle").click ->
-      $(".advanced_options").slideToggle()
+    $(".advanced-options").hide()
+    $(".advanced-toggle").click ->
+      $(".advanced-options").slideToggle()
 
     checkStatus = ->
       pageStatus = $("#page-form-sidebar #page_status").val()
       if pageStatus == "2"
-        $("#page-form-sidebar .published_date").fadeIn()
+        $("#page-form-sidebar .published-date").fadeIn()
       else
-        $("#page-form-sidebar .published_date").hide()
+        $("#page-form-sidebar .published-date").hide()
 
     $("#page-form-sidebar #page_status").change checkStatus
     checkStatus()
-    $(".autopublish_notice").hide()
+    $(".autopublish-notice").hide()
 
     checkDate = ->
       year = $("#page-form-sidebar select[name=\"page[published_at(1i)]\"]").val()
@@ -81,11 +81,11 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
       publishDate = new Date(year, (month - 1), day, hour, minute)
       now = new Date()
       if publishDate > now
-        $(".autopublish_notice").fadeIn()
+        $(".autopublish-notice").fadeIn()
       else
-        $(".autopublish_notice").fadeOut()
+        $(".autopublish-notice").fadeOut()
 
-    $(".published_date").find("select").change checkDate
+    $(".published-date").find("select").change checkDate
     checkDate()
 
     replicateFormElement = ->
@@ -106,13 +106,13 @@ class Admin.Controllers.PagesController extends Admin.Controllers.Base
       Modal.show "<div class=\"uploadImages\">" + $("#new-file").html() + "</div>"
 
     # Reordering files
-    $(".filelist").each ->
+    $(".file-list").each ->
       list = this
       $(list).sortable
         axis: "y"
         cursor: "move"
         distance: 10
-        handle: ".drag_handle"
+        handle: ".drag-handle"
         placeholder: "placeholder"
         update: (event, ui) ->
           $.post $(list).data('url'),

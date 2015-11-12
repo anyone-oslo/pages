@@ -4,20 +4,20 @@
   else
     subpages = page.children.visible.in_locale(page.locale).order(page.content_order)
   end
-  page_classes = ['page', 'page_listing']
+  page_classes = ['page', 'page-listing']
   page_classes << 'hidden' unless page.published?
-  page_classes << 'page_without_locale' unless page.name?
+  page_classes << 'page-without-locale' unless page.name?
 -%>
 <li page_id="<%= page.id %>">
   <% if page.reorderable? %>
-    <div class="drag_handle">
+    <div class="drag-handle">
     </div>
   <% end %>
   <div class="<%= page_classes.join(' ') %>" id="pagelisting_<%= page.id %>">
     <% if page.published? %>
-      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), class: 'page_name') %>
+      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), class: 'page-name') %>
     <% else %>
-      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), class: 'page_name') %>
+      <%= link_to_if(policy(page).edit?, page_name(page), edit_admin_page_url(@locale, page), class: 'page-name') %>
       <small class="status">
         (<%= (page.autopublish?) ? "Will publish at "+page.published_at.to_formatted_s(:short)  : page.status_label %><% if page.draft? && page.author %> by <%= page.author.name %><% end %>)
       </small>
@@ -43,7 +43,7 @@
   </div>
   <% if page.news_page? %>
     <ul>
-      <li><div class="page_listing">
+      <li><div class="page-listing">
         <em>(<%= page.children.visible.count %> items)</em>
         <div class="actions">
           <% if policy(Page).new? %>

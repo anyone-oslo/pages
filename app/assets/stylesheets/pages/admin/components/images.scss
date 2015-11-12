@@ -53,7 +53,7 @@
   .editor {
     line-height: 1px;
     margin-bottom: 40px;
-    background-image: url('<%= asset_path "pages/admin/image-editor-bg.png" %>');
+    background-image: image-url("pages/admin/image-editor-bg.png");
     box-shadow: 0px 2px 15px hsla(0,0%,0%,0.35);
 
     h4 {

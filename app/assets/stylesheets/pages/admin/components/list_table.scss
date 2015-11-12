@@ -19,7 +19,7 @@ table.list tr td:last-child, table.list tr th:last-child {
 
 
 table.list th {
-  background: #fff url('<%= asset_path "pages/admin/list-table-td-bg.gif" %>') right bottom repeat-x;
+  background: #fff image-url("pages/admin/list-table-td-bg.gif") right bottom repeat-x;
   color: #777;
   font-weight: bold;
   border-bottom: 1px solid #bdbdbd;
@@ -38,11 +38,11 @@ table.list tr.disabled td  {
 }
 
 table.list tr.disabled td:first-child  {
-  background: transparent url('<%= asset_path "pages/admin/list-table-pin-disabled.gif" %>') 14px center no-repeat;
+  background: transparent image-url("pages/admin/list-table-pin-disabled.gif") 14px center no-repeat;
 }
 
 table.list tr.active td:first-child  {
-  background: transparent url('<%= asset_path "pages/admin/list-table-pin-blue.gif" %>') 14px center no-repeat;
+  background: transparent image-url("pages/admin/list-table-pin-blue.gif") 14px center no-repeat;
 }
 
 table.list .actions {

@@ -1,7 +1,7 @@
-<%= labelled_field f.select(:status, Page.status_labels.invert), "Status",
-  errors: @page.errors[:status]
-%>
-<div class="published_date">
+<%= labelled_field(f.select(:status, Page.status_labels.invert),
+                   "Status",
+                   errors: @page.errors[:status]) %>
+<div class="published-date">
   <%= labelled_field (
       f.date_select(
         :published_at,
@@ -14,7 +14,9 @@
     "Date",
     errors: @page.errors[:published_at]
   %>
-  <p class="autopublish_notice">This page will publish later</p>
+  <p class="autopublish-notice">
+    This page will publish later
+  </p>
 </div>
 
 <%= labelled_field (
@@ -26,8 +28,11 @@
 
 <% if @page.parent && @page.parent.news_page? %>
   <div class="field">
-    <label>Pin to top</label>
-    <%= f.check_box(:pinned) %> Make post featured<br />
+    <label>
+      Pin to top
+    </label>
+    <%= f.check_box(:pinned) %>
+    Make post featured<br />
   </div>
 <% end %>
 
@@ -35,18 +40,21 @@
   <div class="field">
     <label>Categories</label>
     <% @categories.each do |category| %>
-      <%= check_box_tag "category[#{category.id}]", "1", (@page.categories.map{|c| c.id}.include?(category.id) ? true : false) %>
+      <%= check_box_tag("category[#{category.id}]",
+                        "1",
+                        @page.categories.map { |c| c.id }.include?(category.id)) %>
       <%= category.name %><br />
     <% end %>
   </div>
 <% end %>
 
-<%= labelled_field f.select( :template, available_templates_for_select ), "Template", errors: @page.errors[:template] %>
+<%= labelled_field(f.select(:template, available_templates_for_select),
+                   "Template",
+                   errors: @page.errors[:template]) %>
 
+<%= link_to "Advanced options", "#", class: "advanced-toggle" %>
 
-<%= link_to "Advanced options", "#", class: "advanced_toggle" %>
-
-<div class="advanced_options">
+<div class="advanced-options">
 
   <div class="field">
     <label>Subpages</label>

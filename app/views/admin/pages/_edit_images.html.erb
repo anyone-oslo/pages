@@ -1,84 +1,95 @@
-  <div class="page_images">
-
-    <div class="editor">
-      <div class="controls">
-        <div class="nav">
-          <%= link_to "Close",    '#', class: :close %>
-        </div>
-        <h4>Image Editor</h4>
-        <%= fields_for PageImage.new do |pi| %>
-          <%= pi.fields_for :image_attributes, Image.new do |i| %>
-            <%= i.hidden_field :id, class: 'image_id' %>
-            <fieldset>
-              <label>
-                Alternative text
-              </label>
-              <%= i.text_field(:alternative,
-                               class: 'alternative',
-                               placeholder: 'Alternative text') %>
-            </fieldset>
-            <fieldset class="caption-fieldset">
-              <label>
-                Caption
-              </label>
-              <%= i.text_field(:caption,
-                               class: 'caption',
-                               placeholder: 'Write your caption/byline') %>
-            </fieldset>
-            <%= text_field_tag 'embed', '', class: 'embed' %>
-            <%= pi.check_box :primary %><label>Primary</label>
-            <%= i.hidden_field :crop_start_x, class: 'crop_start_x' %>
-            <%= i.hidden_field :crop_start_y, class: 'crop_start_y' %>
-            <%= i.hidden_field :crop_width, class: 'crop_width' %>
-            <%= i.hidden_field :crop_height, class: 'crop_height' %>
-          <% end %>
-
-          <button class="save">
-            Save
-          </button>
-
-          <%= link_to "Delete image", '#', class: :delete %>
+<div class="page_images">
+  <div class="editor">
+    <div class="controls">
+      <div class="nav">
+        <%= link_to("Close", '#', class: :close) %>
+      </div>
+      <h4>Image Editor</h4>
+      <%= fields_for PageImage.new do |pi| %>
+        <%= pi.fields_for(:image_attributes, Image.new) do |i| %>
+          <%= i.hidden_field :id, class: 'image_id' %>
+          <fieldset>
+            <label>
+              Alternative text
+            </label>
+            <%= i.text_field(:alternative,
+                             class: 'alternative',
+                             placeholder: 'Alternative text') %>
+          </fieldset>
+          <fieldset class="caption-fieldset">
+            <label>
+              Caption
+            </label>
+            <%= i.text_field(:caption,
+                             class: 'caption',
+                             placeholder: 'Write your caption/byline') %>
+          </fieldset>
+          <%= text_field_tag 'embed', '', class: 'embed' %>
+          <%= pi.check_box :primary %><label>Primary</label>
+          <%= i.hidden_field :crop_start_x, class: 'crop_start_x' %>
+          <%= i.hidden_field :crop_start_y, class: 'crop_start_y' %>
+          <%= i.hidden_field :crop_width, class: 'crop_width' %>
+          <%= i.hidden_field :crop_height, class: 'crop_height' %>
         <% end %>
-      </div>
-      <div class="edit-image-container">
-        <%= link_to "", '#', class: :previous %>
-        <%= link_to "",     '#', class: :next %>
-        <div class="edit-image">
-        </div>
-      </div>
-    </div>
 
-    <div class="uploadButton">
-      <p>
-        <button type="button" class="upload-images-button">
-          Upload images
+        <button class="save">
+          Save
         </button>
-      </p>
-    </div>
 
-    <div class="no_images">
-      <p>No images have been uploaded.</p>
-    </div>
-
-    <div class="primary_container">
-      <% if @page.image? && (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
-        <a class="image primary"
-           data-page-image-id="<%= page_image.id %>"
-           data-uncropped-url="<%= uncropped_dynamic_image_path(page_image.image, size: '2000x2000') %>"
-           href="<%= dynamic_image_url page_image.image, size: '2000x2000' %>">
-          <%= dynamic_image_tag(page_image.image, size: '380x380', crop: true, upscale: true) %>
-        </a>
+        <%= link_to "Delete image", '#', class: :delete %>
       <% end %>
     </div>
-    <div class="images clearfix">
-      <% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
-        <a class="image"
-           data-page-image-id="<%= i.id %>"
-           data-uncropped-url="<%= uncropped_dynamic_image_path(i.image, size: '2000x2000') %>"
-           href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
-          <%= dynamic_image_tag(i.image, size: '240x240', crop: true, upscale: true) %>
-        </a>
-      <% end %>
+    <div class="edit-image-container">
+      <%= link_to "", '#', class: :previous %>
+      <%= link_to "",     '#', class: :next %>
+      <div class="edit-image">
+      </div>
     </div>
-
   </div>
+
+  <div class="uploadButton">
+    <p>
+      <button type="button" class="upload-images-button">
+        Upload images
+      </button>
+    </p>
+  </div>
+
+  <div class="no_images">
+    <p>No images have been uploaded.</p>
+  </div>
+
+  <div class="primary_container">
+    <% if @page.image? &&
+      (page_image = @page.page_images.select{|pi| pi.primary?}.first) %>
+      <a class="image primary"
+         data-page-image-id="<%= page_image.id %>"
+         data-uncropped-url="<%= uncropped_dynamic_image_path(
+                                   page_image.image,
+                                   size: '2000x2000')
+                             %>"
+         href="<%= dynamic_image_url page_image.image, size: '2000x2000' %>">
+        <%= dynamic_image_tag(page_image.image,
+                              size: '380x380',
+                              crop: true,
+                              upscale: true) %>
+      </a>
+    <% end %>
+  </div>
+  <div class="images clearfix">
+    <% @page.page_images.reject{|pi| pi.primary?}.each do |i| %>
+      <a class="image"
+         data-page-image-id="<%= i.id %>"
+         data-uncropped-url="<%= uncropped_dynamic_image_path(
+                                   i.image,
+                                   size: '2000x2000')
+                             %>"
+         href="<%= dynamic_image_url i.image, size: '2000x2000' %>">
+        <%= dynamic_image_tag(i.image,
+                              size: '240x240',
+                              crop: true,
+                              upscale: true) %>
+      </a>
+    <% end %>
+  </div>
+</div>

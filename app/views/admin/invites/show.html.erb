@@ -9,17 +9,16 @@
   </p>
 </div>
 
-<%= form_for @user, url: accept_admin_invite_path(@invite, token: @invite.token), builder: PagesCore::FormBuilder do |f| %>
-
+<%= form_for(@user,
+             url: accept_admin_invite_path(@invite, token: @invite.token),
+             builder: PagesCore::FormBuilder) do |f| %>
   <%= f.labelled_text_field :name %>
   <%= f.labelled_text_field :email %>
   <%= f.labelled_password_field :password %>
   <%= f.labelled_password_field :confirm_password %>
-
   <p>
     <button type="submit">
       Sign up
     </button>
   </p>
-
 <% end %>

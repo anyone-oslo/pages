@@ -4,7 +4,9 @@
 
 <% if !@page.new_record? && @page.template_config.value(:tags) %>
   <div class="field">
-    <label>Tags</label>
-    <%= tag_editor_for f, @page %>
+    <label>
+      Tags
+    </label>
+    <%= tag_editor_for(f, @page) %>
   </div>
 <% end %>
