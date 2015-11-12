@@ -35,7 +35,7 @@
 
   .page {
     padding: 4px 8px;
-    height: 17px;
+    line-height: 17px;
     float: left;
 
     .status {
@@ -140,10 +140,6 @@
 .edit-page {
   padding-top: 1px;
   width: auto;
-
-  .field {
-    margin-right: 20px;
-  }
 
   .hidden-options {
     display: none;

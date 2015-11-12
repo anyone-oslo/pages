@@ -1,3 +1,11 @@
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0px;
   padding: 0px;
@@ -23,7 +31,7 @@ html, body {
     padding: 0px 0px 60px 0px;
   }
   > aside {
-    min-width: 250px;
+    min-width: 300px;
     width: 20%;
     padding: 0px 16px;
   }
