@@ -1,4 +1,4 @@
-#modal_container {
+#modal-container {
   z-index:20;
   border: 1px solid #555;
   position: absolute;
@@ -6,7 +6,8 @@
   padding:20px;
   padding-top: 10px;
 }
-#modal_container h2 {
+
+#modal-container h2 {
   padding: 0 0 8px 0;
   color: #27495e;
   font-size: 1.45em;

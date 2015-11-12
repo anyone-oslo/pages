@@ -4,8 +4,8 @@ window.Modal =
   makeContainer: ->
     modal = this
     unless @container
-      $(document.body).append "<div id=\"modal_container\"/>"
-      @container = $("#modal_container").get(0)
+      $(document.body).append "<div id=\"modal-container\"/>"
+      @container = $("#modal-container").get(0)
       $(@container).hide()
       $(window).scroll ->
         modal.position()

@@ -1,73 +1,71 @@
 #main form {
-  margin:        16px 32px;
+  margin: 16px 32px;
 }
 
-form .field {
-  margin:        16px 0;
-  padding:       0;
-}
+form {
+  .field {
+    margin: 16px 0;
+    padding: 0;
 
-form .field label {
-  display:       block;
-  padding:       0;
-  margin:        0 0 4px 0;
-  font-weight:   bold;
-  font-size:     13px;
-  color:         #444;
-  /*
-  text-transform: uppercase;
-  font-size:     11px;
-  */
-}
-/*
-#sidebar form .field label {
-  color: #666;
-}*/
-form .field .description {
-  color:         #888;
-  margin:        0 0 6px 0;
-}
-form .field_with_errors {
-  background:    #fff0f3;
-  border-top:    1px solid #ffd0d3;
-  border-bottom: 1px solid #ffd0d3;
-  margin:        0 -32px -1px -32px;
-  padding:       12px 32px 16px 32px;
-}
-form .field_with_errors label {
-  color:         #c00007;
+    label {
+      display: block;
+      padding: 0;
+      margin: 0 0 4px 0;
+      font-weight: bold;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .description {
+      color: #888;
+      margin: 0 0 6px 0;
+    }
+  }
+
+  .field-with-errors {
+    background: #fff0f3;
+    border-top: 1px solid #ffd0d3;
+    border-bottom: 1px solid #ffd0d3;
+    margin: 0 -32px -1px -32px;
+    padding: 12px 32px 16px 32px;
+
+    label {
+      color: #c00007;
+    }
+  }
 }
 
 .fieldWithErrors {
-  display:       table;
-  padding:       1px;
+  display: table;
+  padding: 1px;
   padding-right: 22px;
-  background:    transparent image-url("pages/admin/warning-icon.gif") right 5px no-repeat;
+  background: transparent image-url("pages/admin/warning-icon.gif") right 5px no-repeat;
 }
-.fieldWithErrors input, .fieldWithErrors textarea {
-}
-
 
 #main {
-
-  input[type=text], input[type=password], textarea {
-    border:        1px solid #d4d4d4;
-    background:    #fff image-url("pages/admin/formelement-bg.gif") repeat-x;
-    padding:       8px 10px;
-    line-height:   1.4;
-    font-family:   Helvetica, Arial, sans-serif;
-    font-size:     13px;
+  input[type=text],
+  input[type=password],
+  textarea {
+    border: 1px solid #d4d4d4;
+    box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
+    padding: 8px 10px;
+    line-height: 1.4;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
   }
 
-  input[type=text], input[type=password] {
+  input[type=text],
+  input[type=password] {
     width: 100%;
     max-width: 450px;
     min-width: 200px;
   }
 }
 
-input[type=text], input[type=password] {
-  &.large, #main .login-form & {
+input[type=text],
+input[type=password] {
+  &.large,
+  #main .login-form & {
     font-size: 1.4em;
   }
 }

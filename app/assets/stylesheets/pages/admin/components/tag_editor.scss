@@ -17,15 +17,18 @@
     border-radius: 3px;
     line-height: 1;
     min-width: 40px;
+
     input {
       float: left;
       margin: 2px 0 0 0;
     }
+
     .name {
       float: left;
       padding: 1px 5px;
       margin: 0;
     }
+
     &.enabled {
       background: #396e97;
       border-color: #274b67;
@@ -33,14 +36,17 @@
       text-shadow: #274b67 1px 1px 1px;
     }
   }
+
   .add-tag-form {
     float: left;
     width: 178px;
     white-space: nowrap;
   }
+
   input.add-tag {
     margin: 0 4px 0 0;
     padding: 4px 3px 3px 3px;
+
     &.example {
       color: #888;
     }

@@ -1,5 +1,6 @@
 @import "jquery-ui";
 @import 'jquery.Jcrop';
+@import 'admin/mixins';
 @import 'admin/components/**/*';
 @import 'admin/controllers/**/*';
 
@@ -8,10 +9,9 @@ body {
   color: #000;
   margin: 0;
   padding: 0;
-}
-
-body html {
-  min-height: 100%;
+  html {
+    min-height: 100%;
+  }
 }
 
 #main {
@@ -22,33 +22,33 @@ body html {
 }
 
 #page-description {
+  @include vertical-gradient(#dceef6, #e7f3f9);
   margin: 0;
   padding: 16px 32px;
   display: block;
-  background: #e7f3f9 image-url("pages/admin/description-bg.gif") repeat-x;
   border-bottom: 1px solid #d4eaf4;
   color: #000;
-}
 
-#page-description em {
-  font-style: normal;
-  color: #4a5357;
-}
+  em {
+    font-style: normal;
+    color: #4a5357;
+  }
 
-#main #page-description h3 {
-  margin: 0;
-  padding: 0;
-  font-size: 13px;
-  text-shadow: #E9F6FF 1px 1px 1px;
-}
+  #main & h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    text-shadow: #E9F6FF 1px 1px 1px;
+  }
 
-#page-description .links {
-  float: right;
-}
+  .links {
+    float: right;
+  }
 
-#page-description .separator {
-  color:           #779CB3;
-  margin:          0 4px;
+  .separator {
+    color: #779CB3;
+    margin: 0 4px;
+  }
 }
 
 body, td, th {
@@ -75,10 +75,9 @@ th {
 
 .hr {
   border-top: 1px solid #aaa;
-}
-
-.hr hr {
-  display: none;
+  hr {
+    display: none;
+  }
 }
 
 div#content {
@@ -89,18 +88,20 @@ div.content {
   margin: 0 32px;
 }
 
-table.show th, td {
+table.show th,
+td {
   font-weight: normal;
   padding: 2px 16px 2px 0;
 }
 
-#flash-error, #flash-notice {
+#flash-error,
+#flash-notice {
   padding: 16px 32px;
   font-size: 12px;
 }
 
 #flash-error {
-  background: #c00007 image-url("pages/admin/flash-error-bg.gif") repeat-x;
+  @include vertical-gradient(#970002, #c00007);
   border-bottom: 1px solid #9c0002;
   color: #fff299;
   font-weight: bold;
@@ -113,152 +114,45 @@ table.show th, td {
   font-weight: normal;
 }
 
-div.taskbar {
-  background: #ddd;
-  border-bottom: 1px solid #ccc;
-  padding: 8px 32px;
-  display: inline-table;
-}
-
-div.taskbar:after {
-  content: ".";
-  display: block;
-  height: 0;
-  font-size: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-div.taskbar h2 {
-  font-size: 1.1em;
-  color: #444;
-  border: 0;
-  margin: 8px 0;
-}
-
-div.taskbar p {
-  margin: 8px 0;
-}
-
-div.taskbar div.taskbar-group {
-  margin-right: 32px;
-  float: left;
-}
-
-.sidebar {
-  font-family: Helvetica, Arial, sans-serif;
-  width: 280px;
-  background: #F7F0DA;
-  float: right;
-  margin: -32px -32px 0 32px;
-  padding: 16px;
-  padding-top: 0px;
-  font-size: 0.95em;
-  line-height: 1.3;
-  border-left: 1px solid #CBD2B6;
-  border-bottom: 1px solid #CBD2B6;
-}
-
-* html .sidebar {
-  width: 312px;
-}
-
-.sidebar h2 {
-  font-size: 1.2em;
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  color: #fff;
-  background: #4D4745;
-  margin: 0 -16px 1em -16px;
-  padding: 8px 16px;
-}
-
-.sidebar .hr {
-  border-bottom: 1px solid #F5F6F0;
-  border-top: 1px solid #D7DCBD;
-  margin: 16px -8px;
-}
-
-.sidebar .box {
-  margin-bottom: 2em;
-}
-
-.sidebar ul {
-  padding: 0;
-  list-style: square inside;
-}
-
-.sidebar li {
-  color: #313429;
-}
-
-.sidebar li.inactive {
-  color: #998;
-}
-
-.sidebar li.current {
-  font-weight: bold;
-}
-
-.sidebar .button {
-  font-size: 0.95em;
-}
-
-.sidebar ul.boxed li.current {
-  background: #EDE6CF;
-}
-
-.sidebar ul.boxed li {
-  padding: 1px 8px;
-  margin-bottom: 1px;
-}
-
-.summary {
-  margin-top: 32px;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #666;
-}
-
 .errorExplanation {
   background-color: #ffd;
   border-bottom:  1px solid #dda;
   margin: -32px -32px 16px -32px;
   padding: 0px 32px;
   color: #333;
-}
 
-.errorExplanation h2 {
-  font-weight: normal;
-  font-size: 1.4em;
-  margin: 0 -32px 16px -32px;
-  padding:  8px 32px;
-  background-color: #a00;
-  color: #fff;
-}
+  h2 {
+    font-weight: normal;
+    font-size: 1.4em;
+    margin: 0 -32px 16px -32px;
+    padding:  8px 32px;
+    background-color: #a00;
+    color: #fff;
+  }
 
-.errorExplanation p {
-  margin-bottom: 0;
-  padding: 0;
-}
+  p {
+    margin-bottom: 0;
+    padding: 0;
+  }
 
-.errorExplanation ul {
-  padding:  0;
-  list-style-position: inside;
-}
+  ul {
+    padding:  0;
+    list-style-position: inside;
+  }
 
-.errorExplanation ul li {
-  font-weight:  bold;
+  ul li {
+    font-weight:  bold;
+  }
 }
 
 .flash {
-  background:  #fffbdf;
-  border-bottom:  1px solid #ccc9b2;
-  margin:  -32px -32px 32px -32px;
+  background: #fffbdf;
+  border-bottom: 1px solid #ccc9b2;
+  margin: -32px -32px 32px -32px;
   padding: 16px 32px;
-  font-weight:  bold;
-  color:  #6f2d1b;
-  font-size:  1.2em;
+  font-weight: bold;
+  color: #6f2d1b;
+  font-size: 1.2em;
 }
 
 div.paginator {
@@ -270,30 +164,6 @@ div.paginator {
 
 img.thumbnail {
   border: 1px solid #555;
-}
-
-.formtable {
-  width: 100%;
-  margin-top: -16px;
-  margin-right: 322px;
-}
-
-.formtable td {
-  vertical-align: top;
-  padding: 0 8px 8px 0;
-}
-
-.formtable label {
-  display: block;
-  margin-top: 4px;
-}
-
-.formtable input, .formtable textarea {
-  width: 100%;
-}
-
-.formtable .title input {
-  font-size: 1.3em;
 }
 
 li .actions {

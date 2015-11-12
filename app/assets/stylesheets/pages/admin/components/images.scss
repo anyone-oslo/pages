@@ -30,8 +30,8 @@
 
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 
-    &:hover, &.selected {
-      /*-webkit-transition:all .2s ease-in;*/
+    &:hover,
+    &.selected {
       outline:solid 3px hsl(198,67%,35%);
       outline-offset: -1px;
     }
@@ -61,7 +61,8 @@
       margin-right:10px;
     }
 
-    h4, .controls {
+    h4,
+    .controls {
       line-height: 20px;
     }
 
@@ -118,8 +119,6 @@
     .edit-image-container {
       position: relative;
       .previous, .next {
-        //text-indent: -9000px;
-        //background: yellow;
         position: absolute;
         height: 100%;
         width: 40px;

@@ -34,7 +34,7 @@ module PagesCore
 
     def field_with_label(attribute, content, label_text = nil)
       classes = ["field"]
-      classes << "field_with_errors" if errors_on?(attribute)
+      classes << "field-with-errors" if errors_on?(attribute)
       content_tag(
         "div",
         label_for(attribute, label_text) + content,

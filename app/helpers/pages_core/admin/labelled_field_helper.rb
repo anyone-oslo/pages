@@ -47,7 +47,7 @@ module PagesCore
 
       def labelled_field_class(options = {})
         if options[:errors] && options[:errors].any?
-          "field field_with_errors"
+          "field field-with-errors"
         else
           "field"
         end
