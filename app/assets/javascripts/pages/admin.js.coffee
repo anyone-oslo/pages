@@ -23,7 +23,6 @@
 #= require pages/admin/features/tag_editor
 #= require pages/admin/lib/ajax_extensions
 #= require pages/admin/lib/center_on_screen
-#= require pages/admin/lib/jrichtextarea
 
 window.Admin =
   Controllers: {}
