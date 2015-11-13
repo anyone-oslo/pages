@@ -137,3 +137,33 @@ header {
     }
   }
 }
+
+#page-description {
+  @include vertical-gradient(#dceef6, #e7f3f9);
+  margin: 0;
+  padding: 16px 32px;
+  display: block;
+  border-bottom: 1px solid #d4eaf4;
+  color: #000;
+
+  em {
+    font-style: normal;
+    color: #4a5357;
+  }
+
+  main & h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    text-shadow: #E9F6FF 1px 1px 1px;
+  }
+
+  .links {
+    float: right;
+  }
+
+  .separator {
+    color: #779CB3;
+    margin: 0 4px;
+  }
+}
