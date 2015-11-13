@@ -13,7 +13,7 @@ class TextileDecorator
   list: (str) ->
     ["", ("* " + line for line in str.split("\n")).join("\n"), ""]
   orderedList: (str) ->
-    ["", ("#{i + 1}. " + line for line, i in str.split("\n")).join("\n"), ""]
+    ["", ("# " + line for line in str.split("\n")).join("\n"), ""]
 
 # Gets the selected text from an element
 getSelection = (elem) -> $(elem).getSelection().text
