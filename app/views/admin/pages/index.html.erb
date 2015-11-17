@@ -32,10 +32,13 @@
   <% if @root_pages.length < 1 -%>
     <p>No pages found</p>
   <% else -%>
-    <ul class="page-list reorderable">
-      <% @root_pages.each do |page| -%>
-        <%= render partial: "pagelisting", locals: { page: page } %>
-      <% end -%>
-    </ul>
+    <%= react_component(
+      "PageTree", {
+        pages: ActiveModel::ArraySerializer.new(
+          @root_pages,
+          each_serializer: PageTreeSerializer
+        )
+      }
+    ) %>
   <% end -%>
 </div>
