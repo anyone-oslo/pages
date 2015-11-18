@@ -34,10 +34,13 @@
   <% else -%>
     <%= react_component(
       "PageTree", {
-        pages: ActiveModel::ArraySerializer.new(
-          @root_pages,
-          each_serializer: PageTreeSerializer
-        )
+        tree: {
+          name: "Top level",
+          children: ActiveModel::ArraySerializer.new(
+            @root_pages,
+            each_serializer: PageTreeSerializer
+          )
+        }
       }
     ) %>
   <% end -%>
