@@ -65,9 +65,11 @@ class PageTreeNode extends React.Component {
     var tree = this.props.tree;
     var dragging = this.props.dragging;
 
-    if(index.children && index.children.length) {
+    if (index.children && index.children.length) {
       var childrenStyles = {};
-      if(index.node.collapsed) childrenStyles.display = 'none';
+      if (index.node.collapsed) {
+        childrenStyles.display = 'none';
+      }
       childrenStyles['paddingLeft'] = this.props.paddingLeft + 'px';
 
       return (
@@ -124,6 +126,7 @@ class PageTreeNode extends React.Component {
     var dragging = this.props.dragging;
     var styles = {};
     var classnames = "node";
+
     if (index.id === dragging) {
       classnames = "node placeholder";
     }
