@@ -95,26 +95,53 @@ class PageTreeNode extends React.Component {
     return null;
   }
 
-  editUrl (page) {
+  node() {
+    return this.props.index.node;
+  }
+
+  editUrl(page) {
     return(`/admin/${page.locale}/pages/${page.param}/edit`)
+  }
+
+  collapsedLabel() {
+    if (this.node().collapsed) {
+      var pluralized = (this.node().children.length == 1) ? "item" : "items";
+      return (
+        <span className="collapsed-label">
+          ({this.node().children.length} {pluralized})
+        </span>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  statusLabel() {
+    let labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
+    if (typeof(this.node().status) != "undefined" && this.node().status != 2) {
+      return (
+        <span className="status-label">
+          ({labels[this.node().status]})
+        </span>
+      );
+    } else {
+      return "";
+    }
   }
 
   renderNode() {
     var index = this.props.index;
     var node = index.node;
-    var collapsed = "";
-    if (node.collapsed) {
-      collapsed = <span className="collapsed-label">
-          ({node.children.length} items)
-      </span>;
-    }
+    var className = `page status-${this.node().status}`;
+
     return (
-      <div className="page">
+      <div className={className}>
         <i className="fa fa-file-o icon"></i>
         <a href={this.editUrl(node)} className="name">
           {node.name}
         </a>
-        {collapsed}
+        {this.statusLabel()}
+        {this.collapsedLabel()}
       </div>
     );
   }

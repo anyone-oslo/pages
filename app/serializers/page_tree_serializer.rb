@@ -11,7 +11,7 @@ class PageTreeSerializer < ActiveModel::Serializer
   end
 
   def children
-    object.pages
+    object.subpages.visible.in_locale(object.locale)
   end
 
   def param
