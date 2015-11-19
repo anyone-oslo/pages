@@ -140,7 +140,30 @@ class PageTree extends React.Component {
     dragging.x = pos.x;
     dragging.y = pos.y;
 
+    var diffX = dragging.x - paddingLeft/2 - (index.left-2) * paddingLeft;
     var diffY = dragging.y - dragging.h/2 - (index.top-2) * dragging.h;
+
+    if (diffX < 0) {
+      // left
+      if (index.parent && !index.next) {
+        newIndex = tree.move(index.id, index.parent, 'after');
+      }
+    } else if (diffX > paddingLeft) {
+      // right
+      if (index.prev) {
+        var prev = tree.getIndex(index.prev);
+
+        if (!prev.node.leaf && !prev.node.collapsed) {
+          newIndex = tree.move(index.id, index.prev, 'append');
+        }
+      }
+    }
+
+    if (newIndex) {
+      index = newIndex;
+      newIndex.node.collapsed = collapsed;
+      dragging.id = newIndex.id;
+    }
 
     if (diffY < 0) {
       // up
@@ -158,7 +181,7 @@ class PageTree extends React.Component {
       } else {
         var below = tree.getNodeByTop(index.top + index.height);
         if (below && below.parent !== index.id) {
-          if(below.children && below.children.length) {
+          if (below.children && below.children.length && !below.node.collapsed) {
             newIndex = tree.move(index.id, below.id, 'prepend');
           } else {
             newIndex = tree.move(index.id, below.id, 'after');

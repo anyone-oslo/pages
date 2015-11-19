@@ -65,7 +65,7 @@ class PageTreeNode extends React.Component {
     var tree = this.props.tree;
     var dragging = this.props.dragging;
 
-    if (index.children && index.children.length) {
+    if (index.children && index.children.length && !index.node.collapsed) {
       var childrenStyles = {};
       if (index.node.collapsed) {
         childrenStyles.display = 'none';

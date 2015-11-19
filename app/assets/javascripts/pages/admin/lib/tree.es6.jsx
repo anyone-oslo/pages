@@ -26,7 +26,7 @@
  */
 function Tree(obj) {
   this.cnt = 1;
-  this.obj = obj || {children:[]};
+  this.obj = obj || { children: [] };
   this.indexes = {};
   this.build(this.obj);
 }
@@ -38,11 +38,13 @@ proto.build = function(obj) {
   var startId = this.cnt;
   var self = this;
 
-  var index = {id: startId, node: obj};
-  indexes[this.cnt+''] = index;
+  var index = { id: startId, node: obj };
+  indexes[this.cnt + ''] = index;
   this.cnt++;
 
-  if(obj.children && obj.children.length) walk(obj.children, index);
+  if (obj.children && obj.children.length) {
+    walk(obj.children, index);
+  }
 
   function walk(objs, parent) {
     var children = [];
@@ -51,20 +53,28 @@ proto.build = function(obj) {
       index.id = self.cnt;
       index.node = obj;
 
-      if(parent) index.parent = parent.id;
+      if (parent) {
+        index.parent = parent.id;
+      }
 
-      indexes[self.cnt+''] = index;
+      indexes[self.cnt + ''] = index;
       children.push(self.cnt);
       self.cnt++;
 
-      if(obj.children && obj.children.length) walk(obj.children, index);
+      if (obj.children && obj.children.length) {
+        walk(obj.children, index);
+      }
     });
     parent.children = children;
 
     children.forEach(function(id, i) {
-      var index = indexes[id+''];
-      if(i > 0) index.prev = children[i-1];
-      if(i < children.length-1) index.next = children[i+1];
+      var index = indexes[id + ''];
+      if (i > 0) {
+        index.prev = children[i - 1];
+      }
+      if (i < children.length-1) {
+        index.next = children[i+1];
+      }
     });
   }
 
@@ -72,8 +82,10 @@ proto.build = function(obj) {
 };
 
 proto.getIndex = function(id) {
-  var index = this.indexes[id+''];
-  if(index) return index;
+  var index = this.indexes[id + ''];
+  if (index) {
+    return index;
+  }
 };
 
 proto.removeIndex = function(index) {
@@ -92,7 +104,9 @@ proto.removeIndex = function(index) {
 
 proto.get = function(id) {
   var index = this.getIndex(id);
-  if(index && index.node) return index.node;
+  if (index && index.node) {
+    return index.node;
+  }
   return null;
 };
 
@@ -113,8 +127,12 @@ proto.updateChildren = function(children) {
   children.forEach(function(id, i) {
     var index = this.getIndex(id);
     index.prev = index.next = null;
-    if(i > 0) index.prev = children[i-1];
-    if(i < children.length-1) index.next = children[i+1];
+    if (i > 0) {
+      index.prev = children[i-1];
+    }
+    if (i < children.length-1) {
+      index.next = children[i+1];
+    }
   }.bind(this));
 };
 
@@ -132,7 +150,7 @@ proto.insert = function(obj, parentId, i) {
   parentIndex.children.splice(i, 0, index.id);
 
   this.updateChildren(parentIndex.children);
-  if(parentIndex.parent) {
+  if (parentIndex.parent) {
     this.updateChildren(this.getIndex(parentIndex.parent).children);
   }
 
@@ -201,7 +219,7 @@ proto.updateNodesPosition = function() {
   root.top = top++;
   root.left = left++;
 
-  if(root.children && root.children.length) {
+  if (root.children && root.children.length) {
     walk(root.children, root, left, root.node.collapsed);
   }
 
@@ -209,7 +227,7 @@ proto.updateNodesPosition = function() {
     var height = 1;
     children.forEach(function(id) {
       var node = self.getIndex(id);
-      if(collapsed) {
+      if (collapsed) {
         node.top = null;
         node.left = null;
       } else {
@@ -217,7 +235,7 @@ proto.updateNodesPosition = function() {
         node.left = left;
       }
 
-      if(node.children && node.children.length) {
+      if (node.children && node.children.length) {
         height += walk(node.children, node, left+1, collapsed || node.node.collapsed);
       } else {
         node.height = 1;
@@ -247,11 +265,20 @@ proto.move = function(fromId, toId, placement) {
   return index;
 };
 
+proto.getParent = function(id) {
+  var indexes = this.indexes;
+  if (indexes.hasOwnProperty(id)) {
+    return this.getIndex(indexes[id].parent);
+  }
+}
+
 proto.getNodeByTop = function(top) {
   var indexes = this.indexes;
   for(var id in indexes) {
-    if(indexes.hasOwnProperty(id)) {
-      if(indexes[id].top === top) return indexes[id];
+    if (indexes.hasOwnProperty(id)) {
+      if(indexes[id].top === top) {
+        return indexes[id];
+      }
     }
   }
 };
