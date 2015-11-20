@@ -86,11 +86,6 @@ class PageTree extends React.Component {
     var self = this;
     var tree = this.state.tree;
     var dragging = this.state.dragging;
-
-    var dragStart = (id, dom, e) => self.dragStart(id, dom, e);
-    var toggleCollapse = (nodeId) => self.toggleCollapse(nodeId);
-    var addChild = (id) => self.addChild(id);
-
     var root = tree.getIndex(1);
 
     return (
@@ -104,9 +99,10 @@ class PageTree extends React.Component {
                  index={childIndex}
                  key={childIndex.id}
                  paddingLeft={this.props.paddingLeft}
-                 addChild={addChild}
-                 onDragStart={dragStart}
-                 onCollapse={toggleCollapse}
+                 addChild={id => this.addChild(id)}
+                 onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
+                 onCollapse={nodeId => this.toggleCollapse(nodeId)}
+                 updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
                  dragging={dragging && dragging.id}
              />
            );
@@ -116,7 +112,7 @@ class PageTree extends React.Component {
   }
 
   addChild(parent) {
-    let newNode = {name: "", status: 0, children: []};
+    let newNode = { name: "", status: 0, children: [] };
     var tree = this.state.tree;
     tree.append(newNode, parent.id);
     this.setState({tree: tree});
@@ -275,6 +271,19 @@ class PageTree extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(tree.obj);
     }
+  }
+
+  updatePage(index, attributes) {
+    var tree = this.state.tree;
+
+    for (var attr in attributes) {
+      if (attributes.hasOwnProperty(attr)) {
+        index.node[attr] = attributes[attr];
+      }
+    }
+
+    this.setState({tree: tree});
+    this.change(tree);
   }
 }
 

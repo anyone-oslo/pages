@@ -26,6 +26,29 @@
  */
 
 class PageTreeNode extends React.Component {
+  actions() {
+    var statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
+    var statusIcon = "icon fa fa-" + ((this.node().status != 2) ? "check" : "ban");
+
+    return (
+      <span className="actions">
+        <button type="button"
+                className="toggle-status"
+                onClick={e => this.toggleStatus()}>
+          <i className={statusIcon} />
+          {statusLabel}
+        </button>
+
+        <button type="button"
+                className="add"
+                onClick={e => this.props.addChild(this.props.index)}>
+          <i className="fa fa-plus icon" />
+          Add child
+        </button>
+      </span>
+    );
+  }
+
   addButton() {
     var self = this;
     var node = this.node();
@@ -38,7 +61,7 @@ class PageTreeNode extends React.Component {
 
     if (!node.collapsed && node.children.length > 0) {
       return (
-        <button className="add"
+        <button className="add add-inline"
                 onClick={handleClick}>
           <i className="fa fa-plus icon" />
           Add page here
@@ -73,6 +96,7 @@ class PageTreeNode extends React.Component {
                    addChild={this.props.addChild}
                    onCollapse={this.props.onCollapse}
                    onDragStart={this.props.onDragStart}
+                   updatePage={this.props.updatePage}
                />
              );
            })}
@@ -183,12 +207,6 @@ class PageTreeNode extends React.Component {
     var node = index.node;
     var className = `page status-${this.node().status}`;
 
-    var addChild = function (e) {
-      if (self.props.addChild) {
-        self.props.addChild(self.props.index);
-      }
-    }
-
     return (
       <div className={className}>
         <i className="fa fa-file-o icon"></i>
@@ -197,14 +215,7 @@ class PageTreeNode extends React.Component {
         </a>
         {this.statusLabel()}
         {this.collapsedLabel()}
-        <span className="actions">
-          <button type="button"
-                  className="add-subpage"
-                  onClick={addChild}>
-            <i className="fa fa-plus icon" />
-            Add child
-          </button>
-        </span>
+        {this.actions()}
       </div>
     );
   }
@@ -219,6 +230,20 @@ class PageTreeNode extends React.Component {
       );
     } else {
       return "";
+    }
+  }
+
+  toggleStatus() {
+    if (this.node().status != 2) {
+      this.updatePage({status: 2});
+    } else {
+      this.updatePage({status: 3});
+    }
+  }
+
+  updatePage(attributes) {
+    if (this.props.updatePage) {
+      return this.props.updatePage(this.props.index, attributes);
     }
   }
 }

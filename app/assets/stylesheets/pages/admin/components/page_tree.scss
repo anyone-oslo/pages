@@ -91,7 +91,10 @@
 
   .page .actions {
     visibility: hidden;
-    margin-left: 10px;
+    margin-left: 5px;
+    button {
+      margin-left: 5px;
+    }
   }
   .page:hover .actions {
     visibility: visible;
@@ -103,23 +106,36 @@
     background: transparent;
     cursor: pointer;
     font-size: 13px;
-    color: $c-create;
     padding: 3px 5px;
     border-radius: 3px;
+    color: $c-link;
+
     .icon {
       margin-right: 8px;
     }
-    &:hover {
-      color: $c-create-hover;
-      background: transparentize($c-create, 0.75);
+
+    &:hover,
+    &:focus {
+      color: $c-link-hover;
+      background: transparentize($c-link, 0.75);
+    }
+
+    &.add {
+      color: $c-create;
+
+      &:hover,
+      &:focus {
+        color: $c-create-hover;
+        background: transparentize($c-create, 0.75);
+      }
     }
   }
 
-  button.add {
+  button.add-inline {
     margin: 5px 0px 5px 30px;
   }
 
-  .node .node .node .page .name {
+  .node .node .page .name {
     font-weight: normal;
   }
 }
