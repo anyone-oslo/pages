@@ -26,41 +26,28 @@
  */
 
 class PageTreeNode extends React.Component {
-  renderCollapse() {
-    var index = this.props.index;
+  addButton() {
     var self = this;
+    var node = this.node();
 
-    var handleCollapse = function (e) {
-      e.stopPropagation();
-      var nodeId = self.props.index.id;
-      if (self.props.onCollapse) {
-        self.props.onCollapse(nodeId);
+    var handleClick = function (e) {
+      if (self.props.addChild) {
+        self.props.addChild(self.props.index);
       }
     }
 
-    if (index.children && index.children.length) {
-      var classnames = null;
-      var collapsed = index.node.collapsed;
-
-      if (collapsed) {
-        classnames = "collapse fa fa-caret-right";
-      } else {
-        classnames = "collapse fa fa-caret-down";
-      }
-
+    if (!node.collapsed && node.children.length > 0) {
       return (
-        <i
-        className={classnames}
-        onMouseDown={function(e) {e.stopPropagation()}}
-        onClick={handleCollapse}
-        />
+        <button className="add"
+                onClick={handleClick}>
+          <i className="fa fa-plus icon" />
+          Add page here
+        </button>
       );
     }
-
-    return null;
   }
 
-  renderChildren() {
+  childNodes() {
     var index = this.props.index;
     var tree = this.props.tree;
     var dragging = this.props.dragging;
@@ -96,12 +83,38 @@ class PageTreeNode extends React.Component {
     return null;
   }
 
-  node() {
-    return this.props.index.node;
-  }
+  collapseArrow() {
+    var index = this.props.index;
+    var self = this;
 
-  editUrl(page) {
-    return(`/admin/${page.locale}/pages/${page.param}/edit`)
+    var handleCollapse = function (e) {
+      e.stopPropagation();
+      var nodeId = self.props.index.id;
+      if (self.props.onCollapse) {
+        self.props.onCollapse(nodeId);
+      }
+    }
+
+    if (index.children && index.children.length) {
+      var classnames = null;
+      var collapsed = index.node.collapsed;
+
+      if (collapsed) {
+        classnames = "collapse fa fa-caret-right";
+      } else {
+        classnames = "collapse fa fa-caret-down";
+      }
+
+      return (
+        <i
+        className={classnames}
+        onMouseDown={function(e) {e.stopPropagation()}}
+        onClick={handleCollapse}
+        />
+      );
+    }
+
+    return null;
   }
 
   collapsedLabel() {
@@ -117,17 +130,12 @@ class PageTreeNode extends React.Component {
     }
   }
 
-  statusLabel() {
-    let labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
-    if (typeof(this.node().status) != "undefined" && this.node().status != 2) {
-      return (
-        <span className="status-label">
-          ({labels[this.node().status]})
-        </span>
-      );
-    } else {
-      return "";
-    }
+  editUrl(page) {
+    return(`/admin/${page.locale}/pages/${page.param}/edit`)
+  }
+
+  node() {
+    return this.props.index.node;
   }
 
   pageName() {
@@ -138,25 +146,35 @@ class PageTreeNode extends React.Component {
     }
   }
 
-  renderAddButton() {
+  render() {
     var self = this;
-    var node = this.node();
+    var props = this.props;
+    var index = props.index;
+    var dragging = props.dragging;
+    var classnames = "node";
 
-    var handleClick = function (e) {
-      if (self.props.addChild) {
-        self.props.addChild(self.props.index);
+    if (index.id === dragging) {
+      classnames = "node placeholder";
+    }
+
+    var handleMouseDown = function (e) {
+      var dom = self.refs.inner;
+
+      if (props.onDragStart) {
+        props.onDragStart(props.index.id, dom, e);
       }
     }
 
-    if (!node.collapsed && node.children.length > 0) {
-      return (
-        <button className="add-button"
-                onClick={handleClick}>
-          <i className="fa fa-plus icon" />
-          Add page here
-        </button>
-      );
-    }
+    return (
+      <div className={classnames}>
+        <div className="inner" ref="inner" onMouseDown={handleMouseDown}>
+          {this.collapseArrow()}
+          {this.renderNode()}
+        </div>
+        {this.childNodes()}
+        {this.addButton()}
+      </div>
+    );
   }
 
   renderNode() {
@@ -191,36 +209,16 @@ class PageTreeNode extends React.Component {
     );
   }
 
-  render() {
-    var self = this;
-    var tree = this.props.tree;
-    var index = this.props.index;
-    var dragging = this.props.dragging;
-    var styles = {};
-    var classnames = "node";
-
-    if (index.id === dragging) {
-      classnames = "node placeholder";
+  statusLabel() {
+    let labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
+    if (typeof(this.node().status) != "undefined" && this.node().status != 2) {
+      return (
+        <span className="status-label">
+          ({labels[this.node().status]})
+        </span>
+      );
+    } else {
+      return "";
     }
-
-    var handleMouseDown = function (e) {
-      var nodeId = self.props.index.id;
-      var dom = self.refs.inner;
-
-      if(self.props.onDragStart) {
-        self.props.onDragStart(nodeId, dom, e);
-      }
-    }
-
-    return (
-      <div className={classnames} style={styles}>
-        <div className="inner" ref="inner" onMouseDown={handleMouseDown}>
-          {this.renderCollapse()}
-          {this.renderNode()}
-        </div>
-        {this.renderChildren()}
-        {this.renderAddButton()}
-      </div>
-    );
   }
 }
