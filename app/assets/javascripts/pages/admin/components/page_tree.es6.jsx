@@ -90,6 +90,7 @@ class PageTree extends React.Component {
 
     var dragStart = (id, dom, e) => self.dragStart(id, dom, e);
     var toggleCollapse = (nodeId) => self.toggleCollapse(nodeId);
+    var addChild = (id) => self.addChild(id);
 
     return (
       <div className="page-tree">
@@ -99,12 +100,21 @@ class PageTree extends React.Component {
             index={tree.getIndex(1)}
             key={1}
             paddingLeft={this.props.paddingLeft}
+            addChild={addChild}
             onDragStart={dragStart}
             onCollapse={toggleCollapse}
             dragging={dragging && dragging.id}
         />
       </div>
     );
+  }
+
+  addChild(parent) {
+    let newNode = {name: "", status: 0, children: []};
+    var tree = this.state.tree;
+    tree.append(newNode, parent.id);
+    this.setState({tree: tree});
+    this.change(tree);
   }
 
   drag(e) {

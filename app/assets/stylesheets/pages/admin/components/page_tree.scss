@@ -47,6 +47,12 @@
     font-size: 15px;
     padding: 4px 10px;
     border: 1px solid transparent;
+    //border-radius: 5px;
+
+    &:hover {
+      border: 1px solid #f0f0f0;
+      @include vertical-gradient(#ffffff, #f8f8f8);
+    }
 
     .name {
       font-weight: bold;
@@ -82,6 +88,45 @@
       }
     }
   }
+
+  .page .actions {
+    visibility: hidden;
+    margin-left: 10px;
+  }
+  .page:hover .actions {
+    visibility: visible;
+  }
+
+  button {
+    padding: 0px;
+    border: 0px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: $c-create;
+    padding: 3px 5px;
+    border-radius: 3px;
+    .icon {
+      margin-right: 8px;
+    }
+    &:hover {
+      color: $c-create-hover;
+      background: transparentize($c-create, 0.75);
+    }
+  }
+
+  .add-button {
+    margin: 5px 0px 5px 30px;
+  }
+  /*
+  .node > .add-button {
+    display: none;
+  }
+  .node:hover > .add-button,
+  > .node > .add-button {
+    display: block;
+  }
+ */
 
   .node .node .node .page .name {
     font-weight: normal;

@@ -83,6 +83,7 @@ class PageTreeNode extends React.Component {
                    key={childIndex.id}
                    dragging={dragging}
                    paddingLeft={this.props.paddingLeft}
+                   addChild={this.props.addChild}
                    onCollapse={this.props.onCollapse}
                    onDragStart={this.props.onDragStart}
                />
@@ -129,19 +130,63 @@ class PageTreeNode extends React.Component {
     }
   }
 
+  pageName() {
+    if (this.node().name) {
+      return this.node().name;
+    } else {
+      return <i className="untitled">Untitled</i>;
+    }
+  }
+
+  renderAddButton() {
+    var self = this;
+    var node = this.node();
+
+    var handleClick = function (e) {
+      if (self.props.addChild) {
+        self.props.addChild(self.props.index);
+      }
+    }
+
+    if (!node.collapsed && node.children.length > 0) {
+      return (
+        <button className="add-button"
+                onClick={handleClick}>
+          <i className="fa fa-plus icon" />
+          Add page here
+        </button>
+      );
+    }
+  }
+
   renderNode() {
+    var self = this;
     var index = this.props.index;
     var node = index.node;
     var className = `page status-${this.node().status}`;
+
+    var addChild = function (e) {
+      if (self.props.addChild) {
+        self.props.addChild(self.props.index);
+      }
+    }
 
     return (
       <div className={className}>
         <i className="fa fa-file-o icon"></i>
         <a href={this.editUrl(node)} className="name">
-          {node.name}
+          {this.pageName()}
         </a>
         {this.statusLabel()}
         {this.collapsedLabel()}
+        <span className="actions">
+          <button type="button"
+                  className="add-subpage"
+                  onClick={addChild}>
+            <i className="fa fa-plus icon" />
+            Add child
+          </button>
+        </span>
       </div>
     );
   }
@@ -174,6 +219,7 @@ class PageTreeNode extends React.Component {
           {this.renderNode()}
         </div>
         {this.renderChildren()}
+        {this.renderAddButton()}
       </div>
     );
   }

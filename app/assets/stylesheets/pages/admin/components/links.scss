@@ -1,36 +1,39 @@
-a, a:visited {
-  color: #1d7195;
+a,
+a:visited {
+  color: $c-link;
   text-decoration: underline;
 }
 
-a:hover {
-  color: #193443;
+a:hover,
+a:focus {
+  color: $c-link;
 }
 
 a.create,
 a.create:visited {
-  color: #008800;
+  color: $c-create;
 }
 
-a.create:hover {
-  color: #004400;
+a.create:hover,
+a.create:focus {
+  color: $c-create-hover;
 }
 
 a.cancel,
 a.cancel:visited {
-  color: #dd0000;
+  color: $c-delete;
 }
 
 a.cancel:hover {
-  color: #880000;
+  color: $c-delete-hover;
 }
 
 a.delete, a.delete:visited {
-  color: #dd0000;
+  color: $c-delete;
 }
 
 a.delete:hover {
-  color: #880000;
+  color: $c-delete-hover;
 }
 
 button a {
