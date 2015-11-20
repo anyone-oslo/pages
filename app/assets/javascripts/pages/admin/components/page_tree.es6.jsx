@@ -87,26 +87,20 @@ class PageTree extends React.Component {
     var tree = this.state.tree;
     var dragging = this.state.dragging;
     var root = tree.getIndex(1);
-
     return (
       <div className="page-tree">
         {this.getDraggingDom()}
-        {root.children.map((child) => {
-           var childIndex = tree.getIndex(child);
-           return (
-             <PageTreeNode
-                 tree={tree}
-                 index={childIndex}
-                 key={childIndex.id}
-                 paddingLeft={this.props.paddingLeft}
-                 addChild={id => this.addChild(id)}
-                 onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
-                 onCollapse={nodeId => this.toggleCollapse(nodeId)}
-                 updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
-                 dragging={dragging && dragging.id}
-             />
-           );
-         })}
+        <PageTreeNode
+            tree={tree}
+            index={root}
+            key={root.id}
+            paddingLeft={this.props.paddingLeft}
+            addChild={id => this.addChild(id)}
+            onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
+            onCollapse={nodeId => this.toggleCollapse(nodeId)}
+            updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
+            dragging={dragging && dragging.id}
+        />
       </div>
     );
   }
