@@ -40,6 +40,13 @@ class PageTreeNode extends React.Component {
         </button>
 
         <button type="button"
+                className="delete"
+                onClick={e => this.deletePage()}>
+          <i className="fa fa-trash icon" />
+          Delete
+        </button>
+
+        <button type="button"
                 className="add"
                 onClick={e => this.props.addChild(this.props.index)}>
           <i className="fa fa-plus icon" />
@@ -52,14 +59,13 @@ class PageTreeNode extends React.Component {
   addButton() {
     var self = this;
     var node = this.node();
-
     var handleClick = function (e) {
       if (self.props.addChild) {
         self.props.addChild(self.props.index);
       }
     }
 
-    if (!node.collapsed && node.children.length > 0) {
+    if (!node.collapsed && this.visibleChildren.length > 0) {
       return (
         <button className="add add-inline"
                 onClick={handleClick}>
@@ -119,7 +125,7 @@ class PageTreeNode extends React.Component {
       }
     }
 
-    if (index.children && index.children.length) {
+    if (this.visibleChildren().length > 0) {
       var classnames = null;
       var collapsed = index.node.collapsed;
 
@@ -151,6 +157,12 @@ class PageTreeNode extends React.Component {
       );
     } else {
       return null;
+    }
+  }
+
+  deletePage() {
+    if (confirm("Are you sure you want to delete this page?")) {
+      this.updatePage({status: 4});
     }
   }
 
@@ -189,16 +201,20 @@ class PageTreeNode extends React.Component {
       }
     }
 
-    return (
-      <div className={classnames}>
-        <div className="inner" ref="inner" onMouseDown={handleMouseDown}>
-          {this.collapseArrow()}
-          {this.renderNode()}
+    if (this.node().status != 4) {
+      return (
+        <div className={classnames}>
+          <div className="inner" ref="inner" onMouseDown={handleMouseDown}>
+            {this.collapseArrow()}
+            {this.renderNode()}
+          </div>
+          {this.childNodes()}
+          {this.addButton()}
         </div>
-        {this.childNodes()}
-        {this.addButton()}
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 
   renderNode() {
@@ -245,5 +261,9 @@ class PageTreeNode extends React.Component {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
+  }
+
+  visibleChildren() {
+    return this.node().children.filter(p => p.status != 4);
   }
 }

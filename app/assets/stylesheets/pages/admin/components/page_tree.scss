@@ -44,6 +44,7 @@
   }
 
   .page {
+    @extend %clearfix;
     font-size: 15px;
     padding: 4px 10px;
     border: 1px solid transparent;
@@ -90,6 +91,7 @@
   }
 
   .page .actions {
+    float: right;
     visibility: hidden;
     margin-left: 5px;
     button {
@@ -127,6 +129,16 @@
       &:focus {
         color: $c-create-hover;
         background: transparentize($c-create, 0.75);
+      }
+    }
+
+    &.delete {
+      color: $c-delete;
+
+      &:hover,
+      &:focus {
+        color: $c-delete-hover;
+        background: transparentize($c-delete, 0.75);
       }
     }
   }
