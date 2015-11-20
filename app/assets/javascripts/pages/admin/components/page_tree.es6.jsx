@@ -106,7 +106,7 @@ class PageTree extends React.Component {
   }
 
   addChild(parent) {
-    let newNode = { name: "", status: 0, children: [] };
+    let newNode = { name: "", status: 0, editing: true, children: [] };
     var tree = this.state.tree;
     tree.append(newNode, parent.id);
     this.updatePage(parent, { collapsed: false });

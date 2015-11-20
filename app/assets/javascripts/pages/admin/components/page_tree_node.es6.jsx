@@ -26,9 +26,18 @@
  */
 
 class PageTreeNode extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { newName: props.index.node.name };
+  }
+
   actions() {
     var statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
     var statusIcon = "icon fa fa-" + ((this.node().status != 2) ? "check" : "ban");
+
+    if (this.node().editing) {
+      return null;
+    }
 
     return (
       <span className="actions">
@@ -37,6 +46,13 @@ class PageTreeNode extends React.Component {
                 onClick={e => this.toggleStatus()}>
           <i className={statusIcon} />
           {statusLabel}
+        </button>
+
+        <button type="button"
+                className="edit"
+                onClick={e => this.edit()}>
+          <i className="fa fa-pencil icon" />
+          Rename
         </button>
 
         <button type="button"
@@ -65,7 +81,7 @@ class PageTreeNode extends React.Component {
       }
     }
 
-    if (!node.collapsed && this.visibleChildren.length > 0) {
+    if (!node.collapsed && this.visibleChildren().length > 0) {
       return (
         <button className="add add-inline"
                 onClick={handleClick}>
@@ -166,6 +182,10 @@ class PageTreeNode extends React.Component {
     }
   }
 
+  edit() {
+    this.updatePage({editing: true});
+  }
+
   editUrl(page) {
     return(`/admin/${page.locale}/pages/${page.param}/edit`)
   }
@@ -189,6 +209,8 @@ class PageTreeNode extends React.Component {
     var dragging = props.dragging;
     var classnames = "node";
 
+    var node = this.node().editing ? this.renderEditNode() : this.renderNode();
+
     if (index.id === dragging) {
       classnames = "node placeholder";
     }
@@ -206,7 +228,7 @@ class PageTreeNode extends React.Component {
         <div className={classnames}>
           <div className="inner" ref="inner" onMouseDown={handleMouseDown}>
             {this.collapseArrow()}
-            {this.renderNode()}
+            {node}
           </div>
           {this.childNodes()}
           {this.addButton()}
@@ -215,6 +237,50 @@ class PageTreeNode extends React.Component {
     } else {
       return null;
     }
+  }
+
+  handleNameChange(event) {
+    this.setState({newName: event.target.value});
+  }
+
+  submitEdit(event) {
+    event.preventDefault();
+    this.updatePage({
+      name: this.state.newName,
+      editing: false
+    });
+  }
+
+  renderEditNode() {
+    var self = this;
+
+    var cancelEdit = function(e) {
+      self.setState({newName: self.node().name});
+      self.updatePage({editing: false});
+    }
+
+    return (
+      <div className="page edit">
+        <i className="fa fa-file-o icon"></i>
+        <form onSubmit={e => this.submitEdit(e)}>
+          <input type="text"
+                 value={this.state.newName}
+                 autoFocus
+                 ref="nameInput"
+                 onChange={e => this.handleNameChange(e)} />
+          <button className="save" type="submit">
+            <i className="fa fa-cloud icon"></i>
+            Save
+          </button>
+          <button className="cancel"
+                  onClick={cancelEdit}
+                  type="button">
+            <i className="fa fa-ban icon"></i>
+            Cancel
+          </button>
+        </form>
+      </div>
+    );
   }
 
   renderNode() {

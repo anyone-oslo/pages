@@ -69,6 +69,23 @@
       font-size: 12px;
     }
 
+    form {
+      display: inline;
+      margin: 0px;
+      padding: 0px;
+      input {
+        font-size: 15px;
+        padding: 2px 4px;
+
+        margin-top: -2px;
+        margin-bottom: -2px;
+        margin-right: 5px;
+      }
+      button {
+        margin-left: 5px;
+      }
+    }
+
     a,
     a:visited {
       color: #111;
@@ -132,7 +149,8 @@
       }
     }
 
-    &.delete {
+    &.delete,
+    &.cancel {
       color: $c-delete;
 
       &:hover,
@@ -147,7 +165,7 @@
     margin: 5px 0px 5px 30px;
   }
 
-  .node .node .page .name {
+  .node .node .node .page .name {
     font-weight: normal;
   }
 }
