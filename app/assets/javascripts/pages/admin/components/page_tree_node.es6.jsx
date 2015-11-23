@@ -32,8 +32,8 @@ class PageTreeNode extends React.Component {
   }
 
   actions() {
-    var statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
-    var statusIcon = "icon fa fa-" + ((this.node().status != 2) ? "check" : "ban");
+    let statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
+    let statusIcon = "icon fa fa-" + ((this.node().status != 2) ? "check" : "ban");
 
     if (this.node().editing) {
       return null;
@@ -73,9 +73,9 @@ class PageTreeNode extends React.Component {
   }
 
   addButton() {
-    var self = this;
-    var node = this.node();
-    var handleClick = function (e) {
+    let self = this;
+    let node = this.node();
+    let handleClick = function (e) {
       if (self.props.addChild) {
         self.props.addChild(self.props.index);
       }
@@ -93,9 +93,9 @@ class PageTreeNode extends React.Component {
   }
 
   childNodes() {
-    var index = this.props.index;
-    var tree = this.props.tree;
-    var dragging = this.props.dragging;
+    let index = this.props.index;
+    let tree = this.props.tree;
+    let dragging = this.props.dragging;
 
     if (index.children && index.children.length && !index.node.collapsed) {
       var childrenStyles = {};
@@ -130,20 +130,25 @@ class PageTreeNode extends React.Component {
   }
 
   collapseArrow() {
-    var index = this.props.index;
-    var self = this;
+    let index = this.props.index;
+    let self = this;
 
-    var handleCollapse = function (e) {
+    // Don't collapse the root node
+    if (!index.parent) {
+      return null;
+    }
+
+    let handleCollapse = function (e) {
       e.stopPropagation();
-      var nodeId = self.props.index.id;
+      let nodeId = self.props.index.id;
       if (self.props.onCollapse) {
         self.props.onCollapse(nodeId);
       }
     }
 
     if (this.visibleChildren().length > 0) {
+      let collapsed = index.node.collapsed;
       var classnames = null;
-      var collapsed = index.node.collapsed;
 
       if (collapsed) {
         classnames = "collapse fa fa-caret-right";
@@ -152,11 +157,9 @@ class PageTreeNode extends React.Component {
       }
 
       return (
-        <i
-        className={classnames}
-        onMouseDown={function(e) {e.stopPropagation()}}
-        onClick={handleCollapse}
-        />
+        <i className={classnames}
+           onMouseDown={function(e) {e.stopPropagation()}}
+           onClick={handleCollapse} />
       );
     }
 
@@ -165,7 +168,7 @@ class PageTreeNode extends React.Component {
 
   collapsedLabel() {
     if (this.node().collapsed) {
-      var pluralized = (this.node().children.length == 1) ? "item" : "items";
+      let pluralized = (this.node().children.length == 1) ? "item" : "items";
       return (
         <span className="collapsed-label">
           ({this.node().children.length} {pluralized})
@@ -203,10 +206,10 @@ class PageTreeNode extends React.Component {
   }
 
   render() {
-    var self = this;
-    var props = this.props;
-    var index = props.index;
-    var dragging = props.dragging;
+    let self = this;
+    let props = this.props;
+    let index = props.index;
+    let dragging = props.dragging;
     var classnames = "node";
 
     var node = this.node().editing ? this.renderEditNode() : this.renderNode();
@@ -215,11 +218,9 @@ class PageTreeNode extends React.Component {
       classnames = "node placeholder";
     }
 
-    var handleMouseDown = function (e) {
-      var dom = self.refs.inner;
-
+    let handleMouseDown = function (e) {
       if (props.onDragStart) {
-        props.onDragStart(props.index.id, dom, e);
+        props.onDragStart(props.index.id, self.refs.inner, e);
       }
     }
 
@@ -239,22 +240,22 @@ class PageTreeNode extends React.Component {
     }
   }
 
-  handleNameChange(event) {
-    this.setState({newName: event.target.value});
-  }
-
-  submitEdit(event) {
-    event.preventDefault();
-    this.updatePage({
-      name: this.state.newName,
-      editing: false
-    });
-  }
-
   renderEditNode() {
-    var self = this;
+    let self = this;
 
-    var cancelEdit = function(e) {
+    let handleNameChange = function(event) {
+      self.setState({newName: event.target.value});
+    }
+
+    let performEdit = function(event) {
+      event.preventDefault();
+      self.updatePage({
+        name: self.state.newName,
+        editing: false
+      });
+    }
+
+    let cancelEdit = function(e) {
       self.setState({newName: self.node().name});
       self.updatePage({editing: false});
     }
@@ -262,12 +263,12 @@ class PageTreeNode extends React.Component {
     return (
       <div className="page edit">
         <i className="fa fa-file-o icon"></i>
-        <form onSubmit={e => this.submitEdit(e)}>
+        <form onSubmit={performEdit}>
           <input type="text"
                  value={this.state.newName}
                  autoFocus
                  ref="nameInput"
-                 onChange={e => this.handleNameChange(e)} />
+                 onChange={handleNameChange} />
           <button className="save" type="submit">
             <i className="fa fa-cloud icon"></i>
             Save
@@ -284,17 +285,27 @@ class PageTreeNode extends React.Component {
   }
 
   renderNode() {
-    var self = this;
-    var index = this.props.index;
-    var node = index.node;
-    var className = `page status-${this.node().status}`;
+    let self = this;
+    let index = this.props.index;
+    let node = index.node;
+
+    var pageName = <span className="name">{this.pageName()}</span>;
+    var className = "page";
+
+    if (typeof(node.status) != "undefined") {
+      className = `page status-${this.node().status}`;
+    }
+
+    if (node.id && node.locale) {
+      pageName = <a href={this.editUrl(node)} className="name">
+        {this.pageName()}
+      </a>;
+    }
 
     return (
       <div className={className}>
         <i className="fa fa-file-o icon"></i>
-        <a href={this.editUrl(node)} className="name">
-          {this.pageName()}
-        </a>
+        {pageName}
         {this.statusLabel()}
         {this.collapsedLabel()}
         {this.actions()}
