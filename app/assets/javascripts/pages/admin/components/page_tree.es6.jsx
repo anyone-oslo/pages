@@ -29,24 +29,36 @@ class PageTree extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.init(this.props);
+
+    if (props.tree) {
+      PageTreeActions.init(this.props.tree);
+    }
+  }
+
+  componentDidMount() {
+    let self = this;
+    this.unsubscribe = PageTreeStore.listen(
+      newTree => self.setState({tree: newTree})
+    );
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this._updated) {
       this.setState(this.init(nextProps));
+      if (nextProps.tree) {
+        PageTreeActions.init(this.props.tree);
+      }
     } else {
       this._updated = false;
     }
   }
 
-  init(props) {
-    var tree = new Tree(props.tree);
-    tree.isNodeCollapsed = props.isNodeCollapsed;
-    tree.changeNodeCollapsed = props.changeNodeCollapsed;
-    tree.updateNodesPosition();
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
+  init(props) {
     return {
-      tree: tree,
       dragging: {
         id: null,
         x: null,
@@ -86,32 +98,37 @@ class PageTree extends React.Component {
     var self = this;
     var tree = this.state.tree;
     var dragging = this.state.dragging;
-    var root = tree.getIndex(1);
-    return (
-      <div className="page-tree">
-        {this.getDraggingDom()}
-        <PageTreeNode
-            tree={tree}
-            index={root}
-            key={root.id}
-            paddingLeft={this.props.paddingLeft}
-            addChild={id => this.addChild(id)}
-            onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
-            onCollapse={nodeId => this.toggleCollapse(nodeId)}
-            updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
-            dragging={dragging && dragging.id}
-        />
-      </div>
-    );
+
+    if (!tree) {
+      return (
+        <div className="page-tree">
+          {this.getDraggingDom()}
+        </div>
+      );
+    } else {
+      var root = tree.getIndex(1);
+      return (
+        <div className="page-tree">
+          {this.getDraggingDom()}
+          <PageTreeNode
+              tree={tree}
+              index={root}
+              key={root.id}
+              paddingLeft={this.props.paddingLeft}
+              addChild={id => this.addChild(id)}
+              onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
+              onCollapse={nodeId => this.toggleCollapse(nodeId)}
+              updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
+              dragging={dragging && dragging.id}
+          />
+        </div>
+      );
+    }
   }
 
   addChild(parent) {
     let newNode = { name: "", status: 0, editing: true, children: [] };
-    var tree = this.state.tree;
-    tree.append(newNode, parent.id);
-    this.updatePage(parent, { collapsed: false });
-    this.setState({tree: tree});
-    this.change(tree);
+    PageTreeActions.addChild(parent.id, newNode);
   }
 
   drag(e) {
@@ -203,8 +220,8 @@ class PageTree extends React.Component {
     }
 
     this.setState({
-      tree: tree,
-      dragging: dragging
+      dragging: dragging,
+      tree: tree
     });
   }
 
@@ -232,6 +249,8 @@ class PageTree extends React.Component {
   }
 
   dragEnd() {
+    PageTreeActions.updateTree(this.state.tree);
+
     this.setState({
       dragging: {
         id: null,
@@ -242,43 +261,19 @@ class PageTree extends React.Component {
       }
     });
 
-    this.change(this.state.tree);
     window.removeEventListener('mousemove', this._dragListener);
     window.removeEventListener('mouseup', this._dragEndListener);
   }
 
   toggleCollapse(nodeId) {
-    var tree = this.state.tree;
-    var index = tree.getIndex(nodeId);
-    var node = index.node;
-    node.collapsed = !node.collapsed;
-    tree.updateNodesPosition();
-
-    this.setState({
-      tree: tree
-    });
-
-    this.change(tree);
-  }
-
-  change(tree) {
-    this._updated = true;
-    if (this.props.onChange) {
-      this.props.onChange(tree.obj);
-    }
+    PageTreeActions.toggleCollapsed(nodeId);
   }
 
   updatePage(index, attributes) {
-    var tree = this.state.tree;
-
-    for (var attr in attributes) {
-      if (attributes.hasOwnProperty(attr)) {
-        index.node[attr] = attributes[attr];
-      }
-    }
-
-    this.setState({tree: tree});
-    this.change(tree);
+    PageTreeActions.updatePage(
+      index.id,
+      attributes
+    );
   }
 }
 

@@ -7,6 +7,7 @@
 #= require underscore
 #= require react
 #= require react_ujs
+#= require reflux.min
 
 # Vendored assets
 #= require jquery.dimscreen
