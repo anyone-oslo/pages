@@ -39,37 +39,50 @@ class PageTreeNode extends React.Component {
       return null;
     }
 
-    return (
-      <span className="actions">
-        <button type="button"
-                className="toggle-status"
-                onClick={e => this.toggleStatus()}>
-          <i className={statusIcon} />
-          {statusLabel}
-        </button>
+    if (this.props.index.id === 1) {
+      return (
+        <span className="actions">
+          <button type="button"
+                  className="add"
+                  onClick={e => this.props.addChild(this.props.index)}>
+            <i className="fa fa-plus icon" />
+            Add child
+          </button>
+        </span>
+      );
+    } else {
+      return (
+        <span className="actions">
+          <button type="button"
+                  className="toggle-status"
+                  onClick={e => this.toggleStatus()}>
+            <i className={statusIcon} />
+            {statusLabel}
+          </button>
 
-        <button type="button"
-                className="edit"
-                onClick={e => this.edit()}>
-          <i className="fa fa-pencil icon" />
-          Rename
-        </button>
+          <button type="button"
+                  className="edit"
+                  onClick={e => this.edit()}>
+            <i className="fa fa-pencil icon" />
+            Rename
+          </button>
 
-        <button type="button"
-                className="delete"
-                onClick={e => this.deletePage()}>
-          <i className="fa fa-trash icon" />
-          Delete
-        </button>
+          <button type="button"
+                  className="delete"
+                  onClick={e => this.deletePage()}>
+            <i className="fa fa-trash icon" />
+            Delete
+          </button>
 
-        <button type="button"
-                className="add"
-                onClick={e => this.props.addChild(this.props.index)}>
-          <i className="fa fa-plus icon" />
-          Add child
-        </button>
-      </span>
-    );
+          <button type="button"
+                  className="add"
+                  onClick={e => this.props.addChild(this.props.index)}>
+            <i className="fa fa-plus icon" />
+            Add child
+          </button>
+        </span>
+      );
+    }
   }
 
   addButton() {
@@ -292,6 +305,8 @@ class PageTreeNode extends React.Component {
     var pageName = <span className="name">{this.pageName()}</span>;
     var className = "page";
 
+    var iconClass = "fa fa-file-o icon";
+
     if (typeof(node.status) != "undefined") {
       className = `page status-${this.node().status}`;
     }
@@ -302,9 +317,15 @@ class PageTreeNode extends React.Component {
       </a>;
     }
 
+    if (node.news_page) {
+      iconClass = "fa fa-newspaper-o icon";
+    } else if (node.pinned) {
+      iconClass = "fa fa-flag-o icon";
+    }
+
     return (
       <div className={className}>
-        <i className="fa fa-file-o icon"></i>
+        <i className={iconClass}></i>
         {pageName}
         {this.statusLabel()}
         {this.collapsedLabel()}
