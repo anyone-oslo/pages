@@ -272,4 +272,40 @@ describe Page do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe "#subpages" do
+    let!(:page1) do
+      create(:page,
+             position: 2,
+             pinned: true,
+             parent: page,
+             published_at: 3.days.ago)
+    end
+
+    let!(:page2) do
+      create(:page,
+             position: 3,
+             parent: page,
+             published_at: 2.days.ago)
+    end
+
+    let!(:page3) do
+      create(:page,
+             position: 1,
+             parent: page,
+             published_at: 1.days.ago)
+    end
+
+    subject { page.subpages.map(&:id) }
+
+    context "when page is a regular page" do
+      let(:page) { create(:page) }
+      it { is_expected.to eq([page3.id, page1.id, page2.id]) }
+    end
+
+    context "when page is a news page" do
+      let(:page) { create(:page, news_page: true) }
+      it { is_expected.to eq([page1.id, page3.id, page2.id]) }
+    end
+  end
 end

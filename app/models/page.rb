@@ -63,12 +63,10 @@ class Page < ActiveRecord::Base
   validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
 
   validates :template, presence: true
-  validates :content_order, presence: true
   validates :published_at, presence: true
 
   before_validation :published_at
   before_validation :set_autopublish
-  before_validation :set_content_order
   after_save :ensure_page_images_contains_primary_image
   after_save :queue_autopublisher
   after_save ThinkingSphinx::RealTime.callback_for(:page)
@@ -177,7 +175,7 @@ class Page < ActiveRecord::Base
   end
 
   def subpages
-    children.order(pinned_content_order)
+    children.order(content_order)
   end
 
   # Return the status of the page as a string
@@ -218,12 +216,12 @@ class Page < ActiveRecord::Base
 
   # Returns true if this page's children is reorderable
   def reorderable_children?
-    !self.content_order? || content_order =~ /position/
+    !news_page?
   end
 
   # Returns true if this page is reorderable
   def reorderable?
-    !parent || !parent.content_order? || parent.content_order =~ /position/
+    !parent.news_page?
   end
 
   def draft?
@@ -251,7 +249,11 @@ class Page < ActiveRecord::Base
   end
 
   def content_order
-    self[:content_order] || "position"
+    if self.news_page?
+      "pages.pinned DESC, published_at DESC"
+    else
+      "position ASC"
+    end
   end
 
   private
@@ -266,17 +268,9 @@ class Page < ActiveRecord::Base
     end
   end
 
-  def pinned_content_order
-    self.news_page? ? "pages.pinned DESC, #{content_order}" : content_order
-  end
-
   def set_autopublish
     self.autopublish = published_at? && published_at > Time.now
     true
-  end
-
-  def set_content_order
-    self[:content_order] ||= "position"
   end
 
   def queue_autopublisher
