@@ -5,10 +5,38 @@
     listenables: [PageTreeActions],
 
     init: function () {
+      if (!window.localStorage.collapsedPages) {
+        window.localStorage.collapsedPages = JSON.stringify({});
+      }
+    },
+
+    applyCollapsed: function () {
+      let store = JSON.parse(window.localStorage.collapsedPages);
+      let walk = function (id) {
+        var index = tree.getIndex(id);
+        var node = index.node;
+        if (store.hasOwnProperty(node.id)) {
+          node.collapsed = store[node.id];
+        } else if (node.news_page) {
+          node.collapsed = true;
+        }
+        if (index.children && index.children.length) {
+          index.children.forEach(c => walk(c));
+        }
+      };
+      walk(1);
     },
 
     getInitialState: function () {
       return tree;
+    },
+
+    storeCollapsed: function (id, state) {
+      let node = tree.getIndex(id).node;
+      var store = JSON.parse(window.localStorage.collapsedPages);
+      store[node.id] = state;
+      console.log(store);
+      window.localStorage.collapsedPages = JSON.stringify(store);
     },
 
     reorderChildren: function (id) {
@@ -31,6 +59,7 @@
 
     onInit: function (newTree) {
       tree = new Tree(newTree);
+      this.applyCollapsed();
       tree.updateNodesPosition();
       this.trigger(tree);
     },
@@ -51,6 +80,7 @@
     onToggleCollapsed: function (id) {
       var node = tree.getIndex(id).node;
       node.collapsed = !node.collapsed;
+      this.storeCollapsed(id, node.collapsed);
       this.trigger(tree);
     },
 
