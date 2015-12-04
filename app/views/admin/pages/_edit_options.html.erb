@@ -58,7 +58,6 @@
 
   <div class="field">
     <label>Subpages</label>
-    Sort <%= f.select(:content_order, [ ['manually','position'], ['with the newest first','published_at DESC'] ] ) %><br />
     <%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
     <%= f.check_box(:news_page) %> Show in News<br />
   </div>
