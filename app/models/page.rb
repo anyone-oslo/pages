@@ -221,7 +221,7 @@ class Page < ActiveRecord::Base
 
   # Returns true if this page is reorderable
   def reorderable?
-    !parent.news_page?
+    !parent || !parent.news_page?
   end
 
   def draft?
