@@ -27,6 +27,31 @@
       walk(1);
     },
 
+    createPage: function (index, attributes) {
+      let store = this;
+      let url = `/admin/${index.node.locale}/pages.json`;
+      $.post(url, { page: attributes }, function (response) {
+        store.updateNode(index, response.page_tree);
+      });
+    },
+
+    updatePage: function (index, attributes) {
+      let store = this;
+      let url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
+      $.put(url, { page: attributes }, function (response) {
+        store.updateNode(index, response.page_tree);
+      });
+    },
+
+    updateNode: function (index, attributes) {
+      for (var attr in attributes) {
+        if (attributes.hasOwnProperty(attr)) {
+          index.node[attr] = attributes[attr];
+        }
+      }
+      this.trigger(tree);
+    },
+
     getInitialState: function () {
       return tree;
     },
@@ -71,10 +96,10 @@
     },
 
     onAddChild: function (id, attributes) {
-      tree.append(attributes, id);
+      var index = tree.append(attributes, id);
       this.reorderChildren(id);
-      PageTreeActions.updatePage(id, { collapsed: false });
-      this.trigger(tree);
+      this.updateNode(index, { collapsed: false })
+      this.createPage(index, attributes);
     },
 
     onToggleCollapsed: function (id) {
@@ -86,12 +111,8 @@
 
     onUpdatePage: function (id, attributes) {
       var index = tree.getIndex(id);
-      for (var attr in attributes) {
-        if (attributes.hasOwnProperty(attr)) {
-          index.node[attr] = attributes[attr];
-        }
-      }
-      this.trigger(tree);
+      this.updateNode(index, attributes);
+      this.updatePage(index, attributes);
     },
 
     onUpdateTree: function (newTree) {

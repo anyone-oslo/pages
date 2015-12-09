@@ -133,7 +133,9 @@ class PageTree extends React.Component {
       editing: true,
       children: [],
       published_at: new Date(),
-      pinned: false
+      pinned: false,
+      locale: parent.node.locale,
+      parent_page_id: parent.node.id
     };
     PageTreeActions.addChild(parent.id, newNode);
   }
@@ -256,8 +258,10 @@ class PageTree extends React.Component {
   }
 
   dragEnd() {
-    PageTreeActions.updateTree(this.state.tree);
-    PageTreeActions.movedPage(this.state.dragging.id);
+    if (!this._start) {
+      PageTreeActions.updateTree(this.state.tree);
+      PageTreeActions.movedPage(this.state.dragging.id);
+    }
 
     this.setState({
       dragging: {

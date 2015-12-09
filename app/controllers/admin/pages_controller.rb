@@ -72,7 +72,14 @@ module Admin
           comments_allowed: @page.template_config.value(:comments_allowed)
         )
         @page.categories = param_categories
-        redirect_to edit_admin_page_url(@locale, @page)
+        respond_to do |format|
+          format.html do
+            redirect_to(edit_admin_page_url(@locale, @page))
+          end
+          format.json do
+            render json: @page, serializer: PageTreeSerializer
+          end
+        end
       else
         render action: :new
       end
@@ -91,9 +98,16 @@ module Admin
     def update
       if @page.update(page_params)
         @page.categories = param_categories
-        flash[:notice] = "Your changes were saved"
-        flash[:save_performed] = true
-        redirect_to edit_admin_page_url(@locale, @page)
+        respond_to do |format|
+          format.html do
+            flash[:notice] = "Your changes were saved"
+            flash[:save_performed] = true
+            redirect_to edit_admin_page_url(@locale, @page)
+          end
+          format.json do
+            render json: @page, serializer: PageTreeSerializer
+          end
+        end
       else
         edit
         render action: :edit
