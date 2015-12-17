@@ -73,8 +73,8 @@ RichTextArea = (textarea, options) ->
 
   # Heading buttons
   addButton "Heading 2", "header h2", (selection) -> decorator().h2(selection)
-  addButton "Heading 3", "header h3", (selection) -> decorator().h2(selection)
-  addButton "Heading 4", "header h4", (selection) -> decorator().h2(selection)
+  addButton "Heading 3", "header h3", (selection) -> decorator().h3(selection)
+  addButton "Heading 4", "header h4", (selection) -> decorator().h4(selection)
 
   # Block Quote
   addButton "Block Quote", "quote-left", (selection) ->
