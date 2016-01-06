@@ -23,10 +23,6 @@ module PagesCore
         @sphinx_port ||= ask_with_fallback("Sphinx port?", "3312")
       end
 
-      def add_gem_source
-        add_source "http://gems.manualdesign.no/"
-      end
-
       def create_active_job_initializer
         template(
           "active_job_initializer.rb",

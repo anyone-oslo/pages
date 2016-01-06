@@ -2,14 +2,14 @@
 
 class AdminMailer < ActionMailer::Base
   before_action :default_headers
-  default from: proc { "\"Pages\" <support@manualdesign.no>" }
+  default from: proc { "\"Pages\" <support@kord.no>" }
 
   def error_report(error_report, from, description)
     @error_report, @from, @description = error_report, from, description
     short_message = @error_report[:message].gsub(/[\s\n]+/, " ")[0..80]
     mail(
-      to:      "system+error@manualdesign.no",
-      from:    "\"Error reports\" <system+error@manualdesign.no>",
+      to:      "system+error@kord.no",
+      from:    "\"Error reports\" <system+error@kord.no>",
       subject: "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
     )
   end

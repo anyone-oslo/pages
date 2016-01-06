@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name        = "pages_core"
   s.version     = PagesCore::VERSION
   s.authors     = ["Inge Jørgensen"]
-  s.email       = ["inge@manualdesign.no"]
+  s.email       = ["inge@kord.no"]
   s.homepage    = ""
   s.summary     = "Pages Core"
   s.description = "Pages Core"
