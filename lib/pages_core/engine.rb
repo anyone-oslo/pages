@@ -25,6 +25,9 @@ module PagesCore
         pages/admin.css
         pages/admin/print.css
         pages/errors.css
+        pages/*.gif
+        pages/*.png
+        pages/*.jpg
       )
     end
   end
