@@ -45,7 +45,8 @@ describe PagesCore::HtmlFormatter do
     context "with file" do
       let(:string) { "Download [file:#{page_file.id}]" }
       let(:expected_path) do
-        "/#{I18n.locale}/pages/#{page.id}/files/#{page_file.id}.png"
+        "/#{I18n.locale}/pages/#{page.id}/files/" \
+          "#{page_file.id}-#{page_file.content_hash}.png"
       end
       it "should embed a link to the file" do
         expect(subject).to match(

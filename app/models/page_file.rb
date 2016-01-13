@@ -56,9 +56,9 @@ class PageFile < ActiveRecord::Base
 
   def to_param
     if filename_extension?
-      "#{id}.#{filename_extension}"
+      "#{id}-#{content_hash}.#{filename_extension}"
     else
-      "#{id}"
+      "#{id}-#{content_hash}"
     end
   end
 
