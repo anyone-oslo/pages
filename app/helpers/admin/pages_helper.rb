@@ -49,6 +49,10 @@ module Admin
       )
     end
 
+    def file_embed_code(file)
+      "[file:#{file.id}]"
+    end
+
     def publish_time(time)
       if time.year != Time.now.year
         time.strftime("on %b %d %Y at %H:%M")

@@ -59,6 +59,9 @@
           <% @page.files.each do |file| %>
             <li data-file-id="<%= file.id %>">
               <span class="actions">
+                <span class="embed-code">
+                  <%= file_embed_code(file) %>
+                </span>
                 <%= link_to "Delete", admin_page_file_path(@locale, @page, file), class: :delete, method: :delete, data: {confirm: 'Are you sure? There is no undo.'} %>
               </span>
               <div class="drag-handle"></div>
@@ -142,7 +145,9 @@
 <% if @page.template_config.value(:files) %>
   <div id="new-file" class="page_new_file">
     <h2>Upload new file</h2>
-    <%= form_for((@new_file = PageFile.new), url: admin_page_files_path(@locale, @page), html: {multipart: true}) do |f| %>
+    <%= form_for((@new_file = PageFile.new),
+                 url: admin_page_files_path(@locale, @page),
+                 html: {multipart: true}) do |f| %>
       <%= labelled_field f.text_field( :name, size: 48 ), "Name",
         errors: @new_file.errors[:name]
       %>
