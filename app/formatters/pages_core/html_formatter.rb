@@ -18,7 +18,7 @@ module PagesCore
     end
 
     def to_html
-      string = parse_images(@string)
+      string = parse_images(parse_files(@string))
       if @options[:shorten] && string.length > @options[:shorten]
         string = string[0..@options[:shorten]] + "..."
       end
@@ -28,8 +28,26 @@ module PagesCore
 
     private
 
+    def file_expression
+      /\[file:(\d+)\]/
+    end
+
     def image_expression
       /\[image:(\d+)([\s="\-\w]*)?\]/
+    end
+
+    def embed_file(id)
+      file = PageFile.find(id).localize(I18n.locale)
+      content_tag(
+        :a,
+        file.name,
+        class: "file",
+        href: Rails.application.routes.url_helpers.page_file_path(
+          file.locale,
+          file.page,
+          file
+        )
+      )
     end
 
     def embed_image(id, size:, class_name:)
@@ -47,6 +65,13 @@ module PagesCore
       )
     rescue ActiveRecord::RecordNotFound
       nil
+    end
+
+    def parse_files(string)
+      string.gsub(file_expression).each do |str|
+        id = str.match(file_expression)[1]
+        embed_file(id)
+      end
     end
 
     def parse_images(string)

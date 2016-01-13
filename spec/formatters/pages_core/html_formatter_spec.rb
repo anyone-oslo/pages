@@ -24,6 +24,14 @@ describe PagesCore::HtmlFormatter do
     let(:uploaded_file) do
       Rack::Test::UploadedFile.new(imagefile, content_type)
     end
+    let(:page) { create(:page) }
+    let(:page_file) do
+      page.page_files.create(
+        file: uploaded_file,
+        name: "Foobar",
+        locale: I18n.locale
+      )
+    end
     let(:image) { Image.create(file: uploaded_file) }
 
     subject { PagesCore::HtmlFormatter.new(string, options).to_html }
@@ -32,6 +40,18 @@ describe PagesCore::HtmlFormatter do
 
     it "should emit a HTML safe string" do
       expect(subject.html_safe?).to eq(true)
+    end
+
+    context "with file" do
+      let(:string) { "Download [file:#{page_file.id}]" }
+      let(:expected_path) do
+        "/#{I18n.locale}/pages/#{page.id}/files/#{page_file.id}.png"
+      end
+      it "should embed a link to the file" do
+        expect(subject).to match(
+          "<p>Download <a class=\"file\" href=\"#{expected_path}\">Foobar</a></p>"
+        )
+      end
     end
 
     context "with image" do
