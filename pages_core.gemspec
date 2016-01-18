@@ -54,13 +54,13 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-cookie-rails"
   s.add_dependency "jcrop-rails-v2"
   s.add_dependency "underscore-rails"
-  s.add_dependency "font-awesome-rails", "~> 4.4.0"
+  s.add_dependency "font-awesome-rails", "~> 4.5.0"
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list"
 
   # reCAPTCHA
-  s.add_dependency "recaptcha", "~> 0.4.0"
+  s.add_dependency "recaptcha", "~> 0.6.0"
 
   # Delayed Job
   s.add_dependency "delayed_job", "~> 4.1.0"
