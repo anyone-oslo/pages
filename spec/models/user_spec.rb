@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe User do
+  subject { build(:user) }
+
   it { is_expected.to belong_to(:creator) }
   it { is_expected.to have_many(:created_users) }
   it { is_expected.to have_many(:pages) }
@@ -10,7 +12,6 @@ describe User do
   it { is_expected.to have_many(:roles) }
   it { is_expected.to belong_to(:image) }
 
-  it { is_expected.to validate_presence_of(:username) }
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_presence_of(:name) }
 
@@ -23,6 +24,11 @@ describe User do
 
   it { is_expected.to allow_value("long enough").for(:password) }
   it { is_expected.not_to allow_value("eep").for(:password) }
+
+  context "when email is blank" do
+    subject { build(:user, email: nil) }
+    it { is_expected.to validate_presence_of(:username) }
+  end
 
   describe "password validation" do
     subject { user.valid? }

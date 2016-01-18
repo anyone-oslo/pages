@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe PagePath do
+  subject { build(:page_path) }
+
   it { is_expected.to belong_to(:page) }
 
   it { is_expected.to validate_presence_of(:locale) }

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe Invite do
+  subject { build(:invite) }
+
   it { is_expected.to belong_to(:user) }
   it do
     is_expected.to have_many(:roles)
