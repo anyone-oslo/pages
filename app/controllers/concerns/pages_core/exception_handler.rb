@@ -23,12 +23,20 @@ module PagesCore
     def render_error(error, options = {})
       options[:status] ||= error if error.is_a? Numeric
       options[:template] ||= "errors/#{error}"
-      options[:layout] ||= "errors"
+      options[:layout] = error_layout(error) unless options.key?(:layout)
       @email = logged_in? ? current_user.email : ""
       render options
     end
 
     protected
+
+    def error_layout(error)
+      if error == 404 && PagesCore.config.error_404_layout?
+        PagesCore.config.error_404_layout
+      else
+        "errors"
+      end
+    end
 
     def log_error(exception)
       trace = exception.backtrace

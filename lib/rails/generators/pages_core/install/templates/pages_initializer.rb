@@ -39,4 +39,7 @@ PagesCore.configure do |config|
   # Add <%%= comment_honeypot_field %> to your form
   # and .comment_email { display: none; } to your CSS.
   # config.comment_honeypot :disabled
+
+  # Layout for 404 errors
+  # config.error_404_layout "errors"
 end

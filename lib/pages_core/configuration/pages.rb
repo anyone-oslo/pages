@@ -17,6 +17,7 @@ module PagesCore
       setting :close_comments_after,  :integer
       setting :comment_honeypot,      :boolean, false
       setting :recaptcha,             :boolean, false
+      setting :error_404_layout,      :string
     end
   end
 end
