@@ -29,7 +29,7 @@ module PagesCore
     private
 
     def file_expression
-      /\[file:(\d+)\]/
+      /\[file:([\d,]+)\]/
     end
 
     def image_expression
@@ -67,10 +67,14 @@ module PagesCore
       nil
     end
 
+    def embed_files(ids)
+      ids.map { |id| embed_file(id) }.join(", ")
+    end
+
     def parse_files(string)
       string.gsub(file_expression).each do |str|
-        id = str.match(file_expression)[1]
-        embed_file(id)
+        ids = str.match(file_expression)[1].split(",")
+        embed_files(ids)
       end
     end
 

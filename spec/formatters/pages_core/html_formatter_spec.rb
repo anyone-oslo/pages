@@ -55,6 +55,31 @@ describe PagesCore::HtmlFormatter do
       end
     end
 
+    context "with several files" do
+      let(:second_file) do
+        page.page_files.create(
+          file: uploaded_file,
+          name: "Foobar2",
+          locale: I18n.locale
+        )
+      end
+      let(:string) { "Download [file:#{page_file.id},#{second_file.id}]" }
+      let(:expected_path) do
+        "/#{I18n.locale}/pages/#{page.id}/files/" \
+          "#{page_file.id}-#{page_file.content_hash}.png"
+      end
+      let(:expected_path2) do
+        "/#{I18n.locale}/pages/#{page.id}/files/" \
+          "#{second_file.id}-#{second_file.content_hash}.png"
+      end
+      it "should embed links to the files" do
+        expect(subject).to match(
+          "<p>Download <a class=\"file\" href=\"#{expected_path}\">Foobar</a>" \
+            ", <a class=\"file\" href=\"#{expected_path2}\">Foobar2</a></p>"
+        )
+      end
+    end
+
     context "with image" do
       context "without attributes" do
         let(:string) { "[image:#{image.id}]" }
