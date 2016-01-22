@@ -42,4 +42,7 @@ PagesCore.configure do |config|
 
   # Layout for 404 errors
   # config.error_404_layout "errors"
+
+  # Custom file embedder
+  # config.file_embedder PagesCore::FileEmbedder
 end

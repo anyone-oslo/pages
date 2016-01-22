@@ -36,20 +36,6 @@ module PagesCore
       /\[image:(\d+)([\s="\-\w]*)?\]/
     end
 
-    def embed_file(id)
-      file = PageFile.find(id).localize(I18n.locale)
-      content_tag(
-        :a,
-        file.name,
-        class: "file",
-        href: Rails.application.routes.url_helpers.page_file_path(
-          file.locale,
-          file.page,
-          file
-        )
-      )
-    end
-
     def embed_image(id, size:, class_name:)
       image = Image.find(id).localize(I18n.locale)
       class_name = ["image", image_class_name(image), class_name].compact
@@ -67,14 +53,13 @@ module PagesCore
       nil
     end
 
-    def embed_files(ids)
-      ids.map { |id| embed_file(id) }.join(", ")
-    end
-
     def parse_files(string)
       string.gsub(file_expression).each do |str|
-        ids = str.match(file_expression)[1].split(",")
-        embed_files(ids)
+        files = str
+          .match(file_expression)[1]
+          .split(",")
+          .map { |id| PageFile.find(id).localize(I18n.locale) }
+        PagesCore.config.file_embedder.new(files).to_html
       end
     end
 

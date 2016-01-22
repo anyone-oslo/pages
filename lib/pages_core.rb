@@ -49,6 +49,7 @@ module PagesCore
       load "pages_core/admin_menu_item.rb"
       load "pages_core/archive_finder.rb"
       load "pages_core/cache_sweeper.rb"
+      load "pages_core/file_embedder.rb"
       load "pages_core/configuration.rb"
       load "pages_core/engine.rb"
       load "pages_core/extensions.rb"

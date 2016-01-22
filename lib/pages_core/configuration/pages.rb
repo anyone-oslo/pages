@@ -18,6 +18,7 @@ module PagesCore
       setting :comment_honeypot,      :boolean, false
       setting :recaptcha,             :boolean, false
       setting :error_404_layout,      :string
+      setting :file_embedder,         :object, PagesCore::FileEmbedder
     end
   end
 end
