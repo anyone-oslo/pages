@@ -13,6 +13,7 @@ module PagesCore
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
       before_action :find_page, only: [:show, :preview, :add_comment]
+      before_action :require_page, only: [:show, :preview, :add_comment]
       before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
 
@@ -265,7 +266,7 @@ module PagesCore
 
       def find_page
         @page ||= find_page_by_id(params[:id]) || unique_page(params[:id])
-        @page.locale = @locale || I18n.default_locale.to_s
+        @page.locale = @locale || I18n.default_locale.to_s if @page
       end
 
       def find_page_by_id(id)
@@ -289,6 +290,11 @@ module PagesCore
         @items, @title = items, title
         response.headers["Content-Type"] = "application/rss+xml;charset=utf-8"
         render template: "feeds/pages", layout: false
+      end
+
+      def require_page
+        return if @page
+        render_error 404
       end
 
       def search_options(category_id: nil)
