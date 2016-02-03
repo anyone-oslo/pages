@@ -60,7 +60,6 @@
       let node = tree.getIndex(id).node;
       var store = JSON.parse(window.localStorage.collapsedPages);
       store[node.id] = state;
-      console.log(store);
       window.localStorage.collapsedPages = JSON.stringify(store);
     },
 

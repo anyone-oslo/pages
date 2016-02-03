@@ -140,6 +140,28 @@ class PageTree extends React.Component {
     PageTreeActions.addChild(parent.id, newNode);
   }
 
+  prevAddButtonCount(tree, index) {
+    pointer = index;
+    parentNodes = [];
+    while (pointer = tree.getIndex(pointer.parent)) {
+      parentNodes.push(pointer);
+    }
+
+    pointer = index;
+    count = 0;
+    while (pointer = tree.getNodeByTop(pointer.top - 1)) {
+      if (
+        parentNodes.indexOf(pointer) == -1 &&
+        !pointer.node.collapsed &&
+        pointer.node.children.filter(p => p.status != 4).length > 0
+      ) {
+        count += 1;
+      }
+    }
+
+    return count;
+  }
+
   drag(e) {
     if (this._start) {
       var distance = Math.abs(e.clientX - this._offsetX) +
@@ -174,7 +196,7 @@ class PageTree extends React.Component {
     dragging.y = pos.y;
 
     var diffX = dragging.x - paddingLeft/2 - (index.left-2) * paddingLeft;
-    var diffY = dragging.y - dragging.h/2 - (index.top-2) * dragging.h;
+    var diffY = dragging.y - dragging.h/2 - (index.top-2 + this.prevAddButtonCount(tree, index)) * dragging.h;
 
     if (diffX < 0) {
       // left
@@ -198,11 +220,11 @@ class PageTree extends React.Component {
       dragging.id = newIndex.id;
     }
 
-    if (diffY < 0) {
+    if (diffY < (0 - dragging.h * 0.5)) {
       // up
       var above = tree.getNodeByTop(index.top-1);
       newIndex = tree.move(index.id, above.id, 'before');
-    } else if (diffY > dragging.h) {
+    } else if (diffY > dragging.h * 1.5) {
       // down
       if (index.next) {
         var below = tree.getIndex(index.next);
