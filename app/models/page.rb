@@ -166,6 +166,13 @@ class Page < ActiveRecord::Base
     self.image_id?
   end
 
+  def move(parent:, position:)
+    Page.transaction do
+      update(parent: parent) unless self.parent == parent
+      insert_at(position)
+    end
+  end
+
   # Get subpages
   def pages(_options = nil)
     if self.locale?

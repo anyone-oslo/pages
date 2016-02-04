@@ -323,14 +323,54 @@ describe Page do
     end
 
     context "when moving a page" do
+      let!(:page) { create(:page) }
+      let!(:root) { create(:page) }
+      let!(:before) { create(:page, parent: root, position: 1) }
+      let!(:after) { create(:page, parent: root, position: 2) }
+
+      before do
+        page.move(parent: root, position: 2)
+        before.reload
+        after.reload
+      end
+
+      context "to another parent" do
+        it "should update the positions" do
+          expect(before.position).to eq(1)
+          expect(page.position).to eq(2)
+          expect(after.position).to eq(3)
+        end
+      end
+
+      context "within the same parent" do
+        let!(:page) { create(:page, parent: root, position: 3) }
+        it "should update the positions" do
+          expect(before.position).to eq(1)
+          expect(page.position).to eq(2)
+          expect(after.position).to eq(3)
+        end
+      end
+    end
+
+    context "when changing parent" do
       let!(:root1) { create(:page) }
       let!(:root2) { create(:page) }
       let!(:page1) { create(:page, position: 1, parent: root1) }
       let!(:page2) { create(:page, position: 2, parent: root1) }
+      let!(:page3) { create(:page, position: 1, parent: root2) }
 
-      it "should update the position on lower items" do
+      before do
         page1.update(parent: root2)
         page2.reload
+        page3.reload
+      end
+
+      it "should update the positions on the new parent" do
+        expect(page1.position).to eq(1)
+        expect(page3.position).to eq(2)
+      end
+
+      it "should update the position on lower items" do
         expect(page2.position).to eq(1)
       end
     end
