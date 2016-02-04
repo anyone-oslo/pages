@@ -308,4 +308,129 @@ describe Page do
       it { is_expected.to eq([page1.id, page3.id, page2.id]) }
     end
   end
+
+  describe "#position" do
+    context "creating a page" do
+      let(:page) { create(:page) }
+      subject { page.position }
+      it { is_expected.to eq(1) }
+    end
+
+    context "creating a deleted page" do
+      let(:page) { create(:page, status: 4) }
+      subject { page.position }
+      it { is_expected.to eq(nil) }
+    end
+
+    context "when moving a page" do
+      let!(:page) { create(:page) }
+      let(:parent) { root }
+      let(:position) { 2 }
+      let!(:root) { create(:page) }
+      let!(:before) { create(:page, parent: root, position: 1) }
+      let!(:after) { create(:page, parent: root, position: 2) }
+
+      before do
+        page.move(parent: parent, position: position)
+        root.reload
+        before.reload
+        after.reload
+      end
+
+      context "to another parent" do
+        it "should update the positions" do
+          expect(before.position).to eq(1)
+          expect(page.position).to eq(2)
+          expect(after.position).to eq(3)
+        end
+      end
+
+      context "within the same parent" do
+        let!(:page) { create(:page, parent: root, position: 3) }
+        it "should update the positions" do
+          expect(before.position).to eq(1)
+          expect(page.position).to eq(2)
+          expect(after.position).to eq(3)
+        end
+      end
+
+      context "to the root" do
+        let(:parent) { nil }
+        let(:position) { 1 }
+        let!(:page) { create(:page, parent: root, position: 3) }
+
+        it "should move the page" do
+          expect(page.parent).to eq(nil)
+          expect(page.position).to eq(1)
+          expect(root.position).to eq(2)
+        end
+      end
+    end
+
+    context "when changing parent" do
+      let!(:root1) { create(:page) }
+      let!(:root2) { create(:page) }
+      let!(:page1) { create(:page, position: 1, parent: root1) }
+      let!(:page2) { create(:page, position: 2, parent: root1) }
+      let!(:page3) { create(:page, position: 1, parent: root2) }
+
+      before do
+        page1.update(parent: root2)
+        page2.reload
+        page3.reload
+      end
+
+      it "should update the positions on the new parent" do
+        expect(page1.position).to eq(1)
+        expect(page3.position).to eq(2)
+      end
+
+      it "should update the position on lower items" do
+        expect(page2.position).to eq(1)
+      end
+    end
+
+    context "when deleting a page" do
+      let!(:page1) { create(:page, position: 1) }
+      let!(:page2) { create(:page, position: 2) }
+
+      before do
+        page1.update(status: 4)
+        page2.reload
+      end
+
+      it "should remove the list position" do
+        expect(page1.position).to eq(nil)
+      end
+
+      it "should update the position on lower items" do
+        expect(page2.position).to eq(1)
+      end
+    end
+
+    context "when restoring a page" do
+      let!(:previous_page) { create(:page, position: 1) }
+      let!(:page) { create(:page, status: 4) }
+
+      before { page.update(status: 2) }
+
+      it "should append it to the list" do
+        expect(page.position).to eq(2)
+      end
+    end
+
+    context "when destroying a page" do
+      let!(:page1) { create(:page, position: 1) }
+      let!(:page2) { create(:page, position: 2) }
+
+      before do
+        page1.destroy
+        page2.reload
+      end
+
+      it "should update the position on lower items" do
+        expect(page2.position).to eq(1)
+      end
+    end
+  end
 end

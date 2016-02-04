@@ -74,10 +74,10 @@ Rails.application.routes.draw do
         collection do
           get "news"
           get "new_news" # TODO: Should be refactored
-          get "reorder_pages"
         end
 
         member do
+          put "move"
           delete "delete_meta_image"
         end
 

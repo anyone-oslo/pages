@@ -34,6 +34,7 @@ require "thinking-sphinx"
 # Assets
 require "jquery/rails/engine"
 require "jquery-ui-rails"
+require "react-rails"
 require "jquery-cookie-rails"
 require "underscore-rails"
 require "jcrop/rails/v2"

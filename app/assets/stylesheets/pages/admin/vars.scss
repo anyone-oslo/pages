@@ -1,1 +1,8 @@
 $breakpoint-mobile: 720px;
+
+$c-link: #1d7195;
+$c-link-hover: darken($c-link, 10%);
+$c-create: #19ac1e;
+$c-create-hover: darken($c-create, 10%);
+$c-delete: #a21402;
+$c-delete-hover: darken($c-delete, 10%);

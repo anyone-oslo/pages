@@ -30,5 +30,12 @@ module PagesCore
         pages/*.jpg
       )
     end
+
+    # React configuration
+    initializer :react do |app|
+      app.config.react.jsx_transform_options = {
+        harmony: true
+      }
+    end
   end
 end

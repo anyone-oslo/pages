@@ -15,10 +15,6 @@ class PagePolicy < Policy
     def new_news?
       create?
     end
-
-    def reorder_pages?
-      create?
-    end
   end
 
   module Member
@@ -28,6 +24,10 @@ class PagePolicy < Policy
 
     def edit?
       user.role?(:pages)
+    end
+
+    def move?
+      edit?
     end
   end
 end

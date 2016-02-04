@@ -1,51 +1,6 @@
 class Admin.Controllers.PagesController extends Admin.Controllers.Base
 
   index: ->
-    $("#reorder_link").click ->
-      link = this
-      list = $(".page-list").get(0)
-      if $(list).hasClass("reorder")
-        $(link).html "Reorder pages"
-        $(list).removeClass "reorder"
-      else
-        $(link).html "Done reordering"
-        $(list).addClass "reorder"
-
-    $("ul.reorderable").each ->
-      list = this
-      $(list).sortable
-        axis: "y"
-        cursor: "move"
-        distance: 10
-        handle: ".drag-handle"
-        update: (event, ui) ->
-          new_order = []
-          parent_page_id = $(list).attr("parent_page_id")
-          $(list).children("li").each ->
-            new_order.push $(this).attr("page_id")
-
-          reorder_url = "/admin/" + Admin.locale() + "/pages/reorder_pages"
-          $.get reorder_url,
-            ids: new_order
-          , (data) ->
-            $(list).effect "highlight", {}, 1500
-
-    # Hover actions on .page .actions
-    $(".page").hover (->
-      $(this).addClass "hover"
-      $(this).children(".actions").css "visibility", "visible"
-    ), ->
-      $(this).removeClass "hover"
-      $(this).children(".actions").css "visibility", "hidden"
-
-    $(".page .actions").css "visibility", "hidden"
-
-    # Toggling of the new category input
-    $("toggle-category").click ->
-      $("#new-category").toggle()
-      $("#new-category-button").toggle()
-
-    $("#new-category").hide()
 
   new: ->
     @edit()

@@ -8,34 +8,22 @@
 %>
 
 <% content_for :sidebar do %>
-  <% if policy(Page).new? %>
-    <h2>New page</h2>
-    <p>
-      <%= form_tag new_admin_page_path, method: :get do %>
-        In <%= select_tag 'parent', options_from_collection_for_select(@root_pages, 'id', 'name') %>
-        <%= submit_tag "Go", name: nil %>
-      <% end %>
-    </p>
-    <p>
-      You can also <%= link_to "create a new root page", new_admin_page_path(@locale) %>.
-    </p>
-    <h2>Structure</h2>
-    <p>
-      <button id="reorder_link" type="button">Reorder the pages</button>
-    </p>
-  <% else %>
-    &nbsp;
-  <% end %>
 <% end %>
 
 <div class="content">
   <% if @root_pages.length < 1 -%>
     <p>No pages found</p>
   <% else -%>
-    <ul class="page-list reorderable">
-      <% @root_pages.each do |page| -%>
-        <%= render partial: "pagelisting", locals: { page: page } %>
-      <% end -%>
-    </ul>
+    <%= react_component(
+      "PageTree", {
+        tree: {
+          name: "All Pages",
+          children: ActiveModel::ArraySerializer.new(
+            @root_pages,
+            each_serializer: PageTreeSerializer
+          )
+        }
+      }
+    ) %>
   <% end -%>
 </div>

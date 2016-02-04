@@ -70,6 +70,7 @@ class Page < ActiveRecord::Base
   after_save :ensure_page_images_contains_primary_image
   after_save :queue_autopublisher
   after_save ThinkingSphinx::RealTime.callback_for(:page)
+  after_save :check_list_position
 
   scope :by_date,    -> { order("published_at DESC") }
   scope :published,  -> { where(status: 2, autopublish: false) }
@@ -165,6 +166,13 @@ class Page < ActiveRecord::Base
     self.image_id?
   end
 
+  def move(parent:, position:)
+    Page.transaction do
+      update(parent: parent) unless self.parent == parent
+      insert_at(position)
+    end
+  end
+
   # Get subpages
   def pages(_options = nil)
     if self.locale?
@@ -257,6 +265,14 @@ class Page < ActiveRecord::Base
   end
 
   private
+
+  def check_list_position
+    if deleted?
+      remove_from_list
+    elsif !position?
+      assume_bottom_position
+    end
+  end
 
   def ensure_page_images_contains_primary_image
     return if !image_id? || !image_id_changed?
