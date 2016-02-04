@@ -11,7 +11,9 @@
   position: relative;
   overflow: hidden;
 
-  margin: 30px 0;
+  margin: 20px 0;
+  margin-left: -20px;
+  margin-right: -10px;
 
   .draggable {
     @extend %no-select;
@@ -46,7 +48,7 @@
   .page {
     @extend %clearfix;
     font-size: 15px;
-    padding: 4px 10px;
+    padding: 6px 10px;
     border: 1px solid transparent;
     //border-radius: 5px;
 
@@ -110,7 +112,7 @@
   .page .actions {
     float: right;
     visibility: hidden;
-    margin-left: 5px;
+    margin: -4px -6px -4px 5px;
     button {
       margin-left: 5px;
     }

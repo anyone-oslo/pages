@@ -257,6 +257,11 @@ class PageTree extends React.Component {
   }
 
   dragStart(id, dom, e) {
+    // Only drag on left click
+    if (e.button !== 0) {
+      return;
+    }
+
     this.dragging = {
       id: id,
       w: dom.offsetWidth,
