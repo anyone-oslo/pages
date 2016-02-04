@@ -122,6 +122,7 @@
       var node = tree.getIndex(id).node;
       node.collapsed = !node.collapsed;
       this.storeCollapsed(id, node.collapsed);
+      tree.updateNodesPosition();
       this.trigger(tree);
     },
 
