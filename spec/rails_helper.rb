@@ -78,6 +78,7 @@ RSpec.configure do |config|
 
   # config.include JsonSpec::Helpers
   config.include RSpec::ActiveJob
+  config.include LoginMacros
   config.include MailerMacros
   config.before(:each) { reset_email }
 

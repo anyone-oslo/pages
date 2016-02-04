@@ -4,8 +4,8 @@ module Admin
   class PagesController < Admin::AdminController
     before_action :require_news_pages, only: [:news]
     before_action :find_page, only: [
-      :show, :edit, :preview, :update, :destroy, :reorder,
-      :delete_meta_image
+      :show, :edit, :preview, :update, :destroy,
+      :delete_meta_image, :move
     ]
     before_action :find_categories
     before_action :find_news_pages, only: [:news, :new_news]
@@ -13,7 +13,13 @@ module Admin
     require_authorization(
       Page,
       proc { @page },
-      collection: [:index, :news, :new, :new_news, :create, :reorder_pages]
+      collection: [
+        :index, :news, :new, :new_news, :create
+      ],
+      member: [
+        :show, :edit, :preview, :update, :destroy,
+        :delete_meta_image, :move
+      ]
     )
 
     def index
@@ -32,16 +38,6 @@ module Admin
       @month ||= Time.now.month
 
       @pages = @archive_finder.by_year_and_month(@year, @month)
-    end
-
-    def reorder_pages
-      pages = params[:ids].map { |id| Page.find(id) }
-      PagesCore::CacheSweeper.once do
-        pages.each_with_index do |page, index|
-          page.update(position: (index + 1))
-        end
-      end
-      render text: "ok" if request.xhr?
     end
 
     def show
@@ -101,7 +97,6 @@ module Admin
         respond_to do |format|
           format.html do
             flash[:notice] = "Your changes were saved"
-            flash[:save_performed] = true
             redirect_to edit_admin_page_url(@locale, @page)
           end
           format.json do
@@ -111,6 +106,21 @@ module Admin
       else
         edit
         render action: :edit
+      end
+    end
+
+    def move
+      @page.update(
+        parent: Page.find(params[:parent_id]),
+        position: params[:position]
+      )
+      respond_to do |format|
+        format.html do
+          redirect_to admin_pages_url(@locale)
+        end
+        format.json do
+          render json: @page, serializer: PageTreeSerializer
+        end
       end
     end
 
