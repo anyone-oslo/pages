@@ -110,8 +110,9 @@ module Admin
     end
 
     def move
+      parent = params[:parent_id] ? Page.find(params[:parent_id]) : nil
       @page.update(
-        parent: Page.find(params[:parent_id]),
+        parent: parent,
         position: params[:position]
       )
       respond_to do |format|

@@ -35,6 +35,18 @@
       });
     },
 
+    movePage: function (index, parent, position) {
+      let store = this;
+      let data = {
+        parent_id: parent.node.id,
+        position: position
+      };
+      let url = `/admin/${index.node.locale}/pages/${index.node.id}/move.json`;
+      $.put(url, data, function (response) {
+        store.updateNode(index, response.page_tree);
+      });
+    },
+
     updatePage: function (index, attributes) {
       let store = this;
       let url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
@@ -91,6 +103,11 @@
     onMovedPage: function (id) {
       let index = tree.getIndex(id);
       this.reorderChildren(index.parent);
+
+      parent = tree.getIndex(index.parent);
+      position = parent.children.indexOf(id) + 1;
+
+      this.movePage(index, parent, position);
       this.trigger(tree);
     },
 

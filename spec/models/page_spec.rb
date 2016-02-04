@@ -324,12 +324,15 @@ describe Page do
 
     context "when moving a page" do
       let!(:page) { create(:page) }
+      let(:parent) { root }
+      let(:position) { 2 }
       let!(:root) { create(:page) }
       let!(:before) { create(:page, parent: root, position: 1) }
       let!(:after) { create(:page, parent: root, position: 2) }
 
       before do
-        page.move(parent: root, position: 2)
+        page.move(parent: parent, position: position)
+        root.reload
         before.reload
         after.reload
       end
@@ -348,6 +351,18 @@ describe Page do
           expect(before.position).to eq(1)
           expect(page.position).to eq(2)
           expect(after.position).to eq(3)
+        end
+      end
+
+      context "to the root" do
+        let(:parent) { nil }
+        let(:position) { 1 }
+        let!(:page) { create(:page, parent: root, position: 3) }
+
+        it "should move the page" do
+          expect(page.parent).to eq(nil)
+          expect(page.position).to eq(1)
+          expect(root.position).to eq(2)
         end
       end
     end
