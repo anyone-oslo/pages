@@ -59,15 +59,19 @@ class PageTree extends React.Component {
 
   init(props) {
     return {
-      dragging: {
-        id: null,
-        x: null,
-        y: null,
-        w: null,
-        h: null,
-        scrollTop: null,
-        scrollLeft: null
-      }
+      dragging: this.initDragging()
+    };
+  }
+
+  initDragging() {
+    return {
+      id: null,
+      x: null,
+      y: null,
+      w: null,
+      h: null,
+      scrollTop: null,
+      scrollLeft: null
     };
   }
 
@@ -303,15 +307,7 @@ class PageTree extends React.Component {
     }
 
     this.setState({
-      dragging: {
-        id: null,
-        x: null,
-        y: null,
-        w: null,
-        h: null,
-        scrollTop: null,
-        scrollLeft: null
-      }
+      dragging: this.initDragging()
     });
 
     window.removeEventListener('mousemove', this._dragListener);
