@@ -68,6 +68,13 @@
       return tree;
     },
 
+    setCollapsed: function (id, value) {
+      var node = tree.getIndex(id).node;
+      node.collapsed = value;
+      this.storeCollapsed(id, node.collapsed);
+      tree.updateNodesPosition();
+    },
+
     storeCollapsed: function (id, state) {
       let node = tree.getIndex(id).node;
       var store = JSON.parse(window.localStorage.collapsedPages);
@@ -114,15 +121,14 @@
     onAddChild: function (id, attributes) {
       var index = tree.append(attributes, id);
       this.reorderChildren(id);
-      this.updateNode(index, { collapsed: false })
+      this.setCollapsed(id, false);
       this.createPage(index, attributes);
+      this.trigger(tree);
     },
 
     onToggleCollapsed: function (id) {
       var node = tree.getIndex(id).node;
-      node.collapsed = !node.collapsed;
-      this.storeCollapsed(id, node.collapsed);
-      tree.updateNodesPosition();
+      this.setCollapsed(id, !node.collapsed);
       this.trigger(tree);
     },
 
