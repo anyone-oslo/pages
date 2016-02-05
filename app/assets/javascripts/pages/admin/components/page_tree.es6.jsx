@@ -64,7 +64,9 @@ class PageTree extends React.Component {
         x: null,
         y: null,
         w: null,
-        h: null
+        h: null,
+        scrollTop: null,
+        scrollLeft: null
       }
     };
   }
@@ -162,6 +164,14 @@ class PageTree extends React.Component {
     return count;
   }
 
+  scrollOffset() {
+    let dragging = this.state.dragging;
+    return {
+      top: document.body.scrollTop - dragging.scrollTop,
+      left: document.body.scrollLeft - dragging.scrollLeft
+    };
+  }
+
   drag(e) {
     if (this._start) {
       var distance = Math.abs(e.clientX - this._offsetX) +
@@ -189,8 +199,8 @@ class PageTree extends React.Component {
     var _offsetY = this._offsetY;
 
     var pos = {
-      x: _startX + e.clientX - _offsetX,
-      y: _startY + e.clientY - _offsetY
+      x: _startX + e.clientX - _offsetX + this.scrollOffset().left,
+      y: _startY + e.clientY - _offsetY + this.scrollOffset().top
     };
     dragging.x = pos.x;
     dragging.y = pos.y;
@@ -267,7 +277,9 @@ class PageTree extends React.Component {
       w: dom.offsetWidth,
       h: dom.offsetHeight,
       x: dom.offsetLeft,
-      y: dom.offsetTop
+      y: dom.offsetTop,
+      scrollTop: document.body.scrollTop,
+      scrollLeft: document.body.scrollLeft
     };
 
     this._startX = dom.offsetLeft;
@@ -296,7 +308,9 @@ class PageTree extends React.Component {
         x: null,
         y: null,
         w: null,
-        h: null
+        h: null,
+        scrollTop: null,
+        scrollLeft: null
       }
     });
 
