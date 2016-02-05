@@ -101,6 +101,7 @@ describe PagesCore::PathablePage do
     let(:page1) { create(:page, locale: "en", name: "Products") }
     let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }
     let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
+    let(:page4) { create(:page, locale: "en", name: "Other products") }
 
     subject { page3.full_path }
 
@@ -116,6 +117,11 @@ describe PagesCore::PathablePage do
     context "when a parent is missing a path segment" do
       let(:page1) { create(:page, locale: "en", name: "") }
       it { is_expected.to eq(nil) }
+    end
+
+    context "when a parent is moved" do
+      before { page2.update(parent: page4) }
+      it { is_expected.to eq("other-products/category/my-thing") }
     end
   end
 end
