@@ -180,7 +180,7 @@ class PageTreeNode extends React.Component {
   }
 
   collapsedLabel() {
-    if (this.node().collapsed) {
+    if (this.node().collapsed && this.node().children.length > 0) {
       let pluralized = (this.node().children.length == 1) ? "item" : "items";
       return (
         <span className="collapsed-label">
