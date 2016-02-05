@@ -141,14 +141,14 @@ class PageTree extends React.Component {
   }
 
   prevAddButtonCount(tree, index) {
-    pointer = index;
-    parentNodes = [];
+    var pointer = index;
+    var parentNodes = [];
     while (pointer = tree.getIndex(pointer.parent)) {
       parentNodes.push(pointer);
     }
 
-    pointer = index;
-    count = 0;
+    var pointer = index;
+    var count = 0;
     while (pointer = tree.getNodeByTop(pointer.top - 1)) {
       if (
         parentNodes.indexOf(pointer) == -1 &&

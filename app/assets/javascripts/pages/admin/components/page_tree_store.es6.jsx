@@ -11,13 +11,16 @@
     },
 
     applyCollapsed: function () {
-      let store = JSON.parse(window.localStorage.collapsedPages);
+      let store = this;
+      let collapsedState = JSON.parse(window.localStorage.collapsedPages);
       let walk = function (id) {
         var index = tree.getIndex(id);
         var node = index.node;
-        if (store.hasOwnProperty(node.id)) {
-          node.collapsed = store[node.id];
+        if (collapsedState.hasOwnProperty(node.id)) {
+          node.collapsed = collapsedState[node.id];
         } else if (node.news_page) {
+          node.collapsed = true;
+        } else if (store.depth(index) > 1) {
           node.collapsed = true;
         }
         if (index.children && index.children.length) {
@@ -25,6 +28,15 @@
         }
       };
       walk(1);
+    },
+
+    depth: function (index) {
+      var depth = 0;
+      var pointer = index;
+      while (pointer = tree.getIndex(pointer.parent)) {
+        depth += 1;
+      }
+      return depth;
     },
 
     createPage: function (index, attributes) {
