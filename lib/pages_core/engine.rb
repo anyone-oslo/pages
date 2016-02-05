@@ -31,6 +31,10 @@ module PagesCore
       )
     end
 
+    initializer :handle_exceptions do |app|
+      app.config.exceptions_app = app.routes
+    end
+
     # React configuration
     initializer :react do |app|
       app.config.react.jsx_transform_options = {

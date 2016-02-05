@@ -19,6 +19,18 @@ class ErrorsController < ApplicationController
     render_error params[:id].to_i
   end
 
+  def not_found
+    render_error 404
+  end
+
+  def unacceptable
+    render_error 422
+  end
+
+  def internal_error
+    render_error 500
+  end
+
   private
 
   def deliver_error_report(report, from, description)
