@@ -57,21 +57,15 @@ module PagesCore
     end
 
     def labelled_text_field(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        text_field(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        text_field(attribute, opts)
+      end
     end
 
     def labelled_text_area(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        text_area(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        text_area(attribute, opts)
+      end
     end
 
     def labelled_country_select(
@@ -82,106 +76,75 @@ module PagesCore
       html_options = {}
     )
       if priority_or_options.is_a?(Hash)
-        label_text, priority_or_options = parse_label_text_and_options(
-          label_text,
-          priority_or_options
-        )
+        labelled_field(attribute, label_text, priority_or_options) do |opts|
+          country_select(attribute, opts, options, html_options)
+        end
       else
-        label_text, options = parse_label_text_and_options(
-          label_text,
-          options
-        )
+        labelled_field(attribute, label_text, options) do |opts|
+          country_select(attribute, priority_or_options, opts, html_options)
+        end
       end
-      field_with_label(
-        attribute,
-        country_select(attribute, priority_or_options, options, html_options),
-        label_text
-      )
     end
 
     def labelled_date_select(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        date_select(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        date_select(attribute, opts)
+      end
     end
 
     def labelled_datetime_select(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        datetime_select(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        datetime_select(attribute, opts)
+      end
     end
 
     def labelled_time_select(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        time_select(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        time_select(attribute, opts)
+      end
     end
 
     def labelled_select(attribute, choices, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        select(attribute, choices, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        select(attribute, choices, opts)
+      end
     end
 
     def labelled_check_box(
       attribute, label_text = nil, options = {},
       checked_value = "1", unchecked_value = "0"
     )
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        check_box(attribute, options, checked_value, unchecked_value),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        check_box(attribute, opts, checked_value, unchecked_value)
+      end
     end
 
     def labelled_file_field(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        file_field(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        file_field(attribute, opts)
+      end
     end
 
     def labelled_image_file_field(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        image_file_field(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        image_file_field(attribute, opts)
+      end
     end
 
     def labelled_password_field(attribute, label_text = nil, options = {})
-      label_text, options = parse_label_text_and_options(label_text, options)
-      field_with_label(
-        attribute,
-        password_field(attribute, options),
-        label_text
-      )
+      labelled_field(attribute, label_text, options) do |opts|
+        password_field(attribute, opts)
+      end
     end
 
     protected
 
-    def parse_label_text_and_options(label_text = nil, options = {})
+    def labelled_field(attribute, label_text = nil, options = {})
       if label_text.is_a?(Hash) && options == {}
         options = label_text
         label_text = nil
       end
-      [label_text, options]
+      field_with_label(attribute, yield(options), label_text)
     end
   end
 end
