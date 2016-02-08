@@ -45,13 +45,7 @@ module PagesCore
     private
 
     def group_by_month(relation)
-      if mysql?
-        relation.group("MONTH(#{timestamp_attribute})")
-      else
-        relation
-          .reorder("")
-          .group("date_part('month', #{timestamp_attribute})")
-      end
+      relation.reorder("").group(month_part)
     end
 
     def filter_by_time(range)
@@ -60,6 +54,14 @@ module PagesCore
         range.first,
         range.last
       )
+    end
+
+    def month_part
+      if mysql?
+        "MONTH(#{timestamp_attribute})"
+      else
+        "date_part('month', #{timestamp_attribute})"
+      end
     end
 
     def mysql?
@@ -77,27 +79,23 @@ module PagesCore
     end
 
     def select_months(relation)
-      if mysql?
-        relation.pluck("DISTINCT MONTH(#{timestamp_attribute})")
-      else
-        relation
-          .reorder("")
-          .pluck("DISTINCT date_part('month', #{timestamp_attribute})")
-      end
+      relation.reorder("").pluck("DISTINCT #{month_part}")
     end
 
     def select_years(relation)
-      if mysql?
-        relation.pluck("DISTINCT YEAR(#{timestamp_attribute})")
-      else
-        relation
-          .reorder("")
-          .pluck("DISTINCT date_part('year', #{timestamp_attribute})")
-      end
+      relation.reorder("").pluck("DISTINCT #{year_part}")
     end
 
     def ordered_relation
       @relation.reorder("#{timestamp_attribute} DESC")
+    end
+
+    def year_part
+      if mysql?
+        "YEAR(#{timestamp_attribute})"
+      else
+        "date_part('year', #{timestamp_attribute})"
+      end
     end
   end
 end
