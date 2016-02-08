@@ -49,20 +49,12 @@ module Admin
       else
         @page.page_images.create(page_image_params.merge(locale: @locale))
       end
-      redirect_to(admin_page_path(@locale, @page, anchor: "images"))
+      respond_with_page_image(@page_image)
     end
 
     def update
       if @page_image.update(page_image_params)
-        respond_to do |format|
-          format.html do
-            flash[:notice] = "The image was updated"
-            redirect_to(admin_page_path(@locale, @page, anchor: "images"))
-          end
-          format.json do
-            render json: @page_image.to_json
-          end
-        end
+        respond_with_page_image(@page_image)
       else
         render action: :edit
       end
@@ -70,15 +62,7 @@ module Admin
 
     def destroy
       @page_image.destroy
-      respond_to do |format|
-        format.html do
-          flash[:notice] = "The image was deleted"
-          redirect_to(admin_page_path(@locale, @page, anchor: "images"))
-        end
-        format.json do
-          render json: @page_image.to_json
-        end
-      end
+      respond_with_page_image(@page_image)
     end
 
     protected
@@ -111,6 +95,17 @@ module Admin
 
     def page_images_params?
       params[:page_images] ? true : false
+    end
+
+    def respond_with_page_image(page_image)
+      respond_to do |format|
+        format.html do
+          redirect_to(admin_page_path(@locale, @page, anchor: "images"))
+        end
+        format.json do
+          render json: page_image.to_json
+        end
+      end
     end
   end
 end

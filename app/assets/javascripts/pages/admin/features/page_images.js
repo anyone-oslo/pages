@@ -48,8 +48,75 @@ $(function () {
       return imageData;
     }
 
-    function showImage (image) {
+    function showEditor (image, imageData) {
+      // Show the editor
+      $('.page_images .uploadButton').hide();
+      $editor.find('.caption').val(imageData.image.caption);
+      $editor.find('.alternative').val(imageData.image.alternative);
+      $editor.find('.embed').val("[image:" + imageData.image.id + "]");
+      $editor.find('.image_id').val(imageData.image.id);
 
+      if (imageData.primary) {
+        $editor.find('#page_image_primary').attr('checked', 'checked');
+      } else {
+        $editor.find('#page_image_primary').attr('checked', false);
+      }
+      $(container).find('.image').removeClass('selected');
+      $(image).addClass('selected');
+      $editor.slideDown(400);
+    }
+
+    function cropImage (imageData, imageSize, scaleFactor) {
+      // Handle cropping
+      var cropStart = [
+        imageData.image.crop_start_x,
+        imageData.image.crop_start_y
+      ];
+
+      var cropSize = [
+        (imageSize[0] - cropStart[0]),
+        (imageSize[1] - cropStart[1])
+      ]
+
+      if (imageData.image.crop_width && imageData.image.crop_height) {
+        cropSize = [
+          imageData.image.crop_width,
+          imageData.image.crop_height
+        ];
+      }
+
+      var updateCrop = function (crop) {
+        var start = [0, 0];
+        var size = imageSize;
+        if (crop.w > 0 && crop.h > 0) {
+          start = [
+            Math.floor(crop.x / scaleFactor),
+            Math.floor(crop.y / scaleFactor)
+          ];
+          size = [
+            Math.floor(crop.w / scaleFactor),
+            Math.floor(crop.h / scaleFactor)
+          ];
+        }
+        $editor.find('.crop_start_x').val(start[0]);
+        $editor.find('.crop_start_y').val(start[1]);
+        $editor.find('.crop_width').val(size[0]);
+        $editor.find('.crop_height').val(size[1]);
+      };
+
+      $editor.find('.edit-image img').Jcrop({
+        setSelect: [
+          Math.floor(cropStart[0] * scaleFactor),
+          Math.floor(cropStart[1] * scaleFactor),
+          Math.floor(cropStart[0] * scaleFactor) + Math.floor(cropSize[0] * scaleFactor),
+          Math.floor(cropStart[1] * scaleFactor) + Math.floor(cropSize[1] * scaleFactor)
+        ],
+        onSelect: updateCrop,
+        onChange: updateCrop
+      });
+    }
+
+    function showImage (image) {
       // Delay execution if imageData is unavailable
       if (imagesData === false) {
         setTimeout(function () {
@@ -63,23 +130,9 @@ $(function () {
         var imageURL  = $(image).data('uncropped-url');
         var imageData = getImageData(imageId);
 
-        // Show the editor
-        $('.page_images .uploadButton').hide();
-        $editor.find('.caption').val(imageData.image.caption);
-        $editor.find('.alternative').val(imageData.image.alternative);
-        $editor.find('.embed').val("[image:" + imageData.image.id + "]");
-        $editor.find('.image_id').val(imageData.image.id);
-
-        if (imageData.primary) {
-          $editor.find('#page_image_primary').attr('checked', 'checked');
-        } else {
-          $editor.find('#page_image_primary').attr('checked', false);
-        }
-        $(container).find('.image').removeClass('selected');
-        $(image).addClass('selected');
+        showEditor(image, imageData);
         selectedImage = image;
         selectedImageId = imageId;
-        $editor.slideDown(400);
 
         // Determine resized size
         var maxSize   = [($editor.width() - 40), ($(window).height() - 200)];
@@ -103,54 +156,7 @@ $(function () {
           '" height="' + resizedSize[1] + '" />'
         );
 
-        // Handle cropping
-        var cropStart = [
-          imageData.image.crop_start_x,
-          imageData.image.crop_start_y
-        ];
-
-        var cropSize = [
-          (imageSize[0] - cropStart[0]),
-          (imageSize[1] - cropStart[1])
-        ]
-
-        if (imageData.image.crop_width && imageData.image.crop_height) {
-          cropSize = [
-            imageData.image.crop_width,
-            imageData.image.crop_height
-          ];
-        }
-
-        var updateCrop = function (crop) {
-          var start = [0, 0];
-          var size = imageSize;
-          if (crop.w > 0 && crop.h > 0) {
-            start = [
-              Math.floor(crop.x / scaleFactor),
-              Math.floor(crop.y / scaleFactor)
-            ];
-            size = [
-              Math.floor(crop.w / scaleFactor),
-              Math.floor(crop.h / scaleFactor)
-            ];
-          }
-          $editor.find('.crop_start_x').val(start[0]);
-          $editor.find('.crop_start_y').val(start[1]);
-          $editor.find('.crop_width').val(size[0]);
-          $editor.find('.crop_height').val(size[1]);
-        };
-
-        $editor.find('.edit-image img').Jcrop({
-          setSelect: [
-            Math.floor(cropStart[0] * scaleFactor),
-            Math.floor(cropStart[1] * scaleFactor),
-            Math.floor(cropStart[0] * scaleFactor) + Math.floor(cropSize[0] * scaleFactor),
-            Math.floor(cropStart[1] * scaleFactor) + Math.floor(cropSize[1] * scaleFactor)
-          ],
-          onSelect: updateCrop,
-          onChange: updateCrop
-        });
-
+        cropImage(imageData, imageSize, scaleFactor);
       }
     }
 
@@ -197,7 +203,7 @@ $(function () {
     }
 
     // Sorting images
-    var saveImageOrder = function () {
+    function saveImageOrder () {
       var ids = [];
       images = [];
       $('.page_images .images .image').each(function () {
@@ -296,11 +302,15 @@ $(function () {
       return false;
     }
 
-    $editor.find('a.next').click(showNextImage);
-    $editor.find('a.previous').click(showPreviousImage);
-    $editor.find('a.close').click(closeEditor);
-    $editor.find('button.save').click(saveImage);
-    $editor.find('a.delete').click(deleteImage);
+    function applyButtonActions (container) {
+      container.find('a.next').click(showNextImage);
+      container.find('a.previous').click(showPreviousImage);
+      container.find('a.close').click(closeEditor);
+      container.find('button.save').click(saveImage);
+      container.find('a.delete').click(deleteImage);
+    }
+
+    applyButtonActions($editor);
 
     // Find images
     $(container).find('.image').each(function () {
