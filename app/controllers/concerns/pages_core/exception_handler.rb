@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module PagesCore
-
   module ExceptionHandler
     module Rescues
       extend ActiveSupport::Concern

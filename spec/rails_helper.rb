@@ -19,6 +19,7 @@ require "rspec/active_job"
 require "thinking_sphinx/test"
 require "factory_girl"
 require "shoulda-matchers"
+require "timecop"
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

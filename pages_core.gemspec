@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl", "~> 4.5.0"
   s.add_development_dependency "shoulda-matchers", "~> 3.1.0"
   s.add_development_dependency "rspec-activejob"
+  s.add_development_dependency "timecop", "~> 0.8.0"
 
   s.add_dependency "rails", "~> 4.2.0"
 
