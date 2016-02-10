@@ -48,21 +48,22 @@
     },
 
     movePage: function (index, parent, position) {
-      let store = this;
       let data = {
         parent_id: parent.node.id,
         position: position
       };
       let url = `/admin/${index.node.locale}/pages/${index.node.id}/move.json`;
-      $.put(url, data, function (response) {
-        store.updateNode(index, response.page_tree);
-      });
+      this.performUpdate(index, url, data);
     },
 
     updatePage: function (index, attributes) {
-      let store = this;
       let url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
-      $.put(url, { page: attributes }, function (response) {
+      this.performUpdate(index, url, { page: attributes });
+    },
+
+    performUpdate: function (index, url, data) {
+      let store = this;
+      $.put(url, data, function (response) {
         store.updateNode(index, response.page_tree);
       });
     },

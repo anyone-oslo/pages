@@ -95,7 +95,7 @@ module PagesCore
 
         @page.attributes = page_params.merge(
           status: 2,
-          published_at: Time.now,
+          published_at: Time.zone.now,
           locale: @locale,
           redirect_to: nil
         )
@@ -274,7 +274,8 @@ module PagesCore
       end
 
       def render_rss(items, title: nil)
-        @items, @title = items, title
+        @items = items
+        @title = title
         response.headers["Content-Type"] = "application/rss+xml;charset=utf-8"
         render template: "feeds/pages", layout: false
       end
@@ -296,9 +297,7 @@ module PagesCore
             autopublish: 0
           }
         }
-        unless category_id.blank?
-          options[:with][:category_ids] = category_id
-        end
+        options[:with][:category_ids] = category_id unless category_id.blank?
         options
       end
     end

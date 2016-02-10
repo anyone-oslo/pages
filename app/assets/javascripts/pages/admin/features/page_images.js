@@ -17,7 +17,6 @@ $(function () {
         imagesData = json["page_images"];
       });
     }
-    loadImagesData();
 
     function updateImageData(data) {
       for (var a = 0; a < imagesData.length; a++) {
@@ -85,18 +84,16 @@ $(function () {
         ];
       }
 
+      var scale = function (val) {
+        return Math.floor(val / scaleFactor);
+      }
+
       var updateCrop = function (crop) {
         var start = [0, 0];
         var size = imageSize;
         if (crop.w > 0 && crop.h > 0) {
-          start = [
-            Math.floor(crop.x / scaleFactor),
-            Math.floor(crop.y / scaleFactor)
-          ];
-          size = [
-            Math.floor(crop.w / scaleFactor),
-            Math.floor(crop.h / scaleFactor)
-          ];
+          start = [scale(crop.x), scale(crop.y)];
+          size = [scale(crop.w), scale(crop.y)];
         }
         $editor.find('.crop_start_x').val(start[0]);
         $editor.find('.crop_start_y').val(start[1]);
@@ -219,7 +216,7 @@ $(function () {
       $.put(url, data, function (json) {
         $('.page_images .images').animate({opacity: 1.0}, 300);
       });
-    };
+    }
 
     function setPrimaryImage (newPrimary) {
       var $previousPrimary = $(container).find('.primary');
@@ -310,28 +307,32 @@ $(function () {
       container.find('a.delete').click(deleteImage);
     }
 
-    applyButtonActions($editor);
+    function init() {
+      loadImagesData();
+      applyButtonActions($editor);
 
-    // Find images
-    $(container).find('.image').each(function () {
-      images.push(this);
-      $(this).find('img').removeAttr('width').removeAttr('height');
-    });
-    if (images.length > 0) {
-      $(container).find('.no_images').hide();
+      // Find images
+      $(container).find('.image').each(function () {
+        images.push(this);
+        $(this).find('img').removeAttr('width').removeAttr('height');
+      });
+      if (images.length > 0) {
+        $(container).find('.no_images').hide();
+      }
+
+      $(container).on('click', '.image', function () {
+        showImage(this);
+        return false;
+      });
+
+      $('.page_images .images').sortable({
+        forcePlaceholderSize: true,
+        update:               saveImageOrder,
+        distance:             5
+      });
+      $('.page_images .image').disableSelection();
     }
 
-    $(container).on('click', '.image', function () {
-      showImage(this);
-      return false;
-    });
-
-    $('.page_images .images').sortable({
-      forcePlaceholderSize: true,
-      update:               saveImageOrder,
-      distance:             5
-    });
-    $('.page_images .image').disableSelection();
-
+    init();
   });
 });
