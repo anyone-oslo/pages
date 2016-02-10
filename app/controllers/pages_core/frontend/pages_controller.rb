@@ -179,23 +179,10 @@ module PagesCore
           end
         end
 
-        # Call template method
         template = page_template(@page)
-
         run_template_actions_for(template, @page)
-
-        @page_template_layout = false if @disable_layout
-
         return if rendered?
-
-        if instance_variables.include?("@page_template_layout")
-          render(
-            template: "pages/templates/#{template}",
-            layout: @page_template_layout
-          )
-        else
-          render template: "pages/templates/#{template}"
-        end
+        render template: "pages/templates/#{template}"
       end
 
       # Cache pages by hand. This is dirty, but it works.
