@@ -74,7 +74,7 @@ module PagesCore
     #
     def meta_keywords(*args)
       if args.any?
-        @meta_keywords = Array(args.first).join(" ")
+        @meta_keywords = Array(args.first).join(", ")
       else
         keywords = @meta_keywords
         keywords ||= @page.tag_list if @page && @page.tags.any?
