@@ -20,9 +20,7 @@ module PagesCore
       def index
         respond_to do |format|
           format.html do
-            if self.respond_to?(:no_page_given)
-              no_page_given
-            elsif root_pages.any?
+            if root_pages.any?
               @page = root_pages.first
               render_page
             else
@@ -47,7 +45,7 @@ module PagesCore
           format.rss do
             render_rss(
               @page.pages.limit(20),
-              title: "#{PagesCore.config(:side_name)}: #{@page.name}"
+              title: "#{PagesCore.config(:site_name)}: #{@page.name}"
             )
           end
           format.json do
@@ -276,7 +274,6 @@ module PagesCore
       def render_rss(items, title: nil)
         @items = items
         @title = title
-        response.headers["Content-Type"] = "application/rss+xml;charset=utf-8"
         render template: "feeds/pages", layout: false
       end
 
