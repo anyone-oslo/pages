@@ -127,5 +127,15 @@ module PagesCore
         block_output
       ]
     end
+
+    def meta_description_tag
+      return unless meta_description?
+      tag(:meta, name: "description", content: meta_description)
+    end
+
+    def meta_keywords_tag
+      return unless meta_keywords?
+      tag(:meta, name: "keywords", content: meta_keywords)
+    end
   end
 end

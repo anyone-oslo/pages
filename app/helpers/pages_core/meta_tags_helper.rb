@@ -86,17 +86,5 @@ module PagesCore
     def meta_keywords?
       !meta_keywords.blank?
     end
-
-    private
-
-    def meta_description_tag
-      return unless meta_description?
-      tag(:meta, name: "description", content: meta_description)
-    end
-
-    def meta_keywords_tag
-      return unless meta_keywords?
-      tag(:meta, name: "keywords", content: meta_keywords)
-    end
   end
 end
