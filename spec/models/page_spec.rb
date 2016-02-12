@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Page do
+describe Page, type: :model do
   describe ".archive_finder" do
     subject { Page.archive_finder }
     it { is_expected.to be_a(PagesCore::ArchiveFinder) }

@@ -4,16 +4,26 @@ module PagesCore
   class FormBuilder < ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper
 
-    # Are there any errors on this attribute?
-    def errors_on?(attribute)
-      errors_on(attribute).length > 0
-    end
-
     # Returns all errors for the attribute
     def errors_on(attribute)
       errors = object.errors[attribute] || []
       errors = [errors] unless errors.is_a?(Array)
       errors
+    end
+
+    # Are there any errors on this attribute?
+    def errors_on?(attribute)
+      errors_on(attribute).length > 0
+    end
+
+    def field_with_label(attribute, content, label_text = nil)
+      classes = ["field"]
+      classes << "field-with-errors" if errors_on?(attribute)
+      content_tag(
+        "div",
+        label_for(attribute, label_text) + content,
+        class: classes.join(" ")
+      )
     end
 
     # Returns the first error on attribute
@@ -32,16 +42,6 @@ module PagesCore
       end
     end
 
-    def field_with_label(attribute, content, label_text = nil)
-      classes = ["field"]
-      classes << "field-with-errors" if errors_on?(attribute)
-      content_tag(
-        "div",
-        label_for(attribute, label_text) + content,
-        class: classes.join(" ")
-      )
-    end
-
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
       if errors_on?(attribute)
@@ -56,15 +56,12 @@ module PagesCore
       )
     end
 
-    def labelled_text_field(attribute, label_text = nil, options = {})
+    def labelled_check_box(
+      attribute, label_text = nil, options = {},
+      checked_value = "1", unchecked_value = "0"
+    )
       labelled_field(attribute, label_text, options) do |opts|
-        text_field(attribute, opts)
-      end
-    end
-
-    def labelled_text_area(attribute, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
-        text_area(attribute, opts)
+        check_box(attribute, opts, checked_value, unchecked_value)
       end
     end
 
@@ -98,27 +95,6 @@ module PagesCore
       end
     end
 
-    def labelled_time_select(attribute, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
-        time_select(attribute, opts)
-      end
-    end
-
-    def labelled_select(attribute, choices, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
-        select(attribute, choices, opts)
-      end
-    end
-
-    def labelled_check_box(
-      attribute, label_text = nil, options = {},
-      checked_value = "1", unchecked_value = "0"
-    )
-      labelled_field(attribute, label_text, options) do |opts|
-        check_box(attribute, opts, checked_value, unchecked_value)
-      end
-    end
-
     def labelled_file_field(attribute, label_text = nil, options = {})
       labelled_field(attribute, label_text, options) do |opts|
         file_field(attribute, opts)
@@ -134,6 +110,30 @@ module PagesCore
     def labelled_password_field(attribute, label_text = nil, options = {})
       labelled_field(attribute, label_text, options) do |opts|
         password_field(attribute, opts)
+      end
+    end
+
+    def labelled_select(attribute, choices, label_text = nil, options = {})
+      labelled_field(attribute, label_text, options) do |opts|
+        select(attribute, choices, opts)
+      end
+    end
+
+    def labelled_text_area(attribute, label_text = nil, options = {})
+      labelled_field(attribute, label_text, options) do |opts|
+        text_area(attribute, opts)
+      end
+    end
+
+    def labelled_text_field(attribute, label_text = nil, options = {})
+      labelled_field(attribute, label_text, options) do |opts|
+        text_field(attribute, opts)
+      end
+    end
+
+    def labelled_time_select(attribute, label_text = nil, options = {})
+      labelled_field(attribute, label_text, options) do |opts|
+        time_select(attribute, opts)
       end
     end
 

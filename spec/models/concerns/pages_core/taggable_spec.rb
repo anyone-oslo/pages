@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::Taggable do
+describe PagesCore::Taggable, type: :model do
   let(:page) { create(:page) }
 
   subject { page }
