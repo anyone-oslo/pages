@@ -6,6 +6,24 @@ module PagesCore
       include PagesCore::Admin::LabelledFieldHelper
       include PagesCore::Admin::TagEditorHelper
 
+      attr_accessor :page_title
+      attr_accessor :page_description
+      attr_accessor :page_description_class
+      attr_accessor :page_description_links
+
+      def add_body_class(class_name)
+        @body_classes ||= []
+        @body_classes << class_name
+      end
+
+      def body_classes
+        classes = @body_classes || []
+        classes << controller.class.to_s.underscore
+        classes << "#{controller.action_name}_action" if controller.action_name
+        classes << "with_notice" if flash[:notice]
+        classes
+      end
+
       # Generates tags for an editable dynamic image.
       def editable_dynamic_image_tag(image, options = {})
         preview_url = uncropped_dynamic_image_url(image, size: "800x")
@@ -16,33 +34,25 @@ module PagesCore
         )
       end
 
-      def body_classes
-        classes = @body_classes || []
-        classes << controller.class.underscore
-        classes << "#{controller.action_name}_action"
-        classes << "with_notice" if flash[:notice]
-        classes.reverse.join(" ")
+      def content_tab(name, options = {}, &block)
+        @content_tabs ||= []
+        return unless block_given?
+        tab = {
+          name:    name.to_s.humanize,
+          key:     name.to_s.underscore.gsub(/[\s]+/, "_"),
+          options: options,
+          content: capture(&block)
+        }
+        @content_tabs << tab
+        tab_output = "<div class=\"content_tab\" " \
+          "id=\"content-tab-#{tab[:key]}\">"
+        tab_output += tab[:content]
+        tab_output += "</div>"
+        tab_output.html_safe
       end
 
-      def add_body_class(class_name)
-        @body_classes ||= []
-        @body_classes << class_name
-      end
-
-      attr_accessor :page_title
-      attr_accessor :page_description
-      attr_accessor :page_description_class
-      attr_accessor :page_description_links
-
-      def page_title(title = nil)
-        if title
-          ActiveSupport::Deprecation.warn(
-            "Setting page title with page_title is deprecated, use page_title="
-          )
-          @page_title = title
-        else
-          @page_title
-        end
+      def link_separator
+        ' <span class="separator">|</span> '.html_safe
       end
 
       def page_description(string = nil, class_name = nil)
@@ -76,31 +86,15 @@ module PagesCore
         end
       end
 
-      def sidebar(string = "", &block)
-        @sidebar = string
-        return unless block_given?
-        @sidebar += capture(&block)
-      end
-
-      def content_tab(name, options = {}, &block)
-        @content_tabs ||= []
-        return unless block_given?
-        tab = {
-          name:    name.to_s.humanize,
-          key:     name.to_s.underscore.gsub(/[\s]+/, "_"),
-          options: options,
-          content: capture(&block)
-        }
-        @content_tabs << tab
-        tab_output = "<div class=\"content_tab\" " \
-          "id=\"content-tab-#{tab[:key]}\">"
-        tab_output += tab[:content]
-        tab_output += "</div>"
-        tab_output.html_safe
-      end
-
-      def link_separator
-        ' <span class="separator">|</span> '.html_safe
+      def page_title(title = nil)
+        if title
+          ActiveSupport::Deprecation.warn(
+            "Setting page title with page_title is deprecated, use page_title="
+          )
+          @page_title = title
+        else
+          @page_title
+        end
       end
     end
   end
