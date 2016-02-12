@@ -34,8 +34,8 @@ module Admin
         .archive_finder
 
       @year, @month = year_and_month(@archive_finder)
-      @year ||= Time.now.year
-      @month ||= Time.now.month
+      @year ||= Time.zone.now.year
+      @month ||= Time.zone.now.month
 
       @pages = @archive_finder.by_year_and_month(@year, @month)
     end
@@ -88,7 +88,6 @@ module Admin
       if @authors.any? && @page.author
         @authors = [@page.author] + @authors.reject { |a| a == @page.author }
       end
-      @new_image ||= Image.new
     end
 
     def update

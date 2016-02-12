@@ -13,5 +13,9 @@ FactoryGirl.define do
     factory :hidden_page do
       status 3
     end
+
+    factory :deleted_page do
+      status 4
+    end
   end
 end
