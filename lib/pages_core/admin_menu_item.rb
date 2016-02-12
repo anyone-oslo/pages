@@ -6,12 +6,14 @@ module PagesCore
 
     class << self
       def items
-        @items ||= []
+        return [] unless @menu_items
+        @menu_items.map { |_, v| v }
       end
 
       def register(label, path, group = :custom, options = {})
         entry = new(label, path, group, options)
-        items << entry unless items.include?(entry)
+        @menu_items ||= {}
+        @menu_items[[group, label]] = entry
       end
     end
 
