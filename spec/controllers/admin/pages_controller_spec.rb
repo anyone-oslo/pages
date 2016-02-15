@@ -76,6 +76,23 @@ describe Admin::PagesController, type: :controller do
     end
   end
 
+  describe "POST create" do
+    let(:params) { { name: "Page name" } }
+    before { post(:create, locale: locale, page: params) }
+
+    it "should redirect to the edit page" do
+      expect(subject).to(
+        redirect_to(edit_admin_page_url(locale, assigns(:page)))
+      )
+    end
+
+    describe "the page" do
+      subject { assigns(:page) }
+
+      it { is_expected.to be_valid }
+    end
+  end
+
   describe "GET new_news" do
     let!(:root) { create(:page, news_page: true) }
     before { get :new_news, locale: locale }
