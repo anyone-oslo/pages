@@ -11,19 +11,15 @@
 <% end %>
 
 <div class="content">
-  <% if @root_pages.length < 1 -%>
-    <p>No pages found</p>
-  <% else -%>
-    <%= react_component(
-      "PageTree", {
-        tree: {
-          name: "All Pages",
-          children: ActiveModel::ArraySerializer.new(
-            @root_pages,
-            each_serializer: PageTreeSerializer
-          )
-        }
+  <%= react_component(
+    "PageTree", {
+      tree: {
+        name: "All Pages",
+        children: ActiveModel::ArraySerializer.new(
+          @root_pages,
+          each_serializer: PageTreeSerializer
+        )
       }
-    ) %>
-  <% end -%>
+    }
+  ) %>
 </div>
