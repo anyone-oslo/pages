@@ -15,6 +15,7 @@
     "PageTree", {
       tree: {
         name: "All Pages",
+        locale: @locale,
         children: ActiveModel::ArraySerializer.new(
           @root_pages,
           each_serializer: PageTreeSerializer
