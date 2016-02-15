@@ -87,66 +87,66 @@ module PagesCore
       end
 
       def sweep_dir(cache_dir)
-        new(cache_dir).sweep!
+        PagesCore::CacheSweeper.new(cache_dir).sweep!
       end
     end
 
+    attr_reader :cache_dir
+
     self.enabled ||= true
-  end
 
-  attr_reader :cache_dir
-
-  def initialize(cache_dir)
-    @cache_dir = cache_dir
-  end
-
-  def sweep!
-    return [] unless File.exist?(cache_dir)
-    swept_files = []
-
-    Find.find(cache_dir + "/") do |path|
-      Find.prune if skip_path?(path)
-      Find.prune unless File.exist?(path)
-      Find.prune unless sweep_file?(path)
-
-      swept_files << path
-      FileUtils.rm_rf(path)
+    def initialize(cache_dir)
+      @cache_dir = cache_dir
     end
-    swept_files
-  end
 
-  private
+    def sweep!
+      return [] unless File.exist?(cache_dir)
+      swept_files = []
 
-  def locales
-    if PagesCore.config.locales
-      ([I18n.default_locale.to_s] +
-        PagesCore.config.locales.keys.map(&:to_s)).uniq
-    else
-      [I18n.default_locale.to_s]
+      Find.find(cache_dir + "/") do |path|
+        Find.prune if skip_path?(path)
+        Find.prune unless File.exist?(path)
+        Find.prune unless sweep_file?(path)
+
+        swept_files << path
+        FileUtils.rm_rf(path)
+      end
+      swept_files
     end
-  end
 
-  def page_path_files
-    @page_path_files ||= PagePath.all.flat_map do |p|
-      ["/#{p.path}.html"] +
-        locales.map { |l| "/#{l}/#{p.path}.html" }
+    private
+
+    def locales
+      if PagesCore.config.locales
+        ([I18n.default_locale.to_s] +
+          PagesCore.config.locales.keys.map(&:to_s)).uniq
+      else
+        [I18n.default_locale.to_s]
+      end
     end
-  end
 
-  def pattern_match?(relative_path)
-    PagesCore::CacheSweeper
-      .config
-      .patterns
-      .select { |p| p =~ relative_path }
-      .any?
-  end
+    def page_path_files
+      @page_path_files ||= PagePath.all.flat_map do |p|
+        ["/#{p.path}.html"] +
+          locales.map { |l| "/#{l}/#{p.path}.html" }
+      end
+    end
 
-  def skip_path?(path)
-    path =~ Regexp.new("^#{cache_dir}/dynamic_image[s]?")
-  end
+    def pattern_match?(relative_path)
+      PagesCore::CacheSweeper
+        .config
+        .patterns
+        .select { |p| p =~ relative_path }
+        .any?
+    end
 
-  def sweep_file?(path)
-    relative = path.gsub(Regexp.new("^#{cache_dir}"), "")
-    pattern_match?(relative) || page_path_files.include?(relative)
+    def skip_path?(path)
+      path =~ Regexp.new("^#{cache_dir}/dynamic_image[s]?")
+    end
+
+    def sweep_file?(path)
+      relative = path.gsub(Regexp.new("^#{cache_dir}"), "")
+      pattern_match?(relative) || page_path_files.include?(relative)
+    end
   end
 end
