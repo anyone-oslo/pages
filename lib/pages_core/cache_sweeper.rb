@@ -103,13 +103,15 @@ module PagesCore
       return [] unless File.exist?(cache_dir)
       swept_files = []
 
+
       Find.find(cache_dir + "/") do |path|
         Find.prune if skip_path?(path)
         Find.prune unless File.exist?(path)
-        Find.prune unless sweep_file?(path)
 
-        swept_files << path
-        FileUtils.rm_rf(path)
+        if sweep_file?(path)
+          swept_files << path
+          FileUtils.rm_rf(path)
+        end
       end
       swept_files
     end
