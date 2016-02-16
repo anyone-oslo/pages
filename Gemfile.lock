@@ -29,7 +29,7 @@ PATH
       underscore-rails
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.2)
     RedCloth (4.2.9)
