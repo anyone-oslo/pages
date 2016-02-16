@@ -15,6 +15,10 @@ rvm:
 env:
 - CI=1 DB=mysql
 - CI=1 DB=postgres
+matrix:
+  exclude:
+    - rvm: 2.2.3
+      env: CI=1 DB=postgres
 script:
 - bundle exec rspec spec
 before_script:
