@@ -17,20 +17,6 @@ module PagesCore
         PagesCore::SweepCacheJob.perform_later
       end
 
-      # Returns the default configuration.
-      def default_config
-        OpenStruct.new(
-          cache_path: ActionController::Base.page_cache_directory,
-          observe: [Page, PageComment, Image],
-          patterns: [
-            %r{^/index\.[\w]+$},
-            %r{^/sitemap\.[\w]+$},
-            %r{^/pages/[\w]{2,3}[/\.](.*)$},
-            %r{^/[\w]{2,3}/(.*)$}
-          ]
-        )
-      end
-
       # Returns the configuration. Accepts a block, ie:
       #
       #   PagesCore::CacheSweeper.config do |c|
@@ -44,17 +30,6 @@ module PagesCore
           extend_observed_models!
         end
         @configuration
-      end
-
-      def extend_observed_models!
-        config.observe.each do |klass|
-          if klass.is_a?(Symbol) || klass.is_a?(String)
-            klass = klass.to_s.camelize.constantize
-          end
-          unless klass.include?(PagesCore::Sweepable)
-            klass.send(:include, PagesCore::Sweepable)
-          end
-        end
       end
 
       # Purge the entire pages cache
@@ -82,6 +57,31 @@ module PagesCore
         end
       end
 
+      # Returns the default configuration.
+      def default_config
+        OpenStruct.new(
+          cache_path: ActionController::Base.page_cache_directory,
+          observe: [Page, PageComment, Image],
+          patterns: [
+            %r{^/index\.[\w]+$},
+            %r{^/sitemap\.[\w]+$},
+            %r{^/pages/[\w]{2,3}[/\.](.*)$},
+            %r{^/[\w]{2,3}/(.*)$}
+          ]
+        )
+      end
+
+      def extend_observed_models!
+        config.observe.each do |klass|
+          if klass.is_a?(Symbol) || klass.is_a?(String)
+            klass = klass.to_s.camelize.constantize
+          end
+          unless klass.include?(PagesCore::Sweepable)
+            klass.send(:include, PagesCore::Sweepable)
+          end
+        end
+      end
+
       def visible_dir?(dir)
         !(dir =~ /^\./) && File.directory?(File.join(config.cache_path, dir))
       end
@@ -102,7 +102,6 @@ module PagesCore
     def sweep!
       return [] unless File.exist?(cache_dir)
       swept_files = []
-
 
       Find.find(cache_dir + "/") do |path|
         Find.prune if skip_path?(path)
