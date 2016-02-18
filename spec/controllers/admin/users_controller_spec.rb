@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe Admin::UsersController, type: :controller do
-  #let(:user) { create(:user).tap { |u| u.roles.create(name: "users") } }
   let(:user) { create(:user) }
 
   describe "GET index" do
