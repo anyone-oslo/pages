@@ -75,7 +75,7 @@ $(function () {
       var cropSize = [
         (imageSize[0] - cropStart[0]),
         (imageSize[1] - cropStart[1])
-      ]
+      ];
 
       if (imageData.image.crop_width && imageData.image.crop_height) {
         cropSize = [
@@ -86,14 +86,14 @@ $(function () {
 
       var scale = function (val) {
         return Math.floor(val / scaleFactor);
-      }
+      };
 
       var updateCrop = function (crop) {
         var start = [0, 0];
         var size = imageSize;
         if (crop.w > 0 && crop.h > 0) {
           start = [scale(crop.x), scale(crop.y)];
-          size = [scale(crop.w), scale(crop.y)];
+          size = [scale(crop.w), scale(crop.h)];
         }
         $editor.find('.crop_start_x').val(start[0]);
         $editor.find('.crop_start_y').val(start[1]);
