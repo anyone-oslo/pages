@@ -29,5 +29,9 @@ class PagePolicy < Policy
     def move?
       edit?
     end
+
+    def delete_meta_image?
+      edit?
+    end
   end
 end
