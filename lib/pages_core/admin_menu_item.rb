@@ -22,7 +22,8 @@ module PagesCore
     end
 
     def ==(other)
-      other.label == label &&
+      other &&
+        other.label == label &&
         other.path == path &&
         other.group == group &&
         other.options == options
