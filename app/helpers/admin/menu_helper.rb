@@ -22,6 +22,7 @@ module Admin
     def menu_item_candidates
       routes = Rails.application.routes
       menu_items
+        .select { |item| item.path.is_a?(Proc) }
         .map { |item| [item, routes.recognize_path(instance_eval(&item.path))] }
         .select { |_item, routing| routing[:controller] == params[:controller] }
     end
