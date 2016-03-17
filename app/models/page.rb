@@ -51,7 +51,7 @@ class Page < ActiveRecord::Base
   end
 
   validates_format_of :redirect_to,
-                      with: %r{\A(/|https?://)},
+                      with: %r{\A(/|https?://).+\z},
                       allow_nil: true,
                       allow_blank: true
 
