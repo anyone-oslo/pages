@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class AdminMailer < ActionMailer::Base
-  before_action :default_headers
   default from: proc { "\"Pages\" <support@kord.no>" }
 
   def error_report(error_report, from, description)
@@ -36,11 +35,5 @@ class AdminMailer < ActionMailer::Base
       to:      @invite.email,
       subject: "#{PagesCore.config(:site_name)} has invited you to Pages"
     )
-  end
-
-  private
-
-  def default_headers
-    headers("X-MC-Subaccount" => "pages")
   end
 end
