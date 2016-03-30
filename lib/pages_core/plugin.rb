@@ -12,10 +12,7 @@ module PagesCore
       attr_accessor :called_from, :paths
 
       def inherited(plugin)
-        plugin.paths ||= {
-          "db/migrate"                    => "db/migrate",
-          "config/removed_migrations.yml" => "config/removed_migrations.yml"
-        }
+        plugin.paths ||= default_paths
         plugin.called_from = begin
           # Remove the line number from backtraces making sure we
           # don't leave anything behind
@@ -63,6 +60,15 @@ module PagesCore
         (existing_removed_migrations + existing_migrations).each do |migration|
           File.unlink Rails.root.join("db", "migrate", migration)
         end
+      end
+
+      private
+
+      def default_paths
+        {
+          "db/migrate"                    => "db/migrate",
+          "config/removed_migrations.yml" => "config/removed_migrations.yml"
+        }
       end
     end
 

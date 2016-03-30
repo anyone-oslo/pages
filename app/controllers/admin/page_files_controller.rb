@@ -18,9 +18,7 @@ module Admin
     def reorder
       if params[:ids]
         files = Array(params[:ids]).map { |id| PageFile.find(id) }
-        files.each_with_index do |file, index|
-          file.update(position: index)
-        end
+        files.each_with_index { |f, i| f.update(position: i) }
       end
       if request.xhr?
         render text: "ok"

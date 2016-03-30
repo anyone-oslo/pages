@@ -45,15 +45,13 @@ module PagesCore
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
       if errors_on?(attribute)
-        label_text += " <span class=\"error\">" +
-                      first_error_on(attribute) +
-                      "</span>"
+        label_text += content_tag(:span,
+                                  first_error_on(attribute),
+                                  class: "error")
       end
-      content_tag(
-        "label",
-        label_text.html_safe,
-        for: [object.class.to_s.underscore, attribute].join("_")
-      )
+      content_tag("label",
+                  label_text.html_safe,
+                  for: [object.class.to_s.underscore, attribute].join("_"))
     end
 
     def labelled_check_box(
@@ -66,20 +64,15 @@ module PagesCore
     end
 
     def labelled_country_select(
-      attribute,
-      label_text = nil,
-      priority_or_options = {},
-      options = {},
-      html_options = {}
+      attr, label = nil, priority = {}, opts = {}, html_opts = {}
     )
-      if priority_or_options.is_a?(Hash)
-        labelled_field(attribute, label_text, priority_or_options) do |opts|
-          country_select(attribute, opts, options, html_options)
+      if priority.is_a?(Hash)
+        return labelled_field(attr, label, priority) do |options|
+          country_select(attr, options, opts, html_opts)
         end
-      else
-        labelled_field(attribute, label_text, options) do |opts|
-          country_select(attribute, priority_or_options, opts, html_options)
-        end
+      end
+      labelled_field(attr, label, opts) do |options|
+        country_select(attr, priority, options, html_opts)
       end
     end
 

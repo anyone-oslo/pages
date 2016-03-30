@@ -14,12 +14,10 @@ module PagesCore
           response.headers["Last-Modified"] = @page_file.updated_at.httpdate
         end
 
-        send_data(
-          @page_file.data,
-          filename:    @page_file.filename,
-          type:        @page_file.content_type,
-          disposition: "attachment"
-        )
+        send_data(@page_file.data,
+                  filename: @page_file.filename,
+                  type: @page_file.content_type,
+                  disposition: "attachment")
       end
 
       private

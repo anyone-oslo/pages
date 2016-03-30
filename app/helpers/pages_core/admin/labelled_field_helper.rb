@@ -32,16 +32,14 @@ module PagesCore
       def image_upload_field(form, label, method = :image, options = {})
         output = ""
         if form.object.send(method)
-          output += "<p>" +
-                    dynamic_image_tag(form.object.send(method),
-                                      size: "120x100") +
-                    "</p>"
+          output += content_tag(:p,
+                                dynamic_image_tag(form.object.send(method),
+                                                  size: "120x100"))
         end
-        output += labelled_field(
+        output + labelled_field(
           form.file_field(method),
           label, { errors: form.object.errors[method] }.merge(options)
         )
-        output.html_safe
       end
 
       private

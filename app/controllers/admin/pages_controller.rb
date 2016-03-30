@@ -56,20 +56,17 @@ module Admin
       render action: :new
     end
 
+    def update_page(page, params, categories)
+      return false unless page.update(params)
+      page.categories = categories
+    end
+
     def create
-      @page = build_page(@locale)
-      if @page.update(page_params)
-        @page.update(
-          comments_allowed: @page.template_config.value(:comments_allowed)
-        )
-        @page.categories = param_categories
-        respond_to do |format|
-          format.html do
-            redirect_to(edit_admin_page_url(@locale, @page))
-          end
-          format.json do
-            render json: @page, serializer: PageTreeSerializer
-          end
+      @page = build_page(@locale, page_params, param_categories)
+      if @page.valid?
+        @page.save
+        respond_with_page(@page) do
+          redirect_to(edit_admin_page_url(@locale, @page))
         end
       else
         render action: :new
@@ -82,39 +79,26 @@ module Admin
       # even if the account isn't active.
       return unless @authors.any? && @page.author
       @authors = [@page.author] + @authors.reject { |a| a == @page.author }
+      render action: :edit
     end
 
     def update
       if @page.update(page_params)
         @page.categories = param_categories
-        respond_to do |format|
-          format.html do
-            flash[:notice] = "Your changes were saved"
-            redirect_to edit_admin_page_url(@locale, @page)
-          end
-          format.json do
-            render json: @page, serializer: PageTreeSerializer
-          end
+        respond_with_page(@page) do
+          flash[:notice] = "Your changes were saved"
+          redirect_to edit_admin_page_url(@locale, @page)
         end
       else
         edit
-        render action: :edit
       end
     end
 
     def move
       parent = params[:parent_id] ? Page.find(params[:parent_id]) : nil
-      @page.update(
-        parent: parent,
-        position: params[:position]
-      )
-      respond_to do |format|
-        format.html do
-          redirect_to admin_pages_url(@locale)
-        end
-        format.json do
-          render json: @page, serializer: PageTreeSerializer
-        end
+      @page.update(parent: parent, position: params[:position])
+      respond_with_page(@page) do
+        redirect_to admin_pages_url(@locale)
       end
     end
 
@@ -140,9 +124,14 @@ module Admin
           .archive_finder
     end
 
-    def build_page(locale)
+    def build_page(locale, attributes = nil, categories = nil)
       Page.new.localize(locale).tap do |page|
         page.author = default_author || current_user
+        if attributes
+          page.attributes = attributes
+          page.comments_allowed = page.template_config.value(:comments_allowed)
+          page.categories = categories if categories
+        end
       end
     end
 
@@ -191,6 +180,13 @@ module Admin
     def require_news_pages
       return if Page.news_pages.any?
       redirect_to(admin_pages_url(@locale))
+    end
+
+    def respond_with_page(page)
+      respond_to do |format|
+        format.html { yield }
+        format.json { render json: page, serializer: PageTreeSerializer }
+      end
     end
 
     def year_and_month(archive_finder)

@@ -34,6 +34,7 @@ module PagesCore
       options[:layout] = error_layout(error) unless options.key?(:layout)
       @email = logged_in? ? current_user.email : ""
       render options
+      true
     end
 
     protected
@@ -72,9 +73,7 @@ module PagesCore
 
     def exception_url
       [
-        "http://",
-        request.env["HTTP_HOST"],
-        request.env["REQUEST_URI"]
+        "http://", request.env["HTTP_HOST"], request.env["REQUEST_URI"]
       ].compact.join
     end
 
@@ -113,20 +112,26 @@ module PagesCore
 
     def handle_exception(exception)
       log_error(exception)
+      return if handle_40x(exception)
+      @error_id = write_error(error_report(exception).to_yaml)
+      session[:error_report] = @error_id
+      logger.error "Logged error #{@error_id}"
+      render_error 500
+    rescue => error
+      handle_critical_exception(error)
+    end
+
+    private
+
+    def handle_40x(exception)
       if exception.is_a?(ActionController::RoutingError) ||
          exception.is_a?(ActiveRecord::RecordNotFound)
         render_error 404
       elsif exception.is_a?(PagesCore::NotAuthorized)
         render_error 403
       else
-        @error_id = write_error(error_report(exception).to_yaml)
-        session[:error_report] = @error_id
-        logger.error "Logged error #{@error_id}"
-        render_error 500
+        false
       end
-    rescue => error
-      handle_critical_exception(error)
-      return
     end
   end
 end

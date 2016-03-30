@@ -24,12 +24,10 @@ module PagesCore
         unless is_a?(Localizable::ClassMethods)
           send :extend,  Localizable::ClassMethods
           send :include, Localizable::InstanceMethods
-          has_many(
-            :localizations,
-            as: :localizable,
-            dependent: :destroy,
-            autosave: true
-          )
+          has_many(:localizations,
+                   as: :localizable,
+                   dependent: :destroy,
+                   autosave: true)
           before_save :cleanup_localizations!
         end
         localizable_configuration.instance_eval(&block) if block_given?

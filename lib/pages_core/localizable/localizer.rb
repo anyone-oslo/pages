@@ -37,16 +37,9 @@ module PagesCore
       def set(attribute, value, options = {})
         set_options = { locale: locale }.merge(options)
         if value.is_a?(Hash)
-          value.each do |loc, val|
-            set(attribute, val, locale: loc)
-          end
+          value.each { |loc, val| set(attribute, val, locale: loc) }
         else
-          unless set_options[:locale]
-            raise(
-              ArgumentError,
-              "Tried to set :#{attribute}, but no locale has been set"
-            )
-          end
+          require_locale!(attribute, set_options[:locale])
           get(attribute, locale: set_options[:locale]).value = value
         end
         value
@@ -66,6 +59,12 @@ module PagesCore
         @model.localizations.select do |l|
           l.name == name && l.locale == locale
         end
+      end
+
+      def require_locale!(attribute, locale)
+        return if locale
+        raise(ArgumentError,
+              "Tried to set :#{attribute}, but no locale has been set")
       end
     end
   end

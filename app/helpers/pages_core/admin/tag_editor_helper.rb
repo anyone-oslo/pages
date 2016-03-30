@@ -18,17 +18,19 @@ module PagesCore
 
       private
 
+      def tag_check_box(tag, tagged)
+        content_tag(:span, class: :tag) do
+          check_box_tag(
+            "tag-#{tag.id}",
+            1,
+            tagged.include?(tag)
+          ) + content_tag(:span, tag.name, class: :name)
+        end
+      end
+
       def tag_check_boxes(tags, tagged)
         content_tag(:div, class: :tags) do
-          tags.map do |tag|
-            content_tag(:span, class: :tag) do
-              check_box_tag(
-                "tag-#{tag.id}",
-                1,
-                tagged.include?(tag)
-              ) + content_tag(:span, tag.name, class: :name)
-            end
-          end.join.html_safe
+          safe_join(tags.map { |t| tag_check_box(t, tagged) }, "")
         end
       end
 

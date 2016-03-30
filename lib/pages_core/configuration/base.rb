@@ -13,11 +13,7 @@ module PagesCore
         settings[key] = OpenStruct.new(type: type, default: default)
 
         define_method key do |*args|
-          if args.any?
-            set(key, *args)
-          else
-            get(key)
-          end
+          args.any? ? set(key, *args) : get(key)
         end
 
         define_method "#{key}=" do |value|

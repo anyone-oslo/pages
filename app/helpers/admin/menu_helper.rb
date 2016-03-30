@@ -7,11 +7,9 @@ module Admin
         menu_items_for(group).map do |item|
           content_tag :li do
             path = instance_eval(&item.path)
-            link_to(
-              item.label,
-              path,
-              class: (current_menu_item?(item) ? "current" : "")
-            )
+            link_to(item.label,
+                    path,
+                    class: (current_menu_item?(item) ? "current" : ""))
           end
         end.join.html_safe
       end

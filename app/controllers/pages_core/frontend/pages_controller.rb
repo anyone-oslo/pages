@@ -19,38 +19,16 @@ module PagesCore
 
       def index
         respond_to do |format|
-          format.html do
-            if root_pages.any?
-              @page = root_pages.first
-              render_page
-            else
-              render_error 404
-            end
-          end
-          format.rss do
-            render_rss(all_feed_items)
-          end
+          format.html { render_published_page(root_pages.try(&:first)) }
+          format.rss { render_rss(all_feed_items) }
         end
       end
 
       def show
         respond_to do |format|
-          format.html do
-            if @page && @page.published?
-              render_page
-            else
-              render_error 404
-            end
-          end
-          format.rss do
-            render_rss(
-              @page.pages.limit(20),
-              title: "#{PagesCore.config(:site_name)}: #{@page.name}"
-            )
-          end
-          format.json do
-            render json: @page
-          end
+          format.html { render_published_page(@page) }
+          format.rss { render_rss(@page.pages.limit(20), title: @page.name) }
+          format.json { render json: @page }
         end
       end
 
@@ -65,13 +43,10 @@ module PagesCore
           return
         end
 
-        if @page.comments_allowed? && !honeypot_triggered?
-          @comment.save
-          if PagesCore.config(:comment_notifications)
-            deliver_comment_notifications(@page, @comment)
-          end
-        end
+        return unless @page.comments_allowed? && !honeypot_triggered?
 
+        @comment.save
+        deliver_comment_notifications(@page, @comment)
         redirect_to(page_url(@locale, @page))
       end
 
@@ -164,17 +139,10 @@ module PagesCore
       end
 
       def render_page
-        if @page.redirects?
-          redirect_to(@page.redirect_path(locale: @locale))
-          return
-        end
+        return if redirect_page(@page)
 
         unless document_title?
-          if @page.meta_title?
-            document_title(@page.meta_title)
-          else
-            document_title(@page.name)
-          end
+          document_title(@page.meta_title? ? @page.meta_title : @page.name)
         end
 
         template = page_template(@page)
@@ -234,6 +202,7 @@ module PagesCore
       end
 
       def deliver_comment_notifications(page, comment)
+        return unless PagesCore.config(:comment_notifications)
         comment_recipients(page).each do |r|
           AdminMailer.comment_notification(
             r,
@@ -271,10 +240,25 @@ module PagesCore
           .join(" ")
       end
 
+      def render_published_page(page)
+        if page && page.published?
+          @page = page
+          render_page
+        else
+          render_error 404
+        end
+      end
+
       def render_rss(items, title: nil)
+        @title = PagesCore.config.site_name
+        @title += ": #{title}" if title
         @items = items
-        @title = title
         render template: "feeds/pages", layout: false
+      end
+
+      def redirect_page(page)
+        return false unless page.redirects?
+        redirect_to(page.redirect_path(locale: locale))
       end
 
       def require_page
@@ -289,10 +273,7 @@ module PagesCore
           include:   [:localizations, :categories, :image, :author],
           order:     :published_at,
           sort_mode: :desc,
-          with: {
-            status:      2,
-            autopublish: 0
-          }
+          with:      { status: 2, autopublish: 0 }
         }
         options[:with][:category_ids] = category_id unless category_id.blank?
         options

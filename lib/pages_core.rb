@@ -45,21 +45,13 @@ module PagesCore
 
   class << self
     def load_dependencies!
-      load "pages_core/plugin.rb"
-
-      load "pages_core/admin_menu_item.rb"
-      load "pages_core/archive_finder.rb"
-      load "pages_core/cache_sweeper.rb"
-      load "pages_core/file_embedder.rb"
-      load "pages_core/configuration.rb"
-      load "pages_core/engine.rb"
-      load "pages_core/extensions.rb"
-      load "pages_core/localizable.rb"
-      load "pages_core/page_path_constraint.rb"
-      load "pages_core/pages_plugin.rb"
-      load "pages_core/paginates.rb"
-      load "pages_core/templates.rb"
-      load "pages_core/version.rb"
+      %w(
+        plugin admin_menu_item archive_finder cache_sweeper file_embedder
+        configuration engine extensions localizable page_path_constraint
+        pages_plugin paginates templates version
+      ).each do |dep|
+        load("pages_core/#{dep}.rb")
+      end
     end
 
     def init!

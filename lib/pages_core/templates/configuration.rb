@@ -34,23 +34,13 @@ module PagesCore
       def configure_template(template_name, setting, value, options = {})
         template_name = template_name.to_sym
         setting = setting.to_sym
-        if valid_template_options.include?(setting)
-          value = true  if value == :enabled
-          value = false if value == :disabled
-          template_config = {
-            setting => {
-              value:   value,
-              options: options
-            }
-          }
-          if template_name == :_defaults
-            set([:default], template_config)
-          else
-            set([:templates, template_name], template_config)
-          end
-        else
+        unless valid_template_options.include?(setting)
           raise "Invalid template configuration value: #{setting.inspect}"
         end
+        set(
+          template_path(template_name),
+          template_config(setting, value, options)
+        )
       end
 
       def blocks(template_name = :_defaults, &block)
@@ -60,22 +50,31 @@ module PagesCore
       end
 
       def templates(*tpl_args, &block)
-        template_names = tpl_args.flatten.map(&:to_sym)
+        names = tpl_args.flatten.map(&:to_sym)
         proxy(block) do |name, *args|
           if name == :blocks
             proxy(args.first.is_a?(Proc) ? args.first : nil) do |n2, *a2|
-              template_names.each do |template_name|
-                configure_block(template_name, n2, *a2)
-              end
+              names.each { |t| configure_block(t, n2, *a2) }
             end
           else
-            template_names.each do |template_name|
-              configure_template(template_name, name, *args)
-            end
+            names.each { |t| configure_template(t, name, *args) }
           end
         end
       end
       alias template templates
+
+      private
+
+      def template_config(setting, value, options)
+        value = true if value == :enabled
+        value = false if value == :disabled
+        { setting => { value: value, options: options } }
+      end
+
+      def template_path(name)
+        return [:default] if name == :_defaults
+        [:templates, name]
+      end
     end
   end
 end

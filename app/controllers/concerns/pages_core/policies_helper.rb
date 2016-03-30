@@ -8,10 +8,7 @@ module PagesCore
 
     module ClassMethods
       def require_authorization(collection, member, options = {})
-        options = {
-          collection: [:index, :new, :create],
-          member:     [:show, :edit, :update, :destroy]
-        }.merge(options)
+        options = default_options.merge(options)
         before_action do |controller|
           action = params[:action].to_sym
           if options[:collection].include?(action)
@@ -20,6 +17,13 @@ module PagesCore
             verify_policy_with_proc(controller, member)
           end
         end
+      end
+
+      def default_options
+        {
+          collection: [:index, :new, :create],
+          member:     [:show, :edit, :update, :destroy]
+        }
       end
     end
 

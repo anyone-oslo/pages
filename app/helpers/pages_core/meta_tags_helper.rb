@@ -51,10 +51,7 @@ module PagesCore
       if args.any?
         @meta_image = args.first
       else
-        image   = @meta_image
-        image ||= @page.try(&:meta_image)
-        image ||= @page.try(&:image)
-        image ||= default_meta_image
+        image = find_meta_image
         if image.is_a?(Image)
           dynamic_image_url(image, size: "1200x", only_path: false)
         else
@@ -85,6 +82,15 @@ module PagesCore
     # Returns true if meta keywords have been set.
     def meta_keywords?
       !meta_keywords.blank?
+    end
+
+    private
+
+    def find_meta_image
+      @meta_image ||
+        @page.try(&:meta_image) ||
+        @page.try(&:image) ||
+        default_meta_image
     end
   end
 end

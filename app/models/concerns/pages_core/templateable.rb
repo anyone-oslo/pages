@@ -63,19 +63,15 @@ module PagesCore
         .try(&:first)
     end
 
-    def inherited_or_default_template
-      default_options = PagesCore::Templates.configuration.get(
+    def default_template_options
+      PagesCore::Templates.configuration.get(
         :default, :template, :options
-      )
-      if parent
-        t = parent.default_subtemplate
-      elsif default_options && default_options[:root]
-        t = default_options[:root]
-      elsif default_template
-        t = default_template
-      end
-      t ||= :index
-      t.to_s
+      ) || {}
+    end
+
+    def inherited_or_default_template
+      return parent.default_subtemplate.to_s if parent
+      (default_template_options[:root] || default_template || :index).to_s
     end
 
     def ensure_template

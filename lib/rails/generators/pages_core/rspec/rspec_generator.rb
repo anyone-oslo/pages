@@ -6,10 +6,13 @@ module PagesCore
       desc "RSpec setup"
       source_root File.expand_path("../templates", __FILE__)
 
-      def setup_gems
+      def setup_development_gems
         gem_group :development do
           gem "spring-commands-rspec"
         end
+      end
+
+      def setup_test_gems
         gem_group :test, :development do
           gem "rspec-rails"
           gem "shoulda-matchers", require: false

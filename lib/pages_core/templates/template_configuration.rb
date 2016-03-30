@@ -108,15 +108,7 @@ module PagesCore
 
         # Default template options
         config.default do |default|
-          default.template :autodetect, root: "index"
-          default.image :enabled, linkable: false
-          default.comments :disabled
-          default.comments_allowed :enabled
-          default.files :disabled
-          default.images :disabled
-          default.text_filter :textile
-          default.enabled_blocks [:headline, :excerpt, :body]
-          default.tags :disabled
+          default_configuration(default)
           default_block_configuration(default)
         end
       end
@@ -137,6 +129,18 @@ module PagesCore
       end
 
       private
+
+      def default_configuration(config)
+        config.template :autodetect, root: "index"
+        config.image :enabled, linkable: false
+        config.comments :disabled
+        config.comments_allowed :enabled
+        config.files :disabled
+        config.images :disabled
+        config.text_filter :textile
+        config.enabled_blocks [:headline, :excerpt, :body]
+        config.tags :disabled
+      end
 
       def default_blocks
         {

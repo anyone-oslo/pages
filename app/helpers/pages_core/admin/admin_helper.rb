@@ -44,30 +44,30 @@ module PagesCore
           content: capture(&block)
         }
         @content_tabs << tab
-        tab_output = "<div class=\"content_tab\" " \
-          "id=\"content-tab-#{tab[:key]}\">"
-        tab_output += tab[:content]
-        tab_output += "</div>"
-        tab_output.html_safe
+        content_tab_tag(tab[:key], tab[:content])
       end
 
       def link_separator
         ' <span class="separator">|</span> '.html_safe
       end
 
-      def page_description(string = nil, class_name = nil)
+      def deprecate_page_description_args(string = nil, class_name = nil)
         if class_name
-          ActiveSupport::Deprecation.warn(
-            "Setting page description class through page_description " \
-              "is deprecated, use page_description_class="
-          )
-          @page_description_class = class_name
+          ActiveSupport::Deprecation.warn("Setting class through " \
+                                          "page_description is deprecated, " \
+                                          "use page_description_class=")
         end
         if string
-          ActiveSupport::Deprecation.warn(
-            "Setting description with page_description is deprecated, " \
-              "use page_description="
-          )
+          ActiveSupport::Deprecation.warn("Setting description with " \
+                                          "page_description is deprecated, " \
+                                          "use page_description=")
+        end
+      end
+
+      def page_description(string = nil, class_name = nil)
+        deprecate_page_description_args(string, class_name)
+        @page_description_class = class_name if class_name
+        if string
           @page_description = string
         else
           @page_description
@@ -95,6 +95,15 @@ module PagesCore
         else
           @page_title
         end
+      end
+
+      private
+
+      def content_tab_tag(key, content)
+        content_tag(:div,
+                    content,
+                    class: "content_tab",
+                    id: "content-tab-#{key}")
       end
     end
   end

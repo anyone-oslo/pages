@@ -33,18 +33,11 @@ module PagesCore
       feeds = Page.enabled_feeds(@locale, options)
       return unless feeds.any?
       feed_tags = [
-        rss_link_tag(
-          PagesCore.config(:site_name),
-          pages_url(@locale, format: :rss)
-        )
-      ]
-      if feeds.count < 1
-        feed_tags += feeds.map do |page|
-          rss_link_tag(
-            "#{PagesCore.config(:site_name)}: #{page.name}",
-            page_url(@locale, page, format: :rss)
-          )
-        end
+        rss_link_tag(PagesCore.config(:site_name),
+                     pages_url(@locale, format: :rss))
+      ] + feeds.map do |page|
+        rss_link_tag("#{PagesCore.config(:site_name)}: #{page.name}",
+                     page_url(@locale, page, format: :rss))
       end
       safe_join(feed_tags, "\n")
     end
@@ -114,8 +107,7 @@ module PagesCore
         tag(:meta, charset: "utf-8"),
         tag(:meta, "http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
         content_tag(:title, document_title),
-        meta_description_tag,
-        meta_keywords_tag,
+        meta_description_tag, meta_keywords_tag,
         (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
         open_graph_tags,
         csrf_meta_tags,

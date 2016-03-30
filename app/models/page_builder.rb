@@ -32,9 +32,7 @@ class PageBuilder
 
   def page(name, options = {}, &block)
     page = Page.create(
-      { name: name }
-        .merge(default_options)
-        .merge(options)
+      { name: name }.merge(default_options).merge(options)
     )
     if block_given?
       self.class

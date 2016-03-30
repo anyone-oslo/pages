@@ -15,12 +15,7 @@ module PagesCore
       page.localize(link_locale) do |p|
         title = options[:title] || p.name.to_s
         return title unless conditional_options?(options)
-        url = if p.redirects?
-                p.redirect_path(locale: link_locale)
-              else
-                page_path(link_locale, p)
-              end
-        link_to(title, url, class: options[:class])
+        link_to(title, page_link_path(link_locale, p), class: options[:class])
       end
     end
 
@@ -43,6 +38,14 @@ module PagesCore
         !options[:unless]
       else
         true
+      end
+    end
+
+    def page_link_path(locale, page)
+      if page.redirects?
+        page.redirect_path(locale: locale)
+      else
+        page_path(locale, page)
       end
     end
   end

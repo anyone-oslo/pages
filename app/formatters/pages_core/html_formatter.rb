@@ -39,18 +39,22 @@ module PagesCore
     def embed_image(id, size:, class_name:)
       image = Image.find(id).localize(I18n.locale)
       class_name = ["image", image_class_name(image), class_name].compact
-      content_tag(
-        :figure,
-        dynamic_image_tag(
-          image,
-          size: size,
-          crop: false,
-          upscale: false
-        ) + image_caption(image),
-        class: class_name
-      )
+      content_tag(:figure,
+                  dynamic_image_tag(image,
+                                    size: size,
+                                    crop: false,
+                                    upscale: false) + image_caption(image),
+                  class: class_name)
     rescue ActiveRecord::RecordNotFound
       nil
+    end
+
+    def embed_image_size(str)
+      if str =~ /size="(\d*x\d*)"/
+        Regexp.last_match(1)
+      else
+        "2000x2000"
+      end
     end
 
     def find_files(str)
@@ -69,16 +73,8 @@ module PagesCore
       string.gsub(image_expression).each do |str|
         id = str.match(image_expression)[1]
         options = str.match(image_expression)[2]
-
-        size = if options =~ /size="(\d*x\d*)"/
-                 Regexp.last_match(1)
-               else
-                 "2000x2000"
-               end
-
         class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
-
-        embed_image(id, size: size, class_name: class_name)
+        embed_image(id, size: embed_image_size(options), class_name: class_name)
       end
     end
 

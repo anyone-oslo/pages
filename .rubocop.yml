@@ -10,6 +10,10 @@ Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
 
+Metrics/ClassLength:
+  Exclude:
+    - "db/migrate/*"
+
 Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
