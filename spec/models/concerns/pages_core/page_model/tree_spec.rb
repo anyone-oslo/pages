@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::PageTree, type: :model do
+describe PagesCore::PageModel::Tree, type: :model do
   let(:page) { create(:page) }
 
   subject { page }
