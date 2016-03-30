@@ -58,10 +58,6 @@ describe Admin::PagesController, type: :controller do
 
     it { is_expected.to render_template("admin/pages/new") }
 
-    it "should set authors" do
-      expect(assigns(:authors)).to eq([user])
-    end
-
     it "should initialize the page" do
       expect(page).to be_a(Page)
       expect(page.author).to eq(user)
@@ -102,14 +98,11 @@ describe Admin::PagesController, type: :controller do
 
   describe "GET show" do
     before { get :show, locale: locale, id: page.id }
-    it { is_expected.to render_template("admin/pages/edit") }
 
-    it "should find the page" do
-      expect(assigns(:page)).to eq(page)
-    end
-
-    it "should find authors" do
-      expect(assigns(:authors).any?).to eq(true)
+    it "should redirect to the edit page" do
+      expect(subject).to(
+        redirect_to(edit_admin_page_url(locale, page))
+      )
     end
   end
 
@@ -119,13 +112,6 @@ describe Admin::PagesController, type: :controller do
 
     it "should find the page" do
       expect(assigns(:page)).to eq(page)
-    end
-
-    describe "@authors" do
-      let(:deactivated) { create(:user, activated: false) }
-      let(:page) { create(:page, author: deactivated) }
-      subject { assigns(:authors) }
-      it { is_expected.to match_array([user, deactivated]) }
     end
   end
 
