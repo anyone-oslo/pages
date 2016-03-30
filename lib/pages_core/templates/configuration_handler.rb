@@ -26,7 +26,7 @@ module PagesCore
             self.class.handle_blocks[method_name],
             self
           )
-          block.call(proxy) if block
+          yield(proxy) if block
           proxy
         else
           super

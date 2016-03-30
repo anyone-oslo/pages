@@ -49,7 +49,7 @@ module PagesCore
             set([:templates, template_name], template_config)
           end
         else
-          fail "Invalid template configuration value: #{setting.inspect}"
+          raise "Invalid template configuration value: #{setting.inspect}"
         end
       end
 
@@ -75,7 +75,7 @@ module PagesCore
           end
         end
       end
-      alias_method :template, :templates
+      alias template templates
     end
   end
 end

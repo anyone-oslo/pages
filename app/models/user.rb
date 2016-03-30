@@ -50,8 +50,8 @@ class User < ActiveRecord::Base
 
     # Finds a user by either username or email address.
     def find_by_username_or_email(string)
-      where(username: string.to_s).first ||
-        where(email: string.to_s).first
+      find_by(username: string.to_s) ||
+        find_by(email: string.to_s)
     end
   end
 
@@ -65,12 +65,12 @@ class User < ActiveRecord::Base
   end
 
   def can_login?
-    self.activated?
+    activated?
   end
 
   def mark_active!
     return if last_login_at && last_login_at > 10.minutes.ago
-    update_columns(last_login_at: Time.now)
+    update_columns(last_login_at: Time.now.utc)
   end
 
   def name_and_email
@@ -122,10 +122,9 @@ class User < ActiveRecord::Base
 
   def valid_password?(password)
     if hashed_password.length <= 40
-      return true if hashed_password == Digest::SHA1.hexdigest(password)
+      hashed_password == Digest::SHA1.hexdigest(password)
     else
-      return true if BCrypt::Password.new(hashed_password) == password
+      BCrypt::Password.new(hashed_password) == password
     end
-    false
   end
 end

@@ -88,8 +88,8 @@ module PagesCore
 
     def migrations
       Dir.entries(migrations_path)
-        .select { |f| f =~ /\.rb$/ }
-        .map { |f| migrations_path.join(f) }
+         .select { |f| f =~ /\.rb$/ }
+         .map { |f| migrations_path.join(f) }
     end
 
     def removed_migrations
@@ -103,13 +103,13 @@ module PagesCore
       root_path = self.class.called_from
 
       while root_path && File.directory?(root_path) &&
-          !File.exist?("#{root_path}/#{subfolder}")
+            !File.exist?("#{root_path}/#{subfolder}")
         parent = File.dirname(root_path)
         root_path = parent != root_path && parent
       end
 
       unless File.exist?("#{root_path}/#{subfolder}")
-        fail "Could not find root path for #{self}"
+        raise "Could not find root path for #{self}"
       end
 
       Pathname.new(root_path).realpath

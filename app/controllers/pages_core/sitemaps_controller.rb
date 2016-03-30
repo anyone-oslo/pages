@@ -12,7 +12,7 @@ module PagesCore
     private
 
     def format_time(timestamp)
-      if timestamp.kind_of?(Date)
+      if timestamp.is_a?(Date)
         timestamp.strftime("%Y-%m-%d")
       else
         timestamp.strftime("%Y-%m-%dT%H:%M:%S#{timestamp.formatted_offset}")
@@ -45,8 +45,8 @@ module PagesCore
     def pages
       ([Page.root.localize(I18n.default_locale)] +
         locales.flat_map do |locale|
-        Page.published.localized(locale)
-      end).uniq
+          Page.published.localized(locale)
+        end).uniq
     end
 
     def page_record_url(record)

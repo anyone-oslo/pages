@@ -7,7 +7,7 @@ class PageComment < ActiveRecord::Base
   attr_accessor :invalid_captcha
 
   def valid_captcha?
-    (invalid_captcha) ? false : true
+    invalid_captcha ? false : true
   end
 
   after_create do |page_comment|

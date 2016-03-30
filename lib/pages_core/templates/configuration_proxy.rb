@@ -9,18 +9,14 @@ module PagesCore
       end
 
       def method_missing(method_name, *args, &block)
-        if @parent
-          if block_given?
-            @callback.call(@parent, method_name, block)
-          else
-            @callback.call(@parent, method_name, *args)
-          end
+        if @parent && block_given?
+          @callback.call(@parent, method_name, block)
+        elsif @parent
+          @callback.call(@parent, method_name, *args)
+        elsif block_given?
+          @callback.call(method_name, block)
         else
-          if block_given?
-            @callback.call(method_name, block)
-          else
-            @callback.call(method_name, *args)
-          end
+          @callback.call(method_name, *args)
         end
       end
     end

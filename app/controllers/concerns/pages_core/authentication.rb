@@ -24,7 +24,7 @@ module PagesCore
     end
 
     def deauthenticate!
-      @current_user  = nil
+      @current_user = nil
       session[:current_user_id] = nil
     end
 

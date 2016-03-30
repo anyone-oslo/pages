@@ -56,9 +56,9 @@ module PagesCore
     def parse_files(string)
       string.gsub(file_expression).each do |str|
         files = str
-          .match(file_expression)[1]
-          .split(",")
-          .map { |id| PageFile.find(id).localize(I18n.locale) }
+                .match(file_expression)[1]
+                .split(",")
+                .map { |id| PageFile.find(id).localize(I18n.locale) }
         PagesCore.config.file_embedder.new(files).to_html
       end
     end
@@ -68,15 +68,13 @@ module PagesCore
         id = str.match(image_expression)[1]
         options = str.match(image_expression)[2]
 
-        size  =  if options.match(/size="(\d*x\d*)"/)
-                   Regexp.last_match(1)
-                 else
-                   "2000x2000"
-                 end
+        size = if options =~ /size="(\d*x\d*)"/
+                 Regexp.last_match(1)
+               else
+                 "2000x2000"
+               end
 
-        class_name = if options.match(/class="([\s\-\w]+)"/)
-                       Regexp.last_match(1)
-                     end
+        class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
 
         embed_image(id, size: size, class_name: class_name)
       end

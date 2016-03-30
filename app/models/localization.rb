@@ -17,11 +17,9 @@ class Localization < ActiveRecord::Base
     value || ""
   end
 
-  def empty?
-    to_s.empty?
-  end
+  delegate :empty?, to: :to_s
 
   def translate(locale)
-    localizable.localizations.where(name: name, locale: locale).first
+    localizable.localizations.find_by(name: name, locale: locale)
   end
 end

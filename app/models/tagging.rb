@@ -4,7 +4,8 @@ class Tagging < ActiveRecord::Base
   belongs_to :tag
   belongs_to :taggable, polymorphic: true
 
-  validates_presence_of :taggable_id, :taggable_type
+  validates :taggable_id, presence: true
+  validates :taggable_type, presence: true
   validates :tag_id,
             presence: true,
             uniqueness: { scope: [:taggable_type, :taggable_id] }

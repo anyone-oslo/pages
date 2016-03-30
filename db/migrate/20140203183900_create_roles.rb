@@ -10,8 +10,11 @@ class CreateRoles < ActiveRecord::Migration
        WHERE #{connection.quote_column_name(flag)} = #{connection.quote(true)}"
     ).each do |u|
       connection.execute(
-        "INSERT INTO #{connection.quote_table_name('roles')} (user_id, name, created_at, updated_at)
-         VALUES (#{u[0]}, #{connection.quote(role)}, #{connection.quote(Time.now)}, #{connection.quote(Time.now)})"
+        "INSERT INTO #{connection.quote_table_name('roles')} " \
+          "(user_id, name, created_at, updated_at) " \
+          "VALUES (#{u[0]}, #{connection.quote(role)}, " \
+          "#{connection.quote(Time.now.utc)}, " \
+          "#{connection.quote(Time.now.utc)})"
       )
     end
   end

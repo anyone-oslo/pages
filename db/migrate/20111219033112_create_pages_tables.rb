@@ -155,7 +155,7 @@ class CreatePagesTables < ActiveRecord::Migration
       t.integer "page_id"
       t.integer "image_id"
       t.integer "position"
-      t.boolean "primary",  default: false, null: false
+      t.boolean "primary", default: false, null: false
     end
 
     add_index "page_images", %w(page_id primary)
@@ -169,18 +169,18 @@ class CreatePagesTables < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.integer "user_id"
-      t.integer "status", default: 0,     null: false
+      t.integer "status", default: 0, null: false
       t.string "content_order"
       t.boolean "feed_enabled", default: false, null: false
       t.datetime "published_at"
       t.text "redirect_to"
       t.integer "image_id"
-      t.boolean "comments_allowed", default: true,  null: false
+      t.boolean "comments_allowed", default: true, null: false
       t.string "image_link"
       t.boolean "news_page", default: false, null: false
       t.boolean "autopublish", default: false, null: false
       t.string "unique_name"
-      t.integer "comments_count", default: 0,     null: false
+      t.integer "comments_count", default: 0, null: false
       t.datetime "last_comment_at"
       t.boolean "pinned", default: false, null: false
     end

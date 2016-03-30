@@ -22,7 +22,7 @@ describe PagePath, type: :model do
       it "should get the locale/path from the page" do
         expect(subject.locale).to eq("nb")
         expect(subject.path).to eq("foobar")
-     end
+      end
     end
 
     context "when path doesn't exist" do

@@ -42,7 +42,7 @@ module PagesCore
           end
         else
           unless set_options[:locale]
-            fail(
+            raise(
               ArgumentError,
               "Tried to set :#{attribute}, but no locale has been set"
             )

@@ -3,7 +3,7 @@
 module PagesCore
   module Configuration
     class Pages < Base
-      setting :site_name,             :string,  "Pages Site"
+      setting :site_name,             :string, "Pages Site"
       setting :default_sender,        :string
       setting :localizations,         :boolean, false
       setting :locales,               :hash
@@ -13,7 +13,7 @@ module PagesCore
       setting :rss_fulltext,          :boolean, true
       setting :image_fallback_url,    :string
       setting :default_author,        :string
-      setting :comment_notifications, :array,   []
+      setting :comment_notifications, :array, []
       setting :close_comments_after,  :integer
       setting :comment_honeypot,      :boolean, false
       setting :recaptcha,             :boolean, false

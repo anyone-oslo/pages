@@ -34,7 +34,7 @@ module PagesCore
 
     def verify_policy(record)
       return true if policy(record).public_send(action_name + "?")
-      fail PagesCore::NotAuthorized
+      raise PagesCore::NotAuthorized
     end
   end
 end

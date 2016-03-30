@@ -49,9 +49,9 @@ module PagesCore
       def cache_dirs
         if PagesCore.config(:domain_based_cache)
           Dir.entries(config.cache_path)
-            .select { |d| visible_dir?(d) }
-            .map { |d| File.join(config.cache_path, d) }
-            .map(&:to_s)
+             .select { |d| visible_dir?(d) }
+             .map { |d| File.join(config.cache_path, d) }
+             .map(&:to_s)
         else
           [config.cache_path.to_s]
         end

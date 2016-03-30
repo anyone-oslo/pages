@@ -22,7 +22,6 @@ describe Admin::PagesController, type: :controller do
   end
 
   describe "GET news" do
-
     context "without a news page" do
       before { get :news, locale: locale }
       it { is_expected.to redirect_to(admin_pages_url(locale)) }

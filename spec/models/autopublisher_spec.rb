@@ -4,8 +4,8 @@ require "rails_helper"
 
 describe Autopublisher do
   describe ".run!" do
-    let!(:future) { create(:page, published_at: (Time.now + 1.day)) }
-    let!(:past) { create(:page, published_at: (Time.now - 1.day)) }
+    let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
+    let!(:past) { create(:page, published_at: (Time.now.utc - 1.day)) }
     before { past.update_column(:autopublish, true) }
 
     it "should autopublish the due pages" do
@@ -23,7 +23,7 @@ describe Autopublisher do
     subject { Autopublisher.queue! }
 
     context "with future pages" do
-      let!(:future) { create(:page, published_at: (Time.now + 1.day)) }
+      let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
       it "should schedule a run" do
         expect(PagesCore::AutopublishJob).to have_been_enqueued
       end

@@ -187,8 +187,8 @@ module PagesCore
       def cache_page_request
         status_code = response.status.try(&:to_i)
         unless status_code == 200 &&
-            PagesCore.config(:page_cache) &&
-            @page && @locale
+               PagesCore.config(:page_cache) &&
+               @page && @locale
           return
         end
 
@@ -229,8 +229,8 @@ module PagesCore
 
       def comment_recipients(page)
         PagesCore.config(:comment_notifications)
-          .map { |r| r == :author ? page.author.name_and_email : r }
-          .uniq
+                 .map { |r| r == :author ? page.author.name_and_email : r }
+                 .uniq
       end
 
       def deliver_comment_notifications(page, comment)

@@ -9,8 +9,8 @@ module Admin
     layout "admin"
 
     def create
-      if params[:username] &&
-          @user = User.find_by_username_or_email(params[:username])
+      @user = find_user_by_email(params[:username])
+      if @user
         @password_reset_token = @user.password_reset_tokens.create
         deliver_password_reset(@user, @password_reset_token)
         flash[:notice] = "An email with further instructions has been sent"
@@ -45,6 +45,11 @@ module Admin
           password_reset, password_reset.token
         )
       ).deliver_now
+    end
+
+    def find_user_by_email(email)
+      return unless email
+      User.find_by_username_or_email(params[:username])
     end
 
     def login_url

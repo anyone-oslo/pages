@@ -13,7 +13,7 @@ module PagesCore
         settings[key] = OpenStruct.new(type: type, default: default)
 
         define_method key do |*args|
-          if args.length > 0
+          if args.any?
             set(key, *args)
           else
             get(key)
@@ -30,7 +30,7 @@ module PagesCore
       end
 
       def get(key)
-        fail InvalidConfigurationKey unless setting?(key)
+        raise InvalidConfigurationKey unless setting?(key)
         if configuration.key?(key)
           configuration[key]
         else
@@ -39,10 +39,10 @@ module PagesCore
       end
 
       def set(key, value)
-        fail InvalidConfigurationKey unless setting?(key)
+        raise InvalidConfigurationKey unless setting?(key)
         value = parse_value(key, value)
         unless valid_type?(key, value)
-          fail(
+          raise(
             ArgumentError,
             "expected #{self.class.settings[key].type}, got #{value.class}"
           )

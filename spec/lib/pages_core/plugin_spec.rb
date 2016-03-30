@@ -9,7 +9,7 @@ describe PagesCore::Plugin do
 
   describe ".admin_menu_item" do
     let(:items) { PagesCore::AdminMenuItem.items }
-    let(:item) { PagesCore::AdminMenuItem.new("Test", "foo", :custom, {} ) }
+    let(:item) { PagesCore::AdminMenuItem.new("Test", "foo", :custom, {}) }
     it "should create a menu item" do
       expect(items).to include(item)
     end

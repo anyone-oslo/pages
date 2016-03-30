@@ -18,7 +18,10 @@ module PagesCore
     end
 
     def initialize(label, path, group = :custom, options = {})
-      @label, @path, @group, @options = label, path, group, options
+      @label = label
+      @path = path
+      @group = group
+      @options = options
     end
 
     def ==(other)

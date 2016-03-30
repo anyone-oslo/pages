@@ -16,7 +16,7 @@ module PagesCore
         )
       end
     end
-    alias_method :page_title, :document_title
+    alias page_title document_title
 
     # Returns true if document title has been set.
     def document_title?
@@ -107,9 +107,9 @@ module PagesCore
     #
     def typekit_tags(kit_id)
       safe_join([
-        javascript_include_tag("http://use.typekit.com/#{kit_id}.js"),
-        javascript_tag("try{Typekit.load();}catch(e){}")
-      ], "\n")
+                  javascript_include_tag("http://use.typekit.com/#{kit_id}.js"),
+                  javascript_tag("try{Typekit.load();}catch(e){}")
+                ], "\n")
     end
 
     private

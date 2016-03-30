@@ -125,7 +125,7 @@ module PagesCore
         load_default_configuration unless defined? @configuration
         @configuration
       end
-      alias_method :config, :configuration
+      alias config configuration
 
       def metadata_block_names
         [

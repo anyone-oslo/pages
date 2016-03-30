@@ -46,11 +46,11 @@ module Admin
     end
 
     def update
-      if @page_file.update(page_file_params)
-        flash[:notice] = "File updated"
-      else
-        flash[:notice] = "Error updating file!"
-      end
+      flash[:notice] = if @page_file.update(page_file_params)
+                         "File updated"
+                       else
+                         "Error updating file!"
+                       end
       redirect_to_page
     end
 

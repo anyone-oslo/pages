@@ -32,13 +32,13 @@ module PagesCore
     def set_process_title
       PagesCore::ProcessTitler.inc_number_of_requests do |i|
         $0 = PagesCore::ProcessTitler.original_title +
-          ": Handling #{request.path} (#{i} reqs)"
+             ": Handling #{request.path} (#{i} reqs)"
       end
     end
 
     def unset_process_title
       $0 = PagesCore::ProcessTitler.original_title +
-        ": Idle (#{PagesCore::ProcessTitler.number_of_requests} reqs)"
+           ": Idle (#{PagesCore::ProcessTitler.number_of_requests} reqs)"
     end
   end
 end

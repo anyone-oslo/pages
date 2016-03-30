@@ -5,14 +5,13 @@ class LocalizeImages < ActiveRecord::Migration
 
   def up
     Image.all.in_locale(locale).each do |image|
-      unless image.attributes["byline"].blank?
-        Localization.create(
-          localizable: image,
-          name: "caption",
-          locale: locale,
-          value: image.attributes["byline"]
-        )
-      end
+      next if image.attributes["byline"].blank?
+      Localization.create(
+        localizable: image,
+        name: "caption",
+        locale: locale,
+        value: image.attributes["byline"]
+      )
     end
     remove_column :images, :name, :string
     remove_column :images, :byline, :string

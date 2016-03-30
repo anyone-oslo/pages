@@ -51,7 +51,7 @@ module PagesCore
 
     # Returns true if collection is paginated
     def paginated?
-      (@paginated) ? true : false
+      @paginated ? true : false
     end
 
     # Returns next page, or nil if at last page.
@@ -61,7 +61,7 @@ module PagesCore
 
     # Returns true/false depending on if there's a next page
     def next_page?
-      (next_page) ? true : false
+      next_page ? true : false
     end
 
     # Returns previous page, or nil if at first page.
@@ -71,7 +71,7 @@ module PagesCore
 
     # Returns true/false depending on if there's a previous page
     def previous_page?
-      (previous_page) ? true : false
+      previous_page ? true : false
     end
 
     # Number of pages

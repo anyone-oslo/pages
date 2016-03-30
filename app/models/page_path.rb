@@ -14,9 +14,7 @@ class PagePath < ActiveRecord::Base
       page.locales.each do |locale|
         localized = page.localize(locale)
         localized.ensure_path_segment
-        if !localized.deleted? && localized.full_path?
-          associate(localized)
-        end
+        associate(localized) if !localized.deleted? && localized.full_path?
       end
       page.children.each { |p| build(p) }
     end
@@ -28,15 +26,15 @@ class PagePath < ActiveRecord::Base
     end
 
     def get(locale, path)
-      where(locale: locale, path: path).first
+      find_by(locale: locale, path: path)
     end
 
     def associate(page, locale: nil, path: nil)
       locale ||= page.locale
       path ||= page.full_path
-      fail PageNotSavedError unless page.id?
-      fail NoLocaleError unless locale
-      fail NoPathError unless path
+      raise PageNotSavedError unless page.id?
+      raise NoLocaleError unless locale
+      raise NoPathError unless path
       existing = get(locale, path)
       if existing
         existing.update(page: page) unless existing.page_id == page.id

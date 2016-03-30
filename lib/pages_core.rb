@@ -86,7 +86,7 @@ module PagesCore
         @configuration
       end
     end
-    alias_method :config, :configuration
+    alias config configuration
   end
 end
 

@@ -10,7 +10,7 @@ module PagesCore
       end
 
       def large?
-        (small?) ? false : true
+        small? ? false : true
       end
     end
   end

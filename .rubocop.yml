@@ -1,20 +1,24 @@
+inherit_from:
+  - .rubocop_todo.yml
+
 AllCops:
   Exclude:
     - 'spec/internal/db/schema.rb'
-    - 'spec/internal/config/**/*'
-    - 'db/migrate/**/*'
+  TargetRubyVersion: 2.1
+
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*"
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*"
+
+Rails:
+  Enabled: true
 
 StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/MultilineOperationIndentation:
-  EnforcedStyle: indented
-
 Documentation:
-  Enabled: false
-
-MethodLength:
-  Enabled: false
-
-ClassLength:
   Enabled: false

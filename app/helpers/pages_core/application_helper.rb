@@ -31,7 +31,7 @@ module PagesCore
         output = capture(page.localize(locale), &block)
         concat(output)
       end
-      (page) ? page.localize(locale) : nil
+      page ? page.localize(locale) : nil
     end
 
     private

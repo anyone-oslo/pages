@@ -10,17 +10,13 @@ module PagesCore
     module InstanceMethods
       # Returns all locales saved for this page.
       #
-      def locales
-        localizer.locales
-      end
+      delegate :locales, to: :localizer
 
       # Getter for locale
       #
       #  page.locale # => 'en'
       #
-      def locale
-        localizer.locale
-      end
+      delegate :locale, to: :localizer
 
       # Setter for locale
       #
@@ -33,9 +29,7 @@ module PagesCore
 
       # Returns true if this page has a locale set
       #
-      def locale?
-        localizer.locale?
-      end
+      delegate :locale?, to: :localizer
 
       # Returns a copy of the model with a different locale.
       #
@@ -51,7 +45,7 @@ module PagesCore
       #
       def localize(locale)
         clone = self.clone.localize!(locale)
-        (block_given?) ? (yield clone) : clone
+        block_given? ? (yield clone) : clone
       end
 
       # In-place variant of #localize.
@@ -84,14 +78,14 @@ module PagesCore
       # A localized model responds to :foo, :foo= and :foo?
       #
       def respond_to?(method_name, *args)
-        requested_attribute, _ = method_name.to_s.match(/(.*?)([\?=]?)$/)[1..2]
+        requested_attribute, = method_name.to_s.match(/(.*?)([\?=]?)$/)[1..2]
         localizer.attribute?(requested_attribute.to_sym) ? true : super
       end
 
-      alias_method :translate,  :localize
-      alias_method :translate!, :localize!
-      alias_method :working_language,  :locale
-      alias_method :working_language=, :locale=
+      alias translate localize
+      alias translate! localize!
+      alias working_language locale
+      alias working_language= locale=
 
       protected
 

@@ -94,22 +94,22 @@ RSpec.describe Admin::PagesHelper, type: :helper do
   end
 
   describe "publish_time" do
-    before { Timecop.freeze(DateTime.parse("2016-02-10 14:10")) }
+    before { Timecop.freeze(DateTime.parse("2016-02-10 14:10")).utc }
     after { Timecop.return }
     subject { helper.publish_time(timestamp) }
 
     context "in a different year" do
-      let(:timestamp) { DateTime.parse("2013-03-12 12:13") }
+      let(:timestamp) { DateTime.parse("2013-03-12 12:13").utc }
       it { is_expected.to eq("on Mar 12 2013 at 12:13") }
     end
 
     context "on a different date" do
-      let(:timestamp) { DateTime.parse("2016-03-12 12:13") }
+      let(:timestamp) { DateTime.parse("2016-03-12 12:13").utc }
       it { is_expected.to eq("on Mar 12 at 12:13") }
     end
 
     context "on the same date" do
-      let(:timestamp) { DateTime.parse("2016-02-10 12:13") }
+      let(:timestamp) { DateTime.parse("2016-02-10 12:13").utc }
       it { is_expected.to eq("at 12:13") }
     end
   end

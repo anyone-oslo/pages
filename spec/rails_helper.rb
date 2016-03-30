@@ -45,11 +45,10 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.backtrace_exclusion_patterns = [
     %r{/lib\d*/ruby/},
-    /bin\//,
-    /spec\/spec_helper\.rb/,
+    %r{bin/},
+    %r{spec/spec_helper\.rb},
     %r{lib/rspec/(core|expectations|matchers|mocks)}
   ]
-
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"

@@ -13,7 +13,7 @@ module PagesCore
 
     # Are there any errors on this attribute?
     def errors_on?(attribute)
-      errors_on(attribute).length > 0
+      errors_on(attribute).any?
     end
 
     def field_with_label(attribute, content, label_text = nil)
@@ -46,8 +46,8 @@ module PagesCore
       label_text ||= object.class.human_attribute_name(attribute)
       if errors_on?(attribute)
         label_text += " <span class=\"error\">" +
-          first_error_on(attribute) +
-          "</span>"
+                      first_error_on(attribute) +
+                      "</span>"
       end
       content_tag(
         "label",

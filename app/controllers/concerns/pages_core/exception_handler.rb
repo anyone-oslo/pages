@@ -86,7 +86,7 @@ module PagesCore
         env: env_as_object,
         session: session.to_hash,
         backtrace: filtered_backtrace(exception),
-        timestamp: Time.now,
+        timestamp: Time.now.utc,
         user_id: logged_in? ? current_user.id : nil
       }
     end
@@ -108,7 +108,7 @@ module PagesCore
     def handle_exception(exception)
       log_error exception
       if exception.is_a?(ActionController::RoutingError) ||
-          exception.is_a?(ActiveRecord::RecordNotFound)
+         exception.is_a?(ActiveRecord::RecordNotFound)
         render_error 404
       elsif exception.is_a?(PagesCore::NotAuthorized)
         render_error 403

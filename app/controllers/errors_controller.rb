@@ -51,7 +51,7 @@ class ErrorsController < ApplicationController
 
   def error_report_path
     Rails.root
-      .join("log", "error_reports")
-      .join("#{session[:error_report]}.yml")
+         .join("log", "error_reports")
+         .join("#{session[:error_report]}.yml")
   end
 end

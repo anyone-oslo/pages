@@ -30,7 +30,7 @@ class PageBuilder
     @parent = parent
   end
 
-  def page(name, options={}, &block)
+  def page(name, options = {}, &block)
     page = Page.create(
       { name: name }
         .merge(default_options)
@@ -38,8 +38,8 @@ class PageBuilder
     )
     if block_given?
       self.class
-        .new(user, locale: locale, parent: page)
-        .run(&block)
+          .new(user, locale: locale, parent: page)
+          .run(&block)
     end
     page
   end

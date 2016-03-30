@@ -20,21 +20,21 @@ class Tag < ActiveRecord::Base
 
     def parse(*tags)
       Array(tags).flatten
-        .map { |tag| tag.is_a?(Tag) ? tag.name : tag }
-        .map { |tag| tag.split(",") }
-        .flatten
-        .map(&:strip)
+                 .map { |tag| tag.is_a?(Tag) ? tag.name : tag }
+                 .map { |tag| tag.split(",") }
+                 .flatten
+                 .map(&:strip)
     end
 
     private
 
     def suggestions(tags, options = {})
       Tag.joins(:taggings)
-        .select("tags.*, COUNT(tags.id) AS counter")
-        .group("tags.id")
-        .order("counter DESC")
-        .limit(options[:limit])
-        .reject { |t| tags.include?(t) }
+         .select("tags.*, COUNT(tags.id) AS counter")
+         .group("tags.id")
+         .order("counter DESC")
+         .limit(options[:limit])
+         .reject { |t| tags.include?(t) }
     end
 
     def default_options

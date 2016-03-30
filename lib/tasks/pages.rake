@@ -23,8 +23,8 @@ namespace :pages do
         files.each do |f|
           report = begin
                      YAML
-                       .load_file(File.join(reports_dir, f))
-                       .merge(sha1_hash: f.gsub(/\.yml$/, ""))
+                   .load_file(File.join(reports_dir, f))
+                   .merge(sha1_hash: f.gsub(/\.yml$/, ""))
                    rescue
                      nil
                    end
@@ -37,8 +37,8 @@ namespace :pages do
         reports.each do |report|
           message = report[:message].strip.split("\n").first
           print "#{report[:timestamp]} "
-          print "#{report[:sha1_hash]}".blue.bold, "\n"
-          print "#{report[:url]}".green.bold, "\n"
+          print (report[:sha1_hash]).to_s.blue.bold, "\n"
+          print (report[:url]).to_s.green.bold, "\n"
           print "#{report[:params].inspect}\n".yellow
           print "#{message}\n\n"
         end

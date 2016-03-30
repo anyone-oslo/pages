@@ -34,7 +34,7 @@ module PagesCore
     def ensure_path_segment
       return if deleted? || path_segment? || !name?
       if sibling_path_segments.include?(generated_path_segment) ||
-          page_path_matches_routes?(full_path(generated_path_segment))
+         page_path_matches_routes?(full_path(generated_path_segment))
         update path_segment: "#{generated_path_segment}-#{id}"
       else
         update path_segment: generated_path_segment
@@ -82,9 +82,8 @@ module PagesCore
 
     def path_segment_cannot_be_routable
       return unless full_path?
-      if page_path_matches_routes?(full_path)
-        errors.add(:path_segment, "can't match an existing URL")
-      end
+      return unless page_path_matches_routes?(full_path)
+      errors.add(:path_segment, "can't match an existing URL")
     end
 
     def recognizable_route?(path)

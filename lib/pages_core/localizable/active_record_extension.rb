@@ -21,7 +21,7 @@ module PagesCore
       #  end
       #
       def localizable(&block)
-        unless self.is_a?(Localizable::ClassMethods)
+        unless is_a?(Localizable::ClassMethods)
           send :extend,  Localizable::ClassMethods
           send :include, Localizable::InstanceMethods
           has_many(

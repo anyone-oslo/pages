@@ -4,7 +4,7 @@ class PageImage < ActiveRecord::Base
   belongs_to :page
   belongs_to_image :image
 
-  validates_presence_of :page_id
+  validates :page_id, presence: true
 
   accepts_nested_attributes_for :image
   validates_associated :image
@@ -27,9 +27,9 @@ class PageImage < ActiveRecord::Base
       if page_image.primary?
         PageImage.where
         page_image.page
-          .page_images
-          .where("id != ?", page_image.id)
-          .update_all(primary: false)
+                  .page_images
+                  .where("id != ?", page_image.id)
+                  .update_all(primary: false)
         page_image.page.update(image_id: page_image.image_id)
 
       # Clear image_id on the page if primary is toggled off
@@ -45,7 +45,7 @@ class PageImage < ActiveRecord::Base
 
   class << self
     def cleanup!
-      all.each do |page_image|
+      all.find_each do |page_image|
         page_image.destroy unless page_image.image
       end
     end

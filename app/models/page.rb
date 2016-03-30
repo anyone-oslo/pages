@@ -50,17 +50,16 @@ class Page < ActiveRecord::Base
     dictionary -> { PagesCore::Templates::TemplateConfiguration.all_blocks }
   end
 
-  validates_format_of :redirect_to,
-                      with: %r{\A(/|https?://).+\z},
+  validates(:redirect_to,
+            format: { with: %r{\A(/|https?://).+\z},
                       allow_nil: true,
-                      allow_blank: true
+                      allow_blank: true })
 
-  validates_format_of :unique_name,
-                      with: /\A[\w\d_\-]+\z/,
+  validates(:unique_name,
+            format: { with: /\A[\w\d_\-]+\z/,
                       allow_nil: true,
-                      allow_blank: true
-
-  validates_uniqueness_of :unique_name, allow_nil: true, allow_blank: true
+                      allow_blank: true },
+            uniqueness: { allow_nil: true, allow_blank: true })
 
   validates :template, presence: true
   validates :published_at, presence: true
@@ -116,12 +115,12 @@ class Page < ActiveRecord::Base
     if PagesCore.config.close_comments_after.nil?
       false
     else
-      (Time.now - published_at) > PagesCore.config.close_comments_after
+      (Time.now.utc - published_at) > PagesCore.config.close_comments_after
     end
   end
 
   def comments_allowed?
-    if self.comments_closed_after_time?
+    if comments_closed_after_time?
       false
     else
       self[:comments_allowed]
@@ -131,7 +130,7 @@ class Page < ActiveRecord::Base
   def empty?
     !body? && !excerpt?
   end
-  alias_method :blank?, :empty?
+  alias blank? empty?
 
   def excerpt_or_body
     excerpt? ? excerpt : body
@@ -163,7 +162,7 @@ class Page < ActiveRecord::Base
 
   # Does this page have an image?
   def image?
-    self.image_id?
+    image_id?
   end
 
   def move(parent:, position:)
@@ -175,7 +174,7 @@ class Page < ActiveRecord::Base
 
   # Get subpages
   def pages(_options = nil)
-    if self.locale?
+    if locale?
       subpages.published.localized(locale)
     else
       subpages.published
@@ -197,16 +196,16 @@ class Page < ActiveRecord::Base
 
   # Get publication date, which defaults to the creation date
   def published_at
-    if self.created_at?
-      self[:published_at] ||= created_at
-    else
-      self[:published_at] ||= Time.now
-    end
+    self[:published_at] ||= if created_at?
+                              created_at
+                            else
+                              Time.now.utc
+                            end
   end
 
   # Returns boolean true if page has a valid redirect
   def redirects?
-    self.redirect_to?
+    redirect_to?
   end
 
   def redirect_path(params = {})
@@ -214,7 +213,7 @@ class Page < ActiveRecord::Base
     if path.start_with? "/"
       params.each do |key, value|
         unless value.is_a?(String) || value.is_a?(Symbol)
-          fail "redirect_url param must be a string or a symbol"
+          raise "redirect_url param must be a string or a symbol"
         end
         path.gsub!("/:#{key}", "/#{value}")
       end
@@ -257,7 +256,7 @@ class Page < ActiveRecord::Base
   end
 
   def content_order
-    if self.news_page?
+    if news_page?
       "pages.pinned DESC, published_at DESC"
     else
       "position ASC"
@@ -276,7 +275,7 @@ class Page < ActiveRecord::Base
 
   def ensure_page_images_contains_primary_image
     return if !image_id? || !image_id_changed?
-    page_image = page_images.where(image_id: image_id).first
+    page_image = page_images.find_by(image_id: image_id)
     if page_image
       page_image.update(primary: true)
     else
@@ -285,11 +284,11 @@ class Page < ActiveRecord::Base
   end
 
   def set_autopublish
-    self.autopublish = published_at? && published_at > Time.now
+    self.autopublish = published_at? && published_at > Time.now.utc
     true
   end
 
   def queue_autopublisher
-    Autopublisher.queue! if self.autopublish?
+    Autopublisher.queue! if autopublish?
   end
 end

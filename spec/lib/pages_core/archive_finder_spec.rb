@@ -8,7 +8,7 @@ describe PagesCore::ArchiveFinder do
   let(:page1) do
     create(
       :page,
-      published_at: DateTime.parse("2012-03-01 12:00"),
+      published_at: DateTime.parse("2012-03-01 12:00").utc,
       parent: parent_page,
       locale: "nb",
       name: "Foo1"
@@ -17,7 +17,7 @@ describe PagesCore::ArchiveFinder do
   let(:page2) do
     create(
       :page,
-      published_at: DateTime.parse("2012-04-05 12:00"),
+      published_at: DateTime.parse("2012-04-05 12:00").utc,
       parent: parent_page,
       locale: "nb",
       name: "Foo2"
@@ -26,7 +26,7 @@ describe PagesCore::ArchiveFinder do
   let(:page3) do
     create(
       :page,
-      published_at: DateTime.parse("2012-04-06 12:00"),
+      published_at: DateTime.parse("2012-04-06 12:00").utc,
       parent: parent_page,
       locale: "nb",
       name: "Foo3"
@@ -35,7 +35,7 @@ describe PagesCore::ArchiveFinder do
   let(:page4) do
     create(
       :page,
-      published_at: DateTime.parse("2013-01-27 12:00"),
+      published_at: DateTime.parse("2013-01-27 12:00").utc,
       parent: parent_page,
       locale: "nb",
       name: "Foo4"

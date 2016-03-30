@@ -2,7 +2,7 @@ module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: [:accept, :show]
     before_action :find_invite, only: [:show, :edit, :update, :destroy, :accept]
-    before_action :require_valid_token,    only: [:show, :accept]
+    before_action :require_valid_token, only: [:show, :accept]
 
     require_authorization(
       Invite,
@@ -43,7 +43,7 @@ module Admin
           @invite,
           admin_invite_with_token_url(@invite, @invite.token)
         ).deliver_now
-        @invite.update(sent_at: Time.now)
+        @invite.update(sent_at: Time.now.utc)
         redirect_to admin_invites_url
       else
         render action: :new

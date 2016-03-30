@@ -25,7 +25,7 @@ module PagesCore
              labelled_field_description(options[:description]) +
              field +
              (options[:check_box_description] || "")
-           ).html_safe
+          ).html_safe
         end
       end
 
@@ -33,8 +33,8 @@ module PagesCore
         output = ""
         if form.object.send(method)
           output += "<p>" +
-            dynamic_image_tag(form.object.send(method), size: "120x100") +
-            "</p>"
+                    dynamic_image_tag(form.object.send(method), size: "120x100") +
+                    "</p>"
         end
         output += labelled_field(
           form.file_field(method),

@@ -8,7 +8,7 @@ class Role < ActiveRecord::Base
   class << self
     def define(name, description, default = false)
       if roles.map(&:name).include?(name.to_s)
-        fail ArgumentError, "Tried to define role :#{role}, " \
+        raise ArgumentError, "Tried to define role :#{role}, " \
           "but a role by that name already exists"
       else
         roles << OpenStruct.new(

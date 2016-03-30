@@ -36,7 +36,7 @@ describe Page, type: :model do
     let!(:published_page) { create(:page) }
     let!(:hidden_page) { create(:page, status: 3) }
     let!(:autopublish_page) do
-      create(:page, published_at: (Time.now + 2.hours))
+      create(:page, published_at: (Time.now.utc + 2.hours))
     end
     subject { Page.published }
     it { is_expected.to include(published_page) }
@@ -80,13 +80,11 @@ describe Page, type: :model do
     subject { Page.status_labels }
     it "should return the status labels" do
       expect(subject).to eq(
-        {
-          0 => "Draft",
-          1 => "Reviewed",
-          2 => "Published",
-          3 => "Hidden",
-          4 => "Deleted"
-        }
+        0 => "Draft",
+        1 => "Reviewed",
+        2 => "Published",
+        3 => "Hidden",
+        4 => "Deleted"
       )
     end
   end
@@ -293,7 +291,7 @@ describe Page, type: :model do
       create(:page,
              position: 1,
              parent: page,
-             published_at: 1.days.ago)
+             published_at: 1.day.ago)
     end
 
     subject { page.subpages.map(&:id) }

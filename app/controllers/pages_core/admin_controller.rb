@@ -11,6 +11,13 @@ module PagesCore
 
     layout "admin"
 
+    class << self
+      # Get name of class with in lowercase, with underscores.
+      def underscore
+        ActiveSupport::Inflector.underscore(to_s).split("/").last
+      end
+    end
+
     def redirect
       if Page.news_pages.any?
         redirect_to news_admin_pages_url(@locale)
@@ -64,11 +71,6 @@ module PagesCore
     end
 
     # --- HELPERS ---
-
-    # Get name of class with in lowercase, with underscores.
-    def self.underscore
-      ActiveSupport::Inflector.underscore(to_s).split(/\//).last
-    end
 
     # Add a stylesheet
     def add_stylesheet(css_file)

@@ -64,7 +64,7 @@ describe Localization, type: :model do
              locale: "fr",
              localizable: localization.localizable,
              value: "Bonjour tout le monde"
-      )
+            )
     end
     let(:fr_translation) { localization.translate("fr").to_s }
     let(:en_translation) { localization.translate("en").to_s }

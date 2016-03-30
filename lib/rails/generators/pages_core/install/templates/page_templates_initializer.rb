@@ -27,7 +27,7 @@ PagesCore::Templates.configure do |config|
         description: "Part of the page, usually background info or facts " \
           "related to the article."
       )
-   end
+    end
 
     # Default template (default: :autodetect, root: 'index')
     default.template :autodetect, root: "index"

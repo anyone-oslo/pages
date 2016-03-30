@@ -5,8 +5,8 @@ class PasswordResetToken < ActiveRecord::Base
 
   validates :user_id, presence: true
 
-  scope :active,  -> { where("expires_at >= ?", Time.now) }
-  scope :expired, -> { where("expires_at < ?", Time.now) }
+  scope :active,  -> { where("expires_at >= ?", Time.now.utc) }
+  scope :expired, -> { where("expires_at < ?", Time.now.utc) }
 
   class << self
     def default_expiration
@@ -18,18 +18,18 @@ class PasswordResetToken < ActiveRecord::Base
     end
 
     def find_by_token(token)
-      active.where(token: token).first
+      active.find_by(token: token)
     end
   end
 
   def expired?
-    expires_at < Time.now
+    expires_at < Time.now.utc
   end
 
   private
 
   def ensure_expiration
-    self.expires_at ||= Time.now + self.class.default_expiration
+    self.expires_at ||= Time.now.utc + self.class.default_expiration
   end
 
   def ensure_token

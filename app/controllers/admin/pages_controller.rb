@@ -28,10 +28,10 @@ module Admin
 
     def news
       @archive_finder = Page.where(parent_page_id: @news_pages)
-        .visible
-        .order("published_at DESC")
-        .in_locale(@locale)
-        .archive_finder
+                            .visible
+                            .order("published_at DESC")
+                            .in_locale(@locale)
+                            .archive_finder
 
       @year, @month = year_and_month(@archive_finder)
       @year ||= Time.zone.now.year
@@ -85,9 +85,8 @@ module Admin
       @authors = User.activated
       # Make sure the page author is included in the dropdown
       # even if the account isn't active.
-      if @authors.any? && @page.author
-        @authors = [@page.author] + @authors.reject { |a| a == @page.author }
-      end
+      return unless @authors.any? && @page.author
+      @authors = [@page.author] + @authors.reject { |a| a == @page.author }
     end
 
     def update
@@ -164,7 +163,7 @@ module Admin
     end
 
     def param_categories
-      if params[:category] && params[:category].length > 0
+      if params[:category] && params[:category].any?
         params[:category].map { |k, _| Category.find(k.to_i) }
       else
         []

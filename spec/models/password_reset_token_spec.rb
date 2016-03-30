@@ -53,7 +53,7 @@ describe PasswordResetToken, type: :model do
 
   describe "#expires_at" do
     subject { password_reset_token.expires_at }
-    it { is_expected.to be_within(30).of(Time.now + 24.hours) }
+    it { is_expected.to be_within(30).of(Time.now.utc + 24.hours) }
   end
 
   describe "#token" do

@@ -3,7 +3,8 @@
 module PagesCore
   class ArchiveFinder
     def initialize(relation, options = {})
-      @relation, @options = relation, options
+      @relation = relation
+      @options = options
     end
 
     def by_year(year)
@@ -69,12 +70,12 @@ module PagesCore
     end
 
     def range_for_year(year)
-      date_time = DateTime.new(year.to_i, 1, 1)
+      date_time = DateTime.new(year.to_i, 1, 1).utc
       date_time..date_time.end_of_year
     end
 
     def range_for_year_and_month(year, month)
-      date_time = DateTime.new(year.to_i, month.to_i, 1)
+      date_time = DateTime.new(year.to_i, month.to_i, 1).utc
       date_time..date_time.end_of_month
     end
 

@@ -62,13 +62,11 @@ class PageFile < ActiveRecord::Base
     end
   end
 
-  def published
-    page.published
-  end
+  delegate :published, to: :page
 
   private
 
   def set_name_from_filename
-    self.name = File.basename(filename, ".*") if self.filename? && !self.name?
+    self.name = File.basename(filename, ".*") if filename? && !name?
   end
 end

@@ -15,7 +15,7 @@ class DropRemovedTables < ActiveRecord::Migration
     create_table :mail_subscribers do |t|
       t.string :email
       t.datetime :created_at
-      t.string :group,      default: "Default"
+      t.string :group, default: "Default"
     end
 
     create_table :mailings do |t|
@@ -24,9 +24,9 @@ class DropRemovedTables < ActiveRecord::Migration
       t.string :subject
       t.text :body
       t.datetime :created_at
-      t.boolean :failed,       default: false
+      t.boolean :failed, default: false
       t.string :content_type
-      t.boolean :in_progress,  default: false, null: false
+      t.boolean :in_progress, default: false, null: false
     end
 
     create_table :mailouts do |t|
