@@ -5,7 +5,8 @@ require "rails_helper"
 describe Category, type: :model do
   let(:category) { create(:category) }
 
-  it { is_expected.to have_and_belong_to_many(:pages) }
+  it { is_expected.to have_many(:page_categories).dependent(:destroy) }
+  it { is_expected.to have_many(:pages).through(:page_categories) }
 
   it { is_expected.to allow_value("Name").for(:name) }
   it { is_expected.not_to allow_value("").for(:name) }

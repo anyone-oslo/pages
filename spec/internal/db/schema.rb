@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151204151000) do
+ActiveRecord::Schema.define(version: 20160330220900) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -83,6 +83,14 @@ ActiveRecord::Schema.define(version: 20151204151000) do
 
   add_index "localizations", ["localizable_id", "localizable_type", "name", "locale"], name: "index_textbits_on_locale", unique: true, using: :btree
   add_index "localizations", ["localizable_id", "localizable_type"], name: "index_localizations_on_localizable_id_and_localizable_type", using: :btree
+
+  create_table "page_categories", force: :cascade do |t|
+    t.integer "page_id",     limit: 4
+    t.integer "category_id", limit: 4
+  end
+
+  add_index "page_categories", ["category_id"], name: "index_page_categories_on_category_id", using: :btree
+  add_index "page_categories", ["page_id"], name: "index_page_categories_on_page_id", using: :btree
 
   create_table "page_comments", force: :cascade do |t|
     t.integer  "page_id",    limit: 4
@@ -156,14 +164,6 @@ ActiveRecord::Schema.define(version: 20151204151000) do
   add_index "pages", ["status", "parent_page_id", "position"], name: "index_pages_on_status_and_parent_page_id_and_position", using: :btree
   add_index "pages", ["status"], name: "index_pages_on_status", using: :btree
   add_index "pages", ["user_id"], name: "index_pages_on_user_id", using: :btree
-
-  create_table "pages_categories", id: false, force: :cascade do |t|
-    t.integer "page_id",     limit: 4
-    t.integer "category_id", limit: 4
-  end
-
-  add_index "pages_categories", ["category_id"], name: "index_pages_categories_on_category_id", using: :btree
-  add_index "pages_categories", ["page_id"], name: "index_pages_categories_on_page_id", using: :btree
 
   create_table "password_reset_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4

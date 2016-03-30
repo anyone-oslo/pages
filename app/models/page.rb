@@ -19,7 +19,8 @@ class Page < ActiveRecord::Base
 
   belongs_to :author, class_name: "User", foreign_key: :user_id
 
-  has_and_belongs_to_many :categories, join_table: "pages_categories"
+  has_many :page_categories, dependent: :destroy
+  has_many :categories, through: :page_categories
 
   has_many :page_files,
            -> { order("position ASC") },
