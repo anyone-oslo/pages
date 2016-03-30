@@ -33,7 +33,8 @@ module PagesCore
         output = ""
         if form.object.send(method)
           output += "<p>" +
-                    dynamic_image_tag(form.object.send(method), size: "120x100") +
+                    dynamic_image_tag(form.object.send(method),
+                                      size: "120x100") +
                     "</p>"
         end
         output += labelled_field(

@@ -245,10 +245,11 @@ class CreatePagesTables < ActiveRecord::Migration
       t.text "body"
       t.datetime "created_at"
       t.datetime "updated_at"
+      t.index(%w(textable_id textable_type name language),
+              unique: true,
+              name: "index_textbits_on_locale")
+      t.index %w(textable_id textable_type)
     end
-
-    add_index "textbits", %w(textable_id textable_type name language), unique: true, name: "index_textbits_on_locale"
-    add_index "textbits", %w(textable_id textable_type)
 
     create_table "users" do |t|
       t.string "username"

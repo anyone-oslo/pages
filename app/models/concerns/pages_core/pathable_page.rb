@@ -33,8 +33,7 @@ module PagesCore
 
     def ensure_path_segment
       return if deleted? || path_segment? || !name?
-      if sibling_path_segments.include?(generated_path_segment) ||
-         page_path_matches_routes?(full_path(generated_path_segment))
+      if path_collision?(generated_path_segment)
         update path_segment: "#{generated_path_segment}-#{id}"
       else
         update path_segment: generated_path_segment
@@ -78,6 +77,11 @@ module PagesCore
       route[:controller] == "pages" &&
         route[:action] == "show" &&
         !route[:path].blank?
+    end
+
+    def path_collision?(path_segment)
+      sibling_path_segments.include?(path_segment) ||
+        page_path_matches_routes?(full_path(path_segment))
     end
 
     def path_segment_cannot_be_routable

@@ -105,25 +105,27 @@ module PagesCore
       sha1_hash
     end
 
+    def handle_critical_exception(exception)
+      logger.fatal "Error in handle_exception"
+      log_error(exception)
+      render(template: "errors/500_critical", status: 500, layout: false)
+    end
+
     def handle_exception(exception)
-      log_error exception
+      log_error(exception)
       if exception.is_a?(ActionController::RoutingError) ||
          exception.is_a?(ActiveRecord::RecordNotFound)
         render_error 404
       elsif exception.is_a?(PagesCore::NotAuthorized)
         render_error 403
       else
-        session[:error_report] = @error_id = write_error(
-          error_report(exception).to_yaml
-        )
+        @error_id = write_error(error_report(exception).to_yaml)
+        session[:error_report] = @error_id
         logger.error "Logged error #{@error_id}"
-
         render_error 500
       end
     rescue => error
-      logger.fatal "Error in handle_exception"
-      log_error(error)
-      render(template: "errors/500_critical", status: 500, layout: false)
+      handle_critical_exception(error)
       return
     end
   end

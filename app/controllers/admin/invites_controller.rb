@@ -39,10 +39,7 @@ module Admin
     def create
       @invite = current_user.invites.create(invite_params)
       if @invite.valid?
-        AdminMailer.invite(
-          @invite,
-          admin_invite_with_token_url(@invite, @invite.token)
-        ).deliver_now
+        deliver_invite(invite)
         @invite.update(sent_at: Time.now.utc)
         redirect_to admin_invites_url
       else
@@ -57,6 +54,13 @@ module Admin
     end
 
     private
+
+    def deliver_invite(invite)
+      AdminMailer.invite(
+        invite,
+        admin_invite_with_token_url(invite, invite.token)
+      ).deliver_now
+    end
 
     def find_invite
       @invite = Invite.find(params[:id])

@@ -9,13 +9,11 @@ class Tag < ActiveRecord::Base
 
   class << self
     def tags_and_suggestions_for(taggable, options = {})
-      options = default_options.merge(options)
+      limit = options[:limit] || 100
       tags = (taggable.tags.sorted + pinned.sorted).uniq
-      if tags.count < options[:limit]
-        suggested = suggestions(tags, options)
-        tags = tags.to_a + suggested[0...(options[:limit] - tags.length)]
-      end
-      tags
+
+      return tags unless tags.count < limit
+      tags + suggestions(tags, limit)[0...(limit - tags.length)]
     end
 
     def parse(*tags)
@@ -28,12 +26,12 @@ class Tag < ActiveRecord::Base
 
     private
 
-    def suggestions(tags, options = {})
+    def suggestions(tags, limit)
       Tag.joins(:taggings)
          .select("tags.*, COUNT(tags.id) AS counter")
          .group("tags.id")
          .order("counter DESC")
-         .limit(options[:limit])
+         .limit(limit)
          .reject { |t| tags.include?(t) }
     end
 

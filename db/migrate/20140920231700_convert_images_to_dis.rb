@@ -36,10 +36,12 @@ class ConvertImagesToDis < ActiveRecord::Migration
 
           image.colorspace = "rgb"
 
-          image.real_width, image.real_height = Vector2d(image.original_size).to_a
+          image.real_width, image.real_height =
+            Vector2d(image.original_size).to_a
 
           if image.cropped?
-            image.crop_start_x, image.crop_start_y = Vector2d(image.crop_start).to_a
+            image.crop_start_x, image.crop_start_y =
+              Vector2d(image.crop_start).to_a
             image.crop_width, image.crop_height = Vector2d(image.crop_size).to_a
           end
 

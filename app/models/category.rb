@@ -13,11 +13,10 @@ class Category < ActiveRecord::Base
   private
 
   def set_slug
-    self.slug = name
-                .downcase
-                .gsub(/[^\w\s]/, "")
-                .split(/[^\w\d\-]+/)
-                .compact
-                .join("-")
+    self.slug = name.downcase
+                    .gsub(/[^\w\s]/, "")
+                    .split(/[^\w\d\-]+/)
+                    .compact
+                    .join("-")
   end
 end

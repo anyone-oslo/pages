@@ -30,7 +30,9 @@ describe Admin::PagesController, type: :controller do
     context "with a news page" do
       let!(:root) { create(:page, news_page: true) }
       let!(:article1) { create(:page, parent: root) }
-      let!(:article2) { create(:page, parent: root, published_at: 2.months.ago) }
+      let!(:article2) do
+        create(:page, parent: root, published_at: 2.months.ago)
+      end
       before { get :news, locale: locale }
 
       it { is_expected.to render_template("admin/pages/news") }

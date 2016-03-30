@@ -20,11 +20,8 @@ module Admin
     protected
 
     def menu_item_candidates
-      routes = Rails.application.routes
-      menu_items
-        .select { |item| item.path.is_a?(Proc) }
-        .map { |item| [item, routes.recognize_path(instance_eval(&item.path))] }
-        .select { |_item, routing| routing[:controller] == params[:controller] }
+      routed_menu_items
+        .select { |_, routing| routing[:controller] == params[:controller] }
     end
 
     def find_menu_candidate
@@ -61,6 +58,13 @@ module Admin
         .reject do |item|
           item.options[:if] && !instance_eval(&item.options[:if])
         end
+    end
+
+    def routed_menu_items
+      routes = Rails.application.routes
+      menu_items
+        .select { |item| item.path.is_a?(Proc) }
+        .map { |item| [item, routes.recognize_path(instance_eval(&item.path))] }
     end
   end
 end

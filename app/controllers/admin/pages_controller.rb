@@ -27,12 +27,7 @@ module Admin
     end
 
     def news
-      @archive_finder = Page.where(parent_page_id: @news_pages)
-                            .visible
-                            .order("published_at DESC")
-                            .in_locale(@locale)
-                            .archive_finder
-
+      @archive_finder = archive_finder(@news_pages, @locale)
       @year, @month = year_and_month(@archive_finder)
       @year ||= Time.zone.now.year
       @month ||= Time.zone.now.month
@@ -136,6 +131,14 @@ module Admin
     end
 
     private
+
+    def archive_finder(parents, locale)
+      Page.where(parent_page_id: parents)
+          .visible
+          .order("published_at DESC")
+          .in_locale(locale)
+          .archive_finder
+    end
 
     def build_page(locale)
       Page.new.localize(locale).tap do |page|

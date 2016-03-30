@@ -50,7 +50,8 @@ describe PagesCore::HtmlFormatter do
       end
       it "should embed a link to the file" do
         expect(subject).to match(
-          "<p>Download <a class=\"file\" href=\"#{expected_path}\">Foobar</a></p>"
+          "<p>Download <a class=\"file\" " \
+            "href=\"#{expected_path}\">Foobar</a></p>"
         )
       end
     end

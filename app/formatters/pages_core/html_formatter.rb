@@ -53,13 +53,15 @@ module PagesCore
       nil
     end
 
+    def find_files(str)
+      str.match(file_expression)[1]
+        .split(",")
+        .map { |id| PageFile.find(id).localize(I18n.locale) }
+    end
+
     def parse_files(string)
       string.gsub(file_expression).each do |str|
-        files = str
-                .match(file_expression)[1]
-                .split(",")
-                .map { |id| PageFile.find(id).localize(I18n.locale) }
-        PagesCore.config.file_embedder.new(files).to_html
+        PagesCore.config.file_embedder.new(find_files(str)).to_html
       end
     end
 
