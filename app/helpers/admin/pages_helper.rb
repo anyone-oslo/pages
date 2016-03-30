@@ -16,6 +16,10 @@ module Admin
       "[file:#{file.id}]"
     end
 
+    def page_authors(page)
+      ([page.author] + User.activated).uniq
+    end
+
     def page_block_field(form, block_name, block_options)
       labelled_field(
         form.send(

@@ -20,7 +20,7 @@
 </div>
 
 <%= labelled_field (
-    f.select(:user_id, @authors.map{|a| [a.name, a.id]})
+    f.select(:user_id, page_authors(@page).map{|a| [a.name, a.id]})
   ),
   "Author",
   errors: @page.errors[:user_id]

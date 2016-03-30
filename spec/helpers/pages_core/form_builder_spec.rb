@@ -7,39 +7,6 @@ describe PagesCore::FormBuilder do
   let(:resource) { build(:user) }
   let(:builder) { PagesCore::FormBuilder.new(:user, resource, template, {}) }
 
-  describe "#errors_on?" do
-    subject { builder.errors_on?(:email) }
-
-    it { is_expected.to eq(false) }
-
-    context "with errors" do
-      let(:resource) { User.new.tap(&:validate) }
-      it { is_expected.to eq(true) }
-    end
-  end
-
-  describe "#errors_on" do
-    subject { builder.errors_on(:email) }
-
-    it { is_expected.to eq([]) }
-
-    context "with errors" do
-      let(:resource) { User.new.tap(&:validate) }
-      it { is_expected.to eq(["kan ikke være blank", "er ugyldig"]) }
-    end
-  end
-
-  context "#first_error_on" do
-    subject { builder.first_error_on(:email) }
-
-    it { is_expected.to eq(nil) }
-
-    context "with errors" do
-      let(:resource) { User.new.tap(&:validate) }
-      it { is_expected.to eq("kan ikke være blank") }
-    end
-  end
-
   describe "#image_file_field" do
     let(:template) { spy }
 

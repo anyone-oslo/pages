@@ -4,51 +4,32 @@ module PagesCore
   class FormBuilder < ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper
 
-    # Returns all errors for the attribute
-    def errors_on(attribute)
-      errors = object.errors[attribute] || []
-      errors = [errors] unless errors.is_a?(Array)
-      errors
-    end
-
-    # Are there any errors on this attribute?
-    def errors_on?(attribute)
-      errors_on(attribute).any?
-    end
-
-    def field_with_label(attribute, content, label_text = nil)
+    def field_with_label(attr, str, label = nil)
       classes = ["field"]
-      classes << "field-with-errors" if errors_on?(attribute)
+      classes << "field-with-errors" if object.errors[attr].any?
+      content_tag(:div, label_for(attr, label) + str, class: classes.join(" "))
+    end
+
+    def image_file_preview(attribute)
+      return "" unless object.send(attribute)
       content_tag(
-        "div",
-        label_for(attribute, label_text) + content,
-        class: classes.join(" ")
+        :p,
+        @template.dynamic_image_tag(object.send(attribute), size: "120x100")
       )
     end
 
-    # Returns the first error on attribute
-    def first_error_on(attribute)
-      errors_on(attribute).first
+    def image_file_field(attribute, options = {})
+      image_file_preview(attribute) + file_field(attribute, options)
     end
 
-    def image_file_field(attribute, options = {})
-      if object.send(attribute)
-        content_tag(
-          "p",
-          @template.dynamic_image_tag(object.send(attribute), size: "120x100")
-        ) + file_field(attribute, options)
-      else
-        file_field(attribute, options)
-      end
+    def label_errors(attribute)
+      return "" unless object.errors[attribute].any?
+      content_tag(:span, object.errors[attribute].first, class: "error")
     end
 
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
-      if errors_on?(attribute)
-        label_text += content_tag(:span,
-                                  first_error_on(attribute),
-                                  class: "error")
-      end
+      label_text += label_errors(attribute)
       content_tag("label",
                   label_text.html_safe,
                   for: [object.class.to_s.underscore, attribute].join("_"))

@@ -50,8 +50,7 @@ module PagesCore
         if PagesCore.config(:domain_based_cache)
           Dir.entries(config.cache_path)
              .select { |d| visible_dir?(d) }
-             .map { |d| File.join(config.cache_path, d) }
-             .map(&:to_s)
+             .map { |d| File.join(config.cache_path, d).to_s }
         else
           [config.cache_path.to_s]
         end
@@ -59,16 +58,12 @@ module PagesCore
 
       # Returns the default configuration.
       def default_config
-        OpenStruct.new(
-          cache_path: ActionController::Base.page_cache_directory,
-          observe: [Page, PageComment, Image],
-          patterns: [
-            %r{^/index\.[\w]+$},
-            %r{^/sitemap\.[\w]+$},
-            %r{^/pages/[\w]{2,3}[/\.](.*)$},
-            %r{^/[\w]{2,3}/(.*)$}
-          ]
-        )
+        OpenStruct.new(cache_path: ActionController::Base.page_cache_directory,
+                       observe: [Page, PageComment, Image],
+                       patterns: [%r{^/index\.[\w]+$},
+                                  %r{^/sitemap\.[\w]+$},
+                                  %r{^/pages/[\w]{2,3}[/\.](.*)$},
+                                  %r{^/[\w]{2,3}/(.*)$}])
       end
 
       def extend_observed_models!
@@ -76,9 +71,7 @@ module PagesCore
           if klass.is_a?(Symbol) || klass.is_a?(String)
             klass = klass.to_s.camelize.constantize
           end
-          unless klass.include?(PagesCore::Sweepable)
-            klass.send(:include, PagesCore::Sweepable)
-          end
+          klass.send(:include, PagesCore::Sweepable)
         end
       end
 
@@ -117,12 +110,10 @@ module PagesCore
     private
 
     def locales
-      if PagesCore.config.locales
-        ([I18n.default_locale.to_s] +
-          PagesCore.config.locales.keys.map(&:to_s)).uniq
-      else
-        [I18n.default_locale.to_s]
-      end
+      return [I18n.default_locale.to_s] unless PagesCore.config.locales
+
+      ([I18n.default_locale.to_s] +
+        PagesCore.config.locales.keys.map(&:to_s)).uniq
     end
 
     def page_path_files
@@ -132,12 +123,8 @@ module PagesCore
       end
     end
 
-    def pattern_match?(relative_path)
-      PagesCore::CacheSweeper
-        .config
-        .patterns
-        .select { |p| p =~ relative_path }
-        .any?
+    def pattern_match?(path)
+      PagesCore::CacheSweeper.config.patterns.select { |p| p =~ path }.any?
     end
 
     def skip_path?(path)
