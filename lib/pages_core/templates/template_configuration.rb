@@ -138,60 +138,50 @@ module PagesCore
 
       private
 
+      def default_blocks
+        {
+          name:     { size: :field, class: "page_title" },
+          body:     { size: :large },
+          headline: { size: :field },
+          excerpt:  {},
+          boxout:   {}
+        }.merge(default_meta_blocks)
+      end
+
+      def default_meta_blocks
+        {
+          meta_title:             { size: :field },
+          meta_description:       { size: :small },
+          open_graph_title:       { size: :field },
+          open_graph_description: { size: :small }
+        }
+      end
+
       def default_block_configuration(default)
         default.blocks do |block|
-          block.name(
-            "Name",
-            size: :field,
-            description: "This is the name of the page, and it will also " \
-              "be the name of the link to this page.",
-            class: "page_title"
-          )
-          block.body(
-            "Body",
-            size: :large
-          )
-          block.headline(
-            "Headline",
-            description: "Optional, use if the headline should differ from " \
-              "the page name.",
-            size: :field
-          )
-          block.excerpt(
-            "Standfirst",
-            description: "An introductory paragraph before the start " \
-              "of the body."
-          )
-          block.boxout(
-            "Boxout",
-            description: "Part of the page, usually background info or " \
-              "facts related to the article."
-          )
-          block.meta_title(
-            "Title",
-            size: :field,
-            description: "Document title. Will fall back to the page name " \
-              "if empty. Recommended length: Up to 56 characters."
-          )
-          block.meta_description(
-            "Description",
-            size: :small,
-            description: "Description for search engines. Will fall back to " \
-              "Standfirst if empty. Recommended length: Up to 156 characters."
-          )
-          block.open_graph_title(
-            "Open Graph Title",
-            size: :field,
-            description: "Page title for Facebook sharing. Will fall back to " \
-              "the document title."
-          )
-          block.open_graph_description(
-            "Open Graph Description",
-            size: :small,
-            description: "Description for Facebook sharing. Will fall back " \
-              "to Description or Standfirst if empty."
-          )
+          default_blocks.keys.each do |name|
+            block.send(
+              name,
+              template_block_localization("#{name}.name"),
+              default_block_options(name)
+            )
+          end
         end
+      end
+
+      def default_block_options(name)
+        {
+          description: template_block_localization("#{name}.description")
+        }.merge(default_blocks[name])
+      end
+
+      def template_block_localization(str)
+        # Templates are configured in an initializer, and
+        # localizations aren't usually configured at this time. This
+        # forces loading of localizations from the plugin.
+        PagesCore::PagesPlugin.configure_localizations!
+
+        I18n.t("templates.default.blocks.#{str}")
       end
     end
   end
