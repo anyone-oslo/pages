@@ -2,6 +2,8 @@
 
 module PagesCore
   module PageModel
+    class InvalidRedirectUrl < StandardError; end
+
     module Redirectable
       extend ActiveSupport::Concern
 
@@ -22,7 +24,7 @@ module PagesCore
         if path.start_with? "/"
           params.each do |key, value|
             unless value.is_a?(String) || value.is_a?(Symbol)
-              raise "redirect_url param must be a string or a symbol"
+              raise InvalidRedirectUrl, "must be a string or a symbol"
             end
             path.gsub!("/:#{key}", "/#{value}")
           end
