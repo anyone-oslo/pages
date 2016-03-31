@@ -1,24 +1,15 @@
-class PagesController extends BaseController {
-  index() {}
-
-  new() {
-    this.edit();
+class EditPage {
+  constructor() {
+    this.toggleAdvancedOptions();
+    this.replicateFormElements();
+    this.checkPublishedStatus();
+    this.checkPublishedDate();
+    this.uploadModals();
+    this.fileList();
+    this.previewButton();
   }
 
-  new_news() {
-    this.edit();
-  }
-
-  show() {
-    this.edit();
-  }
-
-  edit() {
-    $(".advanced-options").hide();
-    $(".advanced-toggle").click(function() {
-      return $(".advanced-options").slideToggle();
-    });
-
+  checkPublishedStatus() {
     let checkStatus = function() {
       var pageStatus = $("#page-form-sidebar #page_status").val();
       if (pageStatus === "2") {
@@ -27,16 +18,16 @@ class PagesController extends BaseController {
         return $("#page-form-sidebar .published-date").hide();
       }
     };
-
     $("#page-form-sidebar #page_status").change(checkStatus);
     checkStatus();
-    $(".autopublish-notice").hide();
+  }
 
+  checkPublishedDate() {
+    $(".autopublish-notice").hide();
     let publishedAt = function(i) {
       return $(`#page-form-sidebar select[name="page[published_at(${i}i)]"]`)
                .val();
     }
-
     let checkDate = function() {
       var year = publishedAt(1);
       var month = publishedAt(2);
@@ -51,10 +42,58 @@ class PagesController extends BaseController {
         return $(".autopublish-notice").fadeOut();
       }
     };
-
     $(".published-date").find("select").change(checkDate);
     checkDate();
+  }
 
+  fileList() {
+    // Reordering files
+    $(".file-list").each(function() {
+      var list = this;
+      return $(list).sortable({
+        axis: "y",
+        cursor: "move",
+        distance: 10,
+        handle: ".drag-handle",
+        placeholder: "placeholder",
+
+        update() {
+          return $.post( $(list).data('url'), { ids: ((() => {
+            var result = [];
+            var iterable = $(list).find('li').get();
+            for (var i = 0, item; i < iterable.length; i++) {
+              item = iterable[i];
+              result.push($(item).data('file-id'));
+            }
+            return result;
+          })()) }, function() {
+            return $(list).effect("highlight", {}, 500);
+          }
+          );
+        }
+      });
+    });
+  }
+
+  previewButton() {
+    $("#previewButton").click(function() {
+      var button = this;
+      var form = $(button).closest("form").get(0);
+      var previewUrl = $(this).data('url');
+
+      // Rewrite the form and submit
+      form.oldAction = form.action;
+      form.target = "_blank";
+      form.action = previewUrl;
+      $(form).submit();
+
+      // Undo rewrite
+      form.action = form.oldAction;
+      form.target = "";
+    });
+  }
+
+  replicateFormElements() {
     let replicateFormElement = function() {
       var newValue = this;
       $("#page-form").find("[name=\"" + newValue.name + "\"]")
@@ -70,67 +109,33 @@ class PagesController extends BaseController {
     $("#page-form-sidebar")
       .find("input,textarea,select")
       .change(replicateFormElement);
+  }
 
+  toggleAdvancedOptions() {
+    $(".advanced-options").hide();
+    $(".advanced-toggle").click(function() {
+      return $(".advanced-options").slideToggle();
+    });
+  }
+
+  uploadModals() {
     $("#new-image").hide();
-
+    $("#new-file").hide();
     $(".upload-images-button").click(function() {
       return Modal.show(
         "<div class=\"uploadImages\">" + $("#new-image").html() + "</div>"
       );
     });
-
     $(".upload-file-button").click(function() {
       return Modal.show(
         "<div class=\"uploadImages\">" + $("#new-file").html() + "</div>"
       );
     });
-
-    // Reordering files
-    $(".file-list").each(function() {
-      var list = this;
-      return $(list).sortable({
-        axis: "y",
-        cursor: "move",
-        distance: 10,
-        handle: ".drag-handle",
-        placeholder: "placeholder",
-
-        update(event, ui) {
-          return $.post( $(list).data('url'), { ids: ((() => {
-            var result = [];
-            var iterable = $(list).find('li').get();
-            for (var i = 0, item; i < iterable.length; i++) {
-              item = iterable[i];
-              result.push($(item).data('file-id'));
-            }
-            return result;
-          })()) }, function(response) {
-            return $(list).effect("highlight", {}, 500);
-            }
-          );
-        }
-      });
-    });
-
-    // Previewing
-    $("#previewButton").click(function() {
-      var button = this;
-      var form = $(button).closest("form").get(0);
-      var previewUrl = $(this).data('url');
-
-      // Rewrite the form and submit
-      form.oldAction = form.action;
-      form.target = "_blank";
-      form.action = previewUrl;
-      $(form).submit();
-
-      // Undo rewrite
-      form.action = form.oldAction;
-      return form.target = "";
-    });
-
-    return $("#new-file").hide();
   }
 }
 
-Admin.Controllers.PagesController = PagesController;
+$(function () {
+  $('.edit-page').each(function() {
+    new EditPage(this)}
+  );
+});
