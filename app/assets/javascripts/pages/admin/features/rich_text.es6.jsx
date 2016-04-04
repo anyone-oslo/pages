@@ -1,8 +1,8 @@
 (function () {
   class TextileDecorator {
     blockquote(str) { return ["bq. ", str, ""]; }
-    bold(str) { return ["*", str, "*"]; }
-    emphasis(str) { return ["_", str, "_"]; }
+    bold(str) { return ["<b>", str, "</b>"]; }
+    emphasis(str) { return ["<i>", str, "</i>"]; }
     h1(str) { return ["h1. ", str, ""]; }
     h2(str) { return ["h2. ", str, ""]; }
     h3(str) { return ["h3. ", str, ""]; }
@@ -73,7 +73,7 @@
     });
   };
 
-  let RichTextArea = function(textarea, options) {
+  let RichTextArea = function(textarea) {
     // Only apply it once
     if (textarea.richtext) { return this; }
     textarea.richtext = true;
