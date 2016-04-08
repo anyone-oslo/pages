@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330220900) do
+ActiveRecord::Schema.define(version: 20160405202700) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20160330220900) do
     t.string   "localizable_type", limit: 255
     t.string   "name",             limit: 255
     t.string   "locale",           limit: 255
-    t.text     "value",            limit: 65535
+    t.text     "value",            limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
