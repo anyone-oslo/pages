@@ -1,0 +1,2 @@
+class InheritedTemplate < IndexTemplate
+end

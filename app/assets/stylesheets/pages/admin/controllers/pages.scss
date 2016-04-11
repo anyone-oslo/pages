@@ -55,7 +55,7 @@
     max-width: 100%;
   }
 
-  main & input.page_title {
+  main & input#page_name {
     font-weight: bold;
     font-size: 1.4em;
     color: $c-text;

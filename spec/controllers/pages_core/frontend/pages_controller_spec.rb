@@ -2,13 +2,13 @@ require "rails_helper"
 
 describe PagesCore::Frontend::PagesController, type: :controller do
   controller(PagesController) do
-    template(:home) do |page|
+    template(:news_item) do |page|
       @home_page = page
     end
   end
 
   let(:locale) { I18n.default_locale }
-  let(:page) { create(:page, name: "Home", template: "home") }
+  let(:page) { create(:page, name: "Home", template: "news_item") }
 
   before { PagesCore.config.localizations = false }
 
@@ -19,11 +19,10 @@ describe PagesCore::Frontend::PagesController, type: :controller do
     end
 
     context "when a page exists" do
-      let!(:page) { create(:page, template: "home") }
-
+      let!(:page) { create(:page, template: "news_item") }
       before { get :index }
 
-      it { is_expected.to render_template("pages/templates/home") }
+      it { is_expected.to render_template("pages/templates/news_item") }
 
       it "finds the page" do
         expect(assigns(:page)).to eq(page)
@@ -32,7 +31,7 @@ describe PagesCore::Frontend::PagesController, type: :controller do
 
     context "when rendering RSS" do
       before do
-        create(:page, template: "home", feed_enabled: true)
+        create(:page, template: "news_item", feed_enabled: true)
         get :index, params: { format: :rss }
       end
 
@@ -108,10 +107,13 @@ describe PagesCore::Frontend::PagesController, type: :controller do
       end
     end
 
-    context "with a nonexistant template" do
+    describe "page rendering with a nonexistant template" do
       let(:page) { create(:page, name: "Home", template: "foo") }
 
-      it { is_expected.to render_template("pages/templates/index") }
+      it "raises an error" do
+        expect { get :show, path: page.path_segment }
+          .to raise_error(PagesCore::Template::NotFoundError)
+      end
     end
 
     describe "RSS rendering" do

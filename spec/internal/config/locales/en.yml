@@ -1,0 +1,7 @@
+en:
+  templates:
+    index:
+      excerpt:
+        name: Excerpt
+        description: This is the excerpt
+        placeholder: Placeholder excerpt

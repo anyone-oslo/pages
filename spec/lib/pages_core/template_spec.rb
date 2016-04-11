@@ -1,74 +1,23 @@
 require "rails_helper"
 
-class ApplicationTemplate < PagesCore::Template
-  block :video_embed, size: :large
-end
-
-class IndexTemplate < ApplicationTemplate
-  filename "default"
-  name "Default"
-  images true
-  enabled_blocks []
-end
-
-class InheritedTemplate < IndexTemplate; end
-
-class NewsItemTemplate < ApplicationTemplate
-  enabled_blocks :headline, :name, :excerpt, :body, :video_embed
-end
-
 describe PagesCore::Template do
   let(:template_class) { ApplicationTemplate }
   let(:template) { template_class.new }
 
-  describe "#block_names" do
-    subject { template.block_names }
+  before { I18n.locale = :en }
+  after { I18n.locale = I18n.default_locale }
 
-    context "with default configuration" do
-      it { is_expected.to eq([:name, :headline, :excerpt, :body]) }
-    end
+  describe ".find" do
+    let(:id) { :news_item }
+    subject { PagesCore::Template.find(id) }
 
-    context "with configuration set" do
-      let(:template_class) { NewsItemTemplate }
-      it "should return the template names" do
-        expect(subject).to eq([:headline, :name, :excerpt, :body, :video_embed])
+    it { is_expected.to eq(NewsItemTemplate) }
+
+    context "when template doesn't exist" do
+      let(:id) { :foo }
+      it "should raise an error" do
+        expect { subject }.to raise_error(PagesCore::Template::NotFoundError)
       end
-    end
-
-    context "with inherited configuration" do
-      let(:template_class) { InheritedTemplate }
-      it { is_expected.to eq([:name]) }
-    end
-  end
-
-  describe "#blocks" do
-    let(:expected_blocks) do
-      {
-        name: { size: :field },
-        headline: { size: :field },
-        excerpt: {},
-        body: { size: :large }
-      }
-    end
-
-    subject { template.blocks }
-
-    context "with default configuration" do
-      it { is_expected.to eq(expected_blocks) }
-    end
-
-    context "with configuration set" do
-      let(:template_class) { NewsItemTemplate }
-      let(:expected_blocks) do
-        {
-          headline: { size: :field },
-          name: { size: :field },
-          excerpt: {},
-          body: { size: :large },
-          video_embed: { size: :large }
-        }
-      end
-      it { is_expected.to eq(expected_blocks) }
     end
   end
 

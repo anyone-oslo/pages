@@ -41,6 +41,18 @@
   <%= f.file_field :meta_image %>
 </div>
 
-<% @page.template_config.metadata_blocks do |block_name, block_options| %>
-  <%= page_block_field(f, block_name, block_options) %>
-<% end %>
+<%= labelled_field(f.text_field(:meta_title),
+                   @page.class.human_attribute_name(:meta_title),
+                   description: t("page.descriptions.meta_title")) %>
+
+<%= labelled_field(f.text_area(:meta_description),
+                   @page.class.human_attribute_name(:meta_description),
+                   description: t("page.descriptions.meta_description")) %>
+
+<%= labelled_field(f.text_field(:open_graph_title),
+                   @page.class.human_attribute_name(:open_graph_title),
+                   description: t("page.descriptions.open_graph_title")) %>
+
+<%= labelled_field(f.text_area(:open_graph_description),
+                   @page.class.human_attribute_name(:open_graph_description),
+                   description: t("page.descriptions.open_graph_description")) %>

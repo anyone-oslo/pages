@@ -4,6 +4,13 @@ RSpec.describe Admin::PagesHelper, type: :helper do
   let(:page) { build(:page) }
 
   describe "#available_templates_for_select" do
+    let(:template_options) do
+      [
+        ["Default", :index],
+        ["Inherited", :inherited],
+        ["News item", :news_item]
+      ]
+    end
     subject { helper.available_templates_for_select }
 
     let(:template_options) { [%w([Default] index), %w[Home home]] }
@@ -24,46 +31,32 @@ RSpec.describe Admin::PagesHelper, type: :helper do
 
     let(:builder) { PagesCore::FormBuilder.new("page", page, helper, {}) }
     let(:name) { :name }
-    let(:options) { { size: :small, title: "Page name" } }
+    let(:options) { { size: :small } }
 
     context "when size is a field" do
-      let(:options) { { size: :field, title: "Page name" } }
-      let(:pattern) do
-        "<div class=\"field\"><label>Page name</label>" \
-        "<input class=\"rich\" type=\"text\" " \
-        "value=\"#{page.name}\" name=\"page[name]\" " \
-        "id=\"page_name\" /></div>"
+      let(:options) { { size: :field } }
+      it "should render" do
+        expect(subject).to eq(
+          "<div class=\"field\"><label>Name</label>" \
+            "<input class=\"rich\" type=\"text\" " \
+            "value=\"#{page.name}\" name=\"page[name]\" " \
+            "id=\"page_name\" /></div>"
+        )
       end
 
       it { is_expected.to eq(pattern) }
     end
 
     context "when size is small" do
-      let(:options) { { size: :large, title: "Page name" } }
-      let(:pattern) do
-        "<div class=\"field\">" \
-        "<label>Page name</label>" \
-        "<textarea class=\"rich\" rows=\"15\" " \
-        "name=\"page[name]\" id=\"page_name\">\n#{page.name}" \
-        "</textarea></div>"
-      end
-
-      it { is_expected.to eq(pattern) }
-    end
-
-    context "with description" do
-      let(:options) do
-        { size: :small,
-          title: "Page name",
-          description: "Description" }
-      end
-      let(:pattern) do
-        "<div class=\"field\">" \
-        "<label>Page name</label>" \
-        "<p class=\"description\">Description</p>" \
-        "<textarea class=\"rich\" rows=\"5\" " \
-        "name=\"page[name]\" id=\"page_name\">\n#{page.name}" \
-        "</textarea></div>"
+      let(:options) { { size: :large } }
+      it "should render" do
+        expect(subject).to eq(
+          "<div class=\"field\">" \
+            "<label>Name</label>" \
+            "<textarea class=\"rich\" rows=\"15\" " \
+            "name=\"page[name]\" id=\"page_name\">\n#{page.name}" \
+            "</textarea></div>"
+        )
       end
 
       it { is_expected.to eq(pattern) }

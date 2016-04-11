@@ -60,14 +60,6 @@ module PagesCore
         super
       end
 
-      def page_template(page)
-        if PagesCore::Templates.names.include?(page.template)
-          page.template
-        else
-          "index"
-        end
-      end
-
       def render_page
         return if redirect_page(@page)
 
@@ -75,10 +67,10 @@ module PagesCore
           document_title(@page.meta_title? ? @page.meta_title : @page.name)
         end
 
-        template = page_template(@page)
-        run_template_actions_for(template, @page)
+        template = @page.template_config
+        run_template_actions_for(template.id, @page)
         return if @already_rendered
-        render template: "pages/templates/#{template}"
+        render template: template.path
       end
 
       # Cache pages by hand. This is dirty, but it works.

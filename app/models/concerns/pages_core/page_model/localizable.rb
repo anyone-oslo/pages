@@ -19,7 +19,7 @@ module PagesCore
           attribute :open_graph_description
 
           dictionary(lambda do
-            PagesCore::Templates::TemplateConfiguration.all_blocks
+            PagesCore::Template.block_ids
           end)
         end
       end
