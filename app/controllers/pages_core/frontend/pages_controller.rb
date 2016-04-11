@@ -2,7 +2,6 @@ module PagesCore
   module Frontend
     class PagesController < ::FrontendController
       include PagesCore::FrontendHelper
-      include PagesCore::Templates::ControllerActions
       include PagesCore::HeadTagsHelper
 
       include PagesCore::PreviewPagesController
@@ -68,7 +67,8 @@ module PagesCore
         end
 
         template = @page.template_config
-        run_template_actions_for(template.id, @page)
+        instance_exec(@page, &template.render)
+
         return if @already_rendered
         render template: template.path
       end

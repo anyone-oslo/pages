@@ -47,6 +47,20 @@ describe PagesCore::Template do
     it { is_expected.to eq("pages/templates/news_item") }
   end
 
+  describe "#render" do
+    subject { template.render }
+
+    it { is_expected.to be_a(Proc) }
+
+    context "with a custom proc" do
+      let(:template_class) { IndexTemplate }
+
+      it "should return the proc" do
+        expect(subject.call).to eq("foo")
+      end
+    end
+  end
+
   describe "#images?" do
     subject { template.images? }
 

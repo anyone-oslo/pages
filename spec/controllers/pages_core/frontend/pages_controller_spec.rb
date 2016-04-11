@@ -2,9 +2,6 @@ require "rails_helper"
 
 describe PagesCore::Frontend::PagesController, type: :controller do
   controller(PagesController) do
-    template(:news_item) do |page|
-      @home_page = page
-    end
   end
 
   let(:locale) { I18n.default_locale }
@@ -61,7 +58,7 @@ describe PagesCore::Frontend::PagesController, type: :controller do
       expect(assigns(:document_title)).to eq("Home")
     end
 
-    it "calls the template actions" do
+    it "calls the template render proc" do
       expect(assigns(:home_page)).to eq(page)
     end
 

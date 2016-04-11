@@ -18,13 +18,9 @@ module PagesCore
       def default_configuration
         { enabled_blocks:   [:headline, :excerpt, :body],
           filename:         nil,
-          comments:         false,
-          comments_allowed: true,
-          files:            false,
-          images:           false,
           name:             nil,
-          subtemplate:      nil,
-          tags:             false }
+          render:           proc {},
+          subtemplate:      nil }.merge(default_options)
       end
 
       def find(id)
@@ -55,6 +51,10 @@ module PagesCore
         (templates - [ApplicationTemplate]).sort_by(&:id)
       end
 
+      def render(&block)
+        set(:render, block)
+      end
+
       def set(key, value, *extra)
         return configuration[key] = value unless extra.any?
         configuration[key] = [value] + extra
@@ -66,6 +66,14 @@ module PagesCore
       end
 
       private
+
+      def default_options
+        { comments:         false,
+          comments_allowed: true,
+          files:            false,
+          images:           false,
+          tags:             false }
+      end
 
       def template_roots
         [
