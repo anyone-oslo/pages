@@ -111,5 +111,3 @@ end
 Delayed::Worker.backend = :active_record
 
 FactoryGirl.find_definitions
-
-PagesCore.load_dependencies!

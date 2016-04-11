@@ -40,24 +40,14 @@ require "underscore-rails"
 require "jcrop/rails/v2"
 require "font-awesome-rails"
 
+require "pages_core/engine"
+require "pages_core/extensions"
+require "pages_core/localizable/active_record_extension"
+
 module PagesCore
   class NotAuthorized < StandardError; end
 
   class << self
-    def load_dependencies!
-      %w(
-        plugin admin_menu_item archive_finder cache_sweeper file_embedder
-        configuration engine extensions localizable page_path_constraint
-        pages_plugin paginates templates version
-      ).each do |dep|
-        load("pages_core/#{dep}.rb")
-      end
-    end
-
-    def init!
-      load_dependencies!
-    end
-
     def version
       VERSION
     end
@@ -81,5 +71,3 @@ module PagesCore
     alias config configuration
   end
 end
-
-PagesCore.init!
