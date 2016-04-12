@@ -11,6 +11,8 @@ namespace :pages do
   desc "Convert templates"
   task convert_templates: :environment do
     TemplateConverter.convert!
+    puts "Templates converted. Remember to move any template actions " \
+         "from PagesController to the template files."
   end
 
   desc "Perform routine maintenance"

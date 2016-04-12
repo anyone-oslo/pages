@@ -185,7 +185,7 @@ module PagesCore
           # forces loading of localizations from the plugin.
           PagesCore::PagesPlugin.configure_localizations!
 
-          I18n.t("templates.default.blocks.#{str}")
+          I18n.t("templates.default.#{str}")
         end
       end
     end

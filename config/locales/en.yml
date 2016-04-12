@@ -17,8 +17,8 @@ en:
         Standfirst if empty. Recommended length: Up to 156 characters."
       open_graph_title: "Page title for Facebook sharing. Will fall back to the
         document title."
-      open_graph_description: "Description for Facebook sharing. Will fall back to
-        Description or Standfirst if empty."
+      open_graph_description: "Description for Facebook sharing. Will fall back
+        to Description or Standfirst if empty."
   templates:
     default:
       name:

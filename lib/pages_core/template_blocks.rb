@@ -65,9 +65,7 @@ module PagesCore
     end
 
     def block_name(block)
-      unless self.class.localization?(block, :description)
-        return block.to_s.humanize
-      end
+      return block.to_s.humanize unless self.class.localization?(block, :name)
       self.class.localization(block, :name)
     end
 

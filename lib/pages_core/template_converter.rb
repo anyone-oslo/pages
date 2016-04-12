@@ -3,13 +3,32 @@
 class TemplateConverter
   class << self
     def convert!
-      # TODO: localizations
-      # TODO: Controller actions?
-      new("application").convert!
-      names.each { |n| new(n).convert! }
+      I18n.locale = :en
+      localizations = convert_template("application")
+      names.each do |n|
+        localizations = localizations.deep_merge(convert_template(n))
+      end
+      localizations = localizations.deep_merge(existing_localizations)
+      File.open(localization_file, "w") do |fh|
+        fh.write(localizations.to_yaml)
+      end
     end
 
     private
+
+    def convert_template(name)
+      new(name).convert!
+      new(name).localizations
+    end
+
+    def existing_localizations
+      return {} unless File.exist?(localization_file)
+      YAML.load_file(localization_file)
+    end
+
+    def localization_file
+      Rails.root.join("config", "locales", "en.yml")
+    end
 
     def names
       Dir.glob(Rails.root.join("app/views/pages/templates/*.html.erb"))
@@ -32,6 +51,14 @@ class TemplateConverter
     end
   end
 
+  def localizations
+    return {} if cleaned_localizations.blank?
+    ns = (name.to_s == "application") ? "default" : name.to_s
+    { "en" => { "templates" => {
+      ns => cleaned_localizations
+    } } }
+  end
+
   private
 
   def block(name)
@@ -40,14 +67,27 @@ class TemplateConverter
       size: config.block(name)[:size] || :small }
   end
 
-  def blocks
+  def blocks(all = false)
     all_blocks = enabled_blocks.each_with_object({}) do |name, blocks|
       blocks[name] = block(name)
     end
+    return all_blocks if all
     reject_blocks(
       all_blocks,
       PagesCore::Template.default_block_definitions.merge(default_blocks)
     )
+  end
+
+  def clean_localizations(hash)
+    hash.reject { |_, v| v.blank? }
+  end
+
+  def cleaned_localizations
+    if name.to_s == "application"
+      clean_localizations(default_localizations)
+    else
+      clean_localizations(template_localizations)
+    end
   end
 
   def config
@@ -60,6 +100,19 @@ class TemplateConverter
 
   def default_config(key)
     config.config.get(:default, key)[:value]
+  end
+
+  def default_localizations
+    default_blocks
+      .reject { |k, _| predefined_blocks.include?(k) }
+      .each_with_object({}) do |(k, v), hash|
+        hash[k.to_s] = {
+          "name" => v[:title], "description" => v[:description]
+        }.reject do |n, s|
+          (n == "name" && s == k.to_s.humanize) ||
+            s.blank? || s == I18n.t("templates.default.#{k}.#{n}")
+        end
+      end
   end
 
   def default_subtemplate
@@ -113,6 +166,23 @@ class TemplateConverter
 
   def template_blocks
     (blocks.map { |n, o| "#{n}:#{o[:size]}" } - default_template_blocks)
+  end
+
+  def template_localizations
+    blocks(true)
+      .reject { |k, _| predefined_blocks.include?(k) }
+      .each_with_object({}) do |(k, v), hash|
+        hash[k.to_s] = {
+          "name" => v[:title], "description" => v[:description]
+        }.reject do |n, s|
+          s.blank? ||
+            (n == "name" && s == k.to_s.humanize) ||
+            (default_localizations[k.to_s] &&
+            default_localizations[k.to_s][n] == s) ||
+            s == I18n.t("templates.#{name}.#{k}.#{n}") ||
+            s == I18n.t("templates.default.#{k}.#{n}")
+        end
+      end
   end
 
   def template_options
