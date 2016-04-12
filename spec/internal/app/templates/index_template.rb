@@ -4,7 +4,7 @@ class IndexTemplate < ApplicationTemplate
   images true
   enabled_blocks []
 
-  render do |page|
+  render do |_|
     "foo"
   end
 end

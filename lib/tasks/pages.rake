@@ -8,6 +8,11 @@ namespace :pages do
     Rails.logger.info "Autopublished #{published.length} pages"
   end
 
+  desc "Convert templates"
+  task convert_templates: :environment do
+    TemplateConverter.convert!
+  end
+
   desc "Perform routine maintenance"
   task maintenance: [:autopublish] do
   end

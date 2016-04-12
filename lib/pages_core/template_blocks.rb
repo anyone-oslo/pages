@@ -12,7 +12,7 @@ module PagesCore
       end
 
       def block(name, definition = {})
-        blocks[name] = definition
+        blocks[name] = { size: :small }.merge(definition)
       end
 
       def block_definition(name)
@@ -26,9 +26,9 @@ module PagesCore
       def default_block_definitions
         { name:     { size: :field },
           headline: { size: :field },
-          excerpt:  {},
+          excerpt:  { size: :small },
           body:     { size: :large },
-          boxout:   {} }
+          boxout:   { size: :small } }
       end
 
       def localization?(block, name)

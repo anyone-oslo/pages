@@ -1,0 +1,48 @@
+<% module_namespacing do -%>
+class <%= class_name %> < <%= parent_class_name.classify %>
+  # name "<%= human_name %>"
+<% if view_name == file_name -%>
+  # filename "<%= view_name %>"
+<% else -%>
+  filename "<%= view_name %>"
+<% end -%>
+<% if blocks_with_size.any? -%>
+
+<% blocks_with_size.each do |block, size| -%>
+  block :<%= block %>, size: :<%= size %>
+<% end -%>
+<% end -%>
+
+<% unless options[:comments].nil? -%>
+  comments <%= options[:comments] %>
+<% end -%>
+<% unless options[:comments_allowed].nil? -%>
+  comments_allowed <%= options[:comments_allowed] %>
+<% end -%>
+<% unless options[:files].nil? -%>
+  files <%= options[:files] %>
+<% end -%>
+<% unless options[:images].nil? -%>
+  images <%= options[:images] %>
+<% end -%>
+<% unless options[:tags].nil? -%>
+  tags <%= options[:tags] %>
+<% end -%>
+
+<% if subtemplate.blank? || subtemplate == default_subtemplate -%>
+  # subtemplate :<%= default_subtemplate %>
+<% else -%>
+  subtemplate :<%= subtemplate %>
+<% end -%>
+<% if enabled_blocks -%>
+  enabled_blocks <%= enabled_blocks.map { |b| ":#{b}" }.join(", ") %>
+<% else -%>
+  # enabled_blocks :headline, :excerpt, :body
+<% end -%>
+
+  # render do |page|
+  # # Code here will be executed in the controller binding
+  # # when the template is rendered.
+  # end
+end
+<% end -%>
