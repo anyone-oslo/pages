@@ -90,7 +90,7 @@ describe PagesCore::TemplateBlocks do
       {
         name: { size: :field },
         headline: { size: :field },
-        excerpt: {},
+        excerpt: { size: :small },
         body: { size: :large }
       }
     end
@@ -107,7 +107,7 @@ describe PagesCore::TemplateBlocks do
         {
           headline: { size: :field },
           name: { size: :field },
-          excerpt: {},
+          excerpt: { size: :small },
           body: { size: :large },
           video_embed: { size: :large }
         }
