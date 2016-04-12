@@ -11,7 +11,7 @@ namespace :pages do
   desc "Convert templates"
   task convert_templates: :environment do
     config_file = Rails.root.join("config", "initializers", "page_templates.rb")
-    TemplateConverter.convert!
+    PagesCore::TemplateConverter.convert!
     puts "Templates converted. Remember to move any template actions " \
          "from PagesController to the template files."
     if File.exist?(config_file)
