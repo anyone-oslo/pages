@@ -20,7 +20,7 @@ module PagesCore
         end
 
         def localizations
-          all_templates.inject({}) { |a, e| a.deep_merge(new(e).foo) }
+          all_templates.inject({}) { |a, e| a.deep_merge(new(e).to_h) }
         end
 
         def write_localizations(localizations)
@@ -30,7 +30,7 @@ module PagesCore
         end
       end
 
-      def foo
+      def to_h
         return {} if cleaned.blank?
         ns = application? ? "default" : name.to_s
         { "en" => { "templates" => {

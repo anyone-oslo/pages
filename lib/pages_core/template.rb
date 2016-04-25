@@ -1,4 +1,64 @@
 module PagesCore
+  # = Template
+  #
+  # A Template object is the bridge between a Page and the view.
+  #
+  # == Configuration
+  #
+  # Images, files, comments and tags can be toggled on or off per
+  # template. They're all disabled by default.
+  #
+  #   class ArticleTemplate < ApplicationTemplate
+  #     comments true
+  #     files false
+  #     images true
+  #     tags true
+  #   end
+  #
+  # The template name can also be configured.
+  #
+  #   class HomeTemplate < ApplicationTemplate
+  #     name "Home page"
+  #   end
+  #
+  # == Blocks
+  #
+  # A block is a piece of content, and a template can have has many
+  # blocks as desired. By default, the <tt>:name</tt>,
+  # <tt>:headline</tt>, <tt>:excerpt</tt> and <tt>:body</ttt> blocks
+  # are defined and enabled. The <tt>:name</tt> block is special and
+  # will always be present.
+  #
+  #   class ArticleTemplate < ApplicationTemplate
+  #     block :video_embed, size: :small
+  #     enabled_blocks :headline, :body, :video_embed
+  #   end
+  #
+  # Valid size options for a block definition are <tt>:field</tt>,
+  # <tt>:small</tt> and <tt>:large</tt>. <tt>:field</tt> will be
+  # rendered as a text field, and the other two as text areas.
+  #
+  # Blocks must be enabled by setting <tt>enabled_blocks</tt>. This
+  # also determines the ordering.
+  #
+  # The name and description for each block can be customized using
+  # the Rails I18n system. The lookup keys are
+  # <tt>templates.<template name>.<block_name>.name</tt> and
+  # <tt>templates.<template name>.<block_name>.description</tt>.
+  #
+  # == Defaults and inheritance
+  #
+  # All properties except for <tt>filename</tt> are inherited when
+  # subclassing. Typically this will be used to set a default configuration
+  # in <tt>ApplicationTemplate</tt>.
+  #
+  #   class ApplicationTemplate < PagesCore::Template
+  #     block :video_embed, size: :small
+  #   end
+  #
+  #   class ArticleTemplate < ApplicationTemplate
+  #     enabled_blocks :headline, :body, :video_embed
+  #   end
   class Template
     class NotFoundError < StandardError; end
 
