@@ -2,8 +2,8 @@
 
 module PagesCore
   class Engine < Rails::Engine
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
-    config.eager_load_paths += Dir["#{config.root}/lib/**/"]
+    config.autoload_paths += Dir["#{config.root}/lib/pages_core/**/"]
+    config.eager_load_paths += Dir["#{config.root}/lib/pages_core/**/"]
 
     initializer :active_job do |_config|
       ActiveJob::Base.queue_adapter = if Rails.env.test?
