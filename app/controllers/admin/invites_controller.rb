@@ -39,7 +39,7 @@ module Admin
     def create
       @invite = current_user.invites.create(invite_params)
       if @invite.valid?
-        deliver_invite(invite)
+        deliver_invite(@invite)
         @invite.update(sent_at: Time.now.utc)
         redirect_to admin_invites_url
       else
