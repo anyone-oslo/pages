@@ -45,6 +45,12 @@ module PagesCore
           nodes
         end
 
+        # Returns all children, recursively
+        def all_subpages
+          return nil unless subpages.any?
+          subpages.map { |p| [p, p.all_subpages] }.flatten.compact
+        end
+
         # Finds the page's next sibling. Returns nil if there isn't one.
         def next_sibling
           return unless siblings.any?
