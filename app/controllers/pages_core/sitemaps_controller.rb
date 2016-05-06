@@ -39,7 +39,7 @@ module PagesCore
     end
 
     def localized?(record)
-      record.is_a?(PagesCore::Localizable::InstanceMethods)
+      record.is_a?(LocalizableModel::InstanceMethods)
     end
 
     def pages
