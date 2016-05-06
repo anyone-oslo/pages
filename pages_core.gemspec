@@ -60,6 +60,7 @@ Gem::Specification.new do |s|
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list"
+  s.add_dependency "localizable_model"
 
   # reCAPTCHA
   s.add_dependency "recaptcha", "~> 0.6.0"

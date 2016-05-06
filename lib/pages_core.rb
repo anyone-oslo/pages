@@ -24,6 +24,7 @@ require "coffee-script"
 require "delayed_job"
 require "dis"
 require "dynamic_image"
+require "localizable_model"
 require "json"
 require "rails_i18n"
 require "recaptcha/rails"
@@ -42,7 +43,6 @@ require "font-awesome-rails"
 
 require "pages_core/engine"
 require "pages_core/extensions"
-require "pages_core/localizable/active_record_extension"
 
 module PagesCore
   class NotAuthorized < StandardError; end
