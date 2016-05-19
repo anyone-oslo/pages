@@ -48,7 +48,12 @@ module PagesCore
         # Returns all children, recursively
         def all_subpages
           return nil unless subpages.any?
-          subpages.map { |p| [p, p.all_subpages] }.flatten.compact
+          localized_subpages.map { |p| [p, p.all_subpages] }.flatten.compact
+        end
+
+        def localized_subpages
+          return subpages unless locale?
+          subpages.localized(locale)
         end
 
         # Finds the page's next sibling. Returns nil if there isn't one.
@@ -64,11 +69,7 @@ module PagesCore
 
         # Get subpages
         def pages(_options = nil)
-          if locale?
-            subpages.published.localized(locale)
-          else
-            subpages.published
-          end
+          localized_subpages.published
         end
 
         # Finds the page's next sibling. Returns nil if there isn't one.
