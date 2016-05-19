@@ -56,7 +56,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jcrop-rails-v2"
   s.add_dependency "underscore-rails"
   s.add_dependency "font-awesome-rails", "~> 4.5.0"
-  s.add_dependency "react-rails"
+  s.add_dependency "react-rails", "~> 1.6.2"
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list"
