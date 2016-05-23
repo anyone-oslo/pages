@@ -22,6 +22,11 @@ module PagesCore
       safe_join [image_file_preview(attribute), file_field(attribute, options)]
     end
 
+    def label_and_errors(attribute, label_text)
+      return label_text unless object.errors[attribute].any?
+      safe_join([label_text, label_errors(attribute)], " ")
+    end
+
     def label_errors(attribute)
       return "" unless object.errors[attribute].any?
       content_tag(:span, object.errors[attribute].first, class: "error")
@@ -29,9 +34,8 @@ module PagesCore
 
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
-      label_text += label_errors(attribute)
       content_tag("label",
-                  label_text.html_safe,
+                  label_and_errors(attribute, label_text),
                   for: [object.class.to_s.underscore, attribute].join("_"))
     end
 
