@@ -43,6 +43,7 @@ require "font-awesome-rails"
 
 require "pages_core/engine"
 require "pages_core/extensions"
+require "pages_core/templates"
 
 module PagesCore
   class NotAuthorized < StandardError; end
