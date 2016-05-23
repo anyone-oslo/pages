@@ -13,8 +13,7 @@ module PagesCore
     def image_file_preview(attribute)
       return "" unless object.send(attribute)
       content_tag(
-        :p,
-        @template.dynamic_image_tag(object.send(attribute), size: "120x100")
+        :p, @template.dynamic_image_tag(object.send(attribute), size: "120x100")
       )
     end
 
@@ -24,18 +23,15 @@ module PagesCore
 
     def label_and_errors(attribute, label_text)
       return label_text unless object.errors[attribute].any?
-      safe_join([label_text, label_errors(attribute)], " ")
-    end
-
-    def label_errors(attribute)
-      return "" unless object.errors[attribute].any?
-      content_tag(:span, object.errors[attribute].first, class: "error")
+      safe_join(
+        [label_text,
+         content_tag(:span, object.errors[attribute].first, class: "error")],
+        " ")
     end
 
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
-      content_tag("label",
-                  label_and_errors(attribute, label_text),
+      content_tag("label", label_and_errors(attribute, label_text),
                   for: [object.class.to_s.underscore, attribute].join("_"))
     end
 
