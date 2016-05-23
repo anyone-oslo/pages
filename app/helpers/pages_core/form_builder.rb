@@ -19,7 +19,7 @@ module PagesCore
     end
 
     def image_file_field(attribute, options = {})
-      image_file_preview(attribute) + file_field(attribute, options)
+      safe_join [image_file_preview(attribute), file_field(attribute, options)]
     end
 
     def label_errors(attribute)
