@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require "pages_core/templates/block_configuration.rb"
-require "pages_core/templates/configuration_proxy.rb"
-require "pages_core/templates/configuration_handler.rb"
-require "pages_core/templates/configuration.rb"
-require "pages_core/templates/controller_actions.rb"
-require "pages_core/templates/template_configuration.rb"
+require "pages_core/templates/block_configuration"
+require "pages_core/templates/configuration_proxy"
+require "pages_core/templates/configuration_handler"
+require "pages_core/templates/configuration"
+require "pages_core/templates/controller_actions"
+require "pages_core/templates/template_configuration"
 
 module PagesCore
   module Templates

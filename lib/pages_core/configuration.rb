@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-load "pages_core/configuration/base.rb"
-load "pages_core/configuration/pages.rb"
+require "pages_core/configuration/base"
+require "pages_core/configuration/pages"
 
 module PagesCore
   module Configuration
