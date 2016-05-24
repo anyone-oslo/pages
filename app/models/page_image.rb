@@ -9,7 +9,7 @@ class PageImage < ActiveRecord::Base
   accepts_nested_attributes_for :image
   validates_associated :image
 
-  acts_as_list scope: :page
+  acts_as_list scope: [:page, :primary]
 
   localizable
 
@@ -21,7 +21,6 @@ class PageImage < ActiveRecord::Base
 
   after_save do |page_image|
     if page_image.primary_changed?
-
       # Make sure only one PageImage can be the primary,
       # then update image_id on the page.
       if page_image.primary?
