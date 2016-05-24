@@ -6,6 +6,11 @@ module PagesCore
     # config.autoload_paths += Dir["#{config.root}/lib/pages_core/**/"]
     # config.eager_load_paths += Dir["#{config.root}/lib/pages_core/**/"]
 
+    rake_tasks do
+      Dir[PagesCore.plugin_root.join("lib/tasks/**/*.rake")]
+        .each { |f| load(f) }
+    end
+
     initializer :active_job do |_config|
       ActiveJob::Base.queue_adapter = if Rails.env.test?
                                         :test
