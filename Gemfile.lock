@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     pages_core (3.5.0.alpha)
-      RedCloth (~> 4.2.9)
+      RedCloth (~> 4.3.0)
       actionpack-page_caching
       active_model_serializers (~> 0.9.0)
       acts_as_list (= 0.7.2)
@@ -33,7 +33,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.2)
-    RedCloth (4.2.9)
+    RedCloth (4.3.2)
     actionmailer (4.2.6)
       actionpack (= 4.2.6)
       actionview (= 4.2.6)
@@ -119,7 +119,7 @@ GEM
       vector2d (~> 2.2, >= 2.2.1)
     erubis (2.7.0)
     excon (0.49.0)
-    execjs (2.6.0)
+    execjs (2.7.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     fission (0.5.0)
@@ -148,7 +148,7 @@ GEM
       fog-core (~> 1.22)
       fog-json
       inflecto (~> 0.0.2)
-    fog-core (1.39.0)
+    fog-core (1.40.0)
       builder
       excon (~> 0.49)
       formatador (~> 0.2)
@@ -220,14 +220,14 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     middleware (0.1.0)
-    mime-types (3.0)
+    mime-types (3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0221)
+    mime-types-data (3.2016.0521)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
+    minitest (5.9.0)
     multi_json (1.12.1)
-    mysql2 (0.4.3)
+    mysql2 (0.4.4)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
@@ -236,7 +236,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-rescue (1.4.2)
+    pry-rescue (1.4.4)
       interception (>= 0.5)
       pry
     pry-stack_explorer (0.4.9.2)
@@ -272,7 +272,7 @@ GEM
       activesupport (= 4.2.6)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.1.1)
+    rake (11.1.2)
     react-rails (1.6.2)
       babel-transpiler (>= 0.7.0)
       coffee-script-source (~> 1.8)
@@ -335,7 +335,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.4)
-    timecop (0.8.0)
+    timecop (0.8.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (3.0.0)
