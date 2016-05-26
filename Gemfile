@@ -25,7 +25,7 @@ gem 'httparty', '0.6.1'
 gem 'delayed_job', '2.0.8'
 
 # DynamicImage
-gem 'dynamic_image-pages', :require => 'dynamic_image', git: 'git@bitbucket.org:kord-as/dynamic_image-pages.git'
+gem 'dynamic_image-pages', :require => 'dynamic_image', git: 'git@github.com:kord-as/dynamic_image-pages.git'
 #gem 'dynamic_image-pages', :require => 'dynamic_image', :path => '~/Dev/gems/dynamic_image-pages'
 
 # Assets
