@@ -70,7 +70,7 @@ describe Admin::UsersController, type: :controller do
 
     context "with invalid params" do
       let(:params) { { name: "foo" } }
-      before { post :create, user: params }
+      before { post :create, params: { user: params } }
       it { is_expected.to render_template("admin/users/new") }
 
       it "should assign the user" do
@@ -79,7 +79,7 @@ describe Admin::UsersController, type: :controller do
     end
 
     context "with valid params" do
-      before { post :create, user: params }
+      before { post :create, params: { user: params } }
       it { is_expected.to redirect_to(admin_default_url) }
 
       it "should authenticate the user" do
@@ -89,14 +89,14 @@ describe Admin::UsersController, type: :controller do
 
     context "with users" do
       let!(:user) { create(:user) }
-      before { post :create, user: params }
+      before { post :create, params: { user: params } }
       it { is_expected.to redirect_to(admin_users_url) }
     end
   end
 
   describe "GET show" do
     before { login(user) }
-    before { get :show, id: user.id }
+    before { get :show, params: { id: user.id } }
 
     it { is_expected.to render_template("admin/users/show") }
 
@@ -107,7 +107,7 @@ describe Admin::UsersController, type: :controller do
 
   describe "GET edit" do
     before { login(user) }
-    before { get :edit, id: user.id }
+    before { get :edit, params: { id: user.id } }
 
     it { is_expected.to render_template("admin/users/edit") }
 
@@ -121,13 +121,13 @@ describe Admin::UsersController, type: :controller do
     let(:params) { { email: "new@example.com" } }
 
     context "with valid params" do
-      before { put :update, id: user.id, user: params }
+      before { put :update, params: { id: user.id, user: params } }
       it { is_expected.to redirect_to(admin_users_url) }
     end
 
     context "with invalid params" do
       let(:params) { { email: "invalid" } }
-      before { put :update, id: user.id, user: params }
+      before { put :update, params: { id: user.id, user: params } }
       it { is_expected.to render_template("admin/users/edit") }
     end
   end
@@ -136,7 +136,7 @@ describe Admin::UsersController, type: :controller do
     before { login(user) }
     let!(:target) { create(:user) }
 
-    before { delete :destroy, id: target.id }
+    before { delete :destroy, params: { id: target.id } }
 
     it { is_expected.to redirect_to(admin_users_url) }
 
@@ -149,7 +149,7 @@ describe Admin::UsersController, type: :controller do
     before do
       user.update(image: create(:image))
       login(user)
-      delete :delete_image, id: user.id
+      delete :delete_image, params: { id: user.id }
     end
 
     it { is_expected.to redirect_to(edit_admin_user_url(user)) }

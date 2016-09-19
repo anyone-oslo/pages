@@ -33,7 +33,7 @@ describe PagesCore::Frontend::PagesController, type: :controller do
 
     context "rendering RSS" do
       let!(:page) { create(:page, template: "home", feed_enabled: true) }
-      before { get :index, format: :rss }
+      before { get :index, params: { format: :rss } }
 
       it { is_expected.to render_template("feeds/pages") }
 
@@ -54,18 +54,18 @@ describe PagesCore::Frontend::PagesController, type: :controller do
 
     context "when page redirects" do
       let(:page) { create(:page, redirect_to: "http://kord.no") }
-      before { get :show, id: page.id, locale: locale }
+      before { get :show, params: { id: page.id, locale: locale } }
       it { is_expected.to redirect_to("http://kord.no") }
     end
 
     context "when page does not exist" do
-      before { get :show, id: 123, locale: locale }
+      before { get :show, params: { id: 123, locale: locale } }
       it { is_expected.to render_template("errors/404") }
     end
 
     describe "URL canonicalization" do
       context "with ID" do
-        before { get :show, id: page.id, locale: locale }
+        before { get :show, params: { id: page.id, locale: locale } }
         it { is_expected.to redirect_to("/home") }
       end
 
@@ -73,18 +73,18 @@ describe PagesCore::Frontend::PagesController, type: :controller do
         let!(:path) do
           PagePath.associate(page, locale: locale, path: "foo")
         end
-        before { get :show, path: "foo" }
+        before { get :show, params: { path: "foo" } }
         it { is_expected.to redirect_to("/home") }
       end
 
       context "with proper path" do
-        before { get :show, path: page.path_segment }
+        before { get :show, params: { path: page.path_segment } }
         it { is_expected.to render_template("pages/templates/home") }
       end
     end
 
     describe "page rendering" do
-      before { get :show, path: page.path_segment }
+      before { get :show, params: { path: page.path_segment } }
 
       context "if page is hidden" do
         let!(:page) { create(:page, name: "Home", status: 3) }
@@ -116,12 +116,12 @@ describe PagesCore::Frontend::PagesController, type: :controller do
     end
 
     describe "RSS rendering" do
-      before { get :show, path: page.path_segment, format: :rss }
+      before { get :show, params: { path: page.path_segment, format: :rss } }
       it { is_expected.to render_template("feeds/pages") }
     end
 
     describe "JSON rendering" do
-      before { get :show, path: page.path_segment, format: :json }
+      before { get :show, params: { path: page.path_segment, format: :json } }
       it "should render the page as json" do
         page.reload
         expect(response.body).to eq(PageSerializer.new(page).to_json)

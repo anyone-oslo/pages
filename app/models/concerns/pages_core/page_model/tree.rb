@@ -59,7 +59,7 @@ module PagesCore
         # Finds the page's next sibling. Returns nil if there isn't one.
         def next_sibling
           return unless siblings.any?
-          siblings[(siblings.index(self) + 1)...siblings.length].try(&:first)
+          siblings[(siblings.to_a.index(self) + 1)...siblings.length].try(&:first)
         end
 
         # Returns the pages parent
@@ -75,7 +75,7 @@ module PagesCore
         # Finds the page's next sibling. Returns nil if there isn't one.
         def previous_sibling
           return unless siblings.any?
-          siblings[0...siblings.index(self)].try(&:last)
+          siblings[0...siblings.to_a.index(self)].try(&:last)
         end
 
         # Returns the root node of the tree.

@@ -13,9 +13,9 @@ if Rails.env.production?
   abort("The Rails environment is running in production mode!")
 end
 
-require "rails_helper"
+require "rails-controller-testing"
+require "spec_helper"
 require "rspec/rails"
-require "rspec/active_job"
 require "thinking_sphinx/test"
 require "factory_girl"
 require "shoulda-matchers"
@@ -77,7 +77,6 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   # config.include JsonSpec::Helpers
-  config.include RSpec::ActiveJob
   config.include LoginMacros
   config.include MailerMacros
   config.before(:each) { reset_email }

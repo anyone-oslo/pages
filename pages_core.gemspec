@@ -26,12 +26,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mysql2", "~> 0.4.2"
   s.add_development_dependency "pg", "~> 0.18.3"
   s.add_development_dependency "rspec-rails", "~> 3.5.1"
-  s.add_development_dependency "factory_girl", "~> 4.5.0"
-  s.add_development_dependency "shoulda-matchers", "~> 3.1.0"
-  s.add_development_dependency "rspec-activejob"
+  s.add_development_dependency "factory_girl", "~> 4.7.0"
+  s.add_development_dependency "shoulda-matchers", "~> 3.1.1"
   s.add_development_dependency "timecop", "~> 0.8.0"
+  s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
 
-  s.add_dependency "rails", "~> 4.2.0"
+  s.add_dependency "rails", "~> 5.0.0"
 
   s.add_dependency "bcrypt-ruby"
   s.add_dependency "RedCloth", "~> 4.3.2"
@@ -39,9 +39,10 @@ Gem::Specification.new do |s|
   s.add_dependency "dynamic_image", "~> 2.0.0"
   s.add_dependency "actionpack-page_caching"
   s.add_dependency "active_model_serializers", "~> 0.9.0"
+  s.add_dependency "country_select"
 
   # Locales
-  s.add_dependency "rails-i18n", "~> 4.0.0"
+  s.add_dependency "rails-i18n", "~> 5.0.0"
 
   # Default asset dependencies
   s.add_dependency "sass-rails", "~> 5.0"
@@ -55,20 +56,20 @@ Gem::Specification.new do |s|
   s.add_dependency "jcrop-rails-v2"
   s.add_dependency "underscore-rails"
   s.add_dependency "font-awesome-rails", "~> 4.5.0"
-  s.add_dependency "react-rails", "~> 1.6.2"
+  s.add_dependency "react-rails", "~> 1.8.2"
 
   # ActiveRecord extensions
-  s.add_dependency "acts_as_list", "0.7.2"
+  s.add_dependency "acts_as_list", "0.8.1"
   s.add_dependency "localizable_model"
 
   # reCAPTCHA
   s.add_dependency "recaptcha", "~> 0.6.0"
 
   # Delayed Job
-  s.add_dependency "delayed_job", "~> 4.1.0"
-  s.add_dependency "delayed_job_active_record", "~> 4.1.0"
+  s.add_dependency "delayed_job", "~> 4.1.2"
+  s.add_dependency "delayed_job_active_record", "~> 4.1.1"
   s.add_dependency "daemons", "~> 1.2.0"
 
   # Thinking Sphinx
-  s.add_dependency "thinking-sphinx", "~> 3.1.1"
+  s.add_dependency "thinking-sphinx", "~> 3.2.0"
 end
