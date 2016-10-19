@@ -6,8 +6,6 @@ gem 'rake', '10.1.1'
 gem 'rails', '2.3.18'
 gem 'rdoc', '3.12'
 
-# This is explicitely held back for pages_console,
-# the 0.2.x series are the last compatible with Rails 2.3.
 gem 'mysql2', '~> 0.2.24'
 
 gem "bcrypt-ruby", :require => "bcrypt"
@@ -19,7 +17,6 @@ gem 'simple-rss', '1.2.3'
 gem 'RedCloth', '4.2.9'
 gem 'unicode', '0.3.1'
 gem 'daemon-spawn', '0.2.0'
-gem 'pages_console', '~> 0.4.16'
 gem 'ruby-openid', :require => 'openid'
 gem 'httparty', '0.6.1'
 gem 'delayed_job', '2.0.8'

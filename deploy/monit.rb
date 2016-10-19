@@ -2,9 +2,9 @@
 
 namespace :monit do
   desc "Reconfigure Monit"
-  task :configure do
-    run "pages_console monitrc > /etc/monit.d/pages && echo 'Monit configured'"
-  end
+  # task :configure do
+  #   run "pages_console monitrc > /etc/monit.d/pages && echo 'Monit configured'"
+  # end
   desc "Start Monit"
   task :start do
     run "sudo /etc/init.d/monit start"

@@ -30,9 +30,6 @@ module PagesCore
 
       # Register default mime types
       Mime::Type.register "application/rss+xml", 'rss'
-
-      # Register with PagesConsole
-      PagesCore.register_with_pages_console
     end
 
     def version
@@ -46,16 +43,6 @@ module PagesCore
     def application_name
       dir = Rails.root.to_s
       dir.gsub(/\/current\/?$/, '').gsub(/\/releases\/[\d]+\/?$/, '').split('/').last
-    end
-
-    def register_with_pages_console
-      begin
-        require 'pages_console'
-        site = PagesConsole::Site.new(self.application_name, Rails.root.to_s)
-        PagesConsole.ping(site)
-      rescue MissingSourceFile
-        # Nothing to do, PagesConsole not installed.
-      end
     end
 
     def configure(options={}, &block)
