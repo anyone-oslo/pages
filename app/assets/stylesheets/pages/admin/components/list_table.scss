@@ -22,6 +22,9 @@ table.list {
     &.note {
       color: #888;
     }
+    &.name {
+      font-weight: bold;
+    }
   }
 
   tr td:first-child,

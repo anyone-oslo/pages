@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       resources :pages do
         collection do
           get "news"
+          get "deleted"
           get "new_news" # TODO: Should be refactored
         end
 
