@@ -81,12 +81,16 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.before(:each) { reset_email }
 
-  config.before(:suite) do
-    # Ensure sphinx directories exist for the test environment
-    ThinkingSphinx::Test.init
-    # Configure and start Sphinx, and automatically
-    # stop Sphinx at the end of the test suite.
-    ThinkingSphinx::Test.start_with_autostop
+  config.before(:each) do
+    # Configure and start Sphinx for request specs
+    # if example.metadata[:type] == :request
+    #   ThinkingSphinx::Test.init
+    #   ThinkingSphinx::Test.start index: false
+    # end
+
+    # Disable real-time callbacks if Sphinx isn't running
+    ThinkingSphinx::Configuration
+      .instance.settings["real_time_callbacks"] = false
   end
 
   config.after(:each) do
