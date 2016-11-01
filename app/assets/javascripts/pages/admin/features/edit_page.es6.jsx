@@ -1,5 +1,6 @@
 class EditPage {
-  constructor() {
+  constructor(container) {
+    this.container = container;
     this.toggleAdvancedOptions();
     this.replicateFormElements();
     this.checkPublishedStatus();
@@ -112,9 +113,10 @@ class EditPage {
   }
 
   toggleAdvancedOptions() {
-    $(".advanced-options").hide();
-    $(".advanced-toggle").click(function() {
-      return $(".advanced-options").slideToggle();
+    let container = this.container;
+    $(container).find(".advanced-options").hide();
+    $(container).find(".advanced-toggle").click(function() {
+      return $(container).find(".advanced-options").slideToggle();
     });
   }
 
