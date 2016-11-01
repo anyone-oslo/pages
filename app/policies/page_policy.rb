@@ -8,6 +8,10 @@ class PagePolicy < Policy
       true
     end
 
+    def deleted?
+      index?
+    end
+
     def new?
       user.role?(:pages)
     end

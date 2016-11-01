@@ -38,11 +38,13 @@ class Page < ActiveRecord::Base
 
   before_validation :published_at
 
-  scope :by_date,    -> { order("published_at DESC") }
-  scope :published,  -> { where(status: 2, autopublish: false) }
-  scope :visible,    -> { where("status < 4") }
-  scope :news_pages, -> { visible.where(news_page: true) }
-  scope :pinned,     -> { where(pinned: true) }
+  scope :by_date,       -> { order("published_at DESC") }
+  scope :by_updated_at, -> { order("updated_at DESC") }
+  scope :published,     -> { where(status: 2, autopublish: false) }
+  scope :deleted,       -> { where(status: 4) }
+  scope :visible,       -> { where("status < 4") }
+  scope :news_pages,    -> { visible.where(news_page: true) }
+  scope :pinned,        -> { where(pinned: true) }
 
   class << self
     def archive_finder
