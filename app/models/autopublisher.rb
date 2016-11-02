@@ -23,7 +23,9 @@ class Autopublisher
     protected
 
     def queued_pages
-      Page.where(autopublish: true).order("published_at ASC")
+      Page.where(autopublish: true)
+          .order("published_at ASC")
+          .in_locale(I18n.default_locale)
     end
 
     def due_pages
