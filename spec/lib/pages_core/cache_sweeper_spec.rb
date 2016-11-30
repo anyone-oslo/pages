@@ -50,23 +50,12 @@ describe PagesCore::CacheSweeper do
 
     it { is_expected.to be_an(OpenStruct) }
 
-    it "should observe objects" do
-      expect(subject.observe).to match_array([Page, PageComment, Image])
-    end
-
     context "with a block" do
       it "should yield the config object" do
         singleton.config do |config|
           expect(config).to be_an(OpenStruct)
           expect(config).to eq(singleton.config)
         end
-      end
-
-      it "should extend the model" do
-        singleton.config do |config|
-          config.observe << :sweepable_test_model
-        end
-        expect(SweepableTestModel).to include(PagesCore::Sweepable)
       end
     end
   end
