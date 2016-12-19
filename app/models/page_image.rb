@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class PageImage < ActiveRecord::Base
+  include PagesCore::Sweepable
+
   belongs_to :page
   belongs_to_image :image
 
