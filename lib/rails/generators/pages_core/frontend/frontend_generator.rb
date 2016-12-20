@@ -15,8 +15,7 @@ module PagesCore
 
       def create_application_scss
         template(
-          "application.scss.erb
-",
+          "application.scss.erb",
           File.join("app/assets/stylesheets/application.scss")
         )
       end
