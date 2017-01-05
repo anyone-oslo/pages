@@ -11,7 +11,8 @@ module PagesCore
     end
 
     def image_file_preview(attribute)
-      return "" unless object.send(attribute)
+      return "" unless object.send(attribute) &&
+                       !object.send(attribute).new_record?
       content_tag(
         :p, @template.dynamic_image_tag(object.send(attribute), size: "120x100")
       )
