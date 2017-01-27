@@ -1,7 +1,6 @@
-main  .page_images {
-  .images {
-    margin-left: 200px;
-  }
+main .page_images {
+  @extend %clearfix;
+  margin-bottom: 20px;
 
   .image {
     float:left;
