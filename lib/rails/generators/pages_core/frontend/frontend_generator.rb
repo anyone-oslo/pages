@@ -6,11 +6,6 @@ module PagesCore
       desc "Creates the default Pages frontend"
       source_root File.expand_path("../templates", __FILE__)
 
-      def install_gems
-        gem "modernizr-rails"
-        gem "selectivizr-rails"
-      end
-
       def create_layout
         copy_file(
           "layout.html.erb",
@@ -20,8 +15,8 @@ module PagesCore
 
       def create_application_scss
         template(
-          "application.css.scss.erb",
-          File.join("app/assets/stylesheets/application.css.scss")
+          "application.scss.erb",
+          File.join("app/assets/stylesheets/application.scss")
         )
       end
 
@@ -38,22 +33,22 @@ module PagesCore
 
       def create_breakpoints_css
         template(
-          "breakpoints.css.scss.erb",
-          File.join("app/assets/stylesheets/mixins/breakpoints.css.scss")
+          "breakpoints.scss.erb",
+          File.join("app/assets/stylesheets/mixins/breakpoints.scss")
         )
       end
 
-      def create_hidpi_css
+      def create_clearfix_css
         template(
-          "hidpi.css.scss.erb",
-          File.join("app/assets/stylesheets/mixins/hidpi.css.scss")
+          "clearfix.scss.erb",
+          File.join("app/assets/stylesheets/mixins/clearfix.scss")
         )
       end
 
       def create_base_css
         template(
-          "base.css.scss.erb",
-          File.join("app/assets/stylesheets/components/base.css.scss")
+          "base.scss.erb",
+          File.join("app/assets/stylesheets/components/base.scss")
         )
       end
 

@@ -41,6 +41,7 @@ class Page < ActiveRecord::Base
   scope :by_date,       -> { order("published_at DESC") }
   scope :by_updated_at, -> { order("updated_at DESC") }
   scope :published,     -> { where(status: 2, autopublish: false) }
+  scope :hidden,        -> { where(status: 3) }
   scope :deleted,       -> { where(status: 4) }
   scope :visible,       -> { where("status < 4") }
   scope :news_pages,    -> { visible.where(news_page: true) }

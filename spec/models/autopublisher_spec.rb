@@ -14,24 +14,27 @@ describe Autopublisher do
     end
 
     it "should schedule another run" do
-      Autopublisher.run!
-      expect(PagesCore::AutopublishJob).to have_been_enqueued
+      expect { Autopublisher.run! }.to(
+        have_enqueued_job(PagesCore::AutopublishJob)
+      )
     end
   end
 
   describe ".queue!" do
-    subject { Autopublisher.queue! }
-
     context "with future pages" do
       let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
       it "should schedule a run" do
-        expect(PagesCore::AutopublishJob).to have_been_enqueued
+        expect { Autopublisher.queue! }.to(
+          have_enqueued_job(PagesCore::AutopublishJob)
+        )
       end
     end
 
     context "without future pages" do
       it "should not schedule a run" do
-        expect(PagesCore::AutopublishJob).not_to have_been_enqueued
+        expect { Autopublisher.queue! }.not_to(
+          have_enqueued_job(PagesCore::AutopublishJob)
+        )
       end
     end
   end

@@ -13,9 +13,9 @@ if Rails.env.production?
   abort("The Rails environment is running in production mode!")
 end
 
-require "rails_helper"
+require "rails-controller-testing"
+require "spec_helper"
 require "rspec/rails"
-require "rspec/active_job"
 require "thinking_sphinx/test"
 require "factory_girl"
 require "shoulda-matchers"
@@ -77,17 +77,20 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   # config.include JsonSpec::Helpers
-  config.include RSpec::ActiveJob
   config.include LoginMacros
   config.include MailerMacros
   config.before(:each) { reset_email }
 
-  config.before(:suite) do
-    # Ensure sphinx directories exist for the test environment
-    ThinkingSphinx::Test.init
-    # Configure and start Sphinx, and automatically
-    # stop Sphinx at the end of the test suite.
-    ThinkingSphinx::Test.start_with_autostop
+  config.before(:each) do
+    # Configure and start Sphinx for request specs
+    # if example.metadata[:type] == :request
+    #   ThinkingSphinx::Test.init
+    #   ThinkingSphinx::Test.start index: false
+    # end
+
+    # Disable real-time callbacks if Sphinx isn't running
+    ThinkingSphinx::Configuration
+      .instance.settings["real_time_callbacks"] = false
   end
 
   config.after(:each) do

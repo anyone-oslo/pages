@@ -1,5 +1,6 @@
 class Image < ActiveRecord::Base
   include DynamicImage::Model
+  include PagesCore::Sweepable
 
   localizable do
     attribute :alternative

@@ -20,14 +20,12 @@ module PagesCore
       # Returns the configuration. Accepts a block, ie:
       #
       #   PagesCore::CacheSweeper.config do |c|
-      #     c.observe  += [:store, :store_test]
       #     c.patterns += [/^\/arkiv(.*)$/, /^\/tests(.*)$/]
       #   end
       def config
         @configuration ||= default_config
         if block_given?
           yield @configuration
-          extend_observed_models!
         end
         @configuration
       end
@@ -59,20 +57,10 @@ module PagesCore
       # Returns the default configuration.
       def default_config
         OpenStruct.new(cache_path: ActionController::Base.page_cache_directory,
-                       observe: [Page, PageComment, Image],
                        patterns: [%r{^/index\.[\w]+$},
                                   %r{^/sitemap\.[\w]+$},
                                   %r{^/pages/[\w]{2,3}[/\.](.*)$},
                                   %r{^/[\w]{2,3}/(.*)$}])
-      end
-
-      def extend_observed_models!
-        config.observe.each do |klass|
-          if klass.is_a?(Symbol) || klass.is_a?(String)
-            klass = klass.to_s.camelize.constantize
-          end
-          klass.send(:include, PagesCore::Sweepable)
-        end
       end
 
       def visible_dir?(dir)

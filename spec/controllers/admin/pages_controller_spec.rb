@@ -12,7 +12,7 @@ describe Admin::PagesController, type: :controller do
     let!(:hidden) { create(:hidden_page) }
     let!(:deleted) { create(:deleted_page) }
 
-    before { get :index, locale: locale }
+    before { get :index, params: { locale: locale } }
 
     it { is_expected.to render_template("admin/pages/index") }
 
@@ -23,7 +23,7 @@ describe Admin::PagesController, type: :controller do
 
   describe "GET news" do
     context "without a news page" do
-      before { get :news, locale: locale }
+      before { get :news, params: { locale: locale } }
       it { is_expected.to redirect_to(admin_pages_url(locale)) }
     end
 
@@ -33,7 +33,7 @@ describe Admin::PagesController, type: :controller do
       let!(:article2) do
         create(:page, parent: root, published_at: 2.months.ago)
       end
-      before { get :news, locale: locale }
+      before { get :news, params: { locale: locale } }
 
       it { is_expected.to render_template("admin/pages/news") }
 
@@ -53,7 +53,7 @@ describe Admin::PagesController, type: :controller do
   end
 
   describe "GET new" do
-    before { get :new, locale: locale }
+    before { get :new, params: { locale: locale } }
     let(:page) { assigns(:page) }
 
     it { is_expected.to render_template("admin/pages/new") }
@@ -65,7 +65,7 @@ describe Admin::PagesController, type: :controller do
 
     context "with parent" do
       let(:parent) { create(:page) }
-      before { get :new, locale: locale, parent: parent.id }
+      before { get :new, params: { locale: locale, parent: parent.id } }
 
       it "should set the parent" do
         expect(page.parent).to eq(parent)
@@ -75,7 +75,7 @@ describe Admin::PagesController, type: :controller do
 
   describe "POST create" do
     let(:params) { { name: "Page name" } }
-    before { post(:create, locale: locale, page: params) }
+    before { post(:create, params: { locale: locale, page: params }) }
 
     it "should redirect to the edit page" do
       expect(subject).to(
@@ -92,12 +92,12 @@ describe Admin::PagesController, type: :controller do
 
   describe "GET new_news" do
     let!(:root) { create(:page, news_page: true) }
-    before { get :new_news, locale: locale }
+    before { get :new_news, params: { locale: locale } }
     it { is_expected.to render_template("admin/pages/new") }
   end
 
   describe "GET show" do
-    before { get :show, locale: locale, id: page.id }
+    before { get :show, params: { locale: locale, id: page.id } }
 
     it "should redirect to the edit page" do
       expect(subject).to(
@@ -107,7 +107,7 @@ describe Admin::PagesController, type: :controller do
   end
 
   describe "GET edit" do
-    before { get :edit, locale: locale, id: page.id }
+    before { get :edit, params: { locale: locale, id: page.id } }
     it { is_expected.to render_template("admin/pages/edit") }
 
     it "should find the page" do
@@ -120,7 +120,10 @@ describe Admin::PagesController, type: :controller do
     let!(:other) { create(:page, parent: parent, position: 1) }
 
     before do
-      put :move, id: page.id, locale: locale, parent_id: parent.id, position: 1
+      put(:move, params: { id: page.id,
+                           locale: locale,
+                           parent_id: parent.id,
+                           position: 1 })
       page.reload
       other.reload
     end
