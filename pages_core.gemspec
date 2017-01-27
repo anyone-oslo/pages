@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_dependency "RedCloth", "~> 4.3.2"
   s.add_dependency "dis", "~> 1.0.0"
   s.add_dependency "dynamic_image", "~> 2.0.0"
-  s.add_dependency "actionpack-page_caching"
+  s.add_dependency "actionpack-page_caching", "~> 1.1.0"
   s.add_dependency "active_model_serializers", "~> 0.9.0"
   s.add_dependency "country_select"
 
