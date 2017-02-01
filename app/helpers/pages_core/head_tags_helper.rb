@@ -73,7 +73,7 @@ module PagesCore
 
       safe_join(
         [
-          "<!doctype html>\n<html lang=\"#{I18n.locale}\">",
+          "<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe,
           content_tag(:head) do
             safe_join(head_tag_contents(block_output), "\n")
           end
