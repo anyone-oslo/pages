@@ -9,15 +9,13 @@ module Admin
       redirect_to admin_page_path(@locale, @page)
     end
 
-    def show
-    end
+    def show; end
 
     def new
       @page_comment = @page.comments.new
     end
 
-    def edit
-    end
+    def edit; end
 
     def create
       @page_comment = @page.comments.create(page_comment_params)

@@ -37,9 +37,9 @@ module PagesCore
 
       def block(block_name)
         default_block_options(block_name)
-          .deep_merge(config.get(*[:default, :blocks, block_name]) || {})
+          .deep_merge(config.get(:default, :blocks, block_name) || {})
           .deep_merge(
-            config.get(*[:templates, @template_name, :blocks, block_name]) || {}
+            config.get(:templates, @template_name, :blocks, block_name) || {}
           )
       end
 

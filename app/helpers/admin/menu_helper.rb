@@ -4,14 +4,14 @@ module Admin
   module MenuHelper
     def header_tabs(group)
       content_tag :ul, class: group.to_s do
-        menu_items_for(group).map do |item|
+        safe_join(menu_items_for(group).map do |item|
           content_tag :li do
             path = instance_eval(&item.path)
             link_to(item.label,
                     path,
                     class: (current_menu_item?(item) ? "current" : ""))
           end
-        end.join.html_safe
+        end)
       end
     end
 

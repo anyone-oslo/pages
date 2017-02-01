@@ -44,14 +44,13 @@ class User < ActiveRecord::Base
 
   class << self
     def authenticate(email, password:)
-      user = User.find_by_username_or_email(email)
+      user = User.login_name(email)
       user if user.try { |u| u.authenticate!(password) }
     end
 
     # Finds a user by either username or email address.
-    def find_by_username_or_email(string)
-      find_by(username: string.to_s) ||
-        find_by(email: string.to_s)
+    def login_name(string)
+      find_by(username: string.to_s) || find_by(email: string.to_s)
     end
   end
 
@@ -70,7 +69,7 @@ class User < ActiveRecord::Base
 
   def mark_active!
     return if last_login_at && last_login_at > 10.minutes.ago
-    update_columns(last_login_at: Time.now.utc)
+    update(last_login_at: Time.now.utc)
   end
 
   def name_and_email
@@ -78,7 +77,7 @@ class User < ActiveRecord::Base
   end
 
   def online?
-    (last_login_at && last_login_at > 15.minutes.ago) ? true : false
+    last_login_at && last_login_at > 15.minutes.ago ? true : false
   end
 
   def realname

@@ -49,7 +49,7 @@ module Admin
 
     def find_user_by_email(email)
       return unless email
-      User.find_by_username_or_email(params[:username])
+      User.login_name(params[:username])
     end
 
     def login_url

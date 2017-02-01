@@ -54,7 +54,7 @@ class Page < ActiveRecord::Base
 
     # Find all published and feed enabled pages
     def enabled_feeds(locale, options = {})
-      conditions = (options[:include_hidden]) ? "status IN (2,3)" : "status = 2"
+      conditions = options[:include_hidden] ? "status IN (2,3)" : "status = 2"
       Page.where(feed_enabled: true).where(conditions).localized(locale)
     end
   end

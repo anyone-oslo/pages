@@ -12,8 +12,7 @@ module Admin
       collection: [:index, :reorder, :new, :create]
     )
 
-    def index
-    end
+    def index; end
 
     def reorder
       if params[:ids]
@@ -27,11 +26,9 @@ module Admin
       end
     end
 
-    def show
-    end
+    def show; end
 
-    def new
-    end
+    def new; end
 
     def create
       @page_file = @page.files.new
@@ -40,8 +37,7 @@ module Admin
       redirect_to_page
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       flash[:notice] = if @page_file.update(page_file_params)

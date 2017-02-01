@@ -56,7 +56,7 @@ module PagesCore
 
     # Returns next page, or nil if at last page.
     def next_page
-      (@current_page < @pages) ? (@current_page + 1) : nil
+      @current_page < @pages ? (@current_page + 1) : nil
     end
 
     # Returns true/false depending on if there's a next page
@@ -66,7 +66,7 @@ module PagesCore
 
     # Returns previous page, or nil if at first page.
     def previous_page
-      (@current_page > 1) ? (@current_page - 1) : nil
+      @current_page > 1 ? (@current_page - 1) : nil
     end
 
     # Returns true/false depending on if there's a previous page
@@ -81,7 +81,7 @@ module PagesCore
 
     # Returns true if at the last page
     def last_page?
-      (@page == @pages) ? true : false
+      @page == @pages ? true : false
     end
 
     # First page
@@ -91,7 +91,7 @@ module PagesCore
 
     # Returns true if at the first page
     def first_page?
-      (@page == 1) ? true : false
+      @page == 1 ? true : false
     end
 
     # All pages as an array

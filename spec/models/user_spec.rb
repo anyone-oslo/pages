@@ -49,7 +49,8 @@ describe User, type: :model do
         build(
           :user,
           password: "validpassword",
-          confirm_password: "invalidpassword")
+          confirm_password: "invalidpassword"
+        )
       end
       it { is_expected.to eq(false) }
     end

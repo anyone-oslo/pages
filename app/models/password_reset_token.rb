@@ -16,10 +16,6 @@ class PasswordResetToken < ActiveRecord::Base
     def expire!
       expired.delete_all
     end
-
-    def find_by_token(token)
-      active.find_by(token: token)
-    end
   end
 
   def expired?

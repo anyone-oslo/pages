@@ -39,6 +39,10 @@ module PagesCore
         proxy_object
       end
 
+      def respond_to_missing?(method_name)
+        self.class.handle_blocks.keys.include?(method_name)
+      end
+
       def set(stack, value)
         @configuration ||= {}
         value = true  if value == :enabled
@@ -54,7 +58,7 @@ module PagesCore
       def get(*path)
         @configuration ||= {}
         path.inject(@configuration) do |value, key|
-          (value && value.is_a?(Hash) && value.key?(key)) ? value[key] : nil
+          value && value.is_a?(Hash) && value.key?(key) ? value[key] : nil
         end
       end
     end

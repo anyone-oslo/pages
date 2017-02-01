@@ -48,7 +48,7 @@ module PagesCore
       end
 
       def link_separator
-        ' <span class="separator">|</span> '.html_safe
+        safe_join [" ", content_tag(:span, "|", class: "separator"), " "]
       end
 
       def deprecate_page_description_args(string = nil, class_name = nil)
@@ -57,11 +57,10 @@ module PagesCore
                                           "page_description is deprecated, " \
                                           "use page_description_class=")
         end
-        if string
-          ActiveSupport::Deprecation.warn("Setting description with " \
-                                          "page_description is deprecated, " \
-                                          "use page_description=")
-        end
+        return unless string
+        ActiveSupport::Deprecation.warn("Setting description with " \
+                                        "page_description is deprecated, " \
+                                        "use page_description=")
       end
 
       def page_description(string = nil, class_name = nil)

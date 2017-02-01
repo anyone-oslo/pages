@@ -24,9 +24,7 @@ module PagesCore
       #   end
       def config
         @configuration ||= default_config
-        if block_given?
-          yield @configuration
-        end
+        yield @configuration if block_given?
         @configuration
       end
 

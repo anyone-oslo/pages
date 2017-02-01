@@ -30,7 +30,7 @@ class PageImage < ActiveRecord::Base
         page_image.page
                   .page_images
                   .where("id != ?", page_image.id)
-                  .update_all(primary: false)
+                  .find_each { |p| p.update(primary: false) }
         page_image.page.update(image_id: page_image.image_id)
 
       # Clear image_id on the page if primary is toggled off

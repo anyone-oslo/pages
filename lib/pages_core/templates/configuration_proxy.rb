@@ -19,6 +19,10 @@ module PagesCore
           @callback.call(method_name, *args)
         end
       end
+
+      def respond_to_missing?
+        true
+      end
     end
   end
 end

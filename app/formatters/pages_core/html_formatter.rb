@@ -59,8 +59,8 @@ module PagesCore
 
     def find_files(str)
       str.match(file_expression)[1]
-        .split(",")
-        .map { |id| PageFile.find(id).localize(I18n.locale) }
+         .split(",")
+         .map { |id| PageFile.find(id).localize(I18n.locale) }
     end
 
     def parse_files(string)

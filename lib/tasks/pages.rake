@@ -23,8 +23,8 @@ namespace :pages do
         files.each do |f|
           report = begin
                      YAML
-                   .load_file(File.join(reports_dir, f))
-                   .merge(sha1_hash: f.gsub(/\.yml$/, ""))
+                       .load_file(File.join(reports_dir, f))
+                       .merge(sha1_hash: f.gsub(/\.yml$/, ""))
                    rescue
                      nil
                    end

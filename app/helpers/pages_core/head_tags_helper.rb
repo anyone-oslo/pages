@@ -71,8 +71,14 @@ module PagesCore
       # The block output must be captured first
       block_output = block_given? ? capture(&block) : nil
 
-      "<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe +
-        content_tag(:head) { safe_join(head_tag_contents(block_output), "\n") }
+      safe_join(
+        [
+          "<!doctype html>\n<html lang=\"#{I18n.locale}\">",
+          content_tag(:head) do
+            safe_join(head_tag_contents(block_output), "\n")
+          end
+        ]
+      )
     end
 
     # Generates a link to an RSS feed.

@@ -18,10 +18,7 @@ PagesCore::Templates.configure do |config|
         "Standfirst",
         description: "An introductory paragraph before the start of the body."
       )
-      block.body(
-        "Body",
-        size: :large
-      )
+      block.body("Body", size: :large)
       block.boxout(
         "Boxout",
         description: "Part of the page, usually background info or facts " \
@@ -36,16 +33,16 @@ PagesCore::Templates.configure do |config|
     default.image :enabled, linkable: false
 
     # Enables file uploads (default: :disabled)
-    default.files :disabled
+    # default.files :enabled
 
     # Enables comments (default: :disabled)
-    default.comments :disabled
+    # default.comments :enabled
 
     # New pages are open for comments by default (default: :enabled)
-    default.comments_allowed :enabled
+    # default.comments_allowed :disabled
 
     # Pages can have tags (default: :disabled)
-    default.tags :disabled
+    # default.tags :enabled
 
     # Only use the blocks enabled here by default
     default.enabled_blocks [:headline, :excerpt, :body]

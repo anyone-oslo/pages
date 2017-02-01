@@ -4,8 +4,7 @@ module Admin
   class ImagesController < Admin::AdminController
     before_action :find_image, only: [:show, :edit, :update, :destroy]
 
-    def index
-    end
+    def index; end
 
     def show
       respond_to do |format|
@@ -13,14 +12,11 @@ module Admin
       end
     end
 
-    def new
-    end
+    def new; end
 
-    def edit
-    end
+    def edit; end
 
-    def create
-    end
+    def create; end
 
     def update
       @image.update(image_params)
@@ -29,8 +25,7 @@ module Admin
       end
     end
 
-    def destroy
-    end
+    def destroy; end
 
     protected
 

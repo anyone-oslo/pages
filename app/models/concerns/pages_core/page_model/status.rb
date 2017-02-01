@@ -27,7 +27,7 @@ module PagesCore
       end
 
       def draft?
-        status == 0
+        status.zero?
       end
 
       def reviewed?

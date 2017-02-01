@@ -59,7 +59,8 @@ module PagesCore
         # Finds the page's next sibling. Returns nil if there isn't one.
         def next_sibling
           return unless siblings.any?
-          siblings[(siblings.to_a.index(self) + 1)...siblings.length].try(&:first)
+          siblings[(siblings.to_a.index(self) + 1)...siblings.length]
+            .try(&:first)
         end
 
         # Returns the pages parent

@@ -6,7 +6,7 @@ module PagesCore
     class BlockConfiguration
       attr_reader :name, :title, :description, :optional, :enforced
       def small?
-        (@size == :small) ? true : false
+        @size == :small ? true : false
       end
 
       def large?

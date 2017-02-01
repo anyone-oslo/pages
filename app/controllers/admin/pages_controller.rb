@@ -8,13 +8,11 @@ module Admin
                                      :delete_meta_image, :move]
     before_action :find_categories
 
-    require_authorization(
-      Page,
-      proc { @page },
-      collection: [:index, :news, :new, :new_news, :create, :deleted],
-      member: [:show, :edit, :preview, :update, :destroy,
-               :delete_meta_image, :move]
-    )
+    require_authorization(Page, proc { @page },
+                          collection: [:index, :news, :new, :new_news, :create,
+                                       :deleted],
+                          member: [:show, :edit, :preview, :update, :destroy,
+                                   :delete_meta_image, :move])
 
     def index
       @root_pages = Page.roots.in_locale(@locale).visible
@@ -30,11 +28,11 @@ module Admin
 
     def new
       @page = build_page(@locale)
-      if params[:parent]
-        @page.parent = Page.find(params[:parent])
-      elsif @news_pages
-        @page.parent = @news_pages.first
-      end
+      @page.parent = if params[:parent]
+                       Page.find(params[:parent])
+                     elsif @news_pages
+                       @news_pages.first
+                     end
     end
 
     def create
@@ -49,9 +47,7 @@ module Admin
       end
     end
 
-    def edit
-      render action: :edit
-    end
+    def edit; end
 
     def update
       if @page.update(page_params)
@@ -61,7 +57,7 @@ module Admin
           redirect_to edit_admin_page_url(@locale, @page)
         end
       else
-        edit
+        render action: :edit
       end
     end
 
@@ -87,16 +83,13 @@ module Admin
     def build_page(locale, attributes = nil, categories = nil)
       Page.new.localize(locale).tap do |page|
         page.author = default_author || current_user
-        if attributes
-          page.attributes = attributes
-          page.comments_allowed = page.template_config.value(:comments_allowed)
-        end
+        page.comments_allowed = page.template_config.value(:comments_allowed)
+        page.attributes = attributes if attributes
         page.categories = categories if categories
       end
     end
 
     def default_author
-      return unless PagesCore.config.default_author
       User.where(email: PagesCore.config.default_author).first
     end
 

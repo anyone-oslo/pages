@@ -32,7 +32,7 @@ module PagesCore
       group_by_month(by_year(year))
         .count
         .to_a
-        .sort { |a, b| a.first <=> b.first }
+        .sort_by(&:first)
     end
 
     def timestamp_attribute

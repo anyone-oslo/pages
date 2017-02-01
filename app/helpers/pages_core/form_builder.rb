@@ -27,7 +27,8 @@ module PagesCore
       safe_join(
         [label_text,
          content_tag(:span, object.errors[attribute].first, class: "error")],
-        " ")
+        " "
+      )
     end
 
     def label_for(attribute, label_text = nil)
@@ -37,11 +38,10 @@ module PagesCore
     end
 
     def labelled_check_box(
-      attribute, label_text = nil, options = {},
-      checked_value = "1", unchecked_value = "0"
+      attr, label = nil, options = {}, checked = "1", unchecked = "0"
     )
-      labelled_field(attribute, label_text, options) do |opts|
-        check_box(attribute, opts, checked_value, unchecked_value)
+      labelled_field(attr, label, options) do |opts|
+        check_box(attr, opts, checked, unchecked)
       end
     end
 
@@ -112,9 +112,7 @@ module PagesCore
       end
     end
 
-    protected
-
-    def labelled_field(attribute, label_text = nil, options = {})
+    protected def labelled_field(attribute, label_text = nil, options = {})
       if label_text.is_a?(Hash) && options == {}
         options = label_text
         label_text = nil

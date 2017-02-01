@@ -20,12 +20,12 @@ module PagesCore
       #
       def labelled_field(field, label, options = {})
         content_tag(:div, class: labelled_field_class(options)) do
-          (
-           labelled_field_label(label, options) +
-             labelled_field_description(options[:description]) +
-             field +
-             (options[:check_box_description] || "")
-          ).html_safe
+          safe_join(
+            [labelled_field_label(label, options),
+             labelled_field_description(options[:description]),
+             field,
+             (options[:check_box_description] || "")]
+          )
         end
       end
 
