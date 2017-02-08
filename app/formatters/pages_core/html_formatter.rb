@@ -57,10 +57,17 @@ module PagesCore
       end
     end
 
+    def find_file(id)
+      PageFile.find(id).localize(I18n.locale)
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+
     def find_files(str)
       str.match(file_expression)[1]
          .split(",")
-         .map { |id| PageFile.find(id).localize(I18n.locale) }
+         .map { |id| find_file(id) }
+         .compact
     end
 
     def parse_files(string)
