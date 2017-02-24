@@ -23,7 +23,7 @@ module Admin
     def reorder
       @page_images = params[:ids].map { |id| PageImage.find(id) }
       @page_images.each_with_index do |pi, i|
-        pi.update(position: i)
+        pi.update(position: i + 1)
       end
       respond_to do |format|
         format.json do
