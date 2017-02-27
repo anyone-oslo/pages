@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module PagesCore
-  class SitemapsController < ApplicationController
+  class SitemapsController < ::ApplicationController
     include PagesCore::PagePathHelper
     caches_page :show
 

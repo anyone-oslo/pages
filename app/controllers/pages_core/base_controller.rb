@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module PagesCore
-  class ApplicationController < ActionController::Base
+  class BaseController < ActionController::Base
     include PagesCore::Authentication
     include PagesCore::DomainBasedCache
     include PagesCore::ExceptionHandler

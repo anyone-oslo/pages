@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class ApplicationController < PagesCore::ApplicationController #:nodoc:
+class ApplicationController < PagesCore::BaseController #:nodoc:
   helper :all
-  protect_from_forgery
+  protect_from_forgery with: :exception
 end

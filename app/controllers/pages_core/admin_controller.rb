@@ -3,7 +3,9 @@
 # All admin controllers inherit Admin::AdminController, which provides layout,
 # authorization and other common code for the Admin set of controllers.
 module PagesCore
-  class AdminController < ApplicationController
+  class AdminController < ::ApplicationController
+    protect_from_forgery with: :exception
+
     before_action :set_i18n_locale
     before_action :require_authentication
     before_action :restore_persistent_params

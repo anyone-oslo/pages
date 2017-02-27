@@ -2,7 +2,7 @@
 
 # Abstract controller for all frontend controllers.
 module PagesCore
-  class FrontendController < ApplicationController
+  class FrontendController < ::ApplicationController
     include ApplicationHelper
 
     before_action :set_i18n_locale

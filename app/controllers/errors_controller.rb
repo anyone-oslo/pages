@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class ErrorsController < ApplicationController
+class ErrorsController < ::ApplicationController
   layout "errors"
 
   skip_before_action :verify_authenticity_token
