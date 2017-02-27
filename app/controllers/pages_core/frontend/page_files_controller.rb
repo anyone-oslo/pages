@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class PagesCore::Frontend::PageFilesController < FrontendController
+class PagesCore::Frontend::PageFilesController < ::FrontendController
 
   before_action :find_page_file, :only => [:show, :edit, :update, :destroy]
 

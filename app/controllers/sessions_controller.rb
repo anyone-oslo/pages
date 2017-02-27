@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class SessionsController < ApplicationController
+class SessionsController < ::ApplicationController
   def create
     if params[:username] && params[:password]
       if user = User.authenticate(params[:username], password: params[:password])

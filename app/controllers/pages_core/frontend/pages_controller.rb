@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class PagesCore::Frontend::PagesController < FrontendController
+class PagesCore::Frontend::PagesController < ::FrontendController
   include PagesCore::Templates::ControllerActions
   include PagesCore::HeadTagsHelper
 

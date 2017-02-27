@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 # Abstract controller for all frontend controllers.
-class PagesCore::FrontendController < ApplicationController
+class PagesCore::FrontendController < ::ApplicationController
 
   include ApplicationHelper
 
