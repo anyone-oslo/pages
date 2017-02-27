@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module PagesCore
-  class ImagesController < ApplicationController
+  class ImagesController < ::ApplicationController
     include DynamicImage::Controller
 
     caches_page :show, :uncropped, :original
