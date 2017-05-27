@@ -19,7 +19,7 @@ set :web_server,  :apache2
 
 set :scm,                   "git"
 if variables.has_key?(:github) && github
-  set :repository, "git@github.com:kord-as/#{application}.git"
+  set :repository, "git@github.com:anyone-oslo/#{application}.git"
 else
   set :repository, "rails@git.manualdesign.no:~/git/sites/#{application}.git"
 end
