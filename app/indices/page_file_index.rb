@@ -1,9 +1,11 @@
-ThinkingSphinx::Index.define :page_file, with: :real_time do
-  indexes name
-  indexes filename
+if Object.const_defined?("ThinkingSphinx")
+  ThinkingSphinx::Index.define :page_file, with: :real_time do
+    indexes name
+    indexes filename
 
-  has page_id,    type: :integer
-  has created_at, type: :timestamp
-  has updated_at, type: :timestamp
-  has published,  type: :boolean
+    has page_id,    type: :integer
+    has created_at, type: :timestamp
+    has updated_at, type: :timestamp
+    has published,  type: :boolean
+  end
 end
