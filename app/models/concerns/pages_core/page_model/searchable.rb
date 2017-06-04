@@ -6,7 +6,9 @@ module PagesCore
       extend ActiveSupport::Concern
 
       included do
-        after_save ThinkingSphinx::RealTime.callback_for(:page)
+        if const_defined?("ThinkingSphinx")
+          after_save ThinkingSphinx::RealTime.callback_for(:page)
+        end
       end
 
       def localization_values

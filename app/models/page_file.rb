@@ -18,7 +18,9 @@ class PageFile < ActiveRecord::Base
 
   before_validation :set_name_from_filename
 
-  after_save ThinkingSphinx::RealTime.callback_for(:page_file)
+  if const_defined?("ThinkingSphinx")
+    after_save ThinkingSphinx::RealTime.callback_for(:page_file)
+  end
 
   class << self
     def formats

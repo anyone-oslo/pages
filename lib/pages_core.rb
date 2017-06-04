@@ -31,7 +31,6 @@ require "rails_i18n"
 require "recaptcha/rails"
 require "RedCloth"
 require "sass"
-require "thinking-sphinx"
 
 # Assets
 require "font-awesome-rails"

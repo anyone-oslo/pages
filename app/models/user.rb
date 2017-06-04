@@ -36,7 +36,9 @@ class User < ActiveRecord::Base
   before_validation :hash_password
   before_create :ensure_first_user_has_all_roles
 
-  after_save ThinkingSphinx::RealTime.callback_for(:user)
+  if const_defined?("ThinkingSphinx")
+    after_save ThinkingSphinx::RealTime.callback_for(:user)
+  end
 
   scope :by_name,     -> { order("name ASC") }
   scope :activated,   -> { by_name.includes(:roles).where(activated: true) }

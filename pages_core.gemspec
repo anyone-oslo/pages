@@ -60,7 +60,7 @@ Gem::Specification.new do |s|
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list", "0.8.1"
-  s.add_dependency "localizable_model"
+  s.add_dependency "localizable_model", ">= 0.5.3"
 
   # reCAPTCHA
   s.add_dependency "recaptcha", "~> 0.6.0"
@@ -69,7 +69,4 @@ Gem::Specification.new do |s|
   s.add_dependency "delayed_job", "~> 4.1.2"
   s.add_dependency "delayed_job_active_record", "~> 4.1.1"
   s.add_dependency "daemons", "~> 1.2.0"
-
-  # Thinking Sphinx
-  s.add_dependency "thinking-sphinx", "~> 3.2.0"
 end

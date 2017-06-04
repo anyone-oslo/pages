@@ -7,7 +7,10 @@ class Category < ActiveRecord::Base
   acts_as_list
 
   before_save :set_slug
-  after_save ThinkingSphinx::RealTime.callback_for(:pages, [:page])
+
+  if const_defined?("ThinkingSphinx")
+    after_save ThinkingSphinx::RealTime.callback_for(:pages, [:page])
+  end
 
   scope :by_name, -> { order("name ASC") }
 
