@@ -3,8 +3,6 @@
 class ErrorsController < ::ApplicationController
   layout "errors"
 
-  skip_before_action :verify_authenticity_token
-
   def report
     return unless session[:error_report]
     deliver_error_report(
