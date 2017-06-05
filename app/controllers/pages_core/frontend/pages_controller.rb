@@ -10,7 +10,6 @@ module PagesCore
       include PagesCore::AddCommentsController
       include PagesCore::PreviewPagesController
       include PagesCore::RssController
-      include PagesCore::SearchPagesController
 
       caches_page :index if PagesCore.config(:page_cache)
 

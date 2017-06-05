@@ -11,7 +11,6 @@ class Page < ActiveRecord::Base
   include PagesCore::PageModel::Localizable
   include PagesCore::PageModel::Pathable
   include PagesCore::PageModel::Redirectable
-  include PagesCore::PageModel::Searchable
   include PagesCore::PageModel::Sortable
   include PagesCore::PageModel::Status
   include PagesCore::PageModel::Tree

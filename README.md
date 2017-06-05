@@ -2,10 +2,6 @@
 
 [![Build Status](https://travis-ci.org/kord-as/pages.svg?branch=master)](https://travis-ci.org/kord-as/pages) [![Code Climate](https://codeclimate.com/github/kord-as/pages/badges/gpa.svg)](https://codeclimate.com/github/kord-as/pages) [![Test Coverage](https://codeclimate.com/github/kord-as/pages/badges/coverage.svg)](https://codeclimate.com/github/kord-as/pages) [![Dependency Status](https://gemnasium.com/kord-as/pages.svg)](https://gemnasium.com/kord-as/pages)
 
-## Dependencies
-
-* Sphinx
-
 ## Getting started
 
 Pages is a Ruby on Rails-based CMS tailored for Rails developers.
@@ -27,13 +23,6 @@ the migrations.
 ```sh
 bin/rails g pages_core:install
 bin/rake db:migrate
-```
-
-You'll also need a running Sphinx process:
-
-```sh
-bin/rake ts:configure
-bin/rake ts:start
 ```
 
 You should now be ready to fire up the server and visit /admin to

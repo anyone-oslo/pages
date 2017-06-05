@@ -8,10 +8,6 @@ class Category < ActiveRecord::Base
 
   before_save :set_slug
 
-  if const_defined?("ThinkingSphinx")
-    after_save ThinkingSphinx::RealTime.callback_for(:pages, [:page])
-  end
-
   scope :by_name, -> { order("name ASC") }
 
   private

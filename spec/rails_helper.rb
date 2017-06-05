@@ -16,7 +16,6 @@ end
 require "rails-controller-testing"
 require "spec_helper"
 require "rspec/rails"
-require "thinking_sphinx/test"
 require "factory_girl"
 require "shoulda-matchers"
 require "timecop"
@@ -80,18 +79,6 @@ RSpec.configure do |config|
   config.include LoginMacros
   config.include MailerMacros
   config.before(:each) { reset_email }
-
-  config.before(:each) do
-    # Configure and start Sphinx for request specs
-    # if example.metadata[:type] == :request
-    #   ThinkingSphinx::Test.init
-    #   ThinkingSphinx::Test.start index: false
-    # end
-
-    # Disable real-time callbacks if Sphinx isn't running
-    ThinkingSphinx::Configuration
-      .instance.settings["real_time_callbacks"] = false
-  end
 
   config.after(:each) do
     # Clean the Dis storage after each example

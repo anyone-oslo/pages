@@ -19,8 +19,6 @@ module PagesCore
           "Default sender?",
           "no-reply@#{@domain_name}"
         )
-
-        @sphinx_port ||= ask_with_fallback("Sphinx port?", "3312")
       end
 
       def create_active_job_initializer
@@ -84,10 +82,6 @@ module PagesCore
         read_configuration!
         template("page_templates_initializer.rb",
                  File.join("config/initializers/page_templates.rb"))
-      end
-
-      def create_sphinx_config
-        template "thinking_sphinx.yml", File.join("config/thinking_sphinx.yml")
       end
 
       def create_gitignore

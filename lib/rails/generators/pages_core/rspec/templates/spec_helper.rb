@@ -4,7 +4,6 @@ require "rubygems"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "rspec/autorun"
-require "thinking_sphinx/test"
 require "shoulda-matchers"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -40,12 +39,4 @@ RSpec.configure do |config|
   config.include JsonSpec::Helpers
   config.include MailerMacros
   config.before(:each) { reset_email }
-
-  config.before(:suite) do
-    # Ensure sphinx directories exist for the test environment
-    ThinkingSphinx::Test.init
-    # Configure and start Sphinx, and automatically
-    # stop Sphinx at the end of the test suite.
-    ThinkingSphinx::Test.start_with_autostop
-  end
 end
