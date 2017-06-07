@@ -9,7 +9,8 @@ module PagesCore
         belongs_to :parent,
                    class_name:  "Page",
                    foreign_key: :parent_page_id,
-                   inverse_of:  :children
+                   inverse_of:  :children,
+                   optional:    true
 
         has_many :children,
                  class_name:  "Page",

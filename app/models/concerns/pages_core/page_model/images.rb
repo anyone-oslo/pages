@@ -6,8 +6,8 @@ module PagesCore
       extend ActiveSupport::Concern
 
       included do
-        belongs_to_image :image
-        belongs_to_image :meta_image, class_name: "Image"
+        belongs_to_image :image, optional: true
+        belongs_to_image :meta_image, class_name: "Image", optional: true
         has_many :page_images, -> { order("position") }
         has_many(
           :images,

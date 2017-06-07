@@ -292,7 +292,7 @@ GEM
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.6)
-    localizable_model (0.5.4)
+    localizable_model (0.5.5)
       rails (~> 5.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
