@@ -37,10 +37,10 @@ module PagesCore
       private
 
       def ensure_page_images_contains_primary_image
-        return if !image_id? || !image_id_changed?
+        return if !image_id?
         page_image = page_images.find_by(image_id: image_id)
         if page_image
-          page_image.update(primary: true)
+          page_image.update(primary: true) unless page_image.primary?
         else
           page_images.create(image_id: image_id, primary: true)
         end

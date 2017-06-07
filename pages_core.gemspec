@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
   s.add_dependency "react-rails", "~> 1.8.2"
 
   # ActiveRecord extensions
-  s.add_dependency "acts_as_list", "0.8.1"
+  s.add_dependency "acts_as_list", "~> 0.9"
   s.add_dependency "localizable_model", ">= 0.5.3"
 
   # reCAPTCHA

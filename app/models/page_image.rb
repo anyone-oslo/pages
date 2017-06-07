@@ -21,28 +21,9 @@ class PageImage < ActiveRecord::Base
     end
   end
 
-  after_save do |page_image|
-    if page_image.primary_changed?
-      # Make sure only one PageImage can be the primary,
-      # then update image_id on the page.
-      if page_image.primary?
-        PageImage.where
-        page_image.page
-                  .page_images
-                  .where("id != ?", page_image.id)
-                  .find_each { |p| p.update(primary: false) }
-        page_image.page.update(image_id: page_image.image_id)
-
-      # Clear image_id on the page if primary is toggled off
-      else
-        page_image.page.update(image_id: nil)
-      end
-    end
-  end
-
-  after_destroy do |page_image|
-    page_image.page.update(image_id: nil) if page_image.primary?
-  end
+  before_save :detect_primary_change
+  after_save :update_primary
+  after_destroy :unset_page_image_on_destroy
 
   class << self
     def cleanup!
@@ -59,5 +40,34 @@ class PageImage < ActiveRecord::Base
   def to_json(options = {})
     options = { include: [:image] }.merge(options)
     super(options)
+  end
+
+  private
+
+  def detect_primary_change
+    @primary_change = primary_changed?
+  end
+
+  def update_primary
+    return unless @primary_change
+    # Make sure only one PageImage can be the primary,
+    # then update image_id on the page.
+    if primary?
+      page
+        .page_images
+        .where("id != ?", id)
+        .find_each { |p| p.update(primary: false) }
+      page.update(image_id: image_id)
+
+    # Clear image_id on the page if primary is toggled off
+    else
+      page.update(image_id: nil)
+    end
+    @primary_change = false
+  end
+
+  def unset_page_image_on_destroy
+    return unless primary?
+    page.update(image_id: nil)
   end
 end
