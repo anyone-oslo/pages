@@ -1,4 +1,4 @@
-class ChangeLocalizationLimit < ActiveRecord::Migration
+class ChangeLocalizationLimit < ActiveRecord::Migration[4.2]
   def up
     change_column :localizations, :value, :text, limit: 16_777_215
   end

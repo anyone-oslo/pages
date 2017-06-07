@@ -1,4 +1,4 @@
-class UpdateDelayedJobTable < ActiveRecord::Migration
+class UpdateDelayedJobTable < ActiveRecord::Migration[4.2]
   def up
     change_column :delayed_jobs, :last_error, :text
   end

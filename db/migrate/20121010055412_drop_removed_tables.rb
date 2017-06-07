@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class DropRemovedTables < ActiveRecord::Migration
+class DropRemovedTables < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :mail_subscribers
     drop_table :mailouts

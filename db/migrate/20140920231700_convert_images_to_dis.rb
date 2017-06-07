@@ -1,4 +1,4 @@
-class ConvertImagesToDis < ActiveRecord::Migration
+class ConvertImagesToDis < ActiveRecord::Migration[4.2]
   class Image < ActiveRecord::Base; end
   class Binary < ActiveRecord::Base; end
 

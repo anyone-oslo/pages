@@ -1,4 +1,4 @@
-class LocalizeImages < ActiveRecord::Migration
+class LocalizeImages < ActiveRecord::Migration[4.2]
   def locale
     I18n.default_locale
   end

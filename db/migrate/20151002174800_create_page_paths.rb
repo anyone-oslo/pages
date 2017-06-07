@@ -1,4 +1,4 @@
-class CreatePagePaths < ActiveRecord::Migration
+class CreatePagePaths < ActiveRecord::Migration[4.2]
   def change
     create_table :page_paths do |t|
       t.belongs_to :page

@@ -1,4 +1,4 @@
-class ConvertPageFilesToDis < ActiveRecord::Migration
+class ConvertPageFilesToDis < ActiveRecord::Migration[4.2]
   class PageFile < ActiveRecord::Base; end
   class Binary < ActiveRecord::Base; end
 

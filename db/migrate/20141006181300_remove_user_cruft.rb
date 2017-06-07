@@ -1,4 +1,4 @@
-class RemoveUserCruft < ActiveRecord::Migration
+class RemoveUserCruft < ActiveRecord::Migration[4.2]
   def change
     remove_column :users, :token, :string
     remove_column :users, :is_deleted, :boolean, default: false, null: false

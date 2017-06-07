@@ -1,4 +1,4 @@
-class CreateRoles < ActiveRecord::Migration
+class CreateRoles < ActiveRecord::Migration[4.2]
   def connection
     @connection ||= ActiveRecord::Base.connection
   end

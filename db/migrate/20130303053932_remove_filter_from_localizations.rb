@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class RemoveFilterFromLocalizations < ActiveRecord::Migration
+class RemoveFilterFromLocalizations < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :localizations, :filter
   end

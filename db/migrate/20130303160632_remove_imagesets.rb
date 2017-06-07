@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class RemoveImagesets < ActiveRecord::Migration
+class RemoveImagesets < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :imagesets
     drop_table :images_imagesets
