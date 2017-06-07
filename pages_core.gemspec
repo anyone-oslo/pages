@@ -31,12 +31,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "timecop", "~> 0.8.0"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
 
-  s.add_dependency "rails", "~> 5.0.0"
+  s.add_dependency "rails", "~> 5.0"
 
   s.add_dependency "bcrypt-ruby"
   s.add_dependency "RedCloth", "~> 4.3.2"
-  s.add_dependency "dis", "~> 1.0.0"
-  s.add_dependency "dynamic_image", "~> 2.0.0"
+  s.add_dependency "dis", "~> 1.0"
+  s.add_dependency "dynamic_image", "~> 2.0"
   s.add_dependency "actionpack-page_caching", "~> 1.1.0"
   s.add_dependency "active_model_serializers", "~> 0.9.0"
   s.add_dependency "country_select"
@@ -47,15 +47,15 @@ Gem::Specification.new do |s|
   # Default asset dependencies
   s.add_dependency "sass-rails", "~> 5.0"
   s.add_dependency "uglifier", ">= 1.3.0"
-  s.add_dependency "coffee-rails", "~> 4.2.0"
+  s.add_dependency "coffee-rails", "~> 4.2"
   s.add_dependency "jquery-rails"
-  s.add_dependency "jbuilder", "~> 2.0"
+  s.add_dependency "jbuilder", "~> 2.5"
 
   # Extra asset dependencies
   s.add_dependency "jquery-ui-rails", "~> 5.0.0"
   s.add_dependency "jcrop-rails-v2"
   s.add_dependency "underscore-rails"
-  s.add_dependency "font-awesome-rails", "~> 4.5.0"
+  s.add_dependency "font-awesome-rails", "~> 4.7"
   s.add_dependency "react-rails", "~> 1.8.2"
 
   # ActiveRecord extensions
