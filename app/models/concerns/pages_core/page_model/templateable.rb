@@ -14,7 +14,7 @@ module PagesCore
       end
 
       def template
-        return self[:template] unless self[:template].blank?
+        return self[:template] if self[:template].present?
         inherited_or_default_template
       end
 
@@ -46,7 +46,7 @@ module PagesCore
 
       def base_template
         template.split(/_/)
-                .reject { |w| %w(index list archive liste arkiv).include?(w) }
+                .reject { |w| %w[index list archive liste arkiv].include?(w) }
                 .join(" ")
       end
 

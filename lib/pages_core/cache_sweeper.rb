@@ -62,7 +62,7 @@ module PagesCore
       end
 
       def visible_dir?(dir)
-        !(dir =~ /^\./) && File.directory?(File.join(config.cache_path, dir))
+        dir !~ /^\./ && File.directory?(File.join(config.cache_path, dir))
       end
 
       def sweep_dir(cache_dir)

@@ -2,18 +2,18 @@
 
 module Admin
   class UsersController < Admin::AdminController
-    before_action :require_authentication, except: [:new, :create, :login]
-    before_action :require_no_users, only: [:new, :create]
+    before_action :require_authentication, except: %i[new create login]
+    before_action :require_no_users, only: %i[new create]
     before_action(
       :find_user,
-      only: [:edit, :update, :show, :destroy, :delete_image]
+      only: %i[edit update show destroy delete_image]
     )
 
     require_authorization(
       User,
       proc { @user },
-      member:     [:delete_image, :update, :destroy, :edit],
-      collection: [:index, :deactivated, :new, :create]
+      member:     %i[delete_image update destroy edit],
+      collection: %i[index deactivated new create]
     )
 
     def index
@@ -81,12 +81,12 @@ module Admin
     end
 
     def user_params
-      permitted_params = [
-        :name, :email, :image
+      permitted_params = %i[
+        name email image
       ]
       permitted_params += [:activated, role_names: []] if policy(User).manage?
-      if !User.any? || (@user && policy(@user).change_password?)
-        permitted_params += [:password, :confirm_password]
+      if User.none? || (@user && policy(@user).change_password?)
+        permitted_params += %i[password confirm_password]
       end
       params.require(:user).permit(permitted_params)
     end

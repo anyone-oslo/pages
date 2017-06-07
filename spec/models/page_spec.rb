@@ -73,7 +73,7 @@ describe Page, type: :model do
       )
     end
     subject { page.locales }
-    it { is_expected.to match(%w(en nb)) }
+    it { is_expected.to match(%w[en nb]) }
   end
 
   describe ".status_labels" do
@@ -126,7 +126,7 @@ describe Page, type: :model do
     end
 
     it "should remove the unnecessary locales" do
-      expect(page.locales).to match(%w(en nb))
+      expect(page.locales).to match(%w[en nb])
       page.update(excerpt: "")
       page.reload
       expect(page.locales).to match(["nb"])

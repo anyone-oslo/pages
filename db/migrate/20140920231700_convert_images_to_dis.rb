@@ -1,6 +1,6 @@
 class ConvertImagesToDis < ActiveRecord::Migration
-  class Image < ActiveRecord::Base; end
-  class Binary < ActiveRecord::Base; end
+  class Image < ApplicationRecord; end
+  class Binary < ApplicationRecord; end
 
   def change
     add_column :images, :content_hash, :string, null: false

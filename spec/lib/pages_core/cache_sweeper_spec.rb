@@ -9,7 +9,7 @@ end
 
 describe PagesCore::CacheSweeper do
   let(:singleton) { PagesCore::CacheSweeper }
-  let(:cache_path) { Rails.root.join("public/cache") }
+  let(:cache_path) { Rails.root.join("public", "cache") }
 
   before do
     PagesCore::CacheSweeper.enabled = true

@@ -158,7 +158,7 @@ class CreatePagesTables < ActiveRecord::Migration
       t.boolean "primary", default: false, null: false
     end
 
-    add_index "page_images", %w(page_id primary)
+    add_index "page_images", %w[page_id primary]
     add_index "page_images", ["page_id"]
 
     create_table "pages" do |t|
@@ -187,7 +187,7 @@ class CreatePagesTables < ActiveRecord::Migration
 
     add_index "pages", ["parent_page_id"]
     add_index "pages", ["position"]
-    add_index "pages", %w(status parent_page_id position)
+    add_index "pages", %w[status parent_page_id position]
     add_index "pages", ["status"]
     add_index "pages", ["user_id"]
 
@@ -228,7 +228,7 @@ class CreatePagesTables < ActiveRecord::Migration
     end
 
     add_index "taggings", ["tag_id"]
-    add_index "taggings", %w(taggable_type taggable_id)
+    add_index "taggings", %w[taggable_type taggable_id]
 
     create_table "tags" do |t|
       t.string "name"
@@ -245,10 +245,10 @@ class CreatePagesTables < ActiveRecord::Migration
       t.text "body"
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.index(%w(textable_id textable_type name language),
+      t.index(%w[textable_id textable_type name language],
               unique: true,
               name: "index_textbits_on_locale")
-      t.index %w(textable_id textable_type)
+      t.index %w[textable_id textable_type]
     end
 
     create_table "users" do |t|

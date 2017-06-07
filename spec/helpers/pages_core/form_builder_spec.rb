@@ -120,7 +120,7 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_select" do
     let(:template) { spy }
-    let(:options) { %w(Foo Bar) }
+    let(:options) { %w[Foo Bar] }
     it "should render the field" do
       builder.labelled_select(:email, options)
       expect(template).to have_received(:select)

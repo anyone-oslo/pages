@@ -32,7 +32,7 @@ describe PagesCore::Taggable, type: :model do
     end
 
     context "with array argument" do
-      subject { Page.tagged_with(%w(foo bar)) }
+      subject { Page.tagged_with(%w[foo bar]) }
       it { is_expected.to match([page1, page2]) }
     end
 
@@ -44,12 +44,12 @@ describe PagesCore::Taggable, type: :model do
 
   describe "#serialized_tags" do
     subject { page.serialized_tags }
-    before { page.tag_with(%w(foo bar)) }
-    it { is_expected.to eq(%w(bar foo).to_json) }
+    before { page.tag_with(%w[foo bar]) }
+    it { is_expected.to eq(%w[bar foo].to_json) }
   end
 
   describe "#serialized_tags=" do
-    let(:json) { %w(foo bar).to_json }
+    let(:json) { %w[foo bar].to_json }
     before { page.update(serialized_tags: json) }
     specify { expect(page.tags.count).to eq(2) }
   end
@@ -61,7 +61,7 @@ describe PagesCore::Taggable, type: :model do
     end
 
     context "with array argument" do
-      before { page.tag_with(%w(foo bar)) }
+      before { page.tag_with(%w[foo bar]) }
       specify { expect(page.tags.count).to eq(2) }
     end
 

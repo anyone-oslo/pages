@@ -38,7 +38,7 @@ module PagesCore
 
     # Returns true if meta description has been set.
     def meta_description?
-      !meta_description.blank?
+      meta_description.present?
     end
 
     # Sets an image to use for meta tags. Supports
@@ -62,7 +62,7 @@ module PagesCore
 
     # Returns true if meta image has been set.
     def meta_image?
-      !meta_image.blank? || default_meta_image?
+      meta_image.present? || default_meta_image?
     end
 
     # Sets keywords for meta tags.
@@ -81,7 +81,7 @@ module PagesCore
 
     # Returns true if meta keywords have been set.
     def meta_keywords?
-      !meta_keywords.blank?
+      meta_keywords.present?
     end
 
     private

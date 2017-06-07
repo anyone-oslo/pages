@@ -126,7 +126,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
     end
 
     context "when keywords have been set" do
-      before { helper.meta_keywords(%w(Foo Bar)) }
+      before { helper.meta_keywords(%w[Foo Bar]) }
       it { is_expected.to eq("Foo, Bar") }
     end
 
@@ -149,7 +149,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
     end
 
     context "when keywords have been set" do
-      before { helper.meta_keywords(%w(Foo Bar)) }
+      before { helper.meta_keywords(%w[Foo Bar]) }
       it { is_expected.to eq(true) }
     end
   end

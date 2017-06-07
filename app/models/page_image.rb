@@ -11,7 +11,7 @@ class PageImage < ActiveRecord::Base
   accepts_nested_attributes_for :image
   validates_associated :image
 
-  acts_as_list scope: [:page, :primary]
+  acts_as_list scope: %i[page primary]
 
   localizable
 

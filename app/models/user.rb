@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
   end
 
   def hash_password
-    self.hashed_password = encrypt_password(password) unless password.blank?
+    self.hashed_password = encrypt_password(password) if password.present?
   end
 
   def password_needs_rehash?

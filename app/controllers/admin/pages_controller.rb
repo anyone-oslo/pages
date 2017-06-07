@@ -4,15 +4,15 @@ module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::NewsPageController
 
-    before_action :find_page, only: [:show, :edit, :preview, :update, :destroy,
-                                     :delete_meta_image, :move]
+    before_action :find_page, only: %i[show edit preview update destroy
+                                       delete_meta_image move]
     before_action :find_categories
 
     require_authorization(Page, proc { @page },
-                          collection: [:index, :news, :new, :new_news, :create,
-                                       :deleted],
-                          member: [:show, :edit, :preview, :update, :destroy,
-                                   :delete_meta_image, :move])
+                          collection: %i[index news new new_news create
+                                         deleted],
+                          member: %i[show edit preview update destroy
+                                     delete_meta_image move])
 
     def index
       @root_pages = Page.roots.in_locale(@locale).visible
@@ -94,9 +94,9 @@ module Admin
     end
 
     def page_attributes
-      [:template, :user_id, :status, :feed_enabled, :published_at,
-       :redirect_to, :comments_allowed, :image_link, :news_page,
-       :unique_name, :pinned, :parent_page_id, :serialized_tags, :meta_image]
+      %i[template user_id status feed_enabled published_at
+         redirect_to comments_allowed image_link news_page
+         unique_name pinned parent_page_id serialized_tags meta_image]
     end
 
     def page_params

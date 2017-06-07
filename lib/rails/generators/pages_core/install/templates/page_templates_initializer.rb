@@ -45,7 +45,7 @@ PagesCore::Templates.configure do |config|
     # default.tags :enabled
 
     # Only use the blocks enabled here by default
-    default.enabled_blocks [:headline, :excerpt, :body]
+    default.enabled_blocks %i[headline excerpt body]
 
     # Subpages will have this template. Will fall back to default.template
     # unless specified. (default: nil)

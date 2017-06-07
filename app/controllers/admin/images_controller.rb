@@ -2,7 +2,7 @@
 
 module Admin
   class ImagesController < Admin::AdminController
-    before_action :find_image, only: [:show, :edit, :update, :destroy]
+    before_action :find_image, only: %i[show edit update destroy]
 
     def index; end
 

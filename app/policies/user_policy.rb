@@ -9,7 +9,7 @@ class UserPolicy < Policy
     end
 
     def new?
-      !User.any? || user.role?(:users)
+      User.none? || user.role?(:users)
     end
 
     def create?

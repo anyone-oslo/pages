@@ -33,7 +33,7 @@ namespace :pages do
       end
       if reports.length > 1
         puts
-        reports = reports.sort { |a, b| a[:timestamp] <=> b[:timestamp] }
+        reports = reports.sort_by { |a| a[:timestamp] }
         reports.each do |report|
           message = report[:message].strip.split("\n").first
           print "#{report[:timestamp]} "

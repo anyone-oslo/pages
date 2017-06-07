@@ -28,9 +28,9 @@ module PagesCore
       def full_path?(last_segment = nil)
         last_segment ||= path_segment
         if parent
-          parent.full_path? && !last_segment.blank?
+          parent.full_path? && last_segment.present?
         else
-          !last_segment.blank?
+          last_segment.present?
         end
       end
 
@@ -78,7 +78,7 @@ module PagesCore
       def page_path_route?(route)
         route[:controller] == "pages" &&
           route[:action] == "show" &&
-          !route[:path].blank?
+          route[:path].present?
       end
 
       def path_collision?(path_segment)

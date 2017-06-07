@@ -14,9 +14,9 @@ module PagesCore
       end
 
       def valid_template_options
-        [
-          :template, :image, :images, :files, :text_filter, :blocks,
-          :enabled_blocks, :sub_template, :comments, :comments_allowed, :tags
+        %i[
+          template image images files text_filter blocks
+          enabled_blocks sub_template comments comments_allowed tags
         ]
       end
 

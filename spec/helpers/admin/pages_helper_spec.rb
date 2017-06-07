@@ -4,7 +4,7 @@ RSpec.describe Admin::PagesHelper, type: :helper do
   let(:page) { build(:page) }
 
   describe "#available_templates_for_select" do
-    let(:template_options) { [%w([Default] index), %w(Home home)] }
+    let(:template_options) { [%w([Default] index), %w[Home home]] }
     subject { helper.available_templates_for_select }
 
     it { is_expected.to eq(template_options) }
@@ -94,7 +94,7 @@ RSpec.describe Admin::PagesHelper, type: :helper do
   end
 
   describe "publish_time" do
-    before { Timecop.freeze(DateTime.parse("2016-02-10 14:10")).utc }
+    before { Timecop.freeze(DateTime.parse("2016-02-10 14:10").utc) }
     after { Timecop.return }
     subject { helper.publish_time(timestamp) }
 

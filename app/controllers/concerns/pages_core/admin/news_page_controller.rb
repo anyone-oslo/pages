@@ -7,7 +7,7 @@ module PagesCore
 
       included do
         before_action :require_news_pages, only: [:news]
-        before_action :find_news_pages, only: [:news, :new_news]
+        before_action :find_news_pages, only: %i[news new_news]
       end
 
       def news

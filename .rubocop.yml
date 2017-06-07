@@ -10,6 +10,18 @@ Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
 
+Metrics/BlockLength:
+  Exclude:
+    - "*.gemspec"
+  ExcludedMethods:
+    - context
+    - describe
+    - it
+    - shared_examples
+    - shared_examples_for
+    - namespace
+    - draw
+
 Metrics/ClassLength:
   Exclude:
     - "db/migrate/*"
@@ -20,6 +32,9 @@ Metrics/MethodLength:
 
 Rails:
   Enabled: true
+
+Rails/ApplicationRecord:
+  Enabled: false
 
 StringLiterals:
   EnforcedStyle: double_quotes

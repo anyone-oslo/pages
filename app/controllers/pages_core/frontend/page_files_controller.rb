@@ -3,7 +3,7 @@
 module PagesCore
   module Frontend
     class PageFilesController < ::FrontendController
-      before_action :find_page_file, only: [:show, :edit, :update, :destroy]
+      before_action :find_page_file, only: %i[show edit update destroy]
 
       def show
         unless modified?(@page_file)

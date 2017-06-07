@@ -15,8 +15,8 @@ module PagesCore
 
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
-      before_action :find_page, only: [:show, :preview, :add_comment]
-      before_action :require_page, only: [:show, :preview, :add_comment]
+      before_action :find_page, only: %i[show preview add_comment]
+      before_action :require_page, only: %i[show preview add_comment]
       before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
 
@@ -49,7 +49,7 @@ module PagesCore
         return if @page.redirects?
         return if request.path == canonical_path(@page)
         # Don't canonicalize if any unknown params are present
-        return if (params.keys - %w(controller action path locale id)).any?
+        return if (params.keys - %w[controller action path locale id]).any?
         redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 

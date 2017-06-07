@@ -120,11 +120,11 @@ module PagesCore
       alias config configuration
 
       def metadata_block_names
-        [
-          :meta_title,
-          :meta_description,
-          :open_graph_title,
-          :open_graph_description
+        %i[
+          meta_title
+          meta_description
+          open_graph_title
+          open_graph_description
         ]
       end
 
@@ -138,7 +138,7 @@ module PagesCore
         config.files :disabled
         config.images :disabled
         config.text_filter :textile
-        config.enabled_blocks [:headline, :excerpt, :body]
+        config.enabled_blocks %i[headline excerpt body]
         config.tags :disabled
       end
 

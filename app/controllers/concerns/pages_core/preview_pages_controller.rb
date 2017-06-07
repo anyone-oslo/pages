@@ -29,9 +29,9 @@ module PagesCore
     end
 
     def permitted_page_attributes
-      [:template, :user_id, :status, :feed_enabled, :published_at,
-       :redirect_to, :comments_allowed, :image_link, :news_page,
-       :unique_name, :pinned, :parent_page_id]
+      %i[template user_id status feed_enabled published_at
+         redirect_to comments_allowed image_link news_page
+         unique_name pinned parent_page_id]
     end
 
     def page_params

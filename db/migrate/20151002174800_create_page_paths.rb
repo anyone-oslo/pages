@@ -5,6 +5,6 @@ class CreatePagePaths < ActiveRecord::Migration
       t.string :locale, :path
       t.timestamps null: false
     end
-    add_index :page_paths, [:locale, :path], unique: true
+    add_index :page_paths, %i[locale path], unique: true
   end
 end

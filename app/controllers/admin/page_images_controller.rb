@@ -3,12 +3,12 @@
 module Admin
   class PageImagesController < Admin::AdminController
     before_action :find_page
-    before_action :find_page_image, only: [:show, :edit, :update, :destroy]
+    before_action :find_page_image, only: %i[show edit update destroy]
 
     require_authorization(
       PageImage,
       proc { @page_image },
-      collection: [:index, :reorder, :new, :create]
+      collection: %i[index reorder new create]
     )
 
     def index
@@ -77,9 +77,9 @@ module Admin
     def page_image_params
       params.require(:page_image).permit(
         :image, :primary,
-        image_attributes: [
-          :id, :alternative, :caption,
-          :crop_start_x, :crop_start_y, :crop_width, :crop_height
+        image_attributes: %i[
+          id alternative caption
+          crop_start_x crop_start_y crop_width crop_height
         ]
       )
     end
@@ -87,7 +87,7 @@ module Admin
     def page_images_params
       params.permit(
         page_images: [:image, :primary, {
-          image_attributes: [:alternative, :caption]
+          image_attributes: %i[alternative caption]
         }]
       )[:page_images]
     end

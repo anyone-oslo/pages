@@ -21,8 +21,8 @@ module PagesCore
 
       def default_options
         {
-          collection: [:index, :new, :create],
-          member:     [:show, :edit, :update, :destroy]
+          collection: %i[index new create],
+          member:     %i[show edit update destroy]
         }
       end
     end

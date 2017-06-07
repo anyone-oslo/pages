@@ -2,9 +2,9 @@
 
 module Admin
   class PasswordResetsController < Admin::AdminController
-    before_action :find_password_reset_token, only: [:show, :update]
-    before_action :check_for_expired_token, only: [:show, :update]
-    before_action :require_authentication, except: [:create, :show, :update]
+    before_action :find_password_reset_token, only: %i[show update]
+    before_action :check_for_expired_token, only: %i[show update]
+    before_action :require_authentication, except: %i[create show update]
 
     layout "admin"
 
@@ -26,7 +26,7 @@ module Admin
 
     def update
       @user = @password_reset_token.user
-      if !user_params[:password].blank? && @user.update(user_params)
+      if user_params[:password].present? && @user.update(user_params)
         @password_reset_token.destroy
         authenticate!(@user)
         flash[:notice] = "Your password has been changed"

@@ -24,7 +24,7 @@ module PagesCore
 
     # Enable asset precompilation
     initializer :assets do |_config|
-      Rails.application.config.assets.precompile += %w(
+      Rails.application.config.assets.precompile += %w[
         pages/admin.js
         pages/admin.css
         pages/admin/print.css
@@ -32,7 +32,7 @@ module PagesCore
         pages/*.gif
         pages/*.png
         pages/*.jpg
-      )
+      ]
     end
 
     initializer :handle_exceptions do |app|

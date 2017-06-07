@@ -1,6 +1,6 @@
 class ConvertPageFilesToDis < ActiveRecord::Migration
-  class PageFile < ActiveRecord::Base; end
-  class Binary < ActiveRecord::Base; end
+  class PageFile < ApplicationRecord; end
+  class Binary < ApplicationRecord; end
 
   def change
     add_column :page_files, :content_hash, :string, null: false

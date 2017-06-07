@@ -1,14 +1,14 @@
 module Admin
   class InvitesController < Admin::AdminController
-    before_action :require_authentication, except: [:accept, :show]
-    before_action :find_invite, only: [:show, :edit, :update, :destroy, :accept]
-    before_action :require_valid_token, only: [:show, :accept]
+    before_action :require_authentication, except: %i[accept show]
+    before_action :find_invite, only: %i[show edit update destroy accept]
+    before_action :require_valid_token, only: %i[show accept]
 
     require_authorization(
       Invite,
       proc { @invite },
-      member:     [:show, :edit, :update, :destroy],
-      collection: [:index, :new, :create]
+      member:     %i[show edit update destroy],
+      collection: %i[index new create]
     )
 
     def index

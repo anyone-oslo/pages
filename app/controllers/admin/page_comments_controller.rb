@@ -3,7 +3,7 @@
 module Admin
   class PageCommentsController < Admin::AdminController
     before_action :find_page
-    before_action :find_page_comment, only: [:show, :edit, :update, :destroy]
+    before_action :find_page_comment, only: %i[show edit update destroy]
 
     def index
       redirect_to admin_page_path(@locale, @page)

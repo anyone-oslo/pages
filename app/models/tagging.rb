@@ -8,7 +8,7 @@ class Tagging < ActiveRecord::Base
   validates :taggable_type, presence: true
   validates :tag_id,
             presence: true,
-            uniqueness: { scope: [:taggable_type, :taggable_id] }
+            uniqueness: { scope: %i[taggable_type taggable_id] }
 
   def self.tagged_class(taggable)
     ActiveRecord::Base.send(

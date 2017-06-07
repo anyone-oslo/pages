@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe PagesCore::ExceptionHandler, type: :controller do
-  let(:reports_path) { Rails.root.join("log/error_reports") }
+  let(:reports_path) { Rails.root.join("log", "error_reports") }
 
   controller(ApplicationController) do
     include PagesCore::ExceptionHandler
