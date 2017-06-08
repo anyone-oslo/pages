@@ -3,12 +3,6 @@
 require "find"
 require "open-uri"
 
-begin
-  require "delayed/tasks"
-rescue LoadError
-  puts "Delayed job not installed"
-end
-
 namespace :pages do
   namespace :error_reports do
     desc "Show error reports"

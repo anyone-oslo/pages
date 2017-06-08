@@ -6,14 +6,6 @@ module PagesCore
     # config.autoload_paths += Dir["#{config.root}/lib/pages_core/**/"]
     # config.eager_load_paths += Dir["#{config.root}/lib/pages_core/**/"]
 
-    initializer :active_job do |_config|
-      ActiveJob::Base.queue_adapter = if Rails.env.test?
-                                        :test
-                                      else
-                                        :delayed_job
-                                      end
-    end
-
     initializer :append_migrations do |app|
       unless app.root.to_s.match root.to_s
         config.paths["db/migrate"].expanded.each do |expanded_path|
