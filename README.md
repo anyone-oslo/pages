@@ -1,6 +1,6 @@
 # Pages
 
-[![Build Status](https://travis-ci.org/kord-as/pages.svg?branch=master)](https://travis-ci.org/kord-as/pages) [![Code Climate](https://codeclimate.com/github/kord-as/pages/badges/gpa.svg)](https://codeclimate.com/github/kord-as/pages) [![Test Coverage](https://codeclimate.com/github/kord-as/pages/badges/coverage.svg)](https://codeclimate.com/github/kord-as/pages) [![Dependency Status](https://gemnasium.com/kord-as/pages.svg)](https://gemnasium.com/kord-as/pages)
+[![Build Status](https://travis-ci.org/anyone-oslo/pages.svg?branch=master)](https://travis-ci.org/anyone-oslo/pages) [![Code Climate](https://codeclimate.com/github/anyone-oslo/pages/badges/gpa.svg)](https://codeclimate.com/github/anyone-oslo/pages) [![Test Coverage](https://codeclimate.com/github/anyone-oslo/pages/badges/coverage.svg)](https://codeclimate.com/github/anyone-oslo/pages) [![Dependency Status](https://gemnasium.com/anyone-oslo/pages.svg)](https://gemnasium.com/anyone-oslo/pages)
 
 ## Getting started
 
