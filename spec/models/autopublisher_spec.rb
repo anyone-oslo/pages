@@ -6,7 +6,7 @@ describe Autopublisher do
   describe ".run!" do
     let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
     let!(:past) { create(:page, published_at: (Time.now.utc - 1.day)) }
-    before { past.update_column(:autopublish, true) }
+    before { past.update(autopublish: true) }
 
     it "should autopublish the due pages" do
       Autopublisher.run!
