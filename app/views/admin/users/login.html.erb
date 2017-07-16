@@ -11,5 +11,48 @@
   </p>
 <% end %>
 
+<div class="login-form">
+  <div class="login-tab password">
+    <%= form_tag session_path do %>
+      <p>
+        <label>Email address</label>
+        <%= text_field_tag :username, '' %>
+      </p>
+      <p>
+        <label>Password</label>
+        <%= password_field_tag :password, '' %>
+      </p>
+      <p>
+        <button type="submit">Sign in</button>
+      </p>
+      <ul>
+        <li>
+          <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
+                      login_admin_users_path,
+                      class: 'show-password-reset') %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
 
-<%= login_form(success_url: admin_default_path, login_url: login_admin_users_path) %>
+  <div class="login-tab password-reset">
+    <%= form_tag admin_password_resets_path do %>
+      <h2>
+        Forgot your password?
+      </h2>
+      <p>
+        Don't worry, it happens.
+        Enter your email address below,
+        and we'll send you a link where you can reset your password.
+      </p>
+      <p>
+        <%= text_field_tag :username, '' %>
+      </p>
+      <p>
+        <button type="submit">
+          Send
+        </button>
+      </p>
+    <% end %>
+  </div>
+</div>

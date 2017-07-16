@@ -17,7 +17,7 @@ module Admin
       else
         flash[:notice] = "Couldn't find a user with that email address"
       end
-      redirect_to login_url
+      redirect_to login_admin_users_url
     end
 
     def show
@@ -30,7 +30,7 @@ module Admin
         @password_reset_token.destroy
         authenticate!(@user)
         flash[:notice] = "Your password has been changed"
-        redirect_to login_url
+        redirect_to login_admin_users_url
       else
         render action: :show
       end
@@ -52,11 +52,6 @@ module Admin
       User.login_name(params[:username])
     end
 
-    def login_url
-      # TODO: Validate URL
-      params[:login_url] || login_admin_users_url
-    end
-
     def user_params
       params.require(:user).permit(:password, :confirm_password)
     end
@@ -75,14 +70,14 @@ module Admin
       return if valid_token?(@password_reset_token)
 
       flash[:notice] = "Invalid password reset request"
-      redirect_to(login_url) && return
+      redirect_to(login_admin_users_url) && return
     end
 
     def check_for_expired_token
       return unless @password_reset_token.expired?
       @password_reset_token.destroy
       flash[:notice] = "Your password reset link has expired"
-      redirect_to(login_url)
+      redirect_to(login_admin_users_url)
     end
   end
 end
