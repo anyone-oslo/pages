@@ -61,12 +61,6 @@
     <%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
     <%= f.check_box(:news_page) %> Show in News<br />
   </div>
-  <% if @page.template_config.value(:comments) %>
-    <p class="field">
-      <label>Comments</label>
-      <%= f.check_box(:comments_allowed) %> Enabled<br />
-    </p>
-  <% end %>
   <%= labelled_field f.text_field(:unique_name), "Unique name", errors: @page.errors[:unique_name] %>
   <%= labelled_field f.text_field(:redirect_to), "Redirect", errors: @page.errors[:redirect_to] %>
 </div>

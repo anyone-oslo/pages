@@ -28,7 +28,6 @@ require "dynamic_image"
 require "localizable_model"
 require "json"
 require "rails_i18n"
-require "recaptcha/rails"
 require "RedCloth"
 require "sass"
 

@@ -83,7 +83,6 @@ module Admin
     def build_page(locale, attributes = nil, categories = nil)
       Page.new.localize(locale).tap do |page|
         page.author = default_author || current_user
-        page.comments_allowed = page.template_config.value(:comments_allowed)
         page.attributes = attributes if attributes
         page.categories = categories if categories
       end
@@ -95,7 +94,7 @@ module Admin
 
     def page_attributes
       %i[template user_id status feed_enabled published_at
-         redirect_to comments_allowed image_link news_page
+         redirect_to image_link news_page
          unique_name pinned parent_page_id serialized_tags meta_image]
     end
 

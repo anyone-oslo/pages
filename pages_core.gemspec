@@ -62,9 +62,6 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_list", "~> 0.9"
   s.add_dependency "localizable_model", ">= 0.5.3"
 
-  # reCAPTCHA
-  s.add_dependency "recaptcha", "~> 0.6.0"
-
   # Delayed Job
   s.add_dependency "delayed_job", "~> 4.1.2"
   s.add_dependency "delayed_job_active_record", "~> 4.1.1"

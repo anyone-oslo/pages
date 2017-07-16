@@ -30,7 +30,7 @@ module PagesCore
 
     def permitted_page_attributes
       %i[template user_id status feed_enabled published_at
-         redirect_to comments_allowed image_link news_page
+         redirect_to image_link news_page
          unique_name pinned parent_page_id]
     end
 

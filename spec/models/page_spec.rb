@@ -167,48 +167,6 @@ describe Page, type: :model do
     end
   end
 
-  describe "#comments_closed_after_time?" do
-    subject { page.comments_closed_after_time? }
-
-    context "when close_comments_after is configured" do
-      before { PagesCore.config.close_comments_after = 14.days }
-
-      context "and page is past" do
-        let(:page) { build(:page, published_at: 15.days.ago) }
-        it { is_expected.to eq(true) }
-      end
-
-      context "and page isn't past" do
-        let(:page) { build(:page, published_at: 10.days.ago) }
-        it { is_expected.to eq(false) }
-      end
-    end
-
-    context "when close_comments_after is configured" do
-      before { PagesCore.config.close_comments_after = nil }
-
-      let(:page) { build(:page, published_at: 90.days.ago) }
-      it { is_expected.to eq(false) }
-    end
-  end
-
-  describe "#comments_allowed?" do
-    subject { page.comments_allowed? }
-
-    context "when comments are automatically closed" do
-      before { PagesCore.config.close_comments_after = 14.days }
-      let(:page) do
-        build(:page, published_at: 15.days.ago, comments_allowed: true)
-      end
-      it { is_expected.to eq(false) }
-    end
-
-    context "when comments haven't automatically been closed" do
-      let(:page) { build(:page, comments_allowed: true) }
-      it { is_expected.to eq(true) }
-    end
-  end
-
   describe "#empty?" do
     subject { page.empty? }
 

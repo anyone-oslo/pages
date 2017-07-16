@@ -81,20 +81,6 @@
   <% end %>
 
 
-  <%# #### COMMENTS #### %>
-  <% if @page.template_config.value(:comments) %>
-    <% if @page.comments.count > 0 %>
-      <%= content_tab "Comments" do %>
-        <%= render partial: 'edit_comments', locals: {f: f} %>
-      <% end %>
-    <% else %>
-      <%= content_tab "Comments", {disabled: true} do %>
-        <p>No comments added.</p>
-      <% end %>
-    <% end %>
-  <% end %>
-
-
   <%# #### METADATA #### %>
   <%= content_tab "Metadata" do %>
     <%= render partial: 'edit_metadata', locals: {f: f} %>

@@ -133,8 +133,6 @@ module PagesCore
       def default_configuration(config)
         config.template :autodetect, root: "index"
         config.image :enabled, linkable: false
-        config.comments :disabled
-        config.comments_allowed :enabled
         config.files :disabled
         config.images :disabled
         config.text_filter :textile
