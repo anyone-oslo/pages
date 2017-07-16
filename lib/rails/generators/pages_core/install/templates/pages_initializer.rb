@@ -28,18 +28,6 @@ PagesCore.configure do |config|
   # New pages will be created by the user with this email address:
   # config.default_author "email@example.com"
 
-  # Send notifications when new comments are posted
-  # config :comment_notifications,  [:author, 'your@email.com']
-
-  # Automatically close comments after a certain amount of time has
-  # passed. (default: disabled)
-  # config.close_comments_after 60.days
-
-  # Comment honeypot.
-  # Add <%%= comment_honeypot_field %> to your form
-  # and .comment_email { display: none; } to your CSS.
-  # config.comment_honeypot :disabled
-
   # Layout for 404 errors
   # config.error_404_layout "errors"
 

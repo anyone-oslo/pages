@@ -10,7 +10,6 @@ Rails.application.routes.draw do
       post "search"
     end
     member do
-      post "add_comment"
       put "preview"
     end
     resources :files, controller: "page_files"
@@ -96,10 +95,6 @@ Rails.application.routes.draw do
           collection do
             post "reorder"
           end
-        end
-
-        # Page Files
-        resources :comments, controller: "page_comments" do
         end
       end
     end

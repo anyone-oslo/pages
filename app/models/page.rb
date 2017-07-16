@@ -6,7 +6,6 @@ class Page < ActiveRecord::Base
   include PagesCore::Taggable
 
   include PagesCore::PageModel::Autopublishable
-  include PagesCore::PageModel::Commentable
   include PagesCore::PageModel::Images
   include PagesCore::PageModel::Localizable
   include PagesCore::PageModel::Pathable

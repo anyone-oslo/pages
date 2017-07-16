@@ -7,7 +7,6 @@ module PagesCore
       include PagesCore::Templates::ControllerActions
       include PagesCore::HeadTagsHelper
 
-      include PagesCore::AddCommentsController
       include PagesCore::PreviewPagesController
       include PagesCore::RssController
 
@@ -15,8 +14,8 @@ module PagesCore
 
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
-      before_action :find_page, only: %i[show preview add_comment]
-      before_action :require_page, only: %i[show preview add_comment]
+      before_action :find_page, only: %i[show preview]
+      before_action :require_page, only: %i[show preview]
       before_action :canonicalize_url, only: [:show]
       after_action :cache_page_request, only: [:show]
 

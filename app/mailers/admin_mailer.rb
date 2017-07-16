@@ -24,17 +24,6 @@ class AdminMailer < ActionMailer::Base
     )
   end
 
-  def comment_notification(recipient, page, comment, url)
-    @recipient = recipient
-    @page = page
-    @comment = comment
-    @url = url
-    mail(
-      to:      recipient,
-      subject: "[#{PagesCore.config(:site_name)}] New comment on #{@page.name}"
-    )
-  end
-
   def invite(invite, url)
     @invite = invite
     @url = url

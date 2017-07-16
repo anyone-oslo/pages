@@ -15,9 +15,6 @@ module PagesCore
       setting :rss_fulltext,          :boolean, true
       setting :image_fallback_url,    :string
       setting :default_author,        :string
-      setting :comment_notifications, :array, []
-      setting :close_comments_after,  :integer
-      setting :comment_honeypot,      :boolean, false
       setting :recaptcha,             :boolean, false
       setting :error_404_layout,      :string
       setting :file_embedder,         :object, PagesCore::FileEmbedder

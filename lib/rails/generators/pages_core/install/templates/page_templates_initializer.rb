@@ -35,12 +35,6 @@ PagesCore::Templates.configure do |config|
     # Enables file uploads (default: :disabled)
     # default.files :enabled
 
-    # Enables comments (default: :disabled)
-    # default.comments :enabled
-
-    # New pages are open for comments by default (default: :enabled)
-    # default.comments_allowed :disabled
-
     # Pages can have tags (default: :disabled)
     # default.tags :enabled
 

@@ -13,9 +13,5 @@ module PagesCore
     attr_reader :search_query
 
     attr_reader :search_category_id
-
-    def comment_honeypot_field
-      text_field_tag "email", "", class: "comment_email"
-    end
   end
 end
