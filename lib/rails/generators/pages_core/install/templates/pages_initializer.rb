@@ -13,9 +13,6 @@ PagesCore.configure do |config|
   # Locales and names
   # config.locales(nb: 'Norwegian', en: 'English')
 
-  # ReCAPTCHA (default: disabled)
-  # config.recaptcha :disabled
-
   # Page cache (default: enabled)
   # config.page_cache :enabled
 

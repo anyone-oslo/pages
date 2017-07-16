@@ -15,7 +15,6 @@ module PagesCore
       setting :rss_fulltext,          :boolean, true
       setting :image_fallback_url,    :string
       setting :default_author,        :string
-      setting :recaptcha,             :boolean, false
       setting :error_404_layout,      :string
       setting :file_embedder,         :object, PagesCore::FileEmbedder
     end
