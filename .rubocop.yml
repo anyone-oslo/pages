@@ -39,5 +39,9 @@ Rails/ApplicationRecord:
 StringLiterals:
   EnforcedStyle: double_quotes
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    "%i": "[]"
+
 Documentation:
   Enabled: false
