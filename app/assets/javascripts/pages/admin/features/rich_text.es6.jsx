@@ -11,12 +11,17 @@ class TextileDecorator {
   link(url, name) { return ["\"", name, `\":${url}`]; }
   email(address, name) { return ["\"", name, `\":mailto:${address}`]; }
 
+  strToList(str, prefix) {
+    return str.split("\n").map(l => prefix +  " " + l).join("\n");
+  }
+
   list(str) {
+    return ["", this.strToList(str, "*"), ""];
     return ["", str.split("\n").map(l => "* " + l).join("\n"), ""];
   }
 
   orderedList(str) {
-    return ["", str.split("\n").map(l => "# " + l).join("\n"), ""];
+    return ["", this.strToList(str, "#"), ""];
   }
 }
 

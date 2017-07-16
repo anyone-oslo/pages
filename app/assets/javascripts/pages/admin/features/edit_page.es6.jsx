@@ -121,17 +121,19 @@ class EditPage {
   }
 
   uploadModals() {
+    let uploadModal = function(id) {
+      return Modal.show(
+        "<div class=\"uploadImages\">" + $("#" + id).html() + "</div>"
+      );
+    }
+
     $("#new-image").hide();
     $("#new-file").hide();
     $(".upload-images-button").click(function() {
-      return Modal.show(
-        "<div class=\"uploadImages\">" + $("#new-image").html() + "</div>"
-      );
+      return uploadModal("new-image");
     });
     $(".upload-file-button").click(function() {
-      return Modal.show(
-        "<div class=\"uploadImages\">" + $("#new-file").html() + "</div>"
-      );
+      return uploadModal("new-file");
     });
   }
 }
