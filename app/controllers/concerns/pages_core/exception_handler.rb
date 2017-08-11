@@ -2,14 +2,19 @@
 
 module PagesCore
   module ExceptionHandler
-    module Rescues
+    module Rescues40x
       extend ActiveSupport::Concern
-
       included do
-        rescue_from Exception,                           with: :handle_exception
         rescue_from PagesCore::NotAuthorized,            with: :handle_exception
         rescue_from ActiveRecord::RecordNotFound,        with: :handle_exception
         rescue_from ActionController::RoutingError,      with: :handle_exception
+      end
+    end
+
+    module Rescues
+      extend ActiveSupport::Concern
+      included do
+        rescue_from Exception,                           with: :handle_exception
         rescue_from ActionController::UnknownController, with: :handle_exception
         rescue_from AbstractController::ActionNotFound,  with: :handle_exception
       end
@@ -18,7 +23,9 @@ module PagesCore
     extend ActiveSupport::Concern
 
     included do
-      unless Rails.application.config.consider_all_requests_local
+      return if Rails.application.config.consider_all_requests_local
+      include PagesCore::ExceptionHandler::Rescues40x
+      if PagesCore.config.exception_handler?
         include PagesCore::ExceptionHandler::Rescues
       end
     end

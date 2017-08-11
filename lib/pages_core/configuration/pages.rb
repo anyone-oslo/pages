@@ -12,6 +12,7 @@ module PagesCore
       setting :text_filter,           :symbol, :textile
       setting :page_cache,            :boolean, true
       setting :domain_based_cache,    :boolean, false
+      setting :exception_handler,     :boolean, true
       setting :rss_fulltext,          :boolean, true
       setting :image_fallback_url,    :string
       setting :default_author,        :string
