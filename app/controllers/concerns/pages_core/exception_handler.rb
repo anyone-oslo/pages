@@ -23,10 +23,11 @@ module PagesCore
     extend ActiveSupport::Concern
 
     included do
-      return if Rails.application.config.consider_all_requests_local
-      include PagesCore::ExceptionHandler::Rescues40x
-      if PagesCore.config.exception_handler?
-        include PagesCore::ExceptionHandler::Rescues
+      unless Rails.application.config.consider_all_requests_local
+        include PagesCore::ExceptionHandler::Rescues40x
+        if PagesCore.config.exception_handler?
+          include PagesCore::ExceptionHandler::Rescues
+        end
       end
     end
 
