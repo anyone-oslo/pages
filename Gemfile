@@ -6,7 +6,9 @@ gem 'rake', '10.1.1'
 gem 'rails', '2.3.18'
 gem 'rdoc', '3.12'
 
-gem 'mysql2', '~> 0.2.24'
+gem "mysql2",
+    git: "git@github.com:anyone-oslo/mysql2.git",
+    branch: "fix-mariadb-0.2.24"
 
 gem "bcrypt-ruby", :require => "bcrypt"
 gem 'capistrano', '~> 2.15.4'
