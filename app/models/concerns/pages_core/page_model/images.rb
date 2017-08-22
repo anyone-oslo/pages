@@ -11,7 +11,7 @@ module PagesCore
         has_many :page_images, -> { order("position") }
         has_many(
           :images,
-          -> { where("`page_images`.`primary` = ?", false).order("position") },
+          -> { where(page_images: { primary: false }).order("position") },
           through: :page_images
         )
 
