@@ -102,7 +102,8 @@ module Admin
           redirect_to(admin_page_path(@locale, @page, anchor: "images"))
         end
         format.json do
-          render json: page_image.to_json
+          @page_image = page_image
+          render template: "admin/page_images/show"
         end
       end
     end

@@ -6,11 +6,7 @@ module Admin
 
     def index; end
 
-    def show
-      respond_to do |format|
-        format.js { render text: @image.to_json, layout: false }
-      end
-    end
+    def show; end
 
     def new; end
 
@@ -21,7 +17,7 @@ module Admin
     def update
       @image.update(image_params)
       respond_to do |format|
-        format.json { render text: @image.to_json, layout: false }
+        format.json { render action: :show }
       end
     end
 

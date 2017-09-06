@@ -37,11 +37,6 @@ class PageImage < ActiveRecord::Base
     super.localize!(locale)
   end
 
-  def to_json(options = {})
-    options = { include: [:image] }.merge(options)
-    super(options)
-  end
-
   private
 
   def detect_primary_change
