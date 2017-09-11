@@ -1,4 +1,4 @@
-class RemovePageComments < ActiveRecord::Migration[5.1]
+class RemovePageComments < ActiveRecord::Migration[5.0]
   def up
     drop_table :page_comments
     remove_column :pages, :comments_allowed
