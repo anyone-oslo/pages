@@ -41,6 +41,7 @@ class PageImage < ActiveRecord::Base
 
   def detect_primary_change
     @primary_change = primary_changed?
+    return
   end
 
   def update_primary
