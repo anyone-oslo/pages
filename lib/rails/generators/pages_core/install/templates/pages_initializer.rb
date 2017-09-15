@@ -25,9 +25,6 @@ PagesCore.configure do |config|
   # New pages will be created by the user with this email address:
   # config.default_author "email@example.com"
 
-  # Handle exceptions
-  # config.exception_handler :enabled
-
   # Layout for 404 errors
   # config.error_404_layout "errors"
 

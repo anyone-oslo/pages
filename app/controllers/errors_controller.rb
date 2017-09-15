@@ -4,13 +4,10 @@ class ErrorsController < ::ApplicationController
   layout "errors"
 
   def report
-    return unless session[:error_report]
-    deliver_error_report(
-      find_error_report,
-      params[:email],
-      params[:description]
-    )
-    @error_id = session[:error_report]
+    report = decrypt_report(params[:error_report])
+    report[:user] = User.find_by(id: report[:user_id]) if report.key?(:user_id)
+
+    deliver_error_report(report, params[:email], params[:description])
   end
 
   def show
@@ -26,7 +23,15 @@ class ErrorsController < ::ApplicationController
   end
 
   def internal_error
-    render_error 500
+    exception = request.env["action_dispatch.exception"]
+    if !exception
+      render_error 500
+    elsif exception.is_a?(PagesCore::NotAuthorized)
+      render_error 403
+    else
+      @report = encrypt_report(error_report(request, exception))
+      render_error 500
+    end
   end
 
   private
@@ -35,21 +40,37 @@ class ErrorsController < ::ApplicationController
     AdminMailer.error_report(report, from, description).deliver_now
   end
 
-  def find_error_report
-    report = YAML.load_file(error_report_path)
-    if report[:user_id]
-      report[:user] = begin
-                        User.find(report[:user_id])
-                      rescue
-                        nil
-                      end
-    end
-    report
+  def decrypt_report(str)
+    YAML.load(report_encryptor.decrypt_and_verify(str))
   end
 
-  def error_report_path
-    Rails.root
-         .join("log", "error_reports")
-         .join("#{session[:error_report]}.yml")
+  def encrypt_report(report)
+    report_encryptor.encrypt_and_sign(report.to_yaml)
+  end
+
+  def error_report(request, exception)
+    { message:   exception.to_s,
+      url:       request.original_url,
+      env:       request.env.select { |_, v| v.is_a?(String) },
+      params:    params.to_unsafe_h,
+      session:   session.to_hash,
+      backtrace: exception_backtrace(exception),
+      timestamp: Time.now.utc,
+      user_id:   current_user.try(&:id) }
+  end
+
+  def exception_backtrace(exception)
+    Rails.backtrace_cleaner.send(:filter, exception.backtrace)
+  end
+
+  def report_encryptor
+    ActiveSupport::MessageEncryptor.new(
+      ActiveSupport::CachingKeyGenerator.new(
+        ActiveSupport::KeyGenerator.new(
+          Rails.application.secrets.secret_key_base,
+          iterations: 1000
+        )
+      ).generate_key("encrypted error report")
+    )
   end
 end

@@ -29,7 +29,7 @@ require "localizable_model"
 require "json"
 require "rails_i18n"
 require "RedCloth"
-require "sass"
+require "sass-rails"
 
 # Assets
 require "font-awesome-rails"

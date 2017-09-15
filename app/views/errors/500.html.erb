@@ -2,18 +2,23 @@
   @page_title = "Oh dear..."
 %>
 <p>
-  Something went terribly wrong. Of course, this shouldn't happen, and we'd really appreciate it if you
-  could click the button below to notify us about the problem.
+  Something went terribly wrong. Of course, this shouldn't happen, and
+  we'd really appreciate it if you could click the button below to
+  notify us about the problem.
 </p>
 <p>
   Please include your email address if you'd like to hear back from us.
 </p>
 
 <%= form_tag report_errors_path, method: 'post' do %>
+  <%= hidden_field_tag :error_report, @report %>
   <p>
-    <input name="email" type="text" class="text" value="<%= @email %>" placeholder="Your email (optional)" />
+    <input name="email" type="text" class="text" value="<%= @email %>"
+           placeholder="Your email (optional)" />
   </p>
   <p>
-    <button type="submit" class="clean-gray">Report error</button>
+    <button type="submit" class="clean-gray">
+      Report error
+    </button>
   </p>
 <% end %>

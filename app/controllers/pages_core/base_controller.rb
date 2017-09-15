@@ -4,7 +4,7 @@ module PagesCore
   class BaseController < ActionController::Base
     include PagesCore::Authentication
     include PagesCore::DomainBasedCache
-    include PagesCore::ExceptionHandler
+    include PagesCore::ErrorRenderer
     include PagesCore::ProcessTitler
     include PagesCore::PoliciesHelper
 
