@@ -8,10 +8,23 @@ module PagesCore
     include PagesCore::ProcessTitler
     include PagesCore::PoliciesHelper
 
-    before_action :set_locale
+    before_action :set_locale, :configure_error_reporting
     after_action :set_content_language_header
 
     protected
+
+    # Configures additional report data if Sentry is installed
+    def configure_error_reporting
+      return unless Object.const_defined?("Raven")
+      if logged_in?
+        Raven.user_context(user_id: current_user.id,
+                           user_email: current_user.email)
+      else
+        Raven.user_context({})
+      end
+      Raven.tags_context(locale: locale)
+      Raven.extra_context(params: params.to_unsafe_h)
+    end
 
     # Sets @locale from params[:locale], with I18n.default_locale as fallback
     def set_locale
