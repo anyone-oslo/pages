@@ -14,12 +14,20 @@ class ErrorsController < ::ApplicationController
     render_error params[:id].to_i
   end
 
+  def forbidden
+    render_error 403
+  end
+
   def not_found
     render_error 404
   end
 
   def unacceptable
     render_error 422
+  end
+
+  def unauthorized
+    render_error 401
   end
 
   def internal_error
@@ -30,7 +38,8 @@ class ErrorsController < ::ApplicationController
       render_error 403
     else
       @report = encrypt_report(error_report(request, exception))
-      render_error 500
+      wrapper = ActionDispatch::ExceptionWrapper.new(nil, exception)
+      render_error wrapper.status_code
     end
   end
 

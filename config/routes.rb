@@ -131,6 +131,8 @@ Rails.application.routes.draw do
     defaults: { locale: I18n.default_locale.to_s }
   )
 
+  get "/401", to: "errors#unauthorized"
+  get "/403", to: "errors#forbidden"
   get "/404", to: "errors#not_found"
   get "/422", to: "errors#unacceptable"
   get "/500", to: "errors#internal_error"

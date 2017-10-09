@@ -13,7 +13,14 @@ module PagesCore
       options[:template] ||= "errors/#{error}"
       options[:layout] = error_layout(error) unless options.key?(:layout)
       @email = logged_in? ? current_user.email : ""
-      render options
+      respond_to do |format|
+        format.html do
+          render options
+        end
+        format.any do
+          head options[:status].to_i
+        end
+      end
       true
     end
 
