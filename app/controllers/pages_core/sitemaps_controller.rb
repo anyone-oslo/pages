@@ -43,10 +43,10 @@ module PagesCore
     end
 
     def pages
-      ([Page.root.localize(I18n.default_locale)] +
+      ([Page.root.try(:localize, I18n.default_locale)] +
         locales.flat_map do |locale|
           Page.published.localized(locale)
-        end).uniq
+        end).compact.uniq
     end
 
     def page_record_url(record)
