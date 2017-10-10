@@ -55,7 +55,13 @@ module Admin
       if @page_image.update(page_image_params)
         respond_with_page_image(@page_image)
       else
-        render action: :edit
+        respond_to do |format|
+          format.html { render action: :edit }
+          format.json do
+            render template: "admin/page_images/show",
+                   status: :unprocessable_entity
+          end
+        end
       end
     end
 
