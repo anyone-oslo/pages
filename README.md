@@ -1,6 +1,10 @@
-# Pages
+[![Version](https://img.shields.io/gem/v/pages_core.svg?style=flat)](https://rubygems.org/gems/pages_core)
+[![Build Status](https://travis-ci.org/anyone-oslo/pages.svg?branch=master)](https://travis-ci.org/anyone-oslo/pages)
+[![Code Climate](https://codeclimate.com/github/anyone-oslo/pages/badges/gpa.svg)](https://codeclimate.com/github/anyone-oslo/pages)
+[![Test Coverage](https://codeclimate.com/github/anyone-oslo/pages/badges/coverage.svg)](https://codeclimate.com/github/anyone-oslo/pages)
+[![Dependency Status](https://gemnasium.com/anyone-oslo/pages.svg)](https://gemnasium.com/anyone-oslo/pages)
 
-[![Build Status](https://travis-ci.org/anyone-oslo/pages.svg?branch=master)](https://travis-ci.org/anyone-oslo/pages) [![Code Climate](https://codeclimate.com/github/anyone-oslo/pages/badges/gpa.svg)](https://codeclimate.com/github/anyone-oslo/pages) [![Test Coverage](https://codeclimate.com/github/anyone-oslo/pages/badges/coverage.svg)](https://codeclimate.com/github/anyone-oslo/pages) [![Dependency Status](https://gemnasium.com/anyone-oslo/pages.svg)](https://gemnasium.com/anyone-oslo/pages)
+# Pages
 
 ## Getting started
 
