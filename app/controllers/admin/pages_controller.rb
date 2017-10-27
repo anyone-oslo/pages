@@ -103,8 +103,10 @@ module Admin
     end
 
     def param_categories
-      return [] unless params[:category] && params[:category].any?
-      params[:category].map { |k, _| Category.find(k.to_i) }
+      return [] unless params[:category]
+      params.permit(category: {})[:category]
+            .to_hash
+            .map { |id, _| Category.find(id) }
     end
 
     def find_page
