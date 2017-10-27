@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Admin
   module MenuHelper
     def header_tabs(group)

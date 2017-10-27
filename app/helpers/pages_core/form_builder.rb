@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class FormBuilder < ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper

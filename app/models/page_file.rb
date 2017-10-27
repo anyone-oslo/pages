@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class PageFile < ActiveRecord::Base
   include Dis::Model
 

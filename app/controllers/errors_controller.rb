@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class ErrorsController < ::ApplicationController
   layout "errors"
 
@@ -50,7 +48,7 @@ class ErrorsController < ::ApplicationController
   end
 
   def decrypt_report(str)
-    YAML.load(report_encryptor.decrypt_and_verify(str))
+    YAML.safe_load(report_encryptor.decrypt_and_verify(str))
   end
 
   def encrypt_report(report)

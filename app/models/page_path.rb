@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class PagePath < ActiveRecord::Base
   class PageNotSavedError < StandardError; end
   class NoPathError < StandardError; end

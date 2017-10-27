@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   module ErrorRenderer
     extend ActiveSupport::Concern

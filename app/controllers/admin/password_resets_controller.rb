@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Admin
   class PasswordResetsController < Admin::AdminController
     before_action :find_password_reset_token, only: %i[show update]

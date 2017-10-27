@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class Engine < Rails::Engine
     # config.autoload_paths += Dir["#{config.root}/lib/"]

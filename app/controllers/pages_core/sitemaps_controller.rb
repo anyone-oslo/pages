@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class SitemapsController < ::ApplicationController
     include PagesCore::PagePathHelper

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   module OpenGraphTagsHelper
     def open_graph_properties

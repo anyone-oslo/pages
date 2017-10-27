@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Admin
   class UsersController < Admin::AdminController
     before_action :require_authentication, except: %i[new create login]

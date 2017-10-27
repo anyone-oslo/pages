@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Admin
   class PageImagesController < Admin::AdminController
     before_action :find_page

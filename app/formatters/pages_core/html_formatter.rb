@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class HtmlFormatter
     include ActionView::Helpers::AssetTagHelper

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   module PagePathHelper
     def page_path(locale, page, options = {})

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # All admin controllers inherit Admin::AdminController, which provides layout,
 # authorization and other common code for the Admin set of controllers.
 module PagesCore

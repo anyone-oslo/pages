@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Ruby Standard Library
 require "digest/sha1"
 require "fileutils"

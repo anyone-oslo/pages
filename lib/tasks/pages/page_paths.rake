@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 namespace :pages do
   namespace :page_paths do
     desc "Build page paths"

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # # PageBuilder
 #
 # PageBuilder is a simple DSL for building pages, for use in ie. seeds.rb

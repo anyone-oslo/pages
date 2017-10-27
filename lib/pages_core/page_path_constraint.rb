@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class PagePathConstraint
     def matches?(request)

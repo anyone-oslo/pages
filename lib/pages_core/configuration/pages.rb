@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require "pages_core/file_embedder"
 
 module PagesCore

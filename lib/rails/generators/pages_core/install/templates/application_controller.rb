@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class ApplicationController < PagesCore::BaseController
   # Put frontend specific code in frontend_controller.rb
 

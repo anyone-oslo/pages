@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class PageImage < ActiveRecord::Base
   include PagesCore::Sweepable
 
@@ -41,7 +39,7 @@ class PageImage < ActiveRecord::Base
 
   def detect_primary_change
     @primary_change = primary_changed?
-    return
+    nil
   end
 
   def update_primary

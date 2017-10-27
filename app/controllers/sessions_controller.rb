@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class SessionsController < ::ApplicationController
   def create
     user = find_user(params[:username], params[:password])

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Autopublisher
   class << self
     def run!(_options = {})

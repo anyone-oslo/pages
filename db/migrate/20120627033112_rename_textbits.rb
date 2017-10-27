@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class RenameTextbits < ActiveRecord::Migration[4.2]
   def self.up
     rename_table :textbits, :localizations

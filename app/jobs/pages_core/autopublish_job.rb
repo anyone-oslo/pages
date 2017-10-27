@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class AutopublishJob < ActiveJob::Base
     queue_as :pages_core

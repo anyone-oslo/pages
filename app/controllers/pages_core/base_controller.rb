@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   class BaseController < ActionController::Base
     include PagesCore::Authentication

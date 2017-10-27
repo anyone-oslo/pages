@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do

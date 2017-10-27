@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require "pages_core/templates/block_configuration"
 require "pages_core/templates/configuration_proxy"
 require "pages_core/templates/configuration_handler"

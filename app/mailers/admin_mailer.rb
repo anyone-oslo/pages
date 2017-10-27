@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class AdminMailer < ActionMailer::Base
   default from: proc { "\"Pages\" <support@kord.no>" }
 

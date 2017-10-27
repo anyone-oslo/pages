@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   module FrontendHelper
     def root_pages

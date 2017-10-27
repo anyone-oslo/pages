@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class ChangeLocaleNames < ActiveRecord::Migration[4.2]
   def self.up
     Localization.where(locale: "nor").update_all(locale: "nb")

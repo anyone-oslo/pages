@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   # The Paginates module adds syntactic sugar to a collection for
   # handling pagination.  The module doesn't do any pagination on it's
@@ -81,7 +79,7 @@ module PagesCore
 
     # Returns true if at the last page
     def last_page?
-      @page == @pages ? true : false
+      @page == @pages
     end
 
     # First page
@@ -91,7 +89,7 @@ module PagesCore
 
     # Returns true if at the first page
     def first_page?
-      @page == 1 ? true : false
+      @page == 1
     end
 
     # All pages as an array

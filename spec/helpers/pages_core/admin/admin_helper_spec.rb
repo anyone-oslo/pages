@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require "rails_helper"
 
 RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do

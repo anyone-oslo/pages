@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 Rails.application.routes.draw do
   get "errors/exception" => "error_handler_tests#exception"
   get "errors/not_authorized" => "error_handler_tests#not_authorized"

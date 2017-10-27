@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::NewsPageController

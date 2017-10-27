@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module PagesCore
   module MetaTagsHelper
     # Sets a default image to use for meta tags. Supports

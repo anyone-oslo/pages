@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class RemoveSmsSubscribers < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :sms_subscribers
