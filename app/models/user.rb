@@ -3,9 +3,15 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :confirm_password
 
-  belongs_to :creator, class_name: "User", foreign_key: "created_by", optional: true
-  has_many :created_users, class_name: "User", foreign_key: "created_by"
-  has_many :pages
+  belongs_to(:creator,
+             class_name: "User",
+             foreign_key: "created_by",
+             optional: true)
+  has_many(:created_users,
+           class_name: "User",
+           foreign_key: "created_by",
+           dependent: :nullify)
+  has_many :pages, dependent: :nullify
   has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
   has_many :invites, dependent: :destroy
@@ -98,9 +104,7 @@ class User < ActiveRecord::Base
   def ensure_first_user_has_all_roles
     return if User.any?
     self.activated = true
-    Role.roles.each do |role|
-      roles.new(name: role.name)
-    end
+    Role.roles.each { |r| roles.new(name: r.name) }
   end
 
   def hash_password

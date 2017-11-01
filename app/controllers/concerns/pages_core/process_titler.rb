@@ -8,7 +8,7 @@ module PagesCore
     end
 
     class << self
-      attr_accessor :number_of_requests
+      attr_writer :number_of_requests
 
       def original_title
         @original_title ||= $PROGRAM_NAME

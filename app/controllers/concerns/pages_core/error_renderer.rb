@@ -8,23 +8,21 @@ module PagesCore
     #
     def render_error(error, options = {})
       options[:status] ||= error if error.is_a? Numeric
-      options[:template] ||= "errors/#{error}"
-      options[:layout] = error_layout(error) unless options.key?(:layout)
-      @email = logged_in? ? current_user.email : ""
       respond_to do |format|
         format.html do
-          render options
+          options[:layout] = error_layout(error, options)
+          @email = current_user.try(&:email) || ""
+          render({ template: "errors/#{error}" }.merge(options))
         end
-        format.any do
-          head options[:status].to_i
-        end
+        format.any { head options[:status] }
       end
       true
     end
 
     protected
 
-    def error_layout(error)
+    def error_layout(error, options = {})
+      return options[:layout] if options.key?(:layout)
       if error == 404 && PagesCore.config.error_404_layout?
         PagesCore.config.error_404_layout
       else

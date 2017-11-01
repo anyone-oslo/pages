@@ -1,6 +1,6 @@
 class Tag < ActiveRecord::Base
   include PagesCore::HumanizableParam
-  has_many :taggings
+  has_many :taggings, dependent: :destroy
 
   scope :pinned, -> { where(pinned: true) }
   scope :sorted, -> { order("pinned DESC, name ASC") }

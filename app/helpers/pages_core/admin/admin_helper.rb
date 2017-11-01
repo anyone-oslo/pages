@@ -4,10 +4,10 @@ module PagesCore
       include PagesCore::Admin::LabelledFieldHelper
       include PagesCore::Admin::TagEditorHelper
 
-      attr_accessor :page_title
-      attr_accessor :page_description
-      attr_accessor :page_description_class
-      attr_accessor :page_description_links
+      attr_writer :page_title
+      attr_writer :page_description
+      attr_writer :page_description_class
+      attr_writer :page_description_links
 
       def add_body_class(class_name)
         @body_classes ||= []

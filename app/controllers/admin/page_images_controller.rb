@@ -38,7 +38,7 @@ module Admin
 
     def create
       if page_images_params?
-        page_images_params.each do |_index, attributes|
+        page_images_params.each_value do |attributes|
           if attributes[:image]
             @page.page_images.create(attributes.merge(locale: @locale))
           end
@@ -56,8 +56,7 @@ module Admin
         respond_to do |format|
           format.html { render action: :edit }
           format.json do
-            render template: "admin/page_images/show",
-                   status: :unprocessable_entity
+            render action: :show, status: :unprocessable_entity
           end
         end
       end
