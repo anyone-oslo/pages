@@ -13,17 +13,14 @@ Rails.application.routes.draw do
     resources :files, controller: "page_files"
   end
 
-  get(
-    "/:locale/pages/:id/:page" => "pages#show",
-    constraints: { page: /\d+/ }, as: :paginated_page
-  )
+  get "/:locale/pages/:id/:page" => "pages#show",
+      constraints: { page: /\d+/ }, as: :paginated_page
 
   # Redirect hack for backwards compatibility
   get "pages/:locale" => redirect("/%{locale}/pages"), locale: /\w\w\w/
-  get(
-    "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
-    locale: /\w\w\w/
-  )
+
+  get "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
+      locale: /\w\w\w/
 
   # Authentication
   resource :session, only: %i[create destroy]
@@ -99,13 +96,10 @@ Rails.application.routes.draw do
   end
 
   # Default admin route
-  get(
-    "/admin" => redirect do |_env, _req|
-      "/admin/#{I18n.default_locale}/pages/news"
-    end,
-    as: "admin_default"
-  )
-  # get '/admin' => 'admin#redirect', as: 'admin_default'
+  get("/admin" => redirect do |_env, _req|
+                    "/admin/#{I18n.default_locale}/pages/news"
+                  end,
+      as: "admin_default")
 
   # Errors
   resources :errors do
@@ -115,19 +109,15 @@ Rails.application.routes.draw do
   end
 
   # Page path routing
-  get(
-    ":locale/*path/page/:page" => "pages#show",
-    constraints: PagesCore::PagePathConstraint.new
-  )
-  get(
-    ":locale/*path" => "pages#show",
-    constraints: PagesCore::PagePathConstraint.new
-  )
-  get(
-    "*path" => "pages#show",
-    constraints: PagesCore::PagePathConstraint.new,
-    defaults: { locale: I18n.default_locale.to_s }
-  )
+  get ":locale/*path/page/:page" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new
+
+  get ":locale/*path" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new
+
+  get "*path" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new,
+      defaults: { locale: I18n.default_locale.to_s }
 
   get "/401", to: "errors#unauthorized"
   get "/403", to: "errors#forbidden"
