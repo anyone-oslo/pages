@@ -38,7 +38,7 @@ module Admin
 
     def create
       if page_images_params?
-        page_images_params.each_value do |attributes|
+        page_images_params.each_pair do |_key, attributes|
           if attributes[:image]
             @page.page_images.create(attributes.merge(locale: @locale))
           end
