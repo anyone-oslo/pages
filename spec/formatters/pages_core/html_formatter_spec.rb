@@ -114,6 +114,17 @@ describe PagesCore::HtmlFormatter do
         end
       end
 
+      context "with link" do
+        let(:string) { "[image:#{image.id} link=\"http://example.com\"]" }
+        it do
+          is_expected.to match(
+            %r{<figure.class="image.landscape"><a.href="http://example.com">
+            <img.alt="Image".src="/dynamic_images/([\w\d]+)/320x200/#{image.id}
+            -([\w\d]+)\.png".width="320".height="200"./></a></figure>}x
+          )
+        end
+      end
+
       context "with non-existant image" do
         let(:string) { "[image:31337]" }
         it { is_expected.to eq("") }

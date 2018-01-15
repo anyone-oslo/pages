@@ -31,18 +31,21 @@ module PagesCore
     end
 
     def image_expression
-      /\[image:(\d+)([\s="\-\w]*)?\]/
+      /\[image:(\d+)([^\]]*)?\]/
     end
 
-    def embed_image(id, size:, class_name:)
+    def embed_image(id, size:, class_name:, link:)
       image = Image.find(id).localize(I18n.locale)
       class_name = ["image", image_class_name(image), class_name].compact
-      content_tag(:figure,
-                  dynamic_image_tag(image,
+      image_tag = dynamic_image_tag(image,
                                     size: size,
                                     crop: false,
-                                    upscale: false) + image_caption(image),
-                  class: class_name)
+                                    upscale: false)
+      if link
+        content_tag(:figure, link_to(image_tag, link) + image_caption(image), class: class_name)
+      else
+        content_tag(:figure, image_tag + image_caption(image), class: class_name)
+      end
     rescue ActiveRecord::RecordNotFound
       nil
     end
@@ -79,7 +82,11 @@ module PagesCore
         id = str.match(image_expression)[1]
         options = str.match(image_expression)[2]
         class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
-        embed_image(id, size: embed_image_size(options), class_name: class_name)
+        link = (Regexp.last_match(1) if options =~ /link="([^"]+)"/)
+        embed_image(id,
+                    size: embed_image_size(options),
+                    class_name: class_name,
+                    link: link)
       end
     end
 
@@ -96,6 +103,10 @@ module PagesCore
       else
         "portrait"
       end
+    end
+
+    def link_to(content, href)
+      content_tag(:a, content, href: href)
     end
   end
 end
