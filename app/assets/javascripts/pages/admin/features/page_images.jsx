@@ -207,15 +207,17 @@ $(function () {
         images.push(this);
         ids.push(parseInt($(this).data('page-image-id'), 10));
       });
-      $('.page_images .images').animate({opacity: 0.8}, 300);
-      var url = baseURL + '/images/reorder.json';
-      var data = {
-        ids: ids,
-        authenticity_token: $("input[name=authenticity_token]").val()
-      };
-      $.put(url, data, function (json) {
-        $('.page_images .images').animate({opacity: 1.0}, 300);
-      });
+      if (ids.length > 0) {
+        $('.page_images .images').animate({opacity: 0.8}, 300);
+        var url = baseURL + '/images/reorder.json';
+        var data = {
+          ids: ids,
+          authenticity_token: $("input[name=authenticity_token]").val()
+        };
+        $.put(url, data, function (json) {
+          $('.page_images .images').animate({opacity: 1.0}, 300);
+        });
+      }
     }
 
     function setPrimaryImage (newPrimary) {
