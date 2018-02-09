@@ -118,12 +118,10 @@ module PagesCore
       alias config configuration
 
       def metadata_block_names
-        %i[
-          meta_title
-          meta_description
-          open_graph_title
-          open_graph_description
-        ]
+        %i[meta_title
+           meta_description
+           open_graph_title
+           open_graph_description]
       end
 
       private
@@ -136,6 +134,7 @@ module PagesCore
         config.text_filter :textile
         config.enabled_blocks %i[headline excerpt body]
         config.tags :disabled
+        config.dates :disabled
       end
 
       def default_blocks

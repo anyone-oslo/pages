@@ -93,7 +93,8 @@ module Admin
     def page_attributes
       %i[template user_id status feed_enabled published_at
          redirect_to image_link news_page
-         unique_name pinned parent_page_id serialized_tags meta_image]
+         unique_name pinned parent_page_id serialized_tags meta_image
+         starts_at ends_at all_day]
     end
 
     def page_params

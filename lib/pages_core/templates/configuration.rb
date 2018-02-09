@@ -12,10 +12,8 @@ module PagesCore
       end
 
       def valid_template_options
-        %i[
-          template image images files text_filter blocks
-          enabled_blocks sub_template tags
-        ]
+        %i[template image images files text_filter blocks
+           enabled_blocks sub_template tags dates]
       end
 
       def configure_block(tpl_name, block_name, title = false, options = {})

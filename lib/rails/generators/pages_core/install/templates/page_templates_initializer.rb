@@ -36,6 +36,9 @@ PagesCore::Templates.configure do |config|
     # Pages can have tags (default: :disabled)
     # default.tags :enabled
 
+    # Pages can have dates (default: :disabled)
+    # default.dates :enabled
+
     # Only use the blocks enabled here by default
     default.enabled_blocks %i[headline excerpt body]
 
