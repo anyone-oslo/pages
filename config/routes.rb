@@ -115,6 +115,10 @@ Rails.application.routes.draw do
   get ":locale/*path" => "pages#show",
       constraints: PagesCore::PagePathConstraint.new
 
+  get "*path/page/:page" => "pages#show",
+      constraints: PagesCore::PagePathConstraint.new,
+      defaults: { locale: I18n.default_locale.to_s }
+
   get "*path" => "pages#show",
       constraints: PagesCore::PagePathConstraint.new,
       defaults: { locale: I18n.default_locale.to_s }

@@ -3,9 +3,9 @@ module PagesCore
     def page_path(locale, page, options = {})
       page.localize(locale) do |p|
         if p.full_path? && PagesCore.config.localizations?
-          "/#{locale}/" + URI.escape(p.full_path)
+          "/#{locale}/" + URI.escape(p.full_path) + paginated_section(options)
         elsif p.full_path?
-          "/" + URI.escape(p.full_path)
+          "/" + URI.escape(p.full_path) + paginated_section(options)
         else
           super(locale, p, options)
         end
@@ -33,6 +33,11 @@ module PagesCore
         "Calling page_url without locale is deprecated"
       )
       [(opts[:locale] || @locale), page_or_locale]
+    end
+
+    def paginated_section(opts)
+      return "" unless opts[:page]
+      "/page/#{opts[:page]}"
     end
   end
 end
