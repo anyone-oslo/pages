@@ -26,15 +26,13 @@
   errors: @page.errors[:user_id]
 %>
 
-<% if @page.parent && @page.parent.news_page? %>
-  <div class="field">
-    <label>
-      Pin to top
-    </label>
-    <%= f.check_box(:pinned) %>
-    Make post featured<br />
-  </div>
-<% end %>
+<div class="field">
+  <label>
+    Pin to top
+  </label>
+  <%= f.check_box(:pinned) %>
+  Make post featured<br />
+</div>
 
 <% if @categories.length > 0 %>
   <div class="field">
