@@ -57,6 +57,12 @@
       @include vertical-gradient(#ffffff, #f8f8f8);
     }
 
+    .date {
+      font-size: 12px;
+      margin-left: 10px;
+      color: #777;
+    }
+
     .name {
       font-weight: bold;
     }
