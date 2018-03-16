@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 $LOAD_PATH.push File.expand_path("../lib", __FILE__)
 require "pages_core/version"
 
@@ -5,7 +7,7 @@ Gem::Specification.new do |s|
   s.name        = "pages_core"
   s.version     = PagesCore::VERSION
   s.authors     = ["Inge Jørgensen"]
-  s.email       = ["inge@kord.no"]
+  s.email       = ["inge@anyone.no"]
   s.homepage    = ""
   s.summary     = "Pages Core"
   s.description = "Pages Core"

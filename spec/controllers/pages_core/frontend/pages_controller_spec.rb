@@ -51,9 +51,9 @@ describe PagesCore::Frontend::PagesController, type: :controller do
     end
 
     context "when page redirects" do
-      let(:page) { create(:page, redirect_to: "http://kord.no") }
+      let(:page) { create(:page, redirect_to: "http://anyone.no") }
       before { get :show, params: { id: page.id, locale: locale } }
-      it { is_expected.to redirect_to("http://kord.no") }
+      it { is_expected.to redirect_to("http://anyone.no") }
     end
 
     context "when page does not exist" do
