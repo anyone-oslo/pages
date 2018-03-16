@@ -3,6 +3,7 @@
 [![Code Climate](https://codeclimate.com/github/anyone-oslo/pages/badges/gpa.svg)](https://codeclimate.com/github/anyone-oslo/pages)
 [![Test Coverage](https://codeclimate.com/github/anyone-oslo/pages/badges/coverage.svg)](https://codeclimate.com/github/anyone-oslo/pages)
 [![Dependency Status](https://gemnasium.com/anyone-oslo/pages.svg)](https://gemnasium.com/anyone-oslo/pages)
+[![Security](https://hakiri.io/github/anyone-oslo/pages/master.svg)](https://hakiri.io/github/anyone-oslo/pages/master)
 
 # Pages
 
