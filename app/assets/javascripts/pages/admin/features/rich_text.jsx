@@ -58,7 +58,9 @@ class RichTextArea {
   replaceSelection(prefix, replacement, postfix) {
     return this.adjustSelection(() => {
       $(this.textarea).replaceSelection(prefix + replacement + postfix);
-      $(this.textarea).focus();
+      if (typeof this.textarea.focus !== "undefined") {
+        this.textarea.focus({ preventScroll: true });
+      }
       return [replacement.length, prefix.length];
     });
   };
@@ -76,7 +78,8 @@ class RichTextArea {
       `<i class=\"fa fa-${className}\"></i></a>`
     );
 
-    link.click(() => {
+    link.click((evt) => {
+      evt.preventDefault();
       let [prefix, replacement, postfix] = callback(this.getSelection());
       this.replaceSelection(prefix, replacement, postfix);
     });
