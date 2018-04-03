@@ -231,16 +231,17 @@ class PageTreeNode extends React.Component {
     let props = this.props;
     let index = props.index;
     let dragging = props.dragging;
+    let editing = this.node().editing;
     var classnames = "node";
 
-    var node = this.node().editing ? this.renderEditNode() : this.renderNode();
+    var node = editing ? this.renderEditNode() : this.renderNode();
 
     if (index.id === dragging) {
       classnames = "node placeholder";
     }
 
     let handleMouseDown = function (e) {
-      if (props.onDragStart) {
+      if (!editing && props.onDragStart) {
         props.onDragStart(props.index.id, self.refs.inner, e);
       }
     }
