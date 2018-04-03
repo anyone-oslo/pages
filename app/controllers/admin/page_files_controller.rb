@@ -18,7 +18,7 @@ module Admin
         files.each_with_index { |f, i| f.update(position: i) }
       end
       if request.xhr?
-        render text: "ok"
+        head :ok
       else
         redirect_to_page
       end
