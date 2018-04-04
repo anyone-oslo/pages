@@ -22,7 +22,15 @@
       <% end %>
     </td>
     <td>
-      <%= link_to "Cancel invite", [:admin, invite], method: 'delete', data: {confirm: "Are you sure?"}, class: 'delete' %>
+      <% if current_user.role?(:users) %>
+        <%= link_to("View invite",
+                    admin_invite_with_token_url(invite, invite.token)) %> /
+        <%= link_to("Cancel invite",
+                    [:admin, invite],
+                    method: 'delete',
+                    data: { confirm: "Are you sure?" },
+                    class: 'delete') %>
+      <% end %>
     </td>
   </tr>
 <% end %>
