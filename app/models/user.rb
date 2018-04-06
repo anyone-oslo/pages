@@ -3,8 +3,8 @@
 class User < ActiveRecord::Base
 
   SPECIAL_USERS = {
-    'inge'      => {:email => 'inge@manualdesign.no',      :openid_url => 'http://elektronaut.no/',            :realname => 'Inge Jørgensen'},
-    'thomas'    => {:email => 'thomas@manualdesign.no',    :openid_url => 'http://silverminken.myopenid.com/', :realname => 'Thomas Knutstad'}
+    'inge'      => {:email => 'inge@anyone.no',      :openid_url => 'http://elektronaut.no/',            :realname => 'Inge Jørgensen'},
+    'thomas'    => {:email => 'thomas@anyone.no',    :openid_url => 'http://silverminken.myopenid.com/', :realname => 'Thomas Knutstad'}
   }
 
 
@@ -248,7 +248,7 @@ class User < ActiveRecord::Base
   end
 
   def is_special?
-    (self.email =~ /^(inge|thomas|alexander)@manualdesign\.no$/) ? true : false
+    (self.email =~ /^(inge|thomas|alexander)@anyone\.no$/) ? true : false
   end
 
   def account_holder?

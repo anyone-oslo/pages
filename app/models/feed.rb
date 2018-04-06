@@ -16,7 +16,7 @@ class Feed < ActiveRecord::Base
   #
   # Example:
   #
-  #   <% Feed.url( 'http://blog.manualdesign.no/index.rss' ).feed_items[0..10].each do |item| -%>
+  #   <% Feed.url( 'http://blog.anyone.no/index.rss' ).feed_items[0..10].each do |item| -%>
   #     <%= link_to item.title, item.link %>
   #   <% end -%>
   #

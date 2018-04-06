@@ -18,7 +18,7 @@
     <li><%= link_to 'Safari', 'http://www.apple.com/safari/' %></li>
   </ul>
   <p>
-    Please <%= link_to "contact support", 'http://support.manualdesign.no/' %> if you experience problems logging in or using Pages.
+    Please <%= mail_to "contact support", 'support@anyone.no' %> if you experience problems logging in or using Pages.
   </p>
 <% end -%>
 
@@ -77,7 +77,7 @@
 
 <script type="text/javascript">
   (function($){
-    
+
     window.toggleLoginMode = function(){
       if ($.cookie('login_mode') === 'openid') {
         $('#loginOpenID').hide();
@@ -89,7 +89,7 @@
         $.cookie('login_mode', 'openid', {expires: 1095});
       }
     }
-    
+
     if ($.cookie('login_mode') === 'openid') {
       $('#loginRegular').hide();
     } else {

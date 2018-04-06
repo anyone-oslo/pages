@@ -3,7 +3,7 @@
 class AdminMailer < ActionMailer::Base
 
   def self.default_address
-    "support@manualdesign.no"
+    "support@anyone.no"
   end
 
   def generic_mailer( options )
@@ -50,7 +50,7 @@ class AdminMailer < ActionMailer::Base
     short_message = options[:error_report][:message].gsub(/[\s\n]+/, ' ')[0..80]
     mailer_options[:subject]    = "[#{options[:site_name]}] " rescue "[Pages] "
     mailer_options[:subject]   += "Error: #{short_message}" rescue "Unknown error"
-    mailer_options[:recipients] = "system+error@manualdesign.no"
+    mailer_options[:recipients] = "system+error@anyone.no"
     mailer_options[:body]       = options
     mailer_options[:from]       = options[:from] if options[:from] && !options[:from].empty?
     content_type "text/html"

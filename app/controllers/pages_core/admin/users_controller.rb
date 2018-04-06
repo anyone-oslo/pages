@@ -27,7 +27,7 @@ class PagesCore::Admin::UsersController < Admin::AdminController
     def index
       respond_to do |format|
         format.html do
-          @users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true}).reject{|user| user.email.match(/@manualdesign\.no/)}
+          @users = User.find(:all, :order => 'realname', :conditions => {:is_activated => true}).reject{|user| user.email.match(/@anyone\.no/)}
         end
         format.xml do
           #@users = User.find(:all, :order => 'realname')

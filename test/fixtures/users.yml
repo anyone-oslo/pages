@@ -9,7 +9,7 @@ inge:
     id: 2
     username: inge
     realname: Inge Jørgensen
-    email: inge@manualdesign.no
+    email: inge@anyone.no
     hashed_password: <%= Digest::SHA1.hexdigest "ingepassord" %>
     is_admin: 1
 thomas:
@@ -17,7 +17,7 @@ thomas:
     created_by: 2
     username: thomas
     realname: Thomas Knutstad
-    email: thomas@manualdesign.no
+    email: thomas@anyone.no
     hashed_password: <%= Digest::SHA1.hexdigest "manual" %>
     is_admin: 1
 dummy:

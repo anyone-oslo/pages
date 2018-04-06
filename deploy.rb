@@ -6,7 +6,7 @@ set :default_environment, {
   'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
 }
 
-set :remote_host, "server.manualdesign.no" unless variables.has_key?(:remote_host)
+set :remote_host, "server.anyone.no" unless variables.has_key?(:remote_host)
 set :remote_user, "rails" unless variables.has_key?(:remote_user)
 
 set :ssh_options, { :forward_agent => true }
@@ -21,7 +21,7 @@ set :scm,                   "git"
 if variables.has_key?(:github) && github
   set :repository, "git@github.com:anyone-oslo/#{application}.git"
 else
-  set :repository, "rails@git.manualdesign.no:~/git/sites/#{application}.git"
+  set :repository, "rails@git.anyone.no:~/git/sites/#{application}.git"
 end
 
 set :deploy_via,            :remote_cache

@@ -22,7 +22,7 @@ class UserTest < Test::Unit::TestCase
 
   def test_find_by_username_or_email
     #assert User.find_by_username_or_email( 'inge' )
-    #assert User.find_by_username_or_email( 'inge@manualdesign.no' )
+    #assert User.find_by_username_or_email( 'inge@anyone.no' )
     #assert_equal users(:inge), User.find_by_id_or_username( 2 )
     #assert_equal users(:inge), User.find_by_id_or_username( 'inge' )
   end
