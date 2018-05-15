@@ -69,3 +69,10 @@ input[type=password] {
     font-size: 1.4em;
   }
 }
+
+fieldset {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  border-bottom: 1px solid $c-border;
+}
