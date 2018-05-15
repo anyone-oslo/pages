@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pg", "~> 0.18.3"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
   s.add_development_dependency "rspec-rails", "~> 3.5.1"
+  s.add_development_dependency "rspec_junit_formatter"
   s.add_development_dependency "shoulda-matchers", "~> 3.1.1"
   s.add_development_dependency "timecop", "~> 0.8.0"
 
