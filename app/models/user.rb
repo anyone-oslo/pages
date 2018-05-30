@@ -50,9 +50,13 @@ class User < ActiveRecord::Base
       user if user.try { |u| u.authenticate!(password) }
     end
 
+    def find_by_email(str)
+      find_by("LOWER(email) = ?", str.to_s.downcase)
+    end
+
     # Finds a user by either username or email address.
     def login_name(string)
-      find_by(username: string.to_s) || find_by(email: string.to_s)
+      find_by(username: string.to_s) || find_by_email(string)
     end
   end
 

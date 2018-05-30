@@ -87,7 +87,7 @@ module Admin
     end
 
     def default_author
-      User.where(email: PagesCore.config.default_author).first
+      User.find_by_email(PagesCore.config.default_author)
     end
 
     def page_attributes
