@@ -25,6 +25,7 @@ describe User, type: :model do
 
   context "when email is blank" do
     subject { build(:user, email: nil) }
+
     it { is_expected.to validate_presence_of(:username) }
   end
 
@@ -39,6 +40,7 @@ describe User, type: :model do
           confirm_password: "validpassword"
         )
       end
+
       it { is_expected.to eq(true) }
     end
 
@@ -50,6 +52,7 @@ describe User, type: :model do
           confirm_password: "invalidpassword"
         )
       end
+
       it { is_expected.to eq(false) }
     end
 
@@ -57,6 +60,7 @@ describe User, type: :model do
       let(:user) do
         build(:user, password: "validpassword", confirm_password: nil)
       end
+
       it { is_expected.to eq(false) }
     end
   end

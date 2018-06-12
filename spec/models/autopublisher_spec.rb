@@ -4,15 +4,16 @@ describe Autopublisher do
   describe ".run!" do
     let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
     let!(:past) { create(:page, published_at: (Time.now.utc - 1.day)) }
+
     before { past.update(autopublish: true) }
 
-    it "should autopublish the due pages" do
-      Autopublisher.run!
+    it "autopublishes the due pages" do
+      described_class.run!
       expect(Page.where(autopublish: true)).to match_array([future])
     end
 
-    it "should schedule another run" do
-      expect { Autopublisher.run! }.to(
+    it "schedules another run" do
+      expect { described_class.run! }.to(
         have_enqueued_job(PagesCore::AutopublishJob)
       )
     end
@@ -20,17 +21,18 @@ describe Autopublisher do
 
   describe ".queue!" do
     context "with future pages" do
-      let!(:future) { create(:page, published_at: (Time.now.utc + 1.day)) }
-      it "should schedule a run" do
-        expect { Autopublisher.queue! }.to(
+      before { create(:page, published_at: (Time.now.utc + 1.day)) }
+
+      it "schedules a run" do
+        expect { described_class.queue! }.to(
           have_enqueued_job(PagesCore::AutopublishJob)
         )
       end
     end
 
     context "without future pages" do
-      it "should not schedule a run" do
-        expect { Autopublisher.queue! }.not_to(
+      it "does not schedule a run" do
+        expect { described_class.queue! }.not_to(
           have_enqueued_job(PagesCore::AutopublishJob)
         )
       end

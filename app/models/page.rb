@@ -13,7 +13,11 @@ class Page < ActiveRecord::Base
   include PagesCore::PageModel::Tree
   include PagesCore::PageModel::Templateable
 
-  belongs_to :author, class_name: "User", foreign_key: :user_id, optional: true
+  belongs_to :author,
+             class_name: "User",
+             foreign_key: :user_id,
+             optional: true,
+             inverse_of: :pages
 
   has_many :page_categories, dependent: :destroy
   has_many :categories, through: :page_categories
@@ -21,7 +25,8 @@ class Page < ActiveRecord::Base
   has_many :page_files,
            -> { order("position ASC") },
            class_name: "PageFile",
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :page
 
   validates(:unique_name,
             format: { with: /\A[\w\d_\-]+\z/,

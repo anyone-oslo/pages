@@ -54,8 +54,8 @@ module Admin
       params.require(:user).permit(:password, :confirm_password)
     end
 
-    def valid_token?(pr)
-      pr && secure_compare(pr.token, params[:token])
+    def valid_token?(reset)
+      reset && secure_compare(reset.token, params[:token])
     end
 
     def find_password_reset_token

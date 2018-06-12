@@ -1,7 +1,7 @@
 module Admin
   class PageImagesController < Admin::AdminController
     before_action :find_page
-    before_action :find_page_image, only: %i[show edit update destroy]
+    before_action :find_page_image, only: %i[show update destroy]
 
     require_authorization(
       PageImage,

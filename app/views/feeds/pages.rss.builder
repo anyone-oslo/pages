@@ -17,7 +17,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
           xml.description { xml.cdata! item.body.to_html }
         else
           xml.description do
-            xml.cdata! (item.extended? ? item.excerpt : item.body).to_html
+            xml.cdata!((item.extended? ? item.excerpt : item.body).to_html)
           end
         end
         xml.guid page_url(@locale, item, only_path: false)

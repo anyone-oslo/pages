@@ -22,11 +22,8 @@ module PagesCore
 
     def label_and_errors(attribute, label_text)
       return label_text unless object.errors[attribute].any?
-      safe_join(
-        [label_text,
-         content_tag(:span, object.errors[attribute].first, class: "error")],
-        " "
-      )
+      error = content_tag(:span, object.errors[attribute].first, class: "error")
+      safe_join([label_text, error], " ")
     end
 
     def label_for(attribute, label_text = nil)
@@ -110,7 +107,9 @@ module PagesCore
       end
     end
 
-    protected def labelled_field(attribute, label_text = nil, options = {})
+    protected
+
+    def labelled_field(attribute, label_text = nil, options = {})
       if label_text.is_a?(Hash) && options == {}
         options = label_text
         label_text = nil

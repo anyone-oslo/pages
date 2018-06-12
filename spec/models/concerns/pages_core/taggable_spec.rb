@@ -1,9 +1,9 @@
 require "rails_helper"
 
 describe PagesCore::Taggable, type: :model do
-  let(:page) { create(:page) }
-
   subject { page }
+
+  let(:page) { create(:page) }
 
   it { is_expected.to have_many(:taggings).dependent(:destroy) }
   it { is_expected.to have_many(:tags).through(:taggings) }
@@ -21,33 +21,39 @@ describe PagesCore::Taggable, type: :model do
 
     context "with tag argument" do
       subject { Page.tagged_with(foo) }
+
       it { is_expected.to eq([page1]) }
     end
 
     context "with string argument" do
       subject { Page.tagged_with("foo") }
+
       it { is_expected.to eq([page1]) }
     end
 
     context "with array argument" do
       subject { Page.tagged_with(%w[foo bar]) }
+
       it { is_expected.to match([page1, page2]) }
     end
 
     context "with multiple arguments" do
       subject { Page.tagged_with(foo, bar) }
+
       it { is_expected.to match([page1, page2]) }
     end
   end
 
   describe "#serialized_tags" do
     subject { page.serialized_tags }
+
     before { page.tag_with(%w[foo bar]) }
     it { is_expected.to eq(%w[bar foo].to_json) }
   end
 
   describe "#serialized_tags=" do
     let(:json) { %w[foo bar].to_json }
+
     before { page.update(serialized_tags: json) }
     specify { expect(page.tags.count).to eq(2) }
   end

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 require "pages_core/version"
 
 Gem::Specification.new do |s|
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "."
 
-  s.required_ruby_version = ">= 1.9.2"
+  s.required_ruby_version = ">= 2.1.0"
 
   s.files = Dir[
     "{app,config,db,lib,vendor}/**/*",

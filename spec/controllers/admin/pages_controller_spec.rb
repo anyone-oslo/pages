@@ -10,13 +10,15 @@ describe Admin::PagesController, type: :controller do
   describe "GET index" do
     let!(:page) { create(:page) }
     let!(:hidden) { create(:hidden_page) }
-    let!(:deleted) { create(:deleted_page) }
 
-    before { get :index, params: { locale: locale } }
+    before do
+      create(:deleted_page)
+      get :index, params: { locale: locale }
+    end
 
     it { is_expected.to render_template("admin/pages/index") }
 
-    it "should load the root pages" do
+    it "loads the root pages" do
       expect(assigns(:root_pages)).to match_array([page, hidden])
     end
   end
@@ -30,23 +32,27 @@ describe Admin::PagesController, type: :controller do
     context "with a news page" do
       let!(:root) { create(:page, news_page: true) }
       let!(:article1) { create(:page, parent: root) }
-      let!(:article2) do
+
+      before do
         create(:page, parent: root, published_at: 2.months.ago)
+        get :news, params: { locale: locale }
       end
-      before { get :news, params: { locale: locale } }
 
       it { is_expected.to render_template("admin/pages/news") }
 
-      it "should set the archive finder" do
+      it "sets the archive finder" do
         expect(assigns(:archive_finder)).to be_a(PagesCore::ArchiveFinder)
       end
 
-      it "should default to the current month" do
+      it "defaults to the current year" do
         expect(assigns(:year)).to eq(Time.zone.now.year)
+      end
+
+      it "defaults to the current month" do
         expect(assigns(:month)).to eq(Time.zone.now.month)
       end
 
-      it "should find the page" do
+      it "finds the page" do
         expect(assigns(:pages)).to eq([article1])
       end
     end
@@ -58,16 +64,20 @@ describe Admin::PagesController, type: :controller do
 
     it { is_expected.to render_template("admin/pages/new") }
 
-    it "should initialize the page" do
+    it "initializes the page" do
       expect(page).to be_a(Page)
+    end
+
+    it "sets the author" do
       expect(page.author).to eq(user)
     end
 
     context "with parent" do
       let(:parent) { create(:page) }
+
       before { get :new, params: { locale: locale, parent: parent.id } }
 
-      it "should set the parent" do
+      it "sets the parent" do
         expect(page.parent).to eq(parent)
       end
     end
@@ -75,10 +85,11 @@ describe Admin::PagesController, type: :controller do
 
   describe "POST create" do
     let(:params) { { name: "Page name" } }
+
     before { post(:create, params: { locale: locale, page: params }) }
 
-    it "should redirect to the edit page" do
-      expect(subject).to(
+    it "redirects to the edit page" do
+      expect(controller).to(
         redirect_to(edit_admin_page_url(locale, assigns(:page)))
       )
     end
@@ -91,16 +102,19 @@ describe Admin::PagesController, type: :controller do
   end
 
   describe "GET new_news" do
-    let!(:root) { create(:page, news_page: true) }
-    before { get :new_news, params: { locale: locale } }
+    before do
+      create(:page, news_page: true)
+      get :new_news, params: { locale: locale }
+    end
+
     it { is_expected.to render_template("admin/pages/new") }
   end
 
   describe "GET show" do
     before { get :show, params: { locale: locale, id: page.id } }
 
-    it "should redirect to the edit page" do
-      expect(subject).to(
+    it "redirects to the edit page" do
+      expect(controller).to(
         redirect_to(edit_admin_page_url(locale, page))
       )
     end
@@ -110,7 +124,7 @@ describe Admin::PagesController, type: :controller do
     before { get :edit, params: { locale: locale, id: page.id } }
     it { is_expected.to render_template("admin/pages/edit") }
 
-    it "should find the page" do
+    it "finds the page" do
       expect(assigns(:page)).to eq(page)
     end
   end
@@ -130,13 +144,12 @@ describe Admin::PagesController, type: :controller do
 
     it { is_expected.to redirect_to(admin_pages_url(locale)) }
 
-    it "should change the parent" do
+    it "changes the parent" do
       expect(page.parent).to eq(parent)
     end
 
-    it "should change the positions" do
-      expect(page.position).to eq(1)
-      expect(other.position).to eq(2)
+    it "changes the positions" do
+      expect([page.position, other.position]).to eq([1, 2])
     end
   end
 end

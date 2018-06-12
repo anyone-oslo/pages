@@ -21,7 +21,8 @@ module PagesCore
   #   <% end %>
   #   <%= link_to_unless @pages.last_page? "Next", {page: @users.next_page}  %>
   module Paginates
-    attr_accessor :paginated, :current_page, :pages, :per_page, :offset
+    attr_accessor :paginated, :current_page, :per_page, :offset
+    attr_writer :pages
 
     class << self
       # Applies pagination to any collection.

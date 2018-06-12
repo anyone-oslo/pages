@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :page do
-    locale I18n.default_locale
+    locale { I18n.default_locale }
     sequence(:name) { |n| "Page #{n}" }
     status 2
 

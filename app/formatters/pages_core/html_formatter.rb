@@ -38,14 +38,11 @@ module PagesCore
       image = Image.find(id).localize(I18n.locale)
       class_name = ["image", image_class_name(image), class_name].compact
       image_tag = dynamic_image_tag(image,
-                                    size: size,
-                                    crop: false,
-                                    upscale: false)
-      if link
-        content_tag(:figure, link_to(image_tag, link) + image_caption(image), class: class_name)
-      else
-        content_tag(:figure, image_tag + image_caption(image), class: class_name)
-      end
+                                    size: size, crop: false, upscale: false)
+      content_tag(:figure,
+                  (link ? link_to(image_tag, link) : image_tag) +
+                  image_caption(image),
+                  class: class_name)
     rescue ActiveRecord::RecordNotFound
       nil
     end
@@ -77,16 +74,20 @@ module PagesCore
       end
     end
 
+    def parse_image(str)
+      id = str.match(image_expression)[1]
+      options = str.match(image_expression)[2]
+      class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
+      link = (Regexp.last_match(1) if options =~ /link="([^"]+)"/)
+      embed_image(id,
+                  size: embed_image_size(options),
+                  class_name: class_name,
+                  link: link)
+    end
+
     def parse_images(string)
       string.gsub(image_expression).each do |str|
-        id = str.match(image_expression)[1]
-        options = str.match(image_expression)[2]
-        class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
-        link = (Regexp.last_match(1) if options =~ /link="([^"]+)"/)
-        embed_image(id,
-                    size: embed_image_size(options),
-                    class_name: class_name,
-                    link: link)
+        parse_image(str)
       end
     end
 

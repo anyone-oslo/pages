@@ -4,7 +4,7 @@ SimpleCov.start
 ENV["RAILS_ENV"] ||= "test"
 ENV["DB"] ||= "mysql"
 
-require File.expand_path("../internal/config/environment", __FILE__)
+require File.expand_path("internal/config/environment", __dir__)
 
 # Prevent database truncation if the environment is production
 if Rails.env.production?
@@ -76,9 +76,9 @@ RSpec.configure do |config|
   # config.include JsonSpec::Helpers
   config.include LoginMacros
   config.include MailerMacros
-  config.before(:each) { reset_email }
+  config.before { reset_email }
 
-  config.after(:each) do
+  config.after do
     # Clean the Dis storage after each example
     storage_root = Rails.root.join("db", "dis", "test")
     FileUtils.rm_rf(storage_root) if File.exist?(storage_root)

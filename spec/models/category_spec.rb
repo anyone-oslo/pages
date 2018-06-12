@@ -11,8 +11,10 @@ describe Category, type: :model do
   it { is_expected.not_to allow_value(nil).for(:name) }
 
   describe "slugging" do
-    let(:category) { create(:category, name: "Test category") }
     subject { category.slug }
+
+    let(:category) { create(:category, name: "Test category") }
+
     it { is_expected.to eq("test-category") }
   end
 end

@@ -10,7 +10,9 @@ describe InviteRole, type: :model do
 
   describe "#to_s" do
     subject { role.to_s }
+
     let(:role) { InviteRole.new(name: "foo") }
+
     it { is_expected.to eq("Foo") }
   end
 end

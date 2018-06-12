@@ -9,32 +9,37 @@ describe Admin::PasswordResetsController, type: :controller do
 
   describe "POST create" do
     context "with an existing user" do
+      let(:token_url) do
+        admin_password_reset_with_token_url(
+          assigns(:password_reset_token).id,
+          assigns(:password_reset_token).token
+        )
+      end
+
       before { post :create, params: { username: user.email } }
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash[:notice]).to match(
           /An email with further instructions has been sent/
         )
       end
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
 
-      it "should assign the password reset token" do
+      it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
-      it "should email the user" do
+      it "emails the user" do
         expect(last_email.to).to eq([user.email])
-        expect(last_email.body.encoded).to match(
-          admin_password_reset_with_token_url(
-            assigns(:password_reset_token).id,
-            assigns(:password_reset_token).token
-          )
-        )
+      end
+
+      it "sends the URL" do
+        expect(last_email.body.encoded).to(match(token_url))
       end
     end
 
@@ -43,11 +48,11 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should not assign the password reset token" do
+      it "does not assign the password reset token" do
         expect(assigns(:password_reset_token)).to be_nil
       end
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash[:notice]).to match(
           /Couldn't find a user with that email address/
         )
@@ -70,11 +75,11 @@ describe Admin::PasswordResetsController, type: :controller do
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
 
-      it "should assign the password reset token" do
+      it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
     end
@@ -84,7 +89,7 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
       end
     end
@@ -102,17 +107,17 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should assign the password reset token" do
+      it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(
           /Your password reset link has expired/
         )
       end
 
-      it "should destroy the token" do
+      it "destroys the token" do
         expect(assigns(:password_reset_token).destroyed?).to eq(true)
       end
     end
@@ -122,7 +127,7 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
       end
     end
@@ -142,19 +147,19 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(/Your password has been changed/)
       end
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
 
-      it "should log the user in" do
+      it "logs the user in" do
         expect(session[:current_user_id]).to eq(password_reset_token.user.id)
       end
 
-      it "should destroy the token" do
+      it "destroys the token" do
         expect(assigns(:password_reset_token).destroyed?).to eq(true)
       end
     end
@@ -177,15 +182,15 @@ describe Admin::PasswordResetsController, type: :controller do
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
 
-      it "should assign the password reset token" do
+      it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
-      it "should not destroy the token" do
+      it "does not destroy the token" do
         expect(assigns(:password_reset_token).destroyed?).to eq(false)
       end
     end
@@ -204,7 +209,7 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
       end
     end
@@ -224,17 +229,17 @@ describe Admin::PasswordResetsController, type: :controller do
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
-      it "should assign the password reset token" do
+      it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash.now[:notice]).to match(
           /Your password reset link has expired/
         )
       end
 
-      it "should destroy the token" do
+      it "destroys the token" do
         expect(assigns(:password_reset_token).destroyed?).to eq(true)
       end
     end

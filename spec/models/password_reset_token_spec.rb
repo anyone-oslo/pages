@@ -27,17 +27,22 @@ describe PasswordResetToken, type: :model do
 
     context "when token is expired" do
       let(:password_reset_token) { expired_password_reset_token }
+
       it { is_expected.to eq(true) }
     end
   end
 
   describe "#expires_at" do
     subject { password_reset_token.expires_at }
+
     it { is_expected.to be_within(30).of(Time.now.utc + 24.hours) }
   end
 
   describe "#token" do
-    subject { password_reset_token.token }
-    specify { expect(subject.length).to eq(64) }
+    subject(:token) { password_reset_token.token }
+
+    it "has a length of 64" do
+      expect(token.length).to eq(64)
+    end
   end
 end

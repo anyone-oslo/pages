@@ -32,26 +32,27 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
   describe "#meta_description" do
     subject { helper.meta_description }
 
+    before { helper.instance_variable_set(:@page, page) }
+
     context "when description isn't set" do
+      let(:page) { nil }
+
       it { is_expected.to eq(nil) }
     end
 
-    context "with a page" do
-      before { helper.instance_variable_set(:@page, page) }
+    context "when description is set" do
+      before { helper.meta_description "<b>Description</b>" }
+      it { is_expected.to eq("Description") }
+    end
 
-      context "when description is set" do
-        before { helper.meta_description "<b>Description</b>" }
-        it { is_expected.to eq("Description") }
-      end
+    context "with meta description set" do
+      it { is_expected.to eq(page.meta_description) }
+    end
 
-      context "with meta description set" do
-        it { is_expected.to eq(page.meta_description) }
-      end
+    context "with excerpt fallback" do
+      let(:page) { build(:page, excerpt: "excerpt") }
 
-      context "with excerpt fallback" do
-        let(:page) { build(:page, excerpt: "excerpt") }
-        it { is_expected.to eq(page.excerpt) }
-      end
+      it { is_expected.to eq(page.excerpt) }
     end
   end
 
@@ -69,8 +70,10 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
   end
 
   describe "#meta_image" do
-    let(:image) { create(:image) }
     subject { helper.meta_image }
+
+    let(:image) { create(:image) }
+
     before { helper.instance_variable_set(:@page, page) }
 
     context "when image isn't set" do
@@ -89,17 +92,21 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when page has a meta image" do
       let(:page) { create(:page, meta_image: image) }
+
       it { is_expected.to match(%r{^http://test.host/dynamic_images/}) }
     end
 
     context "when default_meta_image is set" do
       before { helper.default_meta_image "default.png" }
       it { is_expected.to eq("default.png") }
+    end
 
-      context "and page has an image" do
-        let(:page) { create(:page, image: image) }
-        it { is_expected.to match(%r{^http://test.host/dynamic_images/}) }
-      end
+    context "when page has an image" do
+      let(:page) { create(:page, image: image) }
+
+      before { helper.default_meta_image "default.png" }
+
+      it { is_expected.to match(%r{^http://test.host/dynamic_images/}) }
     end
   end
 
@@ -117,9 +124,11 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
   end
 
   describe "#meta_keywords" do
-    let(:page) { create(:page) }
-    before { helper.instance_variable_set(:@page, page) }
     subject { helper.meta_keywords }
+
+    let(:page) { create(:page) }
+
+    before { helper.instance_variable_set(:@page, page) }
 
     context "when not set" do
       it { is_expected.to eq(nil) }

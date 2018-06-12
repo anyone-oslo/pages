@@ -1,7 +1,7 @@
 module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: %i[accept show]
-    before_action :find_invite, only: %i[show edit update destroy accept]
+    before_action :find_invite, only: %i[show destroy accept]
     before_action :require_valid_token, only: %i[show accept]
 
     require_authorization(

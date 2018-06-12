@@ -20,7 +20,7 @@ class Invite < ActiveRecord::Base
                          role_names: role_names,
                          creator: self.user,
                          activated: true
-    ))
+                       ))
     destroy if user.valid?
     user
   end

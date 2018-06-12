@@ -2,7 +2,7 @@ module PagesCore
   module Generators
     class RspecGenerator < Rails::Generators::Base
       desc "RSpec setup"
-      source_root File.expand_path("../templates", __FILE__)
+      source_root File.expand_path("templates", __dir__)
 
       def setup_development_gems
         gem_group :development do

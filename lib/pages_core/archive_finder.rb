@@ -68,12 +68,12 @@ module PagesCore
     end
 
     def range_for_year(year)
-      date_time = DateTime.new(year.to_i, 1, 1).utc
+      date_time = Time.new(year.to_i, 1, 1).in_time_zone
       date_time..date_time.end_of_year
     end
 
     def range_for_year_and_month(year, month)
-      date_time = DateTime.new(year.to_i, month.to_i, 1).utc
+      date_time = Time.new(year.to_i, month.to_i, 1).in_time_zone
       date_time..date_time.end_of_month
     end
 

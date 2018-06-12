@@ -21,9 +21,9 @@ describe Invite, type: :model do
   end
 
   describe "#create_user" do
-    let!(:invite) { create(:invite, role_names: ["users"]) }
-    let!(:user) { invite.create_user(attributes) }
-    subject { user }
+    subject!(:user) { invite.create_user(attributes) }
+
+    let(:invite) { create(:invite, role_names: ["users"]) }
 
     context "when attributes are valid" do
       let(:attributes) { attributes_for(:user) }
@@ -31,19 +31,19 @@ describe Invite, type: :model do
       it { is_expected.to be_a(User) }
       it { is_expected.to be_valid }
 
-      it "should set the creator" do
+      it "sets the creator" do
         expect(user.creator).to eq(invite.user)
       end
 
-      it "should inherit the roles" do
-        expect(subject.role_names).to eq(["users"])
+      it "inherits the roles" do
+        expect(user.role_names).to eq(["users"])
       end
 
-      it "should be activated" do
-        expect(subject.activated?).to eq(true)
+      it "is activated" do
+        expect(user.activated?).to eq(true)
       end
 
-      it "should destroy the invite" do
+      it "destroys the invite" do
         expect(invite.destroyed?).to eq(true)
       end
     end
@@ -54,18 +54,19 @@ describe Invite, type: :model do
       it { is_expected.to be_a(User) }
       it { is_expected.not_to be_valid }
 
-      it "should not destroy the invite" do
+      it "does not destroy the invite" do
         expect(invite.destroyed?).to eq(false)
       end
     end
   end
 
   describe "#token" do
-    let(:invite) { create(:invite) }
-    subject { invite.token }
+    subject(:token) { invite.token }
 
-    it "should generate a token" do
-      expect(subject.length).to eq(64)
+    let(:invite) { create(:invite) }
+
+    it "generates a token" do
+      expect(token.length).to eq(64)
     end
   end
 end

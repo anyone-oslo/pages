@@ -1,7 +1,7 @@
 module PagesCore
   module OpenGraphTagsHelper
     def open_graph_properties
-      @_open_graph_properties ||= {}
+      @open_graph_properties ||= {}
     end
 
     # Outputs Open Graph tags for Facebook.

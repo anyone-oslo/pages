@@ -31,7 +31,7 @@ class PageFile < ActiveRecord::Base
   end
 
   def format?
-    content_type && self.class.formats.keys.include?(content_type)
+    content_type && self.class.formats.key?(content_type)
   end
 
   def format

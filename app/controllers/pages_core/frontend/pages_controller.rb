@@ -95,7 +95,7 @@ module PagesCore
 
       def find_page_by_path
         return unless params[:path]
-        @page ||= PagePath.get(locale, params[:path]).try(&:page)
+        @page = PagePath.get(locale, params[:path]).try(&:page)
       end
 
       def find_page

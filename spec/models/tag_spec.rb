@@ -4,9 +4,10 @@ describe Tag, type: :model do
   it { is_expected.to have_many(:taggings) }
 
   describe ".tags_and_suggestions_for" do
+    subject { Tag.tags_and_suggestions_for(taggable) }
+
     let!(:tag) { create(:tag) }
     let(:taggable) { create(:page) }
-    subject { Tag.tags_and_suggestions_for(taggable) }
 
     context "when nothing has been tagged" do
       it { is_expected.to match_array([]) }
@@ -20,6 +21,7 @@ describe Tag, type: :model do
     context "when subject has been tagged and another tagging exists" do
       let(:other_tag) { create(:tag) }
       let(:other_taggable) { create(:page) }
+
       before do
         other_taggable.tag_with(other_tag)
         taggable.tag_with(tag)
@@ -31,6 +33,7 @@ describe Tag, type: :model do
       let!(:pinned_tag) { create(:tag, pinned: true) }
       let(:other_tag) { create(:tag) }
       let(:other_taggable) { create(:page) }
+
       before do
         other_taggable.tag_with(other_tag)
         taggable.tag_with(tag)

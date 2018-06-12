@@ -6,11 +6,13 @@ class User < ActiveRecord::Base
   belongs_to(:creator,
              class_name: "User",
              foreign_key: "created_by",
-             optional: true)
+             optional: true,
+             inverse_of: :created_users)
   has_many(:created_users,
            class_name: "User",
            foreign_key: "created_by",
-           dependent: :nullify)
+           dependent: :nullify,
+           inverse_of: :creator)
   has_many :pages, dependent: :nullify
   has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
@@ -23,8 +25,7 @@ class User < ActiveRecord::Base
             presence: true,
             uniqueness: { case_sensitive: false }
 
-  validates :name,
-            presence: true
+  validates :name, presence: true
 
   validates :email,
             presence: true,
@@ -61,12 +62,9 @@ class User < ActiveRecord::Base
   end
 
   def authenticate!(password)
-    if can_login? && valid_password?(password)
-      rehash_password!(password) if password_needs_rehash?
-      true
-    else
-      false
-    end
+    return false unless can_login? && valid_password?(password)
+    rehash_password!(password) if password_needs_rehash?
+    true
   end
 
   def can_login?

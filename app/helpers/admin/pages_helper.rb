@@ -39,7 +39,7 @@ module Admin
                    end
       safe_join(
         page_names.map { |p| page_name_with_fallback(p) },
-        " &raquo; ".html_safe
+        raw(" &raquo; ")
       )
     end
 

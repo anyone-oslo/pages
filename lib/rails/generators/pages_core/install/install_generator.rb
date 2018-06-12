@@ -2,7 +2,7 @@ module PagesCore
   module Generators
     class InstallGenerator < Rails::Generators::Base
       desc "Creates the Pages configuration"
-      source_root File.expand_path("../templates", __FILE__)
+      source_root File.expand_path("templates", __dir__)
 
       def default_app_name
         Rails.root.to_s.split("/").last
@@ -17,6 +17,7 @@ module PagesCore
           "Default sender?",
           "no-reply@#{@domain_name}"
         )
+        nil
       end
 
       def create_active_job_initializer
@@ -90,11 +91,7 @@ module PagesCore
 
       def ask_with_fallback(question, default)
         result = ask(question + " [#{default}]")
-        if result.blank?
-          default
-        else
-          result
-        end
+        result.presence || default
       end
     end
   end

@@ -2,14 +2,16 @@ require "rails_helper"
 
 describe Page, type: :model do
   describe ".archive_finder" do
-    subject { Page.archive_finder }
+    subject(:finder) { Page.archive_finder }
+
     it { is_expected.to be_a(PagesCore::ArchiveFinder) }
-    specify { expect(subject.timestamp_attribute).to eq(:published_at) }
+    specify { expect(finder.timestamp_attribute).to eq(:published_at) }
   end
 
   describe ".enabled_feeds" do
-    let(:options) { {} }
     subject { Page.enabled_feeds(I18n.default_locale, options) }
+
+    let(:options) { {} }
 
     context "with no pages" do
       it { is_expected.to eq([]) }
@@ -17,8 +19,12 @@ describe Page, type: :model do
 
     context "with no arguments" do
       let!(:page) { create(:page, feed_enabled: true) }
-      let!(:hidden) { create(:hidden_page, feed_enabled: true) }
-      let!(:other_locale) { create(:page, feed_enabled: true, locale: "fr") }
+
+      before do
+        create(:hidden_page, feed_enabled: true)
+        create(:page, feed_enabled: true, locale: "fr")
+      end
+
       it { is_expected.to match_array([page]) }
     end
 
@@ -26,23 +32,28 @@ describe Page, type: :model do
       let(:options) { { include_hidden: true } }
       let!(:page) { create(:page, feed_enabled: true) }
       let!(:hidden) { create(:page, feed_enabled: true, status: 3) }
+
       it { is_expected.to match_array([page, hidden]) }
     end
   end
 
   describe ".published" do
+    subject { Page.published }
+
     let!(:published_page) { create(:page) }
     let!(:hidden_page) { create(:page, status: 3) }
     let!(:autopublish_page) do
       create(:page, published_at: (Time.now.utc + 2.hours))
     end
-    subject { Page.published }
+
     it { is_expected.to include(published_page) }
     it { is_expected.not_to include(hidden_page) }
     it { is_expected.not_to include(autopublish_page) }
   end
 
   describe ".order_by_tags" do
+    subject { Page.localized(I18n.default_locale).order_by_tags([foo, bar]) }
+
     let(:foo) { Tag.create(name: "Foo") }
     let(:bar) { Tag.create(name: "Bar") }
     let(:baz) { Tag.create(name: "Baz") }
@@ -50,40 +61,41 @@ describe Page, type: :model do
     let!(:page2) { create(:page, tag_list: [foo, bar]) }
     let!(:page3) { create(:page, tag_list: [foo]) }
 
-    subject { Page.localized(I18n.default_locale).order_by_tags([foo, bar]) }
-
     it { is_expected.to match_array([page3, page2, page1]) }
   end
 
   describe ".localized" do
+    subject { Page.localized("nb") }
+
     let!(:norwegian_page) { Page.create(name: "Test", locale: "nb") }
     let!(:english_page) { Page.create(name: "Test", locale: "en") }
-    subject { Page.localized("nb") }
+
     it { is_expected.to include(norwegian_page) }
     it { is_expected.not_to include(english_page) }
   end
 
   describe ".locales" do
+    subject { page.locales }
+
     let(:page) do
       Page.create(
         excerpt: { "en" => "My test page", "nb" => "Testside" },
         locale: "en"
       )
     end
-    subject { page.locales }
+
     it { is_expected.to match(%w[en nb]) }
   end
 
   describe ".status_labels" do
-    subject { Page.status_labels }
-    it "should return the status labels" do
-      expect(subject).to eq(
-        0 => "Draft",
-        1 => "Reviewed",
-        2 => "Published",
-        3 => "Hidden",
-        4 => "Deleted"
-      )
+    subject(:labels) { Page.status_labels }
+
+    it "returns the status labels" do
+      expect(labels).to eq(0 => "Draft",
+                           1 => "Reviewed",
+                           2 => "Published",
+                           3 => "Hidden",
+                           4 => "Deleted")
     end
   end
 
@@ -117,24 +129,42 @@ describe Page, type: :model do
       )
     end
 
-    it "should respond with the locale specific string" do
-      expect(page.excerpt?).to eq(true)
+    it "responds with the locale specific string" do
       expect(page.excerpt.to_s).to eq("My test page")
+    end
+
+    it "sets the other locale" do
       expect(page.localize("nb").excerpt.to_s).to eq("Testside")
     end
 
-    it "should remove the unnecessary locales" do
+    it "has multiple locales" do
       expect(page.locales).to match(%w[en nb])
+    end
+  end
+
+  describe "removing a locale" do
+    let(:page) do
+      Page.create(
+        excerpt: { "en" => "My test page", "nb" => "Testside" },
+        locale: "en"
+      )
+    end
+
+    before do
       page.update(excerpt: "")
       page.reload
+    end
+
+    it "removes the unnecessary locales" do
       expect(page.locales).to match(["nb"])
     end
   end
 
-  it "should return a blank Localization for uninitialized columns" do
-    page = Page.new
-    expect(page.body?).to eq(false)
-    expect(page.body).to be_a(String)
+  describe "uninitialized localization" do
+    let(:page) { Page.new }
+
+    specify { expect(page.body?).to eq(false) }
+    specify { expect(page.body).to be_a(String) }
   end
 
   describe "with an excerpt" do
@@ -142,25 +172,24 @@ describe Page, type: :model do
 
     it "responds to excerpt?" do
       expect(page.excerpt?).to eq(true)
-      page.excerpt = nil
-      expect(page.excerpt?).to eq(false)
+    end
+
+    it "returns a string" do
+      expect(page.excerpt).to be_kind_of(String)
     end
 
     it "excerpt should be a localization" do
-      expect(page.excerpt).to be_kind_of(String)
       expect(page.excerpt.to_s).to eq("My test page")
     end
 
-    it "should be changed when saved" do
+    it "is changed when saved" do
       page.update(excerpt: "Hi")
       page.reload
       expect(page.excerpt.to_s).to eq("Hi")
     end
 
-    it "should remove the localization when nilified" do
+    it "removes the localization when nilified" do
       page.update(excerpt: nil)
-      expect(page.valid?).to eq(true)
-      page.reload
       expect(page.excerpt?).to eq(false)
     end
   end
@@ -170,16 +199,19 @@ describe Page, type: :model do
 
     context "when page is empty" do
       let(:page) { build(:page) }
+
       it { is_expected.to eq(true) }
     end
 
     context "when page has excerpt" do
       let(:page) { build(:page, excerpt: "e") }
+
       it { is_expected.to eq(false) }
     end
 
     context "when page has body" do
       let(:page) { build(:page, body: "b") }
+
       it { is_expected.to eq(false) }
     end
   end
@@ -189,16 +221,19 @@ describe Page, type: :model do
 
     context "with no attributes" do
       let(:page) { build(:page) }
+
       it { is_expected.to eq("") }
     end
 
     context "with no excerpt" do
       let(:page) { build(:page, body: "b") }
+
       it { is_expected.to eq("b") }
     end
 
     context "with excerpt" do
       let(:page) { build(:page, body: "b", excerpt: "e") }
+
       it { is_expected.to eq("e") }
     end
   end
@@ -208,26 +243,32 @@ describe Page, type: :model do
 
     context "with no attributes" do
       let(:page) { build(:page) }
+
       it { is_expected.to eq(false) }
     end
 
     context "with no body" do
       let(:page) { build(:page, excerpt: "e") }
+
       it { is_expected.to eq(false) }
     end
 
     context "with no excerpt" do
       let(:page) { build(:page, body: "b") }
+
       it { is_expected.to eq(false) }
     end
 
     context "with body and excerpt" do
       let(:page) { build(:page, body: "b", excerpt: "e") }
+
       it { is_expected.to eq(true) }
     end
   end
 
   describe "#subpages" do
+    subject { page.subpages.map(&:id) }
+
     let!(:page1) do
       create(:page,
              position: 2,
@@ -250,75 +291,78 @@ describe Page, type: :model do
              published_at: 1.day.ago)
     end
 
-    subject { page.subpages.map(&:id) }
-
     context "when page is a regular page" do
       let(:page) { create(:page) }
+
       it { is_expected.to eq([page3.id, page1.id, page2.id]) }
     end
 
     context "when page is a news page" do
       let(:page) { create(:page, news_page: true) }
+
       it { is_expected.to eq([page1.id, page3.id, page2.id]) }
     end
   end
 
+  describe "#move" do
+    let!(:page) { create(:page) }
+    let(:parent) { root }
+    let(:position) { 2 }
+    let!(:root) { create(:page) }
+    let!(:before) { create(:page, parent: root, position: 1) }
+    let!(:after) { create(:page, parent: root, position: 2) }
+
+    before do
+      page.move(parent: parent, position: position)
+      root.reload
+      before.reload
+      after.reload
+    end
+
+    context "with another parent" do
+      it "updates the positions" do
+        expect([before, page, after].map(&:position)).to eq([1, 2, 3])
+      end
+    end
+
+    context "when within the same parent" do
+      let!(:page) { create(:page, parent: root, position: 3) }
+
+      it "updates the positions" do
+        expect([before, page, after].map(&:position)).to eq([1, 2, 3])
+      end
+    end
+
+    context "when moving to the root" do
+      let(:parent) { nil }
+      let(:position) { 1 }
+      let!(:page) { create(:page, parent: root, position: 3) }
+
+      it "moves the page" do
+        expect(page.parent).to eq(nil)
+      end
+
+      it "updates the positions" do
+        expect([page, root].map(&:position)).to eq([1, 2])
+      end
+    end
+  end
+
   describe "#position" do
-    context "creating a page" do
-      let(:page) { create(:page) }
+    context "when creating a page" do
       subject { page.position }
+
+      let(:page) { create(:page) }
+
       it { is_expected.to eq(1) }
     end
 
-    context "creating a deleted page" do
-      let(:page) { create(:page, status: 4) }
+    context "when creating a deleted page" do
       subject { page.position }
+
+      let(:page) { create(:page, status: 4) }
+
       it { is_expected.to eq(nil) }
-    end
-
-    context "when moving a page" do
-      let!(:page) { create(:page) }
-      let(:parent) { root }
-      let(:position) { 2 }
-      let!(:root) { create(:page) }
-      let!(:before) { create(:page, parent: root, position: 1) }
-      let!(:after) { create(:page, parent: root, position: 2) }
-
-      before do
-        page.move(parent: parent, position: position)
-        root.reload
-        before.reload
-        after.reload
-      end
-
-      context "to another parent" do
-        it "should update the positions" do
-          expect(before.position).to eq(1)
-          expect(page.position).to eq(2)
-          expect(after.position).to eq(3)
-        end
-      end
-
-      context "within the same parent" do
-        let!(:page) { create(:page, parent: root, position: 3) }
-        it "should update the positions" do
-          expect(before.position).to eq(1)
-          expect(page.position).to eq(2)
-          expect(after.position).to eq(3)
-        end
-      end
-
-      context "to the root" do
-        let(:parent) { nil }
-        let(:position) { 1 }
-        let!(:page) { create(:page, parent: root, position: 3) }
-
-        it "should move the page" do
-          expect(page.parent).to eq(nil)
-          expect(page.position).to eq(1)
-          expect(root.position).to eq(2)
-        end
-      end
     end
 
     context "when changing parent" do
@@ -334,12 +378,11 @@ describe Page, type: :model do
         page3.reload
       end
 
-      it "should update the positions on the new parent" do
-        expect(page1.position).to eq(1)
-        expect(page3.position).to eq(2)
+      it "updates the positions on the new parent" do
+        expect([page1, page3].map(&:position)).to eq([1, 2])
       end
 
-      it "should update the position on lower items" do
+      it "updates the position on lower items" do
         expect(page2.position).to eq(1)
       end
     end
@@ -353,22 +396,24 @@ describe Page, type: :model do
         page2.reload
       end
 
-      it "should remove the list position" do
+      it "removes the list position" do
         expect(page1.position).to eq(nil)
       end
 
-      it "should update the position on lower items" do
+      it "updates the position on lower items" do
         expect(page2.position).to eq(1)
       end
     end
 
     context "when restoring a page" do
-      let!(:previous_page) { create(:page, position: 1) }
-      let!(:page) { create(:page, status: 4) }
+      let(:page) { create(:page, status: 4) }
 
-      before { page.update(status: 2) }
+      before do
+        create(:page, position: 1)
+        page.update(status: 2)
+      end
 
-      it "should append it to the list" do
+      it "appends it to the list" do
         expect(page.position).to eq(2)
       end
     end
@@ -382,7 +427,7 @@ describe Page, type: :model do
         page2.reload
       end
 
-      it "should update the position on lower items" do
+      it "updates the position on lower items" do
         expect(page2.position).to eq(1)
       end
     end

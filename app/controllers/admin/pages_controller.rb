@@ -2,14 +2,14 @@ module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::NewsPageController
 
-    before_action :find_page, only: %i[show edit preview update destroy
+    before_action :find_page, only: %i[show edit update destroy
                                        delete_meta_image move]
     before_action :find_categories
 
     require_authorization(Page, proc { @page },
                           collection: %i[index news new new_news create
                                          deleted],
-                          member: %i[show edit preview update destroy
+                          member: %i[show edit update destroy
                                      delete_meta_image move])
 
     def index

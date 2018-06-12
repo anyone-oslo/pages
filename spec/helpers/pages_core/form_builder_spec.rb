@@ -1,14 +1,16 @@
+# encoding: utf-8
+
 require "rails_helper"
 
 describe PagesCore::FormBuilder do
   let(:template) { self }
   let(:resource) { build(:user) }
-  let(:builder) { PagesCore::FormBuilder.new(:user, resource, template, {}) }
+  let(:builder) { described_class.new(:user, resource, template, {}) }
 
   describe "#image_file_field" do
     let(:template) { spy }
 
-    it "should render an image field" do
+    it "renders an image field" do
       builder.image_file_field(:image)
       expect(template).to have_received(:file_field)
         .with(:user, :image, object: resource)
@@ -17,20 +19,21 @@ describe PagesCore::FormBuilder do
     context "with image" do
       let(:image) { create(:image) }
       let(:resource) { create(:user, image: image) }
-      it "should render the image" do
+
+      it "renders the image" do
         builder.image_file_field(:image)
-        expect(template).to have_received(:dynamic_image_tag)
-          .with(image, size: "120x100")
-        expect(template).to have_received(:file_field)
-          .with(:user, :image, object: resource)
+        expect(template).to(
+          have_received(:dynamic_image_tag).with(image, size: "120x100")
+        )
       end
     end
   end
 
   describe "#field_with_label" do
-    subject { builder.field_with_label(:email, "content") }
-    it "should render the field" do
-      expect(subject).to eq(
+    subject(:field) { builder.field_with_label(:email, "content") }
+
+    it "renders the field" do
+      expect(field).to eq(
         "<div class=\"field\"><label for=\"user_email\">Email</label>" \
           "content</div>"
       )
@@ -38,24 +41,27 @@ describe PagesCore::FormBuilder do
 
     context "when field has errors" do
       let(:resource) { User.new.tap(&:validate) }
+
       it { is_expected.to match("class=\"field field-with-errors\"") }
     end
   end
 
   describe "#label_for" do
-    subject { builder.label_for(:email) }
+    subject(:label) { builder.label_for(:email) }
 
     it { is_expected.to eq("<label for=\"user_email\">Email</label>") }
 
     context "with a label" do
       subject { builder.label_for(:email, "Foo") }
+
       it { is_expected.to eq("<label for=\"user_email\">Foo</label>") }
     end
 
     context "with errors" do
       let(:resource) { User.new.tap(&:validate) }
-      it "should output the error" do
-        expect(subject).to match(
+
+      it "outputs the error" do
+        expect(label).to match(
           "<span class=\"error\">kan ikke være blank</span>"
         )
       end
@@ -64,7 +70,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_text_field" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_text_field(:email, size: 20)
       expect(template).to have_received(:text_field)
         .with(:user, :email, object: resource, size: 20)
@@ -73,7 +80,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_text_area" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_text_area(:email)
       expect(template).to have_received(:text_area)
         .with(:user, :email, object: resource)
@@ -81,7 +89,7 @@ describe PagesCore::FormBuilder do
   end
 
   describe "#labelled_country_select" do
-    it "should render the field" do
+    it "renders the field" do
       allow(builder).to receive(:country_select)
       builder.labelled_country_select(:email)
       expect(builder).to have_received(:country_select)
@@ -91,7 +99,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_date_select" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_date_select(:created_at)
       expect(template).to have_received(:date_select)
         .with(:user, :created_at, { object: resource }, {})
@@ -100,7 +109,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_datetime_select" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_datetime_select(:created_at)
       expect(template).to have_received(:datetime_select)
         .with(:user, :created_at, { object: resource }, {})
@@ -109,7 +119,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_time_select" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_time_select(:created_at)
       expect(template).to have_received(:time_select)
         .with(:user, :created_at, { object: resource }, {})
@@ -119,7 +130,8 @@ describe PagesCore::FormBuilder do
   describe "#labelled_select" do
     let(:template) { spy }
     let(:options) { %w[Foo Bar] }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_select(:email, options)
       expect(template).to have_received(:select)
         .with(:user, :email, options, { object: resource }, {})
@@ -128,7 +140,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_check_box" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_check_box(:activated)
       expect(template).to have_received(:check_box)
         .with(:user, :activated, { object: resource }, "1", "0")
@@ -137,7 +150,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_image_file_field" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_image_file_field(:image)
       expect(template).to have_received(:file_field)
         .with(:user, :image, object: resource)
@@ -146,7 +160,8 @@ describe PagesCore::FormBuilder do
 
   describe "#labelled_password_field" do
     let(:template) { spy }
-    it "should render the field" do
+
+    it "renders the field" do
       builder.labelled_password_field(:email)
       expect(template).to have_received(:password_field)
         .with(:user, :email, object: resource)

@@ -19,7 +19,7 @@ module PagesCore
       end
 
       def method_missing(method_name, *args, &block)
-        if self.class.handle_blocks.keys.include?(method_name)
+        if self.class.handle_blocks.key?(method_name)
           proxy = PagesCore::Templates::ConfigurationProxy.new(
             self.class.handle_blocks[method_name],
             self
@@ -38,7 +38,7 @@ module PagesCore
       end
 
       def respond_to_missing?(method_name)
-        self.class.handle_blocks.keys.include?(method_name)
+        self.class.handle_blocks.key?(method_name)
       end
 
       def set(stack, value)

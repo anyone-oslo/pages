@@ -9,7 +9,7 @@ describe PageBuilder do
 
   describe ".build" do
     before do
-      PageBuilder.build(user, locale: locale) do
+      described_class.build(user, locale: locale) do
         page "Home" do
           page "Foo"
           page "Bar", template: "foobar", status: 1
@@ -17,26 +17,20 @@ describe PageBuilder do
       end
     end
 
-    it "should create the page" do
+    it "creates the page" do
       expect(Page.count).to eq(3)
     end
 
-    it "should set the correct default options" do
-      expect(page1.name).to eq("Home")
-      expect(page1.template).to eq("index")
-      expect(page1.published?).to eq(true)
-      expect(page1.parent).to eq(nil)
-      expect(page1.author).to eq(user)
-    end
+    specify { expect(page1.name).to eq("Home") }
+    specify { expect(page1.template).to eq("index") }
+    specify { expect(page1.published?).to eq(true) }
+    specify { expect(page1.parent).to eq(nil) }
+    specify { expect(page1.author).to eq(user) }
 
-    it "should inherit parent on nested pages" do
-      expect(page2.parent).to eq(page1)
-      expect(page2.author).to eq(user)
-    end
+    specify { expect(page2.parent).to eq(page1) }
+    specify { expect(page2.author).to eq(user) }
 
-    it "should set the options when provided" do
-      expect(page3.template).to eq("foobar")
-      expect(page3.published?).to eq(false)
-    end
+    specify { expect(page3.template).to eq("foobar") }
+    specify { expect(page3.published?).to eq(false) }
   end
 end

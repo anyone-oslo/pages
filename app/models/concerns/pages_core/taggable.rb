@@ -3,7 +3,10 @@ module PagesCore
     extend ActiveSupport::Concern
 
     included do
-      has_many :taggings, as: :taggable, dependent: :destroy
+      has_many :taggings,
+               as: :taggable,
+               dependent: :destroy,
+               inverse_of: :taggable
       has_many :tags, through: :taggings
     end
 

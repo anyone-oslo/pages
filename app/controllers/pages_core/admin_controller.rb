@@ -59,14 +59,14 @@ module PagesCore
       current_user.save
     end
 
-    def secure_compare(a, b)
-      return false unless a && b
-      return false unless a.bytesize == b.bytesize
+    def secure_compare(compare, other)
+      return false unless compare && other
+      return false unless compare.bytesize == other.bytesize
 
-      l = a.unpack "C#{a.bytesize}"
+      l = compare.unpack "C#{compare.bytesize}"
 
       res = 0
-      b.each_byte { |byte| res |= byte ^ l.shift }
+      other.each_byte { |byte| res |= byte ^ l.shift }
       res.zero?
     end
 
@@ -84,14 +84,14 @@ module PagesCore
       session[:persistent_params][namespace]
     end
 
-    def coerce_persistent_param(v)
-      case v
+    def coerce_persistent_param(value)
+      case value
       when "true"
         true
       when "false"
         false
       else
-        v
+        value
       end
     end
 

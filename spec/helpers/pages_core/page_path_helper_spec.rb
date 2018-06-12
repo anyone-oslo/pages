@@ -9,16 +9,14 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
   describe "#page_path" do
     subject { helper.page_path("nb", page) }
 
-    context "when page has a page path" do
-      context "and localizations are disabled" do
-        before { PagesCore.config.localizations = :disabled }
-        it { is_expected.to eq("/category/product") }
-      end
+    context "when localizations are disabled" do
+      before { PagesCore.config.localizations = :disabled }
+      it { is_expected.to eq("/category/product") }
+    end
 
-      context "and localizations are enabled" do
-        before { PagesCore.config.localizations = :enabled }
-        it { is_expected.to eq("/nb/category/product") }
-      end
+    context "when localizations are enabled" do
+      before { PagesCore.config.localizations = :enabled }
+      it { is_expected.to eq("/nb/category/product") }
     end
 
     context "when page doesn't have a page path" do
@@ -30,16 +28,14 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
   describe "#page_url" do
     subject { helper.page_url("nb", page) }
 
-    context "when page has a page path" do
-      context "and localizations are disabled" do
-        before { PagesCore.config.localizations = :disabled }
-        it { is_expected.to eq("http://test.host/category/product") }
-      end
+    context "when localizations are disabled" do
+      before { PagesCore.config.localizations = :disabled }
+      it { is_expected.to eq("http://test.host/category/product") }
+    end
 
-      context "and localizations are enabled" do
-        before { PagesCore.config.localizations = :enabled }
-        it { is_expected.to eq("http://test.host/nb/category/product") }
-      end
+    context "when localizations are enabled" do
+      before { PagesCore.config.localizations = :enabled }
+      it { is_expected.to eq("http://test.host/nb/category/product") }
     end
 
     context "when page doesn't have a page path" do

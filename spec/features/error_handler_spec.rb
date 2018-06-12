@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe ErrorsController, type: :feature do
-  around :each do |example|
+describe "Error handling", type: :feature do
+  around do |example|
     Rails.application.config.consider_all_requests_local = false
     Rails.application.config.action_dispatch.show_exceptions = true
     example.run

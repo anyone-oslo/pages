@@ -4,31 +4,35 @@ describe Admin::UsersController, type: :controller do
   let(:user) { create(:user) }
 
   describe "GET index" do
-    before { login(user) }
-    before { get :index }
+    before do
+      login(user)
+      get :index
+    end
 
     it { is_expected.to render_template("admin/users/index") }
 
-    it "should assign to users" do
+    it "assigns to users" do
       expect(assigns(:users)).to be_an(ActiveRecord::Relation)
     end
 
-    it "should assign to invites" do
+    it "assigns to invites" do
       expect(assigns(:invites)).to be_an(ActiveRecord::Relation)
     end
   end
 
   describe "GET deactivated" do
-    before { login(user) }
-    before { get :deactivated }
+    before do
+      login(user)
+      get :deactivated
+    end
 
     it { is_expected.to render_template("admin/users/deactivated") }
 
-    it "should assign to users" do
+    it "assigns to users" do
       expect(assigns(:users)).to be_an(ActiveRecord::Relation)
     end
 
-    it "should assign to invites" do
+    it "assigns to invites" do
       expect(assigns(:invites)).to eq([])
     end
   end
@@ -40,8 +44,10 @@ describe Admin::UsersController, type: :controller do
     end
 
     context "when logged in" do
-      before { login(user) }
-      before { get :login }
+      before do
+        login(user)
+        get :login
+      end
 
       it { is_expected.to redirect_to(admin_default_url) }
     end
@@ -53,14 +59,17 @@ describe Admin::UsersController, type: :controller do
 
       it { is_expected.to render_template("admin/users/new") }
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
     end
 
     context "with users" do
-      let!(:user) { create(:user) }
-      before { get :new }
+      before do
+        create(:user)
+        get :new
+      end
+
       it { is_expected.to redirect_to(admin_users_url) }
     end
   end
@@ -70,10 +79,11 @@ describe Admin::UsersController, type: :controller do
 
     context "with invalid params" do
       let(:params) { { name: "foo" } }
+
       before { post :create, params: { user: params } }
       it { is_expected.to render_template("admin/users/new") }
 
-      it "should assign the user" do
+      it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
     end
@@ -82,36 +92,43 @@ describe Admin::UsersController, type: :controller do
       before { post :create, params: { user: params } }
       it { is_expected.to redirect_to(admin_default_url) }
 
-      it "should authenticate the user" do
+      it "authenticates the user" do
         expect(session[:current_user_id]).to eq(User.last.id)
       end
     end
 
     context "with users" do
-      let!(:user) { create(:user) }
-      before { post :create, params: { user: params } }
+      before do
+        create(:user)
+        post :create, params: { user: params }
+      end
+
       it { is_expected.to redirect_to(admin_users_url) }
     end
   end
 
   describe "GET show" do
-    before { login(user) }
-    before { get :show, params: { id: user.id } }
+    before do
+      login(user)
+      get :show, params: { id: user.id }
+    end
 
     it { is_expected.to render_template("admin/users/show") }
 
-    it "should assign the user" do
+    it "assigns the user" do
       expect(assigns(:user)).to be_a(User)
     end
   end
 
   describe "GET edit" do
-    before { login(user) }
-    before { get :edit, params: { id: user.id } }
+    before do
+      login(user)
+      get :edit, params: { id: user.id }
+    end
 
     it { is_expected.to render_template("admin/users/edit") }
 
-    it "should assign the user" do
+    it "assigns the user" do
       expect(assigns(:user)).to be_a(User)
     end
   end
@@ -127,20 +144,23 @@ describe Admin::UsersController, type: :controller do
 
     context "with invalid params" do
       let(:params) { { email: "invalid" } }
+
       before { put :update, params: { id: user.id, user: params } }
       it { is_expected.to render_template("admin/users/edit") }
     end
   end
 
   describe "DELETE destroy" do
-    before { login(user) }
-    let!(:target) { create(:user) }
+    before do
+      login(user)
+      delete :destroy, params: { id: target.id }
+    end
 
-    before { delete :destroy, params: { id: target.id } }
+    let!(:target) { create(:user) }
 
     it { is_expected.to redirect_to(admin_users_url) }
 
-    it "should delete the user" do
+    it "deletes the user" do
       expect(User.all).to match_array([user])
     end
   end

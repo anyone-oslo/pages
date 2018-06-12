@@ -2,7 +2,7 @@ module PagesCore
   module Generators
     class FrontendGenerator < Rails::Generators::Base
       desc "Creates the default Pages frontend"
-      source_root File.expand_path("../templates", __FILE__)
+      source_root File.expand_path("templates", __dir__)
 
       def create_layout
         copy_file(
