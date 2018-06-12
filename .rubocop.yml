@@ -1,10 +1,10 @@
-# inherit_from:
-#   - .rubocop_todo.yml
+require: rubocop-rspec
+
+#inherit_from: .rubocop_todo.yml
 
 AllCops:
   Exclude:
     - 'spec/internal/db/schema.rb'
-  TargetRubyVersion: 2.1
 
 Metrics/AbcSize:
   Exclude:
@@ -13,14 +13,12 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - "*.gemspec"
-  ExcludedMethods:
-    - context
-    - describe
-    - it
-    - shared_examples
-    - shared_examples_for
-    - namespace
-    - draw
+    - "spec/internal/config/environments/*"
+    - "config/routes.rb"
+    - "db/migrate/*"
+    - "**/*_spec.rb"
+    - "spec/factories.rb"
+    - "spec/rails_helper.rb"
 
 Metrics/ClassLength:
   Exclude:
@@ -38,10 +36,6 @@ Rails/ApplicationRecord:
 
 StringLiterals:
   EnforcedStyle: double_quotes
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    "%i": "[]"
 
 Documentation:
   Enabled: false
