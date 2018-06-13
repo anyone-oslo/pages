@@ -33,6 +33,44 @@ form {
       color: #c00007;
     }
   }
+
+  .page-dates {
+    margin-bottom: 40px;
+    .toggles {
+      label {
+        font-weight: normal;
+        display: inline-block;
+        margin-right: 12px;
+        input {
+          margin-right: 6px;
+        }
+        &.disabled {
+          color: #888;
+        }
+      }
+    }
+    .date {
+      line-height: 34px;
+      display: inline-block;
+      white-space: nowrap;
+      .date-select {
+        display: inline-block;
+      }
+      input[type=text] {
+        display: inline;
+        width: auto;
+        min-width: auto;
+        margin-left: 12px;
+        padding: 4px 6px;
+      }
+    }
+    .to {
+      margin: 0px 8px;
+    }
+    .remove-dates {
+      margin-top: 12px;
+    }
+  }
 }
 
 .fieldWithErrors {
@@ -52,6 +90,10 @@ main {
     line-height: 1.4;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 13px;
+    &:disabled {
+      border-color: #eee;
+      color: #444;
+    }
   }
 
   input[type=text],
