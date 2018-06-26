@@ -7,12 +7,8 @@
 @import 'admin/controllers/**/*';
 
 body {
-  background: #fff;
-  color: #000;
-}
-
-main {
-  color: #222;
+  background: $c-background;
+  color: $c-text;
 }
 
 body, td, th {
@@ -30,7 +26,7 @@ img {
 
 small {
   font-size: 0.9em;
-  color: #666;
+  color: $c-text-light;
 }
 
 th {
@@ -38,7 +34,7 @@ th {
 }
 
 .hr {
-  border-top: 1px solid #aaa;
+  border-top: 1px solid $c-border;
   hr {
     display: none;
   }
@@ -61,7 +57,7 @@ td {
 }
 
 #flash-error {
-  @include vertical-gradient(#970002, #c00007);
+  @include vertical-gradient(#970002, $c-red);
   border-bottom: 1px solid #9c0002;
   color: #fff299;
   font-weight: bold;
@@ -86,7 +82,7 @@ td {
     font-size: 1.4em;
     margin: 0 -32px 16px -32px;
     padding:  8px 32px;
-    background-color: #a00;
+    background-color: $c-red;
     color: #fff;
   }
 
@@ -119,7 +115,7 @@ div.paginator {
   margin: 32px 0;
   font-size: 1.5em;
   font-weight: bold;
-  color: #666;
+  color: $c-text-light;
 }
 
 img.thumbnail {
@@ -130,7 +126,7 @@ li .actions {
   font-weight: normal;
   display:  inline;
   font-size: 12px;
-  color: #aaa;
+  color: $c-text-light;
   margin-top: 1px;
 }
 

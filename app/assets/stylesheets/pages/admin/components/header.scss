@@ -1,13 +1,7 @@
 header {
-  //display: block;
-  background: #000;
-  height: 82px;
-  //clear: both;
-  color: #ddd;
-  font-size: 11px;
-  text-shadow: 0 0 0 #000;
-  -moz-opacity: 0.9999;
-  border-bottom: 1px solid #555;
+  background: $c-background-invert;
+  height: 86px;
+  color: $c-text-invert;
 
   a,
   a:visited {
@@ -15,7 +9,7 @@ header {
     border: 0;
     padding: 0;
     margin: 0;
-    color: #fff;
+    color: $c-text-invert;
   }
 
   #logo {
@@ -28,7 +22,7 @@ header {
   }
 
   #site-name {
-    color: #fff;
+    color: $c-text-invert;
     position: absolute;
     top: 15px;
     left: 52px;
@@ -48,12 +42,12 @@ header {
   }
 
   .user {
-    font-size: 12px;
+    font-size: 13px;
     position: absolute;
     top: 20px;
     right: 16px;
     .separator {
-      color: #777;
+      color: $c-text-light;
       margin: 0 4px;
     }
   }
@@ -81,21 +75,18 @@ header {
       margin: 0;
       padding: 0;
       font-weight: normal;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     a,
     a:visited {
-      background: #484848;
-      border-left: 1px solid #383838;
-      border-right: 1px solid #383838;
-      color: #fff;
-      text-shadow: #404040 1px 1px 1px;
+      background: #333;
+      color: $c-text-invert;
       display: block;
       float: left;
       padding: 0 15px;
-      padding-top: 8px;
-      height: 28px;
+      line-height: 32px;
+      height: 32px;
       margin: 0 2px 0 0;
       text-decoration: none;
     }
@@ -104,10 +95,7 @@ header {
     a.current,
     a.current:visited {
       @include vertical-gradient(#cfcfcf, #fefefe);
-      border-left: 1px solid #fefefe;
-      border-right: 1px solid #fefefe;
-      color: #000;
-      text-shadow: #fff 1px 1px 1px;
+      color: $c-text;
     }
   }
 }
@@ -126,10 +114,10 @@ header {
   }
 
   li.current {
-    background: #fff;
+    background: $c-background;
     padding: 5px 16px;
     border: 1px solid #cae6f1;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid $c-background;
     a,
     a:visited {
       text-decoration: none;
@@ -144,7 +132,7 @@ header {
   padding: 16px 32px;
   display: block;
   border-bottom: 1px solid #d4eaf4;
-  color: #000;
+  color: $c-text;
 
   em {
     font-style: normal;

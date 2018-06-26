@@ -11,16 +11,16 @@ table.list {
   }
 
   th {
-    @include vertical-gradient(#fff, #f2f2f2);
-    color: #777;
+    @include vertical-gradient($c-background, $c-background-disabled);
+    color: $c-text-light;
     font-weight: bold;
-    border-bottom: 1px solid #bdbdbd;
+    border-bottom: 1px solid $c-border;
   }
 
   td {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $c-border;
     &.note {
-      color: #888;
+      color: $c-text-light;
     }
     &.name {
       font-weight: bold;

@@ -27,7 +27,7 @@
     }
 
     &.placeholder {
-      border: 1px dashed #ccc;
+      border: 1px dashed $c-border;
     }
 
     .inner {
@@ -53,14 +53,14 @@
     //border-radius: 5px;
 
     &:hover {
-      border: 1px solid #f0f0f0;
-      @include vertical-gradient(#ffffff, #f8f8f8);
+      border: 1px solid $c-border-light;
+      @include vertical-gradient($c-background, $c-background-disabled);
     }
 
     .date {
       font-size: 12px;
       margin-left: 10px;
-      color: #777;
+      color: $c-text-light;
     }
 
     .name {
@@ -96,7 +96,7 @@
 
     a,
     a:visited {
-      color: #111;
+      color: $c-text;
       text-decoration: none;
     }
     a:hover,
@@ -110,7 +110,7 @@
       &,
       a,
       a:visited {
-        color: #777;
+        color: $c-text-light;
       }
     }
   }

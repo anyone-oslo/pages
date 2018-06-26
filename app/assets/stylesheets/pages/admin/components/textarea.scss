@@ -37,12 +37,13 @@ textarea.rich {
       float: left;
       border-left: 1px solid #fff;
       border-right: 1px solid #d7d7d7;
-      color: #555;
+      color: $c-text-light;
       font-size: 14px;
-      background-color: #F6F6F6;
+      background-color: $c-button;
+      transition: all 200ms ease-out;
       &:focus,
       &:hover {
-        color: #000;
+        color: $c-text;
         background: #fdfdfd;
       }
 

@@ -9,101 +9,6 @@
   background-image: image-url("pages/admin/drag-icon.png");
 }
 
-.page-list {
-  float: left;
-  list-style-type:  none;
-  padding: 0;
-  margin: 0;
-  font-size: 1.2em;
-  margin-left: -8px;
-  margin-top: 16px;
-
-  .page-listing {
-    border: 1px solid transparent;
-    padding: 3px 8px 2px 8px !important;
-  }
-
-  ul {
-    border-left: 1px dotted #ccc !important;
-    margin-left: 12px !important;
-    padding-left: 8px !important
-  }
-
-  ul li {
-    overflow: auto;
-  }
-
-  .page {
-    padding: 4px 8px;
-    line-height: 17px;
-    float: left;
-
-    .status {
-      font-weight: normal;
-    }
-
-    a.page-name,
-    a.page-name:visited {
-      text-decoration: none;
-      color: #222;
-    }
-    a.page-name:hover {
-      text-decoration: underline;
-    }
-
-    &.hidden {
-      a.page-name {
-        color: #666;
-      }
-    }
-
-    &:hover {
-      background: #ffd;
-      border: 1px solid #dda;
-      .status {
-        display: none;
-      }
-    }
-  }
-
-  .page-without-locale {
-    color: #888;
-  }
-
-  li {
-    font-weight:  bold;
-    margin:  0;
-    padding: 0;
-    clear: both;
-  }
-
-  li li {
-    font-weight: normal;
-    font-size:  12px;
-    padding: 0;
-  }
-
-  ul {
-    clear: both;
-    list-style-type:  none;
-    border-left:  1px dashed #ccc;
-    margin:  0 0 0px 12px;
-    padding: 0 0 0 12px;
-  }
-
-  .hover {
-    background: #cef;
-  }
-
-  .drag-handle {
-    display: none;
-  }
-
-  &.reorder .drag-handle {
-    display: block;
-  }
-}
-
 .news-item-list {
   .name {
     line-height: 1.5;
@@ -113,19 +18,14 @@
     font-weight: bold;
   }
 
-  .name .status_label {
-    color: #666;
-  }
-
   .draft,
   .hidden,
   .autopublish,
   .reviewed {
-    background: #f4f4f4;
+    background: $c-background-disabled;
   }
 
   .pinned .name {
-    background: #fff8e8;
     background: transparent image-url("pages/admin/list-table-pin-blue.gif") no-repeat 13px 50%;
   }
 
@@ -158,7 +58,7 @@
   main & input.page_title {
     font-weight: bold;
     font-size: 1.4em;
-    color: #222;
+    color: $c-text;
   }
 }
 
@@ -175,7 +75,7 @@
   }
   li {
     line-height: 30px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $c-border;
     &:first-child {
       border-top: 0px;
     }
@@ -190,7 +90,7 @@
     height: 30px;
   }
   .ui-sortable-helper {
-    border: 1px solid #ddd !important;
+    border: 1px solid $c-border !important;
     background: rgba(250, 250, 250, 0.8);
   }
 }

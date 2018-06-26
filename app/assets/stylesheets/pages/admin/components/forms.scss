@@ -13,24 +13,24 @@ form {
       margin: 0 0 4px 0;
       font-weight: bold;
       font-size: 13px;
-      color: #444;
+      color: $c-text;
     }
 
     .description {
-      color: #888;
+      color: $c-text-light;
       margin: 0 0 6px 0;
     }
   }
 
   .field-with-errors {
-    background: #fff0f3;
-    border-top: 1px solid #ffd0d3;
-    border-bottom: 1px solid #ffd0d3;
+    background: $c-red-invert;
+    border-top: 1px solid mix($c-red-invert, $c-red, 90%);
+    border-bottom: 1px solid mix($c-red-invert, $c-red, 90%);
     margin: 0 -32px -1px -32px;
     padding: 12px 32px 16px 32px;
 
     label {
-      color: #c00007;
+      color: $c-red;
     }
   }
 
@@ -45,7 +45,7 @@ form {
           margin-right: 6px;
         }
         &.disabled {
-          color: #888;
+          color: $c-text-light;
         }
       }
     }
@@ -84,15 +84,15 @@ main {
   input[type=text],
   input[type=password],
   textarea {
-    border: 1px solid #d4d4d4;
+    border: 1px solid $c-border;
     box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
     padding: 8px 10px;
     line-height: 1.4;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 13px;
     &:disabled {
-      border-color: #eee;
-      color: #444;
+      border-color: $c-border-light;
+      color: $c-text-light;
     }
   }
 

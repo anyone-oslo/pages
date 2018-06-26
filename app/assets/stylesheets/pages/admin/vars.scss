@@ -1,9 +1,24 @@
 $breakpoint-mobile: 720px;
 
+$c-red: #c00007;
+$c-red-invert: #fff0f3;
+
+$c-background: #fff;
+$c-background-invert: #000;
+$c-background-disabled: #f8f8f8;
+
+$c-text: #111;
+$c-text-light: #666;
+$c-text-invert: #fff;
+
+$c-border: #ddd;
+$c-border-light: #eee;
+
 $c-link: #1d7195;
 $c-link-hover: darken($c-link, 10%);
 $c-create: #19ac1e;
 $c-create-hover: darken($c-create, 10%);
-$c-delete: #a21402;
+$c-delete: $c-red;
 $c-delete-hover: darken($c-delete, 10%);
-$c-border: #ddd;
+
+$c-button: #f6f6f6;
