@@ -19,7 +19,7 @@
   <% @archive_finder.years.reverse.each do |year| %>
     <h2><%= year %><%= ": #{@category.name}" if @category %></h2>
     <ul>
-      <% @archive_finder.months_in_year_with_count(year).each do |month, page_count| %>
+      <% @archive_finder.months_in_year_with_count(year).reverse.each do |month, page_count| %>
         <li><% if year == @year && month == @month %>
           <strong><%= month_names[month-1] %></strong> (<%= page_count %>)</strong>
         <% else %>
