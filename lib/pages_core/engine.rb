@@ -17,7 +17,6 @@ module PagesCore
       Rails.application.config.assets.precompile += %w[
         pages/admin.js
         pages/admin.css
-        pages/admin/print.css
         pages/errors.css
         pages/*.gif
         pages/*.png
