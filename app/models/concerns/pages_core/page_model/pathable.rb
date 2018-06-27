@@ -59,11 +59,11 @@ module PagesCore
       end
 
       def generated_path_segment
-        name.gsub(/[^[[:alnum:]]\-_]+/, "-")
-            .gsub(/[\-]{2,}/, "-")
-            .gsub(/(^\-|\-$)/, "")
-            .mb_chars
-            .downcase
+        transliterated_name.gsub(/[^[[:alnum:]]\-_]+/, "-")
+                           .gsub(/[\-]{2,}/, "-")
+                           .gsub(/(^\-|\-$)/, "")
+                           .mb_chars
+                           .downcase
       end
 
       def page_path_matches_routes?(page_path)

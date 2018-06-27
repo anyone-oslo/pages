@@ -1,6 +1,7 @@
 module PagesCore
   module PageModel
     module Localizable
+      include ActiveSupport::Inflector
       extend ActiveSupport::Concern
 
       included do
@@ -21,6 +22,14 @@ module PagesCore
             PagesCore::Templates::TemplateConfiguration.all_blocks
           end)
         end
+      end
+
+      def transliterated_name
+        prev_locale = I18n.locale
+        I18n.locale = locale.to_sym if locale
+        transliterated = transliterate(name)
+        I18n.locale = prev_locale
+        transliterated
       end
     end
   end

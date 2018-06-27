@@ -21,7 +21,7 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
 
     context "when page doesn't have a page path" do
       before { page.path_segment = "" }
-      it { is_expected.to eq("/nb/pages/#{page.id}-Product") }
+      it { is_expected.to eq("/nb/pages/#{page.id}-product") }
     end
   end
 
@@ -40,7 +40,7 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
 
     context "when page doesn't have a page path" do
       before { page.path_segment = "" }
-      it { is_expected.to eq("http://test.host/nb/pages/#{page.id}-Product") }
+      it { is_expected.to eq("http://test.host/nb/pages/#{page.id}-product") }
     end
   end
 end

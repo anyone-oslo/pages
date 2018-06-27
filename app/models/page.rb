@@ -99,6 +99,6 @@ class Page < ActiveRecord::Base
   end
 
   def to_param
-    humanized_param(name)
+    humanized_param(transliterated_name)
   end
 end

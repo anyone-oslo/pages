@@ -17,7 +17,7 @@ describe PagesCore::PageModel::Pathable, type: :model do
     subject { page.path_segment }
 
     let(:page_name) { "ØØ Test 123!" }
-    let(:path_segment) { "øø-test-123" }
+    let(:path_segment) { "oo-test-123" }
     let(:page) { create(:page, locale: "nb", name: page_name) }
 
     context "when defaulting" do
