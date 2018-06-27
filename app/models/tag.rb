@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
       tags = (taggable.tags.sorted + pinned.sorted).uniq
 
       return tags unless tags.count < limit
-      tags + suggestions(tags, limit)[0...(limit - tags.length)]
+      tags + suggestions(taggable, tags, limit)[0...(limit - tags.length)]
     end
 
     def parse(*tags)
@@ -24,13 +24,24 @@ class Tag < ActiveRecord::Base
 
     private
 
-    def suggestions(tags, limit)
+    def suggestions(taggable, tags, limit)
+      suggestions = taggable_suggestions(taggable, limit).to_a
+      if suggestions.length < limit
+        suggestions += all_suggestions(limit - suggestions.length)
+      end
+      suggestions.reject { |t| tags.include?(t) }
+    end
+
+    def taggable_suggestions(taggable, limit)
+      all_suggestions(limit).where("taggings.taggable_type = ?", taggable.class)
+    end
+
+    def all_suggestions(limit)
       Tag.joins(:taggings)
          .select("tags.*, COUNT(tags.id) AS counter")
          .group("tags.id")
          .order("counter DESC")
          .limit(limit)
-         .reject { |t| tags.include?(t) }
     end
 
     def default_options
