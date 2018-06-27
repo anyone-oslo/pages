@@ -27,9 +27,9 @@ class Tag < ActiveRecord::Base
     def suggestions(taggable, tags, limit)
       suggestions = taggable_suggestions(taggable, limit).to_a
       if suggestions.length < limit
-        suggestions += all_suggestions(limit - suggestions.length)
+        suggestions += all_suggestions(limit)
       end
-      suggestions.reject { |t| tags.include?(t) }
+      suggestions.reject { |t| tags.include?(t) }.uniq[0...(limit)]
     end
 
     def taggable_suggestions(taggable, limit)
