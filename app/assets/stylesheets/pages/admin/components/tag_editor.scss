@@ -1,39 +1,42 @@
 .tag-editor {
+  margin-top: 10px;
   margin-bottom: 1.5em;
-  max-width: 600px;
 
   .tags {
     line-height: 1.5;
   }
 
   .tag {
+    font-size: 13px;
     cursor: pointer;
     display: block;
     float: left;
     margin: 0 5px 5px 0;
-    padding: 4px 5px;
-    background: #f8f8f8;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    line-height: 1;
+    padding: 0px 10px;
+    background: $c-background-disabled;
+    border-radius: 5px;
+    line-height: 26px;
+    line-height: 36px;
     min-width: 40px;
+    transition: all 200ms ease-out;
 
     input {
-      float: left;
-      margin: 2px 0 0 0;
+      margin: 2px 3px 0 0;
     }
 
     .name {
-      float: left;
       padding: 1px 5px;
       margin: 0;
     }
 
     &.enabled {
-      background: #396e97;
-      border-color: #274b67;
+      //background: #396e97;
+      //border-color: #274b67;
+      //text-shadow: #274b67 1px 1px 1px;
+
       color: #fff;
-      text-shadow: #274b67 1px 1px 1px;
+      background: $c-link;
+      background: $c-blue-dark;
     }
   }
 
@@ -44,8 +47,10 @@
   }
 
   input.add-tag {
-    margin: 0 4px 0 0;
-    padding: 4px 3px 3px 3px;
+    margin-top: 0px;
+    border-radius: 5px;
+    //margin: 0 4px 0 0;
+    //padding: 4px 3px 3px 3px;
 
     &.example {
       color: $c-text-light;
