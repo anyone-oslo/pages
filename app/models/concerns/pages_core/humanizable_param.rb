@@ -1,10 +1,12 @@
 module PagesCore
   module HumanizableParam
+    include ActiveSupport::Inflector
     extend ActiveSupport::Concern
 
     def humanized_param(slug)
       return id.to_s unless slug && slug.present?
-      "#{id}-" + slug
+      "#{id}-" + transliterate(slug)
+                 .downcase
                  .gsub(/[\[\{]/, "(")
                  .gsub(/[\]\}]/, ")")
                  .gsub(/[^[[:alnum:]]()\-]+/, "-")
