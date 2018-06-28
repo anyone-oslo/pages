@@ -1,8 +1,8 @@
 module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: %i[accept show]
-    before_action :find_invite, only: %i[show destroy accept]
-    before_action :require_valid_token, only: %i[show accept]
+    before_action :find_invite, only: %i[destroy]
+    before_action :find_and_validate_invite, only: %i[show accept]
 
     require_authorization(
       Invite,
@@ -66,18 +66,19 @@ module Admin
       @invite = Invite.find(params[:id])
     end
 
+    def find_and_validate_invite
+      @invite = Invite.find_by(id: params[:id])
+      return if @invite && secure_compare(@invite.token, params[:token])
+      flash[:notice] = "This invite is no longer valid."
+      redirect_to(login_admin_users_url) && return
+    end
+
     def user_params
       params.require(:user).permit(:name, :email, :password, :confirm_password)
     end
 
     def invite_params
       params.require(:invite).permit(:email, role_names: [])
-    end
-
-    def require_valid_token
-      return if @invite && secure_compare(@invite.token, params[:token])
-      flash[:notice] = "Invalid invite token"
-      redirect_to(login_admin_users_url) && return
     end
   end
 end
