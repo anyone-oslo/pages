@@ -49,14 +49,14 @@ class Policy
 
     def collection(user)
       policy = new(user)
-      const_defined?(:Collection) &&
+      const_defined?("#{policy.class}::Collection") &&
         policy.extend(const_get(:Collection))
       policy
     end
 
     def member(user, record)
       policy = new(user, record)
-      const_defined?(:Member) &&
+      const_defined?("#{policy.class}::Member") &&
         policy.extend(const_get(:Member))
       policy
     end
