@@ -44,7 +44,7 @@ module PagesCore
     private
 
     def group_by_month(relation)
-      relation.reorder("").group(month_part)
+      relation.reorder("").group(Arel.sql(month_part))
     end
 
     def filter_by_time(range)
@@ -68,21 +68,23 @@ module PagesCore
     end
 
     def range_for_year(year)
-      date_time = Time.new(year.to_i, 1, 1).in_time_zone
-      date_time..date_time.end_of_year
+      start_time = Time.new(year.to_i, 1, 1)
+      end_time = start_time.end_of_year
+      (start_time.in_time_zone)..(end_time.in_time_zone)
     end
 
     def range_for_year_and_month(year, month)
-      date_time = Time.new(year.to_i, month.to_i, 1).in_time_zone
-      date_time..date_time.end_of_month
+      start_time = Time.new(year.to_i, month, 1)
+      end_time = start_time.end_of_month
+      (start_time.in_time_zone)..(end_time.in_time_zone)
     end
 
     def select_months(relation)
-      relation.reorder("").pluck("DISTINCT #{month_part}")
+      relation.reorder("").pluck(Arel.sql("DISTINCT #{month_part}"))
     end
 
     def select_years(relation)
-      relation.reorder("").pluck("DISTINCT #{year_part}")
+      relation.reorder("").pluck(Arel.sql("DISTINCT #{year_part}"))
     end
 
     def ordered_relation
