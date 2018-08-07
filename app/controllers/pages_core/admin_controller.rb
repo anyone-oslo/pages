@@ -97,12 +97,21 @@ module PagesCore
 
     # Get a persistent param
     def persistent_param(key, default = nil, options = {})
+      key = key.to_s
       namespace = options[:namespace] || self.class.to_s
 
-      value = coerce_persistent_param(params.key?(key) ? params[key] : default)
+      value = coerce_persistent_param(
+        if params.key?(key)
+          params[key]
+        elsif persistent_params(namespace).key?(key)
+          persistent_params(namespace)[key]
+        else
+          default
+        end
+      )
 
       if !value.nil? || options[:preserve_nil]
-        persistent_params(namespace)[key] = value
+        persistent_params(namespace)[key.to_s] = value
       end
 
       value
