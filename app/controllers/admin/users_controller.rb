@@ -7,11 +7,6 @@ module Admin
       only: %i[edit update show destroy delete_image]
     )
 
-    require_authorization(
-      member:     %i[delete_image update destroy edit],
-      collection: %i[index deactivated new create]
-    )
-
     def index
       @users = User.activated
       @invites = Invite.all.order("created_at DESC")

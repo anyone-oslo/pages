@@ -2,14 +2,11 @@ module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::NewsPageController
 
+    before_action :find_categories
     before_action :find_page, only: %i[show edit update destroy
                                        delete_meta_image move]
-    before_action :find_categories
 
-    require_authorization(
-      collection: %i[index news new new_news create deleted],
-      member: %i[show edit update destroy delete_meta_image move]
-    )
+    require_authorization
 
     def index
       @root_pages = Page.roots.in_locale(@locale).visible

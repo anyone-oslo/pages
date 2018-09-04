@@ -4,9 +4,7 @@ module Admin
     before_action :find_page_file,   only: %i[show edit update destroy]
     before_action :redirect_to_page, only: %i[index show new edit]
 
-    require_authorization(
-      collection: %i[index reorder new create]
-    )
+    require_authorization
 
     def index; end
 

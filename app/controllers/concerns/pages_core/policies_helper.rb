@@ -7,20 +7,14 @@ module PagesCore
     end
 
     module ClassMethods
-      def require_authorization(object: nil, member: nil, collection: nil)
-        klass = inferred_policy_class
-        collection ||= %i[index new create]
-        member ||= %i[show edit update destroy]
+      def require_authorization(object: nil, instance: nil)
+        object ||= inferred_policy_class
 
         before_action do |controller|
-          object ||= controller.instance_variable_get("@#{klass.name.underscore}")
+          instance_name = "@#{object.name.underscore}"
+          instance ||= controller.instance_variable_get(instance_name)
 
-          action = params[:action].to_sym
-          if collection.include?(action)
-            verify_policy_with_proc(controller, klass)
-          elsif member.include?(action)
-            verify_policy_with_proc(controller, object)
-          end
+          verify_policy_with_proc(controller, instance || object)
         end
       end
 

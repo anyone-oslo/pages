@@ -3,9 +3,7 @@ module Admin
     before_action :find_page
     before_action :find_page_image, only: %i[show update destroy]
 
-    require_authorization(
-      collection: %i[index reorder new create]
-    )
+    require_authorization
 
     def index
       @page_images = @page.page_images

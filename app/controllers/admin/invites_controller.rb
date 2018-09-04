@@ -4,10 +4,7 @@ module Admin
     before_action :find_invite, only: %i[destroy]
     before_action :find_and_validate_invite, only: %i[show accept]
 
-    require_authorization(
-      member:     %i[show edit update destroy],
-      collection: %i[index new create]
-    )
+    require_authorization
 
     def index
       redirect_to admin_users_url
