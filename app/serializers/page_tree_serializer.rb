@@ -3,6 +3,7 @@ class PageTreeSerializer < ActiveModel::Serializer
   attributes :name
   attributes :published_at, :pinned
   attributes :starts_at
+  attributes :permissions
 
   has_many :children, serializer: PageTreeSerializer
 
@@ -21,5 +22,20 @@ class PageTreeSerializer < ActiveModel::Serializer
 
   def param
     object.to_param
+  end
+
+  def permissions
+    [(:edit if policy.edit?),
+     (:create if policy.edit?)].compact
+  end
+
+  private
+
+  def policy
+    Policy.for(user, object)
+  end
+
+  def user
+    scope
   end
 end

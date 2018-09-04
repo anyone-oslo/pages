@@ -31,6 +31,11 @@ class PageTreeNode extends React.Component {
     this.state = { newName: props.index.node.name };
   }
 
+  permitted(action) {
+    return this.node().permissions &&
+           this.node().permissions.indexOf(action) != -1;
+  }
+
   actions() {
     let statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
     let statusIcon = (this.node().status != 2) ? "check" : "ban";
@@ -53,25 +58,25 @@ class PageTreeNode extends React.Component {
     } else {
       return (
         <span className="actions">
-          {this.button(statusLabel, {
+          {this.permitted("edit") && this.button(statusLabel, {
              className: "toggle-status",
              icon: statusIcon,
              onClick: e => this.toggleStatus()
            })}
 
-          {this.button("Rename", {
+          {this.permitted("edit") && this.button("Rename", {
              className: "edit",
              icon: "pencil",
              onClick: e => this.edit()
            })}
 
-          {this.button("Delete", {
+          {this.permitted("edit") && this.button("Delete", {
              className: "delete",
              icon: "trash",
              onClick: e => this.deletePage()
            })}
 
-          {this.button("Add child", {
+          {this.permitted("create") && this.button("Add child", {
              className: "add",
              icon: "plus",
              onClick: e => this.props.addChild(this.props.index)
@@ -90,7 +95,9 @@ class PageTreeNode extends React.Component {
       }
     }
 
-    if (!node.collapsed && this.visibleChildren().length > 0) {
+    if (!node.collapsed &&
+        this.visibleChildren().length > 0 &&
+        this.permitted("create")) {
       return (
         this.button("Add page here", {
           className: "add add-inline",
@@ -320,7 +327,7 @@ class PageTreeNode extends React.Component {
       className = `page status-${this.node().status}`;
     }
 
-    if (node.id && node.locale) {
+    if (node.id && node.locale && this.permitted("edit")) {
       pageName = <a href={this.editUrl(node)} className="name">
         {this.pageName()}
       </a>;
