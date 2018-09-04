@@ -188,7 +188,7 @@ class PageTreeNode extends React.Component {
   }
 
   collapsedLabel() {
-    if (this.node().collapsed && this.node().children.length > 0) {
+    if (this.node().collapsed && this.node().children) {
       let pluralized = (this.node().children.length == 1) ? "item" : "items";
       return (
         <span className="collapsed-label">
@@ -378,6 +378,10 @@ class PageTreeNode extends React.Component {
   }
 
   visibleChildren() {
-    return this.node().children.filter(p => p.status != 4);
+    if (this.node().children) {
+      return this.node().children.filter(p => p.status != 4);
+    } else {
+      return [];
+    }
   }
 }

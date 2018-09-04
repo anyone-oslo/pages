@@ -14,7 +14,7 @@ $(function () {
 
     function loadImagesData () {
       $.getJSON(baseURL + '/images.json', function (json) {
-        imagesData = json["page_images"];
+        imagesData = json;
       });
     }
 
@@ -322,9 +322,9 @@ $(function () {
         $(container).find('.no_images').hide();
       }
 
-      $(container).on('click', '.image', function () {
+      $(container).on('click', '.image', function (evt) {
+        evt.preventDefault();
         showImage(this);
-        return false;
       });
 
       $('.page_images .images').sortable({

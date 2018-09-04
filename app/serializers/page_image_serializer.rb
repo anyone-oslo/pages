@@ -1,5 +1,7 @@
 class PageImageSerializer < ActiveModel::Serializer
+  include Rails.application.routes.url_helpers
   include DynamicImage::Helper
+
   attributes :id, :image_id, :primary, :filename
   attributes :alternative, :caption, :created_at, :url
 

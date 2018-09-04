@@ -7,8 +7,8 @@ class PageExportSerializer < ActiveModel::Serializer
              :starts_at, :ends_at, :all_day
 
   has_one :image, serializer: PageImageExportSerializer
-  has_many :images, each_serializer: PageImageExportSerializer
-  has_many :page_files, each_serializer: PageFileExportSerializer
+  has_many :images, serializer: PageImageExportSerializer
+  has_many :page_files, serializer: PageFileExportSerializer
 
   def author_name
     object&.author&.name
