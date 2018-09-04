@@ -248,7 +248,7 @@ class PageTreeNode extends React.Component {
     }
 
     let handleMouseDown = function (e) {
-      if (!editing && props.onDragStart) {
+      if (this.permitted("edit") && !editing && props.onDragStart) {
         props.onDragStart(props.index.id, self.refs.inner, e);
       }
     }
