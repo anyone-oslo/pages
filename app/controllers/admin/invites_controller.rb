@@ -5,8 +5,6 @@ module Admin
     before_action :find_and_validate_invite, only: %i[show accept]
 
     require_authorization(
-      Invite,
-      proc { @invite },
       member:     %i[show edit update destroy],
       collection: %i[index new create]
     )

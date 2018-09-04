@@ -7,23 +7,25 @@ module PagesCore
     end
 
     module ClassMethods
-      def require_authorization(collection, member, options = {})
-        options = default_options.merge(options)
+      def require_authorization(object: nil, member: nil, collection: nil)
+        klass = inferred_policy_class
+        collection ||= %i[index new create]
+        member ||= %i[show edit update destroy]
+
         before_action do |controller|
+          object ||= controller.instance_variable_get("@#{klass.name.underscore}")
+
           action = params[:action].to_sym
-          if options[:collection].include?(action)
-            verify_policy_with_proc(controller, collection)
-          elsif options[:member].include?(action)
-            verify_policy_with_proc(controller, member)
+          if collection.include?(action)
+            verify_policy_with_proc(controller, klass)
+          elsif member.include?(action)
+            verify_policy_with_proc(controller, object)
           end
         end
       end
 
-      def default_options
-        {
-          collection: %i[index new create],
-          member:     %i[show edit update destroy]
-        }
+      def inferred_policy_class
+        const_get(name.demodulize.gsub(/Controller$/, "").singularize)
       end
     end
 

@@ -4,8 +4,6 @@ module Admin
     before_action :find_page_image, only: %i[show update destroy]
 
     require_authorization(
-      PageImage,
-      proc { @page_image },
       collection: %i[index reorder new create]
     )
 

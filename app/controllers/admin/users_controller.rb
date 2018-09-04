@@ -8,8 +8,6 @@ module Admin
     )
 
     require_authorization(
-      User,
-      proc { @user },
       member:     %i[delete_image update destroy edit],
       collection: %i[index deactivated new create]
     )

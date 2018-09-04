@@ -6,11 +6,10 @@ module Admin
                                        delete_meta_image move]
     before_action :find_categories
 
-    require_authorization(Page, proc { @page },
-                          collection: %i[index news new new_news create
-                                         deleted],
-                          member: %i[show edit update destroy
-                                     delete_meta_image move])
+    require_authorization(
+      collection: %i[index news new new_news create deleted],
+      member: %i[show edit update destroy delete_meta_image move]
+    )
 
     def index
       @root_pages = Page.roots.in_locale(@locale).visible

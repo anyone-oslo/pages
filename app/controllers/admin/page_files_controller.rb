@@ -5,8 +5,6 @@ module Admin
     before_action :redirect_to_page, only: %i[index show new edit]
 
     require_authorization(
-      PageFile,
-      proc { @page_file },
       collection: %i[index reorder new create]
     )
 
