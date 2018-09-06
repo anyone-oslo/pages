@@ -1,6 +1,4 @@
 class PageExportSerializer < ActiveModel::Serializer
-  self.root = false
-
   attributes :id, :path, :locale, :author_name, :status
   attributes(*PagesCore::Templates::TemplateConfiguration.all_blocks)
   attributes :created_at, :published_at, :pinned, :template, :redirect_to,
