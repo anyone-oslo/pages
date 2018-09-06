@@ -43,7 +43,7 @@
       let store = this;
       let url = `/admin/${index.node.locale}/pages.json`;
       $.post(url, { page: attributes }, function (response) {
-        store.updateNode(index, response.page_tree);
+        store.updateNode(index, response);
       });
     },
 
@@ -64,7 +64,7 @@
     performUpdate: function (index, url, data) {
       let store = this;
       $.put(url, data, function (response) {
-        store.updateNode(index, response.page_tree);
+        store.updateNode(index, response);
       });
     },
 
