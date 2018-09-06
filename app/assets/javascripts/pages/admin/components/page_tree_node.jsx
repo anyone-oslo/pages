@@ -195,7 +195,9 @@ class PageTreeNode extends React.Component {
   }
 
   collapsedLabel() {
-    if (this.node().collapsed && this.node().children) {
+    if (this.node().collapsed &&
+        this.node().children &&
+        this.node().children.length > 0) {
       let pluralized = (this.node().children.length == 1) ? "item" : "items";
       return (
         <span className="collapsed-label">
@@ -248,7 +250,7 @@ class PageTreeNode extends React.Component {
     }
 
     let handleMouseDown = function (e) {
-      if (this.permitted("edit") && !editing && props.onDragStart) {
+      if (self.permitted("edit") && !editing && props.onDragStart) {
         props.onDragStart(props.index.id, self.refs.inner, e);
       }
     }
