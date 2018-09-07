@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     scope ":locale" do
       resources :pages do
         collection do
-          get "news"
+          get "news(/:year(/:month)(/page/:page))", action: :news, as: :news
           get "deleted"
           get "new_news" # TODO: Should be refactored
         end

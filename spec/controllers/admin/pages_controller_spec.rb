@@ -34,22 +34,14 @@ describe Admin::PagesController, type: :controller do
       let!(:article1) { create(:page, parent: root) }
 
       before do
-        create(:page, parent: root, published_at: 2.months.ago)
-        get :news, params: { locale: locale }
+        create(:page, parent: root, published_at: 1.year.ago)
+        get :news, params: { locale: locale, year: article1.published_at.year }
       end
 
       it { is_expected.to render_template("admin/pages/news") }
 
       it "sets the archive finder" do
         expect(assigns(:archive_finder)).to be_a(PagesCore::ArchiveFinder)
-      end
-
-      it "defaults to the current year" do
-        expect(assigns(:year)).to eq(Time.zone.now.year)
-      end
-
-      it "defaults to the current month" do
-        expect(assigns(:month)).to eq(Time.zone.now.month)
       end
 
       it "finds the page" do

@@ -1,29 +1,49 @@
 .pagination {
+  margin: 30px 30px;
   line-height: 20px;
+  font-size: 14px;
+
+  .content & {
+    margin: 20px -2px;
+  }
 
   a,
-  .disabled,
-  .current {
+  .current,
+  .disabled, .gap {
     display: inline-block;
-    border: 1px solid $c-link;
-    text-decoration: none;
-    padding: 0px 5px;
     font-style: normal;
+    margin: 0px 1px;
+    text-decoration: none;
+    padding: 2px;
+    border-radius: 12px;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  a:hover, a:focus {
+    text-decoration: underline;
+  }
+
+  .current {
+    //background: $c-blue;
+    //color: $c-text-invert;
+    font-weight: bold;
   }
 
   .disabled {
-    border-color: #ccc;
-  }
-
-  .disabled,
-  .gap {
     color: $c-text-light;
   }
 
-  .current,
-  a:hover,
-  a:focus {
-    background: $c-link;
-    color: #fff;
+  .next,
+  .previous {
+    background: none;
+  }
+
+  .next {
+    margin-left: 10px;
+  }
+
+  .previous {
+    margin-right: 10px;
   }
 }

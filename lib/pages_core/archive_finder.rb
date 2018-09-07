@@ -13,12 +13,14 @@ module PagesCore
       filter_by_time(range_for_year_and_month(year, month))
     end
 
+    def latest_year
+      latest_year_and_month.first
+    end
+
     def latest_year_and_month
       ordered_relation.first.try do |record|
-        [
-          record[timestamp_attribute].year,
-          record[timestamp_attribute].month
-        ]
+        [record[timestamp_attribute].year,
+         record[timestamp_attribute].month]
       end
     end
 
@@ -41,6 +43,10 @@ module PagesCore
       select_years(@relation).map(&:to_i).sort
     end
 
+    def years_with_count
+      years.map { |year| [year, by_year(year).count] }
+    end
+
     private
 
     def group_by_month(relation)
@@ -59,7 +65,7 @@ module PagesCore
       if mysql?
         "MONTH(#{timestamp_attribute})"
       else
-        "date_part('month', #{timestamp_attribute})"
+        "date_part('month', #{timestamp_attribute})::integer"
       end
     end
 

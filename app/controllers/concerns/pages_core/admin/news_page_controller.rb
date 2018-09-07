@@ -10,11 +10,22 @@ module PagesCore
 
       def news
         @archive_finder = archive_finder(@news_pages, @locale)
-        @year, @month = year_and_month(@archive_finder)
-        @year ||= Time.zone.now.year
-        @month ||= Time.zone.now.month
 
-        @pages = @archive_finder.by_year_and_month(@year, @month)
+        unless params[:year]
+          redirect_to(news_admin_pages_path(@locale,
+                                            (@archive_finder.latest_year ||
+                                             Time.zone.now.year)))
+          return
+        end
+
+        @year = params[:year]&.to_i
+        @month = params[:month]&.to_i
+
+        @pages = (if @month
+                    @archive_finder.by_year_and_month(@year, @month)
+                  else
+                    @archive_finder.by_year(@year)
+                  end).paginate(per_page: 50, page: params[:page])
       end
 
       def new_news
@@ -44,12 +55,8 @@ module PagesCore
         redirect_to(admin_pages_url(@locale))
       end
 
-      def year_and_month(archive_finder)
-        if params[:year] && params[:month]
-          [params[:year], params[:month]].map(&:to_i)
-        else
-          archive_finder.latest_year_and_month
-        end
+      def latest_year
+        archive_finder.latest_year_and_month.first || Time.zone.now.year
       end
     end
   end

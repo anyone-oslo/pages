@@ -28,6 +28,7 @@ require "json"
 require "rails_i18n"
 require "RedCloth"
 require "sass-rails"
+require "will_paginate"
 
 # Assets
 require "font-awesome-rails"
