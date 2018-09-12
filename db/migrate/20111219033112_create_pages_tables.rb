@@ -78,17 +78,6 @@ class CreatePagesTables < ActiveRecord::Migration[4.2]
       t.index :page_id
     end
 
-    create_table :page_comments do |t|
-      t.integer  :page_id
-      t.string   :remote_ip
-      t.string   :name
-      t.string   :email
-      t.string   :url
-      t.text     :body
-      t.datetime :created_at
-      t.datetime :updated_at
-    end
-
     create_table :page_files do |t|
       t.integer  :page_id
       t.integer  :position
@@ -132,12 +121,10 @@ class CreatePagesTables < ActiveRecord::Migration[4.2]
       t.datetime :published_at
       t.string   :redirect_to
       t.integer  :image_id
-      t.boolean  :comments_allowed, default: true, null: false
       t.string   :image_link
       t.boolean  :news_page,        default: false, null: false
       t.boolean  :autopublish,      default: false, null: false
       t.string   :unique_name
-      t.integer  :comments_count,   default: 0, null: false
       t.datetime :last_comment_at
       t.boolean  :pinned,           default: false, null: false
       t.integer  :meta_image_id
@@ -162,14 +149,6 @@ class CreatePagesTables < ActiveRecord::Migration[4.2]
       t.datetime :created_at
       t.datetime :updated_at
       t.index :user_id
-    end
-
-    create_table :sessions do |t|
-      t.string   :session_id
-      t.text     :data
-      t.datetime :updated_at
-      t.index    :session_id
-      t.index    :updated_at
     end
 
     create_table :taggings do |t|
