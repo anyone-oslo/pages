@@ -13,8 +13,6 @@ RSpec.describe Admin::PagesHelper, type: :helper do
     end
     subject { helper.available_templates_for_select }
 
-    let(:template_options) { [%w([Default] index), %w[Home home]] }
-
     it { is_expected.to eq(template_options) }
   end
 
@@ -43,8 +41,6 @@ RSpec.describe Admin::PagesHelper, type: :helper do
             "id=\"page_name\" /></div>"
         )
       end
-
-      it { is_expected.to eq(pattern) }
     end
 
     context "when size is small" do
@@ -58,8 +54,6 @@ RSpec.describe Admin::PagesHelper, type: :helper do
             "</textarea></div>"
         )
       end
-
-      it { is_expected.to eq(pattern) }
     end
   end
 

@@ -52,7 +52,7 @@ describe PagesCore::Frontend::PagesController, type: :controller do
 
     let(:params) { { path: page.path_segment } }
 
-    it { is_expected.to render_template("pages/templates/home") }
+    it { is_expected.to render_template("pages/templates/news_item") }
 
     it "sets the document title" do
       expect(assigns(:document_title)).to eq("Home")
@@ -104,15 +104,6 @@ describe PagesCore::Frontend::PagesController, type: :controller do
       end
     end
 
-    describe "page rendering with a nonexistant template" do
-      let(:page) { create(:page, name: "Home", template: "foo") }
-
-      it "raises an error" do
-        expect { get :show, path: page.path_segment }
-          .to raise_error(PagesCore::Template::NotFoundError)
-      end
-    end
-
     describe "RSS rendering" do
       let(:params) { { path: page.path_segment, format: :rss } }
 
@@ -126,6 +117,19 @@ describe PagesCore::Frontend::PagesController, type: :controller do
         page.reload
         expect(response.body).to eq(PageSerializer.new(page).to_json)
       end
+    end
+  end
+
+  describe "Page rendering with a nonexistant template" do
+    before do
+      routes.draw { get("*path" => "pages#show") }
+    end
+
+    let(:page) { create(:page, name: "Home", template: "nonexistant") }
+
+    it "raises an error" do
+      expect { get :show, params: { path: page.path_segment } }
+        .to raise_error(PagesCore::Template::NotFoundError)
     end
   end
 end
