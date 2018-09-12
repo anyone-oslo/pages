@@ -1,4 +1,4 @@
-window.Modal = {
+window.jQueryModal = {
   container: false,
 
   makeContainer: function() {
@@ -32,7 +32,7 @@ window.Modal = {
     this.position();
     $(document.body).append("<div id=\"modalOverlay\"/>");
     $("#modalOverlay").show().click(function() {
-      return Modal.clear();
+      return jQueryModal.clear();
     }).css({
       position: "absolute",
       top: 0,
@@ -46,7 +46,7 @@ window.Modal = {
       opacity: 0.6
     }, 100);
     return $(this.container).find(".clear-modal").click(function() {
-      return Modal.clear();
+      return jQueryModal.clear();
     });
   },
 

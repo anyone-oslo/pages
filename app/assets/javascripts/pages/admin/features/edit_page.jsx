@@ -122,7 +122,7 @@ class EditPage {
 
   uploadModals() {
     let uploadModal = function(id) {
-      return Modal.show(
+      return jQueryModal.show(
         "<div class=\"uploadImages\">" + $("#" + id).html() + "</div>"
       );
     }
