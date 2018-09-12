@@ -8,7 +8,7 @@ module PagesCore
           send_data(@page_file.data,
                     filename: @page_file.filename,
                     type: @page_file.content_type,
-                    disposition: "attachment")
+                    disposition: "inline")
         end
       end
 
