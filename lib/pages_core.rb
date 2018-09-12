@@ -49,8 +49,13 @@ require "pages_core/engine"
 require "pages_core/extensions"
 require "pages_core/page_path_constraint"
 require "pages_core/pages_plugin"
-require "pages_core/templates"
+require "pages_core/template_blocks"
+require "pages_core/template"
+require "pages_core/template_converter"
 require "pages_core/version"
+
+# Pages deprecated
+require "pages_core/templates"
 
 module PagesCore
   class NotAuthorized < StandardError; end

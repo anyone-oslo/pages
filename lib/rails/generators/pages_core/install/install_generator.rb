@@ -50,7 +50,14 @@ module PagesCore
                  File.join("app/controllers/pages_controller.rb"))
       end
 
+      def create_application_template
+        template("application_template.rb",
+                 File.join("app/templates/application_template.rb"))
+      end
+
       def create_default_template
+        template("index_template.rb",
+                 File.join("app/templates/index_template.rb"))
         copy_file("default_page_template.html.erb",
                   File.join("app/views/pages/templates/index.html.erb"))
       end
@@ -77,10 +84,8 @@ module PagesCore
                  File.join("config/initializers/cache_sweeper.rb"))
       end
 
-      def create_template_initializer
-        read_configuration!
-        template("page_templates_initializer.rb",
-                 File.join("config/initializers/page_templates.rb"))
+      def create_sphinx_config
+        template "thinking_sphinx.yml", File.join("config/thinking_sphinx.yml")
       end
 
       def create_gitignore

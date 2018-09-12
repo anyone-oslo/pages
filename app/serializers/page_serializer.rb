@@ -1,6 +1,6 @@
 class PageSerializer < ActiveModel::Serializer
   attributes :id, :param, :parent_page_id, :locale
-  attributes(*PagesCore::Templates::TemplateConfiguration.all_blocks)
+  attributes(*PagesCore::Template.block_ids)
   attributes :published_at, :pinned
 
   has_one :image

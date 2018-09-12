@@ -48,7 +48,7 @@
   <% end %>
 
   <%# #### IMAGES #### %>
-  <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
+  <% if @page.template_config.images? %>
     <%= content_tab "Images" do %>
       <%= render partial: 'edit_images', locals: {f: f} %>
     <% end %>
@@ -56,7 +56,7 @@
 
 
   <%# #### FILES #### %>
-  <% if @page.template_config.value(:files) %>
+  <% if @page.template_config.files? %>
     <%= content_tab "Files" do %>
       <% if @page.files.any? %>
         <ul class="file-list" data-url="<%= reorder_admin_page_files_url(@locale, @page) %>">
@@ -132,7 +132,7 @@
 
 
 <%# #### UPLOAD FILE #### %>
-<% if @page.template_config.value(:files) %>
+<% if @page.template_config.files? %>
   <div id="new-file" class="page_new_file">
     <h2>Upload new file</h2>
     <%= form_for((@new_file = PageFile.new),
