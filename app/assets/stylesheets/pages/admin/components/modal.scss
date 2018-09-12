@@ -1,3 +1,30 @@
+.modal-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.open {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.9);
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 100;
+  }
+
+  .modal {
+    max-width: 80%;
+    background: $c-background;
+    padding: 20px;
+    border: 1px solid $c-border;
+  }
+}
+
+
+
+/* Old rules */
+
 #modal-container {
   z-index:20;
   border: 1px solid #555;
