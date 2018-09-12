@@ -25,42 +25,17 @@
    SOFTWARE.
  */
 
-class PageTree extends React.Component {
+class PageTree extends Reflux.Component {
   constructor(props) {
     super(props);
-    this.state = this.init(this.props);
-
-    if (props.tree) {
-      PageTreeActions.init(this.props.tree);
-    }
+    this.state = {
+      dragging: this.initDragging()
+    };
+    this.store = PageTreeStore;
   }
 
   componentDidMount() {
-    let self = this;
-    this.unsubscribe = PageTreeStore.listen(
-      newTree => self.setState({tree: newTree})
-    );
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this._updated) {
-      this.setState(this.init(nextProps));
-      if (nextProps.tree) {
-        PageTreeActions.init(this.props.tree);
-      }
-    } else {
-      this._updated = false;
-    }
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  init(props) {
-    return {
-      dragging: this.initDragging()
-    };
+    PageTreeActions.init(this.props.tree);
   }
 
   initDragging() {
@@ -101,7 +76,6 @@ class PageTree extends React.Component {
   }
 
   render() {
-    var self = this;
     var tree = this.state.tree;
     var dragging = this.state.dragging;
 
