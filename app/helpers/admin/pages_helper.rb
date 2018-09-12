@@ -28,14 +28,33 @@ module Admin
 
     def page_block_field(form, block_name, block_options)
       labelled_field(
-        form.send(
-          block_options[:size] == :field ? :text_field : :text_area,
-          block_name,
-          page_block_field_options(block_options)
-        ),
+        if block_options[:type] == :select
+          page_block_select(form, block_name, block_options)
+        else
+          page_block_text_field(form, block_name, block_options)
+        end,
         block_options[:title],
         errors: form.object.errors[block_name],
         description: block_options[:description]
+      )
+    end
+
+    def page_block_select(form, block_name, block_options)
+      template_options = if block_options[:options].is_a?(Hash)
+                           block_options[:options][form.object.locale.to_sym]
+                         else
+                           block_options[:options]
+                         end
+      form.send(:select, block_name, ([""] +
+                                      template_options +
+                                      [form.object.send(block_name)]).uniq)
+    end
+
+    def page_block_text_field(form, block_name, block_options)
+      form.send(
+        block_options[:size] == :field ? :text_field : :text_area,
+        block_name,
+        page_block_field_options(block_options)
       )
     end
 
