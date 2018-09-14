@@ -2,22 +2,19 @@ class ImageEditor extends React.Component {
   constructor(props) {
     super(props);
     let image = props.image;
+
     this.state = {
-      caption: image.caption,
-      alternative: image.alternative,
-      width: image.real_width,
-      height: image.real_height,
-      cropping: false,
-      crop: {
-        x: ((image.crop_start_x || 0) / image.real_width) * 100,
-        y: ((image.crop_start_y || 0) / image.real_height) * 100,
-        width: ((image.crop_width || image.real_width) / image.real_width) * 100,
-        height: ((image.crop_height || image.real_height) / image.real_height) * 100
-      },
+      aspect:         null,
+      caption:        image.caption,
+      alternative:    image.alternative,
+      cropping:       false,
+      crop_start_x:   image.crop_start_x || 0,
+      crop_start_y:   image.crop_start_y || 0,
+      crop_width:     image.crop_width || image.real_width,
+      crop_height:    image.crop_height || image.real_height,
       crop_gravity_x: image.crop_gravity_x,
       crop_gravity_y: image.crop_gravity_y,
-      focal: this.initialFocalPoint(image),
-      croppedImage: null
+      croppedImage:   null
     };
 
     this.aspectRatios = [
@@ -29,19 +26,8 @@ class ImageEditor extends React.Component {
     this.imageContainer = React.createRef();
     this.handleResize = this.handleResize.bind(this);
     this.completeCrop = this.completeCrop.bind(this);
+    this.setCrop = this.setCrop.bind(this);
     this.setFocal = this.setFocal.bind(this);
-  }
-
-  initialFocalPoint(image) {
-    let x = image.crop_gravity_x;
-    let y = image.crop_gravity_y;
-    return {
-      x: (x === null) ? 50 : ((x / image.real_width) * 100),
-      y: (y === null) ? 50 : ((y / image.real_height) * 100)
-    };
-  }
-
-  componentWillMount() {
   }
 
   componentDidMount() {
@@ -73,12 +59,11 @@ class ImageEditor extends React.Component {
 
   imageSize() {
     let image = this.props.image;
-    let crop = this.cropSize();
+    let { crop_width, crop_height } = this.state;
     if (this.state.cropping) {
       return { width: image.real_width, height: image.real_height };
     } else {
-      return { width: (image.real_width * (crop.width / 100)),
-               height: (image.real_height * (crop.height / 100)) };
+      return { width: crop_width, height: crop_height };
     }
   }
 
@@ -105,17 +90,18 @@ class ImageEditor extends React.Component {
       return (
         <div className="image-wrapper" style={style}>
           <ReactCrop src={image.uncropped_url}
-                     crop={this.state.crop}
+                     crop={this.cropSize()}
                      minWidth="10"
                      minHeight="10"
-                     onChange={crop => this.setState({ crop: crop })} />
+                     onChange={this.setCrop} />
         </div>
       );
     } else {
+      let focal = this.getFocal();
       return (
         <div className="image-wrapper" style={style}>
           <FocalPoint width={width} height={height}
-                      x={this.state.focal.x} y={this.state.focal.y}
+                      x={focal.x} y={focal.y}
                       onChange={this.setFocal} />
           <img src={this.state.croppedImage} />
         </div>
@@ -123,20 +109,51 @@ class ImageEditor extends React.Component {
     }
   }
 
-  setFocal(focal) {
+  setCrop(crop) {
     let image = this.props.image;
-    let crop = this.cropSize();
-    let cropWidth = image.real_width * (crop.width / 100);
-    let cropHeight = image.real_height * (crop.height / 100);
-    let cropX = image.real_width * (crop.x / 100);
-    let cropY = image.real_height * (crop.y / 100);
-    this.setState({focal: focal,
-                   crop_gravity_x: (cropWidth * (focal.x / 100)) + cropX,
-                   crop_gravity_y: (cropHeight * (focal.y / 100)) + cropY});
+
+    // Don't crop if dimensions are below the threshold
+    if (crop.width < 5 || crop.height < 5) {
+      crop = { x: 0, y: 0, width: 100, height: 100 };
+    }
+
+    this.setState({aspect:       crop.aspect,
+                   crop_start_x: image.real_width * (crop.x / 100),
+                   crop_start_y: image.real_height * (crop.y / 100),
+                   crop_width:   image.real_width * (crop.width / 100),
+                   crop_height:  image.real_height * (crop.height / 100)})
+  }
+
+  getFocal() {
+    var x, y;
+    let { crop_gravity_x,
+          crop_gravity_y,
+          crop_start_x,
+          crop_start_y,
+          crop_width,
+          crop_height } = this.state;
+
+    if (crop_gravity_x === null || crop_gravity_y === null) {
+      return { x: 50, y: 50 };
+    } else {
+      x = ((crop_gravity_x - crop_start_x) / crop_width) * 100;
+      y = ((crop_gravity_y - crop_start_y) / crop_height) * 100;
+      return { x: x, y: y };
+    }
+  }
+
+  setFocal(focal) {
+    let {
+      crop_start_x,
+      crop_start_y,
+      crop_width,
+      crop_height
+    } = this.state;
+    this.setState({crop_gravity_x: (crop_width * (focal.x / 100)) + crop_start_x,
+                   crop_gravity_y: (crop_height * (focal.y / 100)) + crop_start_y});
   }
 
   setAspect(aspect) {
-    this.state.crop.aspect = aspect;
     let crop = this.cropSize();
     let image = this.props.image;
     let imageAspect = image.real_width / image.real_height;
@@ -154,9 +171,10 @@ class ImageEditor extends React.Component {
 
       crop.x = (100 - crop.width) / 2;
       crop.y = (100 - crop.height) / 2;
+      this.setCrop(crop);
+    } else {
+      this.setState({aspect: null});
     }
-
-    this.setState({crop: crop});
   }
 
   renderToolbar() {
@@ -182,7 +200,7 @@ class ImageEditor extends React.Component {
           {this.aspectRatios.map(ratio => (
             <a key={"ratio-" + ratio[1]}
                href="#"
-               className={ratio[1] == this.state.crop.aspect ? "current" : ""}
+               className={ratio[1] == this.state.aspect ? "current" : ""}
                onClick={evt => updateAspect(evt, ratio[1])}>
               {ratio[0]}
             </a>
@@ -231,8 +249,15 @@ class ImageEditor extends React.Component {
   cropSize() {
     let image = this.props.image;
     let imageAspect = image.real_width / image.real_height;
-
-    var { x, y, width, height, aspect } = this.state.crop;
+    let { aspect,
+          crop_start_x,
+          crop_start_y,
+          crop_width,
+          crop_height } = this.state;
+    let x = (crop_start_x / image.real_width) * 100;
+    let y = (crop_start_y / image.real_height) * 100;
+    var width = (crop_width / image.real_width) * 100;
+    var height = (crop_height / image.real_height) * 100;
 
     if (aspect && width) {
       height = (width / aspect) * imageAspect;
@@ -240,13 +265,11 @@ class ImageEditor extends React.Component {
       width = (height * aspect) / imageAspect;
     }
 
-    // Don't crop if dimensions are below the threshold
-    if (width < 5 || height < 5) {
-      return { x: 0, y: 0, width: 100, height: 100 };
-    } else {
+    if (aspect === null) {
       return { x: x, y: y, width: width, height: height };
+    } else {
+      return { x: x, y: y, width: width, height: height, aspect: aspect };
     }
-
   }
 
   getCroppedImage() {
