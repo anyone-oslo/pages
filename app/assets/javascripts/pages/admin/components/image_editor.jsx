@@ -14,6 +14,9 @@ class ImageEditor extends React.Component {
         width: ((image.crop_width || image.real_width) / image.real_width) * 100,
         height: ((image.crop_height || image.real_height) / image.real_height) * 100
       },
+      crop_gravity_x: image.crop_gravity_x,
+      crop_gravity_y: image.crop_gravity_y,
+      focal: this.initialFocalPoint(image),
       croppedImage: null
     };
 
@@ -26,6 +29,16 @@ class ImageEditor extends React.Component {
     this.imageContainer = React.createRef();
     this.handleResize = this.handleResize.bind(this);
     this.completeCrop = this.completeCrop.bind(this);
+    this.setFocal = this.setFocal.bind(this);
+  }
+
+  initialFocalPoint(image) {
+    let x = image.crop_gravity_x;
+    let y = image.crop_gravity_y;
+    return {
+      x: (x === null) ? 50 : ((x / image.real_width) * 100),
+      y: (y === null) ? 50 : ((y / image.real_height) * 100)
+    };
   }
 
   componentWillMount() {
@@ -101,10 +114,25 @@ class ImageEditor extends React.Component {
     } else {
       return (
         <div className="image-wrapper" style={style}>
+          <FocalPoint width={width} height={height}
+                      x={this.state.focal.x} y={this.state.focal.y}
+                      onChange={this.setFocal} />
           <img src={this.state.croppedImage} />
         </div>
       );
     }
+  }
+
+  setFocal(focal) {
+    let image = this.props.image;
+    let crop = this.cropSize();
+    let cropWidth = image.real_width * (crop.width / 100);
+    let cropHeight = image.real_height * (crop.height / 100);
+    let cropX = image.real_width * (crop.x / 100);
+    let cropY = image.real_height * (crop.y / 100);
+    this.setState({focal: focal,
+                   crop_gravity_x: (cropWidth * (focal.x / 100)) + cropX,
+                   crop_gravity_y: (cropHeight * (focal.y / 100)) + cropY});
   }
 
   setAspect(aspect) {
