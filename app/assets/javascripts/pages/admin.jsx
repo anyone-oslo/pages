@@ -11,6 +11,8 @@
 // Vendored assets
 //= require jquery.dimscreen
 //= require jquery.fieldselection
+//= require ReactCrop.min
+
 //= require_self
 //= require pages/login_form
 //= require_tree ./admin/lib

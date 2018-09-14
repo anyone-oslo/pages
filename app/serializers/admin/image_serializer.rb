@@ -21,7 +21,7 @@ module Admin
     def uncropped_url
       uncropped_dynamic_image_path(
         object,
-        size: "1200x1200",
+        size: "2000x2000",
         upscale: false
       )
     end
