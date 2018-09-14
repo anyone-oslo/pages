@@ -14,10 +14,11 @@
   }
 
   .modal {
-    max-width: 80%;
+    max-width: 90%;
     background: $c-background;
     padding: 20px;
-    border: 1px solid $c-border;
+    border-radius: 5px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.2);
   }
 }
 

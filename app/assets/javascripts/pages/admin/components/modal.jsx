@@ -4,6 +4,11 @@ class Modal extends Reflux.Component {
     this.store = ModalStore;
   }
 
+  closeModal(evt) {
+    evt.stopPropagation();
+    ModalActions.close();
+  }
+
   render() {
     let component = this.state.component;
 
@@ -12,7 +17,7 @@ class Modal extends Reflux.Component {
     }
 
     return (
-      <div className="modal-wrapper open" onClick={ModalActions.close}>
+      <div className="modal-wrapper open" onClick={this.closeModal}>
         <div className="modal" onClick={(evt) => evt.stopPropagation()}>
           {component}
         </div>

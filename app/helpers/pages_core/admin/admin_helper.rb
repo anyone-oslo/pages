@@ -42,12 +42,12 @@ module PagesCore
 
       # Generates tags for an editable dynamic image.
       def editable_dynamic_image_tag(image, options = {})
-        preview_url = uncropped_dynamic_image_url(image, size: "800x")
-        link_to(
-          dynamic_image_tag(image, options), admin_image_path(image),
-          class: "editableImage",
-          data: { "preview-url" => preview_url }
-        )
+        size = Vector2d(fit_size!(image, options.dup)).round
+        react_component("EditableImage",
+                        src: dynamic_image_path(image, options),
+                        width: size.x,
+                        height: size.y,
+                        image: ::Admin::ImageSerializer.new(image))
       end
 
       def content_tab(name, options = {}, &block)
