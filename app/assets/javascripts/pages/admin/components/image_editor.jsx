@@ -41,20 +41,48 @@ class ImageEditor extends React.Component {
     this.handleResize();
   }
 
+  componentDidUpdate() {
+    let size = this.containerSize();
+    if (size.width != this.state.containerSize.width ||
+        size.height != this.state.containerSize.height) {
+      this.handleResize();
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
   }
 
-  handleResize() {
+  containerSize() {
     let elem = this.imageContainer.current;
-    this.setState({
-      containerSize: { width: elem.offsetWidth, height: elem.offsetHeight }
-    });
+    return { width: elem.offsetWidth, height: elem.offsetHeight };
+  }
+
+  handleResize() {
+    this.setState({containerSize: this.containerSize()});
   }
 
   completeCrop() {
-    this.setState({ cropping: false,
-                    croppedImage: this.getCroppedImage() });
+    let { crop_start_x,
+          crop_start_y,
+          crop_width,
+          crop_height,
+          crop_gravity_x,
+          crop_gravity_y } = this.state
+
+    // Disable focal point if it's out of bounds.
+    if (crop_gravity_x < crop_start_x ||
+        crop_gravity_x > (crop_start_x + crop_width) ||
+        crop_gravity_y < crop_start_y ||
+        crop_gravity_y > (crop_start_y + crop_height)) {
+      crop_gravity_x = null;
+      crop_gravity_y = null;
+    }
+
+    this.setState({crop_gravity_x: crop_gravity_x,
+                   crop_gravity_y: crop_gravity_y,
+                   cropping: false,
+                   croppedImage: this.getCroppedImage()});
   }
 
   imageSize() {
@@ -100,9 +128,11 @@ class ImageEditor extends React.Component {
       let focal = this.getFocal();
       return (
         <div className="image-wrapper" style={style}>
-          <FocalPoint width={width} height={height}
-                      x={focal.x} y={focal.y}
-                      onChange={this.setFocal} />
+          {focal && (
+             <FocalPoint width={width} height={height}
+                         x={focal.x} y={focal.y}
+                         onChange={this.setFocal} />
+          )}
           <img src={this.state.croppedImage} />
         </div>
       );
@@ -134,12 +164,20 @@ class ImageEditor extends React.Component {
           crop_height } = this.state;
 
     if (crop_gravity_x === null || crop_gravity_y === null) {
-      return { x: 50, y: 50 };
+      return null;
     } else {
       x = ((crop_gravity_x - crop_start_x) / crop_width) * 100;
       y = ((crop_gravity_y - crop_start_y) / crop_height) * 100;
       return { x: x, y: y };
     }
+  }
+
+  enableFocal() {
+    this.setFocal({x: 50, y: 50});
+  }
+
+  disableFocal() {
+    this.setState({crop_gravity_x: null, crop_gravity_y: null});
   }
 
   setFocal(focal) {
@@ -190,6 +228,16 @@ class ImageEditor extends React.Component {
           <button onClick={() => this.setState({ cropping: true })}>
             Crop
           </button>
+          {(this.state.crop_gravity_x === null) && (
+             <button onClick={() => this.enableFocal()}>
+               Set focal point
+             </button>
+          )}
+          {!(this.state.crop_gravity_x === null) && (
+             <button onClick={() => this.disableFocal()}>
+               Remove focal point
+             </button>
+          )}
         </div>
       );
     } else {
