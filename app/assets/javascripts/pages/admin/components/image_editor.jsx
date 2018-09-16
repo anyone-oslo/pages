@@ -25,9 +25,12 @@ class ImageEditor extends React.Component {
 
     this.imageContainer = React.createRef();
     this.handleResize = this.handleResize.bind(this);
+    this.startCrop = this.startCrop.bind(this);
     this.completeCrop = this.completeCrop.bind(this);
     this.setCrop = this.setCrop.bind(this);
     this.setFocal = this.setFocal.bind(this);
+    this.enableFocal = this.enableFocal.bind(this);
+    this.disableFocal = this.disableFocal.bind(this);
   }
 
   componentDidMount() {
@@ -60,6 +63,10 @@ class ImageEditor extends React.Component {
 
   handleResize() {
     this.setState({containerSize: this.containerSize()});
+  }
+
+  startCrop() {
+    this.setState({cropping: true, crop: this.cropSize()});
   }
 
   completeCrop() {
@@ -118,7 +125,7 @@ class ImageEditor extends React.Component {
       return (
         <div className="image-wrapper" style={style}>
           <ReactCrop src={image.uncropped_url}
-                     crop={this.cropSize()}
+                     crop={this.state.crop}
                      minWidth="10"
                      minHeight="10"
                      onChange={this.setCrop} />
@@ -147,7 +154,12 @@ class ImageEditor extends React.Component {
       crop = { x: 0, y: 0, width: 100, height: 100 };
     }
 
-    this.setState({aspect:       crop.aspect,
+    if (crop.aspect === null) {
+      delete crop.aspect;
+    }
+
+    this.setState({crop:         crop,
+                   aspect:       crop.aspect,
                    crop_start_x: image.real_width * (crop.x / 100),
                    crop_start_y: image.real_height * (crop.y / 100),
                    crop_width:   image.real_width * (crop.width / 100),
@@ -209,10 +221,10 @@ class ImageEditor extends React.Component {
 
       crop.x = (100 - crop.width) / 2;
       crop.y = (100 - crop.height) / 2;
-      this.setCrop(crop);
     } else {
-      this.setState({aspect: null});
+      delete crop.aspect;
     }
+    this.setCrop(crop);
   }
 
   renderToolbar() {
@@ -225,16 +237,16 @@ class ImageEditor extends React.Component {
     if (!this.state.cropping) {
       return (
         <div className="toolbar">
-          <button onClick={() => this.setState({ cropping: true })}>
+          <button onClick={this.startCrop}>
             Crop
           </button>
           {(this.state.crop_gravity_x === null) && (
-             <button onClick={() => this.enableFocal()}>
+             <button onClick={this.enableFocal}>
                Set focal point
              </button>
           )}
           {!(this.state.crop_gravity_x === null) && (
-             <button onClick={() => this.disableFocal()}>
+             <button onClick={this.disableFocal}>
                Remove focal point
              </button>
           )}
