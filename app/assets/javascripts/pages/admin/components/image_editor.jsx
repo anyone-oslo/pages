@@ -227,8 +227,20 @@ class ImageEditor extends React.Component {
     this.setCrop(crop);
   }
 
+  format() {
+    let width = Math.ceil(this.state.crop_width);
+    let height = Math.ceil(this.state.crop_height);
+    let format = this.props.image.content_type.split("/")[1].toUpperCase();
+    return (
+      <span className="format">
+        {width}x{height} {format}
+      </span>
+    );
+  }
+
   renderToolbar() {
     let component = this;
+    let image = this.props.image
     let updateAspect = function (evt, aspect) {
       evt.preventDefault();
       component.setAspect(aspect);
@@ -237,6 +249,7 @@ class ImageEditor extends React.Component {
     if (!this.state.cropping) {
       return (
         <div className="toolbar">
+          {this.format()}
           <button onClick={this.startCrop}>
             Crop
           </button>
@@ -250,11 +263,13 @@ class ImageEditor extends React.Component {
                Remove focal point
              </button>
           )}
+          <a href={image.original_url}>Original</a>
         </div>
       );
     } else {
       return (
         <div className="toolbar">
+          {this.format()}
           <button onClick={this.completeCrop}>Done</button>
           Aspect ratio:
           {this.aspectRatios.map(ratio => (
