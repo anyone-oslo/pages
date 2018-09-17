@@ -20,17 +20,16 @@ class ImageEditor extends React.Component {
     this.aspectRatios = [
       ["Free", null], ["1:1", 1],    ["3:2", 3/2], ["2:3", 2/3],
       ["4:3", 4/3],   ["3:4", 3/4],  ["5:4", 5/4], ["4:5", 4/5],
-      ["16:9", 16/9], ["9:16", 9/16]
+      ["16:9", 16/9]
     ];
 
     this.imageContainer = React.createRef();
     this.handleResize = this.handleResize.bind(this);
-    this.startCrop = this.startCrop.bind(this);
     this.completeCrop = this.completeCrop.bind(this);
     this.setCrop = this.setCrop.bind(this);
     this.setFocal = this.setFocal.bind(this);
-    this.enableFocal = this.enableFocal.bind(this);
-    this.disableFocal = this.disableFocal.bind(this);
+    this.toggleCrop = this.toggleCrop.bind(this);
+    this.toggleFocal = this.toggleFocal.bind(this);
   }
 
   componentDidMount() {
@@ -58,15 +57,11 @@ class ImageEditor extends React.Component {
 
   containerSize() {
     let elem = this.imageContainer.current;
-    return { width: elem.offsetWidth, height: elem.offsetHeight };
+    return { width: elem.offsetWidth - 2, height: elem.offsetHeight - 2 };
   }
 
   handleResize() {
     this.setState({containerSize: this.containerSize()});
-  }
-
-  startCrop() {
-    this.setState({cropping: true, crop: this.cropSize()});
   }
 
   completeCrop() {
@@ -184,12 +179,20 @@ class ImageEditor extends React.Component {
     }
   }
 
-  enableFocal() {
-    this.setFocal({x: 50, y: 50});
+  toggleCrop() {
+    if (this.state.cropping) {
+      this.completeCrop();
+    } else {
+      this.setState({cropping: true, crop: this.cropSize()});
+    }
   }
 
-  disableFocal() {
-    this.setState({crop_gravity_x: null, crop_gravity_y: null});
+  toggleFocal() {
+    if (this.state.crop_gravity_x === null) {
+      this.setFocal({x: 50, y: 50});
+    } else {
+      this.setState({crop_gravity_x: null, crop_gravity_y: null});
+    }
   }
 
   setFocal(focal) {
@@ -240,49 +243,55 @@ class ImageEditor extends React.Component {
 
   renderToolbar() {
     let component = this;
+    let cropping = this.state.cropping;
     let image = this.props.image
     let updateAspect = function (evt, aspect) {
       evt.preventDefault();
       component.setAspect(aspect);
     }
 
-    if (!this.state.cropping) {
-      return (
+
+    return (
+      <div className="toolbars">
         <div className="toolbar">
-          {this.format()}
-          <button onClick={this.startCrop}>
-            Crop
+          <div className="info">
+            {this.format()}
+          </div>
+          <button title="Crop image"
+                  onClick={this.toggleCrop}
+                  className={cropping ? "active" : ""}>
+            <i className="fa fa-crop" />
           </button>
-          {(this.state.crop_gravity_x === null) && (
-             <button onClick={this.enableFocal}>
-               Set focal point
-             </button>
-          )}
-          {!(this.state.crop_gravity_x === null) && (
-             <button onClick={this.disableFocal}>
-               Remove focal point
-             </button>
-          )}
-          <a href={image.original_url}>Original</a>
+          <button disabled={cropping}
+                  title="Toggle focal point"
+                  onClick={this.toggleFocal}>
+            <i className="fa fa-bullseye" />
+          </button>
+          <a href={image.original_url}
+             className="button"
+             title="Download original image"
+             disabled={cropping}
+             download={image.filename}
+             onClick={evt => cropping && evt.preventDefault()}>
+            <i className="fa fa-download" />
+          </a>
         </div>
-      );
-    } else {
-      return (
-        <div className="toolbar">
-          {this.format()}
-          <button onClick={this.completeCrop}>Done</button>
-          Aspect ratio:
-          {this.aspectRatios.map(ratio => (
-            <a key={"ratio-" + ratio[1]}
-               href="#"
-               className={ratio[1] == this.state.aspect ? "current" : ""}
-               onClick={evt => updateAspect(evt, ratio[1])}>
-              {ratio[0]}
-            </a>
-          ))}
-        </div>
-      );
-    }
+        {cropping && (
+           <div className="aspect-ratios toolbar">
+             <div className="label">
+               Lock aspect ratio:
+             </div>
+             {this.aspectRatios.map(ratio => (
+               <button key={"ratio-" + ratio[1]}
+                  className={(ratio[1] == this.state.aspect) ? "active" : ""}
+                  onClick={evt => updateAspect(evt, ratio[1])}>
+                 {ratio[0]}
+               </button>
+             ))}
+           </div>
+        )}
+      </div>
+    );
   }
 
   render() {

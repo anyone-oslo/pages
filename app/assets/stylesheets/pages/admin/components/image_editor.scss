@@ -4,7 +4,13 @@
   display: flex;
   flex-direction: column;
 
-  .toolbar {
+  .toolbars {
+    .aspect-ratios {
+      border-top: 0px;
+    }
+  }
+
+  .toolbar2 {
     padding-bottom: 20px;
     .format {
       float: right;
@@ -27,6 +33,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: 1px solid $c-border;
+    border-top: 0px;
 
     .image-wrapper {
       position: relative;
