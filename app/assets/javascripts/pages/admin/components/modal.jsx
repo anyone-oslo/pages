@@ -12,7 +12,10 @@ class Modal extends Reflux.Component {
   render() {
     let component = this.state.component;
 
-    if (!component) {
+    if (component) {
+      document.body.classList.add("modal");
+    } else {
+      document.body.classList.remove("modal");
       return (<div className="modal-wrapper" />);
     }
 
