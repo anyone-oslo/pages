@@ -297,14 +297,16 @@ class ImageEditor extends React.Component {
   render() {
     return (
       <div className="image-editor">
-        {this.renderToolbar()}
-        <div className="image-container" ref={this.imageContainer}>
-          {!this.state.croppedImage && (
-             <div className="loading">
-               Loading image&hellip;
-             </div>
-          )}
-          {this.renderImage()}
+        <div className="visual">
+          {this.renderToolbar()}
+          <div className="image-container" ref={this.imageContainer}>
+            {!this.state.croppedImage && (
+               <div className="loading">
+                 Loading image&hellip;
+               </div>
+            )}
+            {this.renderImage()}
+          </div>
         </div>
         {!this.state.cropping && (
            <form>
@@ -312,17 +314,27 @@ class ImageEditor extends React.Component {
                <label>
                  Caption
                </label>
-               <input type="text"
-                      value={this.state.caption}
-                      onChange={e => this.setState({caption: e.target.value})} />
+               <textarea onChange={e => this.setState({caption: e.target.value})}
+                         className="caption">
+                 {this.state.caption}
+               </textarea>
              </div>
              <div className="field">
                <label>
                  Alternative text
                </label>
-               <input type="text"
-                      value={this.state.alternative}
-                      onChange={e => this.setState({alternative: e.target.value})} />
+               <textarea className="alternative"
+                         onChange={e => this.setState({alternative: e.target.value})}>
+                 {this.state.alternative}
+               </textarea>
+             </div>
+             <div className="buttons">
+               <button>
+                 Save
+               </button>
+               <button onClick={() => ModalActions.close()}>
+                 Cancel
+               </button>
              </div>
            </form>
         )}

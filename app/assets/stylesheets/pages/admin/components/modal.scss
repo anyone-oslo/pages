@@ -17,7 +17,7 @@ body.modal {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.0);
   opacity: 0;
-  transition: background-color 200ms, opacity 200ms ease-out;
+  transition: background-color 200ms ease-out;
 
   &.open {
     position: fixed;

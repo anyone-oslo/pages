@@ -2,7 +2,7 @@
   width: 80vw;
   height: 80vh;
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
 
   .toolbars {
     .aspect-ratios {
@@ -10,23 +10,17 @@
     }
   }
 
-  .toolbar2 {
-    padding-bottom: 20px;
-    .format {
-      float: right;
-    }
-    a {
-      margin: 0px 5px;
-      &.current {
-        color: $c-text;
-        text-decoration: none;
-      }
-    }
+  .visual {
+    flex: 1 1 auto;
+    background: green;
+    display: flex;
+    flex-direction: column;
   }
 
   .image-container {
     flex: 1 1 auto;
     width: 100%;
+    height: 100%;
     background: #ddd;
     background-image: image-url("pages/admin/image-editor-bg.png");
     display: flex;
@@ -37,7 +31,7 @@
     border-top: 0px;
 
     .image-wrapper {
-      position: relative;
+      position: absolute;
       flex: 0;
       img {
         display: block;
@@ -83,8 +77,15 @@
   }
 
   form {
+    width: 300px;
     display: block;
-    padding-top: 20px;
+    margin-left: 20px;
+    textarea {
+      max-width: 100%;
+      &.caption {
+        height: 100px;
+      }
+    }
   }
 
   .focal-editor {
