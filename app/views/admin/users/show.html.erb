@@ -25,7 +25,7 @@
 <div class="content">
   <% if @user.image -%>
     <div style="float: right;">
-      <%= editable_dynamic_image_tag(@user.image, size: '150x150', class: 'thumbnail') %>
+      <%= editable_dynamic_image_tag(@user.image, caption: true) %>
     </div>
   <% end -%>
   <h2><%= @user.name %></h2>

@@ -41,12 +41,11 @@ module PagesCore
       end
 
       # Generates tags for an editable dynamic image.
-      def editable_dynamic_image_tag(image, options = {})
-        size = Vector2d(fit_size!(image, options.dup)).round
+      def editable_dynamic_image_tag(image, width: 250, caption: false)
         react_component("EditableImage",
-                        src: dynamic_image_path(image, options),
-                        width: size.x,
-                        height: size.y,
+                        caption: caption,
+                        src: dynamic_image_path(image, size: "#{width}x"),
+                        width: width,
                         image: ::Admin::ImageSerializer.new(image))
       end
 

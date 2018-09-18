@@ -30,6 +30,7 @@ class ImageEditor extends React.Component {
     this.setFocal = this.setFocal.bind(this);
     this.toggleCrop = this.toggleCrop.bind(this);
     this.toggleFocal = this.toggleFocal.bind(this);
+    this.save = this.save.bind(this);
   }
 
   componentDidMount() {
@@ -309,37 +310,51 @@ class ImageEditor extends React.Component {
           </div>
         </div>
         {!this.state.cropping && (
-           <form>
-             <div className="field">
-               <label>
-                 Caption
-               </label>
-               <textarea onChange={e => this.setState({caption: e.target.value})}
-                         className="caption">
-                 {this.state.caption}
-               </textarea>
-             </div>
-             <div className="field">
-               <label>
-                 Alternative text
-               </label>
-               <textarea className="alternative"
-                         onChange={e => this.setState({alternative: e.target.value})}>
-                 {this.state.alternative}
-               </textarea>
-             </div>
-             <div className="buttons">
-               <button>
-                 Save
-               </button>
-               <button onClick={() => ModalActions.close()}>
-                 Cancel
-               </button>
-             </div>
-           </form>
+          <form>
+            {this.props.caption && (
+               <div className="field">
+                 <label>
+                   Caption
+                 </label>
+                 <textarea onChange={e => this.setState({caption: e.target.value})}
+                           value={this.state.caption}
+                           className="caption" />
+               </div>
+            )}
+            <div className="field">
+              <label>
+                Alternative text
+              </label>
+              <textarea className="alternative"
+                        value={this.state.alternative}
+                        onChange={e => this.setState({alternative: e.target.value})} />
+            </div>
+            <div className="buttons">
+              <button onClick={this.save}>
+                Save
+              </button>
+              <button onClick={() => ModalActions.close()}>
+                Cancel
+              </button>
+            </div>
+          </form>
         )}
       </div>
     );
+  }
+
+  save() {
+    let data = { crop_start_x: this.state.crop_start_x,
+                 crop_start_y: this.state.crop_start_y,
+                 crop_width: this.state.crop_width,
+                 crop_height: this.state.crop_height,
+                 crop_gravity_x: this.state.crop_gravity_x,
+                 crop_gravity_y: this.state.crop_gravity_y }
+
+    if (this.props.onUpdate) {
+      this.props.onUpdate(data, this.state.croppedImage);
+    }
+    ModalActions.close();
   }
 
   cropSize() {
