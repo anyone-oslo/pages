@@ -43,13 +43,22 @@ module PagesCore
       # Generates tags for an editable dynamic image.
       def editable_dynamic_image_tag(image, width: 250, caption: false, locale: nil)
         react_component("EditableImage",
-                        caption: caption,
-                        src: dynamic_image_path(image, size: "#{width}x"),
-                        width: width,
-                        locale: locale || I18n.default_locale,
-                        locales: PagesCore.config.locales,
-                        csrf_token: form_authenticity_token,
-                        image: ::Admin::ImageSerializer.new(image))
+                        editable_image_options(
+                          image,
+                          width: width,
+                          caption: caption,
+                          locale: locale
+                        ).merge(width: width))
+      end
+
+      def image_uploader(form, attr, caption: false, locale: nil)
+        image = form.object.send(attr)
+        react_component("ImageUploader",
+                        editable_image_options(
+                          image,
+                          caption: caption,
+                          locale: locale
+                        ).merge(attr: "#{form.object_name}[#{attr}_id]"))
       end
 
       def content_tab(name, options = {}, &block)
@@ -121,6 +130,20 @@ module PagesCore
                     content,
                     class: "content_tab",
                     id: "content-tab-#{key}")
+      end
+
+      def editable_image_options(image, width: 250, caption: false, locale: nil)
+        image_opts = if image
+                       { src: dynamic_image_path(image, size: "#{width}x"),
+                         image: ::Admin::ImageSerializer.new(image) }
+                     else
+                       {}
+                     end
+        image_opts.merge(width: width,
+                         caption: caption,
+                         locale: locale || I18n.default_locale,
+                         locales: PagesCore.config.locales,
+                         csrf_token: form_authenticity_token)
       end
     end
   end

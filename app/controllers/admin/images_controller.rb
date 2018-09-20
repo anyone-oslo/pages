@@ -10,7 +10,16 @@ module Admin
 
     def edit; end
 
-    def create; end
+    def create
+      @image = Image.create(image_params)
+      if @image.valid?
+        respond_to do |format|
+          format.json do
+            render json: @image, serializer: Admin::ImageSerializer
+          end
+        end
+      end
+    end
 
     def update
       @image.update(image_params)

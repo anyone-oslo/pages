@@ -26,7 +26,7 @@ class EditableImage extends React.Component {
     let image = this.state.image;
     let width = image.crop_width || image.real_width;
     let height = image.crop_height || image.real_height;
-    return (height / width) * this.props.width;
+    return Math.round((height / width) * this.props.width);
   }
 
   update(image, croppedImage) {

@@ -24,17 +24,11 @@
   <%= f.labelled_text_field :name %>
   <%= f.labelled_text_field :email %>
 
-  <h2>Picture</h2>
-  <% if @user.image %>
-    <p id="user-image-info">
-      <%= (@user==current_user) ? "You already have" : "#{@user.name} already has" %> a profile picture.
-      You can
-      <%= link_to "delete it", delete_image_admin_user_path(@user), method: :delete, class: :delete %>
-      or upload a new file below to replace it.
-    </p>
-  <% end %>
+  <h2>Profile picture</h2>
 
-  <%= f.labelled_file_field :image %>
+  <%= image_uploader(f, :image) %>
+
+  <%#= f.labelled_file_field :image %>
 
   <% if policy(@user).change_password? %>
     <h2>Password</h2>
