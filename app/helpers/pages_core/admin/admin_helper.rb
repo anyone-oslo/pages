@@ -41,11 +41,13 @@ module PagesCore
       end
 
       # Generates tags for an editable dynamic image.
-      def editable_dynamic_image_tag(image, width: 250, caption: false)
+      def editable_dynamic_image_tag(image, width: 250, caption: false, locale: nil)
         react_component("EditableImage",
                         caption: caption,
                         src: dynamic_image_path(image, size: "#{width}x"),
                         width: width,
+                        locale: locale || I18n.default_locale,
+                        locales: PagesCore.config.locales,
                         image: ::Admin::ImageSerializer.new(image))
       end
 

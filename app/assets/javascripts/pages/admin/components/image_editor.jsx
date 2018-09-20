@@ -4,9 +4,10 @@ class ImageEditor extends React.Component {
     let image = props.image;
 
     this.state = {
+      locale:         this.props.locale,
       aspect:         null,
-      caption:        image.caption,
-      alternative:    image.alternative,
+      caption:        image.caption || {},
+      alternative:    image.alternative || {},
       cropping:       false,
       crop_start_x:   image.crop_start_x || 0,
       crop_start_y:   image.crop_start_y || 0,
@@ -295,7 +296,16 @@ class ImageEditor extends React.Component {
     );
   }
 
+  updateLocalized(name, value) {
+    let locale = this.state.locale;
+    this.setState({
+      [name]: mergeObject(this.state[name], { [locale]: value })
+    });
+  }
+
   render() {
+    let locale = this.state.locale;
+    let locales = this.props.locales;
     return (
       <div className="image-editor">
         <div className="visual">
@@ -310,41 +320,58 @@ class ImageEditor extends React.Component {
           </div>
         </div>
         {!this.state.cropping && (
-          <form>
-            {this.props.caption && (
-               <div className="field">
-                 <label>
-                   Caption
-                 </label>
-                 <textarea onChange={e => this.setState({caption: e.target.value})}
-                           value={this.state.caption}
-                           className="caption" />
-               </div>
-            )}
-            <div className="field">
-              <label>
-                Alternative text
-              </label>
-              <textarea className="alternative"
-                        value={this.state.alternative}
-                        onChange={e => this.setState({alternative: e.target.value})} />
-            </div>
-            <div className="buttons">
-              <button onClick={this.save}>
-                Save
-              </button>
-              <button onClick={() => ModalActions.close()}>
-                Cancel
-              </button>
-            </div>
-          </form>
+           <form>
+             {locales && Object.keys(locales).length > 1 && (
+                <div className="field">
+                  <label>
+                    Locale
+                  </label>
+                  <select name="locale"
+                          onChange={e => this.setState({locale: e.target.value})}>
+                    {Object.keys(locales).map(key => (
+                      <option key={`locale-${key}`} value={key}>
+                        {locales[key]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+             )}
+             {this.props.caption && (
+                <div className="field">
+                  <label>
+                    Caption
+                  </label>
+                  <textarea onChange={e => this.updateLocalized("caption", e.target.value)}
+                            value={this.state.caption[locale] || ""}
+                            className="caption" />
+                </div>
+             )}
+             <div className="field">
+               <label>
+                 Alternative text
+               </label>
+               <textarea className="alternative"
+                         value={this.state.alternative[locale] || ""}
+                         onChange={e => this.updateLocalized("alternative", e.target.value)} />
+             </div>
+             <div className="buttons">
+               <button onClick={this.save}>
+                 Save
+               </button>
+               <button onClick={() => ModalActions.close()}>
+                 Cancel
+               </button>
+             </div>
+           </form>
         )}
       </div>
     );
   }
 
   save() {
-    let data = { crop_start_x: this.state.crop_start_x,
+    let data = { alternative: this.state.alternative,
+                 caption: this.state.caption,
+                 crop_start_x: this.state.crop_start_x,
                  crop_start_y: this.state.crop_start_y,
                  crop_width: this.state.crop_width,
                  crop_height: this.state.crop_height,

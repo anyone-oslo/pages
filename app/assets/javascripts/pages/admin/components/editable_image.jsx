@@ -12,22 +12,12 @@ class EditableImage extends React.Component {
     this.update = this.update.bind(this);
   }
 
-  mergeObject(obj1, obj2) {
-    let merge = function(target, source) {
-      for (var prop in source) {
-        if (source.hasOwnProperty(prop)) {
-          target[prop] = source[prop];
-        }
-      }
-      return target;
-    }
-    return merge(merge({}, obj1), obj2);
-  }
-
   openEditor() {
     ModalActions.open(
       <ImageEditor image={this.state.image}
                    caption={this.props.caption}
+                   locale={this.props.locale}
+                   locales={this.props.locales}
                    onUpdate={this.update} />);
   }
 
@@ -39,7 +29,7 @@ class EditableImage extends React.Component {
   }
 
   update(image, croppedImage) {
-    this.setState({image: this.mergeObject(this.state.image, image),
+    this.setState({image: mergeObject(this.state.image, image),
                    src: croppedImage});
   }
 
