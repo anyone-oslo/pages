@@ -96,6 +96,13 @@
       }
     }
 
+    .embed-code {
+      input {
+        width: 50%;
+        margin-right: 8px;
+      }
+    }
+
     @include breakpoint-mobile {
       width: 100%;
       margin-left: 0px;

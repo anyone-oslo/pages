@@ -25,6 +25,7 @@ class ImageEditor extends React.Component {
     ];
 
     this.imageContainer = React.createRef();
+    this.copyEmbedCode = this.copyEmbedCode.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.completeCrop = this.completeCrop.bind(this);
     this.setCrop = this.setCrop.bind(this);
@@ -60,6 +61,21 @@ class ImageEditor extends React.Component {
   containerSize() {
     let elem = this.imageContainer.current;
     return { width: elem.offsetWidth - 2, height: elem.offsetHeight - 2 };
+  }
+
+  copyEmbedCode(evt) {
+    evt.preventDefault();
+    const el = document.createElement("textarea");
+    el.value = `[image:${this.props.image.id}]`;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+  }
+
+  copySupported() {
+    return document.queryCommandSupported &&
+           document.queryCommandSupported("copy");
   }
 
   handleResize() {
@@ -304,6 +320,7 @@ class ImageEditor extends React.Component {
   }
 
   render() {
+    let image = this.props.image;
     let locale = this.state.locale;
     let locales = this.props.locales;
     return (
@@ -321,6 +338,19 @@ class ImageEditor extends React.Component {
         </div>
         {!this.state.cropping && (
            <form>
+             <div className="field embed-code">
+               <label>
+                 Embed code
+               </label>
+               <input type="text"
+                      value={`[image:${image.id}]`}
+                      disabled={true} />
+               {this.copySupported() && (
+                  <button onClick={this.copyEmbedCode}>
+                    Copy
+                  </button>
+               )}
+             </div>
              {locales && Object.keys(locales).length > 1 && (
                 <div className="field">
                   <label>
