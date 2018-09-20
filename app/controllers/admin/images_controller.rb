@@ -23,10 +23,18 @@ module Admin
 
     protected
 
+    def localized_attributes
+      %i[caption alternative]
+    end
+
     def image_params
       params.require(:image).permit(
-        :name, :alternative, :caption, :description, :file,
-        :crop_start_x, :crop_start_y, :crop_height, :crop_width, :locale
+        :name, :description, :file,
+        :crop_start_x, :crop_start_y, :crop_height, :crop_width, :locale,
+        :crop_gravity_x, :crop_gravity_y,
+        localized_attributes.each_with_object({}) do |a, h|
+          h[a] = I18n.available_locales
+        end
       )
     end
 

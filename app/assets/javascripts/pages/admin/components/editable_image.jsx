@@ -18,6 +18,7 @@ class EditableImage extends React.Component {
                    caption={this.props.caption}
                    locale={this.props.locale}
                    locales={this.props.locales}
+                   csrf_token={this.props.csrf_token}
                    onUpdate={this.update} />);
   }
 

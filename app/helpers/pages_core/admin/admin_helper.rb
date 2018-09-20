@@ -48,6 +48,7 @@ module PagesCore
                         width: width,
                         locale: locale || I18n.default_locale,
                         locales: PagesCore.config.locales,
+                        csrf_token: form_authenticity_token,
                         image: ::Admin::ImageSerializer.new(image))
       end
 
