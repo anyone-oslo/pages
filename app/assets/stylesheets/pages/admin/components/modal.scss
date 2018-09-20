@@ -5,11 +5,11 @@ body > .wrapper {
 body.modal {
   > .wrapper {
     filter: blur(2px);
+    @include breakpoint-mobile {
+      filter: none;
+    }
   }
 }
-
-
-
 
 .modal-wrapper {
   display: flex;
@@ -36,6 +36,13 @@ body.modal {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.2);
+
+    @include breakpoint-mobile {
+      max-width: 100%;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0px;
+    }
   }
 }
 
