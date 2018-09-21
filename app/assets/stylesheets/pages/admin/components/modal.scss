@@ -1,10 +1,10 @@
 body > .wrapper {
-  transition: filter 200ms ease-out;
+  transition: filter 1000ms linear;
 }
 
 body.modal {
   > .wrapper {
-    filter: blur(2px);
+    filter: blur(10px);
     @include breakpoint-mobile {
       filter: none;
     }
@@ -15,19 +15,21 @@ body.modal {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.0);
-  opacity: 0;
-  transition: background-color 200ms ease-out;
 
-  &.open {
-    position: fixed;
-    background-color: rgba(255, 255, 255, 0.9);
+  .background {
+    background: radial-gradient(rgba(255, 255, 255, 0.9),
+                                rgba(255, 255, 255, 0.9) 50%,
+                                rgba(80, 80, 80, 0.9));
+    cursor: pointer;
+    position: absolute;
     top: 0px;
     bottom: 0px;
     left: 0px;
     right: 0px;
-    z-index: 100;
-    opacity: 1;
+    z-index: 1;
+    animation-name: modal-background-appear;
+    animation-duration: 200ms;
+    animation-timing-function: ease-out;
   }
 
   .modal {
@@ -36,6 +38,12 @@ body.modal {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    animation-name: modal-appear;
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation-fill-mode: forwards;
+    z-index: 2;
 
     @include breakpoint-mobile {
       max-width: 100%;
@@ -43,6 +51,37 @@ body.modal {
       height: 100vh;
       border-radius: 0px;
     }
+  }
+
+  &.open {
+    display: flex;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 100;
+    opacity: 1;
+  }
+}
+
+@keyframes modal-appear {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.97) translate(0px, 10px);
+  }
+  100% {
+    opacity: 1.0;
+    transform: scale(1.0);
+  }
+}
+
+@keyframes modal-background-appear {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1.0;
   }
 }
 

@@ -53,12 +53,16 @@ module PagesCore
 
       def image_uploader(form, attr, caption: false, locale: nil)
         image = form.object.send(attr)
+        foreign_key = form.object
+                          .class
+                          .reflections[attr.to_s]
+                          .options[:foreign_key]
         react_component("ImageUploader",
                         editable_image_options(
                           image,
                           caption: caption,
                           locale: locale
-                        ).merge(attr: "#{form.object_name}[#{attr}_id]"))
+                        ).merge(attr: "#{form.object_name}[#{foreign_key}]"))
       end
 
       def content_tab(name, options = {}, &block)

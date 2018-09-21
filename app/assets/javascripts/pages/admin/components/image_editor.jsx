@@ -366,6 +366,17 @@ class ImageEditor extends React.Component {
                   </select>
                 </div>
              )}
+             <div className="field">
+               <label>
+                 Alternative text
+               </label>
+               <span className="description">
+                 For visually impaired users and search engines.
+               </span>
+               <textarea className="alternative"
+                         value={this.state.alternative[locale] || ""}
+                         onChange={e => this.updateLocalized("alternative", e.target.value)} />
+             </div>
              {this.props.caption && (
                 <div className="field">
                   <label>
@@ -376,14 +387,6 @@ class ImageEditor extends React.Component {
                             className="caption" />
                 </div>
              )}
-             <div className="field">
-               <label>
-                 Alternative text
-               </label>
-               <textarea className="alternative"
-                         value={this.state.alternative[locale] || ""}
-                         onChange={e => this.updateLocalized("alternative", e.target.value)} />
-             </div>
              <div className="buttons">
                <button onClick={this.save}>
                  Save

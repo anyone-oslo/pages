@@ -28,7 +28,6 @@
     .editable-image {
       width: auto;
       max-height: 400px;
-      display: block;
     }
     @include breakpoint-mobile {
       max-width: 100%;

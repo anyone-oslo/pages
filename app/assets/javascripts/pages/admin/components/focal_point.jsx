@@ -24,6 +24,8 @@ class FocalPoint extends React.Component {
   }
 
   dragStart(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
     if (evt.target == this.point.current) {
       this.setState({dragging: true});
     }

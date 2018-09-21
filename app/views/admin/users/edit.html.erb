@@ -18,7 +18,9 @@
   <% end %>
 <% end %>
 
-<%= form_for [:admin, @user], html: {multipart: true}, builder: PagesCore::FormBuilder do |f| %>
+<%= form_for([:admin, @user],
+             html: { multipart: true },
+             builder: PagesCore::FormBuilder) do |f| %>
 
   <h2>Account details</h2>
   <%= f.labelled_text_field :name %>
