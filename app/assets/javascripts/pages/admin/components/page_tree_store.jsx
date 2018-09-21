@@ -14,15 +14,17 @@ class PageTreeStore extends Reflux.Store {
     this.listenToMany(PageTreeActions);
   }
 
-  init() {
-    if (!window.localStorage.collapsedPages) {
-      window.localStorage.collapsedPages = JSON.stringify({});
+  collapsedState() {
+    if (window && window.localStorage &&
+        typeof(window.localStorage.collapsedPages) != "undefined") {
+      return JSON.parse(window.localStorage.collapsedPages);
     }
+    return {};
   }
 
   applyCollapsed(tree) {
     let store = this;
-    let collapsedState = JSON.parse(window.localStorage.collapsedPages);
+    let collapsedState = this.collapsedState();
     let walk = function (id) {
       var index = tree.getIndex(id);
       var node = index.node;
@@ -100,7 +102,7 @@ class PageTreeStore extends Reflux.Store {
 
   storeCollapsed(id, newState) {
     let node = this.state.tree.getIndex(id).node;
-    var store = JSON.parse(window.localStorage.collapsedPages);
+    var store = this.collapsedState();
     store[node.id] = newState;
     window.localStorage.collapsedPages = JSON.stringify(store);
   }
