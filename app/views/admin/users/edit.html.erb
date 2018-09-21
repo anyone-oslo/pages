@@ -20,7 +20,7 @@
 
 <%= form_for([:admin, @user],
              html: { multipart: true },
-             builder: PagesCore::FormBuilder) do |f| %>
+             builder: PagesCore::Admin::FormBuilder) do |f| %>
 
   <h2>Account details</h2>
   <%= f.labelled_text_field :name %>
@@ -28,9 +28,7 @@
 
   <h2>Profile picture</h2>
 
-  <%= image_uploader(f, :image) %>
-
-  <%#= f.labelled_file_field :image %>
+  <%= f.image_uploader :image %>
 
   <% if policy(@user).change_password? %>
     <h2>Password</h2>

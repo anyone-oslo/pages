@@ -51,18 +51,14 @@ module PagesCore
                         ).merge(width: width))
       end
 
-      def image_uploader(form, attr, caption: false, locale: nil)
-        image = form.object.send(attr)
-        foreign_key = form.object
-                          .class
-                          .reflections[attr.to_s]
-                          .options[:foreign_key]
+      def image_uploader_tag(name, image, options = {})
+        opts = { caption: false, locale: nil }.merge(options)
         react_component("ImageUploader",
                         editable_image_options(
                           image,
-                          caption: caption,
-                          locale: locale
-                        ).merge(attr: "#{form.object_name}[#{foreign_key}]"))
+                          caption: opts[:caption],
+                          locale: opts[:locale]
+                        ).merge(attr: name))
       end
 
       def content_tab(name, options = {}, &block)
@@ -138,7 +134,7 @@ module PagesCore
 
       def editable_image_options(image, width: 250, caption: false, locale: nil)
         image_opts = if image
-                       { src: dynamic_image_path(image, size: "#{width}x"),
+                       { src: dynamic_image_path(image, size: "#{width * 2}x"),
                          image: ::Admin::ImageSerializer.new(image) }
                      else
                        {}
