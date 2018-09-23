@@ -89,11 +89,14 @@ module Admin
     def page_attributes
       %i[template user_id status feed_enabled published_at redirect_to
          image_link news_page unique_name pinned parent_page_id serialized_tags
-         meta_image starts_at ends_at all_day]
+         meta_image starts_at ends_at all_day image_id]
     end
 
     def page_params
-      params.require(:page).permit(Page.localized_attributes + page_attributes)
+      params.require(:page).permit(
+        Page.localized_attributes + page_attributes,
+        page_images_attributes: %i[id position image_id primary]
+      )
     end
 
     def param_categories

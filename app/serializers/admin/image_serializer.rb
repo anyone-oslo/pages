@@ -24,7 +24,7 @@ module Admin
     def thumbnail_url
       dynamic_image_path(
         object,
-        size: "250x",
+        size: "500x",
         upscale: false
       )
     end

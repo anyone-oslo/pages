@@ -18,7 +18,8 @@
 <% content_for :sidebar do %>
   <%= form_for(@page,
                url: admin_page_url(@locale, @page),
-               html: {class: "edit-page", id: 'page-form-sidebar'}) do |f| %>
+               html: {class: "edit-page", id: 'page-form-sidebar'},
+               builder: PagesCore::Admin::FormBuilder) do |f| %>
     <%= render partial: 'edit_options', locals: {f: f} %>
   <% end %>
 <% end %>
@@ -35,7 +36,7 @@
                method: :put,
                multipart: true
              },
-             builder: PagesCore::FormBuilder
+             builder: PagesCore::Admin::FormBuilder
 ) do |f| %>
 
   <div class="hidden-options">

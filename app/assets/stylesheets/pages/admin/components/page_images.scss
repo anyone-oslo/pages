@@ -1,0 +1,131 @@
+.page-images {
+  margin-bottom: 40px;
+  display: flex;
+
+  @include breakpoint-mobile {
+    flex-direction: column;
+  }
+
+  h3 {
+    margin: 10px 5px 10px 5px;
+    border-bottom: 1px solid $c-border;
+    padding-bottom: 5px;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .drop-target {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    text-align: center;
+    line-height: 1.6;
+    > span {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      right: 5px;
+      min-height: 150px;
+      box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.1);
+      background: $c-background-disabled;
+    }
+  }
+
+  .page-image {
+    padding: 5px;
+    &.placeholder {
+      opacity: 0.25;
+    }
+    &.uploading {
+      -webkit-user-select: none;
+      user-select: none;
+      opacity: 0.5;
+      overflow: hidden;
+      .temp-image {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+      }
+      img {
+        filter: blur(10px);
+      }
+      span {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        margin-top: -7px;
+        color: #fff;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+      }
+    }
+    .file-placeholder,
+    .placeholder {
+      position: relative;
+      vertical-align: middle;
+      background: $c-background-disabled;
+      border: 2px dashed $c-border;
+      width: 100%;
+      padding-bottom: 100%;
+      span {
+        color: $c-text-light;
+        text-shadow: none;
+      }
+    }
+  }
+
+  .primary-image {
+    width: 33.33%;
+    @include breakpoint-mobile {
+      width: 100%;
+    }
+  }
+
+  .additional {
+    width: 66.67%;
+    @include breakpoint-mobile {
+      width: 100%;
+    }
+    .images {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+
+      .drop-target,
+      .page-image {
+        width: 25%;
+        @include breakpoint-mobile {
+          width: 50%;
+        }
+      }
+
+      .drop-target {
+        padding-bottom: 25%;
+        @include breakpoint-mobile {
+          padding-bottom: 50%;
+        }
+      }
+
+      .page-image {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .drag-image {
+    position: absolute;
+    width: 150px;
+    z-index: 100;
+  }
+}
