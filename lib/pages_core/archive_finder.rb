@@ -14,7 +14,7 @@ module PagesCore
     end
 
     def latest_year
-      latest_year_and_month.first
+      latest_year_and_month&.first
     end
 
     def latest_year_and_month

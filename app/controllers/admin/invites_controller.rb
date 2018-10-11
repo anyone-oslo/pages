@@ -11,7 +11,7 @@ module Admin
     end
 
     def accept
-      @user = @invite.create_user(user_params)
+      @user = PagesCore::CreateUserService.call(user_params, invite: @invite)
       if @user.valid?
         authenticate!(@user)
         redirect_to admin_default_url

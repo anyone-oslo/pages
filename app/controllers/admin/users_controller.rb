@@ -27,7 +27,7 @@ module Admin
     end
 
     def create
-      @user = User.create(user_params)
+      @user = PagesCore::CreateUserService.call(user_params)
       if @user.valid?
         authenticate!(@user)
         redirect_to admin_default_url
