@@ -16,7 +16,10 @@ module PagesCore
     def call
       User.transaction do
         user = User.create(attributes.merge(invite_attributes))
-        invite.destroy if invite && user.valid?
+        if user.valid?
+          PagesCore::PubSub.publish(:create_user, user: user, invite: invite)
+          invite&.destroy
+        end
         user
       end
     end

@@ -4,7 +4,7 @@ RSpec.describe PagesCore::CreateUserService do
   let(:attributes) { attributes_for(:user) }
 
   describe "with invite" do
-    subject!(:user) { described_class.call(attributes, invite: invite) }
+    subject(:user) { described_class.call(attributes, invite: invite) }
 
     let(:invite) { create(:invite, role_names: ["users"]) }
 
@@ -25,7 +25,15 @@ RSpec.describe PagesCore::CreateUserService do
       end
 
       it "destroys the invite" do
+        user
         expect(invite.destroyed?).to eq(true)
+      end
+
+      it "publishes an event" do
+        result = nil
+        PagesCore::PubSub.subscribe(:create_user) { |p| result = p }
+        user
+        expect([result.user, result.invite]).to eq([user, invite])
       end
     end
 
@@ -37,6 +45,13 @@ RSpec.describe PagesCore::CreateUserService do
 
       it "does not destroy the invite" do
         expect(invite.destroyed?).to eq(false)
+      end
+
+      it "does not publish an event" do
+        result = nil
+        PagesCore::PubSub.subscribe(:create_user) { |p| result = p }
+        user
+        expect(result).to eq(nil)
       end
     end
   end
