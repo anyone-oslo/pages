@@ -30,7 +30,7 @@ class EditableImage extends React.Component {
   }
 
   update(image, croppedImage) {
-    let newImage = mergeObject(this.state.image, image)
+    let newImage = { ...this.state.image, ...image };
     this.setState({image: newImage,
                    src: croppedImage});
     if (this.props.onUpdate) {

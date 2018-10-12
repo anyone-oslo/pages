@@ -315,7 +315,7 @@ class ImageEditor extends React.Component {
   updateLocalized(name, value) {
     let locale = this.state.locale;
     this.setState({
-      [name]: mergeObject(this.state[name], { [locale]: value })
+      [name]: { ...this.state[name], [locale]: value }
     });
   }
 

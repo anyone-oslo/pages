@@ -2,10 +2,9 @@ class PageImages extends React.Component {
   constructor(props) {
     super(props);
     let pageImages = props.page_images
-                          .map(pi => mergeObject(
-                            pi, { ref: React.createRef(),
-                                  handle: this.getHandle() })
-                          );
+                          .map(pi => ({ ...pi,
+                                        ref: React.createRef(),
+                                        handle: this.getHandle() }));
     this.state = {
       dragging: false,
       primary: pageImages.filter(pi => pi.primary)[0] || null,
@@ -35,11 +34,11 @@ class PageImages extends React.Component {
       var additional = component.state.additional;
       if (target === "primary") {
         if (primary) {
-          additional = [primary].concat(additional);
+          additional = [primary, ...additional];
         }
         primary = uploadedFile;
       } else {
-        additional = additional.concat([uploadedFile]);
+        additional = [...additional, uploadedFile];
       }
       component.setState({
         primary: primary,
@@ -100,13 +99,13 @@ class PageImages extends React.Component {
     let queue = images.slice();
     if (primary === "Files") {
       primary = queue.shift();
-      additional = queue.concat(additional);
+      additional = [...queue, ...additional];
     } else {
       let source = additional;
       additional = [];
       source.forEach(function (img) {
         if (img === "Files") {
-          additional = additional.concat(queue);
+          additional = [...additional, ...queue];
         } else {
           additional.push(img);
         }
@@ -176,7 +175,7 @@ class PageImages extends React.Component {
     let { primary, additional } = this.state;
     var ordered = additional;
     if (primary) {
-      ordered = [primary].concat(ordered)
+      ordered = [primary, ...ordered];
     }
     return ordered.indexOf(pi);
   }
@@ -220,8 +219,9 @@ class PageImages extends React.Component {
     var additional = this.state.additional;
     if (dragging) {
       if (this.hovering(this.primaryContainer)) {
-        additional = [primary].concat(additional)
-                              .filter(pi => pi !== null && pi !== dragging);
+        additional = [primary, ...additional].filter(
+          pi => pi !== null && pi !== dragging
+        );
         primary = dragging;
       } else if (this.hovering(this.additionalContainer)) {
         additional = [];
@@ -243,7 +243,7 @@ class PageImages extends React.Component {
         }
         additional = this.state.additional.filter(pi => pi !== dragging);
         if (this.state.y < this.additionalContainer.current.getBoundingClientRect().top) {
-          additional = [dragging].concat(additional);
+          additional = [dragging, ...additional];
         } else {
           additional.push(dragging);
         }
@@ -320,14 +320,16 @@ class PageImages extends React.Component {
           </h3>
           <div className="images">
             {additional.map(pi => this.renderImage(pi, false))}
-            <div className="drop-target">
-              <span>
-                Drag and drop image here, or<br />
-                <button onClick={this.browseFile} data-target="additional">
-                  choose a file
-                </button>
-              </span>
-            </div>
+            {!dragging && (
+               <div className="drop-target">
+                 <span>
+                   Drag and drop image here, or<br />
+                   <button onClick={this.browseFile} data-target="additional">
+                     choose a file
+                   </button>
+                 </span>
+               </div>
+            )}
           </div>
         </div>
       </div>
@@ -345,10 +347,10 @@ class PageImages extends React.Component {
 
   updateImage(pageImage, attrs) {
     if (this.state.primary === pageImage) {
-      this.setState({ primary: mergeObject(pageImage, attrs) });
+      this.setState({ primary: { ...pageImage, ...attrs } });
     } else {
       let additional = this.state.additional.slice();
-      additional[additional.indexOf(pageImage)] = mergeObject(pageImage, attrs);
+      additional[additional.indexOf(pageImage)] = { ...pageImage, ...attrs };
       this.setState({ additional: additional });
     }
   }
