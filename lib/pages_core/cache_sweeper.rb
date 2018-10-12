@@ -110,8 +110,7 @@ module PagesCore
 
     def page_paths
       @page_paths ||= PagePath.all.flat_map do |p|
-        ["/#{p.path}"] +
-          locales.map { |l| "/#{l}/#{p.path}" }
+        ["/#{p.path}"] + locales.map { |l| "/#{l}/#{p.path}" }
       end
     end
 
