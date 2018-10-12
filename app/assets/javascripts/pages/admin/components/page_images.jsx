@@ -9,6 +9,7 @@ class PageImages extends React.Component {
       dragging: false,
       primary: pageImages.filter(pi => pi.primary)[0] || null,
       additional: pageImages.filter(pi => !pi.primary),
+      deleted: [],
       x: null,
       y: null
     };
@@ -17,6 +18,7 @@ class PageImages extends React.Component {
     this.primaryContainer = React.createRef();
     this.browseFile = this.browseFile.bind(this);
     this.cachePositions = this.cachePositions.bind(this);
+    this.deleteImage = this.deleteImage.bind(this);
     this.drag = this.drag.bind(this);
     this.dragEnd = this.dragEnd.bind(this);
     this.dragLeave = this.dragLeave.bind(this);
@@ -73,6 +75,21 @@ class PageImages extends React.Component {
     window.removeEventListener("touchend", this.dragEnd);
     window.removeEventListener("mouseout", this.dragLeave);
     window.removeEventListener("resize", this.cachePositions);
+  }
+
+  deleteImage(pi) {
+    let { primary, additional, deleted } = this.state;
+    if (pi == this.state.primary) {
+      primary = null;
+    } else {
+      additional = additional.filter(i => i != pi);
+    }
+    if (pi.id) {
+      deleted = [...deleted, pi];
+    }
+    this.setState({ primary: primary,
+                    additional: additional,
+                    deleted: deleted });
   }
 
   drag(evt) {
@@ -184,8 +201,8 @@ class PageImages extends React.Component {
   }
 
   index(pi) {
-    let { primary, additional } = this.state;
-    var ordered = additional;
+    let { primary, additional, deleted } = this.state;
+    var ordered = [...additional, ...deleted];
     if (primary) {
       ordered = [primary, ...ordered];
     }
@@ -295,12 +312,13 @@ class PageImages extends React.Component {
                  index={this.index(pageImage)}
                  primary={primary}
                  onUpdate={onUpdate}
+                 deleteImage={this.deleteImage}
                  placeholder={dragging && dragging == pageImage} />
     );
   }
 
   render() {
-    let dragging = this.state.dragging;
+    let { dragging, deleted } = this.state;
     let { primary, additional } = this.getDraggedOrder();
     return (
       <div className="page-images"
@@ -344,7 +362,25 @@ class PageImages extends React.Component {
             )}
           </div>
         </div>
+        <div className="deleted">
+          {deleted.map(pi => this.renderDeletedImage(pi))}
+        </div>
       </div>
+    );
+  }
+
+  renderDeletedImage(pi) {
+    let image = pi.image;
+    let index = this.index(pi);
+    return (
+      <span className="deleted-image" key={`deleted-${pi.id}`}>
+        <input name={`page[page_images_attributes][${index}][id]`}
+               type="hidden" value={pi.id} />
+        <input name={`page[page_images_attributes][${index}][image_id]`}
+               type="hidden" value={(image && image.id) || ""} />
+        <input name={`page[page_images_attributes][${index}][_destroy]`}
+               type="hidden" value={true} />
+      </span>
     );
   }
 

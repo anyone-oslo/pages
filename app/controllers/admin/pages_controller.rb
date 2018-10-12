@@ -95,7 +95,7 @@ module Admin
     def page_params
       params.require(:page).permit(
         Page.localized_attributes + page_attributes,
-        page_images_attributes: %i[id position image_id primary]
+        page_images_attributes: %i[id position image_id primary _destroy]
       )
     end
 

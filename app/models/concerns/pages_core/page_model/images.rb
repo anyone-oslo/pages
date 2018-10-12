@@ -16,7 +16,8 @@ module PagesCore
         after_save :ensure_page_images_contains_primary_image
 
         accepts_nested_attributes_for :page_images,
-                                      reject_if: proc { |a| a["image_id"].blank? }
+                                      reject_if: proc { |a| a["image_id"].blank? },
+                                      allow_destroy: true
       end
 
       def image?

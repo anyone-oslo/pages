@@ -4,6 +4,8 @@ class PageImage extends React.Component {
     this.state = {
       src: (props.pageImage.src || null)
     };
+    this.copyEmbed = this.copyEmbed.bind(this);
+    this.deleteImage = this.deleteImage.bind(this);
     this.dragStart = this.dragStart.bind(this);
   }
 
@@ -13,6 +15,24 @@ class PageImage extends React.Component {
       this.reader = new FileReader();
       this.reader.onload = () => this.setState({src: this.reader.result });
       this.reader.readAsDataURL(this.props.pageImage.file);
+    }
+  }
+
+  copyEmbed(evt) {
+    let image = this.props.pageImage.image;
+    evt.preventDefault();
+    const el = document.createElement("textarea");
+    el.value = `[image:${image.id}]`;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+  }
+
+  deleteImage(evt) {
+    evt.preventDefault();
+    if (this.props.deleteImage) {
+      this.props.deleteImage(this.props.pageImage);
     }
   }
 
@@ -81,6 +101,16 @@ class PageImage extends React.Component {
                type="hidden" value={this.props.primary} />
         {!image && this.renderPlaceholder()}
         {image && this.renderImage()}
+        {image && (
+           <div className="actions">
+             <button onClick={this.deleteImage}>
+               Remove
+             </button>
+             <button onClick={this.copyEmbed}>
+               Copy embed
+             </button>
+           </div>
+        )}
       </div>
     );
   }
