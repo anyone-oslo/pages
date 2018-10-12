@@ -100,10 +100,18 @@ module PagesCore
         PagesCore.config.locales.keys.map(&:to_s)).uniq
     end
 
-    def page_path_files
-      @page_path_files ||= PagePath.all.flat_map do |p|
-        ["/#{p.path}.html"] +
-          locales.map { |l| "/#{l}/#{p.path}.html" }
+    def page_path?(relative)
+      return false unless relative =~ /\.html$/
+      page_paths.each do |p|
+        return true if relative.start_with?(p)
+      end
+      false
+    end
+
+    def page_paths
+      @page_paths ||= PagePath.all.flat_map do |p|
+        ["/#{p.path}"] +
+          locales.map { |l| "/#{l}/#{p.path}" }
       end
     end
 
@@ -117,7 +125,7 @@ module PagesCore
 
     def sweep_file?(path)
       relative = path.gsub(Regexp.new("^#{cache_dir}"), "")
-      pattern_match?(relative) || page_path_files.include?(relative)
+      pattern_match?(relative) || page_path?(relative)
     end
   end
 end

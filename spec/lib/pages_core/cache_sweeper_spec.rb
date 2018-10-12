@@ -103,5 +103,13 @@ describe PagesCore::CacheSweeper do
 
       it { is_expected.to eq(false) }
     end
+
+    context "with a paginated page path" do
+      let(:filename) { "home/page/2.html" }
+
+      before { create(:page, name: "Home") }
+
+      it { is_expected.to eq(false) }
+    end
   end
 end
