@@ -19,6 +19,7 @@ class PageImages extends React.Component {
     this.cachePositions = this.cachePositions.bind(this);
     this.drag = this.drag.bind(this);
     this.dragEnd = this.dragEnd.bind(this);
+    this.dragLeave = this.dragLeave.bind(this);
     this.startImageDrag = this.startImageDrag.bind(this);
   }
 
@@ -60,6 +61,7 @@ class PageImages extends React.Component {
     window.addEventListener("touchmove", this.drag);
     window.addEventListener("mouseup", this.dragEnd);
     window.addEventListener("touchend", this.dragEnd);
+    window.addEventListener("mouseout", this.dragLeave);
     window.addEventListener("resize", this.cachePositions);
     this.cachePositions();
   }
@@ -69,6 +71,7 @@ class PageImages extends React.Component {
     window.removeEventListener("touchmove", this.drag);
     window.removeEventListener("mouseup", this.dragEnd);
     window.removeEventListener("touchend", this.dragEnd);
+    window.removeEventListener("mouseout", this.dragLeave);
     window.removeEventListener("resize", this.cachePositions);
   }
 
@@ -85,6 +88,15 @@ class PageImages extends React.Component {
         this.setState({ dragging: "Files" });
       }
     }
+  }
+
+  dragLeave(evt) {
+    if (!this.state.dragging || this.state.dragging !== "Files") {
+      return;
+    }
+    evt.preventDefault();
+    evt.stopPropagation();
+    this.setState({ dragging: false, x: null, y: null });
   }
 
   getHandle() {
