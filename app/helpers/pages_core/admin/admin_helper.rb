@@ -37,7 +37,7 @@ module PagesCore
         return unless block_given?
         tab = {
           name:    name.to_s.humanize,
-          key:     name.to_s.underscore.gsub(/[\s]+/, "_"),
+          key:     options[:key] || name.to_s.underscore.gsub(/[\s]+/, "_"),
           options: options,
           content: capture(&block)
         }
