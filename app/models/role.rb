@@ -20,7 +20,7 @@ class Role < ActiveRecord::Base
     end
 
     def roles
-      @roles ||= default_roles
+      @roles ||= default_roles + config_roles
     end
 
     def names
@@ -28,6 +28,19 @@ class Role < ActiveRecord::Base
     end
 
     protected
+
+    def config_file
+      Rails.root.join("config", "roles.yml")
+    end
+
+    def config_roles
+      return [] unless File.exist?(config_file)
+      YAML.load_file(config_file).map do |key, opts|
+        OpenStruct.new(name: key.to_s,
+                       description: opts["description"],
+                       default: opts["default"])
+      end
+    end
 
     def default_roles
       [
