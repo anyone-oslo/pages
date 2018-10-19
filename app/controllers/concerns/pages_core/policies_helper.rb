@@ -12,9 +12,9 @@ module PagesCore
 
         before_action do |controller|
           instance_name = "@#{object.name.underscore}"
-          instance ||= controller.instance_variable_get(instance_name)
+          record = instance || controller.instance_variable_get(instance_name)
 
-          verify_policy_with_proc(controller, instance || object)
+          verify_policy_with_proc(controller, record || object)
         end
       end
 
