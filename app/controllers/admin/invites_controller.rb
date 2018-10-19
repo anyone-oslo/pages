@@ -32,10 +32,11 @@ module Admin
     end
 
     def create
-      @invite = current_user.invites.create(invite_params)
+      @invite = PagesCore::InviteService.call(invite_params,
+                                              user: current_user,
+                                              host: request.host,
+                                              protocol: request.protocol)
       if @invite.valid?
-        deliver_invite(@invite)
-        @invite.update(sent_at: Time.now.utc)
         redirect_to admin_invites_url
       else
         render action: :new
@@ -49,13 +50,6 @@ module Admin
     end
 
     private
-
-    def deliver_invite(invite)
-      AdminMailer.invite(
-        invite,
-        admin_invite_with_token_url(invite, invite.token)
-      ).deliver_now
-    end
 
     def find_invite
       @invite = Invite.find(params[:id])
