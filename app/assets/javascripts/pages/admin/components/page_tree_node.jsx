@@ -96,8 +96,8 @@ class PageTreeNode extends React.Component {
     }
 
     if (!node.collapsed &&
-        this.visibleChildren().length > 0 &&
-        this.permitted("create")) {
+        this.permitted("create") &&
+        (node.root || this.visibleChildren().length > 0)) {
       return (
         this.button("Add page here", {
           className: "add add-inline",

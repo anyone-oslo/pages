@@ -16,6 +16,8 @@
       tree: {
         name: "All Pages",
         locale: @locale,
+        root: true,
+        permissions: [(:create if policy(Page).create?)],
         children: ActiveModel::Serializer::CollectionSerializer.new(
           @root_pages,
           serializer: PageTreeSerializer,
