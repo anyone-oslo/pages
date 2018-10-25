@@ -22,6 +22,24 @@ module PagesCore
         classes
       end
 
+      def date_range(starts_at, ends_at)
+        show_time = !(starts_at.is_a?(Date) && ends_at.is_a?(Date))
+        dates = if starts_at.year != ends_at.year
+                  [l(starts_at, format: :pages_full), l(ends_at, format: :pages_full)]
+                elsif starts_at.month != ends_at.month
+                  [l(starts_at, format: :pages_date), l(ends_at, format: :pages_full)]
+                elsif starts_at.day != ends_at.day && !show_time
+                  [l(starts_at, format: :pages_day), l(ends_at, format: :pages_full)]
+                elsif starts_at.day != ends_at.day
+                  [l(starts_at, format: :pages_date), l(ends_at, format: :pages_full)]
+                elsif !show_time
+                  [l(starts_at, format: :pages_full)]
+                else
+                  [l(starts_at, format: :pages_full), l(ends_at, format: :pages_time)]
+                end
+        safe_join(dates.map(&:strip), "&ndash;".html_safe)
+      end
+
       # Generates tags for an editable dynamic image.
       def editable_dynamic_image_tag(image, options = {})
         preview_url = uncropped_dynamic_image_url(image, size: "800x")

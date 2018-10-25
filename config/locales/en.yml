@@ -1,4 +1,16 @@
 en:
+  date:
+    formats:
+      pages_full: "%e %b %Y"
+      pages_date: "%e %b"
+      pages_day: "%e"
+      pages_time: ""
+  time:
+    formats:
+      pages_full: "%e %b %Y %H:%M"
+      pages_date: "%e %b %H:%M"
+      pages_day: "%e %H:%M"
+      pages_time: "%H:%M"
   activerecord:
     attributes:
       user:
