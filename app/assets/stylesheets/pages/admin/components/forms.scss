@@ -34,21 +34,7 @@ form {
     }
   }
 
-  .page-dates {
-    margin-bottom: 40px;
-    .toggles {
-      label {
-        font-weight: normal;
-        display: inline-block;
-        margin-right: 12px;
-        input {
-          margin-right: 6px;
-        }
-        &.disabled {
-          color: $c-text-light;
-        }
-      }
-    }
+  .date-range-select {
     .date {
       line-height: 34px;
       display: inline-block;
@@ -66,6 +52,23 @@ form {
     }
     .to {
       margin: 0px 8px;
+    }
+  }
+
+  .page-dates {
+    margin-bottom: 40px;
+    .toggles {
+      label {
+        font-weight: normal;
+        display: inline-block;
+        margin-right: 12px;
+        input {
+          margin-right: 6px;
+        }
+        &.disabled {
+          color: $c-text-light;
+        }
+      }
     }
     .remove-dates {
       margin-top: 12px;
