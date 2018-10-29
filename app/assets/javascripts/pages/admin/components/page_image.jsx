@@ -103,11 +103,11 @@ class PageImage extends React.Component {
         {image && this.renderImage()}
         {image && (
            <div className="actions">
+             <button onClick={this.copyEmbed}>
+               Embed
+             </button>
              <button onClick={this.deleteImage}>
                Remove
-             </button>
-             <button onClick={this.copyEmbed}>
-               Copy embed
              </button>
            </div>
         )}

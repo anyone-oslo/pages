@@ -348,18 +348,16 @@ class PageImages extends React.Component {
           <h3>
             More images
           </h3>
+          <div className="drop-target">
+            <span>
+              Drag and drop image here, or
+              <button onClick={this.browseFile} data-target="additional">
+                choose a file
+              </button>
+            </span>
+          </div>
           <div className="images">
             {additional.map(pi => this.renderImage(pi, false))}
-            {!dragging && (
-               <div className="drop-target">
-                 <span>
-                   Drag and drop image here, or<br />
-                   <button onClick={this.browseFile} data-target="additional">
-                     choose a file
-                   </button>
-                 </span>
-               </div>
-            )}
           </div>
         </div>
         <div className="deleted">
