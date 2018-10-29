@@ -23,12 +23,12 @@ Gem::Specification.new do |s|
     "template.rb"
   ]
 
-  s.add_development_dependency "capybara", "~> 2.15.0"
-  s.add_development_dependency "factory_girl", "~> 4.7.0"
+  s.add_development_dependency "capybara", "~> 3.10.0"
+  s.add_development_dependency "factory_bot", "~> 4.11.0"
   s.add_development_dependency "mysql2", "~> 0.4.2"
   s.add_development_dependency "pg", "~> 0.18.3"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
-  s.add_development_dependency "rspec-rails", "~> 3.5.1"
+  s.add_development_dependency "rspec-rails", "~> 3.8.1"
   s.add_development_dependency "rspec_junit_formatter"
   s.add_development_dependency "shoulda-matchers", "~> 3.1.1"
   s.add_development_dependency "timecop", "~> 0.8.0"

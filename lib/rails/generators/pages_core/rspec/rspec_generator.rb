@@ -17,7 +17,7 @@ module PagesCore
           gem "json_spec"
           gem "capybara"
           gem "timecop"
-          gem "factory_girl_rails"
+          gem "factory_bot_rails"
         end
       end
 

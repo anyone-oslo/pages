@@ -14,7 +14,7 @@ end
 require "rails-controller-testing"
 require "spec_helper"
 require "rspec/rails"
-require "factory_girl"
+require "factory_bot"
 require "shoulda-matchers"
 require "timecop"
 
@@ -55,8 +55,8 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
-  # Use FactoryGirl shorthand
-  config.include FactoryGirl::Syntax::Methods
+  # Use FactoryBot shorthand
+  config.include FactoryBot::Syntax::Methods
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -74,9 +74,16 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   # config.include JsonSpec::Helpers
+  config.include ActiveJob::TestHelper, type: :feature
+  config.include ErrorResponses
+  config.include Features, type: :feature
   config.include LoginMacros
   config.include MailerMacros
   config.before { reset_email }
+
+  config.around(realistic_error_responses: true) do |example|
+    respond_without_detailed_exceptions(&example)
+  end
 
   config.after do
     # Clean the Dis storage after each example
@@ -98,4 +105,4 @@ end
 
 Delayed::Worker.backend = :active_record
 
-FactoryGirl.find_definitions
+FactoryBot.find_definitions

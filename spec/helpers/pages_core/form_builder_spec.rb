@@ -7,6 +7,8 @@ describe PagesCore::FormBuilder do
   let(:resource) { build(:user) }
   let(:builder) { described_class.new(:user, resource, template, {}) }
 
+  before { I18n.locale = :nb }
+
   describe "#image_file_field" do
     let(:template) { spy }
 

@@ -18,7 +18,7 @@ module PagesCore
               ")"
           )
             .group("pages.id, localizations.id")
-            .reorder("COUNT(tags.id) DESC, position ASC")
+            .reorder(Arel.sql("COUNT(tags.id) DESC, position ASC"))
         end
       end
 
