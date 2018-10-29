@@ -41,7 +41,7 @@ module Admin
     def edit; end
 
     def update
-      if @user.update(user_params)
+      if @user.update(user_params_with_roles)
         flash[:notice] = "Your changed to #{@user.name} were saved."
         redirect_to admin_users_url
       else
@@ -80,6 +80,11 @@ module Admin
         permitted_params += %i[password confirm_password]
       end
       params.require(:user).permit(permitted_params)
+    end
+
+    def user_params_with_roles
+      return user_params unless policy(User).manage?
+      { role_names: [] }.merge(user_params)
     end
 
     def require_no_users

@@ -35,10 +35,7 @@
   </tr>
 <% end %>
 <% @users.each do |user| -%>
-  <tr class="<%=
-    classes = []
-    classes.join( " " )
-   %>">
+  <tr class="user-<%= user.id %>">
     <td>
       <strong><%= link_to user.name, admin_user_url( user ) %></strong>
       <% if policy(user).edit? %>

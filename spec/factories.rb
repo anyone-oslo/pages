@@ -75,10 +75,16 @@ FactoryBot.define do
   end
 
   factory :user do
-    name { "John Doe" }
+    sequence(:name) { |n| "John Doe #{n}" }
     email
     password { "Correct Horse Battery Staple" }
     confirm_password { "Correct Horse Battery Staple" }
+    activated { true }
+    role_names { %w[pages] }
+
+    trait :admin do
+      role_names { %w[pages users] }
+    end
   end
 
   sequence :email do |n|
