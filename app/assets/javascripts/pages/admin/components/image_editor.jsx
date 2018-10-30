@@ -401,7 +401,9 @@ class ImageEditor extends React.Component {
     );
   }
 
-  save() {
+  save(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
     let maybe = (func) => (val) => (val === null) ? val : func(val);
     let maybeRound = maybe(Math.round);
     let maybeCeil = maybe(Math.ceil);
