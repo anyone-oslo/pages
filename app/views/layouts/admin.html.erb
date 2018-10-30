@@ -3,10 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>
-      Pages
-      <% if @page_title %>
-        : <%= @page_title %>
-      <% end %>
+      <%= [@page_title, "Pages"].reject(&:blank?).uniq.join(" - ") %>
     </title>
 
     <link rel="shortcut icon"
@@ -28,6 +25,7 @@
     <% end %>
 
     <%= csrf_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body class="<%= body_classes.join(" ") %>"
