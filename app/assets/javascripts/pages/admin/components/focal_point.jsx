@@ -45,11 +45,11 @@ class FocalPoint extends React.Component {
       evt.preventDefault();
 
       if (evt.type == "touchmove") {
-        x = evt.touches[0].clientX - containerSize.x;
-        y = evt.touches[0].clientY - containerSize.y;
+        x = evt.touches[0].clientX - (containerSize.x || containerSize.left);
+        y = evt.touches[0].clientY - (containerSize.y || containerSize.top);
       } else {
-        x = evt.clientX - containerSize.x;
-        y = evt.clientY - containerSize.y;
+        x = evt.clientX - (containerSize.x || containerSize.left);
+        y = evt.clientY - (containerSize.y || containerSize.top);
       }
 
       x = this.clamp(x, 0, this.props.width);

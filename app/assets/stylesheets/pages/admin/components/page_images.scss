@@ -18,6 +18,7 @@ $page-image-padding: 7px;
     display: block;
     width: 100%;
     height: auto;
+    min-height: 1px; // Hack for IE11
   }
 
   .page-image {

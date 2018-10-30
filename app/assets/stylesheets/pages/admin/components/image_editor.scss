@@ -49,7 +49,12 @@
 
     .image-wrapper {
       position: absolute;
-      flex: 0;
+      flex-grow: 0;
+
+      @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        position: relative;
+      }
+
       img {
         display: block;
         width: 100%;

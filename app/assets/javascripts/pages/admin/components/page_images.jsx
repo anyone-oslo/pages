@@ -92,6 +92,19 @@ class PageImages extends React.Component {
                     deleted: deleted });
   }
 
+  containsFiles(evt) {
+    if (!evt.dataTransfer || !evt.dataTransfer.types) {
+      return false;
+    }
+    let types = evt.dataTransfer.types;
+    for (var i = 0; i < types.length; i++) {
+      if (types[i] === "Files" || types[i] === "application/x-moz-file") {
+        return true;
+      }
+    }
+    return false;
+  }
+
   drag(evt) {
     if (this.state.dragging) {
       let position = this.mousePosition(evt);
@@ -99,8 +112,7 @@ class PageImages extends React.Component {
       evt.preventDefault();
       this.setState({ x: position.x, y: position.y });
     } else {
-      let dt = evt.dataTransfer;
-      if (dt && dt.types.indexOf("Files") !== -1) {
+      if (this.containsFiles(evt)) {
         this.cachePositions();
         this.setState({ dragging: "Files" });
       }
@@ -227,8 +239,8 @@ class PageImages extends React.Component {
       return;
     } else {
       let containerSize = this.container.current.getBoundingClientRect();
-      let x = this.state.x - containerSize.x;
-      let y = this.state.y - containerSize.y;
+      let x = this.state.x - (containerSize.x || containerSize.left);
+      let y = this.state.y - (containerSize.y || containerSize.top);
       let translateStyle = {
         transform: `translate3d(${x}px, ${y}px, 0)`
       }
