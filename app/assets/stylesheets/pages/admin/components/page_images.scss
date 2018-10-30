@@ -8,6 +8,10 @@ $page-image-padding: 7px;
     flex-direction: column;
   }
 
+  input[type=file] {
+    display: none;
+  }
+
   h3 {
     margin: 10px $page-image-padding 10px $page-image-padding;
     border-bottom: 1px solid $c-border;

@@ -16,39 +16,18 @@ class PageImages extends React.Component {
     this.container = React.createRef();
     this.additionalContainer = React.createRef();
     this.primaryContainer = React.createRef();
-    this.browseFile = this.browseFile.bind(this);
+    this.uploadAdditionalInput = React.createRef();
+    this.uploadPrimaryInput = React.createRef();
     this.cachePositions = this.cachePositions.bind(this);
     this.deleteImage = this.deleteImage.bind(this);
     this.drag = this.drag.bind(this);
     this.dragEnd = this.dragEnd.bind(this);
     this.dragLeave = this.dragLeave.bind(this);
     this.startImageDrag = this.startImageDrag.bind(this);
-  }
-
-  browseFile(evt) {
-    let component = this;
-    let target = evt.target.dataset.target;
-    evt.preventDefault();
-    let input = document.createElement("input");
-    input.type = "file";
-    input.addEventListener("change", function () {
-      let uploadedFile = component.uploadFile(input.files[0]);
-      var primary = component.state.primary;
-      var additional = component.state.additional;
-      if (target === "primary") {
-        if (primary) {
-          additional = [primary, ...additional];
-        }
-        primary = uploadedFile;
-      } else {
-        additional = [...additional, uploadedFile];
-      }
-      component.setState({
-        primary: primary,
-        additional: additional
-      });
-    });
-    input.click();
+    this.uploadAdditional = this.uploadAdditional.bind(this);
+    this.triggerUploadAdditional = this.triggerUploadAdditional.bind(this);
+    this.uploadPrimary = this.uploadPrimary.bind(this);
+    this.triggerUploadPrimary = this.triggerUploadPrimary.bind(this);
   }
 
   cachePositions() {
@@ -347,10 +326,13 @@ class PageImages extends React.Component {
              <div className="drop-target">
                <span>
                  Drag and drop image here, or<br />
-                 <button onClick={this.browseFile} data-target="primary">
+                 <button onClick={this.triggerUploadPrimary}>
                    choose a file
                  </button>
                </span>
+               <input type="file"
+                      onChange={this.uploadPrimary}
+                      ref={this.uploadPrimaryInput} />
              </div>
           )}
           <input type="hidden" name="page[image_id]"
@@ -363,10 +345,13 @@ class PageImages extends React.Component {
           <div className="drop-target">
             <span>
               Drag and drop image here, or
-              <button onClick={this.browseFile} data-target="additional">
+              <button onClick={this.triggerUploadAdditional}>
                 choose a file
               </button>
             </span>
+            <input type="file"
+                   onChange={this.uploadAdditional}
+                   ref={this.uploadAdditionalInput} />
           </div>
           <div className="images">
             {additional.map(pi => this.renderImage(pi, false))}
@@ -434,5 +419,31 @@ class PageImages extends React.Component {
     });
     xhr.send(data);
     return obj;
+  }
+
+  triggerUploadAdditional(evt) {
+    evt.preventDefault();
+    this.uploadAdditionalInput.current.click();
+  }
+
+  triggerUploadPrimary(evt) {
+    evt.preventDefault();
+    this.uploadPrimaryInput.current.click();
+  }
+
+  uploadAdditional(evt) {
+    let uploadedFile = this.uploadFile(evt.target.files[0]);
+    this.setState({ additional: [...this.state.additional, uploadedFile] });
+  }
+
+  uploadPrimary(evt) {
+    let uploadedFile = this.uploadFile(evt.target.files[0]);
+    var primary = this.state.primary;
+    var additional = this.state.additional;
+    if (primary) {
+      additional = [primary, ...additional];
+    }
+    primary = uploadedFile;
+    this.setState({ primary: primary, additional: additional });
   }
 }
