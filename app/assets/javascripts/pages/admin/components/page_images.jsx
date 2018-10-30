@@ -100,7 +100,7 @@ class PageImages extends React.Component {
       this.setState({ x: position.x, y: position.y });
     } else {
       let dt = evt.dataTransfer;
-      if (dt && dt.types[0] === "Files") {
+      if (dt && dt.types.indexOf("Files") !== -1) {
         this.cachePositions();
         this.setState({ dragging: "Files" });
       }

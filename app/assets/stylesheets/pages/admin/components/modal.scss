@@ -1,9 +1,9 @@
 body > .wrapper {
-  transition: filter 1000ms linear;
 }
 
 body.modal {
   > .wrapper {
+    transition: filter 1000ms linear;
     filter: blur(10px);
     @include breakpoint-mobile {
       filter: none;
