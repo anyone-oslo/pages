@@ -120,6 +120,7 @@
     @include breakpoint-mobile {
       width: 100%;
       margin-left: 0px;
+      padding-bottom: 20px;
       textarea.caption {
         height: inherit;
       }

@@ -71,6 +71,11 @@ $page-image-padding: 7px;
       display: flex;
       flex-direction: row;
       visibility: hidden;
+
+      @include breakpoint-mobile {
+        visibility: visible;
+      }
+
       button {
         cursor: pointer;
         border: 1px solid $c-border;
