@@ -138,8 +138,10 @@ $page-image-padding: 7px;
       display: flex;
       flex-wrap: wrap;
 
-      .drop-target,
       .page-image {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         width: 25%;
         @include breakpoint-max(1150px) {
           width: 50%;
@@ -148,12 +150,6 @@ $page-image-padding: 7px;
         @include breakpoint-mobile {
           width: 50%;
         }
-      }
-
-      .page-image {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
       }
     }
 

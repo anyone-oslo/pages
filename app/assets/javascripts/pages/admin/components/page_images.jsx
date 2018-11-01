@@ -299,6 +299,7 @@ class PageImages extends React.Component {
                  locale={this.props.locale}
                  locales={this.props.locales}
                  csrf_token={this.props.csrf_token}
+                 showEmbed={true}
                  startDrag={this.startImageDrag}
                  index={this.index(pageImage)}
                  primary={primary}
