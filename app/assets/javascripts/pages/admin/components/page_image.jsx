@@ -27,6 +27,7 @@ class PageImage extends React.Component {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
+    ToastActions.notice("Embed code copied to clipboard");
   }
 
   deleteImage(evt) {
