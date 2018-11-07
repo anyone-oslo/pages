@@ -13,7 +13,7 @@ module PagesCore
           through: :page_images
         )
 
-        after_save :ensure_page_images_contains_primary_image
+        after_save :update_primary_image
 
         accepts_nested_attributes_for :page_images,
                                       reject_if: proc { |a| a["image_id"].blank? },
@@ -38,14 +38,9 @@ module PagesCore
 
       private
 
-      def ensure_page_images_contains_primary_image
-        return unless image_id?
-        page_image = page_images.find_by(image_id: image_id)
-        if page_image
-          page_image.update(primary: true) unless page_image.primary?
-        else
-          page_images.create(image_id: image_id, primary: true)
-        end
+      def update_primary_image
+        new_id = page_images.find_by(primary: true)&.image_id
+        update(image_id: new_id) if new_id != image_id
       end
     end
   end
