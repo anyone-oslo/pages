@@ -102,36 +102,6 @@
 
 <% end %>
 
-<%# #### UPLOAD IMAGE #### %>
-<div id="new-image">
-  <h2>Upload images</h2>
-  <%= form_for(@page.page_images.new, url: admin_page_images_url(@locale, @page), html: {multipart: true}) do |f| %>
-
-    <table>
-      <tr>
-        <th>File</th>
-        <th>Caption</th>
-      </tr>
-      <% 10.times do |i| %>
-        <tr class="">
-          <td>
-            <%= file_field_tag("page_images[#{i}][image]") %>
-          </td>
-          <td>
-            <%= text_field_tag("page_images[#{i}][image_attributes][caption]", '', size: 48) %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-
-    <p>
-      <%= submit_tag "Upload" %> or
-      <%= link_to "Cancel", "#", class: "cancel clear-modal" %>
-    </p>
-  <% end %>
-</div>
-
-
 <%# #### UPLOAD FILE #### %>
 <% if @page.template_config.value(:files) %>
   <div id="new-file" class="page_new_file">
