@@ -13,12 +13,6 @@ class PageImage < ActiveRecord::Base
 
   localizable
 
-  validate do |page_image|
-    if page_image.page && page_image.page.page_images.count < 1
-      page_image.primary = true
-    end
-  end
-
   class << self
     def cleanup!
       all.find_each do |page_image|
