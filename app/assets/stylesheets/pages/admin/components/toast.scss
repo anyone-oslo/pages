@@ -1,0 +1,51 @@
+.toast-wrapper {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  z-index: 200;
+
+  .toast {
+    font-size: 14px;
+    display: inline-block;
+    background: $c-background-invert;
+    color: white;
+    margin: 20px auto 0px auto;
+    padding: 15px 30px;
+    min-width: 50%;
+    text-align: left;
+    animation-duration: 500ms;
+    animation-name: toast-appear;
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-fill-mode: forwards;
+
+    &.error {
+      background: $c-red;
+    }
+
+    &.fadeout {
+      animation-duration: 300ms;
+      animation-name: toast-disappear;
+      animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);
+    }
+  }
+}
+
+@keyframes toast-appear {
+  from {
+    transform: translateZ(0px) translateY(60px);
+  }
+  to {
+    transform: translateZ(0px) translateY(0px);
+  }
+}
+
+@keyframes toast-disappear {
+  from {
+    transform: translateZ(0px) translateY(0px);
+  }
+  to {
+    transform: translateZ(0px) translateY(60px);
+  }
+}

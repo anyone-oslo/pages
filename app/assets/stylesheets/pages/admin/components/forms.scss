@@ -83,27 +83,21 @@ form {
   background: transparent image-url("pages/admin/warning-icon.gif") right 5px no-repeat;
 }
 
-main {
-  input[type=text],
-  input[type=password],
-  textarea {
-    border: 1px solid $c-border;
-    box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
-    padding: 8px 10px;
-    line-height: 1.4;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    &:disabled {
-      border-color: $c-border-light;
-      color: $c-text-light;
-    }
-  }
-
-  input[type=text],
-  input[type=password] {
-    width: 100%;
-    max-width: 450px;
-    min-width: 200px;
+input[type=text],
+input[type=password],
+textarea {
+  width: 100%;
+  max-width: 450px;
+  min-width: 200px;
+  border: 1px solid $c-border;
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
+  padding: 8px 10px;
+  line-height: 1.4;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  &:disabled {
+    border-color: $c-border-light;
+    color: $c-text-light;
   }
 }
 

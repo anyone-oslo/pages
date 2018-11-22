@@ -78,13 +78,6 @@ Rails.application.routes.draw do
 
         get "new/:parent", action: "new"
 
-        # Page Images
-        resources :images, controller: "page_images" do
-          collection do
-            put "reorder"
-          end
-        end
-
         # Page Files
         resources :files, controller: "page_files" do
           collection do

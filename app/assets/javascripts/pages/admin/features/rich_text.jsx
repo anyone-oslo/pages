@@ -29,7 +29,7 @@ class RichTextArea {
   constructor(textarea) {
     this.textarea = textarea;
     this.decorator = new TextileDecorator();
-    this.toolbar = $("<ul class=\"rich-text-toolbar\"></ul>")
+    this.toolbar = $("<div class=\"rich-text toolbar\"></div>")
                       .insertBefore(this.textarea);
     this.addButtons();
   }
@@ -74,7 +74,7 @@ class RichTextArea {
 
   addButton(name, className, callback) {
     var link = $(
-      `<a title=\"${name}\" class=\"${className}\">` +
+      `<a title=\"${name}\" class=\"button ${className}\">` +
       `<i class=\"fa fa-${className}\"></i></a>`
     );
 
@@ -84,7 +84,8 @@ class RichTextArea {
       this.replaceSelection(prefix, replacement, postfix);
     });
 
-    $("<li class=\"button\"></li>").append(link).appendTo(this.toolbar);
+    //$("<li class=\"button\"></li>").append(link).appendTo(this.toolbar);
+    $(this.toolbar).append(link);
   };
 
   addButtons() {

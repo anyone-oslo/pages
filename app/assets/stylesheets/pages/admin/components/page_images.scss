@@ -1,0 +1,182 @@
+$page-image-padding: 7px;
+
+.page-images {
+  margin-bottom: 40px;
+  display: flex;
+
+  @include breakpoint-mobile {
+    flex-direction: column;
+  }
+
+  input[type=file] {
+    display: none;
+  }
+
+  h3 {
+    margin: 10px $page-image-padding 10px $page-image-padding;
+    border-bottom: 1px solid $c-border;
+    padding-bottom: 5px;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 1px; // Hack for IE11
+  }
+
+  .page-image {
+    padding: $page-image-padding;
+    &.placeholder {
+      opacity: 0.25;
+    }
+    &.uploading {
+      -webkit-user-select: none;
+      user-select: none;
+      opacity: 0.5;
+      overflow: hidden;
+      .temp-image {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        background: #000;
+      }
+      img {
+        filter: blur(20px);
+        opacity: 0.75;
+      }
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        margin-top: -20px;
+        margin-left: -20px;
+        border: 5px solid transparentize(#fff, 0.1);
+        border-right-color: transparent;
+        text-indent: -9000px;
+        overflow: hidden;
+        animation: rotate-spinner 0.8s infinite linear;
+      }
+    }
+    .file-placeholder,
+    .placeholder {
+      position: relative;
+      vertical-align: middle;
+      background: $c-background-disabled;
+      border: 2px dashed $c-border;
+      width: 100%;
+      padding-bottom: 100%;
+      span {
+        color: $c-text-light;
+        text-shadow: none;
+      }
+    }
+    .actions {
+      margin-top: 7px;
+      display: flex;
+      flex-direction: row;
+      visibility: hidden;
+
+      @include breakpoint-mobile {
+        visibility: visible;
+      }
+
+      button {
+        cursor: pointer;
+        border: 1px solid $c-border;
+        border-radius: 3px;
+        display: block;
+        background: $c-button;
+        display: flex-item;
+        flex: 1;
+        padding: 5px;
+        font-size: 12px;
+        color: $c-text;
+        &:hover, &:focus {
+          background: #fff;
+        }
+      }
+    }
+    &:hover {
+      .actions {
+        visibility: visible;
+      }
+    }
+  }
+
+  .primary-image {
+    width: 33.33%;
+    @include breakpoint-mobile {
+      width: 100%;
+    }
+
+    .drop-target {
+      position: relative;
+      width: 100%;
+      padding-bottom: 66.67%;
+      text-align: center;
+      line-height: 1.6;
+      > span {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        top: $page-image-padding;
+        bottom: $page-image-padding;
+        left: $page-image-padding;
+        right: $page-image-padding;
+        min-height: 150px;
+        background: $c-background-disabled;
+      }
+    }
+  }
+
+  .additional {
+    width: 66.67%;
+    @include breakpoint-mobile {
+      width: 100%;
+    }
+    .images {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+
+      .page-image {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 25%;
+        @include breakpoint-max(1150px) {
+          width: 50%;
+        }
+
+        @include breakpoint-mobile {
+          width: 50%;
+        }
+      }
+    }
+
+    .drop-target {
+      margin: 10px $page-image-padding;
+      padding-top: 10px;
+      button {
+        margin: 0px 7px;
+      }
+    }
+  }
+
+  .drag-image {
+    position: absolute;
+    width: 150px;
+    z-index: 100;
+  }
+}
+
+@keyframes rotate-spinner {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
+}

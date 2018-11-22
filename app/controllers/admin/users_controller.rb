@@ -73,7 +73,7 @@ module Admin
 
     def user_params
       permitted_params = %i[
-        name email image
+        name email image image_id
       ]
       permitted_params += [:activated, role_names: []] if policy(User).manage?
       if User.none? || (@user && policy(@user).change_password?)

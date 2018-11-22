@@ -22,15 +22,6 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
     end
   end
 
-  describe "#editable_dynamic_image_tag" do
-    subject { helper.editable_dynamic_image_tag(image) }
-
-    let(:image) { create(:image) }
-
-    it { is_expected.to match("<a class=\"editableImage\"") }
-    it { is_expected.to match("<img alt=\"Image\" src=\"/dynamic_images/") }
-  end
-
   describe "#content_tab" do
     subject!(:tab) { helper.content_tab(:foo) { "Content" } }
 

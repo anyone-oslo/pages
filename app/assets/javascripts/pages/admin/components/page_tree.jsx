@@ -294,11 +294,6 @@ class PageTree extends Reflux.Component {
   }
 }
 
-PageTree.propTypes = {
-  tree: React.PropTypes.object.isRequired,
-  paddingLeft: React.PropTypes.number
-};
-
 PageTree.defaultProps = {
   paddingLeft: 15
 };

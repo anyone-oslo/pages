@@ -25,7 +25,8 @@
     <% end %>
 
     <%= csrf_meta_tag %>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no">
   </head>
 
   <body class="<%= body_classes.join(" ") %>"
@@ -75,6 +76,8 @@
         <% end %>
       </div>
     </div>
+    <%= react_component "Modal", {} %>
+    <%= react_component "Toast", { notice: flash[:notice] } %>
     <%= render partial: "layouts/admin/analytics" %>
   </body>
 </html>

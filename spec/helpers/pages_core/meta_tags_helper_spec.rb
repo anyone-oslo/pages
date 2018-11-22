@@ -12,6 +12,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when image is set" do
       before { helper.default_meta_image "foo.png" }
+
       it { is_expected.to eq("foo.png") }
     end
   end
@@ -25,6 +26,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when image is set" do
       before { helper.default_meta_image "foo.png" }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -42,6 +44,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when description is set" do
       before { helper.meta_description "<b>Description</b>" }
+
       it { is_expected.to eq("Description") }
     end
 
@@ -65,6 +68,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when description is set" do
       before { helper.meta_description "description" }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -82,27 +86,30 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when set to a string" do
       before { helper.meta_image("foo.png") }
+
       it { is_expected.to eq("foo.png") }
     end
 
     context "when set to an image" do
       before { helper.meta_image(image) }
+
       it { is_expected.to match(%r{^http://test.host/dynamic_images/}) }
     end
 
     context "when page has a meta image" do
-      let(:page) { create(:page, meta_image: image) }
+      let(:page) { build(:page, meta_image: image) }
 
       it { is_expected.to match(%r{^http://test.host/dynamic_images/}) }
     end
 
     context "when default_meta_image is set" do
       before { helper.default_meta_image "default.png" }
+
       it { is_expected.to eq("default.png") }
     end
 
     context "when page has an image" do
-      let(:page) { create(:page, image: image) }
+      let(:page) { build(:page, image: image) }
 
       before { helper.default_meta_image "default.png" }
 
@@ -119,6 +126,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when image is set" do
       before { helper.meta_image("foo.png") }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -136,6 +144,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when keywords have been set" do
       before { helper.meta_keywords(%w[Foo Bar]) }
+
       it { is_expected.to eq("Foo, Bar") }
     end
 
@@ -159,6 +168,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
 
     context "when keywords have been set" do
       before { helper.meta_keywords(%w[Foo Bar]) }
+
       it { is_expected.to eq(true) }
     end
   end

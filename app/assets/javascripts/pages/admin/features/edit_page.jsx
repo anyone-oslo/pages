@@ -127,11 +127,7 @@ class EditPage {
       );
     }
 
-    $("#new-image").hide();
     $("#new-file").hide();
-    $(".upload-images-button").click(function() {
-      return uploadModal("new-image");
-    });
     $(".upload-file-button").click(function() {
       return uploadModal("new-file");
     });
