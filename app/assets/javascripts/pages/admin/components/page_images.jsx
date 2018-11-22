@@ -333,7 +333,8 @@ class PageImages extends React.Component {
                </span>
                <input type="file"
                       onChange={this.uploadPrimary}
-                      ref={this.uploadPrimaryInput} />
+                      ref={this.uploadPrimaryInput}
+                      multiple />
              </div>
           )}
           <input type="hidden" name="page[image_id]"
@@ -352,7 +353,8 @@ class PageImages extends React.Component {
             </span>
             <input type="file"
                    onChange={this.uploadAdditional}
-                   ref={this.uploadAdditionalInput} />
+                   ref={this.uploadAdditionalInput}
+                   multiple />
           </div>
           <div className="images">
             {additional.map(pi => this.renderImage(pi, false))}
@@ -432,19 +434,30 @@ class PageImages extends React.Component {
     this.uploadPrimaryInput.current.click();
   }
 
+  uploadFiles(fileList) {
+    let result = [];
+    for (var i = 0; i < fileList.length; i++) {
+      result.push(this.uploadFile(fileList[i]));
+    }
+    return result;
+  }
+
   uploadAdditional(evt) {
-    let uploadedFile = this.uploadFile(evt.target.files[0]);
-    this.setState({ additional: [...this.state.additional, uploadedFile] });
+    let uploadedFiles = this.uploadFiles(evt.target.files);
+    this.setState({ additional: [...this.state.additional, ...uploadedFiles] });
   }
 
   uploadPrimary(evt) {
-    let uploadedFile = this.uploadFile(evt.target.files[0]);
+    let uploadedFiles = this.uploadFiles(evt.target.files);
     var primary = this.state.primary;
     var additional = this.state.additional;
     if (primary) {
       additional = [primary, ...additional];
     }
-    primary = uploadedFile;
+    primary = uploadedFiles[0];
+    if (uploadedFiles.length > 1) {
+      additional = [...uploadedFiles.slice(1), ...additional];
+    }
     this.setState({ primary: primary, additional: additional });
   }
 }
