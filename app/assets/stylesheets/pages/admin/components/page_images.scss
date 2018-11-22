@@ -39,18 +39,26 @@ $page-image-padding: 7px;
         position: relative;
         cursor: pointer;
         overflow: hidden;
+        background: #000;
       }
       img {
-        filter: blur(10px);
+        filter: blur(20px);
+        opacity: 0.75;
       }
       span {
         position: absolute;
         top: 50%;
-        width: 100%;
-        text-align: center;
-        margin-top: -7px;
-        color: #fff;
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        margin-top: -20px;
+        margin-left: -20px;
+        border: 5px solid transparentize(#fff, 0.1);
+        border-right-color: transparent;
+        text-indent: -9000px;
+        overflow: hidden;
+        animation: rotate-spinner 0.8s infinite linear;
       }
     }
     .file-placeholder,
@@ -112,7 +120,6 @@ $page-image-padding: 7px;
       text-align: center;
       line-height: 1.6;
       > span {
-        border: 1px dashed $c-border;
         position: absolute;
         display: flex;
         flex-direction: column;
@@ -167,4 +174,9 @@ $page-image-padding: 7px;
     width: 150px;
     z-index: 100;
   }
+}
+
+@keyframes rotate-spinner {
+  0%    { transform: rotate(0deg); }
+  100%  { transform: rotate(360deg); }
 }
