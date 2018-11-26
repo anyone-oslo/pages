@@ -33,22 +33,12 @@ module PagesCore
       end
 
       def ensure_path_segment
-        return if deleted? || !name?
-
-        if path_segment? && path_segment != previous_generated_path_segment
-          return
-        end
-
+        return if deleted? || path_segment? || !name?
         if path_collision?(generated_path_segment)
           update path_segment: "#{generated_path_segment}-#{id}"
         else
           update path_segment: generated_path_segment
         end
-      end
-
-      def name=(new_name)
-        @previous_name = name
-        super
       end
 
       def pathable?
@@ -69,15 +59,11 @@ module PagesCore
       end
 
       def generated_path_segment
-        str_to_path_segment(transliterated_name)
-      end
-
-      def str_to_path_segment(str)
-        str.gsub(/[^[[:alnum:]]\-_]+/, "-")
-           .gsub(/[\-]{2,}/, "-")
-           .gsub(/(^\-|\-$)/, "")
-           .mb_chars
-           .downcase
+        transliterated_name.gsub(/[^[[:alnum:]]\-_]+/, "-")
+                           .gsub(/[\-]{2,}/, "-")
+                           .gsub(/(^\-|\-$)/, "")
+                           .mb_chars
+                           .downcase
       end
 
       def page_path_matches_routes?(page_path)
@@ -101,14 +87,7 @@ module PagesCore
       def path_segment_cannot_be_routable
         return unless full_path?
         return unless page_path_matches_routes?(full_path)
-
         errors.add(:path_segment, "can't match an existing URL")
-      end
-
-      def previous_generated_path_segment
-        return nil if @previous_name.blank?
-
-        str_to_path_segment(transliterate_value(@previous_name))
       end
 
       def recognizable_route?(path)
