@@ -54,9 +54,20 @@ describe PagesCore::PageModel::Pathable, type: :model do
       it { is_expected.to eq("") }
     end
 
+    context "when page name is changed and path segment has ben overriden" do
+      let(:page) do
+        create(:page, locale: "nb", name: page_name, path_segment: "foo")
+      end
+
+      before { page.update(name: "New name") }
+
+      it { is_expected.to eq("foo") }
+    end
+
     context "when page name is changed" do
       before { page.update(name: "New name") }
-      it { is_expected.to eq(path_segment) }
+
+      it { is_expected.to eq("new-name") }
     end
   end
 
