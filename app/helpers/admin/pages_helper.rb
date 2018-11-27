@@ -14,6 +14,14 @@ module Admin
       "[file:#{file.id}]"
     end
 
+    def news_section_name(page, news_pages)
+      if news_pages.select { |p| p.name == page.name }.length > 1
+        page_name(page, include_parents: true)
+      else
+        page_name(page)
+      end
+    end
+
     def page_authors(page)
       ([page.author] + User.activated).uniq
     end
@@ -33,7 +41,7 @@ module Admin
 
     def page_name(page, options = {})
       page_names = if options[:include_parents]
-                     [page.ancestors, page].flatten
+                     page.self_and_ancestors.reverse
                    else
                      [page]
                    end

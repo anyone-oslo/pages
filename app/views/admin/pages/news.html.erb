@@ -12,7 +12,9 @@
   <h2>New article</h2>
   <p>
     <%= form_tag new_news_admin_pages_path, method: :get do %>
-      In <%= select_tag 'parent', options_for_select(@news_pages.map{|p| [page_name(p, include_parents: true).gsub("&raquo;", "»"), p.id] }) %>
+      In
+      <%= select_tag('parent',
+                     options_for_select(@news_pages.map{|p| [news_section_name(p, @news_pages).gsub("&raquo;", "»"), p.id] })) %>
       <%= submit_tag "Go", name: nil %>
     <% end %>
   </p>
@@ -90,7 +92,7 @@
           <% end %>
         </td>
         <td>
-          <%= page_name(page.parent, include_parents: true) %>
+          <%= news_section_name(page.parent, @news_pages) %>
         </td>
         <td>
           <%= link_to page.author.name, admin_user_path(page.author) %>

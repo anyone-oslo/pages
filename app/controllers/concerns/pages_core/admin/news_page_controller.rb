@@ -44,7 +44,9 @@ module PagesCore
       end
 
       def find_news_pages
-        @news_pages = Page.news_pages.in_locale(@locale)
+        @news_pages = Page.news_pages
+                          .in_locale(@locale)
+                          .reorder("parent_page_id ASC, position ASC")
         return if @news_pages.any?
         redirect_to(admin_pages_url(@locale))
       end
