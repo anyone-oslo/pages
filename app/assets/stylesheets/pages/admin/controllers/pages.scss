@@ -9,13 +9,108 @@
   background-image: image-url("pages/admin/drag-icon.png");
 }
 
-.news-item-list {
-  .name {
-    line-height: 1.5;
+.page-list {
+  float: left;
+  list-style-type:  none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.2em;
+  margin-left: -8px;
+  margin-top: 16px;
+
+  .page-listing {
+    border: 1px solid transparent;
+    padding: 3px 8px 2px 8px !important;
   }
 
-  .name .name_link {
-    font-weight: bold;
+  ul {
+    border-left: 1px dotted #ccc !important;
+    margin-left: 12px !important;
+    padding-left: 8px !important
+  }
+
+  ul li {
+    overflow: auto;
+  }
+
+  .page {
+    padding: 4px 8px;
+    line-height: 17px;
+    float: left;
+
+    .status {
+      font-weight: normal;
+    }
+
+    a.page-name,
+    a.page-name:visited {
+      text-decoration: none;
+      color: #222;
+    }
+    a.page-name:hover {
+      text-decoration: underline;
+    }
+
+    &.hidden {
+      a.page-name {
+        color: #666;
+      }
+    }
+
+    &:hover {
+      background: #ffd;
+      border: 1px solid #dda;
+      .status {
+        display: none;
+      }
+    }
+  }
+
+  .page-without-locale {
+    color: #888;
+  }
+
+  li {
+    font-weight:  bold;
+    margin:  0;
+    padding: 0;
+    clear: both;
+  }
+
+  li li {
+    font-weight: normal;
+    font-size:  12px;
+    padding: 0;
+  }
+
+  ul {
+    clear: both;
+    list-style-type:  none;
+    border-left:  1px dashed #ccc;
+    margin:  0 0 0px 12px;
+    padding: 0 0 0 12px;
+  }
+
+  .hover {
+    background: #cef;
+  }
+
+  .drag-handle {
+    display: none;
+  }
+
+  &.reorder .drag-handle {
+    display: block;
+  }
+}
+
+.news-item-list,
+.calendar-item-list {
+  .name {
+    line-height: 1.5;
+    small {
+      font-weight: normal;
+    }
   }
 
   .draft,
@@ -27,13 +122,6 @@
 
   .pinned .name {
     background: transparent image-url("pages/admin/list-table-pin-blue.gif") no-repeat 13px 50%;
-  }
-
-  .draft .name,
-  .hidden .name,
-  .autopublish .name,
-  .autopublish .reviewed {
-    background: transparent image-url("pages/admin/list-table-pin-disabled.gif") no-repeat 13px 50%;
   }
 }
 

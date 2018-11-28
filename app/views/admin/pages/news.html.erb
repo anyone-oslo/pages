@@ -62,42 +62,12 @@
     <tr>
       <th>Name</th>
       <th>Published</th>
-      <th>Section</th>
       <th>Author</th>
+      <th>Section</th>
     </tr>
     <% @pages.each do |page| %>
-      <tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
-        <td class="name">
-          <%= link_to_if(policy(page).edit?,
-                         page_name(page),
-                         edit_admin_page_url(@locale, page),
-                         class: 'name_link') %>
-          <% if page.autopublish? %>
-            <br />
-            <small>
-              This page will be published
-              <strong><%= publish_time(page.published_at) %></strong>
-            </small>
-          <% end %>
-        </td>
-        <td>
-          <% if page.published? %>
-            <%= l(page.published_at, format: :short) %>
-          <% else %>
-            <% if page.status_label == 'Published' %>
-              <em>Not published</em>
-            <% else %>
-              <em><%= page.status_label %></em>
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <%= news_section_name(page.parent, @news_pages) %>
-        </td>
-        <td>
-          <%= link_to page.author.name, admin_user_path(page.author) %>
-        </td>
-      </tr>
+      <%= render(partial: "list_item",
+                 locals: { page: page, author: true, section: true }) %>
     <% end %>
   </table>
 

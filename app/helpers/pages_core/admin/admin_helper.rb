@@ -22,6 +22,14 @@ module PagesCore
         classes
       end
 
+      def page_date_range(page)
+        if page.all_day?
+          date_range(page.starts_at.to_date, page.ends_at.to_date)
+        else
+          date_range(page.starts_at, page.ends_at)
+        end
+      end
+
       def date_range(starts_at, ends_at)
         show_time = !(starts_at.is_a?(Date) && ends_at.is_a?(Date))
         dates = if starts_at.year != ends_at.year
