@@ -40,14 +40,15 @@ module Admin
     end
 
     def page_block_select(form, block_name, block_options)
-      template_options = if block_options[:options].is_a?(Hash)
-                           block_options[:options][form.object.locale.to_sym]
-                         else
-                           block_options[:options]
-                         end
-      form.send(:select, block_name, ([""] +
-                                      template_options +
-                                      [form.object.send(block_name)]).uniq)
+      opts = localize_page_select_options(form, block_options)
+      opts = opts.call if opts.is_a?(Proc)
+      opts = opts.map { |v| [v, v] } unless nested_array?(opts)
+      opts = ([["", nil]] + opts).uniq
+
+      value = form.object.send(block_name)
+      opts << [value, value] unless opts.map(&:last).include?(value)
+
+      form.send(:select, block_name, opts)
     end
 
     def page_block_text_field(form, block_name, block_options)
@@ -81,6 +82,18 @@ module Admin
     end
 
     private
+
+    def localize_page_select_options(form, block_options)
+      if block_options[:options].is_a?(Hash)
+        block_options[:options][form.object.locale.to_sym]
+      else
+        block_options[:options]
+      end
+    end
+
+    def nested_array?(array)
+      array.present? && array.first.is_a?(Array)
+    end
 
     def page_block_classes(class_name, block_options = {})
       [class_name, block_options[:class]].join(" ").strip
