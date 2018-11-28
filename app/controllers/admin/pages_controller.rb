@@ -21,7 +21,8 @@ module Admin
     end
 
     def new
-      @page = build_page(@locale)
+      build_params = params[:page] ? page_params : nil
+      @page = build_page(@locale, build_params)
       @page.parent = if params[:parent]
                        Page.find(params[:parent])
                      elsif @news_pages
