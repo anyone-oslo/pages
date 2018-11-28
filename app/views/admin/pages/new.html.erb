@@ -1,6 +1,6 @@
 <%
   if @page.parent
-    self.page_title = "#{@page.parent.name} &raquo; New Page".html_safe
+    self.page_title = "New page"
     self.page_description = "<em>#{@page.parent.name}</em> &raquo; New Page"
   else
     self.page_title = "Create new page"
