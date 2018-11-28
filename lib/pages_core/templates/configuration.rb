@@ -1,5 +1,85 @@
 module PagesCore
   module Templates
+    # = Template configuration
+    #
+    # Configuration DSL for the page templates. Can be accessed through
+    # +PagesCore::Templates.configure+.
+    #
+    #   PagesCore::Templates.configure do |config|
+    #     # Configuration goes here
+    #   end
+    #
+    # == Configuring templates
+    #
+    # Defaults for all templates can be configured with:
+    #
+    #   config.default do |default|
+    #     default.enabled_blocks %i[name headline body]
+    #     default.files :disabled
+    #   end
+    #
+    # Individual template configurations override the defaults.
+    #
+    #   config.template(:article, :article_alt) do |t|
+    #     t.enabled_blocks %i[name headline excerpt body boxout]
+    #     t.files :enabled
+    #   end
+    #
+    # == Options
+    #
+    # [blocks]
+    #   Yields the block configuration.
+    # [enabled_blocks]
+    #   List of enabled blocks. Default: +%i[headline excerpt body]+
+    # [template]
+    #   Template for all pages, unless overridden with +sub_template+.
+    #   It will attempt to guess based on the parent page if set to
+    #   +:autodetect+, which is the default value. Pass the +:root+
+    #   option to set template at root level.
+    # [image]
+    #   Enable images. Default: +:enabled+
+    # [files]
+    #   Enable file uploads. Default: +:disabled+
+    # [tags]
+    #   Enable tags. Default: +:disabled+
+    # [dates]
+    #   Enable dates. Default: +:disabled+
+    # [sub_template]
+    #   Children of the page will automatically have this template if
+    #   configured. Defaults to +nil+, which fall back to the behaviour
+    #   of +template+.
+    #
+    # == Block configuration
+    #
+    # Blocks can be configured at top level, or per template:
+    #
+    #   config.default do |default|
+    #     default.blocks do |block|
+    #       block.byline("Byline", size: :field)
+    #       block.embed("Video embed", size: :small, description: "Embed code")
+    #     end
+    #     default.enabled_blocks %i[headline byline body embed]
+    #   end
+    #
+    # Valid sizes for text blocks are +:field+ (single line), +:small+
+    # and +:large+.
+    #
+    # === Select blocks
+    #
+    # Blocks can also be selects:
+    #
+    #   block.foobar("Foobar", type: :select, options: %w[Foo Bar Baz])
+    #
+    # Pass a hash for multiple localizations:
+    #
+    #   block.foobar("Foobar", type: :select,
+    #                options: { en: %w[Foo Bar Baz],
+    #                           nb: %w[Fuu Baer Baez] })
+    #
+    # Options can be set at runtime using a Proc:
+    #
+    #   block.foobar("Foobar", type: :select,
+    #                options: -> { FooBar.template_options })
     class Configuration < PagesCore::Templates::ConfigurationHandler
       handle :default do |instance, name, *args|
         if name == :blocks
