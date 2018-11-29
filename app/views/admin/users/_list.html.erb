@@ -13,7 +13,7 @@
       <%= invite.email %>
     </td>
     <td>
-      <%= invite.roles.map(&:to_s).to_sentence %>
+      <%= invite.roles.map(&:to_s).sort.to_sentence %>
     </td>
     <td>
       <% if invite.sent_at? %>
@@ -45,7 +45,7 @@
     <td>
       <%= user.email %>
     </td>
-    <td><%= user.roles.map(&:to_s).to_sentence %></td>
+    <td><%= user.roles.map(&:to_s).sort.to_sentence %></td>
     <td>
       <% if user.online? -%>
         <strong>Online now</strong>
