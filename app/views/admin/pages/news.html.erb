@@ -9,15 +9,17 @@
 %>
 
 <% content_for :sidebar do %>
-  <h2>New article</h2>
-  <p>
-    <%= form_tag new_news_admin_pages_path, method: :get do %>
-      In
-      <%= select_tag('parent',
-                     options_for_select(@news_pages.map{|p| [news_section_name(p, @news_pages).gsub("&raquo;", "»"), p.id] })) %>
-      <%= submit_tag "Go", name: nil %>
-    <% end %>
-  </p>
+  <% if policy(Page).new_news? %>
+    <h2>New article</h2>
+    <p>
+      <%= form_tag new_news_admin_pages_path, method: :get do %>
+        In
+        <%= select_tag('parent',
+                       options_for_select(@news_pages.map{|p| [news_section_name(p, @news_pages).gsub("&raquo;", "»"), p.id] })) %>
+        <%= submit_tag "Go", name: nil %>
+      <% end %>
+    </p>
+  <% end %>
   <div class="archive-index">
     <% @archive_finder.years_with_count.reverse.each do |year, year_count| %>
       <h2>
