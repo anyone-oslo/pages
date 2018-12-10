@@ -105,8 +105,11 @@ class User < ActiveRecord::Base
 
   def ensure_first_user_has_all_roles
     return if User.any?
+
     self.activated = true
-    Role.roles.each { |r| roles.new(name: r.name) }
+    Role.roles.each do |r|
+      roles.new(name: r.name) unless role?(r.name)
+    end
   end
 
   def hash_password
