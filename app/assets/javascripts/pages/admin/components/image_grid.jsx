@@ -1,16 +1,16 @@
-class GridImages extends React.Component {
+class ImageGrid extends React.Component {
   constructor(props) {
     super(props);
 
-    let records = props.records.map(r => (
-      { ...r,
-        ref: React.createRef(),
-        handle: this.getHandle() }
-    ));
+    let records = props.records.map(r => ({
+      ...r,
+      ref: React.createRef(),
+      handle: this.getHandle()
+    }));
 
     this.state = { dragging: false,
                    primary: null,
-                   additional: records,
+                   images: records,
                    deleted: [],
                    x: null,
                    y: null };
@@ -18,17 +18,17 @@ class GridImages extends React.Component {
     if (props.enablePrimary) {
       this.state = { ...this.state,
                      primary: records.filter(r => r.primary)[0] || null,
-                     additional: records.filter(r => !r.primary) }
+                     images: records.filter(r => !r.primary) }
     }
 
     this.container = React.createRef();
-    this.additionalContainer = React.createRef();
+    this.imagesContainer = React.createRef();
     this.primaryContainer = React.createRef();
-    this.uploadAdditionalInput = React.createRef();
+    this.uploadImagesInput = React.createRef();
     this.uploadPrimaryInput = React.createRef();
 
     ["cachePositions", "deleteImage", "drag", "dragEnd", "dragLeave",
-     "startImageDrag", "uploadAdditional", "triggerUploadAdditional",
+     "startImageDrag", "uploadImages", "triggerUploadImages",
      "uploadPrimary", "triggerUploadPrimary"].forEach(
        prop => this[prop] = this[prop].bind(this)
      );
@@ -40,7 +40,7 @@ class GridImages extends React.Component {
 
   cachePositions() {
     this.cachedPositions = {};
-    this.state.additional.forEach(r => {
+    this.state.images.forEach(r => {
       this.cachedPositions[r.handle] = r.ref.current.getBoundingClientRect();
     });
   }
@@ -65,17 +65,17 @@ class GridImages extends React.Component {
   }
 
   deleteImage(record) {
-    let { primary, additional, deleted } = this.state;
+    let { primary, images, deleted } = this.state;
     if (record == this.state.primary) {
       primary = null;
     } else {
-      additional = additional.filter(i => i != record);
+      images = images.filter(i => i != record);
     }
     if (record.id) {
       deleted = [...deleted, record];
     }
     this.setState({ primary: primary,
-                    additional: additional,
+                    images: images,
                     deleted: deleted });
   }
 
@@ -123,23 +123,23 @@ class GridImages extends React.Component {
     return this.handle;
   }
 
-  injectUploads(images, primary, additional) {
-    let queue = images.slice();
+  injectUploads(files, primary, images) {
+    let queue = files.slice();
     if (primary === "Files") {
       primary = queue.shift();
-      additional = [...queue, ...additional];
+      images = [...queue, ...images];
     } else {
-      let source = additional;
-      additional = [];
+      let source = images;
+      images = [];
       source.forEach(function (img) {
         if (img === "Files") {
-          additional = [...additional, ...queue];
+          images = [...images, ...queue];
         } else {
-          additional.push(img);
+          images.push(img);
         }
       });
     }
-    return { primary: primary, additional: additional };
+    return { primary: primary, images: images };
   }
 
   dragEnd(evt) {
@@ -148,20 +148,20 @@ class GridImages extends React.Component {
     }
     evt.preventDefault();
     evt.stopPropagation();
-    var { primary, additional } = this.getDraggedOrder();
+    var { primary, images } = this.getDraggedOrder();
 
     if (this.state.dragging == "Files") {
       let files = this.getFiles(evt.dataTransfer)
                       .map(f => this.uploadFile(f));
       var { primary,
-            additional } = this.injectUploads(files, primary, additional);
+            images } = this.injectUploads(files, primary, images);
     }
 
     this.setState({dragging: false,
                    x: null,
                    y: null,
                    primary: primary,
-                   additional: additional});
+                   images: images});
     this.cachePositions();
   }
 
@@ -200,8 +200,8 @@ class GridImages extends React.Component {
   }
 
   index(record) {
-    let { primary, additional, deleted } = this.state;
-    var ordered = [...additional, ...deleted];
+    let { primary, images, deleted } = this.state;
+    var ordered = [...images, ...deleted];
     if (primary) {
       ordered = [primary, ...ordered];
     }
@@ -244,40 +244,40 @@ class GridImages extends React.Component {
   getDraggedOrder() {
     let dragging = this.state.dragging;
     var primary = this.state.primary;
-    var additional = this.state.additional;
+    var images = this.state.images;
     if (dragging) {
       if (this.hovering(this.primaryContainer)) {
-        additional = [primary, ...additional].filter(
+        images = [primary, ...images].filter(
           r => r !== null && r !== dragging
         );
         primary = dragging;
-      } else if (this.hovering(this.additionalContainer)) {
-        additional = [];
+      } else if (this.hovering(this.imagesContainer)) {
+        images = [];
         if (dragging === primary) {
           primary = null;
         }
-        this.state.additional.filter(r => r !== dragging).forEach(r => {
-          if (this.hovering(r) && additional.indexOf(dragging) === -1) {
-            additional.push(dragging);
+        this.state.images.filter(r => r !== dragging).forEach(r => {
+          if (this.hovering(r) && images.indexOf(dragging) === -1) {
+            images.push(dragging);
           }
-          additional.push(r);
+          images.push(r);
         });
-        if (additional.indexOf(dragging) === -1) {
-          additional.push(dragging);
+        if (images.indexOf(dragging) === -1) {
+          images.push(dragging);
         }
       } else {
         if (dragging === primary) {
           primary = null;
         }
-        additional = this.state.additional.filter(r => r !== dragging);
-        if (this.state.y < this.additionalContainer.current.getBoundingClientRect().top) {
-          additional = [dragging, ...additional];
+        images = this.state.images.filter(r => r !== dragging);
+        if (this.state.y < this.imagesContainer.current.getBoundingClientRect().top) {
+          images = [dragging, ...images];
         } else {
-          additional.push(dragging);
+          images.push(dragging);
         }
       }
     }
-    return { primary: primary, additional: additional };
+    return { primary: primary, images: images };
   }
 
   renderImage(record, primary) {
@@ -321,9 +321,9 @@ class GridImages extends React.Component {
 
   render() {
     let { dragging, deleted } = this.state;
-    let { primary, additional } = this.getDraggedOrder();
+    let { primary, images } = this.getDraggedOrder();
     return (
-      <div className="grid-images"
+      <div className="image-grid"
            ref={this.container}
            onDragOver={this.drag}
            onDrop={this.dragEnd}>
@@ -354,24 +354,24 @@ class GridImages extends React.Component {
              )}
            </div>
         )}
-        <div className="additional" ref={this.additionalContainer}>
+        <div className="grid" ref={this.imagesContainer}>
           <h3>
-            {this.props.enablePrimary ? "More images" : "Images"}
+            {this.props.enablePrimary ? "More files" : "Images"}
           </h3>
           <div className="drop-target">
             <span>
               Drag and drop image here, or
-              <button onClick={this.triggerUploadAdditional}>
+              <button onClick={this.triggerUploadImages}>
                 choose a file
               </button>
             </span>
             <input type="file"
-                   onChange={this.uploadAdditional}
-                   ref={this.uploadAdditionalInput}
+                   onChange={this.uploadImages}
+                   ref={this.uploadImagesInput}
                    multiple />
           </div>
           <div className="images">
-            {additional.map(r => this.renderImage(r, false))}
+            {images.map(r => this.renderImage(r, false))}
           </div>
         </div>
         <div className="deleted">
@@ -409,9 +409,9 @@ class GridImages extends React.Component {
     if (this.state.primary === record) {
       this.setState({ primary: { ...record, ...attrs } });
     } else {
-      let additional = this.state.additional.slice();
-      additional[additional.indexOf(record)] = { ...record, ...attrs };
-      this.setState({ additional: additional });
+      let images = this.state.images.slice();
+      images[images.indexOf(record)] = { ...record, ...attrs };
+      this.setState({ images: images });
     }
   }
 
@@ -438,9 +438,9 @@ class GridImages extends React.Component {
     return obj;
   }
 
-  triggerUploadAdditional(evt) {
+  triggerUploadImages(evt) {
     evt.preventDefault();
-    this.uploadAdditionalInput.current.click();
+    this.uploadImagesInput.current.click();
   }
 
   triggerUploadPrimary(evt) {
@@ -456,22 +456,22 @@ class GridImages extends React.Component {
     return result;
   }
 
-  uploadAdditional(evt) {
+  uploadImages(evt) {
     let uploadedFiles = this.uploadFiles(evt.target.files);
-    this.setState({ additional: [...this.state.additional, ...uploadedFiles] });
+    this.setState({ images: [...this.state.images, ...uploadedFiles] });
   }
 
   uploadPrimary(evt) {
     let uploadedFiles = this.uploadFiles(evt.target.files);
     var primary = this.state.primary;
-    var additional = this.state.additional;
+    var images = this.state.images;
     if (primary) {
-      additional = [primary, ...additional];
+      images = [primary, ...images];
     }
     primary = uploadedFiles[0];
     if (uploadedFiles.length > 1) {
-      additional = [...uploadedFiles.slice(1), ...additional];
+      images = [...uploadedFiles.slice(1), ...images];
     }
-    this.setState({ primary: primary, additional: additional });
+    this.setState({ primary: primary, images: images });
   }
 }

@@ -1,6 +1,6 @@
 $grid-image-padding: 7px;
 
-.grid-images {
+.image-grid {
   margin-bottom: 40px;
   display: flex;
 
@@ -135,7 +135,7 @@ $grid-image-padding: 7px;
     }
   }
 
-  .additional {
+  .grid {
     width: 66.67%;
     @include breakpoint-mobile {
       width: 100%;
