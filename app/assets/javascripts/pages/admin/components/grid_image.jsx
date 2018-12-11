@@ -1,8 +1,8 @@
-class PageImage extends React.Component {
+class GridImage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      src: (props.pageImage.src || null)
+      src: (props.record.src || null)
     };
     this.copyEmbed = this.copyEmbed.bind(this);
     this.deleteImage = this.deleteImage.bind(this);
@@ -10,16 +10,16 @@ class PageImage extends React.Component {
   }
 
   componentDidMount() {
-    let file = this.props.pageImage.file;
+    let file = this.props.record.file;
     if (file) {
       this.reader = new FileReader();
       this.reader.onload = () => this.setState({src: this.reader.result });
-      this.reader.readAsDataURL(this.props.pageImage.file);
+      this.reader.readAsDataURL(this.props.record.file);
     }
   }
 
   copyEmbed(evt) {
-    let image = this.props.pageImage.image;
+    let image = this.props.record.image;
     evt.preventDefault();
     const el = document.createElement("textarea");
     el.value = `[image:${image.id}]`;
@@ -33,7 +33,7 @@ class PageImage extends React.Component {
   deleteImage(evt) {
     evt.preventDefault();
     if (this.props.deleteImage) {
-      this.props.deleteImage(this.props.pageImage);
+      this.props.deleteImage(this.props.record);
     }
   }
 
@@ -41,12 +41,12 @@ class PageImage extends React.Component {
     evt.preventDefault();
     evt.stopPropagation();
     if (this.props.startDrag) {
-      this.props.startDrag(evt, this.props.pageImage);
+      this.props.startDrag(evt, this.props.record);
     }
   }
 
   renderImage() {
-    let image = this.props.pageImage.image;
+    let image = this.props.record.image;
     return(
       <EditableImage image={image}
                      src={this.state.src || image.thumbnail_url}
@@ -78,28 +78,30 @@ class PageImage extends React.Component {
   }
 
   render() {
-    let index = this.props.index;
-    let pageImage = this.props.pageImage;
-    let image = pageImage.image;
-    let classes = ["page-image"];
+    let attributeName = this.props.attributeName;
+    let record = this.props.record;
+    let image = record.image;
+    let classes = ["grid-image"];
     if (this.props.placeholder) {
       classes.push("placeholder");
     }
-    if (this.props.pageImage.file) {
+    if (this.props.record.file) {
       classes.push("uploading");
     }
     return (
       <div className={classes.join(" ")}
            onDragStart={this.dragStart}
-           ref={this.props.pageImage.ref}>
-        <input name={`page[page_images_attributes][${index}][id]`}
-               type="hidden" value={pageImage.id || ""} />
-        <input name={`page[page_images_attributes][${index}][image_id]`}
+           ref={this.props.record.ref}>
+        <input name={`${attributeName}[id]`}
+               type="hidden" value={record.id || ""} />
+        <input name={`${attributeName}[image_id]`}
                type="hidden" value={(image && image.id) || ""} />
-        <input name={`page[page_images_attributes][${index}][position]`}
-               type="hidden" value={index + 1} />
-        <input name={`page[page_images_attributes][${index}][primary]`}
-               type="hidden" value={this.props.primary} />
+        <input name={`${attributeName}[position]`}
+               type="hidden" value={this.props.position} />
+        {this.props.hasOwnProperty("primary") && (
+           <input name={`${attributeName}[primary]`}
+                  type="hidden" value={this.props.primary} />
+        )}
         {!image && this.renderPlaceholder()}
         {image && this.renderImage()}
         {image && (

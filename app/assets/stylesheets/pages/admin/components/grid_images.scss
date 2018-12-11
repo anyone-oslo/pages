@@ -1,6 +1,6 @@
-$page-image-padding: 7px;
+$grid-image-padding: 7px;
 
-.page-images {
+.grid-images {
   margin-bottom: 40px;
   display: flex;
 
@@ -13,7 +13,7 @@ $page-image-padding: 7px;
   }
 
   h3 {
-    margin: 10px $page-image-padding 10px $page-image-padding;
+    margin: 10px $grid-image-padding 10px $grid-image-padding;
     border-bottom: 1px solid $c-border;
     padding-bottom: 5px;
   }
@@ -25,8 +25,8 @@ $page-image-padding: 7px;
     min-height: 1px; // Hack for IE11
   }
 
-  .page-image {
-    padding: $page-image-padding;
+  .grid-image {
+    padding: $grid-image-padding;
     &.placeholder {
       opacity: 0.25;
     }
@@ -125,10 +125,10 @@ $page-image-padding: 7px;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        top: $page-image-padding;
-        bottom: $page-image-padding;
-        left: $page-image-padding;
-        right: $page-image-padding;
+        top: $grid-image-padding;
+        bottom: $grid-image-padding;
+        left: $grid-image-padding;
+        right: $grid-image-padding;
         min-height: 150px;
         background: $c-background-disabled;
       }
@@ -145,7 +145,7 @@ $page-image-padding: 7px;
       display: flex;
       flex-wrap: wrap;
 
-      .page-image {
+      .grid-image {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -161,7 +161,7 @@ $page-image-padding: 7px;
     }
 
     .drop-target {
-      margin: 10px $page-image-padding;
+      margin: 10px $grid-image-padding;
       padding-top: 10px;
       button {
         margin: 0px 7px;

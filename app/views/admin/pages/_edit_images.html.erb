@@ -2,7 +2,7 @@
                     locale: @locale,
                     locales: PagesCore.config.locales,
                     csrf_token: form_authenticity_token,
-                    page_images: ActiveModel::Serializer::CollectionSerializer.new(
+                    records: ActiveModel::Serializer::CollectionSerializer.new(
                       @page.page_images,
                       serializer: Admin::PageImageSerializer
                     )) %>
