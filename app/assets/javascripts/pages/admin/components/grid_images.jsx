@@ -9,11 +9,17 @@ class GridImages extends React.Component {
     ));
 
     this.state = { dragging: false,
-                   primary: records.filter(r => r.primary)[0] || null,
-                   additional: records.filter(r => !r.primary),
+                   primary: null,
+                   additional: records,
                    deleted: [],
                    x: null,
                    y: null };
+
+    if (props.enablePrimary) {
+      this.state = { ...this.state,
+                     primary: records.filter(r => r.primary)[0] || null,
+                     additional: records.filter(r => !r.primary) }
+    }
 
     this.container = React.createRef();
     this.additionalContainer = React.createRef();
@@ -301,11 +307,12 @@ class GridImages extends React.Component {
                  locale={this.props.locale}
                  locales={this.props.locales}
                  csrf_token={this.props.csrf_token}
-                 showEmbed={true}
+                 showEmbed={this.props.showEmbed}
                  startDrag={this.startImageDrag}
                  position={this.index(record) + 1}
                  primary={primary}
                  onUpdate={onUpdate}
+                 enablePrimary={this.props.enablePrimary}
                  deleteImage={this.deleteImage}
                  attributeName={this.attributeName(record)}
                  placeholder={dragging && dragging == record} />
@@ -321,33 +328,35 @@ class GridImages extends React.Component {
            onDragOver={this.drag}
            onDrop={this.dragEnd}>
         {dragging && this.renderDrag()}
-        <div className="primary-image" ref={this.primaryContainer}>
-          <h3>
-            Main image
-          </h3>
-          {primary && this.renderImage(primary, true)}
-          {!primary && (
-             <div className="drop-target">
-               <span>
-                 Drag and drop image here, or<br />
-                 <button onClick={this.triggerUploadPrimary}>
-                   choose a file
-                 </button>
-               </span>
-               <input type="file"
-                      onChange={this.uploadPrimary}
-                      ref={this.uploadPrimaryInput}
-                      multiple />
-             </div>
-          )}
-          {this.props.primaryAttribute && (
-             <input type="hidden" name={this.props.primaryAttribute}
-                    value={(primary && primary.image && primary.image.id) || ""} />
-          )}
-        </div>
+        {this.props.enablePrimary && (
+           <div className="primary-image" ref={this.primaryContainer}>
+             <h3>
+               Main image
+             </h3>
+             {primary && this.renderImage(primary, true)}
+             {!primary && (
+                <div className="drop-target">
+                  <span>
+                    Drag and drop image here, or<br />
+                    <button onClick={this.triggerUploadPrimary}>
+                      choose a file
+                    </button>
+                  </span>
+                  <input type="file"
+                         onChange={this.uploadPrimary}
+                         ref={this.uploadPrimaryInput}
+                         multiple />
+                </div>
+             )}
+             {this.props.primaryAttribute && (
+                <input type="hidden" name={this.props.primaryAttribute}
+                       value={(primary && primary.image && primary.image.id) || ""} />
+             )}
+           </div>
+        )}
         <div className="additional" ref={this.additionalContainer}>
           <h3>
-            More images
+            {this.props.enablePrimary ? "More images" : "Images"}
           </h3>
           <div className="drop-target">
             <span>

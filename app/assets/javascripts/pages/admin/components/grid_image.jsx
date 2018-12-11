@@ -98,7 +98,7 @@ class GridImage extends React.Component {
                type="hidden" value={(image && image.id) || ""} />
         <input name={`${attributeName}[position]`}
                type="hidden" value={this.props.position} />
-        {this.props.hasOwnProperty("primary") && (
+        {this.props.enablePrimary && (
            <input name={`${attributeName}[primary]`}
                   type="hidden" value={this.props.primary} />
         )}
