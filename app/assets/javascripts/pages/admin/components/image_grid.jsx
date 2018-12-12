@@ -1,19 +1,21 @@
-class ImageGrid extends React.Component {
+class ImageGrid extends DragUploader {
   constructor(props) {
     super(props);
 
-    let records = props.records.map(r => ({
-      ...r,
-      ref: React.createRef(),
-      handle: this.getHandle()
-    }));
+    this.validMimeTypes = ["image/gif",
+                           "image/jpeg",
+                           "image/pjpeg",
+                           "image/png",
+                           "image/tiff"];
 
-    this.state = { dragging: false,
+    let records = props.records.map(
+      r => ({ ...r, ref: React.createRef(), handle: this.getHandle() })
+    );
+
+    this.state = { ...this.state,
                    primary: null,
                    images: records,
-                   deleted: [],
-                   x: null,
-                   y: null };
+                   deleted: [] };
 
     if (props.enablePrimary) {
       this.state = { ...this.state,
@@ -27,41 +29,20 @@ class ImageGrid extends React.Component {
     this.uploadImagesInput = React.createRef();
     this.uploadPrimaryInput = React.createRef();
 
-    ["cachePositions", "deleteImage", "drag", "dragEnd", "dragLeave",
-     "startImageDrag", "uploadImages", "triggerUploadImages",
-     "uploadPrimary", "triggerUploadPrimary"].forEach(
-       prop => this[prop] = this[prop].bind(this)
-     );
+    this.deleteImage = this.deleteImage.bind(this);
+    this.startImageDrag = this.startImageDrag.bind(this);
+    this.uploadImages = this.uploadImages.bind(this);
+    this.triggerUploadImages = this.triggerUploadImages.bind(this);
+    this.uploadPrimary = this.uploadPrimary.bind(this);
+    this.triggerUploadPrimary = this.triggerUploadPrimary.bind(this);
   }
 
   attributeName(record) {
     return `${this.props.attribute}[${this.index(record) + 1}]`;
   }
 
-  cachePositions() {
-    this.cachedPositions = {};
-    this.state.images.forEach(r => {
-      this.cachedPositions[r.handle] = r.ref.current.getBoundingClientRect();
-    });
-  }
-
-  componentDidMount() {
-    window.addEventListener("mousemove", this.drag);
-    window.addEventListener("touchmove", this.drag);
-    window.addEventListener("mouseup", this.dragEnd);
-    window.addEventListener("touchend", this.dragEnd);
-    window.addEventListener("mouseout", this.dragLeave);
-    window.addEventListener("resize", this.cachePositions);
-    this.cachePositions();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("mousemove", this.drag);
-    window.removeEventListener("touchmove", this.drag);
-    window.removeEventListener("mouseup", this.dragEnd);
-    window.removeEventListener("touchend", this.dragEnd);
-    window.removeEventListener("mouseout", this.dragLeave);
-    window.removeEventListener("resize", this.cachePositions);
+  draggables() {
+    return this.state.images;
   }
 
   deleteImage(record) {
@@ -74,53 +55,7 @@ class ImageGrid extends React.Component {
     if (record.id) {
       deleted = [...deleted, record];
     }
-    this.setState({ primary: primary,
-                    images: images,
-                    deleted: deleted });
-  }
-
-  containsFiles(evt) {
-    if (!evt.dataTransfer || !evt.dataTransfer.types) {
-      return false;
-    }
-    let types = evt.dataTransfer.types;
-    for (var i = 0; i < types.length; i++) {
-      if (types[i] === "Files" || types[i] === "application/x-moz-file") {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  drag(evt) {
-    if (this.state.dragging) {
-      let position = this.mousePosition(evt);
-      evt.stopPropagation();
-      evt.preventDefault();
-      this.setState({ x: position.x, y: position.y });
-    } else {
-      if (this.containsFiles(evt)) {
-        this.cachePositions();
-        this.setState({ dragging: "Files" });
-      }
-    }
-  }
-
-  dragLeave(evt) {
-    if (!this.state.dragging || this.state.dragging !== "Files") {
-      return;
-    }
-    evt.preventDefault();
-    evt.stopPropagation();
-    this.setState({ dragging: false, x: null, y: null });
-  }
-
-  getHandle() {
-    if (!this.handle) {
-      this.handle = 0;
-    }
-    this.handle += 1;
-    return this.handle;
+    this.setState({ primary: primary, images: images, deleted: deleted });
   }
 
   injectUploads(files, primary, images) {
@@ -142,61 +77,16 @@ class ImageGrid extends React.Component {
     return { primary: primary, images: images };
   }
 
-  dragEnd(evt) {
-    if (!this.state.dragging) {
-      return;
-    }
-    evt.preventDefault();
-    evt.stopPropagation();
+  receiveFiles(files, newState) {
     var { primary, images } = this.getDraggedOrder();
 
-    if (this.state.dragging == "Files") {
-      let files = this.getFiles(evt.dataTransfer)
-                      .map(f => this.uploadFile(f));
-      var { primary,
-            images } = this.injectUploads(files, primary, images);
+    if (files.length > 0) {
+      var { primary, images } = this.injectUploads(
+        files.map(f => this.uploadImage(f)), primary, images
+      );
     }
 
-    this.setState({dragging: false,
-                   x: null,
-                   y: null,
-                   primary: primary,
-                   images: images});
-    this.cachePositions();
-  }
-
-  getFiles(dt) {
-    let validTypes = ["image/gif",
-                      "image/jpeg",
-                      "image/pjpeg",
-                      "image/png",
-                      "image/tiff"];
-    var files = [];
-    if (dt.items) {
-      for (var i = 0; i < dt.items.length; i++) {
-        if (dt.items[i].kind == "file") {
-          files.push(dt.items[i].getAsFile());
-        }
-      }
-    } else {
-      for (var i = 0; i < dt.files.length; i++) {
-        files.push(dt.files[i]);
-      }
-    }
-    return files.filter(f => validTypes.indexOf(f.type) !== -1);
-  }
-
-  hovering(target) {
-    let { x, y } = this.state;
-    var rect;
-    if (target.handle && this.cachedPositions[target.handle]) {
-      rect = this.cachedPositions[target.handle];
-    } else if (target.current) {
-      rect = target.current.getBoundingClientRect();
-    } else {
-      return false;
-    }
-    return (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+    this.setState({...newState, primary: primary, images: images});
   }
 
   index(record) {
@@ -206,18 +96,6 @@ class ImageGrid extends React.Component {
       ordered = [primary, ...ordered];
     }
     return ordered.indexOf(record);
-  }
-
-  mousePosition(evt) {
-    var x, y;
-    if (evt.type == "touchmove") {
-      x = evt.touches[0].clientX;
-      y = evt.touches[0].clientY;
-    } else {
-      x = evt.clientX;
-      y = evt.clientY;
-    }
-    return { x: x, y: y };
   }
 
   renderDrag() {
@@ -356,7 +234,7 @@ class ImageGrid extends React.Component {
         )}
         <div className="grid" ref={this.imagesContainer}>
           <h3>
-            {this.props.enablePrimary ? "More files" : "Images"}
+            {this.props.enablePrimary ? "More images" : "Images"}
           </h3>
           <div className="drop-target">
             <span>
@@ -415,26 +293,22 @@ class ImageGrid extends React.Component {
     }
   }
 
-  uploadFile(file) {
+  uploadImage(file) {
     let component = this;
     let obj = { image: null, file: file, ref: React.createRef(),
                 handle: this.getHandle() };
-    let xhr = new XMLHttpRequest();
     let data = new FormData();
+
     this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
-    xhr.open("POST", "/admin/images.json");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.addEventListener("load", function () {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-        let preloader = new Image();
-        obj.file = null;
-        obj.image = JSON.parse(xhr.responseText)
-        preloader.onload = () => component.setState({});
-        preloader.src = obj.image.thumbnail_url;
-      }
+    this.postFile("/admin/images.json", data, function (json) {
+      let preloader = new Image();
+      obj.file = null;
+      obj.image = json;
+      preloader.onload = () => component.setState({});
+      preloader.src = obj.image.thumbnail_url;
     });
-    xhr.send(data);
+
     return obj;
   }
 
@@ -451,7 +325,7 @@ class ImageGrid extends React.Component {
   uploadFiles(fileList) {
     let result = [];
     for (var i = 0; i < fileList.length; i++) {
-      result.push(this.uploadFile(fileList[i]));
+      result.push(this.uploadImage(fileList[i]));
     }
     return result;
   }
