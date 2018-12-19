@@ -8,6 +8,7 @@ module PagesCore
         before_validation :ensure_ends_at
 
         scope :upcoming, -> { where("ends_at > ?", Time.zone.now) }
+        scope :past, -> { where("ends_at <= ?", Time.zone.now) }
       end
 
       module ClassMethods
