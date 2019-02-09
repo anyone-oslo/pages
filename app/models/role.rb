@@ -1,5 +1,5 @@
 class Role < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, touch: true
   validates :name,
             presence:   true,
             uniqueness: { scope: :user_id },

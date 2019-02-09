@@ -11,10 +11,12 @@
 <% end %>
 
 <div class="content">
-  <%= react_component(
-    "PageTree", {
-      pages: @pages.map { |p| page_json(p) },
-      locale: @locale,
-      permissions: [(:create if policy(Page).create?)] }
-  ) %>
+  <% cache Page.visible.roots.to_a + [current_user] do %>
+    <%= react_component(
+      "PageTree", {
+        pages: @pages.map { |p| page_json(p) },
+        locale: @locale,
+        permissions: [(:create if policy(Page).create?)] }
+    ) %>
+  <% end %>
 </div>

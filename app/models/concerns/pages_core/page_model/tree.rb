@@ -8,7 +8,8 @@ module PagesCore
                    class_name:  "Page",
                    foreign_key: :parent_page_id,
                    inverse_of:  :children,
-                   optional:    true
+                   optional:    true,
+                   touch:       true
 
         has_many :children,
                  class_name:  "Page",
