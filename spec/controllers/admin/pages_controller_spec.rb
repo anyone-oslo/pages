@@ -17,10 +17,6 @@ describe Admin::PagesController, type: :controller do
     end
 
     it { is_expected.to render_template("admin/pages/index") }
-
-    it "loads the root pages" do
-      expect(assigns(:root_pages)).to match_array([page, hidden])
-    end
   end
 
   describe "GET news" do
