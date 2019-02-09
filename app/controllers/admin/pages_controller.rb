@@ -8,8 +8,10 @@ module Admin
 
     require_authorization
 
+    helper_method :page_json
+
     def index
-      @root_pages = Page.roots.in_locale(@locale).visible
+      @pages = Page.admin_list(@locale)
     end
 
     def deleted
@@ -100,6 +102,21 @@ module Admin
       )
     end
 
+    def page_json(page)
+      { id: page.id,
+        param: page.to_param,
+        parent_page_id: page.parent_page_id,
+        locale: page.locale,
+        status: page.status,
+        news_page: page.news_page,
+        name: page.name,
+        published_at: page.published_at,
+        pinned: page.pinned?,
+        starts_at: page.starts_at,
+        permissions: [(:edit if policy(page).edit?),
+                      (:create if policy(page).edit?)].compact }
+    end
+
     def param_categories
       return [] unless params[:category]
       params.permit(category: {})[:category]
@@ -118,7 +135,7 @@ module Admin
     def respond_with_page(page)
       respond_to do |format|
         format.html { yield }
-        format.json { render json: page, serializer: PageTreeSerializer }
+        format.json { render json: page_json(page) }
       end
     end
   end

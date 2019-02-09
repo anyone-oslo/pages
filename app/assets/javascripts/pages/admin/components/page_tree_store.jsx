@@ -126,8 +126,23 @@ class PageTreeStore extends Reflux.Store {
     tree.updateNodesPosition();
   }
 
-  onInit(newTree) {
-    tree = new Tree(newTree);
+  onInit(props) {
+    let pages = props.pages;
+
+    // Build tree
+    let parentMap = pages.reduce((m, page) => {
+      let id = page.parent_page_id;
+      m[id] = [...(m[id] || []), page];
+      return m;
+    }, {});
+
+    pages.forEach((p) => p.children = parentMap[p.id] || []);
+
+    tree = new Tree({ name: "All Pages",
+                      locale: props.locale,
+                      permissions: props.permissions,
+                      root: true,
+                      children: parentMap[null] });
     this.applyCollapsed(tree);
     tree.updateNodesPosition();
     this.setState({tree: tree});

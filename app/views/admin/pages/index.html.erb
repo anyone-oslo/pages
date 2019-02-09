@@ -13,17 +13,8 @@
 <div class="content">
   <%= react_component(
     "PageTree", {
-      tree: {
-        name: "All Pages",
-        locale: @locale,
-        root: true,
-        permissions: [(:create if policy(Page).create?)],
-        children: ActiveModel::Serializer::CollectionSerializer.new(
-          @root_pages,
-          serializer: PageTreeSerializer,
-          scope: current_user
-        )
-      }
-    }
+      pages: @pages.map { |p| page_json(p) },
+      locale: @locale,
+      permissions: [(:create if policy(Page).create?)] }
   ) %>
 </div>

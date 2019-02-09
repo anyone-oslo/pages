@@ -22,6 +22,24 @@ module PagesCore
       end
 
       module ClassMethods
+        def admin_list(locale)
+          left_outer_joins(:parent)
+            .where("pages.status < 4")
+            .order(
+              Arel.sql(
+                <<-QUERY
+                pages.parent_page_id,
+                parents_pages.news_page,
+                case when parents_pages.news_page
+                  then pages.pinned end desc,
+                case when parents_pages.news_page
+                  then pages.published_at end desc,
+                position asc
+                QUERY
+              )
+            ).in_locale(locale)
+        end
+
         # Returns all root pages
         def roots
           where(parent_page_id: nil).order("position ASC")

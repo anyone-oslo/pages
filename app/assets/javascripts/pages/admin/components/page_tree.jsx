@@ -35,7 +35,7 @@ class PageTree extends Reflux.Component {
   }
 
   componentDidMount() {
-    PageTreeActions.init(this.props.tree);
+    PageTreeActions.init(this.props);
   }
 
   initDragging() {
