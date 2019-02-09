@@ -11,7 +11,7 @@
 <% end %>
 
 <div class="content">
-  <% cache Page.visible.roots.to_a + [current_user] do %>
+  <% cache Page.visible.roots.to_a + [current_user, @locale] do %>
     <%= react_component(
       "PageTree", {
         pages: @pages.map { |p| page_json(p) },
