@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency "active_model_serializers", "~> 0.10.0"
   s.add_dependency "bcrypt-ruby"
   s.add_dependency "country_select"
-  s.add_dependency "dis", "~> 1.0"
+  s.add_dependency "dis", "~> 1.1.2"
   s.add_dependency "dynamic_image", "~> 2.0"
   s.add_dependency "RedCloth", "~> 4.3.2"
   s.add_dependency "will_paginate", "~> 3.1.0"
