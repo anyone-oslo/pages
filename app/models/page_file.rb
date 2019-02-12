@@ -1,4 +1,6 @@
 class PageFile < ActiveRecord::Base
+  include PagesCore::Sweepable
+
   belongs_to :page
   belongs_to :attachment
 
@@ -6,13 +8,12 @@ class PageFile < ActiveRecord::Base
 
   accepts_nested_attributes_for :attachment
 
-  localizable do
-  end
+  localizable
 
   delegate :published, to: :page
 
   def attachment
-    super&.localize(locale)
+    super&.localize!(locale)
   end
 
   def name

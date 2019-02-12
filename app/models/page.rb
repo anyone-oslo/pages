@@ -3,6 +3,7 @@ class Page < ActiveRecord::Base
   include PagesCore::Sweepable
   include PagesCore::Taggable
 
+  include PagesCore::PageModel::Attachments
   include PagesCore::PageModel::Autopublishable
   include PagesCore::PageModel::DatedPage
   include PagesCore::PageModel::Images
@@ -22,12 +23,6 @@ class Page < ActiveRecord::Base
 
   has_many :page_categories, dependent: :destroy
   has_many :categories, through: :page_categories
-
-  has_many :page_files,
-           -> { order("position ASC") },
-           class_name: "PageFile",
-           dependent: :destroy,
-           inverse_of: :page
 
   validates(:unique_name,
             format: { with: /\A[\w\d_\-]+\z/,
@@ -72,14 +67,6 @@ class Page < ActiveRecord::Base
 
   def extended?
     excerpt? && body?
-  end
-
-  def page_files
-    super.in_locale(locale)
-  end
-
-  def files
-    page_files
   end
 
   def headline_or_name

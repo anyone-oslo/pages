@@ -1,5 +1,6 @@
 class Attachment < ActiveRecord::Base
   include Dis::Model
+  include PagesCore::Sweepable
 
   belongs_to :user, optional: true
 
@@ -70,6 +71,6 @@ class Attachment < ActiveRecord::Base
   private
 
   def set_name_from_filename
-    self.name = File.basename(filename, ".*") if filename? && !name?
+    self.name ||= File.basename(filename, ".*") if filename? && locale
   end
 end
