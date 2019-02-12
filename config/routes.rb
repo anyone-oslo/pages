@@ -52,6 +52,9 @@ Rails.application.routes.draw do
       get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
     end
 
+    # Attachments
+    resources :attachments, only: %i[create update]
+
     # Images
     resources :images
 
