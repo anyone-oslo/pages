@@ -1,6 +1,7 @@
 class CreateAttachments < ActiveRecord::Migration[5.2]
   def up
     rename_table :page_files, :attachments
+    add_column :attachments, :user_id, :integer
 
     create_table :page_files do |t|
       t.references :page
@@ -61,6 +62,7 @@ class CreateAttachments < ActiveRecord::Migration[5.2]
     Localization.where(localizable_type: "PageFile", name: "name").destroy_all
 
     drop_table :page_files
+    remove_column :attachments, :user_id
     rename_table :attachments, :page_files
   end
 end

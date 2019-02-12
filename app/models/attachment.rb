@@ -1,6 +1,8 @@
 class Attachment < ActiveRecord::Base
   include Dis::Model
 
+  belongs_to :user, optional: true
+
   validates_data_presence
   validates :content_type, presence: true
   validates :filename, presence: true
