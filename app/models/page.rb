@@ -74,8 +74,12 @@ class Page < ActiveRecord::Base
     excerpt? && body?
   end
 
+  def page_files
+    super.in_locale(locale)
+  end
+
   def files
-    page_files.in_locale(locale)
+    page_files
   end
 
   def headline_or_name

@@ -47,14 +47,6 @@ class Attachment < ActiveRecord::Base
     filename =~ /\./
   end
 
-  def to_param
-    if filename_extension?
-      "#{id}-#{content_hash}.#{filename_extension}"
-    else
-      "#{id}-#{content_hash}"
-    end
-  end
-
   private
 
   def set_name_from_filename

@@ -51,7 +51,9 @@ module Admin
     protected
 
     def page_file_params
-      params.require(:page_file).permit(:name, :filename, :file)
+      params.require(:page_file).permit(
+        attachment_attributes: %i[name description file locale]
+      )
     end
 
     def redirect_to_page

@@ -109,15 +109,21 @@
     <%= form_for((@new_file = PageFile.new),
                  url: admin_page_files_path(@locale, @page),
                  html: {multipart: true}) do |f| %>
-      <%= labelled_field f.text_field( :name, size: 48 ), "Name",
-        errors: @new_file.errors[:name]
-      %>
-      <%= labelled_field f.text_field( :description, size: 48 ), "Description",
-        errors: @new_file.errors[:name]
-      %>
-      <%= labelled_field f.file_field( :file ), "File",
-        errors: @new_file.errors[:file]
-      %>
+      <%= f.fields_for :attachment, Attachment.new(locale: @locale) do |ff| %>
+        <%= ff.hidden_field :locale %>
+        <%= labelled_field(ff.text_field(:name, size: 48),
+                           "Name",
+                           errors: @new_file.errors[:name])
+        %>
+        <%= labelled_field(ff.text_field(:description, size: 48),
+                           "Description",
+                           errors: @new_file.errors[:name])
+        %>
+        <%= labelled_field(ff.file_field( :file ),
+                           "File",
+                           errors: @new_file.errors[:file])
+        %>
+      <% end %>
       <p>
         <%= submit_tag "Upload" %> or
         <%= link_to "Cancel", "#", class: "cancel clear-modal" %>

@@ -5,9 +5,9 @@ module PagesCore
 
       def show
         if stale?(etag: @page_file, last_modified: @page_file.updated_at)
-          send_data(@page_file.data,
-                    filename: @page_file.filename,
-                    type: @page_file.content_type,
+          send_data(@page_file.attachment.data,
+                    filename: @page_file.attachment.filename,
+                    type: @page_file.attachment.content_type,
                     disposition: "inline")
         end
       end
