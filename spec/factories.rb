@@ -26,15 +26,21 @@ FactoryBot.define do
     association :localizable, factory: :blank_page
   end
 
-  factory :page_file do
-    locale { "en" }
-    page
+  factory :attachment do
+    locale { I18n.locale }
+    sequence(:name) { |n| "Attachment #{n}" }
     file do
       Rack::Test::UploadedFile.new(
         Rails.root.join("..", "support", "fixtures", "image.png"),
         "image/png"
       )
     end
+  end
+
+  factory :page_file do
+    page
+    attachment
+    locale { I18n.locale }
   end
 
   factory :page_path do
