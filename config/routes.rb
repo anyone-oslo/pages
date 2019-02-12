@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
+  # Attachment
+  resources :attachments, path: "attachments/:digest", only: %i[show] do
+    member do
+      get :download
+    end
+  end
+
   # Pages
   resources :pages, path: ":locale/pages" do
     collection do

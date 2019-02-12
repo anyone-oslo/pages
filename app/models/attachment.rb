@@ -14,6 +14,12 @@ class Attachment < ActiveRecord::Base
   before_validation :set_name_from_filename
 
   class << self
+    def verifier
+      @verifier ||= PagesCore::DigestVerifier.new(
+        Rails.application.key_generator.generate_key("attachments")
+      )
+    end
+
     def formats
       {
         "audio/mpeg"      => :mp3,
@@ -25,6 +31,12 @@ class Attachment < ActiveRecord::Base
         "application/pdf" => :pdf
       }
     end
+  end
+
+  def digest
+    return unless id
+
+    self.class.verifier.generate(id.to_s)
   end
 
   def format?
@@ -45,6 +57,12 @@ class Attachment < ActiveRecord::Base
 
   def filename_extension?
     filename =~ /\./
+  end
+
+  # Includes a timestamp fingerprint in the URL param, so
+  # that rendered images can be cached indefinitely.
+  def to_param
+    [id, updated_at.utc.to_s(cache_timestamp_format)].join("-")
   end
 
   private

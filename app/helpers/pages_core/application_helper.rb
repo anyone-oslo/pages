@@ -2,6 +2,7 @@
 # in the application.
 module PagesCore
   module ApplicationHelper
+    include PagesCore::AttachmentsHelper
     include PagesCore::HeadTagsHelper
     include PagesCore::ImagesHelper
     include PagesCore::MetaTagsHelper
