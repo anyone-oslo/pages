@@ -24,7 +24,7 @@ class PageExporter
 
   def export_files(page)
     path = page_path(page).join("files")
-    page.page_files.each do |file|
+    page.attachments.each do |file|
       write_file(
         path.join([file.content_hash, file.filename].join("-")),
         file.data
