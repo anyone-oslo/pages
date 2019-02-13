@@ -13,7 +13,6 @@ class Attachments extends DragUploader {
 
     this.deleteRecord = this.deleteRecord.bind(this);
     this.receiveFiles = this.receiveFiles.bind(this);
-    this.startRecordDrag = this.startRecordDrag.bind(this);
   }
 
   attributeName(record) {
@@ -144,7 +143,7 @@ class Attachments extends DragUploader {
                   locales={this.props.locales}
                   csrf_token={this.props.csrf_token}
                   showEmbed={this.props.showEmbed}
-                  startDrag={this.startRecordDrag}
+                  startDrag={this.startDrag}
                   position={this.index(record) + 1}
                   onUpdate={onUpdate}
                   deleteRecord={this.deleteRecord}
@@ -166,15 +165,6 @@ class Attachments extends DragUploader {
                type="hidden" value={true} />
       </span>
     );
-  }
-
-  startRecordDrag(evt, record) {
-    let position = this.mousePosition(evt);
-    let prevDisplay = record.ref.current.style.display;
-    record.ref.current.style.display = "none";
-    this.cachePositions();
-    record.ref.current.style.display = prevDisplay;
-    this.setState({ dragging: record, x: position.x, y: position.y });
   }
 
   updateAttachment(record, attachment) {

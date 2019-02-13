@@ -28,7 +28,6 @@ class ImageGrid extends DragUploader {
     this.primaryContainer = React.createRef();
 
     this.deleteImage = this.deleteImage.bind(this);
-    this.startImageDrag = this.startImageDrag.bind(this);
     this.uploadAdditional = this.uploadAdditional.bind(this);
     this.uploadPrimary = this.uploadPrimary.bind(this);
   }
@@ -175,7 +174,7 @@ class ImageGrid extends DragUploader {
                  locales={this.props.locales}
                  csrf_token={this.props.csrf_token}
                  showEmbed={this.props.showEmbed}
-                 startDrag={this.startImageDrag}
+                 startDrag={this.startDrag}
                  position={this.index(record) + 1}
                  primary={primary}
                  onUpdate={onUpdate}
@@ -248,15 +247,6 @@ class ImageGrid extends DragUploader {
                type="hidden" value={true} />
       </span>
     );
-  }
-
-  startImageDrag(evt, record) {
-    let position = this.mousePosition(evt);
-    let prevDisplay = record.ref.current.style.display;
-    record.ref.current.style.display = "none";
-    this.cachePositions();
-    record.ref.current.style.display = prevDisplay;
-    this.setState({ dragging: record, x: position.x, y: position.y });
   }
 
   updateImage(record, attrs) {

@@ -9,6 +9,7 @@ class DragUploader extends React.Component {
     this.drag = this.drag.bind(this);
     this.dragEnd = this.dragEnd.bind(this);
     this.dragLeave = this.dragLeave.bind(this);
+    this.startDrag = this.startDrag.bind(this);
   }
 
   componentDidMount() {
@@ -160,5 +161,14 @@ class DragUploader extends React.Component {
       }
     });
     xhr.send(data);
+  }
+
+  startDrag(evt, record) {
+    let position = this.mousePosition(evt);
+    let prevDisplay = record.ref.current.style.display;
+    record.ref.current.style.display = "none";
+    this.cachePositions();
+    record.ref.current.style.display = prevDisplay;
+    this.setState({ dragging: record, x: position.x, y: position.y });
   }
 }
