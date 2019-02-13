@@ -20,7 +20,7 @@ class ImageGrid extends DragUploader {
     if (props.enablePrimary) {
       this.state = { ...this.state,
                      primary: records.filter(r => r.primary)[0] || null,
-                     images: records.filter(r => !r.primary) }
+                     images: records.filter(r => !r.primary) };
     }
 
     this.container = React.createRef();
@@ -101,21 +101,21 @@ class ImageGrid extends DragUploader {
   renderDrag() {
     let record = this.state.dragging;
     if (record === "Files") {
-      return;
+      return "";
     } else {
       let containerSize = this.container.current.getBoundingClientRect();
       let x = this.state.x - (containerSize.x || containerSize.left);
       let y = this.state.y - (containerSize.y || containerSize.top);
       let translateStyle = {
         transform: `translate3d(${x}px, ${y}px, 0)`
-      }
+      };
       return (
         <div className="drag-image" style={translateStyle}>
           {record.image && (
              <img src={record.src || record.image.thumbnail_url} />
           )}
         </div>
-      )
+      );
     }
   }
 
@@ -160,7 +160,6 @@ class ImageGrid extends DragUploader {
 
   renderImage(record, primary) {
     let dragging = this.state.dragging;
-    var key;
     if (record === "Files") {
       return (
         <div className="grid-image" key="file-placeholder">
@@ -169,18 +168,12 @@ class ImageGrid extends DragUploader {
       );
     }
 
-    if (record.image) {
-      key = record.image.id;
-    } else if (record.file) {
-      key = record.file.name;
-    }
-
     let onUpdate = (image, src) => {
       this.updateImage(record, { image: image, src: src });
-    }
+    };
 
     return (
-      <GridImage key={`grid-image-${key}`}
+      <GridImage key={record.handle}
                  record={record}
                  locale={this.props.locale}
                  locales={this.props.locales}
@@ -295,11 +288,11 @@ class ImageGrid extends DragUploader {
 
   uploadImage(file) {
     let component = this;
-    let obj = { image: null, file: file, ref: React.createRef(),
+    var obj = { image: null, file: file, ref: React.createRef(),
                 handle: this.getHandle() };
+
     let data = new FormData();
 
-    this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
     this.postFile("/admin/images.json", data, function (json) {
       let preloader = new Image();

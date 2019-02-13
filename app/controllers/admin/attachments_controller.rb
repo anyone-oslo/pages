@@ -1,5 +1,5 @@
 module Admin
-  class AttachmentController < Admin::AdminController
+  class AttachmentsController < Admin::AdminController
     before_action :find_attachment, only: %i[update]
 
     def create

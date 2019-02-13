@@ -1,7 +1,7 @@
 module Admin
   class AttachmentSerializer < ActiveModel::Serializer
     include Rails.application.routes.url_helpers
-    include PagesCore::AttachmentHelper
+    include PagesCore::AttachmentsHelper
 
     attributes :id, :filename, :content_type, :content_hash, :content_length,
                :name, :description, :created_at, :updated_at, :url
