@@ -32,11 +32,9 @@ require "will_paginate"
 
 # Assets
 require "font-awesome-rails"
-require "jcrop/rails/v2"
 require "jquery-ui-rails"
 require "jquery/rails/engine"
 require "react-rails"
-require "underscore-rails"
 
 # Pages
 require "pages_core/plugin"

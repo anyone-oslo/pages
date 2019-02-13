@@ -2,14 +2,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery.Jcrop
-//= require underscore
 //= require react
 //= require react_ujs
 //= require reflux.min
 
 // Vendored assets
-//= require jquery.dimscreen
 //= require jquery.fieldselection
 //= require ReactCrop.min
 
