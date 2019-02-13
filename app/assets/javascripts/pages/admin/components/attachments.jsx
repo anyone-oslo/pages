@@ -10,12 +10,10 @@ class Attachments extends DragUploader {
     };
 
     this.container = React.createRef();
-    this.uploadInput = React.createRef();
 
     this.deleteRecord = this.deleteRecord.bind(this);
+    this.receiveFiles = this.receiveFiles.bind(this);
     this.startRecordDrag = this.startRecordDrag.bind(this);
-    this.uploadSelectedFiles = this.uploadSelectedFiles.bind(this);
-    this.triggerUpload = this.triggerUpload.bind(this);
   }
 
   attributeName(record) {
@@ -71,27 +69,29 @@ class Attachments extends DragUploader {
   injectUploads(files, records) {
     let queue = files.slice();
     let source = records;
-    records = [];
-    source.forEach(function (record) {
-      if (record === "Files") {
-        records = [...records, ...queue];
-      } else {
-        records.push(record);
-      }
-    });
+
+    if (source.indexOf("Files") === -1) {
+      return [...source, ...queue];
+    } else {
+      records = [];
+      source.forEach(function (record) {
+        if (record === "Files") {
+          records = [...records, ...queue];
+        } else {
+          records.push(record);
+        }
+      });
+    }
+
     return records;
   }
 
   receiveFiles(files, newState) {
-    let records = this.getDraggedOrder();
-
-    if (files.length > 0) {
-      records = this.injectUploads(
-        files.map(f => this.uploadAttachment(f)), records
-      );
-    }
-
-    this.setState({ ...newState, records: records });
+    this.setState({
+      ...newState,
+      records: this.injectUploads(files.map(f => this.uploadAttachment(f)),
+                                  this.getDraggedOrder())
+    });
   }
 
   render() {
@@ -113,16 +113,9 @@ class Attachments extends DragUploader {
           {deleted.map(r => this.renderDeletedRecord(r))}
         </div>
         <div className="drop-target">
-          <span>
-            Drag and drop files here, or
-            <button onClick={this.triggerUpload}>
-              choose a file
-            </button>
-          </span>
-          <input type="file"
-                 onChange={this.uploadSelectedFiles}
-                 ref={this.uploadInput}
-                 multiple />
+          <FileUploadButton multiple={true}
+                            multiline={true}
+                            callback={this.receiveFiles} />
         </div>
       </div>
     );
@@ -184,11 +177,6 @@ class Attachments extends DragUploader {
     this.setState({ dragging: record, x: position.x, y: position.y });
   }
 
-  triggerUpload(evt) {
-    evt.preventDefault();
-    this.uploadInput.current.click();
-  }
-
   updateAttachment(record, attachment) {
     let records = this.state.records.slice();
 
@@ -224,22 +212,5 @@ class Attachments extends DragUploader {
     });
 
     return obj;
-  }
-
-  uploadFiles(fileList) {
-    let result = [];
-    for (var i = 0; i < fileList.length; i++) {
-      result.push(this.uploadAttachment(fileList[i]));
-    }
-    return result;
-  }
-
-  uploadSelectedFiles(evt) {
-    let fileList = evt.target.files;
-    let uploadedFiles = [];
-    for (var i = 0; i < fileList.length; i++) {
-      uploadedFiles.push(this.uploadAttachment(fileList[i]));
-    }
-    this.setState({ records: [...this.state.records, ...uploadedFiles] });
   }
 }

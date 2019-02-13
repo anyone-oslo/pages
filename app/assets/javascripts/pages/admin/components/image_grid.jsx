@@ -26,15 +26,11 @@ class ImageGrid extends DragUploader {
     this.container = React.createRef();
     this.imagesContainer = React.createRef();
     this.primaryContainer = React.createRef();
-    this.uploadImagesInput = React.createRef();
-    this.uploadPrimaryInput = React.createRef();
 
     this.deleteImage = this.deleteImage.bind(this);
     this.startImageDrag = this.startImageDrag.bind(this);
-    this.uploadImages = this.uploadImages.bind(this);
-    this.triggerUploadImages = this.triggerUploadImages.bind(this);
+    this.uploadAdditional = this.uploadAdditional.bind(this);
     this.uploadPrimary = this.uploadPrimary.bind(this);
-    this.triggerUploadPrimary = this.triggerUploadPrimary.bind(this);
   }
 
   attributeName(record) {
@@ -206,17 +202,11 @@ class ImageGrid extends DragUploader {
              </h3>
              {primary && this.renderImage(primary, true)}
              {!primary && (
-                <div className="drop-target">
-                  <span>
-                    Drag and drop image here, or<br />
-                    <button onClick={this.triggerUploadPrimary}>
-                      choose a file
-                    </button>
-                  </span>
-                  <input type="file"
-                         onChange={this.uploadPrimary}
-                         ref={this.uploadPrimaryInput}
-                         multiple />
+               <div className="drop-target">
+                 <FileUploadButton multiple={true}
+                                   type="image"
+                                   multiline={true}
+                                   callback={this.uploadPrimary} />
                 </div>
              )}
              {this.props.primaryAttribute && (
@@ -230,16 +220,9 @@ class ImageGrid extends DragUploader {
             {this.props.enablePrimary ? "More images" : "Images"}
           </h3>
           <div className="drop-target">
-            <span>
-              Drag and drop image here, or
-              <button onClick={this.triggerUploadImages}>
-                choose a file
-              </button>
-            </span>
-            <input type="file"
-                   onChange={this.uploadImages}
-                   ref={this.uploadImagesInput}
-                   multiple />
+            <FileUploadButton multiple={true}
+                              type="image"
+                              callback={this.uploadAdditional} />
           </div>
           <div className="images">
             {images.map(r => this.renderImage(r, false))}
@@ -305,31 +288,15 @@ class ImageGrid extends DragUploader {
     return obj;
   }
 
-  triggerUploadImages(evt) {
-    evt.preventDefault();
-    this.uploadImagesInput.current.click();
+  uploadAdditional(files) {
+    this.setState({
+      images: [...this.state.images,
+               ...files.map(f => this.uploadImage(f))]
+    });
   }
 
-  triggerUploadPrimary(evt) {
-    evt.preventDefault();
-    this.uploadPrimaryInput.current.click();
-  }
-
-  uploadFiles(fileList) {
-    let result = [];
-    for (var i = 0; i < fileList.length; i++) {
-      result.push(this.uploadImage(fileList[i]));
-    }
-    return result;
-  }
-
-  uploadImages(evt) {
-    let uploadedFiles = this.uploadFiles(evt.target.files);
-    this.setState({ images: [...this.state.images, ...uploadedFiles] });
-  }
-
-  uploadPrimary(evt) {
-    let uploadedFiles = this.uploadFiles(evt.target.files);
+  uploadPrimary(files) {
+    let uploadedFiles = files.map(f => this.uploadImage(f));
     var primary = this.state.primary;
     var images = this.state.images;
     if (primary) {
