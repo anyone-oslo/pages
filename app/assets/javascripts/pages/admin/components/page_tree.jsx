@@ -35,6 +35,7 @@ class PageTree extends Reflux.Component {
   }
 
   componentDidMount() {
+    PageTreeActions.setCSRFToken(this.props.csrf_token);
     PageTreeActions.init(this.props);
   }
 

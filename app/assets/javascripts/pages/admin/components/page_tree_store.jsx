@@ -2,6 +2,7 @@ var PageTreeActions = Reflux.createActions([
   "addChild",
   "init",
   "movedPage",
+  "setCSRFToken",
   "toggleCollapsed",
   "updatePage",
   "updateTree"
@@ -75,9 +76,17 @@ class PageTreeStore extends Reflux.Store {
 
   performUpdate(index, url, data) {
     let store = this;
-    $.put(url, data, function (response) {
-      store.updateNode(index, response);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("PUT", url);
+    xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
+    xhr.setRequestHeader("X-CSRF-Token", this.state.csrf_token);
+    xhr.addEventListener("load", function () {
+      if (xhr.readyState == 4 && xhr.status == "200") {
+        store.updateNode(index, JSON.parse(xhr.responseText));
+      }
     });
+    xhr.send(JSON.stringify(data));
   }
 
   updateNode(index, attributes) {
@@ -167,6 +176,10 @@ class PageTreeStore extends Reflux.Store {
     this.setCollapsed(id, false);
     this.createPage(index, attributes);
     this.setState({tree: tree});
+  }
+
+  onSetCSRFToken(token) {
+    this.setState({ csrf_token: token });
   }
 
   onToggleCollapsed(id) {
