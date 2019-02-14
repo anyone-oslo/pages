@@ -1,4 +1,4 @@
-require "pages_core/file_embedder"
+require "pages_core/attachment_embedder"
 
 module PagesCore
   module Configuration
@@ -14,7 +14,7 @@ module PagesCore
       setting :image_fallback_url,    :string
       setting :default_author,        :string
       setting :error_404_layout,      :string
-      setting :file_embedder,         :object, PagesCore::FileEmbedder
+      setting :attachment_embedder,   :object, PagesCore::AttachmentEmbedder
     end
   end
 end

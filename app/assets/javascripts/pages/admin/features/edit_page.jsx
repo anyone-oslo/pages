@@ -5,8 +5,6 @@ class EditPage {
     this.replicateFormElements();
     this.checkPublishedStatus();
     this.checkPublishedDate();
-    this.uploadModals();
-    this.fileList();
     this.previewButton();
   }
 
@@ -28,7 +26,7 @@ class EditPage {
     let publishedAt = function(i) {
       return $(`#page-form-sidebar select[name="page[published_at(${i}i)]"]`)
                .val();
-    }
+    };
     let checkDate = function() {
       var year = publishedAt(1);
       var month = publishedAt(2);
@@ -45,35 +43,6 @@ class EditPage {
     };
     $(".published-date").find("select").change(checkDate);
     checkDate();
-  }
-
-  fileList() {
-    // Reordering files
-    $(".file-list").each(function() {
-      var list = this;
-      return $(list).sortable({
-        axis: "y",
-        cursor: "move",
-        distance: 10,
-        handle: ".drag-handle",
-        placeholder: "placeholder",
-
-        update() {
-          return $.post( $(list).data('url'), { ids: ((() => {
-            var result = [];
-            var iterable = $(list).find('li').get();
-            for (var i = 0, item; i < iterable.length; i++) {
-              item = iterable[i];
-              result.push($(item).data('file-id'));
-            }
-            return result;
-          })()) }, function() {
-            return $(list).effect("highlight", {}, 500);
-          }
-          );
-        }
-      });
-    });
   }
 
   previewButton() {
@@ -117,19 +86,6 @@ class EditPage {
     $(container).find(".advanced-options").hide();
     $(container).find(".advanced-toggle").click(function() {
       return $(container).find(".advanced-options").slideToggle();
-    });
-  }
-
-  uploadModals() {
-    let uploadModal = function(id) {
-      return jQueryModal.show(
-        "<div class=\"uploadImages\">" + $("#" + id).html() + "</div>"
-      );
-    }
-
-    $("#new-file").hide();
-    $(".upload-file-button").click(function() {
-      return uploadModal("new-file");
     });
   }
 }

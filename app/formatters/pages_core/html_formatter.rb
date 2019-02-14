@@ -16,7 +16,7 @@ module PagesCore
     end
 
     def to_html
-      string = parse_images(parse_files(@string))
+      string = parse_images(parse_files(parse_attachments(@string)))
       if @options[:shorten] && string.length > @options[:shorten]
         string = string[0..@options[:shorten]] + "..."
       end
@@ -25,6 +25,10 @@ module PagesCore
     end
 
     private
+
+    def attachment_expression
+      /\[attachment:([\d,]+)\]/
+    end
 
     def file_expression
       /\[file:([\d,]+)\]/
@@ -55,6 +59,19 @@ module PagesCore
       end
     end
 
+    def find_attachment(id)
+      Attachment.find(id).localize(I18n.locale)
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+
+    def find_attachments(str)
+      str.match(attachment_expression)[1]
+         .split(",")
+         .map { |id| find_attachment(id) }
+         .compact
+    end
+
     def find_file(id)
       PageFile.find(id).localize(I18n.locale)
     rescue ActiveRecord::RecordNotFound
@@ -68,9 +85,19 @@ module PagesCore
          .compact
     end
 
+    def parse_attachments(string)
+      string.gsub(attachment_expression).each do |str|
+        PagesCore.config.attachment_embedder.new(
+          find_attachments(str)
+        ).to_html
+      end
+    end
+
     def parse_files(string)
       string.gsub(file_expression).each do |str|
-        PagesCore.config.file_embedder.new(find_files(str)).to_html
+        PagesCore.config.attachment_embedder.new(
+          find_files(str).map(&:attachment)
+        ).to_html
       end
     end
 

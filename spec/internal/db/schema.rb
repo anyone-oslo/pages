@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207134000) do
+ActiveRecord::Schema.define(version: 2019_02_11_154800) do
 
-  create_table "categories", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "filename", null: false
+    t.string "content_type", null: false
+    t.integer "content_length", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "content_hash", null: false
+  end
+
+  create_table "categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.integer "position"
@@ -21,7 +30,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["slug"], name: "index_categories_on_slug"
   end
 
-  create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
     t.text "handler"
@@ -35,7 +44,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.string "queue"
   end
 
-  create_table "images", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "filename", null: false
     t.string "content_type", null: false
     t.datetime "created_at"
@@ -53,14 +62,14 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.integer "crop_gravity_y"
   end
 
-  create_table "invite_roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "invite_roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "invite_id"
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "invites", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "invites", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "email"
     t.string "token"
@@ -69,7 +78,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.datetime "updated_at"
   end
 
-  create_table "localizations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "localizations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "localizable_id"
     t.string "localizable_type"
     t.string "name"
@@ -81,26 +90,24 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["localizable_id", "localizable_type"], name: "index_localizations_on_localizable_id_and_localizable_type"
   end
 
-  create_table "page_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "page_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "page_id"
     t.integer "category_id"
     t.index ["category_id"], name: "index_page_categories_on_category_id"
     t.index ["page_id"], name: "index_page_categories_on_page_id"
   end
 
-  create_table "page_files", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "page_id"
+  create_table "page_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "page_id"
+    t.bigint "attachment_id"
     t.integer "position"
-    t.string "name"
-    t.string "filename", null: false
-    t.string "content_type", null: false
-    t.integer "content_length", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "content_hash", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_id"], name: "index_page_files_on_attachment_id"
+    t.index ["page_id"], name: "index_page_files_on_page_id"
   end
 
-  create_table "page_images", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "page_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "page_id"
     t.integer "image_id"
     t.integer "position"
@@ -109,7 +116,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["page_id"], name: "index_page_images_on_page_id"
   end
 
-  create_table "page_paths", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "page_paths", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "page_id"
     t.string "locale"
     t.string "path"
@@ -118,7 +125,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["locale", "path"], name: "index_page_paths_on_locale_and_path", unique: true
   end
 
-  create_table "pages", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "pages", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "parent_page_id"
     t.integer "position"
     t.string "byline"
@@ -150,7 +157,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
-  create_table "password_reset_tokens", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "password_reset_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "token"
     t.datetime "expires_at"
@@ -158,7 +165,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.datetime "updated_at"
   end
 
-  create_table "roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
     t.datetime "created_at"
@@ -166,7 +173,7 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["user_id"], name: "index_roles_on_user_id"
   end
 
-  create_table "taggings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "taggings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "tag_id"
     t.integer "taggable_id"
     t.string "taggable_type"
@@ -174,13 +181,13 @@ ActiveRecord::Schema.define(version: 20180207134000) do
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
 
-  create_table "tags", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.boolean "pinned", default: false, null: false
     t.index ["name"], name: "index_tags_on_name"
   end
 
-  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "username"
     t.string "hashed_password"
     t.string "name"

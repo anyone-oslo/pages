@@ -88,7 +88,6 @@ $grid-image-padding: 7px;
         cursor: pointer;
         border: 1px solid $c-border;
         border-radius: 3px;
-        display: block;
         background: $c-button;
         display: flex-item;
         flex: 1;
@@ -119,7 +118,7 @@ $grid-image-padding: 7px;
       padding-bottom: 66.67%;
       text-align: center;
       line-height: 1.6;
-      > span {
+      > .upload-button {
         position: absolute;
         display: flex;
         flex-direction: column;

@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
+  # Attachment
+  resources :attachments, path: "attachments/:digest", only: %i[show] do
+    member do
+      get :download
+    end
+  end
+
   # Pages
   resources :pages, path: ":locale/pages" do
     collection do
@@ -45,6 +52,9 @@ Rails.application.routes.draw do
       get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
     end
 
+    # Attachments
+    resources :attachments, only: %i[create update]
+
     # Images
     resources :images
 
@@ -77,13 +87,6 @@ Rails.application.routes.draw do
         end
 
         get "new/:parent", action: "new"
-
-        # Page Files
-        resources :files, controller: "page_files" do
-          collection do
-            post "reorder"
-          end
-        end
       end
     end
   end

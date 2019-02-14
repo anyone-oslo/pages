@@ -22,10 +22,9 @@ describe PagesCore::HtmlFormatter do
     end
     let(:page) { create(:page) }
     let(:page_file) do
-      page.page_files.create(file: uploaded_file,
-                             name: "Foobar",
-                             locale: I18n.locale)
+      create(:page_file, page: page)
     end
+    let(:attachment) { page_file.attachment }
     let(:image) { Image.create(file: uploaded_file) }
 
     it { is_expected.to eq("<p>Hello world</p>") }
@@ -34,43 +33,67 @@ describe PagesCore::HtmlFormatter do
       expect(html.html_safe?).to eq(true)
     end
 
+    context "with attachment" do
+      let(:string) { "Download [attachment:#{attachment.id}]" }
+
+      let(:expected_path) do
+        Rails.application.routes.url_helpers.attachment_path(
+          attachment.digest,
+          attachment,
+          format: attachment.filename_extension
+        )
+      end
+
+      it "embeds a link to the file" do
+        expect(html).to(
+          match("<p>Download <a class=\"file\" " \
+                "href=\"#{expected_path}\">#{attachment.name}</a></p>")
+        )
+      end
+    end
+
     context "with file" do
       let(:string) { "Download [file:#{page_file.id}]" }
       let(:expected_path) do
-        "/#{I18n.locale}/pages/#{page.id}/files/" \
-          "#{page_file.id}-#{page_file.content_hash}.png"
+        Rails.application.routes.url_helpers.attachment_path(
+          attachment.digest,
+          attachment,
+          format: attachment.filename_extension
+        )
       end
 
       it "embeds a link to the file" do
         expect(html).to match(
           "<p>Download <a class=\"file\" " \
-            "href=\"#{expected_path}\">Foobar</a></p>"
+            "href=\"#{expected_path}\">#{attachment.name}</a></p>"
         )
       end
     end
 
     context "with several files" do
       let(:second_file) do
-        page.page_files.create(
-          file: uploaded_file,
-          name: "Foobar2",
-          locale: I18n.locale
-        )
+        create(:page_file, page: page)
       end
       let(:string) { "Download [file:#{page_file.id},#{second_file.id}]" }
       let(:expected_path) do
-        "/#{I18n.locale}/pages/#{page.id}/files/" \
-          "#{page_file.id}-#{page_file.content_hash}.png"
+        Rails.application.routes.url_helpers.attachment_path(
+          page_file.attachment.digest,
+          page_file.attachment,
+          format: page_file.attachment.filename_extension
+        )
       end
       let(:expected_path2) do
-        "/#{I18n.locale}/pages/#{page.id}/files/" \
-          "#{second_file.id}-#{second_file.content_hash}.png"
+        Rails.application.routes.url_helpers.attachment_path(
+          second_file.attachment.digest,
+          second_file.attachment,
+          format: second_file.attachment.filename_extension
+        )
       end
 
       it "embeds links to the files" do
         expect(html).to match(
-          "<p>Download <a class=\"file\" href=\"#{expected_path}\">Foobar</a>" \
-            ", <a class=\"file\" href=\"#{expected_path2}\">Foobar2</a></p>"
+          "<p>Download <a class=\"file\" href=\"#{expected_path}\">#{page_file.attachment.name}</a>" \
+            ", <a class=\"file\" href=\"#{expected_path2}\">#{second_file.attachment.name}</a></p>"
         )
       end
     end

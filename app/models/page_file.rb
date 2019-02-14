@@ -1,68 +1,48 @@
 class PageFile < ActiveRecord::Base
-  include Dis::Model
+  include PagesCore::Sweepable
 
   belongs_to :page
-
-  validates_data_presence
-  validates :content_type, presence: true
-  validates :filename, presence: true
-  validates :content_length, presence: true
+  belongs_to :attachment
 
   acts_as_list scope: :page
 
-  localizable do
-    attribute :description
-  end
+  accepts_nested_attributes_for :attachment
 
-  before_validation :set_name_from_filename
-
-  class << self
-    def formats
-      {
-        "audio/mpeg"      => :mp3,
-        "image/gif"       => :gif,
-        "image/jpeg"      => :jpg,
-        "image/jpg"       => :jpg,
-        "image/pjpeg"     => :jpg,
-        "image/png"       => :png,
-        "application/pdf" => :pdf
-      }
-    end
-  end
-
-  def format?
-    content_type && self.class.formats.key?(content_type)
-  end
-
-  def format
-    self.class.formats[content_type]
-  end
-
-  def filename_extension
-    if filename_extension?
-      filename.match(/\.([^\.]+)$/)[1]
-    else
-      ""
-    end
-  end
-
-  def filename_extension?
-    filename =~ /\./
-  end
-
-  def to_param
-    if filename_extension?
-      "#{id}-#{content_hash}.#{filename_extension}"
-    else
-      "#{id}-#{content_hash}"
-    end
-  end
+  localizable
 
   delegate :published, to: :page
 
-  private
+  def attachment
+    super&.localize!(locale)
+  end
 
-  def set_name_from_filename
-    self.name = File.basename(filename, ".*") if filename? && !name?
+  def name
+    attachment&.name
+  end
+
+  def description
+    attachment&.description
+  end
+
+  def filename
+    attachment&.filename
+  end
+
+  def format?
+    attachment&.format?
+  end
+
+  def format
+    attachment&.format
+  end
+
+  def to_param
+    return id unless attachment
+
+    if attachment.filename_extension?
+      "#{id}-#{attachment.content_hash}.#{attachment.filename_extension}"
+    else
+      "#{id}-#{attachment.content_hash}"
+    end
   end
 end

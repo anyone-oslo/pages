@@ -5,7 +5,7 @@ class ImageUploader extends React.Component {
                    uploading: false,
                    image: props.image,
                    src: props.src };
-    this.browseFile = this.browseFile.bind(this);
+    this.receiveFiles = this.receiveFiles.bind(this);
     this.removeImage = this.removeImage.bind(this);
     this.dragOver = this.dragOver.bind(this);
     this.dragLeave = this.dragLeave.bind(this);
@@ -13,15 +13,10 @@ class ImageUploader extends React.Component {
     this.drop = this.drop.bind(this);
   }
 
-  browseFile(evt) {
-    let component = this;
-    evt.preventDefault();
-    let input = document.createElement("input");
-    input.type = "file";
-    input.addEventListener("change", function () {
-      component.uploadImage(input.files[0]);
-    });
-    input.click();
+  receiveFiles(files) {
+    if (files.length > 0) {
+      this.uploadImage(files[0]);
+    }
   }
 
   clearItems(dt) {
@@ -109,23 +104,23 @@ class ImageUploader extends React.Component {
         {this.editableImage()}
         <div className="ui-wrapper">
           {this.state.uploading && (
-             <div className="ui">
-               Uploading image...
-             </div>
+            <div className="ui">
+              Uploading image...
+            </div>
           )}
           {!this.state.uploading && (
-             <div className="ui">
-               Drag and drop image here, or<br />
-               <button onClick={this.browseFile}>choose a file</button>
-               <br />
-               {image && (
-                  <a className="delete remove-image"
-                     href="#"
-                     onClick={this.removeImage}>
-                    Remove image
-                  </a>
-               )}
-             </div>
+            <div className="ui">
+              <FileUploadButton type="image"
+                                multiline={true}
+                                callback={this.receiveFiles} />
+              {image && (
+                <a className="delete remove-image"
+                   href="#"
+                   onClick={this.removeImage}>
+                  Remove image
+                </a>
+              )}
+            </div>
           )}
         </div>
       </div>

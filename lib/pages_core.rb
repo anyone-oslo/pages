@@ -32,18 +32,17 @@ require "will_paginate"
 
 # Assets
 require "font-awesome-rails"
-require "jcrop/rails/v2"
 require "jquery-ui-rails"
 require "jquery/rails/engine"
 require "react-rails"
-require "underscore-rails"
 
 # Pages
 require "pages_core/plugin"
 require "pages_core/admin_menu_item"
 require "pages_core/archive_finder"
+require "pages_core/attachment_embedder"
 require "pages_core/cache_sweeper"
-require "pages_core/file_embedder"
+require "pages_core/digest_verifier"
 require "pages_core/configuration"
 require "pages_core/engine"
 require "pages_core/extensions"

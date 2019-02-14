@@ -20,21 +20,16 @@ class ImageGrid extends DragUploader {
     if (props.enablePrimary) {
       this.state = { ...this.state,
                      primary: records.filter(r => r.primary)[0] || null,
-                     images: records.filter(r => !r.primary) }
+                     images: records.filter(r => !r.primary) };
     }
 
     this.container = React.createRef();
     this.imagesContainer = React.createRef();
     this.primaryContainer = React.createRef();
-    this.uploadImagesInput = React.createRef();
-    this.uploadPrimaryInput = React.createRef();
 
     this.deleteImage = this.deleteImage.bind(this);
-    this.startImageDrag = this.startImageDrag.bind(this);
-    this.uploadImages = this.uploadImages.bind(this);
-    this.triggerUploadImages = this.triggerUploadImages.bind(this);
+    this.uploadAdditional = this.uploadAdditional.bind(this);
     this.uploadPrimary = this.uploadPrimary.bind(this);
-    this.triggerUploadPrimary = this.triggerUploadPrimary.bind(this);
   }
 
   attributeName(record) {
@@ -101,21 +96,21 @@ class ImageGrid extends DragUploader {
   renderDrag() {
     let record = this.state.dragging;
     if (record === "Files") {
-      return;
+      return "";
     } else {
       let containerSize = this.container.current.getBoundingClientRect();
       let x = this.state.x - (containerSize.x || containerSize.left);
       let y = this.state.y - (containerSize.y || containerSize.top);
       let translateStyle = {
         transform: `translate3d(${x}px, ${y}px, 0)`
-      }
+      };
       return (
         <div className="drag-image" style={translateStyle}>
           {record.image && (
              <img src={record.src || record.image.thumbnail_url} />
           )}
         </div>
-      )
+      );
     }
   }
 
@@ -160,7 +155,6 @@ class ImageGrid extends DragUploader {
 
   renderImage(record, primary) {
     let dragging = this.state.dragging;
-    var key;
     if (record === "Files") {
       return (
         <div className="grid-image" key="file-placeholder">
@@ -169,24 +163,18 @@ class ImageGrid extends DragUploader {
       );
     }
 
-    if (record.image) {
-      key = record.image.id;
-    } else if (record.file) {
-      key = record.file.name;
-    }
-
     let onUpdate = (image, src) => {
       this.updateImage(record, { image: image, src: src });
-    }
+    };
 
     return (
-      <GridImage key={`grid-image-${key}`}
+      <GridImage key={record.handle}
                  record={record}
                  locale={this.props.locale}
                  locales={this.props.locales}
                  csrf_token={this.props.csrf_token}
                  showEmbed={this.props.showEmbed}
-                 startDrag={this.startImageDrag}
+                 startDrag={this.startDrag}
                  position={this.index(record) + 1}
                  primary={primary}
                  onUpdate={onUpdate}
@@ -213,17 +201,11 @@ class ImageGrid extends DragUploader {
              </h3>
              {primary && this.renderImage(primary, true)}
              {!primary && (
-                <div className="drop-target">
-                  <span>
-                    Drag and drop image here, or<br />
-                    <button onClick={this.triggerUploadPrimary}>
-                      choose a file
-                    </button>
-                  </span>
-                  <input type="file"
-                         onChange={this.uploadPrimary}
-                         ref={this.uploadPrimaryInput}
-                         multiple />
+               <div className="drop-target">
+                 <FileUploadButton multiple={true}
+                                   type="image"
+                                   multiline={true}
+                                   callback={this.uploadPrimary} />
                 </div>
              )}
              {this.props.primaryAttribute && (
@@ -237,16 +219,9 @@ class ImageGrid extends DragUploader {
             {this.props.enablePrimary ? "More images" : "Images"}
           </h3>
           <div className="drop-target">
-            <span>
-              Drag and drop image here, or
-              <button onClick={this.triggerUploadImages}>
-                choose a file
-              </button>
-            </span>
-            <input type="file"
-                   onChange={this.uploadImages}
-                   ref={this.uploadImagesInput}
-                   multiple />
+            <FileUploadButton multiple={true}
+                              type="image"
+                              callback={this.uploadAdditional} />
           </div>
           <div className="images">
             {images.map(r => this.renderImage(r, false))}
@@ -274,15 +249,6 @@ class ImageGrid extends DragUploader {
     );
   }
 
-  startImageDrag(evt, record) {
-    let position = this.mousePosition(evt);
-    let prevDisplay = record.ref.current.style.display;
-    record.ref.current.style.display = "none";
-    this.cachePositions();
-    record.ref.current.style.display = prevDisplay;
-    this.setState({ dragging: record, x: position.x, y: position.y });
-  }
-
   updateImage(record, attrs) {
     if (this.state.primary === record) {
       this.setState({ primary: { ...record, ...attrs } });
@@ -295,11 +261,11 @@ class ImageGrid extends DragUploader {
 
   uploadImage(file) {
     let component = this;
-    let obj = { image: null, file: file, ref: React.createRef(),
+    var obj = { image: null, file: file, ref: React.createRef(),
                 handle: this.getHandle() };
+
     let data = new FormData();
 
-    this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
     this.postFile("/admin/images.json", data, function (json) {
       let preloader = new Image();
@@ -312,31 +278,15 @@ class ImageGrid extends DragUploader {
     return obj;
   }
 
-  triggerUploadImages(evt) {
-    evt.preventDefault();
-    this.uploadImagesInput.current.click();
+  uploadAdditional(files) {
+    this.setState({
+      images: [...this.state.images,
+               ...files.map(f => this.uploadImage(f))]
+    });
   }
 
-  triggerUploadPrimary(evt) {
-    evt.preventDefault();
-    this.uploadPrimaryInput.current.click();
-  }
-
-  uploadFiles(fileList) {
-    let result = [];
-    for (var i = 0; i < fileList.length; i++) {
-      result.push(this.uploadImage(fileList[i]));
-    }
-    return result;
-  }
-
-  uploadImages(evt) {
-    let uploadedFiles = this.uploadFiles(evt.target.files);
-    this.setState({ images: [...this.state.images, ...uploadedFiles] });
-  }
-
-  uploadPrimary(evt) {
-    let uploadedFiles = this.uploadFiles(evt.target.files);
+  uploadPrimary(files) {
+    let uploadedFiles = files.map(f => this.uploadImage(f));
     var primary = this.state.primary;
     var images = this.state.images;
     if (primary) {
