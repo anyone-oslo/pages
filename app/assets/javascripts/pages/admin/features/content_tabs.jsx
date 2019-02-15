@@ -2,7 +2,7 @@ var ContentTabs = {
   tabs: [],
   ids: [],
 
-  show: function(id) {
+  show: function(id, skipPushState) {
     let tabs = ContentTabs.tabs;
     let tab = tabs[id];
     if (tab) {
@@ -14,6 +14,9 @@ var ContentTabs = {
       });
       $(tab).show();
       $("#content-tab-link-" + id).addClass("current");
+      if (!skipPushState) {
+        history.pushState({ tabId: id }, "", `${window.location.pathname}#${id}`);
+      }
     }
   },
 
@@ -37,12 +40,18 @@ var ContentTabs = {
         return tabs[id] = this;
       });
     });
-    ContentTabs.show(ids[0]);
+    ContentTabs.show(ids[0], true);
     ContentTabs.showFromURL(document.location);
   },
 
   init: function() {
     if ($("#content-tabs").length > 0) {
+      window.addEventListener("popstate", (evt) => {
+        if (evt.state && evt.state.tabId) {
+          ContentTabs.show(evt.state.tabId);
+        }
+      });
+
       let tabNames = $("#content-tabs li").map(function() {
         return $(this).data("tab-name");
       }).get();
