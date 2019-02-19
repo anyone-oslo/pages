@@ -14,6 +14,23 @@ module PagesCore
       module ClassMethods
       end
 
+      # Finds the page's next sibling by date. Returns nil if there isn't one.
+      def next_sibling_by_date
+        siblings = siblings_by_date
+        return unless siblings.any?
+
+        siblings[(siblings.to_a.index(self) + 1)...siblings.length]
+          .try(&:first)
+      end
+
+      # Finds the page's previous sibling by date. Returns nil if there isn't one.
+      def previous_sibling_by_date
+        siblings = siblings_by_date
+        return unless siblings.any?
+
+        siblings[0...siblings.to_a.index(self)].try(&:last)
+      end
+
       def upcoming?
         return false unless ends_at?
         ends_at > Time.zone.now
@@ -23,13 +40,19 @@ module PagesCore
 
       def ensure_ends_at
         return unless starts_at?
+
         self.ends_at = starts_at if !ends_at? || ends_at < starts_at
       end
 
       def set_all_day_dates
         return unless all_day?
+
         self.starts_at = starts_at.beginning_of_day if starts_at?
         self.ends_at = ends_at.end_of_day if ends_at?
+      end
+
+      def siblings_by_date
+        siblings.reorder("starts_at ASC, pages.id DESC")
       end
     end
   end
