@@ -39,12 +39,19 @@ class EditableImage extends React.Component {
   }
 
   render() {
+    let altWarning = !this.state.image.alternative[this.props.locale];
+
     return (
-      <img className="editable-image"
-           src={this.state.src}
-           width={this.props.width}
-           height={this.height()}
-           onClick={this.openEditor} />
+      <div className="editable-image">
+        {altWarning &&
+         <span className="alt-warning" title="Alternative text is missing">
+           <i className="fa fa-exclamation-triangle icon" />
+         </span>}
+        <img src={this.state.src}
+             width={this.props.width}
+             height={this.height()}
+             onClick={this.openEditor} />
+      </div>
     );
   }
 }

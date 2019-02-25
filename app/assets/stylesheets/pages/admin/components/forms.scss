@@ -7,6 +7,13 @@ form {
     margin: 16px 0;
     padding: 0;
 
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    textarea {
+      transition: border-color 150ms ease-out;
+    }
+
     label {
       display: block;
       padding: 0;
@@ -14,6 +21,7 @@ form {
       font-weight: bold;
       font-size: 13px;
       color: $c-text;
+      transition: color 150ms ease-out;
 
       &.check-box, &.radio-button {
         font-weight: normal;
@@ -27,6 +35,18 @@ form {
     .description {
       color: $c-text-light;
       margin: 0 0 6px 0;
+    }
+  }
+
+  .field-with-warning {
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    textarea {
+      border-color: mix($c-border, $c-red, 75%);
+    }
+    label {
+      color: $c-red;
     }
   }
 
@@ -106,6 +126,10 @@ textarea {
   &:disabled {
     border-color: $c-border-light;
     color: $c-text-light;
+  }
+
+  &.warn {
+    border-color: red;
   }
 }
 

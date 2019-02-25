@@ -367,7 +367,7 @@ class ImageEditor extends React.Component {
                   </select>
                 </div>
              )}
-             <div className="field">
+             <div className={"field " + (this.state.alternative[locale] ? "" : "field-with-warning")}>
                <label>
                  Alternative text
                </label>
