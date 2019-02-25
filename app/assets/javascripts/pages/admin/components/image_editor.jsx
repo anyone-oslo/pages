@@ -479,6 +479,18 @@ class ImageEditor extends React.Component {
       (img.naturalWidth * (crop.width / 100)),
       (img.naturalHeight * (crop.height / 100))
     );
+
+    return this.imageDataUrl(canvas, ctx);
+  }
+
+  imageDataUrl(canvas, ctx) {
+    let pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    for (var i = 0; i < (pixels.length / 4); i++) {
+      if (pixels[(i * 4) + 3] !== 255) {
+        return canvas.toDataURL("image/png");
+      }
+    }
+
     return canvas.toDataURL("image/jpeg");
   }
 }
