@@ -5,7 +5,38 @@ module PagesCore
 
       class << self
         def all_blocks
-          new(:index).all_blocks
+          (all_templates.map { |t| configured_block_names(t) } +
+           all_templates.map { |t| enabled_block_names(t) }).flatten.compact.uniq
+        end
+
+        def all_templates
+          Array(config.get(:templates).try(&:keys))
+        end
+
+        def config
+          PagesCore::Templates.configuration
+        end
+
+        def localized_blocks
+          template_blocks = all_templates.flat_map do |t|
+            config.get(:templates, t, :blocks).to_a
+          end
+
+          (config.get(:default, :blocks).to_a + template_blocks)
+            .compact
+            .select { |_, opts| opts[:localized] }.map(&:first)
+        end
+
+        private
+
+        def configured_block_names(template)
+          Array(config.get(:default, :blocks).try(&:keys)) +
+            Array(config.get(:templates, template, :blocks).try(&:keys))
+        end
+
+        def enabled_block_names(template)
+          Array(config.get(:default, :enabled_blocks, :value)) +
+            Array(config.get(:templates, template, :enabled_blocks, :value))
         end
       end
 
@@ -14,7 +45,7 @@ module PagesCore
       end
 
       def config
-        PagesCore::Templates.configuration
+        self.class.config
       end
 
       def value(*path)
@@ -58,25 +89,7 @@ module PagesCore
         blocks
       end
 
-      # Returns a list of all configured blocks
-      def all_blocks
-        (
-          all_templates.map { |t| configured_block_names(t) } +
-            all_templates.map { |t| enabled_block_names(t) }
-        ).flatten.compact.uniq
-      end
-
       private
-
-      def configured_block_names(template)
-        Array(config.get(:default, :blocks).try(&:keys)) +
-          Array(config.get(:templates, template, :blocks).try(&:keys))
-      end
-
-      def enabled_block_names(template)
-        Array(config.get(:default, :enabled_blocks, :value)) +
-          Array(config.get(:templates, template, :enabled_blocks, :value))
-      end
 
       def default_block_options(block_name)
         {
@@ -84,10 +97,6 @@ module PagesCore
           optional: true,
           size:     :small
         }
-      end
-
-      def all_templates
-        Array(config.get(:templates).try(&:keys))
       end
     end
 

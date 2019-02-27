@@ -98,12 +98,14 @@ module PagesCore
 
       def configure_block(tpl_name, block_name, title = false, options = {})
         block_name = block_name.to_sym
-        title ||= block_name.to_s.humanize
-        options[:title] = title
+        opts = {
+          title: title || block_name.to_s.humanize,
+          localized: true
+        }.merge(options)
         if tpl_name == :_defaults
-          set([:default, :blocks, block_name], options)
+          set([:default, :blocks, block_name], opts)
         else
-          set([:templates, tpl_name, :blocks, block_name], options)
+          set([:templates, tpl_name, :blocks, block_name], opts)
         end
       end
 
