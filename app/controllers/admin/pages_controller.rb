@@ -97,7 +97,8 @@ module Admin
 
     def page_params
       params.require(:page).permit(
-        Page.localized_attributes + page_attributes,
+        PagesCore::Templates::TemplateConfiguration.all_blocks +
+        page_attributes,
         page_images_attributes: %i[id position image_id primary _destroy],
         page_files_attributes: %i[id position attachment_id _destroy]
       )
