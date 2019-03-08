@@ -11,43 +11,25 @@ class RichTextArea extends React.Component {
     this.orderedList = this.orderedList.bind(this);
   }
 
-  adjustSelection(callback) {
-    let length = this.getSelection().length;
-    let [start, end] = this.getSelectionRange();
-    let [replacementLength, prefixLength] = callback();
-    let newEnd = (end + (replacementLength - length) + prefixLength);
-    let newStart = start === end ? newEnd : (start + prefixLength);
-    this.setSelectionRange(newStart, newEnd);
-  };
-
   getSelection() {
-    return $(this.inputRef.current).getSelection().text;
+    let { selectionStart, selectionEnd, value } = this.inputRef.current;
+    return value.substr(selectionStart, (selectionEnd - selectionStart));
   }
 
-  getSelectionRange() {
-    if (typeof this.inputRef.current.selectionStart !== "undefined") {
-      return [this.inputRef.current.selectionStart, this.inputRef.current.selectionEnd];
-    } else {
-      return [0, 0];
-    }
-  };
-
   replaceSelection(prefix, replacement, postfix) {
-    this.adjustSelection(() => {
-      $(this.inputRef.current).replaceSelection(prefix + replacement + postfix);
-      if (typeof this.inputRef.current.focus !== "undefined") {
-        this.inputRef.current.focus({ preventScroll: true });
-      }
-      return [replacement.length, prefix.length];
-    });
-    this.setValue(this.inputRef.current.value);
-  };
+    let { selectionStart, selectionEnd, value } = this.inputRef.current;
 
-  // Sets a new selection range for object
-  setSelectionRange(start, end) {
-    if (typeof this.inputRef.current.setSelectionRange !== "undefined") {
-      this.inputRef.current.setSelectionRange(start, end);
-    }
+    this.inputRef.current.value =
+      value.substr(0, selectionStart) +
+      prefix + replacement + postfix +
+      value.substr(selectionEnd, value.length);
+
+    this.inputRef.current.focus({ preventScroll: true });
+    this.inputRef.current.setSelectionRange(
+      selectionStart + prefix.length,
+      selectionStart + prefix.length + replacement.length
+    );
+    this.setValue(this.inputRef.current.value);
   };
 
   blockquote(str) { return ["bq. ", str, ""]; }
