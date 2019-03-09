@@ -7,61 +7,32 @@ class RichTextArea extends React.Component {
     };
     this.inputRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
+    this.getSelection = this.getSelection.bind(this);
+    this.replaceSelection = this.replaceSelection.bind(this);
   }
 
   getSelection() {
-    let { selectionStart, selectionEnd, value } = this.inputRef.current;
+    let { selectionStart,
+          selectionEnd,
+          value } = this.inputRef.current;
     return value.substr(selectionStart, (selectionEnd - selectionStart));
   }
 
   replaceSelection(prefix, replacement, postfix) {
-    let { selectionStart, selectionEnd, value } = this.inputRef.current;
+    let textarea = this.inputRef.current;
+    let { selectionStart, selectionEnd, value } = textarea;
 
-    this.inputRef.current.value =
+    textarea.value =
       value.substr(0, selectionStart) +
       prefix + replacement + postfix +
       value.substr(selectionEnd, value.length);
 
-    this.inputRef.current.focus({ preventScroll: true });
-    this.inputRef.current.setSelectionRange(
+    textarea.focus({ preventScroll: true });
+    textarea.setSelectionRange(
       selectionStart + prefix.length,
       selectionStart + prefix.length + replacement.length
     );
-    this.setValue(this.inputRef.current.value);
-  };
-
-  link(selection) {
-    let name = selection.length > 0 ? selection : "Link text";
-    var url = prompt("Enter link URL", "");
-    url = url.length > 0 ? url : "http://example.com/";
-    url = url.replace(/^(?!(f|ht)tps?:\/\/)/, 'http://');
-    return ["\"", name, `\":${url}`];
-  }
-
-  emailLink(selection) {
-    var address = prompt("Enter email address", "");
-    let name = selection.length > 0 ? selection : address;
-    return ["\"", name, `\":mailto:${address}`];
-  }
-
-  strToList(str, prefix) {
-    return str.split("\n").map(l => prefix +  " " + l).join("\n");
-  }
-
-  button(name, className, handler) {
-    let clickHandler = (evt) => {
-      evt.preventDefault();
-      let [prefix, replacement, postfix] = handler(this.getSelection());
-      this.replaceSelection(prefix, replacement, postfix);
-    };
-
-    return (
-      <a title={name}
-         className={"button " + className}
-         onClick={clickHandler}>
-        <i className={"fa fa-" + className} />
-      </a>
-    );
+    this.setValue(textarea.value);
   };
 
   handleChange(evt) {
@@ -73,20 +44,8 @@ class RichTextArea extends React.Component {
     let { id, name } = this.props;
     return (
       <div className="rich-text-area">
-        <div className="rich-text toolbar">
-          {this.button("Bold", "bold", (str) => ["<b>", str, "</b>"])}
-          {this.button("Italics", "italic", (str) => ["<i>", str, "</i>"])}
-          {this.button("Heading 2", "header h2", (str) => ["h2. ", str, ""])}
-          {this.button("Heading 3", "header h3", (str) => ["h3. ", str, ""])}
-          {this.button("Heading 4", "header h4", (str) => ["h4. ", str, ""])}
-          {this.button("Blockquote", "quote-left", (str) => ["bq. ", str, ""])}
-          {this.button("List", "list-ul",
-                       (str) => ["", this.strToList(str, "*"), ""])}
-          {this.button("Ordered list", "list-ol",
-                       (str) => ["", this.strToList(str, "#"), ""])}
-          {this.button("Link", "link", this.link)}
-          {this.button("Email link", "envelope", this.emailLink)}
-        </div>
+        <RichTextToolbar getSelection={this.getSelection}
+                         replaceSelection={this.replaceSelection} />
         <textarea className="rich"
                   ref={this.inputRef}
                   id={id}
