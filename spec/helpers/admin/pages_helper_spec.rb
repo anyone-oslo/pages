@@ -19,57 +19,6 @@ RSpec.describe Admin::PagesHelper, type: :helper do
     it { is_expected.to eq("[file:#{file.id}]") }
   end
 
-  describe "#page_block_field" do
-    subject(:output) { helper.page_block_field(builder, name, options) }
-
-    let(:builder) { PagesCore::FormBuilder.new("page", page, helper, {}) }
-    let(:name) { :name }
-    let(:options) { { size: :small, title: "Page name" } }
-
-    context "when size is a field" do
-      let(:options) { { size: :field, title: "Page name" } }
-      let(:pattern) do
-        "<div class=\"field\"><label>Page name</label>" \
-        "<input class=\"rich\" type=\"text\" " \
-        "value=\"#{page.name}\" name=\"page[name]\" " \
-        "id=\"page_name\" /></div>"
-      end
-
-      it { is_expected.to eq(pattern) }
-    end
-
-    context "when size is small" do
-      let(:options) { { size: :large, title: "Page name" } }
-      let(:pattern) do
-        "<div class=\"field\">" \
-        "<label>Page name</label>" \
-        "<textarea class=\"rich\" rows=\"15\" " \
-        "name=\"page[name]\" id=\"page_name\">\n#{page.name}" \
-        "</textarea></div>"
-      end
-
-      it { is_expected.to eq(pattern) }
-    end
-
-    context "with description" do
-      let(:options) do
-        { size: :small,
-          title: "Page name",
-          description: "Description" }
-      end
-      let(:pattern) do
-        "<div class=\"field\">" \
-        "<label>Page name</label>" \
-        "<p class=\"description\">Description</p>" \
-        "<textarea class=\"rich\" rows=\"5\" " \
-        "name=\"page[name]\" id=\"page_name\">\n#{page.name}" \
-        "</textarea></div>"
-      end
-
-      it { is_expected.to eq(pattern) }
-    end
-  end
-
   describe "#page_name" do
     subject { helper.page_name(page) }
 

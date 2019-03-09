@@ -7,8 +7,6 @@ class RichTextArea extends React.Component {
     };
     this.inputRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
-    this.list = this.list.bind(this);
-    this.orderedList = this.orderedList.bind(this);
   }
 
   getSelection() {
@@ -32,16 +30,6 @@ class RichTextArea extends React.Component {
     this.setValue(this.inputRef.current.value);
   };
 
-  blockquote(str) { return ["bq. ", str, ""]; }
-  bold(str)       { return ["<b>", str, "</b>"]; }
-  emphasis(str)   { return ["<i>", str, "</i>"]; }
-  h1(str)         { return ["h1. ", str, ""]; }
-  h2(str)         { return ["h2. ", str, ""]; }
-  h3(str)         { return ["h3. ", str, ""]; }
-  h4(str)         { return ["h4. ", str, ""]; }
-  h5(str)         { return ["h5. ", str, ""]; }
-  h6(str)         { return ["h6. ", str, ""]; }
-
   link(selection) {
     let name = selection.length > 0 ? selection : "Link text";
     var url = prompt("Enter link URL", "");
@@ -58,14 +46,6 @@ class RichTextArea extends React.Component {
 
   strToList(str, prefix) {
     return str.split("\n").map(l => prefix +  " " + l).join("\n");
-  }
-
-  list(str) {
-    return ["", this.strToList(str, "*"), ""];
-  }
-
-  orderedList(str) {
-    return ["", this.strToList(str, "#"), ""];
   }
 
   button(name, className, handler) {
@@ -94,14 +74,16 @@ class RichTextArea extends React.Component {
     return (
       <div className="rich-text-area">
         <div className="rich-text toolbar">
-          {this.button("Bold", "bold", this.bold)}
-          {this.button("Italics", "italic", this.emphasis)}
-          {this.button("Heading 2", "header h2", this.h2)}
-          {this.button("Heading 3", "header h3", this.h3)}
-          {this.button("Heading 4", "header h4", this.h4)}
-          {this.button("Blockquote", "quote-left", this.blockquote)}
-          {this.button("List", "list-ul", this.list)}
-          {this.button("Ordered list", "list-ol", this.orderedList)}
+          {this.button("Bold", "bold", (str) => ["<b>", str, "</b>"])}
+          {this.button("Italics", "italic", (str) => ["<i>", str, "</i>"])}
+          {this.button("Heading 2", "header h2", (str) => ["h2. ", str, ""])}
+          {this.button("Heading 3", "header h3", (str) => ["h3. ", str, ""])}
+          {this.button("Heading 4", "header h4", (str) => ["h4. ", str, ""])}
+          {this.button("Blockquote", "quote-left", (str) => ["bq. ", str, ""])}
+          {this.button("List", "list-ul",
+                       (str) => ["", this.strToList(str, "*"), ""])}
+          {this.button("Ordered list", "list-ol",
+                       (str) => ["", this.strToList(str, "#"), ""])}
           {this.button("Link", "link", this.link)}
           {this.button("Email link", "envelope", this.emailLink)}
         </div>
