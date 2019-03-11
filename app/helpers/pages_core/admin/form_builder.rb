@@ -3,6 +3,14 @@ module PagesCore
     class FormBuilder < PagesCore::FormBuilder
       include DynamicImage::Helper
 
+      def rich_text_area(attr, options = {})
+        @template.rich_text_area_tag(
+          "#{object_name}[#{attr}]",
+          object.send(attr),
+          options
+        )
+      end
+
       def image_uploader(attr, options = {})
         @template.image_uploader_tag(
           "#{object_name}[#{foreign_key(attr)}]",

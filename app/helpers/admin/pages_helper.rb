@@ -53,7 +53,7 @@ module Admin
 
     def page_block_text_field(form, block_name, block_options)
       form.send(
-        block_options[:size] == :field ? :text_field : :text_area,
+        block_options[:size] == :field ? :text_field : :rich_text_area,
         block_name,
         page_block_field_options(block_options)
       )

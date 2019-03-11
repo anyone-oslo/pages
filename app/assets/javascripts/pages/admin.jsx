@@ -7,7 +7,6 @@
 //= require reflux.min
 
 // Vendored assets
-//= require jquery.fieldselection
 //= require ReactCrop.min
 
 //= require_self
