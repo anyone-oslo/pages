@@ -82,6 +82,13 @@ module PagesCore
         content_tab_tag(tab[:key], tab[:content])
       end
 
+      def rich_text_area_tag(name, content = nil, options = {})
+        react_component("RichTextArea",
+                        options.merge(id: sanitize_to_id(name),
+                                      name: name,
+                                      value: content))
+      end
+
       def link_separator
         safe_join [" ", content_tag(:span, "|", class: "separator"), " "]
       end
