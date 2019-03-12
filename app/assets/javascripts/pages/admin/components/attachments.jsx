@@ -185,16 +185,21 @@ class Attachments extends DragUploader {
   uploadAttachment(file) {
     let component = this;
     let locale = this.props.locale;
-    let obj = { attachment: { filename: file.name,
-                              name: { [locale]: file.name} },
+    let locales = this.props.locales ? Object.keys(this.props.locales) : [locale];
+
+    let name = {};
+    locales.forEach((l) => name[l] = file.name);
+
+    let obj = { attachment: { filename: file.name, name: name },
                 uploading: true,
                 ref: React.createRef(),
                 handle: this.getHandle() };
     let data = new FormData();
 
     data.append("attachment[file]", file);
-    data.append(`attachment[name][${locale}]`,
-                this.filenameToName(file.name));
+    locales.forEach((l) => {
+      data.append(`attachment[name][${l}]`, this.filenameToName(file.name));
+    });
     this.postFile("/admin/attachments.json", data, function (json) {
       obj.attachment = json;
       obj.uploading = false;
