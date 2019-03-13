@@ -13,16 +13,21 @@ class CreateAttachments < ActiveRecord::Migration[5.2]
     Attachment.reset_column_information
     PageFile.reset_column_information
 
+    locales = [I18n.default_locale,
+               PagesCore.config.locales&.keys].compact.map(&:to_sym).uniq
+
     Attachment.all.each do |a|
       begin
         Dis::Storage.change_type("page_files", "attachments", a.content_hash)
       rescue
         puts "Missing attachment: #{a.content_hash}"
       end
-      Localization.create(localizable: a,
-                          locale: I18n.default_locale,
-                          name: "name",
-                          value: a.attributes["name"])
+      locales.each do |l|
+        Localization.create(localizable: a,
+                            locale: l,
+                            name: "name",
+                            value: a.attributes["name"])
+      end
       PageFile.create(attachment_id: a.id,
                       page_id: a.page_id,
                       position: a.position,
