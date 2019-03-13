@@ -28,7 +28,7 @@
 
   <h2>Profile picture</h2>
 
-  <%= f.image_uploader :image %>
+  <%= f.image_uploader :image, alternative: @user.name %>
 
   <% if policy(@user).change_password? %>
     <h2>Password</h2>

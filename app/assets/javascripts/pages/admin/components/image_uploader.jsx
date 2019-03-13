@@ -145,11 +145,17 @@ class ImageUploader extends React.Component {
       return;
     }
 
+    let locale = this.props.locale;
+    let locales = this.props.locales ? Object.keys(this.props.locales) : [locale];
+
     let component = this;
     let xhr = new XMLHttpRequest();
     let data = new FormData();
     this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
+    locales.forEach((l) => {
+      data.append(`image[alternative][${l}]`, this.props.alternative);
+    });
     xhr.open("POST", "/admin/images.json");
     xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
     xhr.addEventListener("load", function (evt) {

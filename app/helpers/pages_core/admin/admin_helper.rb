@@ -66,7 +66,7 @@ module PagesCore
                           image,
                           caption: opts[:caption],
                           locale: opts[:locale]
-                        ).merge(attr: name))
+                        ).merge(attr: name, alternative: opts[:alternative]))
       end
 
       def content_tab(name, options = {}, &block)
