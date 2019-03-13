@@ -21,6 +21,7 @@
 
 <%= form_for(@page,
              url: admin_pages_url(@locale),
+             builder: PagesCore::Admin::FormBuilder,
              html: {
                class: "edit-page",
                id: 'page-form',
