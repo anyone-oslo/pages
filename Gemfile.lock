@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pages_core (3.6.0.alpha)
+    pages_core (3.6.0)
       RedCloth (~> 4.3.2)
       actionpack-page_caching (~> 1.1.0)
       active_model_serializers (~> 0.10.0)
@@ -79,7 +79,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    acts_as_list (0.9.17)
+    acts_as_list (0.9.19)
       activerecord (>= 3.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
@@ -252,7 +252,7 @@ GEM
       fog-core (>= 1.45, <= 2.1.0)
       fog-json (>= 1.0)
       ipaddress (>= 0.8)
-    fog-ovirt (1.1.5)
+    fog-ovirt (1.1.6)
       fog-core
       fog-json
       fog-xml

@@ -1,3 +1,3 @@
 module PagesCore
-  VERSION = "3.6.0.alpha".freeze unless PagesCore.const_defined?("VERSION")
+  VERSION = "3.6.0".freeze unless PagesCore.const_defined?("VERSION")
 end
