@@ -14,7 +14,7 @@ class CreateAttachments < ActiveRecord::Migration[5.2]
     PageFile.reset_column_information
 
     locales = [I18n.default_locale,
-               PagesCore.config.locales&.keys].compact.map(&:to_sym).uniq
+               PagesCore.config.locales&.keys].flatten.compact.map(&:to_sym).uniq
 
     Attachment.all.each do |a|
       begin
