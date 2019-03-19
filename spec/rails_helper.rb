@@ -2,7 +2,7 @@ require "simplecov"
 SimpleCov.start
 
 ENV["RAILS_ENV"] ||= "test"
-ENV["DB"] ||= "mysql"
+ENV["DB"] ||= "postgres"
 
 require File.expand_path("internal/config/environment", __dir__)
 

@@ -12,7 +12,7 @@ defaults: &defaults
   timeout: 5000
   host: localhost
   database: pages_test
-  <<: *<%= ENV["DB"] || "mysql" %>
+  <<: *<%= ENV["DB"] || "postgres" %>
 
 test:
   <<: *defaults
