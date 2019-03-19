@@ -5,7 +5,8 @@ module PagesCore
 
       class << self
         def all_blocks
-          (all_templates.map { |t| configured_block_names(t) } +
+          (config.get(:default, :blocks).keys +
+           all_templates.map { |t| configured_block_names(t) } +
            all_templates.map { |t| enabled_block_names(t) }).flatten.compact.uniq
         end
 
