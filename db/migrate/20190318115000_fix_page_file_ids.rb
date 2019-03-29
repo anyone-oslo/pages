@@ -28,6 +28,7 @@ class FixPageFileIds < ActiveRecord::Migration[5.0]
   end
 
   def mysql2?
-    connection.instance_of?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
+    Object.const_defined?("ActiveRecord::ConnectionAdapters::Mysql2Adapter") &&
+      connection.instance_of?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
   end
 end
