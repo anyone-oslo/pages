@@ -27,18 +27,7 @@
     Will fall back to the primary image if absent.
     Recommended size is at least 1200x630.
   </p>
-  <% if @page.meta_image %>
-    <p>
-      <%= dynamic_image_tag @page.meta_image, size: "250x" %>
-      <br>
-      <%= link_to("Delete image",
-                  delete_meta_image_admin_page_path(@locale, @page),
-                  method: "delete",
-                  class: "delete",
-                  data: { confirm: "Are you sure?" }) %>
-    </p>
-  <% end %>
-  <%= f.file_field :meta_image %>
+  <%= f.image_uploader :meta_image %>
 </div>
 
 <% @page.template_config.metadata_blocks do |block_name, block_options| %>

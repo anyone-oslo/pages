@@ -83,7 +83,6 @@ Rails.application.routes.draw do
 
         member do
           put "move"
-          delete "delete_meta_image"
         end
 
         get "new/:parent", action: "new"

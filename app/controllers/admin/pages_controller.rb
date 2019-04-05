@@ -4,7 +4,7 @@ module Admin
 
     before_action :find_categories
     before_action :find_page, only: %i[show edit update destroy
-                                       delete_meta_image move]
+                                       move]
 
     require_authorization
 
@@ -69,12 +69,6 @@ module Admin
       redirect_to admin_pages_url(@locale)
     end
 
-    def delete_meta_image
-      @page.meta_image.destroy
-      flash[:notice] = "The image was deleted"
-      redirect_to edit_admin_page_url(@locale, @page, anchor: "metadata")
-    end
-
     private
 
     def build_page(locale, attributes = nil, categories = nil)
@@ -92,7 +86,7 @@ module Admin
     def page_attributes
       %i[template user_id status feed_enabled published_at redirect_to
          image_link news_page unique_name pinned parent_page_id serialized_tags
-         meta_image starts_at ends_at all_day image_id]
+         meta_image_id starts_at ends_at all_day image_id]
     end
 
     def page_params
