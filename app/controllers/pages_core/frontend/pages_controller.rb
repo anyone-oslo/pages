@@ -8,14 +8,12 @@ module PagesCore
       include PagesCore::PreviewPagesController
       include PagesCore::RssController
 
-      caches_page :index if PagesCore.config(:page_cache)
-
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
       before_action :find_page, only: %i[show preview]
       before_action :require_page, only: %i[show preview]
       before_action :canonicalize_url, only: [:show]
-      after_action :cache_page_request, only: [:show]
+      after_action :cache_page_request, only: %i[index show]
 
       def index
         respond_to do |format|
@@ -48,6 +46,10 @@ module PagesCore
         # Don't canonicalize if any unknown params are present
         return if (params.keys - %w[controller action path locale id]).any?
         redirect_to(canonical_path(@page), status: :moved_permanently)
+      end
+
+      def disable_page_cache!
+        @page_cache_disabled = true
       end
 
       def render(*args)
@@ -83,14 +85,11 @@ module PagesCore
 
       # Cache pages by hand. This is dirty, but it works.
       def cache_page_request
-        status_code = response.status.try(&:to_i)
-        unless status_code == 200 &&
-               PagesCore.config(:page_cache) &&
-               @page && @locale
-          return
-        end
+        return if @page_cache_disabled || !PagesCore.config(:page_cache)
+        return if response.status&.to_i != 200
+        return unless @page && @locale
 
-        self.class.cache_page response.body, request.path
+        self.class.cache_page(response.body)
       end
 
       def find_page_by_path
