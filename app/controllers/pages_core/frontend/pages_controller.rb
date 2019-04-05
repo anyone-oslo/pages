@@ -89,7 +89,7 @@ module PagesCore
         return if response.status&.to_i != 200
         return unless @page && @locale
 
-        self.class.cache_page(response.body)
+        self.class.cache_page(response.body, request.path)
       end
 
       def find_page_by_path
