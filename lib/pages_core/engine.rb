@@ -4,6 +4,16 @@ module PagesCore
     # config.autoload_paths += Dir["#{config.root}/lib/pages_core/**/"]
     # config.eager_load_paths += Dir["#{config.root}/lib/pages_core/**/"]
 
+    initializer :factory_bot_definitions do |app|
+      path = File.expand_path("../../spec/factories", __dir__)
+
+      if defined?(FactoryBotRails)
+        app.config.factory_bot.definition_file_paths << path
+        FactoryBot.definition_file_paths =
+          Rails.application.config.factory_bot.definition_file_paths
+      end
+    end
+
     initializer :append_migrations do |app|
       unless app.root.to_s.match root.to_s
         config.paths["db/migrate"].expanded.each do |expanded_path|

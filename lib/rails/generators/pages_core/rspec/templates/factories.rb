@@ -1,9 +1,4 @@
-FactoryBot.define do
-  sequence :email do |n|
-    "person#{n}@example.com"
-  end
+# frozen_string_literal: true
 
-  sequence :sha1hash do |n|
-    Digest::SHA1.hexdigest(n.to_s)
-  end
+FactoryBot.define do
 end
