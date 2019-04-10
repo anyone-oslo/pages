@@ -1,6 +1,6 @@
 class Tagging < ActiveRecord::Base
   belongs_to :tag
-  belongs_to :taggable, polymorphic: true
+  belongs_to :taggable, polymorphic: true, touch: true
 
   validates :taggable_id, presence: true
   validates :taggable_type, presence: true
