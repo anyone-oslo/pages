@@ -7,7 +7,7 @@ FactoryBot.define do
     locale { "en" }
     file do
       Rack::Test::UploadedFile.new(
-        Rails.root.join("..", "support", "fixtures", "image.png"),
+        File.expand_path("../support/fixtures/image.png", __dir__),
         "image/png"
       )
     end
@@ -29,7 +29,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Attachment #{n}" }
     file do
       Rack::Test::UploadedFile.new(
-        Rails.root.join("..", "support", "fixtures", "image.png"),
+        File.expand_path("../support/fixtures/image.png", __dir__),
         "image/png"
       )
     end
