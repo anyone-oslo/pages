@@ -11,13 +11,20 @@ module PagesCore
           gem "fuubar"
           gem "json_spec"
           gem "rspec-rails"
+          gem "rspec_junit_formatter"
           gem "selenium-webdriver"
           gem "shoulda-matchers", require: false
           gem "simplecov", require: false
         end
       end
 
+      def setup_circleci
+        @test_db = Rails.configuration.database_configuration["test"]["database"]
+        template "circleci_config.yml", File.join(".circleci/config.yml")
+      end
+
       def setup_rspec
+
         create_file File.join(".rspec"), "--format Fuubar\n--colour\n" \
                                          "--require spec_helper"
         create_file File.join("spec/controllers/.keep")
