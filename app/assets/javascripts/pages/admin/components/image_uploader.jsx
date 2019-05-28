@@ -154,7 +154,7 @@ class ImageUploader extends React.Component {
     this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
     locales.forEach((l) => {
-      data.append(`image[alternative][${l}]`, this.props.alternative);
+      data.append(`image[alternative][${l}]`, (this.props.alternative || ""));
     });
     xhr.open("POST", "/admin/images.json");
     xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
