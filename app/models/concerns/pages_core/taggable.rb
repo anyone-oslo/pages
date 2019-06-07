@@ -41,7 +41,11 @@ module PagesCore
     end
 
     def tag_list
-      tags.order("name ASC").map(&:name).join(", ")
+      tag_names.join(", ")
+    end
+
+    def tag_names
+      tags.order("name ASC").map(&:name)
     end
   end
 end

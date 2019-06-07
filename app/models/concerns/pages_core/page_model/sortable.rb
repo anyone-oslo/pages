@@ -12,13 +12,11 @@ module PagesCore
         def order_by_tags(tags)
           joins(
             "LEFT JOIN taggings ON taggings.taggable_id = pages.id AND " \
-              "taggable_type = #{ActiveRecord::Base.connection.quote('Page')}",
-            "LEFT JOIN tags ON tags.id = taggings.tag_id AND tags.id IN (" +
-              tags.map(&:id).join(",") +
-              ")"
+            "taggings.tag_id IN (" + tags.map(&:id).join(",") + ") AND " \
+            "taggings.taggable_type = #{ActiveRecord::Base.connection.quote('Page')}"
           )
             .group("pages.id, localizations.id")
-            .reorder(Arel.sql("COUNT(tags.id) DESC, position ASC"))
+            .reorder(Arel.sql("COUNT(taggings.id) DESC"))
         end
       end
 
