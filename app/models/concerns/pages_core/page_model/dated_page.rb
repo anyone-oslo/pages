@@ -16,19 +16,12 @@ module PagesCore
 
       # Finds the page's next sibling by date. Returns nil if there isn't one.
       def next_sibling_by_date
-        siblings = siblings_by_date
-        return unless siblings.any?
-
-        siblings[(siblings.to_a.index(self) + 1)...siblings.length]
-          .try(&:first)
+        siblings_by_date.where("starts_at >= ?", starts_at)&.first
       end
 
       # Finds the page's previous sibling by date. Returns nil if there isn't one.
       def previous_sibling_by_date
-        siblings = siblings_by_date
-        return unless siblings.any?
-
-        siblings[0...siblings.to_a.index(self)].try(&:last)
+        siblings_by_date.where("starts_at < ?", starts_at)&.last
       end
 
       def upcoming?
@@ -53,6 +46,8 @@ module PagesCore
 
       def siblings_by_date
         siblings.reorder("starts_at ASC, pages.id DESC")
+                .where
+                .not(id: id)
       end
     end
   end
