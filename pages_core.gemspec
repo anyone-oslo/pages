@@ -12,8 +12,6 @@ Gem::Specification.new do |s|
   s.summary     = "Pages Core"
   s.description = "Pages Core"
 
-  s.rubyforge_project = "."
-
   s.required_ruby_version = ">= 2.1.0"
 
   s.files = Dir[
