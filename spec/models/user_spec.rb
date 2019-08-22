@@ -3,12 +3,12 @@ require "rails_helper"
 describe User, type: :model do
   subject { build(:user) }
 
-  it { is_expected.to belong_to(:creator) }
+  it { is_expected.to belong_to(:creator).optional }
   it { is_expected.to have_many(:created_users) }
   it { is_expected.to have_many(:pages) }
   it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
   it { is_expected.to have_many(:roles) }
-  it { is_expected.to belong_to(:image) }
+  it { is_expected.to belong_to(:image).optional }
 
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_presence_of(:name) }

@@ -5,7 +5,7 @@ describe PagesCore::PageModel::Tree, type: :model do
 
   let(:page) { create(:page) }
 
-  it { is_expected.to belong_to(:parent).class_name("Page") }
+  it { is_expected.to belong_to(:parent).class_name("Page").optional }
   it do
     is_expected.to have_many(:children)
       .class_name("Page")

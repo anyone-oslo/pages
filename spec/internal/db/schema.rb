@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_18_115000) do
+ActiveRecord::Schema.define(version: 2019_06_20_160500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,27 @@ ActiveRecord::Schema.define(version: 2019_03_18_115000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "queue"
+  end
+
+  create_table "dynamic_image_variants", force: :cascade do |t|
+    t.string "image_type", null: false
+    t.bigint "image_id", null: false
+    t.string "content_hash", null: false
+    t.string "content_type", null: false
+    t.integer "content_length", null: false
+    t.string "filename", null: false
+    t.string "format", null: false
+    t.integer "width", null: false
+    t.integer "height", null: false
+    t.integer "crop_width", null: false
+    t.integer "crop_height", null: false
+    t.integer "crop_start_x", null: false
+    t.integer "crop_start_y", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id", "image_type", "format", "width", "height", "crop_width", "crop_height", "crop_start_x", "crop_start_y"], name: "dynamic_image_variants_by_format_and_size", unique: true
+    t.index ["image_id", "image_type"], name: "dynamic_image_variants_by_image"
+    t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image_type_and_image_id"
   end
 
   create_table "images", id: :serial, force: :cascade do |t|
