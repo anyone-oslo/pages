@@ -45,7 +45,7 @@ module Admin
 
     def destroy
       flash[:notice] = "The invite to #{@invite.email} has been deleted"
-      @invite.destroy
+      PagesCore::DestroyInviteService.call(invite: @invite)
       redirect_to admin_invites_url
     end
 
