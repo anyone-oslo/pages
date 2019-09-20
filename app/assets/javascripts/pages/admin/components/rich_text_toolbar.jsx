@@ -38,21 +38,30 @@ class RichTextToolbar extends React.Component {
   };
 
   render() {
-    return (
-      <div className="rich-text toolbar">
-        {this.button("Bold", "bold", (str) => ["<b>", str, "</b>"])}
-        {this.button("Italics", "italic", (str) => ["<i>", str, "</i>"])}
-        {this.button("Heading 2", "header h2", (str) => ["h2. ", str, ""])}
-        {this.button("Heading 3", "header h3", (str) => ["h3. ", str, ""])}
-        {this.button("Heading 4", "header h4", (str) => ["h4. ", str, ""])}
-        {this.button("Blockquote", "quote-left", (str) => ["bq. ", str, ""])}
-        {this.button("List", "list-ul",
-                     (str) => ["", this.strToList(str, "*"), ""])}
-        {this.button("Ordered list", "list-ol",
-                     (str) => ["", this.strToList(str, "#"), ""])}
-        {this.button("Link", "link", this.link)}
-        {this.button("Email link", "envelope", this.emailLink)}
-      </div>
-    );
+    if (this.props.simple) {
+      return (
+        <div className="rich-text toolbar">
+          {this.button("Bold", "bold", (str) => ["<b>", str, "</b>"])}
+          {this.button("Italics", "italic", (str) => ["<i>", str, "</i>"])}
+        </div>
+      );
+    } else {
+      return (
+        <div className="rich-text toolbar">
+          {this.button("Bold", "bold", (str) => ["<b>", str, "</b>"])}
+          {this.button("Italics", "italic", (str) => ["<i>", str, "</i>"])}
+          {this.button("Heading 2", "header h2", (str) => ["h2. ", str, ""])}
+          {this.button("Heading 3", "header h3", (str) => ["h3. ", str, ""])}
+          {this.button("Heading 4", "header h4", (str) => ["h4. ", str, ""])}
+          {this.button("Blockquote", "quote-left", (str) => ["bq. ", str, ""])}
+          {this.button("List", "list-ul",
+                       (str) => ["", this.strToList(str, "*"), ""])}
+          {this.button("Ordered list", "list-ol",
+                       (str) => ["", this.strToList(str, "#"), ""])}
+          {this.button("Link", "link", this.link)}
+          {this.button("Email link", "envelope", this.emailLink)}
+        </div>
+      );
+    };
   }
 }

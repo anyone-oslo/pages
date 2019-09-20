@@ -19,6 +19,12 @@ module PagesCore
         )
       end
 
+      def labelled_rich_text_area(attribute, label_text = nil, options = {})
+        labelled_field(attribute, label_text, options) do |opts|
+          rich_text_area(attribute, opts)
+        end
+      end
+
       def labelled_image_uploader(attribute, label_text = nil, options = {})
         labelled_field(attribute, label_text, options) do |opts|
           image_uploader(attribute, opts)

@@ -2,7 +2,7 @@ class RichTextArea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value,
+      value: props.value || "",
       rows: props.rows || 5
     };
     this.inputRef = React.createRef();
@@ -41,10 +41,11 @@ class RichTextArea extends React.Component {
 
   render() {
     let { value, rows } = this.state;
-    let { id, name } = this.props;
+    let { id, name, simple } = this.props;
     return (
       <div className="rich-text-area">
-        <RichTextToolbar getSelection={this.getSelection}
+        <RichTextToolbar simple={simple}
+                         getSelection={this.getSelection}
                          replaceSelection={this.replaceSelection} />
         <textarea className="rich"
                   ref={this.inputRef}
