@@ -14,7 +14,10 @@ module PagesCore
       locale, page = page_url_locale_and_page(page_or_locale, page, opts)
       page.localize(locale) do |p|
         if p.redirects?
-          p.redirect_path(locale: locale)
+          redirect = p.redirect_path(locale: locale)
+          return redirect if redirect =~ %r{^https?://}
+
+          "#{request.protocol}#{request.host_with_port}" + redirect
         elsif p.full_path
           "#{request.protocol}#{request.host_with_port}" + page_path(locale, p)
         else
