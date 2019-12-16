@@ -144,7 +144,7 @@ GEM
       rails (> 5.0)
       vector2d (~> 2.2, >= 2.2.1)
     erubi (1.8.0)
-    excon (0.66.0)
+    excon (0.71.0)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
