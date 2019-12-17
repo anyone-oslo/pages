@@ -14,6 +14,7 @@ class FixPageFileIds < ActiveRecord::Migration[5.0]
   end
 
   def max_id(attr, table)
+    query = "SELECT MAX(#{attr}) AS max_id FROM #{table}"
     execute(query)[0]["max_id"]
   end
 end
