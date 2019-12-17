@@ -2,19 +2,16 @@ language: ruby
 sudo: false
 cache: bundler
 services:
-  - mysql
   - postgresql
 rvm:
   - 2.5.5
   - 2.6.3
 env:
-  - CI=1 DB=mysql
-  - CI=1 DB=postgres
+  - CI=1
 script:
 - bundle exec rspec spec
 before_script:
-- sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database pages_test;'; fi"
-- sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'create database pages_test' -U postgres; fi"
+- psql -c 'create database pages_test' -U postgres
 - bundle exec rake db:migrate
 after_script:
   - CODECLIMATE_REPO_TOKEN=e0eee16b7b54975a7f2cf57df3a2d1daccb7fab727183bd8e291ead17c01f390 bundle exec codeclimate-test-reporter
