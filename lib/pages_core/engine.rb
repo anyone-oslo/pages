@@ -28,6 +28,8 @@ module PagesCore
         pages/admin.js
         pages/admin.css
         pages/errors.css
+        pages/favicon.gif
+        pages/admin/icon.png
         pages/*.gif
         pages/*.png
         pages/*.jpg

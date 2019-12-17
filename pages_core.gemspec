@@ -26,14 +26,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mysql2", "~> 0.5.2"
   s.add_development_dependency "pg", "~> 0.18.3"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
-  s.add_development_dependency "rspec-rails", "~> 3.8.1"
+  s.add_development_dependency "rspec-rails", ">= 3.8.1"
   s.add_development_dependency "rspec_junit_formatter"
   s.add_development_dependency "shoulda-matchers"
   s.add_development_dependency "timecop", "~> 0.8.0"
 
-  s.add_dependency "rails", "~> 5.0"
+  s.add_dependency "rails", ">= 5.0"
 
-  s.add_dependency "actionpack-page_caching", "~> 1.1.0"
+  s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "active_model_serializers", "~> 0.10.0"
   s.add_dependency "bcrypt-ruby"
   s.add_dependency "country_select"
@@ -43,13 +43,13 @@ Gem::Specification.new do |s|
   s.add_dependency "will_paginate", "~> 3.1.0"
 
   # Locales
-  s.add_dependency "rails-i18n", "~> 5.0.0"
+  s.add_dependency "rails-i18n", ">= 5.0.0"
 
   # Default asset dependencies
   s.add_dependency "coffee-rails", "~> 4.2"
   s.add_dependency "jbuilder", "~> 2.5"
   s.add_dependency "jquery-rails"
-  s.add_dependency "sass-rails", "~> 5.0"
+  s.add_dependency "sass-rails", ">= 5.0"
   s.add_dependency "uglifier", ">= 1.3.0"
 
   # Extra asset dependencies
