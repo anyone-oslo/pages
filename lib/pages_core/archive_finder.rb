@@ -62,15 +62,7 @@ module PagesCore
     end
 
     def month_part
-      if mysql?
-        "MONTH(#{timestamp_attribute})"
-      else
-        "date_part('month', #{timestamp_attribute})::integer"
-      end
-    end
-
-    def mysql?
-      ActiveRecord::Base.connection.adapter_name.downcase.starts_with?("mysql")
+      "date_part('month', #{timestamp_attribute})::integer"
     end
 
     def range_for_year(year)
@@ -98,11 +90,7 @@ module PagesCore
     end
 
     def year_part
-      if mysql?
-        "YEAR(#{timestamp_attribute})"
-      else
-        "date_part('year', #{timestamp_attribute})"
-      end
+      "date_part('year', #{timestamp_attribute})"
     end
   end
 end
