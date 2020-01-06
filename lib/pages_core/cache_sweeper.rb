@@ -28,8 +28,7 @@ module PagesCore
 
       # Purge the entire pages cache
       def purge!
-        cache_dir = config.cache_path
-        FileUtils.rm_rf(Dir.glob("#{cache_dir}/*")) if File.exist?(cache_dir)
+        FileUtils.rm_rf(Dir.glob("#{cache_path}/*")) if File.exist?(cache_path)
       end
 
       # Sweep all cached pages
@@ -42,25 +41,28 @@ module PagesCore
 
       def cache_dirs
         if PagesCore.config(:domain_based_cache)
-          Dir.entries(config.cache_path)
+          Dir.entries(cache_path)
              .select { |d| visible_dir?(d) }
-             .map { |d| File.join(config.cache_path, d).to_s }
+             .map { |d| File.join(cache_path, d).to_s }
         else
-          [config.cache_path.to_s]
+          [cache_path.to_s]
         end
+      end
+
+      def cache_path
+        ActionController::Base.page_cache_directory
       end
 
       # Returns the default configuration.
       def default_config
-        OpenStruct.new(cache_path: ActionController::Base.page_cache_directory,
-                       patterns: [%r{^/index\.[\w]+$},
+        OpenStruct.new(patterns: [%r{^/index\.[\w]+$},
                                   %r{^/sitemap\.[\w]+$},
                                   %r{^/pages/[\w]{2,3}[/\.](.*)$},
                                   %r{^/[\w]{2,3}/(.*)$}])
       end
 
       def visible_dir?(dir)
-        dir !~ /^\./ && File.directory?(File.join(config.cache_path, dir))
+        dir !~ /^\./ && File.directory?(File.join(cache_path, dir))
       end
 
       def sweep_dir(cache_dir)
