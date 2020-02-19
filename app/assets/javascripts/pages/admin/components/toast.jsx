@@ -10,9 +10,6 @@ class Toast extends Reflux.Component {
     }
   }
 
-  componentWillUnmount() {
-  }
-
   render() {
     let toast = this.state.current;
     let classNames = ["toast"];
