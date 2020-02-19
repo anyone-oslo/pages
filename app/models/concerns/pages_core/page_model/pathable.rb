@@ -13,36 +13,25 @@ module PagesCore
         after_save :associate_page_path
       end
 
-      def full_path(last_segment = nil)
-        last_segment ||= path_segment
-        return nil unless full_path?(last_segment)
-        if parent
-          [parent.full_path, last_segment].join("/")
-        else
-          last_segment
-        end
+      def full_path
+        generate_full_path
       end
 
-      def full_path?(last_segment = nil)
-        last_segment ||= path_segment
-        if parent
-          parent.full_path? && last_segment.present?
-        else
-          last_segment.present?
-        end
+      def full_path?
+        path_segment.present? && pathable?
       end
 
       def ensure_path_segment
         return if deleted? || path_segment? || !name?
-        if path_collision?(generated_path_segment)
-          update path_segment: "#{generated_path_segment}-#{id}"
-        else
-          update path_segment: generated_path_segment
-        end
+
+        segment = generated_path_segment
+        segment = "#{segment}-#{id}" if path_collision?(segment)
+        update(path_segment: segment)
       end
 
       def pathable?
         return true unless parent
+
         parent.full_path?
       end
 
@@ -50,12 +39,21 @@ module PagesCore
 
       def associate_page_path
         return if deleted? || !full_path?
+
         PagePath.build(self)
       end
 
       def ensure_no_path_segment_on_deletion
         return unless deleted?
+
         self.path_segment = nil
+      end
+
+      def generate_full_path(last_segment = nil)
+        last_segment ||= path_segment
+        return nil unless last_segment.present? && pathable?
+
+        [parent&.full_path, last_segment].compact.join("/")
       end
 
       def generated_path_segment
@@ -81,12 +79,13 @@ module PagesCore
 
       def path_collision?(path_segment)
         sibling_path_segments.include?(path_segment) ||
-          page_path_matches_routes?(full_path(path_segment))
+          page_path_matches_routes?(generate_full_path(path_segment))
       end
 
       def path_segment_cannot_be_routable
         return unless full_path?
         return unless page_path_matches_routes?(full_path)
+
         errors.add(:path_segment, "can't match an existing URL")
       end
 

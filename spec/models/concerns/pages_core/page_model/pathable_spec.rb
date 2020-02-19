@@ -114,12 +114,6 @@ describe PagesCore::PageModel::Pathable, type: :model do
       it { is_expected.to eq("products/category/my-thing") }
     end
 
-    context "with argument" do
-      subject { page3.full_path("argument") }
-
-      it { is_expected.to eq("products/category/argument") }
-    end
-
     context "when a parent is missing a path segment" do
       let(:page1) { create(:page, locale: "en", name: "") }
 
@@ -128,6 +122,7 @@ describe PagesCore::PageModel::Pathable, type: :model do
 
     context "when a parent is moved" do
       before { page2.update(parent: page4) }
+
       it { is_expected.to eq("other-products/category/my-thing") }
     end
   end
