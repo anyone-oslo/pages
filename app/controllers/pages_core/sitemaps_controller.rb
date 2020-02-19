@@ -42,13 +42,13 @@ module PagesCore
 
     def pages
       ([Page.root.try(:localize, I18n.default_locale)] +
-        locales.flat_map do |locale|
-          Page.published.localized(locale)
-        end).compact.uniq
+       locales.flat_map do |locale|
+         Page.published.localized(locale).includes(:parent)
+       end).compact.uniq
     end
 
     def page_record_url(record)
-      if record == Page.root && record.locale == I18n.default_locale
+      if record == root_page && record.locale == I18n.default_locale
         root_url
       else
         page_url(record.locale, record)
@@ -67,6 +67,10 @@ module PagesCore
 
     def records
       pages
+    end
+
+    def root_page
+      @root_page ||= Page.root
     end
   end
 end
