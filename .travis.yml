@@ -4,8 +4,9 @@ cache: bundler
 services:
   - postgresql
 rvm:
-  - 2.5.5
-  - 2.6.3
+  - 2.5.7
+  - 2.6.5
+  - 2.7.0
 env:
   - CI=1
 script:
