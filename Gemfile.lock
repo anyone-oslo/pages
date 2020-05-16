@@ -54,7 +54,7 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionpack-page_caching (1.2.0)
+    actionpack-page_caching (1.2.2)
       actionpack (>= 5.0.0)
     actiontext (6.0.2.1)
       actionpack (= 6.0.2.1)
@@ -188,7 +188,7 @@ GEM
     jsonapi-renderer (0.2.2)
     localizable_model (0.6.4)
       rails (> 5.0)
-    loofah (2.4.0)
+    loofah (2.5.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -313,7 +313,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.8.1)
-    tzinfo (1.2.6)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -326,7 +326,7 @@ GEM
     will_paginate (3.1.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.2.2)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
