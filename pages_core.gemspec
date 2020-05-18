@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
 
   # Extra asset dependencies
   s.add_dependency "font-awesome-rails", "~> 4.7"
-  s.add_dependency "jquery-ui-rails", "~> 5.0.0"
+  s.add_dependency "jquery-ui-rails", "~> 6.0.0"
   s.add_dependency "react-rails", "~> 2.4"
 
   # ActiveRecord extensions
