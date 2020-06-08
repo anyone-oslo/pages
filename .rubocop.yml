@@ -16,6 +16,7 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Exclude:
+    - "*.gemspec"
     - "**/*_spec.rb"
     - "**/*.builder"
     - "config/routes.rb"
