@@ -119,7 +119,6 @@ jobs:
       - rubocop-test
       - eslint-test
       - rspec-test
-      - deploy
     runs-on: ubuntu-latest
     steps:
     - name: Prepare message
