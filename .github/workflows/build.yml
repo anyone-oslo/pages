@@ -26,23 +26,23 @@ jobs:
       - name: Check code
         run: rubocop
 
-  eslint-test:
-    name: ESLint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Node modules cache
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install Node modules
-        run: |
-          yarn install
-      - name: Check code
-        run: yarn lint-javascript
+  # eslint-test:
+  #   name: ESLint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Node modules cache
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install Node modules
+  #       run: |
+  #         yarn install
+  #     - name: Check code
+  #       run: yarn lint-javascript
 
   rspec-test:
     name: RSpec
@@ -117,7 +117,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/master' && always() }}
     needs:
       - rubocop-test
-      - eslint-test
+      # - eslint-test
       - rspec-test
     runs-on: ubuntu-latest
     steps:
