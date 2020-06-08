@@ -18,13 +18,9 @@ module PagesCore
 
       page.localize(locale) do |p|
         if p.redirects? && html_format?(opts)
-          redirect = p.redirect_path(locale: locale)
-          return redirect if redirect =~ %r{^https?://}
-
-          "#{request.protocol}#{request.host_with_port}" + redirect
+          page.redirect_url(locale, p)
         elsif p.full_path
-          "#{request.protocol}#{request.host_with_port}" +
-            page_path(locale, p, opts)
+          base_page_url + page_path(locale, p, opts)
         else
           super(locale, p, opts)
         end
@@ -32,6 +28,17 @@ module PagesCore
     end
 
     private
+
+    def page_redirect_url(locale, page)
+      redirect = page.redirect_path(locale: locale)
+      return redirect if redirect =~ %r{^https?://}
+
+      base_page_url + redirect
+    end
+
+    def base_page_url
+      "#{request.protocol}#{request.host_with_port}"
+    end
 
     def html_format?(opts)
       opts[:format].blank? || opts[:format].to_sym == :html

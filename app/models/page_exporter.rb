@@ -46,12 +46,20 @@ class PageExporter
 
   def export_page_contents(page)
     path = page_path(page)
-    page.locales.map { |l| page.localize(l) }.each do |p|
-      json = PageExportSerializer.new(p).to_json
-      write_file(path.join("page.#{p.locale}.json"), json)
-      write_file(path.join("page.#{p.locale}.yml"), JSON.parse(json).to_yaml)
+    localized_pages(page).each do |p|
+      export_page_json(path, page)
       write_file(path.join("page.#{p.locale}.txt"), text_page(p))
     end
+  end
+
+  def export_page_json(path, page)
+    json = PageExportSerializer.new(page).to_json
+    write_file(path.join("page.#{p.locale}.json"), json)
+    write_file(path.join("page.#{p.locale}.yml"), JSON.parse(json).to_yaml)
+  end
+
+  def localized_pages(page)
+    page.locales.map { |l| page.localize(l) }
   end
 
   def page_path(page)

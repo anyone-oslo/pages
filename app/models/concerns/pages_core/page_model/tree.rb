@@ -28,19 +28,20 @@ module PagesCore
         def admin_list(locale)
           left_outer_joins(:parent)
             .where("pages.status < 4")
-            .order(
-              Arel.sql(
-                <<-QUERY
-                pages.parent_page_id,
-                parents_pages.news_page,
-                case when parents_pages.news_page
-                  then pages.pinned end desc,
-                case when parents_pages.news_page
-                  then pages.published_at end desc,
-                position asc
-                QUERY
-              )
-            ).in_locale(locale)
+            .order(admin_list_order).in_locale(locale)
+        end
+
+        def admin_list_order
+          Arel.sql(
+            <<-QUERY
+            pages.parent_page_id, parents_pages.news_page,
+            case when parents_pages.news_page
+              then pages.pinned end desc,
+            case when parents_pages.news_page
+              then pages.published_at end desc,
+            position asc
+            QUERY
+          )
         end
 
         # Returns all root pages

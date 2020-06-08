@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
     "template.rb"
   ]
 
-  s.add_development_dependency "capybara", "~> 3.10.0"
+  s.add_development_dependency "capybara", "~> 3.32"
   s.add_development_dependency "factory_bot", "~> 4.11.0"
   s.add_development_dependency "pg", "~> 0.18.3"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"

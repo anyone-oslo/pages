@@ -4,7 +4,9 @@ module PagesCore
   module Admin
     module AdminHelper
       include PagesCore::Admin::ContentTabsHelper
+      include PagesCore::Admin::DateRangeHelper
       include PagesCore::Admin::ImageUploadsHelper
+      include PagesCore::Admin::PageJsonHelper
       include PagesCore::Admin::LabelledFieldHelper
       include PagesCore::Admin::TagEditorHelper
 
@@ -24,37 +26,6 @@ module PagesCore
         classes << "#{controller.action_name}_action" if controller.action_name
         classes << "with_notice" if flash[:notice]
         classes
-      end
-
-      def page_date_range(page)
-        if page.all_day?
-          date_range(page.starts_at.to_date, page.ends_at.to_date)
-        else
-          date_range(page.starts_at, page.ends_at)
-        end
-      end
-
-      def date_range(starts_at, ends_at)
-        show_time = !(starts_at.is_a?(Date) && ends_at.is_a?(Date))
-        dates = if starts_at.year != ends_at.year
-                  [l(starts_at, format: :pages_full),
-                   l(ends_at, format: :pages_full)]
-                elsif starts_at.month != ends_at.month
-                  [l(starts_at, format: :pages_date),
-                   l(ends_at, format: :pages_full)]
-                elsif starts_at.day != ends_at.day && !show_time
-                  [l(starts_at, format: :pages_day),
-                   l(ends_at, format: :pages_full)]
-                elsif starts_at.day != ends_at.day
-                  [l(starts_at, format: :pages_date),
-                   l(ends_at, format: :pages_full)]
-                elsif !show_time
-                  [l(starts_at, format: :pages_full)]
-                else
-                  [l(starts_at, format: :pages_full),
-                   l(ends_at, format: :pages_time)]
-                end
-        safe_join(dates.map(&:strip), "&ndash;".html_safe)
       end
 
       def rich_text_area_tag(name, content = nil, options = {})

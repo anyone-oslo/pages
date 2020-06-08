@@ -4,12 +4,12 @@
 # authorization and other common code for the Admin set of controllers.
 module PagesCore
   class AdminController < ::ApplicationController
+    include PagesCore::Admin::PersistentParams
+
     protect_from_forgery with: :exception
 
     before_action :set_i18n_locale
     before_action :require_authentication
-    before_action :restore_persistent_params
-    after_action :save_persistent_params
 
     layout "admin"
 
@@ -46,24 +46,6 @@ module PagesCore
       end
     end
 
-    # Loads persistent params from user model and merges with session.
-    def restore_persistent_params
-      return unless current_user&.persistent_data?
-
-      session[:persistent_params] ||= {}
-      session[:persistent_params] = current_user.persistent_data.merge(
-        session[:persistent_params]
-      )
-    end
-
-    # Saves persistent params from session to User model if applicable.
-    def save_persistent_params
-      return unless current_user && session[:persistent_params]
-
-      current_user.persistent_data = session[:persistent_params]
-      current_user.save
-    end
-
     def secure_compare(compare, other)
       return false unless compare && other
       return false unless compare.bytesize == other.bytesize
@@ -73,53 +55,6 @@ module PagesCore
       res = 0
       other.each_byte { |byte| res |= byte ^ l.shift }
       res.zero?
-    end
-
-    # --- HELPERS ---
-
-    # Add a stylesheet
-    def add_stylesheet(css_file)
-      @admin_stylesheets ||= []
-      @admin_stylesheets << "admin/#{css_file}"
-    end
-
-    def persistent_params(namespace)
-      session[:persistent_params] ||= {}
-      session[:persistent_params][namespace] ||= {}
-      session[:persistent_params][namespace]
-    end
-
-    def coerce_persistent_param(value)
-      case value
-      when "true"
-        true
-      when "false"
-        false
-      else
-        value
-      end
-    end
-
-    # Get a persistent param
-    def persistent_param(key, default = nil, options = {})
-      key = key.to_s
-      namespace = options[:namespace] || self.class.to_s
-
-      value = coerce_persistent_param(
-        if params.key?(key)
-          params[key]
-        elsif persistent_params(namespace).key?(key)
-          persistent_params(namespace)[key]
-        else
-          default
-        end
-      )
-
-      if !value.nil? || options[:preserve_nil]
-        persistent_params(namespace)[key.to_s] = value
-      end
-
-      value
     end
   end
 end

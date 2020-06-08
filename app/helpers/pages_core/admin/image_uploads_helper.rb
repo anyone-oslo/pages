@@ -27,18 +27,21 @@ module PagesCore
 
       private
 
+      def editable_image_src_options(image, width)
+        return {} unless image
+
+        { src: dynamic_image_path(image, size: "#{width * 2}x"),
+          image: ::Admin::ImageSerializer.new(image) }
+      end
+
       def editable_image_options(image, width: 250, caption: false, locale: nil)
-        image_opts = if image
-                       { src: dynamic_image_path(image, size: "#{width * 2}x"),
-                         image: ::Admin::ImageSerializer.new(image) }
-                     else
-                       {}
-                     end
-        image_opts.merge(width: width,
-                         caption: caption,
-                         locale: locale || I18n.default_locale,
-                         locales: PagesCore.config.locales,
-                         csrf_token: form_authenticity_token)
+        editable_image_src_options(image, width).merge(
+          width: width,
+          caption: caption,
+          locale: locale || I18n.default_locale,
+          locales: PagesCore.config.locales,
+          csrf_token: form_authenticity_token
+        )
       end
     end
   end

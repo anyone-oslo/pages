@@ -10,8 +10,8 @@ module PagesCore
     end
 
     class << self
-      def call(*attrs)
-        new(*attrs).call
+      def call(attrs, invite: nil)
+        new(attrs, invite: invite).call
       end
     end
 

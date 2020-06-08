@@ -23,9 +23,7 @@ class User < ActiveRecord::Base
 
   serialize :persistent_data
 
-  validates :username,
-            presence: true,
-            uniqueness: { case_sensitive: false }
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   validates :name, presence: true
 

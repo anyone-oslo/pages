@@ -2,11 +2,11 @@
 
 module Admin
   class PagesController < Admin::AdminController
+    include PagesCore::Admin::PageJsonHelper
     include PagesCore::Admin::NewsPageController
 
     before_action :find_categories
-    before_action :find_page, only: %i[show edit update destroy
-                                       move]
+    before_action :find_page, only: %i[show edit update destroy move]
 
     require_authorization
 
@@ -99,21 +99,6 @@ module Admin
         page_images_attributes: %i[id position image_id primary _destroy],
         page_files_attributes: %i[id position attachment_id _destroy]
       )
-    end
-
-    def page_json(page)
-      { id: page.id,
-        param: page.to_param,
-        parent_page_id: page.parent_page_id,
-        locale: page.locale,
-        status: page.status,
-        news_page: page.news_page,
-        name: page.name,
-        published_at: page.published_at,
-        pinned: page.pinned?,
-        starts_at: page.starts_at,
-        permissions: [(:edit if policy(page).edit?),
-                      (:create if policy(page).edit?)].compact }
     end
 
     def param_categories
