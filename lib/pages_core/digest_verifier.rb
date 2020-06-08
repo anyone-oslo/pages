@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module PagesCore
   # = Digest Verifier
@@ -42,13 +42,13 @@ module PagesCore
 
     private
 
-    def secure_compare(a, b)
-      return false unless a.bytesize == b.bytesize
+    def secure_compare(value, other)
+      return false unless value.bytesize == other.bytesize
 
-      l = a.unpack "C#{a.bytesize}"
+      l = value.unpack "C#{value.bytesize}"
 
       res = 0
-      b.each_byte { |byte| res |= byte ^ l.shift }
+      other.each_byte { |byte| res |= byte ^ l.shift }
       res.zero?
     end
 

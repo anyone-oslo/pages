@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Role < ActiveRecord::Base
   belongs_to :user, touch: true
   validates :name,
-            presence:   true,
+            presence: true,
             uniqueness: { scope: :user_id },
-            inclusion:  { in: proc { Role.roles.map(&:name) } }
+            inclusion: { in: proc { Role.roles.map(&:name) } }
 
   class << self
     def define(name, description, default = false)
@@ -35,6 +37,7 @@ class Role < ActiveRecord::Base
 
     def config_roles
       return [] unless File.exist?(config_file)
+
       YAML.load_file(config_file).map do |key, opts|
         OpenStruct.new(name: key.to_s,
                        description: opts["description"],

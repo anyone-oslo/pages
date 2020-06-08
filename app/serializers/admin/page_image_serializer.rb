@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class PageImageSerializer < ActiveModel::Serializer
     attributes :id, :page_id, :image_id, :position, :primary

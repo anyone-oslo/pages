@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module OpenGraphTagsHelper
     def open_graph_properties
@@ -37,12 +39,12 @@ module PagesCore
 
     def default_open_graph_properties
       {
-        type:        "website",
-        site_name:   PagesCore.config(:site_name),
-        title:       default_open_graph_title,
-        image:       (meta_image if meta_image?),
+        type: "website",
+        site_name: PagesCore.config(:site_name),
+        title: default_open_graph_title,
+        image: (meta_image if meta_image?),
         description: default_open_graph_description,
-        url:         request.url
+        url: request.url
       }
     end
   end

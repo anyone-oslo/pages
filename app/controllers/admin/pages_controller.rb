@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::NewsPageController
@@ -116,6 +118,7 @@ module Admin
 
     def param_categories
       return [] unless params[:category]
+
       params.permit(category: {})[:category]
             .to_hash
             .map { |id, _| Category.find(id) }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   module MenuHelper
     def header_tabs(group)

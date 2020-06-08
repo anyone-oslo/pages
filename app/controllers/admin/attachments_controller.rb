@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class AttachmentsController < Admin::AdminController
     before_action :find_attachment, only: %i[update]

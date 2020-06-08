@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Templates
     class ConfigurationHandler
@@ -33,7 +35,7 @@ module PagesCore
 
       def proxy(proxy_block = nil, &callback)
         proxy_object = PagesCore::Templates::ConfigurationProxy.new(callback)
-        proxy_block.call(proxy_object) if proxy_block
+        proxy_block&.call(proxy_object)
         proxy_object
       end
 
@@ -56,7 +58,7 @@ module PagesCore
       def get(*path)
         @configuration ||= {}
         path.inject(@configuration) do |value, key|
-          value && value.is_a?(Hash) && value.key?(key) ? value[key] : nil
+          value&.is_a?(Hash) && value&.key?(key) ? value[key] : nil
         end
       end
     end

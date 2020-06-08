@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class AttachmentsController < ::ApplicationController
     before_action :verify_signed_params
@@ -20,12 +22,14 @@ module PagesCore
     end
 
     def send_attachment(disposition: "inline")
-      if stale?(etag: @attachment, last_modified: @attachment.updated_at)
-        send_data(@attachment.data,
-                  filename: @attachment.filename,
-                  type: @attachment.content_type,
-                  disposition: disposition)
+      unless stale?(etag: @attachment, last_modified: @attachment.updated_at)
+        return
       end
+
+      send_data(@attachment.data,
+                filename: @attachment.filename,
+                type: @attachment.content_type,
+                disposition: disposition)
     end
 
     def verify_signed_params

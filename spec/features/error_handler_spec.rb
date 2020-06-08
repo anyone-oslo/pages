@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
-RSpec.feature("Error handling",
-              type: :feature,
-              realistic_error_responses: true) do
+RSpec.describe("Error handling",
+               type: :feature,
+               realistic_error_responses: true) do
   it "renders a 404 page" do
     visit "/errors/not_found"
     expect(page).to have_content("Page not found")

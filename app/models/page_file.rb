@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageFile < ActiveRecord::Base
   include PagesCore::Sweepable
 

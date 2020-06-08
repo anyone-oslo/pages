@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Ruby Standard Library
 require "digest/sha1"
 require "fileutils"

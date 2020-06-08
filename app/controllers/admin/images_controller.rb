@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class ImagesController < Admin::AdminController
     before_action :find_image, only: %i[show edit update destroy]
@@ -12,11 +14,11 @@ module Admin
 
     def create
       @image = Image.create(image_params)
-      if @image.valid?
-        respond_to do |format|
-          format.json do
-            render json: @image, serializer: Admin::ImageSerializer
-          end
+      return unless @image.valid?
+
+      respond_to do |format|
+        format.json do
+          render json: @image, serializer: Admin::ImageSerializer
         end
       end
     end

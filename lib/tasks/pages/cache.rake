@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :pages do
   namespace :cache do
     desc "Sweep the pages cache"

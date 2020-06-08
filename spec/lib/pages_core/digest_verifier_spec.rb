@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::DigestVerifier do
   let(:secret)   { "topsecret" }
-  let(:verifier) { PagesCore::DigestVerifier.new(secret) }
+  let(:verifier) { described_class.new(secret) }
   let(:data)     { "show-123-64x64" }
   let(:digest)   { "1639a467ae544a4a9b4a5623fe56a2f93276087a" }
 
@@ -13,7 +15,7 @@ describe PagesCore::DigestVerifier do
   end
 
   describe "#verify" do
-    subject { verifier.verify(data, digest) }
+    subject(:verification) { verifier.verify(data, digest) }
 
     context "with valid data" do
       it { is_expected.to be true }
@@ -23,7 +25,7 @@ describe PagesCore::DigestVerifier do
       let(:digest) { "1639a467ae544a4a9b4a5623fe56a2f93276087b" }
 
       it "raises an error" do
-        expect { subject }.to(
+        expect { verification }.to(
           raise_error(PagesCore::DigestVerifier::InvalidSignatureError)
         )
       end
@@ -33,7 +35,7 @@ describe PagesCore::DigestVerifier do
       let(:data) { "" }
 
       it "raises an error" do
-        expect { subject }.to(
+        expect { verification }.to(
           raise_error(PagesCore::DigestVerifier::InvalidSignatureError)
         )
       end
@@ -43,7 +45,7 @@ describe PagesCore::DigestVerifier do
       let(:digest) { nil }
 
       it "raises an error" do
-        expect { subject }.to(
+        expect { verification }.to(
           raise_error(PagesCore::DigestVerifier::InvalidSignatureError)
         )
       end

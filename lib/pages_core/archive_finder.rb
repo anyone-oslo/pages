@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class ArchiveFinder
     def initialize(relation, options = {})

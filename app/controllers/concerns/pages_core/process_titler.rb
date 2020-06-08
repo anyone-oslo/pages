@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module ProcessTitler
     extend ActiveSupport::Concern

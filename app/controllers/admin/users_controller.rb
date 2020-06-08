@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class UsersController < Admin::AdminController
     before_action :require_authentication, except: %i[new create login]
@@ -19,6 +21,7 @@ module Admin
 
     def login
       return unless logged_in?
+
       redirect_to admin_default_url
     end
 
@@ -84,11 +87,13 @@ module Admin
 
     def user_params_with_roles
       return user_params unless policy(User).manage?
+
       { role_names: [] }.merge(user_params)
     end
 
     def require_no_users
       return unless User.any?
+
       flash[:error] = "Account holder already exists"
       redirect_to(admin_users_url)
     end

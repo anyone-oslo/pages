@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocalizeImages < ActiveRecord::Migration[4.2]
   def locale
     I18n.default_locale
@@ -6,6 +8,7 @@ class LocalizeImages < ActiveRecord::Migration[4.2]
   def up
     Image.all.in_locale(locale).each do |image|
       next if image.attributes["byline"].blank?
+
       Localization.create(
         localizable: image,
         name: "caption",

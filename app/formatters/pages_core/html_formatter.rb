@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class HtmlFormatter
     include ActionView::Helpers::AssetTagHelper
@@ -120,6 +122,7 @@ module PagesCore
 
     def image_caption(image)
       return unless image.caption?
+
       content_tag(:figcaption, image.caption)
     end
 

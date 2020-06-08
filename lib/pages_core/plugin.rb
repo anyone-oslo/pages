@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # module PagesGallery
 #  class Plugin < PagesCore::Plugin
 #    paths['db/migrate'] = 'template/db/migrate'
@@ -64,7 +66,7 @@ module PagesCore
 
       def default_paths
         {
-          "db/migrate"                    => "db/migrate",
+          "db/migrate" => "db/migrate",
           "config/removed_migrations.yml" => "config/removed_migrations.yml"
         }
       end
@@ -98,6 +100,7 @@ module PagesCore
 
     def removed_migrations
       return unless File.exist?(removed_migrations_path)
+
       YAML.load_file(removed_migrations_path)
     end
 

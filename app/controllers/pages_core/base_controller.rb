@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class BaseController < ActionController::Base
     include PagesCore::Authentication
@@ -14,6 +16,7 @@ module PagesCore
     # Configures additional report data if Sentry is installed
     def configure_error_reporting
       return unless Object.const_defined?("Raven")
+
       if logged_in?
         Raven.user_context(user_id: current_user.id,
                            user_email: current_user.email)
@@ -36,6 +39,7 @@ module PagesCore
 
     def set_content_language_header
       return unless locale
+
       headers["Content-Language"] = locale.to_s
     end
   end

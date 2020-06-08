@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: %i[accept show]
@@ -58,6 +60,7 @@ module Admin
     def find_and_validate_invite
       @invite = Invite.find_by(id: params[:id])
       return if @invite && secure_compare(@invite.token, params[:token])
+
       flash[:notice] = "This invite is no longer valid."
       redirect_to(login_admin_users_url) && return
     end

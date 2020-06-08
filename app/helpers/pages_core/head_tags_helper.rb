@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module HeadTagsHelper
     # Sets a document title.
@@ -30,6 +32,7 @@ module PagesCore
     def feed_tags(options = {})
       feeds = Page.enabled_feeds(@locale, options)
       return unless feeds.any?
+
       feed_tags = [
         rss_link_tag(PagesCore.config(:site_name),
                      pages_url(@locale, format: :rss))
@@ -121,11 +124,13 @@ module PagesCore
 
     def meta_description_tag
       return unless meta_description?
+
       tag(:meta, name: "description", content: meta_description)
     end
 
     def meta_keywords_tag
       return unless meta_keywords?
+
       tag(:meta, name: "keywords", content: meta_keywords)
     end
   end

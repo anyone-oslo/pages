@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class CacheSweeper
     class << self
@@ -34,6 +36,7 @@ module PagesCore
       # Sweep all cached pages
       def sweep!
         return [] unless enabled
+
         cache_dirs.flat_map { |d| sweep_dir(d) }
       end
 
@@ -55,10 +58,10 @@ module PagesCore
 
       # Returns the default configuration.
       def default_config
-        OpenStruct.new(patterns: [%r{^/index\.[\w]+$},
-                                  %r{^/sitemap\.[\w]+$},
-                                  %r{^/pages/[\w]{2,3}[/\.](.*)$},
-                                  %r{^/[\w]{2,3}/(.*)$}])
+        OpenStruct.new(patterns: [%r{^/index\.\w+$},
+                                  %r{^/sitemap\.\w+$},
+                                  %r{^/pages/\w{2,3}[/.](.*)$},
+                                  %r{^/\w{2,3}/(.*)$}])
       end
 
       def visible_dir?(dir)
@@ -80,6 +83,7 @@ module PagesCore
 
     def sweep!
       return [] unless File.exist?(cache_dir)
+
       swept_files = []
 
       Find.find(cache_dir + "/") do |path|
@@ -104,6 +108,7 @@ module PagesCore
 
     def page_path?(relative)
       return false unless relative =~ /\.html$/
+
       page_paths.each do |p|
         return true if relative.start_with?(p)
       end

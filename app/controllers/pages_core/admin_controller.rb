@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # All admin controllers inherit Admin::AdminController, which provides layout,
 # authorization and other common code for the Admin set of controllers.
 module PagesCore
@@ -36,16 +38,18 @@ module PagesCore
     # If not, renders the login screen.
     def require_authentication
       return if logged_in?
+
       if User.count < 1
-        redirect_to(new_admin_user_url) && return
+        redirect_to(new_admin_user_url)
       else
-        redirect_to(login_admin_users_url) && return
+        redirect_to(login_admin_users_url)
       end
     end
 
     # Loads persistent params from user model and merges with session.
     def restore_persistent_params
-      return unless current_user && current_user.persistent_data?
+      return unless current_user&.persistent_data?
+
       session[:persistent_params] ||= {}
       session[:persistent_params] = current_user.persistent_data.merge(
         session[:persistent_params]
@@ -55,6 +59,7 @@ module PagesCore
     # Saves persistent params from session to User model if applicable.
     def save_persistent_params
       return unless current_user && session[:persistent_params]
+
       current_user.persistent_data = session[:persistent_params]
       current_user.save
     end

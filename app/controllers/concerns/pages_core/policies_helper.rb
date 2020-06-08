@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PoliciesHelper
     extend ActiveSupport::Concern
@@ -34,6 +36,7 @@ module PagesCore
 
     def verify_policy(record)
       return true if policy(record).public_send(action_name + "?")
+
       raise PagesCore::NotAuthorized
     end
   end

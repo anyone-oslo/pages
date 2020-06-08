@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   module PagesHelper
     def available_templates_for_select

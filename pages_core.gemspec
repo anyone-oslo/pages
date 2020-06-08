@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 $LOAD_PATH.push File.expand_path("lib", __dir__)
 require "pages_core/version"
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = "Pages Core"
   s.description = "Pages Core"
 
-  s.required_ruby_version = ">= 2.1.0"
+  s.required_ruby_version = ">= 2.7.0"
 
   s.files = Dir[
     "{app,config,db,lib,vendor}/**/*",

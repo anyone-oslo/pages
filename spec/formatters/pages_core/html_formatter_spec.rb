@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::HtmlFormatter do
@@ -92,8 +94,9 @@ describe PagesCore::HtmlFormatter do
 
       it "embeds links to the files" do
         expect(html).to match(
-          "<p>Download <a class=\"file\" href=\"#{expected_path}\">#{page_file.attachment.name}</a>" \
-            ", <a class=\"file\" href=\"#{expected_path2}\">#{second_file.attachment.name}</a></p>"
+          "<p>Download <a class=\"file\" href=\"#{expected_path}\">" \
+          "#{page_file.attachment.name}</a>, <a class=\"file\" " \
+          "href=\"#{expected_path2}\">#{second_file.attachment.name}</a></p>"
         )
       end
     end

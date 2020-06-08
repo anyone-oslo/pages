@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Configuration
     class Base
@@ -25,6 +27,7 @@ module PagesCore
 
       def get(key)
         raise InvalidConfigurationKey unless setting?(key)
+
         if configuration.key?(key)
           configuration[key]
         else
@@ -34,6 +37,7 @@ module PagesCore
 
       def set(key, value)
         raise InvalidConfigurationKey unless setting?(key)
+
         value = parse_value(key, value)
         unless valid_type?(key, value)
           raise(
@@ -60,6 +64,7 @@ module PagesCore
 
       def valid_type?(key, value)
         return true if value.nil?
+
         if type_for(key) == :boolean
           value.is_a?(TrueClass) || value.is_a?(FalseClass)
         else

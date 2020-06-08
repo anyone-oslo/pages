@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class AdminMenuItem
     attr_reader :label, :path, :group, :options
@@ -5,6 +7,7 @@ module PagesCore
     class << self
       def items
         return [] unless @menu_items
+
         @menu_items.map { |_, v| v }
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module MetaTagsHelper
     # Sets a default image to use for meta tags. Supports
@@ -72,7 +74,7 @@ module PagesCore
         @meta_keywords = Array(args.first).join(", ")
       else
         keywords = @meta_keywords
-        keywords ||= @page.tag_list if @page && @page.tags.any?
+        keywords ||= @page.tag_list if @page&.tags&.any?
         strip_tags(keywords)
       end
     end

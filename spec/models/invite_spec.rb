@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Invite, type: :model do
-  subject { build(:invite) }
+  subject(:invite) { build(:invite) }
 
   it { is_expected.to belong_to(:user) }
+
   it do
-    is_expected.to have_many(:roles)
+    expect(invite).to have_many(:roles)
       .dependent(:destroy)
       .class_name("InviteRole")
   end

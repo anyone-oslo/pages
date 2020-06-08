@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Admin
     module LabelledFieldHelper
@@ -43,7 +45,7 @@ module PagesCore
       private
 
       def labelled_field_class(options = {})
-        if options[:errors] && options[:errors].any?
+        if options[:errors]&.any?
           "field field-with-errors"
         else
           "field"
@@ -58,11 +60,13 @@ module PagesCore
 
       def labelled_field_description(str)
         return "" unless str
+
         content_tag(:p, str, class: "description")
       end
 
       def labelled_field_errors(errors)
-        return "" unless errors && errors.any?
+        return "" unless errors&.any?
+
         content_tag(:span, class: "error") { Array(errors).last }
       end
     end

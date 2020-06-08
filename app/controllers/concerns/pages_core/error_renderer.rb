@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module ErrorRenderer
     extend ActiveSupport::Concern
@@ -23,6 +25,7 @@ module PagesCore
 
     def error_layout(error, options = {})
       return options[:layout] if options.key?(:layout)
+
       if error == 404 && PagesCore.config.error_404_layout?
         PagesCore.config.error_404_layout
       else

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PagePathHelper
     def page_path(locale, page, options = {})
@@ -41,6 +43,7 @@ module PagesCore
 
     def page_url_locale_and_page(page_or_locale, page, opts)
       return [page_or_locale, page] if page
+
       ActiveSupport::Deprecation.warn(
         "Calling page_url without locale is deprecated"
       )
@@ -49,6 +52,7 @@ module PagesCore
 
     def paginated_section(opts)
       return "" unless opts[:page]
+
       "/page/#{opts[:page]}"
     end
   end

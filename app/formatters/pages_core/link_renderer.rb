@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class LinkRenderer < WillPaginate::ActionView::LinkRenderer
     def previous_page

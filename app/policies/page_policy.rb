@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PagePolicy < Policy
   def index?
     true

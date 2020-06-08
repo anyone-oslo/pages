@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PasswordResetToken, type: :model do
@@ -13,9 +15,10 @@ describe PasswordResetToken, type: :model do
     before do
       password_reset_token
       expired_password_reset_token
-      PasswordResetToken.expire!
+      described_class.expire!
     end
-    specify { expect(PasswordResetToken.all).to eq([password_reset_token]) }
+
+    specify { expect(described_class.all).to eq([password_reset_token]) }
   end
 
   describe "#expired?" do

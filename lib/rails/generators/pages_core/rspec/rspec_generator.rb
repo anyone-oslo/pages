@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Generators
     class RspecGenerator < Rails::Generators::Base
@@ -19,12 +21,12 @@ module PagesCore
       end
 
       def setup_circleci
-        @test_db = Rails.configuration.database_configuration["test"]["database"]
+        @test_db =
+          Rails.configuration.database_configuration["test"]["database"]
         template "circleci_config.yml", File.join(".circleci/config.yml")
       end
 
       def setup_rspec
-
         create_file File.join(".rspec"), "--format Fuubar\n--colour\n" \
                                          "--require spec_helper"
         create_file File.join("spec/controllers/.keep")

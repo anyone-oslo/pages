@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageImageSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   include DynamicImage::Helper

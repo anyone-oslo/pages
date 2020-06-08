@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::Taggable, type: :model do
@@ -48,6 +50,7 @@ describe PagesCore::Taggable, type: :model do
     subject { page.serialized_tags }
 
     before { page.tag_with(%w[foo bar]) }
+
     it { is_expected.to eq(%w[bar foo].to_json) }
   end
 
@@ -55,33 +58,39 @@ describe PagesCore::Taggable, type: :model do
     let(:json) { %w[foo bar].to_json }
 
     before { page.update(serialized_tags: json) }
+
     specify { expect(page.tags.count).to eq(2) }
   end
 
   describe "#tag_with" do
     context "with string argument" do
       before { page.tag_with("foo, bar") }
+
       specify { expect(page.tags.count).to eq(2) }
     end
 
     context "with array argument" do
       before { page.tag_with(%w[foo bar]) }
+
       specify { expect(page.tags.count).to eq(2) }
     end
 
     context "with tags array argument" do
       before { page.tag_with([create(:tag), create(:tag)]) }
+
       specify { expect(page.tags.count).to eq(2) }
     end
 
     context "with splatted array argument" do
       before { page.tag_with("foo", "bar") }
+
       specify { expect(page.tags.count).to eq(2) }
     end
   end
 
   describe "#tag_list=" do
     before { page.tag_list = "foo, bar" }
+
     specify { expect(page.tags.count).to eq(2) }
   end
 
@@ -94,6 +103,7 @@ describe PagesCore::Taggable, type: :model do
 
     context "with tags" do
       before { page.tag_with("foo, bar") }
+
       it { is_expected.to eq("bar, foo") }
     end
   end

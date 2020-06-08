@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module DomainBasedCache
     extend ActiveSupport::Concern
@@ -17,6 +19,7 @@ module PagesCore
 
     def set_domain_based_cache_path
       return unless PagesCore.config(:domain_based_cache)
+
       ActionController::Base.page_cache_directory = File.join(
         ApplicationController.default_page_cache_directory,
         request.domain

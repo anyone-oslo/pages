@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::PageModel::Tree, type: :model do
-  subject { page }
-
-  let(:page) { create(:page) }
+  subject(:page) { create(:page) }
 
   it { is_expected.to belong_to(:parent).class_name("Page").optional }
+
   it do
-    is_expected.to have_many(:children)
+    expect(page).to have_many(:children)
       .class_name("Page")
       .dependent(:destroy)
   end

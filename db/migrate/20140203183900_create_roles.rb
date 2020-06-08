@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateRoles < ActiveRecord::Migration[4.2]
   def connection
     @connection ||= ActiveRecord::Base.connection

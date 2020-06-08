@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class CategoriesController < Admin::AdminController
     before_action :find_category, only: %i[show edit update destroy]

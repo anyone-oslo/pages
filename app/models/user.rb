@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   include PagesCore::HasRoles
 
@@ -63,6 +65,7 @@ class User < ActiveRecord::Base
 
   def authenticate!(password)
     return false unless can_login? && valid_password?(password)
+
     rehash_password!(password) if password_needs_rehash?
     true
   end
@@ -73,6 +76,7 @@ class User < ActiveRecord::Base
 
   def mark_active!
     return if last_login_at && last_login_at > 10.minutes.ago
+
     update(last_login_at: Time.now.utc)
   end
 
@@ -92,6 +96,7 @@ class User < ActiveRecord::Base
 
   def confirm_password_must_match
     return if password.blank? || password == confirm_password
+
     errors.add(:confirm_password, "does not match")
   end
 

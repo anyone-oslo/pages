@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Extensions
     module StringExtensions
@@ -12,4 +14,4 @@ module PagesCore
   end
 end
 
-String.send(:include, PagesCore::Extensions::StringExtensions)
+String.include PagesCore::Extensions::StringExtensions

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     module Templateable
@@ -13,6 +15,7 @@ module PagesCore
 
       def template
         return self[:template] if self[:template].present?
+
         inherited_or_default_template
       end
 
@@ -29,6 +32,7 @@ module PagesCore
       def singularized_subtemplate
         singularized = ActiveSupport::Inflector.singularize(base_template)
         return if base_template == singularized
+
         find_template_by_expression(
           Regexp.new("^" + Regexp.quote(singularized))
         )
@@ -69,6 +73,7 @@ module PagesCore
 
       def inherited_or_default_template
         return parent.default_subtemplate.to_s if parent
+
         (default_template_options[:root] || default_template || :index).to_s
       end
 

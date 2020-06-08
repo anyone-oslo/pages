@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Frontend
     class PagesController < ::FrontendController
@@ -45,6 +47,7 @@ module PagesCore
         return if request.path == canonical_path(@page)
         # Don't canonicalize if any unknown params are present
         return if (params.keys - %w[controller action path locale id]).any?
+
         redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 
@@ -80,6 +83,7 @@ module PagesCore
         template = page_template(@page)
         run_template_actions_for(template, @page)
         return if @already_rendered
+
         render template: "pages/templates/#{template}"
       end
 
@@ -94,6 +98,7 @@ module PagesCore
 
       def find_page_by_path
         return unless params[:path]
+
         @page = PagePath.get(locale, params[:path]).try(&:page)
       end
 
@@ -103,7 +108,7 @@ module PagesCore
       end
 
       def render_published_page(page)
-        if page && page.published?
+        if page&.published?
           @page = page
           render_page
         else
@@ -113,11 +118,13 @@ module PagesCore
 
       def redirect_page(page)
         return false unless page.redirects?
+
         redirect_to(page.redirect_path(locale: locale))
       end
 
       def require_page
         return if @page
+
         render_error 404
       end
     end

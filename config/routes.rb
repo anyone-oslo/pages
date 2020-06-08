@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 

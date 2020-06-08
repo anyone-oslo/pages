@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAttachments < ActiveRecord::Migration[5.2]
   def up
     rename_table :page_files, :attachments
@@ -14,12 +16,15 @@ class CreateAttachments < ActiveRecord::Migration[5.2]
     PageFile.reset_column_information
 
     locales = [I18n.default_locale,
-               PagesCore.config.locales&.keys].flatten.compact.map(&:to_sym).uniq
+               PagesCore.config.locales&.keys].flatten
+              .compact
+              .map(&:to_sym)
+              .uniq
 
     Attachment.all.each do |a|
       begin
         Dis::Storage.change_type("page_files", "attachments", a.content_hash)
-      rescue
+      rescue StandardError
         puts "Missing attachment: #{a.content_hash}"
       end
       locales.each do |l|
@@ -52,7 +57,7 @@ class CreateAttachments < ActiveRecord::Migration[5.2]
     Attachment.all.in_locale(I18n.default_locale).each do |a|
       begin
         Dis::Storage.change_type("attachments", "page_files", a.content_hash)
-      rescue
+      rescue StandardError
         puts "Missing attachment: #{a.content_hash}"
       end
 

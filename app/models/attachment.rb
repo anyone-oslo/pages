@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Attachment < ActiveRecord::Base
   include Dis::Model
   include PagesCore::Sweepable
@@ -25,12 +27,12 @@ class Attachment < ActiveRecord::Base
 
     def formats
       {
-        "audio/mpeg"      => :mp3,
-        "image/gif"       => :gif,
-        "image/jpeg"      => :jpg,
-        "image/jpg"       => :jpg,
-        "image/pjpeg"     => :jpg,
-        "image/png"       => :png,
+        "audio/mpeg" => :mp3,
+        "image/gif" => :gif,
+        "image/jpeg" => :jpg,
+        "image/jpg" => :jpg,
+        "image/pjpeg" => :jpg,
+        "image/png" => :png,
         "application/pdf" => :pdf
       }
     end
@@ -52,7 +54,7 @@ class Attachment < ActiveRecord::Base
 
   def filename_extension
     if filename_extension?
-      filename.match(/\.([^\.]+)$/)[1]
+      filename.match(/\.([^.]+)$/)[1]
     else
       ""
     end

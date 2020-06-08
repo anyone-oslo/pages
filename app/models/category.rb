@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Category < ActiveRecord::Base
   has_many :page_categories, dependent: :destroy
   has_many :pages, through: :page_categories

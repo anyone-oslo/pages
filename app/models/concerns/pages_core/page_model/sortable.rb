@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     module Sortable
@@ -12,8 +14,9 @@ module PagesCore
         def order_by_tags(tags)
           joins(
             "LEFT JOIN taggings ON taggings.taggable_id = pages.id AND " \
-            "taggings.tag_id IN (" + tags.map(&:id).join(",") + ") AND " \
-            "taggings.taggable_type = #{ActiveRecord::Base.connection.quote('Page')}"
+            "taggings.tag_id IN (#{tags.map(&:id).join(',')}) AND " \
+            "taggings.taggable_type = " \
+            "#{ActiveRecord::Base.connection.quote('Page')}"
           )
             .group("pages.id, localizations.id")
             .reorder(Arel.sql("COUNT(taggings.id) DESC"))

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class Engine < Rails::Engine
     # config.autoload_paths += Dir["#{config.root}/lib/"]

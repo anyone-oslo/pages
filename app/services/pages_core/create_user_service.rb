@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class CreateUserService
     attr_reader :attributes, :invite
@@ -28,6 +30,7 @@ module PagesCore
 
     def invite_attributes
       return {} unless invite
+
       { role_names: invite.role_names,
         creator: invite.user,
         activated: true }

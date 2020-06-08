@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Image < ActiveRecord::Base
   include DynamicImage::Model
   include PagesCore::Sweepable

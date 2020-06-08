@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Methods added to this helper will be available to all templates
 # in the application.
 module PagesCore
@@ -14,6 +16,7 @@ module PagesCore
       page.localize(link_locale) do |p|
         title = options[:title] || p.name.to_s
         return title unless conditional_options?(options)
+
         link_to(title, page_link_path(link_locale, p), class: options[:class])
       end
     end

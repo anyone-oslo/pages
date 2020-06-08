@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :pages do
   namespace :page_paths do
     desc "Build page paths"

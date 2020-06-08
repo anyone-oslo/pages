@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PasswordResetToken < ActiveRecord::Base
   belongs_to :user
   before_create :ensure_token

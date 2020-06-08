@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class ImagesController < ::ApplicationController
     include DynamicImage::Controller

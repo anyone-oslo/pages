@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Templates
     # = Template configuration
@@ -115,6 +117,7 @@ module PagesCore
         unless valid_template_options.include?(setting)
           raise "Invalid template configuration value: #{setting.inspect}"
         end
+
         set(
           template_path(template_name),
           template_config(setting, value, options)
@@ -151,6 +154,7 @@ module PagesCore
 
       def template_path(name)
         return [:default] if name == :_defaults
+
         [:templates, name]
       end
     end

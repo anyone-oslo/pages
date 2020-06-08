@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Admin::PagesController, type: :controller do
@@ -8,10 +10,9 @@ describe Admin::PagesController, type: :controller do
   before { login(user) }
 
   describe "GET index" do
-    let!(:page) { create(:page) }
-    let!(:hidden) { create(:hidden_page) }
-
     before do
+      page
+      create(:hidden_page)
       create(:deleted_page)
       get :index, params: { locale: locale }
     end
@@ -22,6 +23,7 @@ describe Admin::PagesController, type: :controller do
   describe "GET news" do
     context "without a news page" do
       before { get :news, params: { locale: locale } }
+
       it { is_expected.to redirect_to(admin_pages_url(locale)) }
     end
 
@@ -48,6 +50,7 @@ describe Admin::PagesController, type: :controller do
 
   describe "GET new" do
     before { get :new, params: { locale: locale } }
+
     let(:page) { assigns(:page) }
 
     it { is_expected.to render_template("admin/pages/new") }
@@ -110,6 +113,7 @@ describe Admin::PagesController, type: :controller do
 
   describe "GET edit" do
     before { get :edit, params: { locale: locale, id: page.id } }
+
     it { is_expected.to render_template("admin/pages/edit") }
 
     it "finds the page" do

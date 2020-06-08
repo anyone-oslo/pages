@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorsController < ::ApplicationController
   layout "errors"
 
@@ -56,14 +58,14 @@ class ErrorsController < ::ApplicationController
   end
 
   def error_report(request, exception)
-    { message:   exception.to_s,
-      url:       request.original_url,
-      env:       request.env.select { |_, v| v.is_a?(String) },
-      params:    params.to_unsafe_h,
-      session:   session.to_hash,
+    { message: exception.to_s,
+      url: request.original_url,
+      env: request.env.select { |_, v| v.is_a?(String) },
+      params: params.to_unsafe_h,
+      session: session.to_hash,
       backtrace: exception_backtrace(exception),
       timestamp: Time.now.utc,
-      user_id:   current_user.try(&:id) }
+      user_id: current_user.try(&:id) }
   end
 
   def exception_backtrace(exception)

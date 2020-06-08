@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageExportSerializer < ActiveModel::Serializer
   attributes :id, :path, :locale, :author_name, :status
   attributes(*PagesCore::Templates::TemplateConfiguration.all_blocks)

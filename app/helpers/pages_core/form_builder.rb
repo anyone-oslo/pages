@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class FormBuilder < ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper
@@ -11,6 +13,7 @@ module PagesCore
     def image_file_preview(attribute)
       return "" unless object.send(attribute) &&
                        !object.send(attribute).new_record?
+
       content_tag(
         :p, @template.dynamic_image_tag(object.send(attribute), size: "120x100")
       )
@@ -22,6 +25,7 @@ module PagesCore
 
     def label_and_errors(attribute, label_text)
       return label_text unless object.errors[attribute].any?
+
       error = content_tag(:span, object.errors[attribute].first, class: "error")
       safe_join([label_text, error], " ")
     end

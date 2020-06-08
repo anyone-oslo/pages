@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageImageExportSerializer < ActiveModel::Serializer
   attributes :id, :primary, :content_hash, :content_type, :filename,
              :alternative, :caption, :created_at

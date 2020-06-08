@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Admin
     module AdminHelper
@@ -33,23 +35,29 @@ module PagesCore
       def date_range(starts_at, ends_at)
         show_time = !(starts_at.is_a?(Date) && ends_at.is_a?(Date))
         dates = if starts_at.year != ends_at.year
-                  [l(starts_at, format: :pages_full), l(ends_at, format: :pages_full)]
+                  [l(starts_at, format: :pages_full),
+                   l(ends_at, format: :pages_full)]
                 elsif starts_at.month != ends_at.month
-                  [l(starts_at, format: :pages_date), l(ends_at, format: :pages_full)]
+                  [l(starts_at, format: :pages_date),
+                   l(ends_at, format: :pages_full)]
                 elsif starts_at.day != ends_at.day && !show_time
-                  [l(starts_at, format: :pages_day), l(ends_at, format: :pages_full)]
+                  [l(starts_at, format: :pages_day),
+                   l(ends_at, format: :pages_full)]
                 elsif starts_at.day != ends_at.day
-                  [l(starts_at, format: :pages_date), l(ends_at, format: :pages_full)]
+                  [l(starts_at, format: :pages_date),
+                   l(ends_at, format: :pages_full)]
                 elsif !show_time
                   [l(starts_at, format: :pages_full)]
                 else
-                  [l(starts_at, format: :pages_full), l(ends_at, format: :pages_time)]
+                  [l(starts_at, format: :pages_full),
+                   l(ends_at, format: :pages_time)]
                 end
         safe_join(dates.map(&:strip), "&ndash;".html_safe)
       end
 
       # Generates tags for an editable dynamic image.
-      def editable_dynamic_image_tag(image, width: 250, caption: false, locale: nil)
+      def editable_dynamic_image_tag(image, width: 250,
+                                     caption: false, locale: nil)
         react_component("EditableImage",
                         editable_image_options(
                           image,
@@ -72,9 +80,10 @@ module PagesCore
       def content_tab(name, options = {}, &block)
         @content_tabs ||= []
         return unless block_given?
+
         tab = {
-          name:    name.to_s.humanize,
-          key:     options[:key] || name.to_s.underscore.gsub(/[\s]+/, "_"),
+          name: name.to_s.humanize,
+          key: options[:key] || name.to_s.underscore.gsub(/\s+/, "_"),
           options: options,
           content: capture(&block)
         }
@@ -100,6 +109,7 @@ module PagesCore
                                           "use page_description_class=")
         end
         return unless string
+
         ActiveSupport::Deprecation.warn("Setting description with " \
                                         "page_description is deprecated, " \
                                         "use page_description=")

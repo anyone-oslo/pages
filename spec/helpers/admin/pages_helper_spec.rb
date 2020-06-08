@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Admin::PagesHelper, type: :helper do
@@ -50,9 +52,11 @@ RSpec.describe Admin::PagesHelper, type: :helper do
   end
 
   describe "publish_time" do
-    before { Timecop.freeze(Time.zone.parse("2016-02-10 14:10")) }
-    after { Timecop.return }
     subject { helper.publish_time(timestamp) }
+
+    before { Timecop.freeze(Time.zone.parse("2016-02-10 14:10")) }
+
+    after { Timecop.return }
 
     context "when in a different year" do
       let(:timestamp) { Time.zone.parse("2013-03-12 12:13") }

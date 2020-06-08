@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Autopublisher
   class << self
     def run!(_options = {})
@@ -13,6 +15,7 @@ class Autopublisher
 
     def queue!
       return unless queued_pages.any?
+
       PagesCore::AutopublishJob
         .set(wait_until: queued_pages.first.published_at)
         .perform_later

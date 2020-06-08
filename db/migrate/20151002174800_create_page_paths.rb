@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePagePaths < ActiveRecord::Migration[4.2]
   def change
     create_table :page_paths do |t|

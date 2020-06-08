@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagePath, type: :model do
@@ -10,12 +12,14 @@ describe PagePath, type: :model do
   it { is_expected.to validate_uniqueness_of(:path).scoped_to(:locale) }
 
   describe ".associate" do
-    subject(:path) { PagePath.associate(page, locale: "nb", path: "foo") }
+    subject(:path) do
+      described_class.associate(page, locale: "nb", path: "foo")
+    end
 
     let(:page) { create(:blank_page) }
 
     context "when detecting locale/path" do
-      subject(:path) { PagePath.associate(page) }
+      subject(:path) { described_class.associate(page) }
 
       let(:page) { create(:page, locale: "nb", name: "Foobar") }
 
@@ -29,9 +33,10 @@ describe PagePath, type: :model do
     end
 
     context "when path doesn't exist" do
-      it { is_expected.to be_a(PagePath) }
+      it { is_expected.to be_a(described_class) }
+
       it "creates a new PagePath" do
-        expect { path }.to change(PagePath, :count).by(1)
+        expect { path }.to change(described_class, :count).by(1)
       end
     end
 
@@ -40,10 +45,10 @@ describe PagePath, type: :model do
         create(:page_path, page: page, locale: "nb", path: "foo")
       end
 
-      it { is_expected.to be_a(PagePath) }
+      it { is_expected.to be_a(described_class) }
 
       it "does not create a new PagePath" do
-        expect { path }.to change(PagePath, :count).by(0)
+        expect { path }.to change(described_class, :count).by(0)
       end
 
       it "changes the page" do
@@ -61,7 +66,7 @@ describe PagePath, type: :model do
   end
 
   describe ".get" do
-    subject { PagePath.get("nb", "foo/bar") }
+    subject { described_class.get("nb", "foo/bar") }
 
     context "when path exists" do
       let!(:path) { create(:page_path, locale: "nb", path: "foo/bar") }

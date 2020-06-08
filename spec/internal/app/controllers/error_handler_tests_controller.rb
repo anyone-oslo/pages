@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ErrorHandlerTestsController < ApplicationController
   def exception
-    raise Exception, "An error occurred"
+    raise StandardError, "An error occurred"
   end
 
   def not_authorized

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Authentication
     extend ActiveSupport::Concern
@@ -33,13 +35,14 @@ module PagesCore
         user = User.where(id: session[:current_user_id]).first
       end
 
-      return unless user && user.can_login?
+      return unless user&.can_login?
 
       authenticate!(user)
     end
 
     def finalize_authenticated_session
       return unless current_user
+
       session[:current_user_id] = current_user.id
     end
   end

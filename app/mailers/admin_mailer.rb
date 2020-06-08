@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminMailer < ActionMailer::Base
   default from: proc { "\"Pages\" <support@anyone.no>" }
 
@@ -7,8 +9,8 @@ class AdminMailer < ActionMailer::Base
     @description = description
     short_message = @error_report[:message].gsub(/[\s\n]+/, " ")[0..80]
     mail(
-      to:      "system+error@anyone.no",
-      from:    "\"Error reports\" <system+error@anyone.no>",
+      to: "system+error@anyone.no",
+      from: "\"Error reports\" <system+error@anyone.no>",
       subject: "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
     )
   end
@@ -26,7 +28,7 @@ class AdminMailer < ActionMailer::Base
     @invite = invite
     @url = url
     mail(
-      to:      @invite.email,
+      to: @invite.email,
       subject: "#{PagesCore.config(:site_name)} has invited you to Pages"
     )
   end

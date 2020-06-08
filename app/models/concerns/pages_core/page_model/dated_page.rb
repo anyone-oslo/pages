@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     module DatedPage
@@ -14,18 +16,21 @@ module PagesCore
       module ClassMethods
       end
 
-      # Finds the page's next sibling by date. Returns nil if there isn't one.
+      # Finds the page's next sibling by date. Returns nil if there
+      # isn't one.
       def next_sibling_by_date
         siblings_by_date.where("starts_at >= ?", starts_at)&.first
       end
 
-      # Finds the page's previous sibling by date. Returns nil if there isn't one.
+      # Finds the page's previous sibling by date. Returns nil if
+      # there isn't one.
       def previous_sibling_by_date
         siblings_by_date.where("starts_at < ?", starts_at)&.last
       end
 
       def upcoming?
         return false unless ends_at?
+
         ends_at > Time.zone.now
       end
 

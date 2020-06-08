@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   class AttachmentEmbedder
     include ActionView::Helpers::AssetTagHelper

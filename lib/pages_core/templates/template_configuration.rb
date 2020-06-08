@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Templates
     class TemplateConfiguration
@@ -7,7 +9,9 @@ module PagesCore
         def all_blocks
           (config.get(:default, :blocks).keys +
            all_templates.map { |t| configured_block_names(t) } +
-           all_templates.map { |t| enabled_block_names(t) }).flatten.compact.uniq
+           all_templates.map do |t|
+             enabled_block_names(t)
+           end).flatten.compact.uniq
         end
 
         def all_templates
@@ -94,9 +98,9 @@ module PagesCore
 
       def default_block_options(block_name)
         {
-          title:    block_name.to_s.humanize,
+          title: block_name.to_s.humanize,
           optional: true,
-          size:     :small
+          size: :small
         }
       end
     end
@@ -149,26 +153,26 @@ module PagesCore
 
       def default_blocks
         {
-          name:     { size: :field, class: "page_title" },
-          body:     { size: :large },
+          name: { size: :field, class: "page_title" },
+          body: { size: :large },
           headline: { size: :field },
-          excerpt:  {},
-          boxout:   {}
+          excerpt: {},
+          boxout: {}
         }.merge(default_meta_blocks)
       end
 
       def default_meta_blocks
         {
-          meta_title:             { size: :field },
-          meta_description:       { size: :small },
-          open_graph_title:       { size: :field },
+          meta_title: { size: :field },
+          meta_description: { size: :small },
+          open_graph_title: { size: :field },
           open_graph_description: { size: :small }
         }
       end
 
       def default_block_configuration(default)
         default.blocks do |block|
-          default_blocks.keys.each do |name|
+          default_blocks.each_key do |name|
             block.send(
               name,
               template_block_localization("#{name}.name"),

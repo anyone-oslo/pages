@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Page templates" do
+RSpec.describe "Page templates", type: :system do
   subject { page }
 
   let(:page_model) do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     module Pathable
@@ -6,7 +8,7 @@ module PagesCore
       included do
         has_many :page_paths, dependent: :destroy
 
-        validates :path_segment, format: { with: /\A[[[:alnum:]]\-_]*\z/ }
+        validates :path_segment, format: { with: /\A[[[:alnum:]]-_]*\z/ }
         validate :path_segment_cannot_be_routable
         before_validation :ensure_no_path_segment_on_deletion
         after_save :ensure_path_segment
@@ -57,9 +59,9 @@ module PagesCore
       end
 
       def generated_path_segment
-        transliterated_name.gsub(/[^[[:alnum:]]\-_]+/, "-")
-                           .gsub(/[\-]{2,}/, "-")
-                           .gsub(/(^\-|\-$)/, "")
+        transliterated_name.gsub(/[^[[:alnum:]]-_]+/, "-")
+                           .gsub(/-{2,}/, "-")
+                           .gsub(/(^-|-$)/, "")
                            .mb_chars
                            .downcase
       end

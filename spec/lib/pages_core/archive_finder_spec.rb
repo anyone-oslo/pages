@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::ArchiveFinder do
@@ -46,27 +48,33 @@ describe PagesCore::ArchiveFinder do
   end
 
   describe "#by_year" do
-    before { pages }
     subject { archive_finder.by_year(2012) }
 
+    before { pages }
+
     it { is_expected.to match([page1, page2, page3]) }
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to match([page1, page2, page3]) }
     end
   end
 
   describe "#by_year_and_month" do
-    before { pages }
     subject { archive_finder.by_year_and_month(2012, 4) }
 
+    before { pages }
+
     it { is_expected.to match([page2, page3]) }
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to match([page2, page3]) }
     end
   end
@@ -77,14 +85,18 @@ describe PagesCore::ArchiveFinder do
     context "without items" do
       it { is_expected.to be_nil }
     end
+
     context "with items" do
       before { pages }
+
       it { is_expected.to eq([2013, 1]) }
     end
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to eq([2013, 1]) }
     end
   end
@@ -95,14 +107,18 @@ describe PagesCore::ArchiveFinder do
     context "without items" do
       it { is_expected.to eq([]) }
     end
+
     context "with items" do
       before { pages }
+
       it { is_expected.to eq([3, 4]) }
     end
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to eq([3, 4]) }
     end
   end
@@ -113,14 +129,18 @@ describe PagesCore::ArchiveFinder do
     context "without items" do
       it { is_expected.to eq([]) }
     end
+
     context "with items" do
       before { pages }
+
       it { is_expected.to eq([[3, 1], [4, 2]]) }
     end
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to eq([[3, 1], [4, 2]]) }
     end
   end
@@ -133,6 +153,7 @@ describe PagesCore::ArchiveFinder do
 
       it { is_expected.to eq(:created_at) }
     end
+
     context "with options" do
       let(:archive_finder) do
         described_class.new(Page.visible, timestamp: :published_at)
@@ -148,14 +169,18 @@ describe PagesCore::ArchiveFinder do
     context "without items" do
       it { is_expected.to eq([]) }
     end
+
     context "with items" do
       before { pages }
+
       it { is_expected.to eq([2012, 2013]) }
     end
+
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
+
       it { is_expected.to eq([2012, 2013]) }
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LoginMacros
   def login(user = nil)
     @current_user = user || create(:user)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tag < ActiveRecord::Base
   include PagesCore::HumanizableParam
   has_many :taggings, dependent: :destroy
@@ -11,6 +13,7 @@ class Tag < ActiveRecord::Base
       tags = (taggable.tags.sorted + pinned.sorted).uniq
 
       return tags unless tags.count < limit
+
       tags + suggestions(taggable, tags, limit)[0...(limit - tags.length)]
     end
 
@@ -26,10 +29,8 @@ class Tag < ActiveRecord::Base
 
     def suggestions(taggable, tags, limit)
       suggestions = taggable_suggestions(taggable, limit).to_a
-      if suggestions.length < limit
-        suggestions += all_suggestions(limit)
-      end
-      suggestions.reject { |t| tags.include?(t) }.uniq[0...(limit)]
+      suggestions += all_suggestions(limit) if suggestions.length < limit
+      suggestions.reject { |t| tags.include?(t) }.uniq[0...limit]
     end
 
     def taggable_suggestions(taggable, limit)

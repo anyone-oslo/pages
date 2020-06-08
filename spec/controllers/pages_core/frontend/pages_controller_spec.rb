@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PagesCore::Frontend::PagesController, type: :controller do
@@ -15,6 +17,7 @@ describe PagesCore::Frontend::PagesController, type: :controller do
   describe "GET index" do
     context "when no root pages exist" do
       before { get :index }
+
       it { is_expected.to render_template("errors/404") }
     end
 
@@ -39,7 +42,9 @@ describe PagesCore::Frontend::PagesController, type: :controller do
       it { is_expected.to render_template("feeds/pages") }
 
       it "sets the content type" do
-        expect(response.content_type).to eq("application/rss+xml; charset=utf-8")
+        expect(response.content_type).to(
+          eq("application/rss+xml; charset=utf-8")
+        )
       end
     end
   end

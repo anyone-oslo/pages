@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Admin
     module NewsPageController
@@ -48,12 +50,14 @@ module PagesCore
                           .in_locale(@locale)
                           .reorder("parent_page_id ASC, position ASC")
         return if @news_pages.any?
+
         redirect_to(admin_pages_url(@locale))
       end
 
       # Redirect away if no news pages has been configured
       def require_news_pages
         return if Page.news_pages.any?
+
         redirect_to(admin_pages_url(@locale))
       end
 

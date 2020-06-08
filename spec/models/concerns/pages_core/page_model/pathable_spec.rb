@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -51,11 +51,13 @@ describe PagesCore::PageModel::Pathable, type: :model do
 
     context "when page is deleted" do
       before { page.update(status: 4) }
+
       it { is_expected.to eq("") }
     end
 
     context "when page name is changed" do
       before { page.update(name: "New name") }
+
       it { is_expected.to eq(path_segment) }
     end
   end

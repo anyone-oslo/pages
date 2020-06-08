@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module Sweepable
     extend ActiveSupport::Concern
@@ -14,6 +16,7 @@ module PagesCore
     def sweep_cache!
       return unless PagesCore::CacheSweeper.enabled
       return if cache_swept
+
       PagesCore::SweepCacheJob.perform_later
       self.cache_swept = true
     end

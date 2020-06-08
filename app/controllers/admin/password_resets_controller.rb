@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class PasswordResetsController < Admin::AdminController
     before_action :find_password_reset_token, only: %i[show update]
@@ -47,6 +49,7 @@ module Admin
 
     def find_user_by_email(email)
       return unless email
+
       User.login_name(params[:username])
     end
 
@@ -73,6 +76,7 @@ module Admin
 
     def check_for_expired_token
       return unless @password_reset_token.expired?
+
       @password_reset_token.destroy
       flash[:notice] = "Your password reset link has expired"
       redirect_to(login_admin_users_url)

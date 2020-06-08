@@ -9,17 +9,41 @@ AllCops:
     - "spec/internal/db/schema.rb"
     - 'node_modules/**/*'
 
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*"
+    - "lib/rails/generators/**/*_generator.rb"
+
 Metrics/BlockLength:
   Exclude:
     - "**/*_spec.rb"
-    - "spec/factories.rb"
+    - "**/*.builder"
+    - "config/routes.rb"
+    - "spec/factories/**/*.rb"
     - "spec/rails_helper.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "db/migrate/*"
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*"
+    - "lib/rails/generators/**/*_generator.rb"
 
 Style/AsciiComments:
   Enabled: false
 
 Style/Documentation:
   Enabled: false
+
+Style/FormatStringToken:
+  Exclude:
+    - "config/routes.rb"
+
+Style/MethodMissingSuper:
+  Exclude:
+    - "lib/pages_core/templates/configuration_proxy.rb"
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.extract!(
   @image, :id, :filename, :content_type, :content_hash,
   :content_length, :colorspace, :real_width, :real_height, :crop_width,

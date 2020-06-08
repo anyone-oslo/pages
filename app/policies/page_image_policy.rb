@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageImagePolicy < Policy
   def index?
     true

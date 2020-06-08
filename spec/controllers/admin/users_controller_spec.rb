@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Admin::UsersController, type: :controller do
@@ -40,6 +42,7 @@ describe Admin::UsersController, type: :controller do
   describe "GET login" do
     context "when not logged in" do
       before { get :login }
+
       it { is_expected.to render_template("admin/users/login") }
     end
 
@@ -81,6 +84,7 @@ describe Admin::UsersController, type: :controller do
       let(:params) { { name: "foo" } }
 
       before { post :create, params: { user: params } }
+
       it { is_expected.to render_template("admin/users/new") }
 
       it "assigns the user" do
@@ -90,6 +94,7 @@ describe Admin::UsersController, type: :controller do
 
     context "with valid params" do
       before { post :create, params: { user: params } }
+
       it { is_expected.to redirect_to(admin_default_url) }
 
       it "authenticates the user" do
@@ -135,10 +140,12 @@ describe Admin::UsersController, type: :controller do
 
   describe "PUT update" do
     before { login(user) }
+
     let(:params) { { email: "new@example.com" } }
 
     context "with valid params" do
       before { put :update, params: { id: user.id, user: params } }
+
       it { is_expected.to redirect_to(admin_users_url) }
     end
 
@@ -146,6 +153,7 @@ describe Admin::UsersController, type: :controller do
       let(:params) { { email: "invalid" } }
 
       before { put :update, params: { id: user.id, user: params } }
+
       it { is_expected.to render_template("admin/users/edit") }
     end
   end

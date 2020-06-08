@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     module Tree
@@ -5,17 +7,17 @@ module PagesCore
 
       included do
         belongs_to :parent,
-                   class_name:  "Page",
+                   class_name: "Page",
                    foreign_key: :parent_page_id,
-                   inverse_of:  :children,
-                   optional:    true,
-                   touch:       true
+                   inverse_of: :children,
+                   optional: true,
+                   touch: true
 
         has_many :children,
-                 class_name:  "Page",
+                 class_name: "Page",
                  foreign_key: :parent_page_id,
-                 inverse_of:  :parent,
-                 dependent:   :destroy
+                 inverse_of: :parent,
+                 dependent: :destroy
 
         # This must be included after the belongs_to call in order
         # to override the .parent method.
@@ -66,17 +68,20 @@ module PagesCore
         # Returns all children, recursively
         def all_subpages
           return nil unless subpages.any?
+
           localized_subpages.map { |p| [p, p.all_subpages] }.flatten.compact
         end
 
         def localized_subpages
           return subpages unless locale?
+
           subpages.localized(locale)
         end
 
         # Finds the page's next sibling. Returns nil if there isn't one.
         def next_sibling
           return unless siblings.any?
+
           siblings[(siblings.to_a.index(self) + 1)...siblings.length]
             .try(&:first)
         end
@@ -94,6 +99,7 @@ module PagesCore
         # Finds the page's next sibling. Returns nil if there isn't one.
         def previous_sibling
           return unless siblings.any?
+
           siblings[0...siblings.to_a.index(self)].try(&:last)
         end
 

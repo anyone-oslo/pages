@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
@@ -18,6 +20,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
 
     context "when notice has been set" do
       before { helper.flash[:notice] = "Notice" }
+
       it { is_expected.to eq(classes + ["with_notice"]) }
     end
   end
@@ -51,6 +54,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
 
     context "when description has been set" do
       before { helper.page_description = "Foo" }
+
       it { is_expected.to eq("Foo") }
     end
 
@@ -70,6 +74,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
 
     context "when description links have been set" do
       before { helper.page_description_links = "Foo" }
+
       it { is_expected.to eq("Foo") }
     end
 
@@ -89,6 +94,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
 
     context "when description has been set" do
       before { helper.page_title = "Foo" }
+
       it { is_expected.to eq("Foo") }
     end
 

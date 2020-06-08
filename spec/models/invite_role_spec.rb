@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe InviteRole, type: :model do
@@ -11,7 +13,7 @@ describe InviteRole, type: :model do
   describe "#to_s" do
     subject { role.to_s }
 
-    let(:role) { InviteRole.new(name: "foo") }
+    let(:role) { described_class.new(name: "foo") }
 
     it { is_expected.to eq("Foo") }
   end

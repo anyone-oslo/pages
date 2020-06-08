@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Abstract controller for all frontend controllers.
 module PagesCore
   class FrontendController < ::ApplicationController
@@ -32,6 +34,7 @@ module PagesCore
       I18n.locale = locale_param
     rescue I18n::InvalidLocale
       raise if Rails.application.config.consider_all_requests_local
+
       render_error 404
     end
   end

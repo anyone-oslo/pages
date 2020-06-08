@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :pages do
   namespace :export do
     desc "Export pages"

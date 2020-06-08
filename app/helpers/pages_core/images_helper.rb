@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module ImagesHelper
     include DynamicImage::Helper
@@ -28,6 +30,7 @@ module PagesCore
     def extract_alt_text(record_or_array)
       record = extract_dynamic_image_record(record_or_array)
       return {} unless record.alternative?
+
       { alt: record.alternative }
     end
   end

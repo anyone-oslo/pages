@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # # PageBuilder
 #
 # PageBuilder is a simple DSL for building pages, for use in ie. seeds.rb

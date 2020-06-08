@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ErrorResponses
   # See: https://github.com/rails/rails/pull/11289#issuecomment-118612393
   def respond_without_detailed_exceptions

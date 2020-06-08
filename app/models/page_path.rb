@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PagePath < ActiveRecord::Base
   class PageNotSavedError < StandardError; end
   class NoPathError < StandardError; end
@@ -33,6 +35,7 @@ class PagePath < ActiveRecord::Base
       raise PageNotSavedError unless page.id?
       raise NoLocaleError unless locale
       raise NoPathError unless path
+
       existing = get(locale, path)
 
       return create(locale: locale, path: path, page: page) unless existing

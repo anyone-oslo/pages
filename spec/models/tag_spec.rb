@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Tag, type: :model do
   it { is_expected.to have_many(:taggings) }
 
   describe ".tags_and_suggestions_for" do
-    subject { Tag.tags_and_suggestions_for(taggable) }
+    subject { described_class.tags_and_suggestions_for(taggable) }
 
     let!(:tag) { create(:tag) }
     let(:taggable) { create(:page) }

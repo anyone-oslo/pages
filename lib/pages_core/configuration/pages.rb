@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "pages_core/attachment_embedder"
 
 module PagesCore

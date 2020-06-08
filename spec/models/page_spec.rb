@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Page, type: :model do
   describe ".archive_finder" do
-    subject(:finder) { Page.archive_finder }
+    subject(:finder) { described_class.archive_finder }
 
     it { is_expected.to be_a(PagesCore::ArchiveFinder) }
     specify { expect(finder.timestamp_attribute).to eq(:published_at) }
   end
 
   describe ".enabled_feeds" do
-    subject { Page.enabled_feeds(I18n.default_locale, options) }
+    subject { described_class.enabled_feeds(I18n.default_locale, options) }
 
     let(:options) { {} }
 
@@ -38,7 +40,7 @@ describe Page, type: :model do
   end
 
   describe ".published" do
-    subject { Page.published }
+    subject { described_class.published }
 
     let!(:published_page) { create(:page) }
     let!(:hidden_page) { create(:page, status: 3) }
@@ -52,7 +54,9 @@ describe Page, type: :model do
   end
 
   describe ".order_by_tags" do
-    subject { Page.localized(I18n.default_locale).order_by_tags([foo, bar]) }
+    subject do
+      described_class.localized(I18n.default_locale).order_by_tags([foo, bar])
+    end
 
     let(:foo) { Tag.create(name: "Foo") }
     let(:bar) { Tag.create(name: "Bar") }
@@ -65,10 +69,10 @@ describe Page, type: :model do
   end
 
   describe ".localized" do
-    subject { Page.localized("nb") }
+    subject { described_class.localized("nb") }
 
-    let!(:norwegian_page) { Page.create(name: "Test", locale: "nb") }
-    let!(:english_page) { Page.create(name: "Test", locale: "en") }
+    let!(:norwegian_page) { described_class.create(name: "Test", locale: "nb") }
+    let!(:english_page) { described_class.create(name: "Test", locale: "en") }
 
     it { is_expected.to include(norwegian_page) }
     it { is_expected.not_to include(english_page) }
@@ -78,7 +82,7 @@ describe Page, type: :model do
     subject { page.locales }
 
     let(:page) do
-      Page.create(
+      described_class.create(
         excerpt: { "en" => "My test page", "nb" => "Testside" },
         locale: "en"
       )
@@ -88,7 +92,7 @@ describe Page, type: :model do
   end
 
   describe ".status_labels" do
-    subject(:labels) { Page.status_labels }
+    subject(:labels) { described_class.status_labels }
 
     it "returns the status labels" do
       expect(labels).to eq(0 => "Draft",
@@ -100,9 +104,9 @@ describe Page, type: :model do
   end
 
   describe "with ancestors" do
-    let(:root)   { Page.create }
-    let(:parent) { Page.create(parent: root) }
-    let(:page)   { Page.create(parent: parent) }
+    let(:root)   { described_class.create }
+    let(:parent) { described_class.create(parent: root) }
+    let(:page)   { described_class.create(parent: parent) }
 
     it "belongs to the parent" do
       expect(page.parent).to eq(parent)
@@ -123,7 +127,7 @@ describe Page, type: :model do
 
   describe "setting multiple locales" do
     let(:page) do
-      Page.create(
+      described_class.create(
         excerpt: { "en" => "My test page", "nb" => "Testside" },
         locale: "en"
       )
@@ -144,7 +148,7 @@ describe Page, type: :model do
 
   describe "removing a locale" do
     let(:page) do
-      Page.create(
+      described_class.create(
         excerpt: { "en" => "My test page", "nb" => "Testside" },
         locale: "en"
       )
@@ -161,14 +165,14 @@ describe Page, type: :model do
   end
 
   describe "uninitialized localization" do
-    let(:page) { Page.new }
+    let(:page) { described_class.new }
 
     specify { expect(page.body?).to eq(false) }
     specify { expect(page.body).to be_a(String) }
   end
 
   describe "with an excerpt" do
-    let(:page) { Page.create(excerpt: "My test page", locale: "en") }
+    let(:page) { described_class.create(excerpt: "My test page", locale: "en") }
 
     it "responds to excerpt?" do
       expect(page.excerpt?).to eq(true)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "pages_core/templates/block_configuration"
 require "pages_core/templates/configuration_proxy"
 require "pages_core/templates/configuration_handler"
@@ -28,7 +30,7 @@ module PagesCore
           .uniq
           .compact
           .sort
-          .map { |f| f.gsub(/\.[\w\.]+$/, "") }
+          .map { |f| f.gsub(/\.[\w.]+$/, "") }
       end
 
       def template_files_in_dir(dir)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PreviewPagesController
     extend ActiveSupport::Concern
@@ -8,6 +10,7 @@ module PagesCore
 
     def preview
       redirect_to(page_url(@locale, @page)) && return unless logged_in?
+
       @page.attributes = page_params.merge(
         status: 2,
         published_at: Time.zone.now,

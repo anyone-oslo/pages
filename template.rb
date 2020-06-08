@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 gem "pages_core", git: "git@github.com:anyone-oslo/pages.git", branch: "master"
 
 gem_group :development do

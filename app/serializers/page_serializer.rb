@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PageSerializer < ActiveModel::Serializer
   attributes :id, :param, :parent_page_id, :locale
   attributes(*PagesCore::Templates::TemplateConfiguration.all_blocks)

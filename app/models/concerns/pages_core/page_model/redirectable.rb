@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PagesCore
   module PageModel
     class InvalidRedirectUrl < StandardError; end
@@ -24,6 +26,7 @@ module PagesCore
             unless value.is_a?(String) || value.is_a?(Symbol)
               raise InvalidRedirectUrl, "must be a string or a symbol"
             end
+
             path.gsub!("/:#{key}", "/#{value}")
           end
         end

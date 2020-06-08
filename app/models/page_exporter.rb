@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "fileutils"
 
 class PageExporter
@@ -46,7 +48,6 @@ class PageExporter
     path = page_path(page)
     page.locales.map { |l| page.localize(l) }.each do |p|
       json = PageExportSerializer.new(p).to_json
-      basename = path.join("#{page_file_name(p)}.#{p.locale}")
       write_file(path.join("page.#{p.locale}.json"), json)
       write_file(path.join("page.#{p.locale}.yml"), JSON.parse(json).to_yaml)
       write_file(path.join("page.#{p.locale}.txt"), text_page(p))

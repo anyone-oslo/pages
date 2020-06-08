@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe PagesCore::PagePathHelper, type: :helper do
@@ -11,16 +13,19 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
 
     context "when localizations are disabled" do
       before { PagesCore.config.localizations = :disabled }
+
       it { is_expected.to eq("/category/product") }
     end
 
     context "when localizations are enabled" do
       before { PagesCore.config.localizations = :enabled }
+
       it { is_expected.to eq("/nb/category/product") }
     end
 
     context "when page doesn't have a page path" do
       before { page.path_segment = "" }
+
       it { is_expected.to eq("/nb/pages/#{page.id}-product") }
     end
   end
@@ -30,16 +35,19 @@ RSpec.describe PagesCore::PagePathHelper, type: :helper do
 
     context "when localizations are disabled" do
       before { PagesCore.config.localizations = :disabled }
+
       it { is_expected.to eq("http://test.host/category/product") }
     end
 
     context "when localizations are enabled" do
       before { PagesCore.config.localizations = :enabled }
+
       it { is_expected.to eq("http://test.host/nb/category/product") }
     end
 
     context "when page doesn't have a page path" do
       before { page.path_segment = "" }
+
       it { is_expected.to eq("http://test.host/nb/pages/#{page.id}-product") }
     end
   end
