@@ -1,0 +1,12 @@
+{
+  "name": "pages_core",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.4"
+  },
+  "scripts": {
+    "lint-javascript": "eslint 'app/assets/javascripts/**/*.js*'"
+  }
+}

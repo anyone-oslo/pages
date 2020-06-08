@@ -2,6 +2,7 @@ coverage/
 *.gem
 .bundle
 .ruby-version
+node_modules/
 pkg/*
 doc/*
 tmp/*
