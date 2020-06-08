@@ -33,7 +33,7 @@ class RichTextArea extends React.Component {
       selectionStart + prefix.length + replacement.length
     );
     this.setValue(textarea.value);
-  };
+  }
 
   handleChange(evt) {
     this.setValue(evt.target.value);

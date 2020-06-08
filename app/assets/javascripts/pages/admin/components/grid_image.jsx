@@ -56,7 +56,7 @@ class GridImage extends React.Component {
                      locales={this.props.locales}
                      csrf_token={this.props.csrf_token}
                      onUpdate={this.props.onUpdate} />
-    )
+    );
   }
 
   renderPlaceholder() {

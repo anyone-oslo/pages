@@ -63,7 +63,7 @@ class Tree {
     var self = this;
 
     var index = { id: startId, node: obj };
-    indexes[this.cnt + ''] = index;
+    indexes[this.cnt + ""] = index;
     this.cnt++;
 
     if (obj.children && obj.children.length) {
@@ -81,7 +81,7 @@ class Tree {
           index.parent = parent.id;
         }
 
-        indexes[self.cnt + ''] = index;
+        indexes[self.cnt + ""] = index;
         children.push(self.cnt);
         self.cnt++;
 
@@ -92,7 +92,7 @@ class Tree {
       parent.children = children;
 
       children.forEach(function(id, i) {
-        var index = indexes[id + ''];
+        var index = indexes[id + ""];
         if (i > 0) {
           index.prev = children[i - 1];
         }
@@ -106,7 +106,7 @@ class Tree {
   }
 
   getIndex(id) {
-    var index = this.indexes[id + ''];
+    var index = this.indexes[id + ""];
     if (index) {
       return index;
     }
@@ -117,7 +117,7 @@ class Tree {
     del(index);
 
     function del(index) {
-      delete self.indexes[index.id + ''];
+      delete self.indexes[index.id + ""];
       if (index.children && index.children.length) {
         index.children.forEach(function(child) {
           del(self.getIndex(child));
@@ -259,13 +259,13 @@ class Tree {
     var obj = this.remove(fromId);
     var index = null;
 
-    if (placement === 'before') {
+    if (placement === "before") {
       index = this.insertBefore(obj, toId);
-    } else if (placement === 'after') {
+    } else if (placement === "after") {
       index = this.insertAfter(obj, toId);
-    } else if(placement === 'prepend') {
+    } else if(placement === "prepend") {
       index = this.prepend(obj, toId);
-    } else if(placement === 'append') {
+    } else if(placement === "append") {
       index = this.append(obj, toId);
     }
 

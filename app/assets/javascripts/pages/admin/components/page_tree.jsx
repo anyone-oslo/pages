@@ -190,7 +190,7 @@ class PageTree extends Reflux.Component {
     if (diffX < 0) {
       // left
       if (index.parent && !index.next) {
-        newIndex = tree.move(index.id, index.parent, 'after');
+        newIndex = tree.move(index.id, index.parent, "after");
       }
     } else if (diffX > paddingLeft) {
       // right
@@ -198,7 +198,7 @@ class PageTree extends Reflux.Component {
         var prev = tree.getIndex(index.prev);
 
         if (!prev.node.leaf && !prev.node.collapsed) {
-          newIndex = tree.move(index.id, index.prev, 'append');
+          newIndex = tree.move(index.id, index.prev, "append");
         }
       }
     }
@@ -212,7 +212,7 @@ class PageTree extends Reflux.Component {
     if (diffY < (0 - dragging.h * 0.5)) {
       // up
       var above = tree.getNodeByTop(index.top-1);
-      newIndex = tree.move(index.id, above.id, 'before');
+      newIndex = tree.move(index.id, above.id, "before");
     } else if (diffY > dragging.h * 1.5) {
       // down
       let below = index.next ?
@@ -221,9 +221,9 @@ class PageTree extends Reflux.Component {
 
       if (below && below.parent !== index.id) {
         if (below.children && below.children.length && !below.node.collapsed) {
-          newIndex = tree.move(index.id, below.id, 'prepend');
+          newIndex = tree.move(index.id, below.id, "prepend");
         } else {
-          newIndex = tree.move(index.id, below.id, 'after');
+          newIndex = tree.move(index.id, below.id, "after");
         }
       }
     }
@@ -265,8 +265,8 @@ class PageTree extends Reflux.Component {
     this._dragListener = (e) => self.drag(e);
     this._dragEndListener = () => self.dragEnd();
 
-    window.addEventListener('mousemove', this._dragListener);
-    window.addEventListener('mouseup', this._dragEndListener);
+    window.addEventListener("mousemove", this._dragListener);
+    window.addEventListener("mouseup", this._dragEndListener);
   }
 
   dragEnd() {
@@ -279,8 +279,8 @@ class PageTree extends Reflux.Component {
       dragging: this.initDragging()
     });
 
-    window.removeEventListener('mousemove', this._dragListener);
-    window.removeEventListener('mouseup', this._dragEndListener);
+    window.removeEventListener("mousemove", this._dragListener);
+    window.removeEventListener("mouseup", this._dragEndListener);
   }
 
   toggleCollapse(nodeId) {

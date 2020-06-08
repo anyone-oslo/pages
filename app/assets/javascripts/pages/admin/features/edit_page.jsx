@@ -49,7 +49,7 @@ class EditPage {
     $("#previewButton").click(function() {
       var button = this;
       var form = $(button).closest("form").get(0);
-      var previewUrl = $(this).data('url');
+      var previewUrl = $(this).data("url");
 
       // Rewrite the form and submit
       form.oldAction = form.action;
@@ -91,7 +91,7 @@ class EditPage {
 }
 
 $(function () {
-  $('.edit-page').each(function() {
-    new EditPage(this)}
+  $(".edit-page").each(function() {
+    new EditPage(this);}
   );
 });

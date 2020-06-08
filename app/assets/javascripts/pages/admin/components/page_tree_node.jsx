@@ -93,7 +93,7 @@ class PageTreeNode extends React.Component {
       if (self.props.addChild) {
         self.props.addChild(self.props.index);
       }
-    }
+    };
 
     if (!node.collapsed &&
         this.permitted("create") &&
@@ -128,9 +128,9 @@ class PageTreeNode extends React.Component {
     if (index.children && index.children.length && !index.node.collapsed) {
       var childrenStyles = {};
       if (index.node.collapsed) {
-        childrenStyles.display = 'none';
+        childrenStyles.display = "none";
       }
-      childrenStyles['paddingLeft'] = this.props.paddingLeft + 'px';
+      childrenStyles["paddingLeft"] = this.props.paddingLeft + "px";
 
       return (
         <div className="children" style={childrenStyles}>
@@ -172,7 +172,7 @@ class PageTreeNode extends React.Component {
       if (self.props.onCollapse) {
         self.props.onCollapse(nodeId);
       }
-    }
+    };
 
     if (this.visibleChildren().length > 0) {
       let collapsed = index.node.collapsed;
@@ -186,7 +186,7 @@ class PageTreeNode extends React.Component {
 
       return (
         <i className={classnames}
-           onMouseDown={function(e) {e.stopPropagation()}}
+           onMouseDown={function(e) {e.stopPropagation();}}
            onClick={handleCollapse} />
       );
     }
@@ -220,7 +220,7 @@ class PageTreeNode extends React.Component {
   }
 
   editUrl(page) {
-    return(`/admin/${page.locale}/pages/${page.param}/edit`)
+    return(`/admin/${page.locale}/pages/${page.param}/edit`);
   }
 
   node() {
@@ -253,7 +253,7 @@ class PageTreeNode extends React.Component {
       if (self.permitted("edit") && !editing && props.onDragStart) {
         props.onDragStart(props.index.id, self.refs.inner, e);
       }
-    }
+    };
 
     if (this.node().status != 4) {
       return (
@@ -276,7 +276,7 @@ class PageTreeNode extends React.Component {
 
     let handleNameChange = function(event) {
       self.setState({newName: event.target.value});
-    }
+    };
 
     let performEdit = function(event) {
       event.preventDefault();
@@ -284,12 +284,12 @@ class PageTreeNode extends React.Component {
         name: self.state.newName,
         editing: false
       });
-    }
+    };
 
     let cancelEdit = function(e) {
       self.setState({newName: self.node().name});
       self.updatePage({editing: false});
-    }
+    };
 
     return (
       <div className="page edit">
@@ -338,7 +338,7 @@ class PageTreeNode extends React.Component {
     if (node.id && node.starts_at) {
       dateLabel = <span className="date">
         {node.starts_at}
-      </span>
+      </span>;
     }
 
     if (node.news_page) {

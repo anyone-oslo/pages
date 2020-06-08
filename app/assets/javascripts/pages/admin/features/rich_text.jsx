@@ -1,5 +1,5 @@
 $(function() {
-  $('textarea.rich').each(function () {
+  $("textarea.rich").each(function () {
     let container = document.createElement("div");
     this.parentNode.appendChild(container);
     ReactDOM.render(

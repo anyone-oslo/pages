@@ -40,7 +40,7 @@ class ImageEditor extends React.Component {
     this.img = new Image;
     this.img.onload = function() {
       component.setState({ croppedImage: component.getCroppedImage() });
-    }
+    };
     this.img.src = this.props.image.uncropped_url;
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
@@ -89,7 +89,7 @@ class ImageEditor extends React.Component {
           crop_width,
           crop_height,
           crop_gravity_x,
-          crop_gravity_y } = this.state
+          crop_gravity_y } = this.state;
 
     // Disable focal point if it's out of bounds.
     if (crop_gravity_x < crop_start_x ||
@@ -177,7 +177,7 @@ class ImageEditor extends React.Component {
                    crop_start_x: image.real_width * (crop.x / 100),
                    crop_start_y: image.real_height * (crop.y / 100),
                    crop_width:   image.real_width * (crop.width / 100),
-                   crop_height:  image.real_height * (crop.height / 100)})
+                   crop_height:  image.real_height * (crop.height / 100)});
   }
 
   getFocal() {
@@ -263,11 +263,11 @@ class ImageEditor extends React.Component {
   renderToolbar() {
     let component = this;
     let cropping = this.state.cropping;
-    let image = this.props.image
+    let image = this.props.image;
     let updateAspect = function (evt, aspect) {
       evt.preventDefault();
       component.setAspect(aspect);
-    }
+    };
 
 
     return (

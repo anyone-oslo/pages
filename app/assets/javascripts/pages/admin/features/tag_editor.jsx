@@ -7,67 +7,67 @@ $.extend(TagEditor.prototype, {
     var tagEditor = this;
     tagEditor.container = container;
     tagEditor.tags = Array();
-    tagEditor.serializeField = $(tagEditor.container).find('.serialized_tags').get(0);
+    tagEditor.serializeField = $(tagEditor.container).find(".serialized_tags").get(0);
     tagEditor.findTags(true);
 
-    tagEditor.inputField = $(tagEditor.container).find('.add-tag').get(0);
-    $(tagEditor.container).find('.add-tag-button').click(function() {
+    tagEditor.inputField = $(tagEditor.container).find(".add-tag").get(0);
+    $(tagEditor.container).find(".add-tag-button").click(function() {
       tagEditor.addTag();
-      $(tagEditor.container).find('.add-tag').blur();
+      $(tagEditor.container).find(".add-tag").blur();
       return false;
     });
-    $(tagEditor.container).find('.add-tag').keydown(function(event) {
+    $(tagEditor.container).find(".add-tag").keydown(function(event) {
       if (event.which === 13) {
         tagEditor.addTag();
         return false;
       }
     });
 
-    $(tagEditor.container).find('.add-tag').each(function(){
+    $(tagEditor.container).find(".add-tag").each(function(){
       var field = this;
       field.exampleText = $(field).val();
-      $(field).addClass('example');
+      $(field).addClass("example");
       $(field).focus(function(event){
-        $(tagEditor.container).find('.add-tag-button').fadeIn('fast');
-        $(field).removeClass('example');
+        $(tagEditor.container).find(".add-tag-button").fadeIn("fast");
+        $(field).removeClass("example");
         if ($(field).val() === field.exampleText) {
-          $(field).val('');
+          $(field).val("");
         }
       });
       $(field).blur(function(event) {
-        $(tagEditor.container).find('.add-tag-button').fadeOut('fast');
+        $(tagEditor.container).find(".add-tag-button").fadeOut("fast");
         if (!$(field).val() || $(field).val() === field.exampleText) {
-          $(field).addClass('example').val(field.exampleText);
+          $(field).addClass("example").val(field.exampleText);
         }
       });
     });
-    $(tagEditor.container).find('.add-tag-button').hide();
+    $(tagEditor.container).find(".add-tag-button").hide();
   },
 
   addTag: function() {
     var tagEditor = this;
-    var tagName = $(tagEditor.inputField).val().replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    var tagName = $(tagEditor.inputField).val().replace(/^\s\s*/, "").replace(/\s\s*$/, "");
     if (tagName) {
       if (this.hasTag(tagName)) {
         this.enable(this.getTagByName(tagName));
       } else {
-        $(tagEditor.container).find('.tags').append('<span class="tag"><input type="checkbox" name="tag-'+tagName+'" value="1" checked="checked"><span class="name">'+tagName+'</span></span>');
+        $(tagEditor.container).find(".tags").append("<span class=\"tag\"><input type=\"checkbox\" name=\"tag-"+tagName+"\" value=\"1\" checked=\"checked\"><span class=\"name\">"+tagName+"</span></span>");
         tagEditor.findTags();
       }
     }
-    $(tagEditor.inputField).val('');
+    $(tagEditor.inputField).val("");
   },
 
   findTags: function(permanentize) {
     var tagEditor = this;
-    $(this.container).find('.tag').each(function () {
+    $(this.container).find(".tag").each(function () {
       var tag = this;
       if (!tag.tagEditorApplied) {
-        tag.checkBox = $(tag).find('input[type=checkbox]').get(0);
-        tag.name = $(tag).find('.name').text();
+        tag.checkBox = $(tag).find("input[type=checkbox]").get(0);
+        tag.name = $(tag).find(".name").text();
         if(tagEditor.isChecked(tag)){
           tag.enabled = true;
-          $(tag).addClass('enabled');
+          $(tag).addClass("enabled");
         } else {
           tag.enabled = false;
         }
@@ -94,11 +94,11 @@ $.extend(TagEditor.prototype, {
   setEnabled: function(tag, enabled) {
     tag.enabled = enabled;
     if (tag.enabled) {
-      $(tag).addClass('enabled');
+      $(tag).addClass("enabled");
     } else {
-      $(tag).removeClass('enabled');
+      $(tag).removeClass("enabled");
     }
-    $(tag.checkBox).attr('checked', tag.enabled);
+    $(tag.checkBox).attr("checked", tag.enabled);
     this.serializeTags();
   },
 
@@ -129,7 +129,7 @@ $.extend(TagEditor.prototype, {
   },
 
   isChecked: function(tag) {
-    return $(tag.checkBox).attr('checked');
+    return $(tag.checkBox).attr("checked");
   },
 
   enabledTags: function() {
@@ -145,16 +145,16 @@ $.extend(TagEditor.prototype, {
   serializeTags: function() {
     var tagNames = Array();
     $(this.enabledTags()).each(function() {
-      tagNames[tagNames.length] = '"' + this.name.replace('"', '\\"') + '"';
+      tagNames[tagNames.length] = "\"" + this.name.replace("\"", "\\\"") + "\"";
     });
-    $(this.serializeField).val('['+tagNames.join(', ')+']');
-    $(this.container).find('.add-tag').attr('disabled', false);
+    $(this.serializeField).val("["+tagNames.join(", ")+"]");
+    $(this.container).find(".add-tag").attr("disabled", false);
   }
 });
 
 // Apply the tag editor to each instance
 $(function() {
-  $('.tag-editor').each(function() {
+  $(".tag-editor").each(function() {
     this.tagEditor = new TagEditor(this);
   });
 });

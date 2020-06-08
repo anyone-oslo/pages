@@ -20,7 +20,7 @@ class ToastStore extends Reflux.Store {
       this.setState({ queue: [...this.state.queue, entry] });
     } else {
       this.showToast(entry, this.state.queue);
-    };
+    }
   }
 
   showToast(entry, queue) {

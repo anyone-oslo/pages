@@ -7,7 +7,7 @@ class RichTextToolbar extends React.Component {
     let name = selection.length > 0 ? selection : "Link text";
     var url = prompt("Enter link URL", "");
     url = url.length > 0 ? url : "http://example.com/";
-    url = url.replace(/^(?!(f|ht)tps?:\/\/)/, 'http://');
+    url = url.replace(/^(?!(f|ht)tps?:\/\/)/, "http://");
     return ["\"", name, `\":${url}`];
   }
 
@@ -35,7 +35,7 @@ class RichTextToolbar extends React.Component {
         <i className={"fa fa-" + className} />
       </a>
     );
-  };
+  }
 
   render() {
     if (this.props.simple) {
@@ -62,6 +62,6 @@ class RichTextToolbar extends React.Component {
           {this.button("Email link", "envelope", this.emailLink)}
         </div>
       );
-    };
+    }
   }
 }
