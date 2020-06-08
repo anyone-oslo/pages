@@ -9,6 +9,8 @@ group :development, :test do
   gem "pry"
   gem "pry-rescue"
   gem "pry-stack_explorer"
-end
 
-gem "codeclimate-test-reporter", group: :test, require: nil
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+end

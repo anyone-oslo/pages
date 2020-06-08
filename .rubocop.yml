@@ -1,75 +1,35 @@
-inherit_from: .rubocop_todo.yml
-
 require: rubocop-rspec
 
+inherit_from:
+  - .rubocop_todo.yml
+
 AllCops:
-  TargetRubyVersion: 2.5
+  NewCops: enable
   Exclude:
-    - 'spec/internal/db/schema.rb'
-
-StringLiterals:
-  EnforcedStyle: double_quotes
-
-Documentation:
-  Enabled: false
-
-Style/Encoding:
-  Enabled: false
-
-Metrics/AbcSize:
-  Exclude:
-    - "db/migrate/*"
+    - "spec/internal/db/schema.rb"
+    - 'node_modules/**/*'
 
 Metrics/BlockLength:
   Exclude:
-    - "*.gemspec"
-    - "**/*.builder"
-    - "spec/internal/config/environments/*"
-    - "config/routes.rb"
-    - "db/migrate/*"
     - "**/*_spec.rb"
     - "spec/factories.rb"
     - "spec/rails_helper.rb"
 
-Metrics/ClassLength:
-  Exclude:
-    - "db/migrate/*"
+Style/AsciiComments:
+  Enabled: false
 
-Metrics/MethodLength:
-  Exclude:
-    - "db/migrate/*"
+Style/Documentation:
+  Enabled: false
 
-Style/MethodMissingSuper:
-  Exclude:
-    - 'lib/pages_core/templates/configuration_proxy.rb'
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  AutoCorrect: true
+  Max: 80
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: aligned
 
 Rails:
   Enabled: true
-
-Rails/ApplicationJob:
-  Enabled: false
-
-Rails/ApplicationRecord:
-  Enabled: false
-
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - 'db/migrate/20111219033112_create_pages_tables.rb'
-    - 'db/migrate/20121010055412_drop_removed_tables.rb'
-    - 'db/migrate/20130303160632_remove_imagesets.rb'
-    - 'db/migrate/20130303161732_remove_sms_subscribers.rb'
-
-Rails/DynamicFindBy:
-  Whitelist:
-    - find_by_email
-    - find_by_sql
-
-Rails/NotNullColumn:
-  Exclude:
-    - 'db/migrate/20140920231700_convert_images_to_dis.rb'
-    - 'db/migrate/20140922124600_convert_page_files_to_dis.rb'
-
-Rails/SkipsModelValidations:
-  Exclude:
-    - 'db/migrate/20140414150500_change_locale_names.rb'
-    - 'db/migrate/20150401131300_localize_images.rb'

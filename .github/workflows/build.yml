@@ -1,0 +1,135 @@
+env:
+  RUBY_VERSION: 2.7
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: pages_test
+  CC_TEST_REPORTER_ID: e0eee16b7b54975a7f2cf57df3a2d1daccb7fab727183bd8e291ead17c01f390
+
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+jobs:
+  rubocop-test:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install Rubocop
+        run: gem install rubocop rubocop-rails rubocop-rspec
+      - name: Check code
+        run: rubocop
+
+  eslint-test:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Node modules cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install Node modules
+        run: |
+          yarn install
+      - name: Check code
+        run: yarn lint-javascript
+
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install system dependencies
+        run: sudo apt-get install -y libpq-dev
+      - name: Ruby gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install Ruby gems
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install
+      - name: Node modules cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install Node modules
+        run: |
+          yarn install
+      - name: Create database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: |
+          bundle exec rails db:migrate
+      - name: Run tests
+        env:
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: bundle exec rspec
+      - name: Send results to Code Climate
+        uses: paambaati/codeclimate-action@v2.6.0
+        if: ${{ env.CC_TEST_REPORTER_ID }}
+        env:
+          CC_TEST_REPORTER_ID: ${{ env.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: ls
+
+  notify-slack:
+    name: Slack notification
+    if: ${{ github.ref == 'refs/heads/master' && always() }}
+    needs:
+      - rubocop-test
+      - eslint-test
+      - rspec-test
+      - deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare message
+      id: message
+      uses: anyone-oslo/github-action-notify-slack@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        run-id: ${{ github.run_id }}
+        run-number: ${{ github.run_number }}
+    - name: Send to Slack
+      if: success()
+      run: |
+        curl -X POST ${{ secrets.SLACK_WEBHOOK_URL}} -H "Content-type: application/json" --data '${{ steps.message.outputs.message }}'

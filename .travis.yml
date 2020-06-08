@@ -6,7 +6,7 @@ services:
 rvm:
   - 2.5.7
   - 2.6.5
-  - 2.7.0
+  - 2.7.1
 env:
   - CI=1
 script:
@@ -14,5 +14,3 @@ script:
 before_script:
 - psql -c 'create database pages_test' -U postgres
 - bundle exec rake db:migrate
-after_script:
-  - CODECLIMATE_REPO_TOKEN=e0eee16b7b54975a7f2cf57df3a2d1daccb7fab727183bd8e291ead17c01f390 bundle exec codeclimate-test-reporter
