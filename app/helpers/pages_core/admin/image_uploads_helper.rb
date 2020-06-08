@@ -1,0 +1,45 @@
+# frozen_string_literal: true
+
+module PagesCore
+  module Admin
+    module ImageUploadsHelper
+      # Generates tags for an editable dynamic image.
+      def editable_dynamic_image_tag(image, width: 250,
+                                     caption: false, locale: nil)
+        react_component("EditableImage",
+                        editable_image_options(
+                          image,
+                          width: width,
+                          caption: caption,
+                          locale: locale
+                        ).merge(width: width))
+      end
+
+      def image_uploader_tag(name, image, options = {})
+        opts = { caption: false, locale: nil }.merge(options)
+        react_component("ImageUploader",
+                        editable_image_options(
+                          image,
+                          caption: opts[:caption],
+                          locale: opts[:locale]
+                        ).merge(attr: name, alternative: opts[:alternative]))
+      end
+
+      private
+
+      def editable_image_options(image, width: 250, caption: false, locale: nil)
+        image_opts = if image
+                       { src: dynamic_image_path(image, size: "#{width * 2}x"),
+                         image: ::Admin::ImageSerializer.new(image) }
+                     else
+                       {}
+                     end
+        image_opts.merge(width: width,
+                         caption: caption,
+                         locale: locale || I18n.default_locale,
+                         locales: PagesCore.config.locales,
+                         csrf_token: form_authenticity_token)
+      end
+    end
+  end
+end

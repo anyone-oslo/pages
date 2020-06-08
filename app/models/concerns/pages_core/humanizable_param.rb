@@ -11,7 +11,7 @@ module PagesCore
       "#{id}-" + transliterate(slug)
                  .downcase
                  .gsub(/[\[{]/, "(")
-                 .gsub(/\}]/, ")")
+                 .gsub(/}\]/, ")")
                  .gsub(/[^[[:alnum:]]()-]+/, "-")
                  .gsub(/-{2,}/, "-")
                  .gsub(/(^-|-$)/, "")

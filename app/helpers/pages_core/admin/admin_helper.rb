@@ -3,6 +3,8 @@
 module PagesCore
   module Admin
     module AdminHelper
+      include PagesCore::Admin::ContentTabsHelper
+      include PagesCore::Admin::ImageUploadsHelper
       include PagesCore::Admin::LabelledFieldHelper
       include PagesCore::Admin::TagEditorHelper
 
@@ -55,42 +57,6 @@ module PagesCore
         safe_join(dates.map(&:strip), "&ndash;".html_safe)
       end
 
-      # Generates tags for an editable dynamic image.
-      def editable_dynamic_image_tag(image, width: 250,
-                                     caption: false, locale: nil)
-        react_component("EditableImage",
-                        editable_image_options(
-                          image,
-                          width: width,
-                          caption: caption,
-                          locale: locale
-                        ).merge(width: width))
-      end
-
-      def image_uploader_tag(name, image, options = {})
-        opts = { caption: false, locale: nil }.merge(options)
-        react_component("ImageUploader",
-                        editable_image_options(
-                          image,
-                          caption: opts[:caption],
-                          locale: opts[:locale]
-                        ).merge(attr: name, alternative: opts[:alternative]))
-      end
-
-      def content_tab(name, options = {}, &block)
-        @content_tabs ||= []
-        return unless block_given?
-
-        tab = {
-          name: name.to_s.humanize,
-          key: options[:key] || name.to_s.underscore.gsub(/\s+/, "_"),
-          options: options,
-          content: capture(&block)
-        }
-        @content_tabs << tab
-        content_tab_tag(tab[:key], tab[:content])
-      end
-
       def rich_text_area_tag(name, content = nil, options = {})
         react_component("RichTextArea",
                         options.merge(id: sanitize_to_id(name),
@@ -126,49 +92,22 @@ module PagesCore
       end
 
       def page_description_links(links = nil)
-        if links
-          ActiveSupport::Deprecation.warn(
-            "Setting page description_links with page_description_links " \
-              "is deprecated, use page_description_links="
-          )
-          @page_description_links = links
-        else
-          @page_description_links
-        end
+        return @page_description_links unless links
+
+        ActiveSupport::Deprecation.warn(
+          "Setting page description_links with page_description_links " \
+          "is deprecated, use page_description_links="
+        )
+        @page_description_links = links
       end
 
       def page_title(title = nil)
-        if title
-          ActiveSupport::Deprecation.warn(
-            "Setting page title with page_title is deprecated, use page_title="
-          )
-          @page_title = title
-        else
-          @page_title
-        end
-      end
+        return @page_title unless title
 
-      private
-
-      def content_tab_tag(key, content)
-        content_tag(:div,
-                    content,
-                    class: "content_tab",
-                    id: "content-tab-#{key}")
-      end
-
-      def editable_image_options(image, width: 250, caption: false, locale: nil)
-        image_opts = if image
-                       { src: dynamic_image_path(image, size: "#{width * 2}x"),
-                         image: ::Admin::ImageSerializer.new(image) }
-                     else
-                       {}
-                     end
-        image_opts.merge(width: width,
-                         caption: caption,
-                         locale: locale || I18n.default_locale,
-                         locales: PagesCore.config.locales,
-                         csrf_token: form_authenticity_token)
+        ActiveSupport::Deprecation.warn(
+          "Setting page title with page_title is deprecated, use page_title="
+        )
+        @page_title = title
       end
     end
   end
