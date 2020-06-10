@@ -11,6 +11,12 @@ module PagesCore
       filter_by_time(range_for_year(year))
     end
 
+    def by_year_and_maybe_month(year, month = nil)
+      return by_year(year) unless month
+
+      by_year_and_month(year, month)
+    end
+
     def by_year_and_month(year, month)
       filter_by_time(range_for_year_and_month(year, month))
     end

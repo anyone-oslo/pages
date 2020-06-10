@@ -13,12 +13,14 @@ module PagesCore
 
       def news
         @archive_finder = archive_finder(@news_pages, @locale)
-
-        @pages = (if @month
-                    @archive_finder.by_year_and_month(@year, @month)
-                  else
-                    @archive_finder.by_year(@year)
-                  end).paginate(per_page: 50, page: params[:page])
+        unless @year
+          redirect_to(news_admin_pages_path(@locale,
+                                            (@archive_finder.latest_year ||
+                                             Time.zone.now.year)))
+          return
+        end
+        @pages = @archive_finder.by_year_and_maybe_month(@year, @month)
+                                .paginate(per_page: 50, page: params[:page])
       end
 
       def new_news
@@ -48,11 +50,6 @@ module PagesCore
       def find_year_and_month
         @year = params[:year]&.to_i
         @month = params[:month]&.to_i
-        return if @year
-
-        redirect_to(news_admin_pages_path(@locale,
-                                          (@archive_finder.latest_year ||
-                                           Time.zone.now.year)))
       end
 
       # Redirect away if no news pages has been configured
