@@ -18,7 +18,7 @@ module PagesCore
 
       page.localize(locale) do |p|
         if p.redirects? && html_format?(opts)
-          page.redirect_url(locale, p)
+          page_redirect_url(locale, p)
         elsif p.full_path
           base_page_url + page_path(locale, p, opts)
         else
