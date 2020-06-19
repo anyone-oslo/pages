@@ -4,10 +4,11 @@ module PagesCore
   class FormBuilder < ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper
 
-    def field_with_label(attr, str, label = nil)
-      classes = ["field"]
+    def field_with_label(attr, str, label = nil, class_name = nil)
+      classes = ["field", class_name]
       classes << "field-with-errors" if object.errors[attr].any?
-      content_tag(:div, label_for(attr, label) + str, class: classes.join(" "))
+      content_tag(:div, label_for(attr, label) + str,
+                  class: classes.compact.join(" "))
     end
 
     def image_file_preview(attribute)
@@ -82,7 +83,7 @@ module PagesCore
     end
 
     def labelled_password_field(attribute, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
+      labelled_field(attribute, label_text, options, "text-field") do |opts|
         password_field(attribute, opts)
       end
     end
@@ -94,13 +95,13 @@ module PagesCore
     end
 
     def labelled_text_area(attribute, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
+      labelled_field(attribute, label_text, options, "text-area") do |opts|
         text_area(attribute, opts)
       end
     end
 
     def labelled_text_field(attribute, label_text = nil, options = {})
-      labelled_field(attribute, label_text, options) do |opts|
+      labelled_field(attribute, label_text, options, "text-field") do |opts|
         text_field(attribute, opts)
       end
     end
@@ -113,12 +114,12 @@ module PagesCore
 
     protected
 
-    def labelled_field(attribute, label_text = nil, options = {})
+    def labelled_field(attr, label_text = nil, options = {}, class_name = nil)
       if label_text.is_a?(Hash) && options == {}
         options = label_text
         label_text = nil
       end
-      field_with_label(attribute, yield(options), label_text)
+      field_with_label(attr, yield(options), label_text, class_name)
     end
   end
 end

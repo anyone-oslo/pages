@@ -62,6 +62,26 @@ form {
     }
   }
 
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -16px;
+
+    .field {
+      margin-right: 16px;
+      &.text-field {
+        flex-grow: 1;
+        min-width: 300px;
+      }
+    }
+
+    input[type=text],
+    input[type=password] {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
   .date-range-select {
     .date {
       line-height: 34px;
