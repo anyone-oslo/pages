@@ -6,15 +6,17 @@ class RichTextToolbar extends React.Component {
   link(selection) {
     let name = selection.length > 0 ? selection : "Link text";
     var url = prompt("Enter link URL", "");
-    url = url.length > 0 ? url : "http://example.com/";
-    url = url.replace(/^(?!(f|ht)tps?:\/\/)/, "http://");
-    return ["\"", name, `\":${url}`];
+    if (url) {
+      return ["\"", name, `":${url}`];
+    } else {
+      return ["", name, ""];
+    }
   }
 
   emailLink(selection) {
     var address = prompt("Enter email address", "");
     let name = selection.length > 0 ? selection : address;
-    return ["\"", name, `\":mailto:${address}`];
+    return ["\"", name, `":mailto:${address}`];
   }
 
   strToList(str, prefix) {
