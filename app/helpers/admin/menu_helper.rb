@@ -22,9 +22,9 @@ module Admin
         .select { |_, routing| routing[:controller] == params[:controller] }
     end
 
-    def find_menu_candidate
+    def find_menu_candidate(&block)
       menu_item_candidates
-        .select { |item, routing| yield(item, routing) }
+        .select { |item, routing| block.call(item, routing) }
         .try(&:first)
         .try(&:first)
     end

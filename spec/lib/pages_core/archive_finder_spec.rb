@@ -5,43 +5,28 @@ require "rails_helper"
 describe PagesCore::ArchiveFinder do
   let(:parent_page) { create(:page) }
 
-  let(:page1) do
-    create(
-      :page,
-      published_at: Time.zone.parse("2012-03-01 12:00"),
-      parent: parent_page,
-      locale: "nb",
-      name: "Foo1"
-    )
+  let(:pages) do
+    [create(:page,
+            published_at: Time.zone.parse("2012-03-01 12:00"),
+            parent: parent_page,
+            locale: "nb",
+            name: "Foo1"),
+     create(:page,
+            published_at: Time.zone.parse("2012-04-05 12:00"),
+            parent: parent_page,
+            locale: "nb",
+            name: "Foo2"),
+     create(:page,
+            published_at: Time.zone.parse("2012-04-06 12:00"),
+            parent: parent_page,
+            locale: "nb",
+            name: "Foo3"),
+     create(:page,
+            published_at: Time.zone.parse("2013-01-27 12:00"),
+            parent: parent_page,
+            locale: "nb",
+            name: "Foo4")]
   end
-  let(:page2) do
-    create(
-      :page,
-      published_at: Time.zone.parse("2012-04-05 12:00"),
-      parent: parent_page,
-      locale: "nb",
-      name: "Foo2"
-    )
-  end
-  let(:page3) do
-    create(
-      :page,
-      published_at: Time.zone.parse("2012-04-06 12:00"),
-      parent: parent_page,
-      locale: "nb",
-      name: "Foo3"
-    )
-  end
-  let(:page4) do
-    create(
-      :page,
-      published_at: Time.zone.parse("2013-01-27 12:00"),
-      parent: parent_page,
-      locale: "nb",
-      name: "Foo4"
-    )
-  end
-  let(:pages) { [page1, page2, page3, page4] }
 
   let(:archive_finder) do
     described_class.new(parent_page.pages, timestamp: :published_at)
@@ -52,14 +37,14 @@ describe PagesCore::ArchiveFinder do
 
     before { pages }
 
-    it { is_expected.to match([page1, page2, page3]) }
+    it { is_expected.to match([pages[0], pages[1], pages[2]]) }
 
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
 
-      it { is_expected.to match([page1, page2, page3]) }
+      it { is_expected.to match([pages[0], pages[1], pages[2]]) }
     end
   end
 
@@ -68,14 +53,14 @@ describe PagesCore::ArchiveFinder do
 
     before { pages }
 
-    it { is_expected.to match([page2, page3]) }
+    it { is_expected.to match([pages[1], pages[2]]) }
 
     context "when parent page has locale" do
       let(:parent_page) { create(:page, locale: "nb") }
 
       before { pages }
 
-      it { is_expected.to match([page2, page3]) }
+      it { is_expected.to match([pages[1], pages[2]]) }
     end
   end
 

@@ -107,9 +107,10 @@ module PagesCore
 
     class << self
       def configure(options = {}, &_block)
-        if options[:reset] == :defaults
+        case options[:reset]
+        when :defaults
           load_default_configuration
-        elsif options[:reset] == true
+        when true
           @configuration = PagesCore::Templates::Configuration.new
         end
         yield configuration if block_given?

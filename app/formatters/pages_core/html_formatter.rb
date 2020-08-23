@@ -80,7 +80,7 @@ module PagesCore
         return string
       end
 
-      string[0..@options[:shorten]] + "..."
+      "#{string[0..@options[:shorten]]}..."
     end
   end
 end

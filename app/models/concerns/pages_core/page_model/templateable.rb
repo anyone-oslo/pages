@@ -34,14 +34,14 @@ module PagesCore
         return if base_template == singularized
 
         find_template_by_expression(
-          Regexp.new("^" + Regexp.quote(singularized))
+          Regexp.new("^#{Regexp.quote(singularized)}")
         )
       end
 
       def subtemplate_with_postfix
         find_template_by_expression(
           Regexp.new(
-            "^" + Regexp.quote(base_template) + "_?(post|page|subpage|item)"
+            "^#{Regexp.quote(base_template)}_?(post|page|subpage|item)"
           )
         )
       end

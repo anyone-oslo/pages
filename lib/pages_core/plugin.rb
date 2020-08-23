@@ -23,6 +23,7 @@ module PagesCore
             end
           )
         end
+        super
       end
 
       def admin_menu_item(label, path, group = :custom, options = {})

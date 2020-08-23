@@ -43,10 +43,6 @@ Style/FormatStringToken:
   Exclude:
     - "config/routes.rb"
 
-Style/MethodMissingSuper:
-  Exclude:
-    - "lib/pages_core/templates/configuration_proxy.rb"
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
@@ -56,6 +52,11 @@ Layout/LineLength:
 
 Layout/MultilineOperationIndentation:
   EnforcedStyle: aligned
+
+Lint/MissingSuper:
+  Exclude:
+    - "lib/pages_core/templates/configuration_handler.rb"
+    - "lib/pages_core/templates/configuration_proxy.rb"
 
 Rails:
   Enabled: true

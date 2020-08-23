@@ -8,7 +8,7 @@ class Role < ActiveRecord::Base
             inclusion: { in: proc { Role.roles.map(&:name) } }
 
   class << self
-    def define(name, description, default = false)
+    def define(name, description, default: false)
       if roles.map(&:name).include?(name.to_s)
         raise ArgumentError, "Tried to define role :#{role}, " \
           "but a role by that name already exists"

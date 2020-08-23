@@ -117,9 +117,9 @@ module Admin
       @categories = Category.order("name")
     end
 
-    def respond_with_page(page)
+    def respond_with_page(page, &block)
       respond_to do |format|
-        format.html { yield }
+        format.html { block.call }
         format.json { render json: page_json(page) }
       end
     end

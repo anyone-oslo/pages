@@ -36,12 +36,15 @@ class PagePath < ActiveRecord::Base
       raise NoLocaleError unless locale
       raise NoPathError unless path
 
-      existing = get(locale, path)
+      page_path = get_or_create(locale, path, page)
+      page_path.update(page: page) unless page_path.page_id == page.id
+      page_path
+    end
 
-      return create(locale: locale, path: path, page: page) unless existing
+    private
 
-      existing.update(page: page) unless existing.page_id == page.id
-      existing
+    def get_or_create(locale, path, page)
+      get(locale, path) || create(locale: locale, path: path, page: page)
     end
   end
 end

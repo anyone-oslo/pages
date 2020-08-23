@@ -60,8 +60,7 @@ describe Page, type: :model do
 
     let(:foo) { Tag.create(name: "Foo") }
     let(:bar) { Tag.create(name: "Bar") }
-    let(:baz) { Tag.create(name: "Baz") }
-    let!(:page1) { create(:page, tag_list: [baz]) }
+    let!(:page1) { create(:page, tag_list: [Tag.create(name: "Baz")]) }
     let!(:page2) { create(:page, tag_list: [foo, bar]) }
     let!(:page3) { create(:page, tag_list: [foo]) }
 
@@ -310,20 +309,16 @@ describe Page, type: :model do
 
   describe "#move" do
     let!(:page) { create(:page) }
-    let(:parent) { root }
-    let(:position) { 2 }
     let!(:root) { create(:page) }
     let!(:before) { create(:page, parent: root, position: 1) }
     let!(:after) { create(:page, parent: root, position: 2) }
 
-    before do
-      page.move(parent: parent, position: position)
-      root.reload
-      before.reload
-      after.reload
-    end
-
     context "with another parent" do
+      before do
+        page.move(parent: root, position: 2)
+        [root, before, after].each(&:reload)
+      end
+
       it "updates the positions" do
         expect([before, page, after].map(&:position)).to eq([1, 2, 3])
       end
@@ -332,15 +327,23 @@ describe Page, type: :model do
     context "when within the same parent" do
       let!(:page) { create(:page, parent: root, position: 3) }
 
+      before do
+        page.move(parent: root, position: 2)
+        [root, before, after].each(&:reload)
+      end
+
       it "updates the positions" do
         expect([before, page, after].map(&:position)).to eq([1, 2, 3])
       end
     end
 
     context "when moving to the root" do
-      let(:parent) { nil }
-      let(:position) { 1 }
       let!(:page) { create(:page, parent: root, position: 3) }
+
+      before do
+        page.move(parent: nil, position: 1)
+        [root, before, after].each(&:reload)
+      end
 
       it "moves the page" do
         expect(page.parent).to eq(nil)

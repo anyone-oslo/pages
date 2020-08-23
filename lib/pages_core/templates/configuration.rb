@@ -98,7 +98,7 @@ module PagesCore
            enabled_blocks sub_template tags dates]
       end
 
-      def configure_block(tpl_name, block_name, title = false, options = {})
+      def configure_block(tpl_name, block_name, title = nil, options = {})
         block_name = block_name.to_sym
         opts = {
           title: title || block_name.to_s.humanize,
