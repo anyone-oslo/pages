@@ -63,10 +63,10 @@ module Admin
 
     def find_password_reset_token
       @password_reset_token = begin
-                                PasswordResetToken.find(params[:id])
-                              rescue ActiveRecord::RecordNotFound
-                                nil
-                              end
+        PasswordResetToken.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
 
       return if valid_token?(@password_reset_token)
 
