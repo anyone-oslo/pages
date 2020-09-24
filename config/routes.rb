@@ -99,11 +99,7 @@ Rails.application.routes.draw do
       as: "admin_default")
 
   # Errors
-  resources :errors do
-    collection do
-      post "report"
-    end
-  end
+  resources :errors
 
   # Page path routing
   get ":locale/*path/page/:page" => "pages#show",

@@ -44,6 +44,9 @@ module PagesCore
 
     initializer :handle_exceptions do |app|
       app.config.exceptions_app = app.routes
+      ActionDispatch::ExceptionWrapper.rescue_responses.merge!(
+        "PagesCore::NotAuthorized" => :forbidden
+      )
     end
 
     # React configuration

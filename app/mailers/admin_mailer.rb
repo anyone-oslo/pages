@@ -3,18 +3,6 @@
 class AdminMailer < ActionMailer::Base
   default from: proc { "\"Pages\" <support@anyone.no>" }
 
-  def error_report(error_report, from, description)
-    @error_report = error_report
-    @from = from
-    @description = description
-    short_message = @error_report[:message].gsub(/[\s\n]+/, " ")[0..80]
-    mail(
-      to: "system+error@anyone.no",
-      from: "\"Error reports\" <system+error@anyone.no>",
-      subject: "[#{PagesCore.config(:site_name)}] Error: #{short_message}"
-    )
-  end
-
   def password_reset(user, url)
     @user = user
     @url = url
