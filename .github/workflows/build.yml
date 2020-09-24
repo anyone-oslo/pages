@@ -3,7 +3,6 @@ env:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: pages_test
-  CC_TEST_REPORTER_ID: e0eee16b7b54975a7f2cf57df3a2d1daccb7fab727183bd8e291ead17c01f390
 
 name: Build
 on:
@@ -106,9 +105,8 @@ jobs:
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0
-        if: ${{ env.CC_TEST_REPORTER_ID }}
         env:
-          CC_TEST_REPORTER_ID: ${{ env.CC_TEST_REPORTER_ID }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: ls
 
