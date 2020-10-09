@@ -58,7 +58,7 @@ module PagesCore
       def get(*path)
         @configuration ||= {}
         path.inject(@configuration) do |value, key|
-          value&.is_a?(Hash) && value&.key?(key) ? value[key] : nil
+          value.is_a?(Hash) && value&.key?(key) ? value[key] : nil
         end
       end
     end
