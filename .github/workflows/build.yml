@@ -15,15 +15,27 @@ jobs:
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - name: Install Rubocop
-        run: gem install rubocop rubocop-rails rubocop-rspec
+      - name: Ruby gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install Ruby gems
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install
       - name: Check code
-        run: rubocop
+        run: bundle exec rubocop
 
   # eslint-test:
   #   name: ESLint
@@ -46,6 +58,7 @@ jobs:
   rspec-test:
     name: RSpec
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     services:
       postgres:
         image: postgres:latest
@@ -112,7 +125,7 @@ jobs:
 
   notify-slack:
     name: Slack notification
-    if: ${{ github.ref == 'refs/heads/master' && always() }}
+    if: "always() && github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[ci skip]')"
     needs:
       - rubocop-test
       # - eslint-test
