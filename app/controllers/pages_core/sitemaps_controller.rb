@@ -3,7 +3,7 @@
 module PagesCore
   class SitemapsController < ::ApplicationController
     include PagesCore::PagePathHelper
-    caches_page :show
+    static_cache :show
 
     def show
       @entries = formatted_entries

@@ -6,6 +6,7 @@ module PagesCore
     include PagesCore::ErrorRenderer
     include PagesCore::ProcessTitler
     include PagesCore::PoliciesHelper
+    include PagesCore::StaticCacheController
 
     before_action :set_locale, :configure_error_reporting
     after_action :set_content_language_header
