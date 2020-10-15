@@ -1,13 +1,35 @@
 class RichTextToolbar extends React.Component {
   constructor(props) {
     super(props);
+    this.link = this.link.bind(this);
+  }
+
+  relativeUrl(str) {
+    let url = null;
+
+    if (!str.match(/^https:\/\//) || !document || !document.location) {
+      return str;
+    }
+
+    try {
+      url = new URL(str);
+    } catch (error) {
+      console.log("Error parsing URL: ", error);
+    }
+
+    if (url &&
+        url.hostname == document.location.hostname &&
+        (document.location.port || "80") == (url.port || "80")) {
+      return url.pathname;
+    }
+    return str;
   }
 
   link(selection) {
     let name = selection.length > 0 ? selection : "Link text";
     var url = prompt("Enter link URL", "");
     if (url) {
-      return ["\"", name, `":${url}`];
+      return ["\"", name, `":${this.relativeUrl(url)}`];
     } else {
       return ["", name, ""];
     }
