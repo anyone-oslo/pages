@@ -13,9 +13,6 @@ PagesCore.configure do |config|
   # Locales and names
   # config.locales(nb: 'Norwegian', en: 'English')
 
-  # Page cache (default: enabled)
-  # config.page_cache :enabled
-
   # Fulltext in RSS feeds (default: disabled)
   # config.rss_fulltext :disabled
 

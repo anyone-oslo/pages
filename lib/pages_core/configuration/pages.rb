@@ -10,7 +10,6 @@ module PagesCore
       setting :localizations,         :boolean, false
       setting :locales,               :hash
       setting :text_filter,           :symbol, :textile
-      setting :page_cache,            :boolean, true
       setting :rss_fulltext,          :boolean, true
       setting :image_fallback_url,    :string
       setting :default_author,        :string

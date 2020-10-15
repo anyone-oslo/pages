@@ -89,7 +89,7 @@ module PagesCore
 
       # Cache pages by hand. This is dirty, but it works.
       def cache_page_request
-        return if @page_cache_disabled || !PagesCore.config(:page_cache)
+        return if @page_cache_disabled
         return if response.status&.to_i != 200
         return unless @page && @locale
 
