@@ -73,12 +73,6 @@ module PagesCore
                  File.join("config/initializers/pages.rb"))
       end
 
-      def create_cache_sweeper_initializer
-        read_configuration!
-        template("cache_sweeper_initializer.rb",
-                 File.join("config/initializers/cache_sweeper.rb"))
-      end
-
       def create_template_initializer
         read_configuration!
         template("page_templates_initializer.rb",

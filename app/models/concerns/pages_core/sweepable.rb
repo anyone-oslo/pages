@@ -14,10 +14,9 @@ module PagesCore
     protected
 
     def sweep_cache!
-      return unless PagesCore::CacheSweeper.enabled
       return if cache_swept
 
-      PagesCore::SweepCacheJob.perform_later
+      PagesCore::StaticCache.handler.sweep!
       self.cache_swept = true
     end
   end
