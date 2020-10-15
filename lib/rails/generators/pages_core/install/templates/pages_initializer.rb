@@ -16,9 +16,6 @@ PagesCore.configure do |config|
   # Page cache (default: enabled)
   # config.page_cache :enabled
 
-  # Domain based page cache (default: disabled)
-  # config.domain_based_cache :disabled
-
   # Fulltext in RSS feeds (default: disabled)
   # config.rss_fulltext :disabled
 
