@@ -4,10 +4,12 @@ module PagesCore
   module StaticCache
     class PageCacheHandler
       def cache_page(controller, _request, _response)
+        controller.class.page_cache_directory = page_cache_directory
         controller.cache_page
       end
 
       def cache_page_permanently(controller, _request, _response)
+        controller.class.page_cache_directory = permanent_page_cache_directory
         controller.cache_page
       end
 
@@ -23,6 +25,20 @@ module PagesCore
 
       def sweep_now!
         Sweeper.sweep!
+      end
+
+      private
+
+      def page_cache_root
+        Rails.root.join("public")
+      end
+
+      def page_cache_directory
+        page_cache_root.join("cache")
+      end
+
+      def permanent_page_cache_directory
+        page_cache_root.join("permanent_cache")
       end
 
       class << self
