@@ -5,7 +5,7 @@ module PagesCore
     before_action :verify_signed_params
     before_action :find_attachment, only: %i[show download]
 
-    caches_page :show
+    static_cache :show, permanent: true
 
     def show
       send_attachment

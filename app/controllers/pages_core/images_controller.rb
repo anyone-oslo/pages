@@ -4,7 +4,7 @@ module PagesCore
   class ImagesController < ::ApplicationController
     include DynamicImage::Controller
 
-    caches_page :show, :uncropped, :original
+    static_cache :show, :uncropped, :original, permanent: true
 
     private
 

@@ -15,7 +15,7 @@ module PagesCore
       before_action :find_page, only: %i[show preview]
       before_action :require_page, only: %i[show preview]
       before_action :canonicalize_url, only: [:show]
-      after_action :cache_page_request, only: %i[index show]
+      static_cache :index, :show
 
       def index
         respond_to do |format|
@@ -51,10 +51,6 @@ module PagesCore
         redirect_to(canonical_path(@page), status: :moved_permanently)
       end
 
-      def disable_page_cache!
-        @page_cache_disabled = true
-      end
-
       def render(*args)
         @already_rendered = true
         super
@@ -85,15 +81,6 @@ module PagesCore
         return if @already_rendered
 
         render template: "pages/templates/#{template}"
-      end
-
-      # Cache pages by hand. This is dirty, but it works.
-      def cache_page_request
-        return if @page_cache_disabled || !PagesCore.config(:page_cache)
-        return if response.status&.to_i != 200
-        return unless @page && @locale
-
-        self.class.cache_page(response.body, request.path)
       end
 
       def find_page_by_path

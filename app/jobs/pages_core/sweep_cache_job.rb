@@ -5,7 +5,7 @@ module PagesCore
     queue_as :pages_core
 
     def perform
-      PagesCore::CacheSweeper.sweep!
+      PagesCore::StaticCache.handler.sweep_now!
     end
   end
 end
