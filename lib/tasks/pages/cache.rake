@@ -11,7 +11,7 @@ namespace :pages do
     desc "Sweep the pages cache (queued)"
     task sweep_later: :environment do
       PagesCore::StaticCache.handler.sweep!
-      PagesCore::SweepCacheJob.perform_later
+      Rails.logger.info "Static cache sweeping queued"
     end
 
     desc "Purge the entire pages cache"

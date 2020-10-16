@@ -5,28 +5,13 @@ require "rails_helper"
 describe PagesCore::StaticCache::PageCacheHandler do
   subject(:handler) { described_class.new }
 
-  let(:cache_path) { Rails.root.join("public", "cache") }
+  let(:cache_path) { Rails.root.join("public", "static_cache") }
   let(:singleton) { described_class }
 
   before do
     PagesCore::CacheSweeper.enabled = true
-    ActionController::Base.page_cache_directory = cache_path
     FileUtils.rm_rf(cache_path) if File.exist?(cache_path)
     FileUtils.mkdir_p(cache_path)
-  end
-
-  describe ".config" do
-    subject { singleton.config }
-
-    it { is_expected.to be_an(OpenStruct) }
-
-    context "with a block" do
-      it "yields the config object" do
-        singleton.config do |config|
-          expect(config).to eq(singleton.config)
-        end
-      end
-    end
   end
 
   describe ".purge!" do
@@ -52,12 +37,6 @@ describe PagesCore::StaticCache::PageCacheHandler do
     before do
       FileUtils.mkdir_p(File.dirname(path))
       FileUtils.touch(path)
-    end
-
-    context "with a non-matching filename" do
-      let(:filename) { "home.html" }
-
-      it { is_expected.to eq(true) }
     end
 
     context "with a matching filename" do

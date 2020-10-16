@@ -17,12 +17,13 @@ module PagesCore
         PagesCore::StaticCache.handler.sweep!
       end
 
-      def config(&block)
+      def config
         ActiveSupport::Deprecation.warn(
-          "PagesCore::CacheSweeper.config is deprecated, use " \
-          "PagesCore::StaticCache::PageCacheHandler.config"
+          "PagesCore::CacheSweeper.config is no longer used."
         )
-        PagesCore::StaticCache::PageCacheHandler.config(&block)
+        configuration = OpenStruct.new(patterns: [])
+        yield configuration if block_given?
+        configuration
       end
     end
 
