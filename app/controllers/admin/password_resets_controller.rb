@@ -44,7 +44,7 @@ module Admin
         admin_password_reset_with_token_url(
           password_reset, password_reset.token
         )
-      ).deliver_now
+      ).deliver_later
     end
 
     def find_user_by_email(email)

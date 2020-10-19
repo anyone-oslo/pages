@@ -76,7 +76,7 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   # config.include JsonSpec::Helpers
-  config.include ActiveJob::TestHelper, type: :feature
+  config.include ActiveJob::TestHelper
   config.include ErrorResponses
   config.include Features, type: :feature
   config.include LoginMacros

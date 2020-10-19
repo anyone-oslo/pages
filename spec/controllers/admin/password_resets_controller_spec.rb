@@ -18,7 +18,11 @@ describe Admin::PasswordResetsController, type: :controller do
         )
       end
 
-      before { post :create, params: { username: user.email } }
+      before do
+        perform_enqueued_jobs do
+          post :create, params: { username: user.email }
+        end
+      end
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 
