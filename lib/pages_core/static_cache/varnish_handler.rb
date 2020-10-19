@@ -9,10 +9,10 @@ module PagesCore
         @varnish_url = varnish_url
       end
 
-      def cache_page(controller, request, response)
+      def cache_page(_controller, request, response)
         response.set_header("X-Cache-Tags", "static")
         request.session_options[:skip] = true
-        controller.expires_in 1.hour, public: true
+        # controller.expires_in 1.hour, public: true
       end
 
       def cache_page_permanently(controller, request, response)
