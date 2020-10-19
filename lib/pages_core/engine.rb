@@ -68,6 +68,20 @@ module PagesCore
       end
     end
 
+    initializer :lograge do |app|
+      app.config.lograge.enabled = true if ENV["ENABLE_LOGRAGE"]
+      app.config.lograge.formatter = Lograge::Formatters::Json.new
+      app.config.lograge.ignore_actions =
+        ["Healthcheck::HealthchecksController#check"]
+
+      app.config.lograge.custom_options = lambda do |event|
+        exclude_params = %w[controller action format id]
+        { timestamp: Time.now.utc,
+          params: event.payload[:params]
+                       .except(*exclude_params) }
+      end
+    end
+
     # React configuration
     initializer :react do |app|
       app.config.react.jsx_transform_options = {

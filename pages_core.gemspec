@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency "country_select"
   s.add_dependency "dis", "~> 1.1.2"
   s.add_dependency "dynamic_image", "~> 2.0"
+  s.add_dependency "lograge", "~> 0.11.2"
   s.add_dependency "rails-healthcheck", "~> 1.0.3"
   s.add_dependency "RedCloth", "~> 4.3.2"
   s.add_dependency "typhoeus", "~> 1.4.0"
