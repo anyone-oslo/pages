@@ -8,8 +8,18 @@ module PagesCore
   module StaticCache
     class << self
       def handler
-        PagesCore.config.static_cache_handler ||
-          PagesCore::StaticCache::NullHandler.new
+        PagesCore.config.static_cache_handler || default_handler
+      end
+
+      private
+
+      def default_handler
+        if ENV["VARNISH_URL"]
+          return PagesCore::StaticCache::VarnishHandler.new(ENV["VARNISH_URL"])
+        end
+
+        # PagesCore::StaticCache::NullHandler.new
+        PagesCore::StaticCache::PageCacheHandler.new
       end
     end
   end

@@ -16,8 +16,7 @@ module PagesCore
       setting :default_author,        :string
       setting :error_404_layout,      :string
       setting :attachment_embedder,   :object, PagesCore::AttachmentEmbedder
-      setting :static_cache_handler,  :object,
-              PagesCore::StaticCache::PageCacheHandler.new
+      setting :static_cache_handler,  :object
     end
   end
 end

@@ -30,6 +30,7 @@ require "json"
 require "rails_i18n"
 require "RedCloth"
 require "sass-rails"
+require "typhoeus"
 require "will_paginate"
 
 # Assets
