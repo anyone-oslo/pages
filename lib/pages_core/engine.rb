@@ -76,7 +76,9 @@ module PagesCore
 
       app.config.lograge.custom_options = lambda do |event|
         exclude_params = %w[controller action format id]
-        { timestamp: Time.now.utc,
+        { remote_ip: event.payload[:remote_ip],
+          user_id: event.payload[:user_id],
+          user_email: event.payload[:user_email],
           params: event.payload[:params]
                        .except(*exclude_params) }
       end

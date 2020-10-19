@@ -13,18 +13,26 @@ module PagesCore
 
     protected
 
+    def append_info_to_payload(payload)
+      super
+      payload[:remote_ip] = request.remote_ip
+      payload.merge!(current_user_context)
+    end
+
     # Configures additional report data if Sentry is installed
     def configure_error_reporting
       return unless Object.const_defined?("Raven")
 
-      if logged_in?
-        Raven.user_context(user_id: current_user.id,
-                           user_email: current_user.email)
-      else
-        Raven.user_context({})
-      end
+      Raven.user_context(current_user_context)
       Raven.tags_context(locale: locale)
       Raven.extra_context(params: params.to_unsafe_h)
+    end
+
+    def current_user_context
+      return { user_id: :guest } unless logged_in?
+
+      { user_id: current_user.id,
+        user_email: current_user.email }
     end
 
     # Sets @locale from params[:locale], with I18n.default_locale as fallback
