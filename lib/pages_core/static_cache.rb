@@ -2,6 +2,7 @@
 
 require "pages_core/static_cache/null_handler"
 require "pages_core/static_cache/page_cache_handler"
+require "pages_core/static_cache/varnish_handler"
 
 module PagesCore
   module StaticCache
