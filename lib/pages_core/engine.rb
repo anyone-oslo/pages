@@ -49,6 +49,25 @@ module PagesCore
       )
     end
 
+    initializer :healthcheck do |_app|
+      Healthcheck.configure do |config|
+        config.success = 200
+        config.error = 503
+        config.verbose = true
+        config.route = "/healthcheck"
+        config.method = :get
+
+        # -- Checks --
+        config.add_check :database, lambda {
+          ActiveRecord::Base.connection.execute("select 1")
+        }
+        # config.add_check :migrations, lambda {
+        #   ActiveRecord::Migration.check_pending!
+        # }
+        # config.add_check :cache, -> { Rails.cache.read("some_key") }
+      end
+    end
+
     # React configuration
     initializer :react do |app|
       app.config.react.jsx_transform_options = {
