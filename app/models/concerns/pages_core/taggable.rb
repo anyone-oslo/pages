@@ -47,7 +47,7 @@ module PagesCore
     end
 
     def tag_names
-      tags.order("name ASC").map(&:name)
+      tags.map(&:name).sort
     end
   end
 end
