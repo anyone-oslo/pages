@@ -20,6 +20,7 @@ PATH
       jquery-ui-rails (~> 6.0.0)
       localizable_model (>= 0.5.3)
       lograge (~> 0.11.2)
+      nokogiri
       rails (>= 5.0)
       rails-healthcheck (~> 1.0.3)
       rails-i18n (>= 5.0.0)

@@ -16,7 +16,7 @@ module PagesCore
     def to_html
       string = shorten(parse_images(parse_files(parse_attachments(@string))))
       string += " #{@options[:append]}" if @options[:append]
-      RedCloth.new(string).to_html.html_safe
+      fix_markup(RedCloth.new(string).to_html).html_safe
     end
 
     private
@@ -53,6 +53,10 @@ module PagesCore
          .split(",")
          .map { |id| find_file(id) }
          .compact
+    end
+
+    def fix_markup(str)
+      Nokogiri::HTML.fragment(str).to_html
     end
 
     def parse_attachments(string)

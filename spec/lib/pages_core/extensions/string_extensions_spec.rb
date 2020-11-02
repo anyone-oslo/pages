@@ -19,7 +19,7 @@ describe PagesCore::Extensions::StringExtensions do
     context "with :shorten" do
       subject { string.to_html(shorten: 4) }
 
-      it { is_expected.to eq("<p>Hello&#8230;</p>") }
+      it { is_expected.to eq("<p>Hello…</p>") }
     end
   end
 
@@ -33,7 +33,7 @@ describe PagesCore::Extensions::StringExtensions do
     context "with :shorten" do
       subject { string.to_html_with("Read more", shorten: 4) }
 
-      it { is_expected.to eq("<p>Hello&#8230; Read more</p>") }
+      it { is_expected.to eq("<p>Hello… Read more</p>") }
     end
   end
 end
