@@ -160,10 +160,15 @@ class ImageUploader extends React.Component {
     xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
     xhr.addEventListener("load", function (evt) {
       if (xhr.readyState == 4 && xhr.status == "200") {
-        let image = JSON.parse(xhr.responseText);
-        component.setState({ uploading: false,
-                             image: image,
-                             src: image.thumbnail_url });
+        let response = JSON.parse(xhr.responseText);
+        if (response.status === "error") {
+          ToastActions.error("Error uploading image: " + response.error.join(" "));
+          component.setState({ uploading: false });
+        } else {
+          component.setState({ uploading: false,
+                               image: response,
+                               src: response.thumbnail_url });
+        }
       }
     });
     xhr.send(data);

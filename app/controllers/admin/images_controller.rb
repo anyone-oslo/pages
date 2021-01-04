@@ -14,11 +14,14 @@ module Admin
 
     def create
       @image = Image.create(image_params)
-      return unless @image.valid?
 
       respond_to do |format|
         format.json do
-          render json: @image, serializer: Admin::ImageSerializer
+          if @image.valid?
+            render json: @image, serializer: Admin::ImageSerializer
+          else
+            render json: { status: "error", error: @image.errors.first }
+          end
         end
       end
     end
