@@ -220,7 +220,7 @@ GEM
     parallel (1.19.2)
     parser (2.7.2.0)
       ast (~> 2.4.1)
-    pg (0.18.4)
+    pg (1.2.3)
     pmap (1.1.1)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -375,7 +375,7 @@ DEPENDENCIES
   capybara (~> 3.32)
   factory_bot (~> 4.11.0)
   pages_core!
-  pg (~> 0.18.3)
+  pg (~> 1.2.3)
   pry
   pry-rescue
   pry-stack_explorer

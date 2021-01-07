@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "capybara", "~> 3.32"
   s.add_development_dependency "factory_bot", "~> 4.11.0"
-  s.add_development_dependency "pg", "~> 0.18.3"
+  s.add_development_dependency "pg", "~> 1.2.3"
   s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
   s.add_development_dependency "rspec_junit_formatter"
   s.add_development_dependency "rspec-rails", ">= 3.8.1"
