@@ -20,8 +20,6 @@ module PagesCore
 
       def body_classes
         classes = @body_classes || []
-        classes << controller.class.to_s.underscore
-        classes << "#{controller.action_name}_action" if controller.action_name
         classes << "with_notice" if flash[:notice]
         classes
       end

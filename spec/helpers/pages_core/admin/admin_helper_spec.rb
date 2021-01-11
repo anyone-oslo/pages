@@ -14,7 +14,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
   describe "#body_classes" do
     subject { helper.body_classes }
 
-    let(:classes) { ["action_view/test_case/test_controller"] }
+    let(:classes) { [] }
 
     it { is_expected.to eq(classes) }
 
