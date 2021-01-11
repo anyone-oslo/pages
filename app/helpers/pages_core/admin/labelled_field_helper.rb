@@ -19,7 +19,7 @@ module PagesCore
       #   <% end %>
       #
       def labelled_field(field, label, options = {})
-        content_tag(:div, class: labelled_field_class(options)) do
+        tag.div(class: labelled_field_class(options)) do
           safe_join(
             [labelled_field_label(label, options),
              labelled_field_description(options[:description]),
@@ -32,9 +32,8 @@ module PagesCore
       def image_upload_field(form, label, method = :image, options = {})
         output = ""
         if form.object.send(method)
-          output += content_tag(:p,
-                                dynamic_image_tag(form.object.send(method),
-                                                  size: "120x100"))
+          output += tag.p(dynamic_image_tag(form.object.send(method),
+                                            size: "120x100"))
         end
         output + labelled_field(
           form.file_field(method),
@@ -53,7 +52,7 @@ module PagesCore
       end
 
       def labelled_field_label(label, options = {})
-        content_tag(:label) do
+        tag.label do
           label + labelled_field_errors(options[:errors])
         end
       end
@@ -61,13 +60,13 @@ module PagesCore
       def labelled_field_description(str)
         return "" unless str
 
-        content_tag(:p, str, class: "description")
+        tag.p(str, class: "description")
       end
 
       def labelled_field_errors(errors)
         return "" unless errors&.any?
 
-        content_tag(:span, class: "error") { Array(errors).last }
+        tag.span(class: "error") { Array(errors).last }
       end
     end
   end

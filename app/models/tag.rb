@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
   include PagesCore::HumanizableParam
   has_many :taggings, dependent: :destroy
 

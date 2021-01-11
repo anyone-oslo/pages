@@ -35,7 +35,7 @@ require "timecop"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join("..", "support", "**", "*.rb")].sort.each { |f| require f }
+Dir[Rails.root.join("../support/**/*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -89,7 +89,7 @@ RSpec.configure do |config|
 
   config.after do
     # Clean the Dis storage after each example
-    storage_root = Rails.root.join("db", "dis", "test")
+    storage_root = Rails.root.join("db/dis/test")
     FileUtils.rm_rf(storage_root) if File.exist?(storage_root)
 
     # Reset the ActiveJob queue

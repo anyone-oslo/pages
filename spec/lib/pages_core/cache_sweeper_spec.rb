@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe PagesCore::CacheSweeper do
   let(:singleton) { described_class }
-  let(:cache_path) { Rails.root.join("public", "cache") }
+  let(:cache_path) { Rails.root.join("public/cache") }
   let(:handler) { PagesCore.config.static_cache_handler }
 
   before do
@@ -19,7 +19,7 @@ describe PagesCore::CacheSweeper do
     end
 
     it "resets the enabled value" do
-      singleton.disable {}
+      singleton.disable
       expect(singleton.enabled).to eq(true)
     end
   end
@@ -27,7 +27,7 @@ describe PagesCore::CacheSweeper do
   describe ".once" do
     it "performs the sweep" do
       allow(PagesCore::SweepCacheJob).to receive(:perform_later)
-      singleton.once {}
+      singleton.once
       expect(PagesCore::SweepCacheJob).to have_received(:perform_later).once
     end
   end

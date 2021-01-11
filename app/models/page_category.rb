@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PageCategory < ActiveRecord::Base
+class PageCategory < ApplicationRecord
   belongs_to :page
   belongs_to :category
   validates :page_id, :category_id, presence: true

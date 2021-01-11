@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class ConvertImagesToDis < ActiveRecord::Migration[4.2]
-  class Image < ActiveRecord::Base; end
-  class Binary < ActiveRecord::Base; end
+  class Image < ApplicationRecord; end
+
+  class Binary < ApplicationRecord; end
 
   def change
     add_column :images, :content_hash, :string, null: false

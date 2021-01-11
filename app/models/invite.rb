@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Invite < ActiveRecord::Base
+class Invite < ApplicationRecord
   include PagesCore::HasRoles
 
   belongs_to :user

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Category < ActiveRecord::Base
+class Category < ApplicationRecord
   has_many :page_categories, dependent: :destroy
   has_many :pages, through: :page_categories
   validates :name, presence: true

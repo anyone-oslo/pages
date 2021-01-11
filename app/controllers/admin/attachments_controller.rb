@@ -29,8 +29,8 @@ module Admin
     def attachment_params
       params.require(:attachment).permit(
         :file,
-        localized_attributes.each_with_object({}) do |a, h|
-          h[a] = I18n.available_locales
+        localized_attributes.index_with do |_a|
+          I18n.available_locales
         end
       )
     end

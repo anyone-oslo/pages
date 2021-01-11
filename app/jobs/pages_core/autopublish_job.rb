@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PagesCore
-  class AutopublishJob < ActiveJob::Base
+  class AutopublishJob < ApplicationJob
     queue_as :pages_core
 
     def perform

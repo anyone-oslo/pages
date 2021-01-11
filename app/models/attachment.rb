@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Attachment < ActiveRecord::Base
+class Attachment < ApplicationRecord
   include Dis::Model
   include PagesCore::Sweepable
 

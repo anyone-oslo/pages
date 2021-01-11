@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe PagesCore::PubSub do
-  let(:subscriber) { described_class.subscribe(:foo) {} }
+  let(:subscriber) { described_class.subscribe(:foo) }
 
   describe "#publish" do
     it "calls the subscribers" do

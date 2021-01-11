@@ -74,13 +74,13 @@ module PagesCore
     end
 
     def range_for_year(year)
-      start_time = Time.new(year.to_i, 1, 1)
+      start_time = Time.zone.local(year.to_i, 1, 1)
       end_time = start_time.end_of_year
       (start_time.in_time_zone)..(end_time.in_time_zone)
     end
 
     def range_for_year_and_month(year, month)
-      start_time = Time.new(year.to_i, month, 1)
+      start_time = Time.zone.local(year.to_i, month, 1)
       end_time = start_time.end_of_month
       (start_time.in_time_zone)..(end_time.in_time_zone)
     end

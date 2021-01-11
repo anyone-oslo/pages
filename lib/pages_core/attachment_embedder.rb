@@ -19,12 +19,8 @@ module PagesCore
     end
 
     def embed_attachment(attachment)
-      content_tag(
-        :a,
-        attachment.name,
-        class: "file",
-        href: attachment_path(attachment)
-      )
+      tag.a(attachment.name, class: "file",
+                             href: attachment_path(attachment))
     end
 
     private

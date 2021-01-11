@@ -34,7 +34,7 @@ module PagesCore
       end
 
       def link_separator
-        safe_join [" ", content_tag(:span, "|", class: "separator"), " "]
+        safe_join [" ", tag.span("|", class: "separator"), " "]
       end
 
       def deprecate_page_description_args(string = nil, class_name = nil)

@@ -25,10 +25,8 @@ module PagesCore
       class_name = ["image", image_class_name(image), class_name].compact
       image_tag = dynamic_image_tag(image,
                                     size: size, crop: false, upscale: false)
-      content_tag(:figure,
-                  (link ? link_to(image_tag, link) : image_tag) +
-                  image_caption(image),
-                  class: class_name)
+      tag.figure((link ? link_to(image_tag, link) : image_tag) +
+                  image_caption(image), class: class_name)
     rescue ActiveRecord::RecordNotFound
       nil
     end
@@ -44,7 +42,7 @@ module PagesCore
     def image_caption(image)
       return unless image.caption?
 
-      content_tag(:figcaption, image.caption)
+      tag.figcaption(image.caption)
     end
 
     def image_class_name(image)
@@ -58,7 +56,7 @@ module PagesCore
     end
 
     def link_to(content, href)
-      content_tag(:a, content, href: href)
+      tag.a(content, href: href)
     end
 
     def parse_image(str)

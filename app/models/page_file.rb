@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PageFile < ActiveRecord::Base
+class PageFile < ApplicationRecord
   include PagesCore::Sweepable
 
   belongs_to :page

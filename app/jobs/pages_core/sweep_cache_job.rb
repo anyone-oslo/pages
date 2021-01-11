@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PagesCore
-  class SweepCacheJob < ActiveJob::Base
+  class SweepCacheJob < ApplicationJob
     queue_as :pages_core
 
     def perform

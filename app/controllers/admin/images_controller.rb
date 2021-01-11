@@ -46,8 +46,8 @@ module Admin
         :name, :description, :file,
         :crop_start_x, :crop_start_y, :crop_height, :crop_width, :locale,
         :crop_gravity_x, :crop_gravity_y,
-        localized_attributes.each_with_object({}) do |a, h|
-          h[a] = I18n.available_locales
+        localized_attributes.index_with do |_a|
+          I18n.available_locales
         end
       )
     end

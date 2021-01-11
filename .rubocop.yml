@@ -1,4 +1,6 @@
-require: rubocop-rspec
+require:
+  - rubocop-rails
+  - rubocop-rspec
 
 inherit_from:
   - .rubocop_todo.yml
@@ -34,6 +36,10 @@ Metrics/MethodLength:
     - "db/migrate/*"
     - "lib/rails/generators/**/*_generator.rb"
 
+Metrics/ParameterLists:
+  Exclude:
+    - 'app/helpers/pages_core/form_builder.rb'
+
 Style/AsciiComments:
   Enabled: false
 
@@ -61,3 +67,7 @@ Lint/MissingSuper:
 
 Rails:
   Enabled: true
+
+Rails/DynamicFindBy:
+  AllowedMethods:
+    - find_by_email

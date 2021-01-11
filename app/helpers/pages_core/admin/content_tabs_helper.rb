@@ -20,10 +20,8 @@ module PagesCore
       private
 
       def content_tab_tag(key, content)
-        content_tag(:div,
-                    content,
-                    class: "content_tab",
-                    id: "content-tab-#{key}")
+        tag.div(content, class: "content_tab",
+                         id: "content-tab-#{key}")
       end
     end
   end

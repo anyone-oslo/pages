@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Page < ActiveRecord::Base
+class Page < ApplicationRecord
   include PagesCore::HumanizableParam
   include PagesCore::Sweepable
   include PagesCore::Taggable
@@ -28,9 +28,8 @@ class Page < ActiveRecord::Base
 
   validates(:unique_name,
             format: { with: /\A[\w\d_\-]+\z/,
-                      allow_nil: true,
                       allow_blank: true },
-            uniqueness: { allow_nil: true, allow_blank: true })
+            uniqueness: { allow_blank: true })
 
   validates :template, presence: true
   validates :published_at, presence: true

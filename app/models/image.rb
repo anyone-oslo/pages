@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Image < ActiveRecord::Base
+class Image < ApplicationRecord
   include DynamicImage::Model
   include PagesCore::Sweepable
 

@@ -75,7 +75,7 @@ module PagesCore
       safe_join(
         [
           "<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe,
-          content_tag(:head) do
+          tag.head do
             safe_join(head_tag_contents(block_output), "\n")
           end
         ]
@@ -113,7 +113,7 @@ module PagesCore
       [
         tag(:meta, charset: "utf-8"),
         tag(:meta, "http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
-        content_tag(:title, document_title),
+        tag.title(document_title),
         meta_description_tag, meta_keywords_tag,
         (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
         open_graph_tags,

@@ -51,8 +51,8 @@ module Admin
     private
 
     def localized_attribute(attr)
-      object.locales.each_with_object({}) do |locale, hash|
-        hash[locale] = object.localize(locale).send(attr)
+      object.locales.index_with do |locale|
+        object.localize(locale).send(attr)
       end
     end
   end

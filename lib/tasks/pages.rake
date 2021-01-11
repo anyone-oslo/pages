@@ -11,6 +11,5 @@ namespace :pages do
   end
 
   desc "Perform routine maintenance"
-  task maintenance: [:autopublish] do
-  end
+  task maintenance: [:autopublish]
 end

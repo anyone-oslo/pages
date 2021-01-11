@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InviteRole < ActiveRecord::Base
+class InviteRole < ApplicationRecord
   belongs_to :invite
   validates :name,
             presence: true,

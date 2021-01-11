@@ -16,7 +16,7 @@ module PagesCore
       def tagged_with(*tags)
         all
           .includes(:tags)
-          .where("tags.name IN (?)", Tag.parse(tags))
+          .where(tags: { name: Tag.parse(tags) })
           .references(:tags)
       end
     end

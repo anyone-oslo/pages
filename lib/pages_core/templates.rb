@@ -18,8 +18,8 @@ module PagesCore
 
       def template_paths
         [
-          PagesCore.plugin_root.join("app", "views", "pages", "templates"),
-          Rails.root.join("app", "views", "pages", "templates")
+          PagesCore.plugin_root.join("app/views/pages/templates"),
+          Rails.root.join("app/views/pages/templates")
         ]
       end
 

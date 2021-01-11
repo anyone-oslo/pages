@@ -8,7 +8,7 @@ module PagesCore
       def disable(&_block)
         old_value = enabled
         self.enabled = false
-        yield
+        yield if block_given?
         self.enabled = old_value
       end
 

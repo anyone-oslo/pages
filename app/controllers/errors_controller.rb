@@ -25,11 +25,11 @@ class ErrorsController < ::ApplicationController
 
   def internal_error
     exception = request.env["action_dispatch.exception"]
-    if !exception
-      render_error 500
-    else
+    if exception
       wrapper = ActionDispatch::ExceptionWrapper.new(nil, exception)
       render_error wrapper.status_code
+    else
+      render_error 500
     end
   end
 end

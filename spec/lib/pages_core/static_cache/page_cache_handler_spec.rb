@@ -5,7 +5,7 @@ require "rails_helper"
 describe PagesCore::StaticCache::PageCacheHandler do
   subject(:handler) { described_class.new }
 
-  let(:cache_path) { Rails.root.join("public", "static_cache") }
+  let(:cache_path) { Rails.root.join("public/static_cache") }
   let(:singleton) { described_class }
 
   before do

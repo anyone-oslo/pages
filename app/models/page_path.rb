@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class PagePath < ActiveRecord::Base
+class PagePath < ApplicationRecord
   class PageNotSavedError < StandardError; end
+
   class NoPathError < StandardError; end
+
   class NoLocaleError < StandardError; end
 
   belongs_to :page

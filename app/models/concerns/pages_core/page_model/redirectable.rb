@@ -10,7 +10,6 @@ module PagesCore
       included do
         validates(:redirect_to,
                   format: { with: %r{\A(/|https?://).+\z},
-                            allow_nil: true,
                             allow_blank: true })
       end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   belongs_to :user, touch: true
   validates :name,
             presence: true,
@@ -32,7 +32,7 @@ class Role < ActiveRecord::Base
     protected
 
     def config_file
-      Rails.root.join("config", "roles.yml")
+      Rails.root.join("config/roles.yml")
     end
 
     def config_roles
