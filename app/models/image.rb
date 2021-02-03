@@ -29,6 +29,7 @@ class Image < ApplicationRecord
   private
 
   def ensure_max_size
+    return unless real_width? && real_height?
     return if real_width * real_height <= 48_000_000
 
     errors.add(:data, "is too large")
