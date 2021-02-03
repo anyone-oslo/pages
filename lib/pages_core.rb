@@ -36,6 +36,9 @@ require "sass-rails"
 require "typhoeus"
 require "will_paginate"
 
+# Must be loaded so that PagesCore::LinkRender can resolve the constant.
+require "will_paginate/view_helpers/action_view"
+
 # Assets
 require "font-awesome-rails"
 require "jquery-ui-rails"
