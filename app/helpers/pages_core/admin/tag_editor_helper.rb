@@ -21,7 +21,7 @@ module PagesCore
       def tag_check_box(tag_instance, tagged)
         tag.span(class: :tag) do
           check_box_tag(
-            "tag-#{tag.id}",
+            "tag-#{tag_instance.id}",
             1,
             tagged.include?(tag_instance)
           ) + tag.span(tag_instance.name, class: :name)

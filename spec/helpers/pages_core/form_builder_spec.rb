@@ -17,18 +17,6 @@ describe PagesCore::FormBuilder do
       expect(template).to have_received(:file_field)
         .with(:user, :image, object: resource)
     end
-
-    context "with image" do
-      let(:image) { create(:image) }
-      let(:resource) { create(:user, image: image) }
-
-      it "renders the image" do
-        builder.image_file_field(:image)
-        expect(template).to(
-          have_received(:dynamic_image_tag).with(image, size: "120x100")
-        )
-      end
-    end
   end
 
   describe "#field_with_label" do
