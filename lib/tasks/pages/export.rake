@@ -5,7 +5,7 @@ namespace :pages do
     desc "Export pages"
     task pages: :environment do
       dir = Rails.root.join("export")
-      PageExporter.new(dir).export
+      PageExporter.new(dir, progress_bar: true).export
     end
   end
 end

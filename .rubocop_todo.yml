@@ -34,13 +34,6 @@ Rails/LexicallyScopedActionFilter:
   Exclude:
     - 'app/controllers/pages_core/frontend/pages_controller.rb'
 
-# Offense count: 1
-# Configuration parameters: Include.
-# Include: app/**/*.rb, config/**/*.rb, db/**/*.rb, lib/**/*.rb
-Rails/Output:
-  Exclude:
-    - 'app/models/page_exporter.rb'
-
 # Offense count: 3
 Rails/OutputSafety:
   Exclude:

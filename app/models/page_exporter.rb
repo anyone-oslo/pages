@@ -3,21 +3,25 @@
 require "fileutils"
 
 class PageExporter
-  attr_reader :base_dir
+  attr_reader :base_dir, :progress_bar
 
-  def initialize(base_dir)
+  def initialize(base_dir, progress_bar: false)
     @base_dir = base_dir
+    @progress_bar = progress_bar
   end
 
   def export
     Page.roots.in_locale(I18n.default_locale).each { |p| export_page(p) }
-    puts
   end
 
   private
 
+  def bar
+    @bar ||= ProgressBar.new(Page.count)
+  end
+
   def export_page(page)
-    print "."
+    bar.increment! if progress_bar
     export_page_contents(page)
     export_images(page)
     export_files(page)
@@ -54,8 +58,8 @@ class PageExporter
 
   def export_page_json(path, page)
     json = PageExportSerializer.new(page).to_json
-    write_file(path.join("page.#{p.locale}.json"), json)
-    write_file(path.join("page.#{p.locale}.yml"), JSON.parse(json).to_yaml)
+    write_file(path.join("page.#{page.locale}.json"), json)
+    write_file(path.join("page.#{page.locale}.yml"), JSON.parse(json).to_yaml)
   end
 
   def localized_pages(page)
