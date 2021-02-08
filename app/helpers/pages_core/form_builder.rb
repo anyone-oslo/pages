@@ -7,16 +7,15 @@ module PagesCore
     def field_with_label(attr, str, label = nil, class_name = nil)
       classes = ["field", class_name]
       classes << "field-with-errors" if object.errors[attr].any?
-      content_tag(:div, label_for(attr, label) + str,
-                  class: classes.compact.join(" "))
+      tag.div(label_for(attr, label) + str, class: classes.compact.join(" "))
     end
 
     def image_file_preview(attribute)
       return "" unless object.send(attribute) &&
                        !object.send(attribute).new_record?
 
-      content_tag(
-        :p, @template.dynamic_image_tag(object.send(attribute), size: "120x100")
+      tag.p(
+        @template.dynamic_image_tag(object.send(attribute), size: "120x100")
       )
     end
 
@@ -27,14 +26,14 @@ module PagesCore
     def label_and_errors(attribute, label_text)
       return label_text unless object.errors[attribute].any?
 
-      error = content_tag(:span, object.errors[attribute].first, class: "error")
+      error = tag.span(object.errors[attribute].first, class: "error")
       safe_join([label_text, error], " ")
     end
 
     def label_for(attribute, label_text = nil)
       label_text ||= object.class.human_attribute_name(attribute)
-      content_tag("label", label_and_errors(attribute, label_text),
-                  for: [object.class.to_s.underscore, attribute].join("_"))
+      tag.label(label_and_errors(attribute, label_text),
+                for: [object.class.to_s.underscore, attribute].join("_"))
     end
 
     def labelled_check_box(

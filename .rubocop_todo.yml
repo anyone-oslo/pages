@@ -12,13 +12,6 @@ Rails/ApplicationController:
   Exclude:
     - 'app/controllers/pages_core/base_controller.rb'
 
-# Offense count: 10
-# Cop supports --auto-correct.
-Rails/ContentTag:
-  Exclude:
-    - 'app/helpers/pages_core/admin/tag_editor_helper.rb'
-    - 'app/helpers/pages_core/form_builder.rb'
-
 # Offense count: 42
 # Configuration parameters: Include.
 # Include: app/helpers/**/*.rb
