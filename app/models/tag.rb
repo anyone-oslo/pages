@@ -34,7 +34,8 @@ class Tag < ApplicationRecord
     end
 
     def taggable_suggestions(taggable, limit)
-      all_suggestions(limit).where("taggings.taggable_type = ?", taggable.class)
+      all_suggestions(limit)
+        .where(taggings: { taggable_type: taggable.class.to_s })
     end
 
     def all_suggestions(limit)
