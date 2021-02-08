@@ -23,6 +23,7 @@ Metrics/BlockLength:
     - "*.gemspec"
     - "**/*_spec.rb"
     - "**/*.builder"
+    - "db/migrate/**/*"
     - "config/routes.rb"
     - "spec/factories/**/*.rb"
     - "spec/rails_helper.rb"
@@ -71,3 +72,7 @@ Rails:
 Rails/DynamicFindBy:
   AllowedMethods:
     - find_by_email
+
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20190318115000_create_pages_tables.rb'

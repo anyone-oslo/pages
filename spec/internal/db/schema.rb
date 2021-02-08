@@ -2,8 +2,8 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_160500) do
     t.datetime "updated_at", null: false
     t.index ["image_id", "image_type", "format", "width", "height", "crop_width", "crop_height", "crop_start_x", "crop_start_y"], name: "dynamic_image_variants_by_format_and_size", unique: true
     t.index ["image_id", "image_type"], name: "dynamic_image_variants_by_image"
-    t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image_type_and_image_id"
+    t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image"
   end
 
   create_table "images", id: :serial, force: :cascade do |t|
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_160500) do
     t.index ["page_id"], name: "index_page_categories_on_page_id"
   end
 
-  create_table "page_files", force: :cascade do |t|
+  create_table "page_files", id: :serial, force: :cascade do |t|
     t.bigint "page_id"
     t.bigint "attachment_id"
     t.integer "position"
