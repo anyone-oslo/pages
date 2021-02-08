@@ -38,38 +38,10 @@ module PagesCore
         end
       end
 
-      def migrations
-        plugins.map { |p| p.new.migrations }.flatten.compact
-      end
-
-      def removed_migrations
-        plugins.map { |p| p.new.removed_migrations }.flatten.compact
-      end
-
-      def existing_removed_migrations
-        removed_migrations
-          .select { |m| File.exist?(Rails.root.join("db", "migrate", m)) }
-      end
-
-      def existing_migrations
-        migrations
-          .map { |m| Rails.root.join("db", "migrate", m.basename) }
-          .select { |m| File.exist?(m) }
-      end
-
-      def remove_old_migrations!
-        (existing_removed_migrations + existing_migrations).each do |migration|
-          File.unlink Rails.root.join("db", "migrate", migration)
-        end
-      end
-
       private
 
       def default_paths
-        {
-          "db/migrate" => "db/migrate",
-          "config/removed_migrations.yml" => "config/removed_migrations.yml"
-        }
+        { "db/migrate" => "db/migrate" }
       end
     end
 
@@ -79,30 +51,6 @@ module PagesCore
 
     def paths
       self.class.paths
-    end
-
-    def migrations_path
-      root.join(paths["db/migrate"])
-    end
-
-    def removed_migrations_path
-      root.join(paths["config/removed_migrations.yml"])
-    end
-
-    def migrations?
-      File.exist?(migrations_path) && File.directory?(migrations_path)
-    end
-
-    def migrations
-      Dir.entries(migrations_path)
-         .select { |f| f =~ /\.rb$/ }
-         .map { |f| migrations_path.join(f) }
-    end
-
-    def removed_migrations
-      return unless File.exist?(removed_migrations_path)
-
-      YAML.load_file(removed_migrations_path)
     end
 
     protected
