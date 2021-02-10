@@ -75,4 +75,4 @@ Rails/DynamicFindBy:
 
 Rails/CreateTableWithTimestamps:
   Exclude:
-    - 'db/migrate/20190318115000_create_pages_tables.rb'
+    - 'db/migrate/20111219033112_create_pages_tables.rb'
