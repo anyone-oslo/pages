@@ -10,10 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_20_160500) do
+ActiveRecord::Schema.define(version: 2021_02_10_235200) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "attachments", id: :serial, force: :cascade do |t|
     t.string "filename", null: false
@@ -196,6 +198,25 @@ ActiveRecord::Schema.define(version: 2019_06_20_160500) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["user_id"], name: "index_roles_on_user_id"
+  end
+
+  create_table "search_documents", force: :cascade do |t|
+    t.string "searchable_type", null: false
+    t.bigint "searchable_id", null: false
+    t.string "locale", null: false
+    t.text "name"
+    t.text "description"
+    t.text "content"
+    t.text "tags"
+    t.boolean "published", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "tsv_config", default: "simple_unaccent", null: false
+    t.tsvector "tsv"
+    t.index ["name"], name: "search_documents_trgm_idx", opclass: :gin_trgm_ops, using: :gin
+    t.index ["searchable_type", "searchable_id", "locale"], name: "search_documents_unique_index", unique: true
+    t.index ["searchable_type", "searchable_id"], name: "index_search_documents_on_searchable_type_and_searchable_id"
+    t.index ["tsv"], name: "index_search_documents_on_tsv", using: :gin
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
