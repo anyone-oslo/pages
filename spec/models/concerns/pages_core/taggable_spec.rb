@@ -102,7 +102,10 @@ describe PagesCore::Taggable, type: :model do
     end
 
     context "with tags" do
-      before { page.tag_with("foo, bar") }
+      before do
+        page.tag_with("foo, bar")
+        page.reload
+      end
 
       it { is_expected.to eq("bar, foo") }
     end

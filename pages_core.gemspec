@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.17.1"
   s.add_development_dependency "timecop", "~> 0.8.0"
 
-  s.add_dependency "rails", ">= 5.0"
+  s.add_dependency "rails", ">= 6.0"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "active_model_serializers", "~> 0.10.12"

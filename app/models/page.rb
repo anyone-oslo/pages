@@ -2,6 +2,7 @@
 
 class Page < ApplicationRecord
   include PagesCore::HumanizableParam
+  include PagesCore::SearchableDocument
   include PagesCore::Sweepable
   include PagesCore::Taggable
 
@@ -12,6 +13,7 @@ class Page < ApplicationRecord
   include PagesCore::PageModel::Localizable
   include PagesCore::PageModel::Pathable
   include PagesCore::PageModel::Redirectable
+  include PagesCore::PageModel::Searchable
   include PagesCore::PageModel::Sortable
   include PagesCore::PageModel::Status
   include PagesCore::PageModel::Tree

@@ -22,7 +22,7 @@ PATH
       lograge (~> 0.11.2)
       nokogiri
       progress_bar
-      rails (>= 5.0)
+      rails (>= 6.0)
       rails-healthcheck (~> 1.0.3)
       rails-i18n (>= 5.0.0)
       react-rails (~> 2.4)
