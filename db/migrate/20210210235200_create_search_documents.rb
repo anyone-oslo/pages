@@ -12,6 +12,7 @@ class CreateSearchDocuments < ActiveRecord::Migration[6.0]
       t.text :tags
       t.boolean :published, null: false, default: true
       t.timestamps
+      t.datetime :record_updated_at, null: false
 
       t.index %i[searchable_type searchable_id locale],
               name: :search_documents_unique_index,

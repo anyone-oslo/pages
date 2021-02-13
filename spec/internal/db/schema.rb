@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.boolean "published", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "record_updated_at", null: false
     t.string "tsv_config", default: "simple_unaccent", null: false
     t.tsvector "tsv"
     t.index ["name"], name: "search_documents_trgm_idx", opclass: :gin_trgm_ops, using: :gin
