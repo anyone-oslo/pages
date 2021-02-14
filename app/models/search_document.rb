@@ -34,8 +34,8 @@ class SearchDocument < ApplicationRecord
       all.map(&:localized_searchable)
     end
 
-    def search(query, locale: nil)
-      (locale ? where(locale: locale) : all)
+    def search(query, locale:)
+      where(locale: locale)
         .includes(:searchable)
         .full_text_search_scope(query, search_configuration(locale))
     end
