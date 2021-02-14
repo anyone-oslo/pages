@@ -58,6 +58,11 @@ class CreateSearchDocuments < ActiveRecord::Migration[6.0]
             ON search_documents FOR EACH ROW EXECUTE PROCEDURE
             tsvector_search_documents_trigger();
         SQL
+
+        # Index all pages
+        Page.all.find_each do |p|
+          PagesCore::SearchableDocument::Indexer.new(p).index!
+        end
       end
       dir.down do
         ActiveRecord::Base.connection.execute <<-SQL.squish
