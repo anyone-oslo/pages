@@ -72,5 +72,20 @@ describe SearchDocument, type: :model do
         expect(query("løsningen").first.locale).to eq("nb")
       end
     end
+
+    describe "searching without locale" do
+      subject(:results) { described_class.search("example").results }
+
+      let!(:en_page) { create(:page, locale: :en, name: "example") }
+      let!(:nb_page) { create(:page, locale: :nb, name: "example") }
+
+      it "searches the current locale" do
+        expect(results).to include(nb_page)
+      end
+
+      it "does not search other locales" do
+        expect(results).not_to include(en_page)
+      end
+    end
   end
 end
