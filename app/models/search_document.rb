@@ -25,7 +25,8 @@ class SearchDocument < ApplicationRecord
 
   class << self
     def results
-      all.map(&:localized_searchable)
+      select(:searchable_id, :searchable_type, :locale)
+        .map(&:localized_searchable)
     end
 
     def search(query, locale: nil)
