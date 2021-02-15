@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.17.1"
   s.add_development_dependency "timecop", "~> 0.8.0"
 
-  s.add_dependency "rails", ">= 5.0"
+  s.add_dependency "rails", ">= 6.0"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "active_model_serializers", "~> 0.10.12"
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
   s.add_dependency "dynamic_image", "~> 2.0"
   s.add_dependency "lograge", "~> 0.11.2"
   s.add_dependency "nokogiri"
+  s.add_dependency "pg_search"
   s.add_dependency "progress_bar"
   s.add_dependency "rails-healthcheck", "~> 1.0.3"
   s.add_dependency "RedCloth", "~> 4.3.2"
