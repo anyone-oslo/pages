@@ -60,9 +60,7 @@ class CreateSearchDocuments < ActiveRecord::Migration[6.0]
         SQL
 
         # Index all pages
-        Page.all.find_each do |p|
-          PagesCore::SearchableDocument::Indexer.new(p).index!
-        end
+        PagesCore::SearchableDocument::Indexer.index_all!(Page)
       end
       dir.down do
         ActiveRecord::Base.connection.execute <<-SQL.squish

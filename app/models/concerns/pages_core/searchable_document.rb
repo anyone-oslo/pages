@@ -16,6 +16,12 @@ module PagesCore
         @record = record
       end
 
+      class << self
+        def index_all!(scope)
+          scope.all.find_each { |r| new(r).index! }
+        end
+      end
+
       def index!
         SearchDocument.transaction do
           record.search_documents.where.not(locale: locales).destroy_all
