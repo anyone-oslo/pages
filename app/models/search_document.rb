@@ -41,10 +41,11 @@ class SearchDocument < ApplicationRecord
     end
 
     def search_configurations
-      # These are the dictionaries PostgreSQL ships with
+      # These are the dictionaries PostgreSQL 12 ships with.
+      # Also available in PostgreSQL 13: el: "greek_unaccent",
       { ar: "arabic_unaccent", da: "danish_unaccent", nl: "dutch_unaccent",
         en: "english_unaccent", fi: "finnish_unaccent", fr: "french_unaccent",
-        de: "german_unaccent", el: "greek_unaccent", hu: "hungarian_unaccent",
+        de: "german_unaccent", hu: "hungarian_unaccent",
         id: "indonesian_unaccent", ga: "irish_unaccent", it: "italian_unaccent",
         lt: "lithuanian_unaccent", ne: "nepali_unaccent",
         nb: "norwegian_unaccent", pt: "portuguese_unaccent",

@@ -27,7 +27,7 @@ class CreateSearchConfigurations < ActiveRecord::Migration[5.2]
   private
 
   def dictionaries
-    %w[arabic danish dutch english finnish french german greek
+    %w[arabic danish dutch english finnish french german
        hungarian indonesian irish italian lithuanian nepali
        norwegian portuguese romanian russian spanish swedish
        tamil turkish simple]
