@@ -83,7 +83,7 @@ class User < ApplicationRecord
   end
 
   def online?
-    last_login_at && last_login_at > 15.minutes.ago ? true : false
+    last_login_at && last_login_at > 15.minutes.ago
   end
 
   def realname

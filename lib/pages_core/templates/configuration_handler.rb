@@ -49,7 +49,7 @@ module PagesCore
         value = false if value == :disabled
         stack = [stack] unless stack.is_a?(Enumerable)
         partial_hash = stack.reverse.inject(value) do |hash, key|
-          Hash[key => hash]
+          { key => hash }
         end
         @configuration = @configuration.deep_merge(partial_hash)
         value

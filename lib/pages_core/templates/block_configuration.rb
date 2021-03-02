@@ -11,7 +11,7 @@ module PagesCore
       end
 
       def large?
-        small? ? false : true
+        !small?
       end
     end
   end
