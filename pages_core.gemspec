@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails-healthcheck", "~> 1.0.3"
   s.add_dependency "RedCloth", "~> 4.3.2"
   s.add_dependency "typhoeus", "~> 1.4.0"
-  s.add_dependency "will_paginate", "~> 3.1.0"
+  s.add_dependency "will_paginate"
 
   # Locales
   s.add_dependency "rails-i18n", ">= 5.0.0"
