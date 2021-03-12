@@ -14,8 +14,8 @@ module PagesCore
     end
 
     class << self
-      def call(*attrs)
-        new(*attrs).call
+      def call(attrs, user:, host:, protocol: "http")
+        new(attrs, user: user, host: host, protocol: protocol).call
       end
     end
 
