@@ -26,10 +26,9 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         xml.pubDate item.published_at.to_formatted_s(:rfc822)
         xml.tag!("dc:creator", item.author.name)
         if item.image
-          image_size = item.image.data.try(&:length)
           xml.enclosure(
             url: dynamic_image_url(item.image, size: "2000x2000"),
-            length: image_size,
+            length: item.image.content_length,
             type: item.image.content_type
           )
         end
