@@ -20,7 +20,7 @@ module Admin
           if @image.valid?
             render json: @image, serializer: Admin::ImageSerializer
           else
-            render json: { status: "error", error: @image.errors.first }
+            render json: { status: "error", error: @image.errors.first.full_message }
           end
         end
       end
