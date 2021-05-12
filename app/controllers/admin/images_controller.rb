@@ -16,13 +16,7 @@ module Admin
       @image = Image.create(image_params)
 
       respond_to do |format|
-        format.json do
-          if @image.valid?
-            render json: @image, serializer: Admin::ImageSerializer
-          else
-            render json: { status: "error", error: @image.errors.first.full_message }
-          end
-        end
+        format.json { render_image_json(@image) }
       end
     end
 
@@ -54,6 +48,15 @@ module Admin
 
     def find_image
       @image = Image.find(params[:id])
+    end
+
+    def render_image_json(image)
+      if image.valid?
+        render json: image, serializer: Admin::ImageSerializer
+      else
+        render json: { status: "error",
+                       error: image.errors.first.full_message }
+      end
     end
   end
 end
