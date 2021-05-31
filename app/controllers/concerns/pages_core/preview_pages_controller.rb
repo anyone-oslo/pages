@@ -11,6 +11,7 @@ module PagesCore
     def preview
       redirect_to(page_url(@locale, @page)) && return unless logged_in?
 
+      @preview = true
       @page.attributes = page_params.merge(
         status: 2,
         published_at: Time.zone.now,
@@ -18,6 +19,10 @@ module PagesCore
         redirect_to: nil
       )
       render_page
+    end
+
+    def preview?
+      @preview || false
     end
 
     private
