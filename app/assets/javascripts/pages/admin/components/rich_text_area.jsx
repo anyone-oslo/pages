@@ -125,6 +125,27 @@ class RichTextArea extends React.Component {
     }
   }
 
+  relativeUrl(str) {
+    let url = null;
+
+    if (!str.match(/^https:\/\//) || !document || !document.location) {
+      return str;
+    }
+
+    try {
+      url = new URL(str);
+    } catch (error) {
+      console.log("Error parsing URL: ", error);
+    }
+
+    if (url &&
+        url.hostname == document.location.hostname &&
+        (document.location.port || "80") == (url.port || "80")) {
+      return url.pathname;
+    }
+    return str;
+  }
+
   render() {
     let { value, rows } = this.state;
     let { id, name, simple } = this.props;
