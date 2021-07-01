@@ -2,6 +2,7 @@
   author ||= false
   date ||= false
   section ||= false
+  sections ||= []
 %>
 <tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
   <td class="name">
@@ -44,7 +45,7 @@
   <% end %>
   <% if section %>
     <td>
-      <%= news_section_name(page.parent, @news_pages) %>
+      <%= news_section_name(page.parent, sections) %>
     </td>
   <% end %>
 </tr>

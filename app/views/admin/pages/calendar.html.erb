@@ -28,7 +28,12 @@
     </tr>
     <% @pages.each do |page| %>
       <%= render(partial: "list_item",
-                 locals: { page: page, date: true }) %>
+                 locals: {
+                   page: page,
+                   date: true,
+                   section: true,
+                   sections: @parents
+                 }) %>
     <% end %>
   </table>
 
