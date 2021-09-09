@@ -13,13 +13,15 @@ class EditableImage extends React.Component {
   }
 
   openEditor() {
-    ModalActions.open(
-      <ImageEditor image={this.state.image}
-                   caption={this.props.caption}
-                   locale={this.props.locale}
-                   locales={this.props.locales}
-                   csrf_token={this.props.csrf_token}
-                   onUpdate={this.update} />);
+    ModalStore.dispatch({
+      type: "OPEN",
+      payload: <ImageEditor image={this.state.image}
+                            caption={this.props.caption}
+                            locale={this.props.locale}
+                            locales={this.props.locales}
+                            csrf_token={this.props.csrf_token}
+                            onUpdate={this.update} />
+    });
   }
 
   height() {

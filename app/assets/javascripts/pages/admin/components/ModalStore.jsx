@@ -1,20 +1,10 @@
-var ModalActions = Reflux.createActions([
-  "open",
-  "close"
-]);
-
-class ModalStore extends Reflux.Store {
-  constructor() {
-    super();
-    this.state = { component: null };
-    this.listenToMany(ModalActions);
+var ModalStore = Redux.createStore((state = {}, action) => {
+  switch(action.type) {
+  case "OPEN":
+    return {...state, component: action.payload };
+  case "CLOSE":
+    return {...state, component: null };
+  default:
+    return state;
   }
-
-  onOpen(component) {
-    this.setState({component: component});
-  }
-
-  onClose() {
-    this.setState({component: null});
-  }
-}
+});

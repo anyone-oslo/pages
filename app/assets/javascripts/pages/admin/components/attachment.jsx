@@ -16,7 +16,9 @@ class Attachment extends React.Component {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
-    ToastActions.notice("Embed code copied to clipboard");
+    ToastStore.dispatch({
+      type: "NOTICE", message: "Embed code copied to clipboard"
+    });
   }
 
   deleteRecord(evt) {
@@ -52,13 +54,14 @@ class Attachment extends React.Component {
 
   editAttachment(evt) {
     evt.preventDefault();
-    ModalActions.open(
-      <AttachmentEditor attachment={this.props.record.attachment}
-                        locale={this.props.locale}
-                        locales={this.props.locales}
-                        csrf_token={this.props.csrf_token}
-                        onUpdate={this.props.onUpdate} />
-    );
+    ModalStore.dispatch({
+      type: "OPEN",
+      payload: <AttachmentEditor attachment={this.props.record.attachment}
+                                 locale={this.props.locale}
+                                 locales={this.props.locales}
+                                 csrf_token={this.props.csrf_token}
+                                 onUpdate={this.props.onUpdate} />
+    });
   }
 
   renderAttachment() {

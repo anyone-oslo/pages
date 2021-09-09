@@ -71,7 +71,9 @@ class ImageEditor extends React.Component {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
-    ToastActions.notice("Embed code copied to clipboard");
+    ToastStore.dispatch({
+      type: "NOTICE", message: "Embed code copied to clipboard"
+    });
   }
 
   copySupported() {
@@ -393,7 +395,7 @@ class ImageEditor extends React.Component {
                <button onClick={this.save}>
                  Save
                </button>
-               <button onClick={() => ModalActions.close()}>
+               <button onClick={() => ModalStore.dispatch({ type: "CLOSE" })}>
                  Cancel
                </button>
              </div>
@@ -433,7 +435,7 @@ class ImageEditor extends React.Component {
     if (this.props.onUpdate) {
       this.props.onUpdate(data, this.state.croppedImage);
     }
-    ModalActions.close();
+    ModalStore.dispatch({ type: "CLOSE" });
   }
 
   cropSize() {

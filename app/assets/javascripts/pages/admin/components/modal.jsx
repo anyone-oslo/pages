@@ -1,23 +1,31 @@
-class Modal extends Reflux.Component {
+class Modal extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { component: null };
     this.store = ModalStore;
     this.closeModal = this.closeModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleKeypress = this.handleKeypress.bind(this);
   }
 
   componentDidMount() {
+    this.unsubscribe = this.store.subscribe(this.handleChange);
     window.addEventListener("keypress", this.handleKeypress);
   }
 
   componentWillUnmount() {
+    this.unsubscribe();
     window.removeEventListener("keypress", this.handleKeypress);
   }
 
   closeModal(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    ModalActions.close();
+    ModalStore.dispatch({ type: "CLOSE" });
+  }
+
+  handleChange() {
+    this.setState({ ...this.store.getState() });
   }
 
   handleKeypress(evt) {

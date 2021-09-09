@@ -27,7 +27,9 @@ class GridImage extends React.Component {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
-    ToastActions.notice("Embed code copied to clipboard");
+    ToastStore.dispatch({
+      type: "NOTICE", message: "Embed code copied to clipboard"
+    });
   }
 
   deleteImage(evt) {
