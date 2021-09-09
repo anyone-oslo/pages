@@ -9,7 +9,7 @@
                         all_day: @page.all_day }) %>
 <% end %>
 
-<% if !@page.new_record? && @page.template_config.value(:tags) %>
+<% if @page.template_config.value(:tags) %>
   <div class="field">
     <label>
       Tags

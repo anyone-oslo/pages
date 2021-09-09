@@ -151,11 +151,7 @@ RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
     end
 
     context "when page has tags" do
-      before do
-        page.tag_with(create(:tag, name: "foo"))
-        page.tag_with(create(:tag, name: "bar"))
-        page.reload
-      end
+      before { page.update(tag_list: "foo, bar") }
 
       it { is_expected.to eq("bar, foo") }
     end

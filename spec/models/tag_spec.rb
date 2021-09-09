@@ -16,7 +16,7 @@ describe Tag, type: :model do
     end
 
     context "when subject has been tagged" do
-      before { taggable.tag_with(tag) }
+      before { taggable.tag_with!(tag) }
 
       it { is_expected.to match_array([tag]) }
     end
@@ -26,8 +26,8 @@ describe Tag, type: :model do
       let(:other_taggable) { create(:page) }
 
       before do
-        other_taggable.tag_with(other_tag)
-        taggable.tag_with(tag)
+        other_taggable.tag_with!(other_tag)
+        taggable.tag_with!(tag)
       end
 
       it { is_expected.to match_array([tag, other_tag]) }
@@ -39,8 +39,8 @@ describe Tag, type: :model do
       let(:other_taggable) { create(:page) }
 
       before do
-        other_taggable.tag_with(other_tag)
-        taggable.tag_with(tag)
+        other_taggable.tag_with!(other_tag)
+        taggable.tag_with!(tag)
       end
 
       it { is_expected.to match_array([tag, pinned_tag, other_tag]) }
