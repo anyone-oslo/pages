@@ -358,6 +358,7 @@ class ImageEditor extends React.Component {
                     Locale
                   </label>
                   <select name="locale"
+                          value={locale}
                           onChange={e => this.setState({locale: e.target.value})}>
                     {Object.keys(locales).map(key => (
                       <option key={`locale-${key}`} value={key}>
