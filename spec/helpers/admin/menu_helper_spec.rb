@@ -10,9 +10,9 @@ RSpec.describe Admin::MenuHelper, type: :helper do
 
     let(:pattern) do
       "<ul class=\"pages\"><li><a class=\"\" " \
-      "href=\"/admin/nb/pages/news\">News</a></li>" \
-      "<li><a class=\"current\" href=\"/admin/nb/pages\">" \
-      "Pages</a></li></ul>"
+        "href=\"/admin/nb/pages/news\">News</a></li>" \
+        "<li><a class=\"current\" href=\"/admin/nb/pages\">" \
+        "Pages</a></li></ul>"
     end
 
     before { create(:page, news_page: true) }

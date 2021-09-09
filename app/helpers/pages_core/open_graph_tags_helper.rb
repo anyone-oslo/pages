@@ -13,7 +13,7 @@ module PagesCore
         properties
           .delete_if { |_, content| content.nil? }
           .map do |name, content|
-          tag(:meta, property: "og:#{name}", content: content)
+          tag.meta(property: "og:#{name}", content: content)
         end,
         "\n"
       )

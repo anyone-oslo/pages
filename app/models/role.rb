@@ -11,7 +11,7 @@ class Role < ApplicationRecord
     def define(name, description, default: false)
       if roles.map(&:name).include?(name.to_s)
         raise ArgumentError, "Tried to define role :#{role}, " \
-          "but a role by that name already exists"
+                             "but a role by that name already exists"
       else
         roles << OpenStruct.new(
           name: name.to_s,

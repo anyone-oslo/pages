@@ -5,6 +5,12 @@ require "rails_helper"
 describe SearchDocument, type: :model do
   subject(:search_document) { build(:invite) }
 
+  around do |example|
+    I18n.with_locale(:nb) do
+      example.run
+    end
+  end
+
   describe ".search" do
     def query(str)
       described_class.search(str, locale: locale).results

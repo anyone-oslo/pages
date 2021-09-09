@@ -50,11 +50,11 @@ module PagesCore
     def google_analytics_tags(account_id)
       javascript_tag(
         "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||" \
-          "function(){\n (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new " \
-          "Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];" \
-          "a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window," \
-          "document,'script','//www.google-analytics.com/analytics.js','ga');" \
-          "\n\nga('create', '#{account_id}', 'auto');\nga('send', 'pageview');"
+        "function(){\n (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new " \
+        "Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];" \
+        "a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window," \
+        "document,'script','//www.google-analytics.com/analytics.js','ga');" \
+        "\n\nga('create', '#{account_id}', 'auto');\nga('send', 'pageview');"
       )
     end
 
@@ -87,13 +87,10 @@ module PagesCore
     #  rss_link_tag "My feed", "feed.rss"
     #
     def rss_link_tag(title, href)
-      tag(
-        :link,
-        rel: "alternate",
-        type: "application/rss+xml",
-        title: title,
-        href: href
-      )
+      tag.link(rel: "alternate",
+               type: "application/rss+xml",
+               title: title,
+               href: href)
     end
 
     # Outputs Typekit tags.
@@ -111,11 +108,11 @@ module PagesCore
 
     def head_tag_contents(block_output)
       [
-        tag(:meta, charset: "utf-8"),
-        tag(:meta, "http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
+        tag.meta(charset: "utf-8"),
+        tag.meta("http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
         tag.title(document_title),
         meta_description_tag, meta_keywords_tag,
-        (tag(:link, rel: "image_src", href: meta_image) if meta_image?),
+        (tag.link(rel: "image_src", href: meta_image) if meta_image?),
         open_graph_tags,
         csrf_meta_tags,
         block_output
@@ -125,13 +122,13 @@ module PagesCore
     def meta_description_tag
       return unless meta_description?
 
-      tag(:meta, name: "description", content: meta_description)
+      tag.meta(name: "description", content: meta_description)
     end
 
     def meta_keywords_tag
       return unless meta_keywords?
 
-      tag(:meta, name: "keywords", content: meta_keywords)
+      tag.meta(name: "keywords", content: meta_keywords)
     end
   end
 end

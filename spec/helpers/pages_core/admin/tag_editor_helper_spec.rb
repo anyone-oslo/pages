@@ -11,17 +11,17 @@ RSpec.describe PagesCore::Admin::TagEditorHelper, type: :helper do
     let(:builder) { PagesCore::FormBuilder.new("page", page, helper, {}) }
     let(:pattern) do
       "<div class=\"tag-editor clearfix\">" \
-      "<input class=\"serialized_tags\" type=\"hidden\" " \
-      "value=\"[&quot;#{tag.name}&quot;]\" " \
-      "name=\"page[serialized_tags]\" id=\"page_serialized_tags\" />" \
-      "<div class=\"tags\"><span class=\"tag\">" \
-      "<input type=\"checkbox\" name=\"tag-#{tag.id}\" " \
-      "id=\"tag-#{tag.id}\" " \
-      "value=\"1\" checked=\"checked\" /><span class=\"name\">" \
-      "#{tag.name}</span></span></div><div class=\"add-tag-form\">" \
-      "<input type=\"text\" name=\"add_tag\" id=\"add_tag\" " \
-      "value=\"Add tag...\" class=\"add-tag\" />" \
-      "<button class=\"add-tag-button\">Add</button></div></div>"
+        "<input class=\"serialized_tags\" type=\"hidden\" " \
+        "value=\"[&quot;#{tag.name}&quot;]\" " \
+        "name=\"page[serialized_tags]\" id=\"page_serialized_tags\" />" \
+        "<div class=\"tags\"><span class=\"tag\">" \
+        "<input type=\"checkbox\" name=\"tag-#{tag.id}\" " \
+        "id=\"tag-#{tag.id}\" " \
+        "value=\"1\" checked=\"checked\" /><span class=\"name\">" \
+        "#{tag.name}</span></span></div><div class=\"add-tag-form\">" \
+        "<input type=\"text\" name=\"add_tag\" id=\"add_tag\" " \
+        "value=\"Add tag...\" class=\"add-tag\" />" \
+        "<button class=\"add-tag-button\">Add</button></div></div>"
     end
 
     it { is_expected.to eq(pattern) }

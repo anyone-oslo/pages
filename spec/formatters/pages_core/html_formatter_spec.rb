@@ -93,10 +93,10 @@ describe PagesCore::HtmlFormatter do
 
       let(:output) do
         "<p>Download <a class=\"file\" href=\"" \
-        "#{attachment_path(page_file.attachment)}\">" \
-        "#{page_file.attachment.name}</a>, <a class=\"file\" " \
-        "href=\"#{attachment_path(second_file.attachment)}\">" \
-        "#{second_file.attachment.name}</a></p>"
+          "#{attachment_path(page_file.attachment)}\">" \
+          "#{page_file.attachment.name}</a>, <a class=\"file\" " \
+          "href=\"#{attachment_path(second_file.attachment)}\">" \
+          "#{second_file.attachment.name}</a></p>"
       end
 
       it "embeds links to the files" do

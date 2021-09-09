@@ -9,7 +9,7 @@ class SessionsController < ::ApplicationController
       redirect_to admin_default_url
     else
       flash[:notice] = "The provided email address and password combination " \
-        "was not valid"
+                       "was not valid"
       redirect_to login_admin_users_url
     end
   end

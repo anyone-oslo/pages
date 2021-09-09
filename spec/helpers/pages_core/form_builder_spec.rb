@@ -7,7 +7,11 @@ describe PagesCore::FormBuilder do
   let(:resource) { build(:user) }
   let(:builder) { described_class.new(:user, resource, template, {}) }
 
-  before { I18n.locale = :nb }
+  around do |example|
+    I18n.with_locale(:nb) do
+      example.run
+    end
+  end
 
   describe "#image_file_field" do
     let(:template) { spy }
@@ -25,7 +29,7 @@ describe PagesCore::FormBuilder do
     it "renders the field" do
       expect(field).to eq(
         "<div class=\"field\"><label for=\"user_email\">Email</label>" \
-          "content</div>"
+        "content</div>"
       )
     end
 

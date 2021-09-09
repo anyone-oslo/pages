@@ -12,7 +12,7 @@ PagesCore::Templates.configure do |config|
         "Headline",
         size: :field,
         description: "The main statement, usually largest and boldest, " \
-          "describing the main story."
+                     "describing the main story."
       )
       block.excerpt(
         "Standfirst",
@@ -22,7 +22,7 @@ PagesCore::Templates.configure do |config|
       block.boxout(
         "Boxout",
         description: "Part of the page, usually background info or facts " \
-          "related to the article."
+                     "related to the article."
       )
     end
 
