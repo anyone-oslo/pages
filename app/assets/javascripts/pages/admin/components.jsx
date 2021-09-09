@@ -1,2 +1,2 @@
-//= require ./components/drag_uploader
+//= require ./components/DragUploader
 //= require_tree ./components
