@@ -4,7 +4,6 @@
 //= require jquery-ui
 //= require react
 //= require react_ujs
-//= require reflux.min
 //= require redux
 
 // Vendored assets
