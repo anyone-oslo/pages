@@ -77,7 +77,10 @@
       </div>
     </div>
     <%= react_component "Modal", {} %>
-    <%= react_component "Toast", { notice: flash[:notice] } %>
+    <%= react_component "Toast", {
+      notice: flash[:notice],
+      error: flash[:error]
+    } %>
     <%= render partial: "layouts/admin/analytics" %>
   </body>
 </html>

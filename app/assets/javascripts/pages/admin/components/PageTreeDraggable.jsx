@@ -25,18 +25,12 @@
    SOFTWARE.
  */
 
-class PageTree extends Reflux.Component {
+class PageTreeDraggable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dragging: this.initDragging()
     };
-    this.store = PageTreeStore;
-  }
-
-  componentDidMount() {
-    PageTreeActions.setCSRFToken(this.props.csrf_token);
-    PageTreeActions.init(this.props);
   }
 
   initDragging() {
@@ -52,7 +46,7 @@ class PageTree extends Reflux.Component {
   }
 
   getDraggingDom() {
-    var tree = this.state.tree;
+    var tree = this.props.tree;
     var dragging = this.state.dragging;
     if (dragging && dragging.id) {
       var draggingIndex = tree.getIndex(dragging.id);
@@ -77,7 +71,7 @@ class PageTree extends Reflux.Component {
   }
 
   render() {
-    var tree = this.state.tree;
+    var tree = this.props.tree;
     var dragging = this.state.dragging;
 
     if (!tree) {
@@ -118,7 +112,7 @@ class PageTree extends Reflux.Component {
       locale: parent.node.locale,
       parent_page_id: parent.node.id
     };
-    PageTreeActions.addChild(parent.id, newNode);
+    this.props.addChild(parent.id, newNode);
   }
 
   prevAddButtonCount(tree, index) {
@@ -165,7 +159,7 @@ class PageTree extends Reflux.Component {
       }
     }
 
-    var tree = this.state.tree;
+    var tree = this.props.tree;
     var dragging = this.state.dragging;
     var paddingLeft = this.props.paddingLeft;
     var newIndex = null;
@@ -233,10 +227,7 @@ class PageTree extends Reflux.Component {
       dragging.id = newIndex.id;
     }
 
-    this.setState({
-      dragging: dragging,
-      tree: tree
-    });
+    this.setState({ dragging: dragging });
   }
 
   dragStart(id, dom, e) {
@@ -271,8 +262,8 @@ class PageTree extends Reflux.Component {
 
   dragEnd() {
     if (!this._start) {
-      PageTreeActions.updateTree(this.state.tree);
-      PageTreeActions.movedPage(this.state.dragging.id);
+      this.props.updateTree(this.props.tree);
+      this.props.movedPage(this.state.dragging.id);
     }
 
     this.setState({
@@ -284,17 +275,14 @@ class PageTree extends Reflux.Component {
   }
 
   toggleCollapse(nodeId) {
-    PageTreeActions.toggleCollapsed(nodeId);
+    this.props.toggleCollapsed(nodeId);
   }
 
   updatePage(index, attributes) {
-    PageTreeActions.updatePage(
-      index.id,
-      attributes
-    );
+    this.props.updatePage(index.id, attributes);
   }
 }
 
-PageTree.defaultProps = {
+PageTreeDraggable.defaultProps = {
   paddingLeft: 15
 };

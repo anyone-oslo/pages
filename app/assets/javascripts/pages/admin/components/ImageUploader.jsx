@@ -162,7 +162,10 @@ class ImageUploader extends React.Component {
       if (xhr.readyState == 4 && xhr.status == "200") {
         let response = JSON.parse(xhr.responseText);
         if (response.status === "error") {
-          ToastActions.error("Error uploading image: " + response.error);
+          ToastStore.dispatch({
+            type: "ERROR",
+            message: "Error uploading image: " + response.error
+          });
           component.setState({ uploading: false });
         } else {
           component.setState({ uploading: false,

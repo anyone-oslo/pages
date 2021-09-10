@@ -269,7 +269,9 @@ class ImageGrid extends DragUploader {
     data.append("image[file]", file);
     this.postFile("/admin/images.json", data, function (json) {
       if (json.status === "error") {
-        ToastActions.error("Error uploading image: " + json.error);
+        ToastStore.dispatch({
+          type: "ERROR", message: "Error uploading image: " + json.error
+        });
         component.deleteImage(obj);
       } else {
         let preloader = new Image();

@@ -22,7 +22,9 @@ class AttachmentEditor extends React.Component {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
-    ToastActions.notice("Embed code copied to clipboard");
+    ToastStore.dispatch({
+      type: "NOTICE", message: "Embed code copied to clipboard"
+    });
   }
 
   copySupported() {
@@ -89,7 +91,7 @@ class AttachmentEditor extends React.Component {
             <button onClick={this.save}>
               Save
             </button>
-            <button onClick={() => ModalActions.close()}>
+            <button onClick={() => ModalStore.dispatch({ type: "CLOSE" })}>
               Cancel
             </button>
           </div>
@@ -119,7 +121,7 @@ class AttachmentEditor extends React.Component {
     if (this.props.onUpdate) {
       this.props.onUpdate(data);
     }
-    ModalActions.close();
+    ModalStore.dispatch({ type: "CLOSE" });
   }
 
   updateLocalized(name, value) {
