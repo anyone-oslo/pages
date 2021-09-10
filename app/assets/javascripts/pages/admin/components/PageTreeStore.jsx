@@ -2,7 +2,6 @@ var PageTreeActions = Reflux.createActions([
   "addChild",
   "init",
   "movedPage",
-  "setCSRFToken",
   "toggleCollapsed",
   "updatePage",
   "updateTree"
@@ -154,7 +153,7 @@ class PageTreeStore extends Reflux.Store {
                       children: parentMap[null] });
     this.applyCollapsed(tree);
     tree.updateNodesPosition();
-    this.setState({tree: tree});
+    this.setState({ tree: tree, csrf_token: props.csrf_token });
   }
 
   onMovedPage(id) {
@@ -176,10 +175,6 @@ class PageTreeStore extends Reflux.Store {
     this.setCollapsed(id, false);
     this.createPage(index, attributes);
     this.setState({tree: tree});
-  }
-
-  onSetCSRFToken(token) {
-    this.setState({ csrf_token: token });
   }
 
   onToggleCollapsed(id) {
