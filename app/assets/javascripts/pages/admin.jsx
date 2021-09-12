@@ -1,7 +1,6 @@
 // Gem assets
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 
 //= require_self
 //= require pages/login_form
