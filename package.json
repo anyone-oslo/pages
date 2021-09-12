@@ -1,12 +1,23 @@
 {
   "name": "pages_core",
   "private": true,
+  "dependencies": {
+    "@rails/ujs": "^6.1.4-1",
+    "esbuild": "^0.12.26",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-image-crop": "5.0.0",
+    "react_ujs": "^2.6.1",
+    "redux": "^4.1.1"
+  },
   "devDependencies": {
     "eslint": "^7.1.0",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4"
   },
   "scripts": {
-    "lint-javascript": "eslint 'app/assets/javascripts/**/*.js*'"
+    "lint-javascript": "eslint 'app/javascript/**/*.js*'",
+    "build": "esbuild app/javascript/admin.js --bundle --minify --outdir=app/assets/builds/pages_core"
   }
 }
