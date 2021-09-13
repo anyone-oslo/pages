@@ -3,13 +3,15 @@
   "private": true,
   "dependencies": {
     "@rails/ujs": "^6.1.4-1",
+    "@stimulus/polyfills": "^2.0.0",
     "esbuild": "^0.12.26",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-image-crop": "5.0.0",
     "react_ujs": "^2.6.1",
-    "redux": "^4.1.1"
+    "redux": "^4.1.1",
+    "stimulus": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^7.1.0",

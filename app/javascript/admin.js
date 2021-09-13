@@ -27,3 +27,11 @@ require("react_ujs");
 
 import RichText from "./features/RichText";
 RichText.start();
+
+import "@stimulus/polyfills";
+import { Application } from "stimulus";
+
+import MainController from "./controllers/MainController";
+
+const application = Application.start();
+application.register("main", MainController);

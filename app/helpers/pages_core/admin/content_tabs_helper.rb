@@ -20,8 +20,11 @@ module PagesCore
       private
 
       def content_tab_tag(key, content)
-        tag.div(content, class: "content_tab",
-                         id: "content-tab-#{key}")
+        tag.div(content,
+                class: "content-tab",
+                id: "content-tab-#{key}",
+                data: { tab: key,
+                        "main-target" => "tab" })
       end
     end
   end

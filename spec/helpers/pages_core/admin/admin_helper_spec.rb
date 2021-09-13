@@ -31,8 +31,9 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
     let(:tabs) { helper.instance_variable_get(:@content_tabs) }
 
     it "renders the tab" do
-      expect(tab).to eq(
-        "<div class=\"content_tab\" id=\"content-tab-foo\">Content</div>"
+      expect(tab).to(
+        eq("<div class=\"content-tab\" id=\"content-tab-foo\" " \
+           "data-tab=\"foo\" data-main-target=\"tab\">Content</div>")
       )
     end
 
