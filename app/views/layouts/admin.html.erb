@@ -35,60 +35,26 @@
         data-locale="<%= @locale %>">
 
     <div class="wrapper">
-
       <%= render partial: "layouts/admin/header" %>
+      <% if content_for?(:main_wrapper) %>
+        <%= yield :main_wrapper %>
+      <% else %>
+        <div class="main-wrapper">
+          <main data-controller="main">
+            <%= render(partial: "layouts/admin/page_header") %>
+            <%= yield %>
+          </main>
 
-      <div class="main-wrapper">
-        <main data-controller="main">
-          <% if @page_description || @content_tabs %>
-            <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
-              <% if @page_description_links -%>
-                <div class="links">
-                  <%= @page_description_links.html_safe %>
-                </div>
-              <% end %>
-              <h3>
-                <%= (@page_description || @page_title).html_safe %>
-              </h3>
-              <% if @content_tabs %>
-                <ul id="content-tabs">
-                  <% @content_tabs.map do |t| %>
-                    <li id="content-tab-link-<%= t[:key] %>"
-                        data-tab="<%= t[:key] %>"
-                        data-main-target="link">
-                      <% if t[:options][:disabled] == true %>
-                        <%= t[:name] %>
-                      <% else %>
-                        <%= link_to(
-                          t[:name],
-                          { anchor: "#{t[:key]}" },
-                          data: {
-                            action: "click->main#changeTab",
-                            tab: t[:key]
-                        }) %>
-                      <% end %>
-                    </li>
-                  <% end %>
-                </ul>
-              <% end %>
-            </div>
+          <% if content_for?(:sidebar) %>
+            <aside class="sidebar">
+              <%= content_for(:sidebar) %>
+            </aside>
           <% end %>
-
-          <%= yield %>
-        </main>
-
-        <% if content_for?(:sidebar) %>
-          <aside class="sidebar">
-            <%= content_for(:sidebar) %>
-          </aside>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
     <%= react_component "Modal", {} %>
-    <%= react_component "Toast", {
-      notice: flash[:notice],
-      error: flash[:error]
-    } %>
+    <%= react_component "Toast", { notice: flash[:notice], error: flash[:error] } %>
     <%= render partial: "layouts/admin/analytics" %>
   </body>
 </html>

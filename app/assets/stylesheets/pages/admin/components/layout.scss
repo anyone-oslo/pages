@@ -17,7 +17,8 @@ html, body {
   display: flex;
   flex-flow: column nowrap;
   height: 100vh;
-  > * {
+  > *,
+  .main-wrapper {
     flex-shrink: 0;
   }
 }

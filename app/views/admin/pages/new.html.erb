@@ -11,39 +11,40 @@
   @url_options[:parent] = @page.parent if @page.parent
 %>
 
-<% content_for :sidebar do %>
+<% content_for :main_wrapper do %>
   <%= form_for(@page,
                url: admin_pages_url(@locale),
-               html: {class: "edit-page", id: 'page-form-sidebar'}) do |f| %>
-    <%= render partial: 'edit_options', locals: {f: f} %>
+               builder: PagesCore::Admin::FormBuilder,
+               html: {
+                 class: "edit-page main-wrapper",
+                 id: 'page-form',
+                 method: :post,
+                 multipart: true
+               }
+  ) do |f| %>
+
+    <% content_for :main do %>
+      <div class="content">
+        <%# #### CONTENT #### %>
+        <%= content_tab "Content" do %>
+          <%= render partial: 'edit_content', locals: { f: f } %>
+        <% end %>
+
+        <div class="buttons">
+          <button type="submit">
+            Save
+          </button>
+        </div>
+      </div>
+    <% end %>
+
+    <main data-controller="main">
+      <%= render(partial: "layouts/admin/page_header") %>
+      <%= yield :main %>
+    </main>
+
+    <aside class="sidebar" id="page-form-sidebar">
+      <%= render partial: 'edit_options', locals: { f: f } %>
+    </aside>
   <% end %>
-<% end %>
-
-<%= form_for(@page,
-             url: admin_pages_url(@locale),
-             builder: PagesCore::Admin::FormBuilder,
-             html: {
-               class: "edit-page",
-               id: 'page-form',
-               method: :post,
-               multipart: true
-             }
-) do |f| %>
-
-  <div class="hidden-options">
-    <%= render partial: 'edit_options', locals: {f: f} %>
-  </div>
-
-  <%= hidden_field_tag 'locale', @locale %>
-  <%= f.hidden_field 'parent_page_id' if @page.parent %>
-
-  <%# #### CONTENT #### %>
-  <%= content_tab "Content" do %>
-    <%= render partial: 'edit_content', locals: {f: f} %>
-  <% end %>
-
-  <p>
-    <%= submit_tag "Save" %>
-  </p>
-
 <% end %>

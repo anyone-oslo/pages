@@ -7,7 +7,6 @@ export default class EditPage {
   constructor(container) {
     this.container = container;
     this.toggleAdvancedOptions();
-    this.replicateFormElements();
     this.checkPublishedStatus();
     this.checkPublishedDate();
     this.previewButton();
@@ -66,24 +65,6 @@ export default class EditPage {
       form.action = form.oldAction;
       form.target = "";
     });
-  }
-
-  replicateFormElements() {
-    let replicateFormElement = function() {
-      var newValue = this;
-      $("#page-form").find("[name=\"" + newValue.name + "\"]")
-                     .each(function() {
-                       if (newValue.type === "checkbox") {
-                         $(this).prop("checked", $(newValue).prop("checked"));
-                       } else {
-                         $(this).val($(newValue).val());
-                       }
-                     });
-    };
-
-    $("#page-form-sidebar")
-      .find("input,textarea,select")
-      .change(replicateFormElement);
   }
 
   toggleAdvancedOptions() {
