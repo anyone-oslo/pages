@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import RichTextArea from "../components/RichTextArea";
-import readyHandler from "../readyHandler";
+import readyHandler from "../lib/readyHandler";
 
 class RichText {
   apply () {

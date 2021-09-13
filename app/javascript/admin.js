@@ -3,6 +3,8 @@ import Rails from "@rails/ujs";
 // import "channels";
 Rails.start();
 
+require("react_ujs");
+
 import EditableImage from "./components/EditableImage";
 import ImageUploader from "./components/ImageUploader";
 import Modal from "./components/Modal";
@@ -24,8 +26,6 @@ window["PageTree"] = PageTree;
 window["RichTextArea"] = RichTextArea;
 window["TagEditor"] = TagEditor;
 window["Toast"] = Toast;
-
-require("react_ujs");
 
 import RichText from "./features/RichText";
 RichText.start();
