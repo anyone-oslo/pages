@@ -6,8 +6,6 @@ class PageImage < ApplicationRecord
   belongs_to :page
   belongs_to_image :image
 
-  validates :page_id, presence: true
-
   accepts_nested_attributes_for :image
   validates_associated :image
 

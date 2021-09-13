@@ -136,8 +136,13 @@
     display: none;
   }
 
+  .autopublish-notice,
+  .published-date,
   .advanced-options {
-    visibility: none;
+    display: none;
+    &.show {
+      display: block;
+    }
   }
 
   main input[type=text],

@@ -17,18 +17,17 @@
                builder: PagesCore::Admin::FormBuilder,
                html: {
                  class: "edit-page main-wrapper",
-                 id: 'page-form',
-                 method: :post,
-                 multipart: true
-               }
-  ) do |f| %>
+                 data: {
+                   controller: "edit-page",
+                   "edit-page-target": "form"
+                 }
+               }) do |f| %>
 
     <% content_for :main do %>
       <div class="content">
-        <%# #### CONTENT #### %>
-        <%= content_tab "Content" do %>
-          <%= render partial: 'edit_content', locals: { f: f } %>
-        <% end %>
+        <%= f.hidden_field 'parent_page_id' if @page.parent %>
+
+        <%= render(partial: "form", locals: { f: f }) %>
 
         <div class="buttons">
           <button type="submit">

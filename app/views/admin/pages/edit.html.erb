@@ -14,43 +14,26 @@
 <% content_for :main_wrapper do %>
   <%= form_for(@page,
                url: admin_page_url(@locale, @page),
+               builder: PagesCore::Admin::FormBuilder,
                html: {
                  class: "edit-page main-wrapper",
-                 id: 'page-form',
                  method: :put,
-                 multipart: true
-               },
-               builder: PagesCore::Admin::FormBuilder
-  ) do |f| %>
+                 data: {
+                   controller: "edit-page",
+                   "edit-page-target": "form",
+                   "preview-url": preview_page_url(@page.locale, @page)
+                 }
+               }) do |f| %>
 
     <% content_for :main do %>
       <div class="content">
-        <%# #### CONTENT #### %>
-        <%= content_tab "Content" do %>
-          <%= render partial: 'edit_content', locals: { f: f } %>
-        <% end %>
-
-        <%# #### IMAGES #### %>
-        <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
-          <%= content_tab "Images" do %>
-            <%= render partial: 'edit_images', locals: { f: f } %>
-          <% end %>
-        <% end %>
-
-        <%# #### FILES #### %>
-        <% if @page.template_config.value(:files) %>
-          <%= content_tab "Files" do %>
-            <%= render partial: 'edit_files', locals: { f: f } %>
-          <% end %>
-        <% end %>
-
-        <%# #### METADATA #### %>
-        <%= content_tab "Metadata" do %>
-          <%= render partial: 'edit_metadata', locals: { f: f } %>
-        <% end %>
+        <%= render(partial: "form", locals: { f: f }) %>
 
         <div class="buttons">
-          <button type="button" id="previewButton" data-url="<%= preview_page_url(@page.locale, @page) %>">
+          <button type="button"
+                  id="previewButton"
+                  data-action="click->edit-page#preview"
+                  data-url="<%= preview_page_url(@page.locale, @page) %>">
             Preview
           </button>
           <button type="submit">
