@@ -11,6 +11,7 @@ import PageFiles from "./components/PageFiles";
 import PageImages from "./components/PageImages";
 import PageTree from "./components/PageTree";
 import RichTextArea from "./components/RichTextArea";
+import TagEditor from "./components/TagEditor";
 import Toast from "./components/Toast";
 
 window["EditableImage"] = EditableImage;
@@ -21,6 +22,7 @@ window["PageFiles"] = PageFiles;
 window["PageImages"] = PageImages;
 window["PageTree"] = PageTree;
 window["RichTextArea"] = RichTextArea;
+window["TagEditor"] = TagEditor;
 window["Toast"] = Toast;
 
 require("react_ujs");

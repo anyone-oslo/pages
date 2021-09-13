@@ -12,13 +12,24 @@
     display: block;
     float: left;
     margin: 0 5px 5px 0;
-    padding: 0px 10px;
+    padding: 0px;
     background: $c-background-disabled;
     border-radius: 5px;
     line-height: 26px;
     line-height: 36px;
     min-width: 40px;
     transition: all 200ms ease-out;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    label {
+      margin: 0px;
+      padding: 0px 10px;
+      color: inherit;
+    }
 
     input {
       margin: 2px 3px 0 0;
@@ -30,10 +41,6 @@
     }
 
     &.enabled {
-      //background: #396e97;
-      //border-color: #274b67;
-      //text-shadow: #274b67 1px 1px 1px;
-
       color: #fff;
       background: $c-link;
       background: $c-blue-dark;
@@ -49,8 +56,7 @@
   input.add-tag {
     margin-top: 0px;
     border-radius: 5px;
-    //margin: 0 4px 0 0;
-    //padding: 4px 3px 3px 3px;
+    margin: 0 4px 0 0;
 
     &.example {
       color: $c-text-light;
