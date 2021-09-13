@@ -32,6 +32,8 @@ import "@stimulus/polyfills";
 import { Application } from "stimulus";
 
 import MainController from "./controllers/MainController";
+import LoginController from "./controllers/LoginController";
 
 const application = Application.start();
 application.register("main", MainController);
+application.register("login", LoginController);
