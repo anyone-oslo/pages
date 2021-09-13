@@ -27,6 +27,9 @@ window["Toast"] = Toast;
 
 require("react_ujs");
 
+import { startEditPage } from "./features/EditPage";
+startEditPage();
+
 import RichText from "./features/RichText";
 RichText.start();
 

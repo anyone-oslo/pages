@@ -20,7 +20,6 @@
     <% end %>
 
     <%= javascript_include_tag "pages_core/admin", defer: true %>
-    <%= javascript_include_tag "pages/admin", defer: true %>
     <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
       <%= javascript_include_tag "admin" %>
     <% end %>

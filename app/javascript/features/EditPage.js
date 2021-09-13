@@ -1,4 +1,9 @@
-class EditPage {
+import $ from "jquery";
+import {} from "jquery-ujs";
+
+import readyHandler from "../readyHandler";
+
+export default class EditPage {
   constructor(container) {
     this.container = container;
     this.toggleAdvancedOptions();
@@ -89,9 +94,10 @@ class EditPage {
     });
   }
 }
-
-$(function () {
-  $(".edit-page").each(function() {
-    new EditPage(this);}
-  );
-});
+export function startEditPage () {
+  readyHandler.ready(() => {
+    document.querySelectorAll(".edit-page").forEach((elem) => {
+      new EditPage(elem);
+    });
+  });
+}
