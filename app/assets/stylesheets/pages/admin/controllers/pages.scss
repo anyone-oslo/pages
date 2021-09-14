@@ -126,24 +126,32 @@
 }
 
 .edit-page {
-  padding-top: 1px;
   width: auto;
+
+  main div.content {
+    padding-top: 16px;
+  }
 
   .hidden-options {
     display: none;
   }
 
+  .autopublish-notice,
+  .published-date,
   .advanced-options {
-    visibility: none;
+    display: none;
+    &.show {
+      display: block;
+    }
   }
 
-  main & input[type=text],
-  main & textarea {
+  main input[type=text],
+  main textarea {
     width: 100%;
     max-width: 100%;
   }
 
-  main & input.page_title {
+  main input.page_title {
     font-weight: bold;
     font-size: 1.4em;
     color: $c-text;

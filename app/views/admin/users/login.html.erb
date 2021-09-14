@@ -11,8 +11,11 @@
   </p>
 <% end %>
 
-<div class="login-form">
-  <div class="login-tab password">
+<div class="login-form"
+     data-controller="login">
+  <div class="login-tab password"
+       data-login-target="tab"
+       data-tab="password">
     <%= form_tag session_path do %>
       <p>
         <label>Email address</label>
@@ -29,13 +32,18 @@
         <li>
           <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
                       login_admin_users_path,
-                      class: 'show-password-reset') %>
+                      data: {
+                        action: "click->login#changeTab",
+                        tab: "password-reset"
+          }) %>
         </li>
       </ul>
     <% end %>
   </div>
 
-  <div class="login-tab password-reset">
+  <div class="login-tab password-reset"
+       data-login-target="tab"
+       data-tab="password-reset">
     <%= form_tag admin_password_resets_path do %>
       <h2>
         Forgot your password?

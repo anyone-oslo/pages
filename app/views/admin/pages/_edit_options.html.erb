@@ -1,72 +1,90 @@
-<%= labelled_field(f.select(:status, Page.status_labels.invert),
-                   "Status",
-                   errors: @page.errors[:status]) %>
-<div class="published-date">
-  <%= labelled_field (
+<div class="page-options"
+     data-controller="page-options">
+  <%= labelled_field(f.select(:status,
+                              Page.status_labels.invert,
+                              {},
+                              data: {
+                                "page-options-target": "published",
+                                action: "change->page-options#checkPublishedDate"
+                              }),
+                     "Status",
+                     errors: @page.errors[:status]) %>
+  <div class="published-date"
+       data-page-options-target="publishedDate">
+    <%= labelled_field (
       f.date_select(
         :published_at,
-        start_year: (Time.now.year - 20),
-        end_year: (Time.now.year + 5)
+        { start_year: (Time.now.year - 20),
+          end_year: (Time.now.year + 5),
+          with_css_classes: true },
+        data: { action: "change->page-options#checkAutoPublish" }
       ) +
       '<br />'.html_safe +
-      f.time_select(:published_at)
+      f.time_select(:published_at,
+                    { with_css_classes: true },
+                    data: { action: "change->page-options#checkAutoPublish" })
     ),
-    "Date",
-    errors: @page.errors[:published_at]
-  %>
-  <p class="autopublish-notice">
-    This page will publish later
-  </p>
-</div>
+     "Date",
+     errors: @page.errors[:published_at]
+    %>
+    <p class="autopublish-notice"
+       data-page-options-target="autoPublishNotice">
+      This page will publish later
+    </p>
+  </div>
 
-<%= labelled_field (
+  <%= labelled_field (
     f.select(:user_id, page_authors(@page).map{|a| [a.name, a.id]})
   ),
-  "Author",
-  errors: @page.errors[:user_id]
-%>
+   "Author",
+   errors: @page.errors[:user_id]
+  %>
 
-<div class="field">
-  <label>
-    Pin to top
-  </label>
-  <%= f.check_box(:pinned) %>
-  Make post featured<br />
+  <div class="field">
+    <label>
+      Pin to top
+    </label>
+    <%= f.check_box(:pinned) %>
+    Make post featured<br />
+  </div>
+
+  <% if @categories.length > 0 %>
+    <div class="field">
+      <label>Categories</label>
+      <% @categories.each do |category| %>
+        <%= check_box_tag("category[#{category.id}]",
+                          "1",
+                          @page.categories.map { |c| c.id }.include?(category.id)) %>
+        <%= category.name %><br />
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= labelled_field(f.select(:template, available_templates_for_select),
+                     "Template",
+                     errors: @page.errors[:template]) %>
+
+  <%= link_to("Advanced options",
+              "#",
+              class: "advanced-toggle",
+              data: { action: "click->page-options#toggleAdvancedOptions" }) %>
+
+  <div class="advanced-options"
+       data-page-options-target="advancedOptions">
+    <div class="field">
+      <label>Subpages</label>
+      <%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
+      <%= f.check_box(:news_page) %> Show in News<br />
+    </div>
+    <%= labelled_field f.text_field(:unique_name), "Unique name", errors: @page.errors[:unique_name] %>
+    <%= labelled_field f.text_field(:redirect_to), "Redirect", errors: @page.errors[:redirect_to] %>
+  </div>
+
+  <% if @page.id? && @page.name? %>
+    <div class="field">
+      <label>Page link</label>
+      <%= link_to(page_path(@page.locale, @page),
+                  page_path(@page.locale, @page)) %>
+    </div>
+  <% end %>
 </div>
-
-<% if @categories.length > 0 %>
-  <div class="field">
-    <label>Categories</label>
-    <% @categories.each do |category| %>
-      <%= check_box_tag("category[#{category.id}]",
-                        "1",
-                        @page.categories.map { |c| c.id }.include?(category.id)) %>
-      <%= category.name %><br />
-    <% end %>
-  </div>
-<% end %>
-
-<%= labelled_field(f.select(:template, available_templates_for_select),
-                   "Template",
-                   errors: @page.errors[:template]) %>
-
-<%= link_to "Advanced options", "#", class: "advanced-toggle" %>
-
-<div class="advanced-options">
-
-  <div class="field">
-    <label>Subpages</label>
-    <%= f.check_box(:feed_enabled) %> RSS feed enabled<br />
-    <%= f.check_box(:news_page) %> Show in News<br />
-  </div>
-  <%= labelled_field f.text_field(:unique_name), "Unique name", errors: @page.errors[:unique_name] %>
-  <%= labelled_field f.text_field(:redirect_to), "Redirect", errors: @page.errors[:redirect_to] %>
-</div>
-
-<% if @page.id? && @page.name? %>
-  <div class="field">
-    <label>Page link</label>
-    <%= link_to(page_path(@page.locale, @page),
-                page_path(@page.locale, @page)) %>
-  </div>
-<% end %>

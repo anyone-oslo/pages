@@ -1,0 +1,19 @@
+<%= content_tab "Content" do %>
+  <%= render partial: "edit_content", locals: { f: f } %>
+<% end %>
+
+<% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
+  <%= content_tab "Images" do %>
+    <%= render partial: "edit_images", locals: { f: f } %>
+  <% end %>
+<% end %>
+
+<% if @page.template_config.value(:files) %>
+  <%= content_tab "Files" do %>
+    <%= render partial: "edit_files", locals: { f: f } %>
+  <% end %>
+<% end %>
+
+<%= content_tab "Metadata" do %>
+  <%= render partial: "edit_metadata", locals: { f: f } %>
+<% end %>

@@ -51,13 +51,6 @@ module PagesCore
           File.join("app/assets/stylesheets/components/base.scss")
         )
       end
-
-      def create_application_js
-        template(
-          "application.js.erb",
-          File.join("app/assets/javascripts/application.js")
-        )
-      end
     end
   end
 end

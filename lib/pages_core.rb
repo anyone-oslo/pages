@@ -43,8 +43,6 @@ require "will_paginate/view_helpers/action_view"
 
 # Assets
 require "font-awesome-rails"
-require "jquery-ui-rails"
-require "jquery/rails/engine"
 require "react-rails"
 
 # Pages

@@ -54,13 +54,11 @@ Gem::Specification.new do |s|
   # Default asset dependencies
   s.add_dependency "coffee-rails", "~> 4.2"
   s.add_dependency "jbuilder", "~> 2.5"
-  s.add_dependency "jquery-rails"
   s.add_dependency "sass-rails", ">= 5.0"
   s.add_dependency "uglifier", ">= 1.3.0"
 
   # Extra asset dependencies
   s.add_dependency "font-awesome-rails", "~> 4.7"
-  s.add_dependency "jquery-ui-rails", "~> 6.0.0"
   s.add_dependency "react-rails", "~> 2.4"
 
   # ActiveRecord extensions

@@ -1,0 +1,33 @@
+<% if @page_description || @content_tabs %>
+  <div id="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+    <% if @page_description_links -%>
+      <div class="links">
+        <%= @page_description_links.html_safe %>
+      </div>
+    <% end %>
+    <h3>
+      <%= (@page_description || @page_title).html_safe %>
+    </h3>
+    <% if @content_tabs %>
+      <ul id="content-tabs">
+        <% @content_tabs.map do |t| %>
+          <li id="content-tab-link-<%= t[:key] %>"
+              data-tab="<%= t[:key] %>"
+              data-main-target="link">
+            <% if t[:options][:disabled] == true %>
+              <%= t[:name] %>
+            <% else %>
+              <%= link_to(
+                t[:name],
+                { anchor: "#{t[:key]}" },
+                data: {
+                  action: "click->main#changeTab",
+                  tab: t[:key]
+              }) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
