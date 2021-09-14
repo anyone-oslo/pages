@@ -48,14 +48,8 @@ module PagesCore
     #  google_analytics_tags "UA-12345678-1"
     #
     def google_analytics_tags(account_id)
-      javascript_tag(
-        "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||" \
-        "function(){\n (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new " \
-        "Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];" \
-        "a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window," \
-        "document,'script','//www.google-analytics.com/analytics.js','ga');" \
-        "\n\nga('create', '#{account_id}', 'auto');\nga('send', 'pageview');"
-      )
+      render(partial: "pages_core/google_analytics",
+             locals: { account_id: account_id })
     end
 
     # Outputs a HTML5 doctype and head tags, with document title

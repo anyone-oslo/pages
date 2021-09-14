@@ -27,6 +27,7 @@
     <%= csrf_meta_tag %>
     <meta name="viewport"
           content="width=device-width, initial-scale=1, user-scalable=no">
+    <%= google_analytics_tags "UA-5468672-21" %>
   </head>
 
   <body class="<%= body_classes.join(" ") %>"
@@ -55,6 +56,5 @@
     </div>
     <%= react_component "Modal", {} %>
     <%= react_component "Toast", { notice: flash[:notice], error: flash[:error] } %>
-    <%= render partial: "layouts/admin/analytics" %>
   </body>
 </html>
