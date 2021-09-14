@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "@rails/ujs": "^6.1.4-1",
-    "@stimulus/polyfills": "^2.0.0",
     "esbuild": "^0.12.26",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

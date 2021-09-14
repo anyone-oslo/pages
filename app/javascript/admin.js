@@ -30,7 +30,6 @@ window["Toast"] = Toast;
 import RichText from "./features/RichText";
 RichText.start();
 
-import "@stimulus/polyfills";
 import { Application } from "stimulus";
 
 import EditPageController from "./controllers/EditPageController";
