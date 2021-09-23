@@ -19,6 +19,6 @@
   },
   "scripts": {
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
-    "build": "esbuild app/javascript/*.js --bundle --minify --outdir=app/assets/builds/pages_core"
+    "build": "esbuild app/javascript/*.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   }
 }
