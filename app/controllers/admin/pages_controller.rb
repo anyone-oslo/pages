@@ -3,7 +3,6 @@
 module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::PageJsonHelper
-    include PagesCore::Admin::NewsPageController
 
     before_action :find_categories
     before_action :find_page, only: %i[show edit update destroy move]

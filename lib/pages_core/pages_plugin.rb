@@ -15,7 +15,7 @@ module PagesCore
 
     paths["db/migrate"] = "db/migrate"
 
-    admin_menu_item "News",  proc { news_admin_pages_path(@locale) }, :pages,
+    admin_menu_item "News",  proc { admin_news_index_path(@locale) }, :pages,
                     if: proc { Page.news_pages.any? },
                     current: proc { @page && @page.parent.try(&:news_page?) }
 

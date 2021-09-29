@@ -20,34 +20,6 @@ describe Admin::PagesController do
     it { is_expected.to render_template("admin/pages/index") }
   end
 
-  describe "GET news" do
-    context "without a news page" do
-      before { get :news, params: { locale: locale } }
-
-      it { is_expected.to redirect_to(admin_pages_url(locale)) }
-    end
-
-    context "with a news page" do
-      let!(:root) { create(:page, news_page: true) }
-      let!(:article1) { create(:page, parent: root) }
-
-      before do
-        create(:page, parent: root, published_at: 1.year.ago)
-        get :news, params: { locale: locale, year: article1.published_at.year }
-      end
-
-      it { is_expected.to render_template("admin/pages/news") }
-
-      it "sets the archive finder" do
-        expect(assigns(:archive_finder)).to be_a(PagesCore::ArchiveFinder)
-      end
-
-      it "finds the page" do
-        expect(assigns(:pages)).to eq([article1])
-      end
-    end
-  end
-
   describe "GET new" do
     before { get :new, params: { locale: locale } }
 
@@ -90,15 +62,6 @@ describe Admin::PagesController do
 
       it { is_expected.to be_valid }
     end
-  end
-
-  describe "GET new_news" do
-    before do
-      create(:page, news_page: true)
-      get :new_news, params: { locale: locale }
-    end
-
-    it { is_expected.to render_template("admin/pages/new") }
   end
 
   describe "GET show" do

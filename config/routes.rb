@@ -78,12 +78,14 @@ Rails.application.routes.draw do
 
     # Pages
     scope ":locale" do
+      resources :news,
+                only: %i[index],
+                path: "pages/news(/:year(/:month)(/page/:page))"
+
       resources :pages do
         collection do
-          get "news(/:year(/:month)(/page/:page))", action: :news, as: :news
           get "calendar"
           get "deleted"
-          get "new_news" # TODO: Should be refactored
         end
 
         member do
