@@ -21,7 +21,8 @@
       ) +
       '<br />'.html_safe +
       f.time_select(:published_at,
-                    { with_css_classes: true },
+                    { with_css_classes: true,
+                      ignore_date: true },
                     data: { action: "change->page-options#checkAutoPublish" })
     ),
      "Date",
