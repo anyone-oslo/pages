@@ -19,16 +19,21 @@ module PagesCore
     end
 
     def authenticate!(user)
-      user.mark_active!
-      @current_user = user
+      reset_session
+      authenticated(user)
     end
 
     def deauthenticate!
       @current_user = nil
-      session[:current_user_id] = nil
+      reset_session
     end
 
     protected
+
+    def authenticated(user)
+      user.mark_active!
+      @current_user = user
+    end
 
     def start_authenticated_session
       if session[:current_user_id]
@@ -37,7 +42,7 @@ module PagesCore
 
       return unless user&.can_login?
 
-      authenticate!(user)
+      authenticated(user)
     end
 
     def finalize_authenticated_session
