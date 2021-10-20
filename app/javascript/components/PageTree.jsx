@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import PageTreeDraggable from "./PageTreeDraggable";
 import Tree from "../lib/Tree";
+import { post, put } from "../lib/request";
 
 export default class PageTree extends React.Component {
   constructor(props) {
@@ -94,17 +95,8 @@ export default class PageTree extends React.Component {
   }
 
   createPage(index, attributes) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", `/admin/${index.node.locale}/pages.json`);
-    xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.addEventListener("load", () => {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-        this.updateNode(index, JSON.parse(xhr.responseText));
-      }
-    });
-    xhr.send(JSON.stringify({ page: attributes }));
-
+    post(`/admin/${index.node.locale}/pages.json`, { page: attributes })
+      .then(response => this.updateNode(index, response));
   }
 
   buildTree(pages) {
@@ -137,16 +129,7 @@ export default class PageTree extends React.Component {
   }
 
   performUpdate(index, url, data) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("PUT", url);
-    xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.addEventListener("load", () => {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-        this.updateNode(index, JSON.parse(xhr.responseText));
-      }
-    });
-    xhr.send(JSON.stringify(data));
+    put(url, data).then(response => this.updateNode(index, response));
   }
 
   render() {
@@ -205,7 +188,6 @@ export default class PageTree extends React.Component {
 
 PageTree.propTypes = {
   pages: PropTypes.array,
-  csrf_token: PropTypes.string,
   locale: PropTypes.string,
   permissions: PropTypes.array
 };

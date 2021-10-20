@@ -14,7 +14,6 @@
   <% cache Page.visible.roots.to_a + [current_user, @locale] do %>
     <%= react_component(
       "PageTree", {
-        csrf_token: form_authenticity_token,
         pages: @pages.map { |p| page_json(p) },
         locale: @locale,
         permissions: [(:create if policy(Page).create?)] }
