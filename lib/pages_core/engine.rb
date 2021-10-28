@@ -38,10 +38,6 @@ module PagesCore
       ]
     end
 
-    initializer :enable_recursive_serialization do |_app|
-      ActiveModelSerializers.config.default_includes = "**"
-    end
-
     initializer :handle_exceptions do |app|
       app.config.exceptions_app = app.routes
       ActionDispatch::ExceptionWrapper.rescue_responses.merge!(

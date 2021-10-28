@@ -1,37 +1,29 @@
 # frozen_string_literal: true
 
-class PageImageSerializer < ActiveModel::Serializer
+class PageImageResource
+  include Alba::Resource
   include Rails.application.routes.url_helpers
   include DynamicImage::Helper
 
-  attributes :id, :image_id, :primary, :filename
-  attributes :alternative, :caption, :created_at, :url
+  attributes :id, :image_id, :primary
 
-  def name
-    object.image.name
-  end
-
-  def alternative
+  attribute :alternative do
     object.image.alternative
   end
 
-  def caption
+  attribute :caption do
     object.image.caption
   end
 
-  def filename
+  attribute :filename do
     object.image.filename
   end
 
-  def size
-    object.image.crop_size
-  end
-
-  def created_at
+  attribute :created_at do
     object.image.created_at
   end
 
-  def url
+  attribute :url do
     dynamic_image_path(
       object.image,
       size: "2000x2000",

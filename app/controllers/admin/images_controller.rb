@@ -52,7 +52,7 @@ module Admin
 
     def render_image_json(image)
       if image.valid?
-        render json: image, serializer: Admin::ImageSerializer
+        render json: Admin::ImageResource.new(image)
       else
         render json: { status: "error",
                        error: image.errors.first.full_message }
