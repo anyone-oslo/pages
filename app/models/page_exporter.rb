@@ -29,7 +29,7 @@ class PageExporter
   end
 
   def export_files(page)
-    path = page_path(page).join("files")
+    path = page_path(page).join("attachments")
     page.attachments.each do |file|
       write_file(
         path.join([file.content_hash, file.filename].join("-")),
@@ -57,7 +57,7 @@ class PageExporter
   end
 
   def export_page_json(path, page)
-    json = PageExportSerializer.new(page).to_json
+    json = Export::PageResource.new(page).serialize
     write_file(path.join("page.#{page.locale}.json"), json)
     write_file(path.join("page.#{page.locale}.yml"), JSON.parse(json).to_yaml)
   end

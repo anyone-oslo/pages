@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 
 module Admin
-  class AttachmentSerializer < ActiveModel::Serializer
+  class AttachmentResource
+    include Alba::Resource
     include Rails.application.routes.url_helpers
     include PagesCore::AttachmentsHelper
 
     attributes :id, :filename, :content_type, :content_hash, :content_length,
-               :name, :description, :created_at, :updated_at, :url
+               :created_at, :updated_at
 
-    def name
+    attribute :name do
       localized_attribute(:name)
     end
 
-    def description
+    attribute :description do
       localized_attribute(:description)
     end
 
-    def url
+    attribute :url do
       attachment_path(object)
     end
 

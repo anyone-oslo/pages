@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 6.0"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
-  s.add_dependency "active_model_serializers", "~> 0.10.12"
+  s.add_dependency "alba", "~> 1.3.0"
   s.add_dependency "bcrypt"
   s.add_dependency "country_select"
   s.add_dependency "dis", "~> 1.1.2"

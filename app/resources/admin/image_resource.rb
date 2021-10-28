@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
 module Admin
-  class ImageSerializer < ActiveModel::Serializer
+  class ImageResource
+    include Alba::Resource
     include Rails.application.routes.url_helpers
     include DynamicImage::Helper
 
     attributes :id, :filename, :content_type, :content_hash, :content_length,
                :colorspace, :real_width, :real_height, :crop_width,
                :crop_height, :crop_start_x, :crop_start_y, :crop_gravity_x,
-               :crop_gravity_y, :alternative, :caption, :created_at, :updated_at
-    attributes :cropped_url, :uncropped_url, :original_url, :thumbnail_url
+               :crop_gravity_y, :created_at, :updated_at
 
-    def alternative
+    attribute :alternative do
       localized_attribute(:alternative)
     end
 
-    def caption
+    attribute :caption do
       localized_attribute(:caption)
     end
 
-    def original_url
+    attribute :original_url do
       original_dynamic_image_path(object)
     end
 
-    def thumbnail_url
+    attribute :thumbnail_url do
       dynamic_image_path(
         object,
         size: "500x",
@@ -31,7 +31,7 @@ module Admin
       )
     end
 
-    def cropped_url
+    attribute :cropped_url do
       dynamic_image_path(
         object,
         size: "1200x1200",
@@ -40,7 +40,7 @@ module Admin
       )
     end
 
-    def uncropped_url
+    attribute :uncropped_url do
       uncropped_dynamic_image_path(
         object,
         size: "2000x2000",

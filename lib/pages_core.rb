@@ -17,8 +17,8 @@ require "action_mailer"
 
 # Gems
 require "actionpack/page_caching"
-require "active_model_serializers"
 require "acts_as_list"
+require "alba"
 require "bcrypt"
 require "country_select"
 require "delayed_job_active_record"

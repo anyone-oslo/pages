@@ -27,7 +27,7 @@ module PagesCore
       def show
         respond_to do |format|
           format.html { render_published_page(@page) }
-          format.json { render json: @page }
+          format.json { render json: PageResource.new(@page) }
           format.rss do
             render_rss(@page.pages.limit(20).includes(:image, :author),
                        title: @page.name)

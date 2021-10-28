@@ -31,7 +31,7 @@ module PagesCore
         return {} unless image
 
         { src: dynamic_image_path(image, size: "#{width * 2}x"),
-          image: ::Admin::ImageSerializer.new(image) }
+          image: ::Admin::ImageResource.new(image).to_hash }
       end
 
       def editable_image_options(image, width: 250, caption: false, locale: nil)

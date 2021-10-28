@@ -44,7 +44,7 @@ module Admin
     end
 
     def render_attachment(attachment)
-      render json: attachment, serializer: Admin::AttachmentSerializer
+      render json: Admin::AttachmentResource.new(attachment)
     end
   end
 end

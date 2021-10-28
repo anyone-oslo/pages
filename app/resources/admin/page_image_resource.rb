@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module Admin
-  class PageImageSerializer < ActiveModel::Serializer
+  class PageImageResource
+    include Alba::Resource
+
     attributes :id, :page_id, :image_id, :position, :primary
-    has_one :image, serializer: Admin::ImageSerializer
+    one :image, resource: Admin::ImageResource
   end
 end
