@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactCrop from "react-image-crop";
+import copyToClipboard from "../lib/copyToClipboard";
 import FocalPoint from "./FocalPoint";
 import ModalStore from "./ModalStore";
 import ToastStore from "./ToastStore";
@@ -72,12 +73,7 @@ export default class ImageEditor extends React.Component {
 
   copyEmbedCode(evt) {
     evt.preventDefault();
-    const el = document.createElement("textarea");
-    el.value = `[image:${this.props.image.id}]`;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    copyToClipboard(`[image:${this.props.image.id}]`);
     ToastStore.dispatch({
       type: "NOTICE", message: "Embed code copied to clipboard"
     });

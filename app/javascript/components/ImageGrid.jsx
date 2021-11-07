@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import DragUploader from "./DragUploader";
 import FileUploadButton from "./FileUploadButton";
-import GridImage from "./GridImage";
+import GridImage from "./ImageGrid/GridImage";
 import ToastStore from "./ToastStore";
 
 export default class ImageGrid extends DragUploader {

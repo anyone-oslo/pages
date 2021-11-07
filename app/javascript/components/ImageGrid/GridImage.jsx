@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import EditableImage from "./EditableImage";
-import ToastStore from "./ToastStore";
+import copyToClipboard from "../../lib/copyToClipboard";
+import EditableImage from "../EditableImage";
+import ToastStore from "../ToastStore";
+import Placeholder from "./Placeholder";
 
 export default class GridImage extends React.Component {
   constructor(props) {
@@ -26,12 +28,7 @@ export default class GridImage extends React.Component {
   copyEmbed(evt) {
     let image = this.props.record.image;
     evt.preventDefault();
-    const el = document.createElement("textarea");
-    el.value = `[image:${image.id}]`;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    copyToClipboard(`[image:${image.id}]`);
     ToastStore.dispatch({
       type: "NOTICE", message: "Embed code copied to clipboard"
     });
@@ -49,38 +46,6 @@ export default class GridImage extends React.Component {
     evt.stopPropagation();
     if (this.props.startDrag) {
       this.props.startDrag(evt, this.props.record);
-    }
-  }
-
-  renderImage() {
-    let image = this.props.record.image;
-    return(
-      <EditableImage image={image}
-                     src={this.state.src || image.thumbnail_url}
-                     width={250}
-                     caption={true}
-                     locale={this.props.locale}
-                     locales={this.props.locales}
-                     csrf_token={this.props.csrf_token}
-                     onUpdate={this.props.onUpdate} />
-    );
-  }
-
-  renderPlaceholder() {
-    let src = this.state.src;
-    if (src) {
-      return (
-        <div className="temp-image">
-          <img src={src} />
-          <span>Uploading...</span>
-        </div>
-      );
-    } else {
-      return (
-        <div className="file-placeholder">
-          <span>Uploading...</span>
-        </div>
-      );
     }
   }
 
@@ -109,22 +74,31 @@ export default class GridImage extends React.Component {
            <input name={`${attributeName}[primary]`}
                   type="hidden" value={this.props.primary} />
         )}
-        {!image && this.renderPlaceholder()}
-        {image && this.renderImage()}
-        {image && (
+        {!image &&
+         <Placeholder src={this.state.src} />}
+        {image &&
+         <>
+           <EditableImage image={image}
+                          src={this.state.src || image.thumbnail_url}
+                          width={250}
+                          caption={true}
+                          locale={this.props.locale}
+                          locales={this.props.locales}
+                          csrf_token={this.props.csrf_token}
+                          onUpdate={this.props.onUpdate} />
            <div className="actions">
              {this.props.showEmbed && (
-                <button onClick={this.copyEmbed}>
-                  Embed
-                </button>
+               <button onClick={this.copyEmbed}>
+                 Embed
+               </button>
              )}
              {this.props.deleteImage && (
-                <button onClick={this.deleteImage}>
-                  Remove
-                </button>
+               <button onClick={this.deleteImage}>
+                 Remove
+               </button>
              )}
            </div>
-        )}
+         </>}
       </div>
     );
   }

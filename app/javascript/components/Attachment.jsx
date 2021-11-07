@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import copyToClipboard from "../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
 import ModalStore from "./ModalStore";
 import ToastStore from "./ToastStore";
@@ -16,12 +17,7 @@ export default class Attachment extends React.Component {
   copyEmbed(evt) {
     let attachment = this.props.record.attachment;
     evt.preventDefault();
-    const el = document.createElement("textarea");
-    el.value = `[attachment:${attachment.id}]`;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    copyToClipboard(`[attachment:${attachment.id}]`);
     ToastStore.dispatch({
       type: "NOTICE", message: "Embed code copied to clipboard"
     });
