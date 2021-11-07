@@ -11,3 +11,11 @@ spec/internal/db/sphinx
 spec/internal/log/*.pid
 spec/internal/tmp/*
 spec/internal/db/binary-objects
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
