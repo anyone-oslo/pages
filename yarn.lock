@@ -5,6 +5,25 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@anyone-oslo/pages@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@anyone-oslo/pages@workspace:."
+  dependencies:
+    "@rails/ujs": ^6.1.4-1
+    esbuild: ^0.12.26
+    eslint: ^7.1.0
+    eslint-plugin-react: ^7.20.0
+    eslint-plugin-react-hooks: ^4.0.4
+    prop-types: ^15.7.2
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-image-crop: 5.0.0
+    react_ujs: ^2.6.1
+    redux: ^4.1.1
+    stimulus: ^2.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:^7.0.0":
   version: 7.10.1
   resolution: "@babel/code-frame@npm:7.10.1"
@@ -1137,43 +1156,6 @@ __metadata:
   checksum: 5666560f7b9f10182548bf7013883265be33620b1c1b4a4d405c25be2636f970c5488ff3e6c48de75b55d02bde037249fe5dbfbb4c0fb7714953d56aed062e6d
   languageName: node
   linkType: hard
-
-"pages-core-admin@file:./packages/pages-core-admin::locator=pages_core%40workspace%3A.":
-  version: 0.0.0
-  resolution: "pages-core-admin@file:./packages/pages-core-admin#./packages/pages-core-admin::hash=a5a8e2&locator=pages_core%40workspace%3A."
-  dependencies:
-    "@rails/ujs": ^6.1.4-1
-    esbuild: ^0.12.26
-    prop-types: ^15.7.2
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-image-crop: 5.0.0
-    react_ujs: ^2.6.1
-    redux: ^4.1.1
-    stimulus: ^2.0.0
-  checksum: 9ae7815dcd41f638c1fc37ef5fde880085b2f0bf51fa6af68aa9347e9baa5aac4ee6396be9ceab64cba435b67c7554f41a43ca6a97036e7189f9dba498cf2a23
-  languageName: node
-  linkType: hard
-
-"pages_core@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "pages_core@workspace:."
-  dependencies:
-    "@rails/ujs": ^6.1.4-1
-    esbuild: ^0.12.26
-    eslint: ^7.1.0
-    eslint-plugin-react: ^7.20.0
-    eslint-plugin-react-hooks: ^4.0.4
-    pages-core-admin: "file:./packages/pages-core-admin"
-    prop-types: ^15.7.2
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-image-crop: 5.0.0
-    react_ujs: ^2.6.1
-    redux: ^4.1.1
-    stimulus: ^2.0.0
-  languageName: unknown
-  linkType: soft
 
 "parent-module@npm:^1.0.0":
   version: 1.0.1

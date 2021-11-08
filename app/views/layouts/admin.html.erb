@@ -19,9 +19,13 @@
       <%= stylesheet_link_tag "admin" %>
     <% end %>
 
-    <%= javascript_include_tag "pages_core/admin", defer: true %>
-    <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
-      <%= javascript_include_tag "admin" %>
+    <% if File.exist?(Rails.root.join("app/assets/builds/admin.js")) %>
+      <%= javascript_include_tag("admin", defer: true) %>
+    <% else %>
+      <%= javascript_include_tag("pages_core/admin-dist", defer: true) %>
+      <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
+        <%= javascript_include_tag("admin", defer: true) %>
+      <% end %>
     <% end %>
 
     <%= csrf_meta_tag %>

@@ -1,6 +1,13 @@
 {
-  "name": "pages_core",
+  "name": "@anyone-oslo/pages",
+  "version": "3.7.0",
+  "description": "Frontend for Pages",
   "private": true,
+  "repository": "https://github.com/anyone_oslo/pages",
+  "main": "/app/javascript/index.js",
+  "files": [
+    "/app/javascript/**/*"
+  ],
   "dependencies": {
     "@rails/ujs": "^6.1.4-1",
     "esbuild": "^0.12.26",
@@ -19,7 +26,7 @@
   },
   "scripts": {
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
-    "build": "esbuild app/javascript/admin.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
+    "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   },
   "packageManager": "yarn@3.1.0"
 }
