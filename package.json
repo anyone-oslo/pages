@@ -2,8 +2,10 @@
   "name": "@anyone-oslo/pages",
   "version": "3.7.0",
   "description": "Frontend for Pages",
-  "private": true,
-  "repository": "https://github.com/anyone_oslo/pages",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anyone_oslo/pages.git"
+  },
   "main": "/app/javascript/index.js",
   "files": [
     "/app/javascript/**/*"
@@ -28,5 +30,11 @@
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
     "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.1.0",
+  "bugs": {
+    "url": "https://github.com/anyone_oslo/pages/issues"
+  },
+  "homepage": "https://github.com/anyone_oslo/pages#readme",
+  "author": "Inge Jørgensen",
+  "license": "MIT"
 }
