@@ -135,10 +135,7 @@ $grid-image-padding: 7px;
   }
 
   .grid {
-    width: 66.67%;
-    @include breakpoint-mobile {
-      width: 100%;
-    }
+    width: 100%;
     .images {
       position: relative;
       display: flex;
@@ -148,7 +145,7 @@ $grid-image-padding: 7px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        width: 25%;
+        width: 16.66%;
         @include breakpoint-max(1150px) {
           width: 50%;
         }
@@ -164,6 +161,24 @@ $grid-image-padding: 7px;
       padding-top: 10px;
       button {
         margin: 0px 7px;
+      }
+    }
+  }
+
+  &.with-primary-image {
+    .grid {
+      width: 66.67%;
+      @include breakpoint-mobile {
+        width: 100%;
+      }
+    }
+    .images .grid-image {
+      width: 25%;
+      @include breakpoint-max(1150px) {
+        width: 50%;
+      }
+      @include breakpoint-mobile {
+        width: 50%;
       }
     }
   }

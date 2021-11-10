@@ -195,8 +195,14 @@ export default class ImageGrid extends DragUploader {
   render() {
     let { dragging, deleted } = this.state;
     let { primary, images } = this.getDraggedOrder();
+
+    let classNames = ["image-grid"];
+    if (this.props.enablePrimary) {
+      classNames.push("with-primary-image");
+    }
+
     return (
-      <div className="image-grid"
+      <div className={classNames.join(" ")}
            ref={this.container}
            onDragOver={this.drag}
            onDrop={this.dragEnd}>
