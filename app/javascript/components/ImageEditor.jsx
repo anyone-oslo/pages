@@ -5,6 +5,7 @@ import copyToClipboard from "../lib/copyToClipboard";
 import FocalPoint from "./FocalPoint";
 import ModalStore from "./ModalStore";
 import ToastStore from "./ToastStore";
+import { putJson } from "../lib/request";
 
 export default class ImageEditor extends React.Component {
   constructor(props) {
@@ -424,16 +425,7 @@ export default class ImageEditor extends React.Component {
                  crop_gravity_x: maybeRound(this.state.crop_gravity_x),
                  crop_gravity_y: maybeRound(this.state.crop_gravity_y) };
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("PUT", `/admin/images/${this.props.image.id}`, true);
-    xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.onload = function () {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-	// Success
-      }
-    };
-    xhr.send(JSON.stringify({image: data}));
+    putJson(`/admin/images/${this.props.image.id}`, { image: data });
 
     if (this.props.onUpdate) {
       this.props.onUpdate(data, this.state.croppedImage);
@@ -506,6 +498,5 @@ ImageEditor.propTypes = {
   locale: PropTypes.string,
   locales: PropTypes.object,
   caption: PropTypes.bool,
-  csrf_token: PropTypes.string,
   onUpdate: PropTypes.func
 };

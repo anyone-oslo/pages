@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
 import ToastStore from "./ToastStore";
+import { post } from "../lib/request";
 
 export default class ImageUploader extends React.Component {
   constructor(props) {
@@ -67,8 +68,7 @@ export default class ImageUploader extends React.Component {
                        width={this.props.width}
                        caption={this.props.caption}
                        locale={this.props.locale}
-                       locales={this.props.locales}
-                       csrf_token={this.props.csrf_token} />
+                       locales={this.props.locales} />
       </div>
     );
   }
@@ -155,18 +155,15 @@ export default class ImageUploader extends React.Component {
     let locales = this.props.locales ? Object.keys(this.props.locales) : [locale];
 
     let component = this;
-    let xhr = new XMLHttpRequest();
     let data = new FormData();
     this.setState({ image: null, src: null, dragover: false, uploading: true });
     data.append("image[file]", file);
     locales.forEach((l) => {
       data.append(`image[alternative][${l}]`, (this.props.alternative || ""));
     });
-    xhr.open("POST", "/admin/images.json");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.addEventListener("load", function () {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-        let response = JSON.parse(xhr.responseText);
+
+    post("/admin/images.json", data)
+      .then(response => {
         if (response.status === "error") {
           ToastStore.dispatch({
             type: "ERROR",
@@ -178,16 +175,13 @@ export default class ImageUploader extends React.Component {
                                image: response,
                                src: response.thumbnail_url });
         }
-      }
-    });
-    xhr.send(data);
+      });
   }
 }
 
 ImageUploader.propTypes = {
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   image: PropTypes.object,
   src: PropTypes.string,
   width: PropTypes.number,

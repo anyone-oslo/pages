@@ -84,7 +84,6 @@ export default class GridImage extends React.Component {
                           caption={true}
                           locale={this.props.locale}
                           locales={this.props.locales}
-                          csrf_token={this.props.csrf_token}
                           onUpdate={this.props.onUpdate} />
            <div className="actions">
              {this.props.showEmbed && (
@@ -110,7 +109,6 @@ GridImage.propTypes = {
   startDrag: PropTypes.func,
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   onUpdate: PropTypes.func,
   attributeName: PropTypes.string,
   placeholder: PropTypes.bool,

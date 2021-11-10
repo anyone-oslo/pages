@@ -61,7 +61,6 @@ export default class Attachment extends React.Component {
       payload: <AttachmentEditor attachment={this.props.record.attachment}
                                  locale={this.props.locale}
                                  locales={this.props.locales}
-                                 csrf_token={this.props.csrf_token}
                                  onUpdate={this.props.onUpdate} />
     });
   }
@@ -141,7 +140,6 @@ Attachment.propTypes = {
   record: PropTypes.object,
   deleteRecord: PropTypes.func,
   startDrag: PropTypes.func,
-  csrf_token: PropTypes.string,
   showEmbed: PropTypes.bool,
   enablePrimary: PropTypes.bool,
   onUpdate: PropTypes.func,

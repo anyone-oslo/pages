@@ -12,7 +12,6 @@ export default class PageImages extends React.Component {
                    showEmbed={true}
                    locale={this.props.locale}
                    locales={this.props.locales}
-                   csrf_token={this.props.csrf_token}
                    records={this.props.records} />
       </div>
     );
@@ -22,6 +21,5 @@ export default class PageImages extends React.Component {
 PageImages.propTypes = {
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   records: PropTypes.array
 };

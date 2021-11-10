@@ -4,6 +4,7 @@ import DragUploader from "./DragUploader";
 import FileUploadButton from "./FileUploadButton";
 import GridImage from "./ImageGrid/GridImage";
 import ToastStore from "./ToastStore";
+import { post } from "../lib/request";
 
 export default class ImageGrid extends DragUploader {
   constructor(props) {
@@ -179,7 +180,6 @@ export default class ImageGrid extends DragUploader {
                  record={record}
                  locale={this.props.locale}
                  locales={this.props.locales}
-                 csrf_token={this.props.csrf_token}
                  showEmbed={this.props.showEmbed}
                  startDrag={this.startDrag}
                  position={this.index(record) + 1}
@@ -280,20 +280,22 @@ export default class ImageGrid extends DragUploader {
     let data = new FormData();
 
     data.append("image[file]", file);
-    this.postFile("/admin/images.json", data, function (json) {
-      if (json.status === "error") {
-        ToastStore.dispatch({
-          type: "ERROR", message: "Error uploading image: " + json.error
-        });
-        component.deleteImage(obj);
-      } else {
-        let preloader = new Image();
-        obj.file = null;
-        obj.image = json;
-        preloader.onload = () => component.setState({});
-        preloader.src = obj.image.thumbnail_url;
-      }
-    });
+
+    post("/admin/images.json", data)
+      .then(json => {
+        if (json.status === "error") {
+          ToastStore.dispatch({
+            type: "ERROR", message: "Error uploading image: " + json.error
+          });
+          component.deleteImage(obj);
+        } else {
+          let preloader = new Image();
+          obj.file = null;
+          obj.image = json;
+          preloader.onload = () => component.setState({});
+          preloader.src = obj.image.thumbnail_url;
+        }
+      });
 
     return obj;
   }

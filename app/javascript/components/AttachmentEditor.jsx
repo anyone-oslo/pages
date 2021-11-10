@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import copyToClipboard from "../lib/copyToClipboard";
 import ModalStore from "./ModalStore";
 import ToastStore from "./ToastStore";
+import { putJson } from "../lib/request";
 
 export default class AttachmentEditor extends React.Component {
   constructor(props) {
@@ -109,16 +110,8 @@ export default class AttachmentEditor extends React.Component {
     let data = { name: this.state.name,
                  description: this.state.description };
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("PUT", `/admin/attachments/${this.props.attachment.id}`, true);
-    xhr.setRequestHeader("Content-Type","application/json; charset=utf-8");
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.onload = function () {
-      if (xhr.readyState == 4 && xhr.status == "200") {
-	// Success
-      }
-    };
-    xhr.send(JSON.stringify({attachment: data}));
+    putJson(`/admin/attachments/${this.props.attachment.id}`,
+            { attachment: data });
 
     if (this.props.onUpdate) {
       this.props.onUpdate(data);
@@ -138,6 +131,5 @@ AttachmentEditor.propTypes = {
   attachment: PropTypes.object,
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   onUpdate: PropTypes.func
 };

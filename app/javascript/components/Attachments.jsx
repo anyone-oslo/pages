@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Attachment from "./Attachment";
 import DragUploader from "./DragUploader";
 import FileUploadButton from "./FileUploadButton";
+import { post } from "../lib/request";
 
 export default class Attachments extends DragUploader {
   constructor(props) {
@@ -147,7 +148,6 @@ export default class Attachments extends DragUploader {
                   record={record}
                   locale={this.props.locale}
                   locales={this.props.locales}
-                  csrf_token={this.props.csrf_token}
                   showEmbed={this.props.showEmbed}
                   startDrag={this.startDrag}
                   position={this.index(record) + 1}
@@ -206,11 +206,13 @@ export default class Attachments extends DragUploader {
     locales.forEach((l) => {
       data.append(`attachment[name][${l}]`, this.filenameToName(file.name));
     });
-    this.postFile("/admin/attachments.json", data, function (json) {
-      obj.attachment = json;
-      obj.uploading = false;
-      component.setState({ });
-    });
+
+    post("/admin/attachments.json", data)
+      .then(json => {
+        obj.attachment = json;
+        obj.uploading = false;
+        component.setState({ });
+      });
 
     return obj;
   }
@@ -220,6 +222,5 @@ Attachments.propTypes = {
   locale: PropTypes.string,
   locales: PropTypes.object,
   records: PropTypes.array,
-  csrf_token: PropTypes.string,
   showEmbed: PropTypes.bool
 };

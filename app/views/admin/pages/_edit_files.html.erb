@@ -1,5 +1,4 @@
 <%= react_component("PageFiles",
                     locale: @locale,
                     locales: PagesCore.config.locales,
-                    csrf_token: form_authenticity_token,
                     records: @page.files.map { |pf| Admin::PageFileResource.new(pf).to_hash }) %>

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 export default class DragUploader extends React.Component {
   constructor(props) {
@@ -154,18 +153,6 @@ export default class DragUploader extends React.Component {
     return { x: x, y: y };
   }
 
-  postFile(url, data, callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.setRequestHeader("X-CSRF-Token", this.props.csrf_token);
-    xhr.addEventListener("load", function () {
-      if (xhr.readyState == 4 && xhr.status == "200" && callback) {
-        callback(JSON.parse(xhr.responseText));
-      }
-    });
-    xhr.send(data);
-  }
-
   startDrag(evt, record) {
     let position = this.mousePosition(evt);
     let prevDisplay = record.ref.current.style.display;
@@ -175,7 +162,3 @@ export default class DragUploader extends React.Component {
     this.setState({ dragging: record, x: position.x, y: position.y });
   }
 }
-
-DragUploader.propTypes = {
-  csrf_token: PropTypes.csrf_token
-};

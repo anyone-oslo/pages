@@ -24,7 +24,6 @@ export default class EditableImage extends React.Component {
                             caption={this.props.caption}
                             locale={this.props.locale}
                             locales={this.props.locales}
-                            csrf_token={this.props.csrf_token}
                             onUpdate={this.update} />
     });
   }
@@ -69,7 +68,6 @@ EditableImage.propTypes = {
   caption: PropTypes.bool,
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   width: PropTypes.number,
   onUpdate: PropTypes.func
 };

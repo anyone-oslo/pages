@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import PageTreeDraggable from "./PageTreeDraggable";
 import Tree from "../lib/Tree";
-import { post, put } from "../lib/request";
+import { postJson, putJson } from "../lib/request";
 
 export default class PageTree extends React.Component {
   constructor(props) {
@@ -95,7 +95,7 @@ export default class PageTree extends React.Component {
   }
 
   createPage(index, attributes) {
-    post(`/admin/${index.node.locale}/pages.json`, { page: attributes })
+    postJson(`/admin/${index.node.locale}/pages.json`, { page: attributes })
       .then(response => this.updateNode(index, response));
   }
 
@@ -129,7 +129,7 @@ export default class PageTree extends React.Component {
   }
 
   performUpdate(index, url, data) {
-    put(url, data).then(response => this.updateNode(index, response));
+    putJson(url, data).then(response => this.updateNode(index, response));
   }
 
   render() {
