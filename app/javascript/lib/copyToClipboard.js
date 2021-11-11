@@ -1,3 +1,8 @@
+export function copySupported () {
+  return document.queryCommandSupported &&
+    document.queryCommandSupported("copy");
+}
+
 export default function copyToClipboard (str) {
   const el = document.createElement("textarea");
   el.value = str;

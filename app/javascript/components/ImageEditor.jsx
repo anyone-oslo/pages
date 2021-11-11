@@ -1,11 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactCrop from "react-image-crop";
-import copyToClipboard from "../lib/copyToClipboard";
-import FocalPoint from "./FocalPoint";
 import ModalStore from "./ModalStore";
-import ToastStore from "./ToastStore";
 import { putJson } from "../lib/request";
+
+import FocalPoint from "./ImageEditor/FocalPoint";
+import Form from "./ImageEditor/Form";
+import Toolbar from "./ImageEditor/Toolbar";
 
 export default class ImageEditor extends React.Component {
   constructor(props) {
@@ -14,9 +15,9 @@ export default class ImageEditor extends React.Component {
 
     this.state = {
       locale:         this.props.locale,
-      aspect:         null,
       caption:        image.caption || {},
       alternative:    image.alternative || {},
+      aspect:         null,
       cropping:       false,
       crop_start_x:   image.crop_start_x || 0,
       crop_start_y:   image.crop_start_y || 0,
@@ -27,12 +28,6 @@ export default class ImageEditor extends React.Component {
       croppedImage:   null
     };
 
-    this.aspectRatios = [
-      ["Free", null], ["1:1", 1],    ["3:2", 3/2], ["2:3", 2/3],
-      ["4:3", 4/3],   ["3:4", 3/4],  ["5:4", 5/4], ["4:5", 4/5],
-      ["16:9", 16/9]
-    ];
-
     this.imageContainer = React.createRef();
     this.copyEmbedCode = this.copyEmbedCode.bind(this);
     this.handleResize = this.handleResize.bind(this);
@@ -42,6 +37,7 @@ export default class ImageEditor extends React.Component {
     this.toggleCrop = this.toggleCrop.bind(this);
     this.toggleFocal = this.toggleFocal.bind(this);
     this.save = this.save.bind(this);
+    this.updateLocalized = this.updateLocalized.bind(this);
   }
 
   componentDidMount() {
@@ -70,19 +66,6 @@ export default class ImageEditor extends React.Component {
   containerSize() {
     let elem = this.imageContainer.current;
     return { width: elem.offsetWidth - 2, height: elem.offsetHeight - 2 };
-  }
-
-  copyEmbedCode(evt) {
-    evt.preventDefault();
-    copyToClipboard(`[image:${this.props.image.id}]`);
-    ToastStore.dispatch({
-      type: "NOTICE", message: "Embed code copied to clipboard"
-    });
-  }
-
-  copySupported() {
-    return document.queryCommandSupported &&
-           document.queryCommandSupported("copy");
   }
 
   handleResize() {
@@ -124,7 +107,7 @@ export default class ImageEditor extends React.Component {
 
   renderImage() {
     if (!this.state.croppedImage || !this.state.containerSize) {
-      return;
+      return "";
     }
     let image = this.props.image;
     let maxWidth = this.state.containerSize.width;
@@ -255,70 +238,6 @@ export default class ImageEditor extends React.Component {
     this.setCrop(crop);
   }
 
-  format() {
-    let width = Math.ceil(this.state.crop_width);
-    let height = Math.ceil(this.state.crop_height);
-    let format = this.props.image.content_type.split("/")[1].toUpperCase();
-    return (
-      <span className="format">
-        {width}x{height} {format}
-      </span>
-    );
-  }
-
-  renderToolbar() {
-    let component = this;
-    let cropping = this.state.cropping;
-    let image = this.props.image;
-    let updateAspect = function (evt, aspect) {
-      evt.preventDefault();
-      component.setAspect(aspect);
-    };
-
-
-    return (
-      <div className="toolbars">
-        <div className="toolbar">
-          <div className="info">
-            {this.format()}
-          </div>
-          <button title="Crop image"
-                  onClick={this.toggleCrop}
-                  className={cropping ? "active" : ""}>
-            <i className="fa fa-crop" />
-          </button>
-          <button disabled={cropping}
-                  title="Toggle focal point"
-                  onClick={this.toggleFocal}>
-            <i className="fa fa-bullseye" />
-          </button>
-          <a href={image.original_url}
-             className="button"
-             title="Download original image"
-             disabled={cropping}
-             download={image.filename}
-             onClick={evt => cropping && evt.preventDefault()}>
-            <i className="fa fa-download" />
-          </a>
-        </div>
-        {cropping && (
-           <div className="aspect-ratios toolbar">
-             <div className="label">
-               Lock aspect ratio:
-             </div>
-             {this.aspectRatios.map(ratio => (
-               <button key={"ratio-" + ratio[1]}
-                  className={(ratio[1] == this.state.aspect) ? "active" : ""}
-                  onClick={evt => updateAspect(evt, ratio[1])}>
-                 {ratio[0]}
-               </button>
-             ))}
-           </div>
-        )}
-      </div>
-    );
-  }
-
   updateLocalized(name, value) {
     let locale = this.state.locale;
     this.setState({
@@ -327,13 +246,15 @@ export default class ImageEditor extends React.Component {
   }
 
   render() {
-    let image = this.props.image;
-    let locale = this.state.locale;
-    let locales = this.props.locales;
     return (
       <div className="image-editor">
         <div className="visual">
-          {this.renderToolbar()}
+          <Toolbar cropState={this.state}
+                   cropping={this.state.cropping}
+                   image={this.props.image}
+                   setAspect={this.setAspect}
+                   toggleCrop={this.toggleCrop}
+                   toggleFocal={this.toggleFocal} />
           <div className="image-container" ref={this.imageContainer}>
             {!this.state.croppedImage && (
                <div className="loading">
@@ -343,68 +264,16 @@ export default class ImageEditor extends React.Component {
             {this.renderImage()}
           </div>
         </div>
-        {!this.state.cropping && (
-           <form>
-             <div className="field embed-code">
-               <label>
-                 Embed code
-               </label>
-               <input type="text"
-                      value={`[image:${image.id}]`}
-                      disabled={true} />
-               {this.copySupported() && (
-                  <button onClick={this.copyEmbedCode}>
-                    Copy
-                  </button>
-               )}
-             </div>
-             {locales && Object.keys(locales).length > 1 && (
-                <div className="field">
-                  <label>
-                    Locale
-                  </label>
-                  <select name="locale"
-                          value={locale}
-                          onChange={e => this.setState({locale: e.target.value})}>
-                    {Object.keys(locales).map(key => (
-                      <option key={`locale-${key}`} value={key}>
-                        {locales[key]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-             )}
-             <div className={"field " + (this.state.alternative[locale] ? "" : "field-with-warning")}>
-               <label>
-                 Alternative text
-               </label>
-               <span className="description">
-                 For visually impaired users and search engines.
-               </span>
-               <textarea className="alternative"
-                         value={this.state.alternative[locale] || ""}
-                         onChange={e => this.updateLocalized("alternative", e.target.value)} />
-             </div>
-             {this.props.caption && (
-                <div className="field">
-                  <label>
-                    Caption
-                  </label>
-                  <textarea onChange={e => this.updateLocalized("caption", e.target.value)}
-                            value={this.state.caption[locale] || ""}
-                            className="caption" />
-                </div>
-             )}
-             <div className="buttons">
-               <button onClick={this.save}>
-                 Save
-               </button>
-               <button onClick={() => ModalStore.dispatch({ type: "CLOSE" })}>
-                 Cancel
-               </button>
-             </div>
-           </form>
-        )}
+        {!this.state.cropping &&
+         <Form alternative={this.state.alternative}
+               caption={this.state.caption}
+               image={this.props.image}
+               locale={this.state.locale}
+               locales={this.props.locales}
+               setLocale={(l) => this.setState({ locale: l })}
+               save={this.save}
+               showCaption={this.props.caption}
+               updateLocalized={this.updateLocalized} />}
       </div>
     );
   }
