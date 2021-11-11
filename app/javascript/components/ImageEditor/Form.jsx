@@ -57,18 +57,20 @@ export default function Form(props) {
         <span className="description">
           For visually impaired users and search engines.
         </span>
-        <textarea className="alternative"
-                  value={alternative[locale] || ""}
-                  onChange={e => props.updateLocalized("alternative", e.target.value)} />
+        <textarea
+          className="alternative"
+          value={alternative[locale] || ""}
+          onChange={e => props.updateLocalization("alternative", e.target.value)} />
       </div>
       {props.showCaption && (
         <div className="field">
           <label>
             Caption
           </label>
-          <textarea onChange={e => props.updateLocalized("caption", e.target.value)}
-                    value={caption[locale] || ""}
-                    className="caption" />
+          <textarea
+            onChange={e => props.updateLocalization("caption", e.target.value)}
+            value={caption[locale] || ""}
+            className="caption" />
         </div>
       )}
       <div className="buttons">
@@ -92,5 +94,5 @@ Form.propTypes = {
   setLocale: PropTypes.func,
   save: PropTypes.func,
   showCaption: PropTypes.bool,
-  updateLocalized: PropTypes.func
+  updateLocalization: PropTypes.func
 };
