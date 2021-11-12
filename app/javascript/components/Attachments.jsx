@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Attachment from "./Attachment";
+import Attachment from "./Attachments/Attachment";
 import DragUploader from "./DragUploader";
 import FileUploadButton from "./FileUploadButton";
 import { post } from "../lib/request";

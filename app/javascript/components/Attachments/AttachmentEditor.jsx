@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import copyToClipboard from "../lib/copyToClipboard";
-import ModalStore from "./ModalStore";
-import ToastStore from "./ToastStore";
-import { putJson } from "../lib/request";
+import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
+import ModalStore from "../ModalStore";
+import ToastStore from "../ToastStore";
+import { putJson } from "../../lib/request";
 
 export default class AttachmentEditor extends React.Component {
   constructor(props) {
@@ -27,11 +27,6 @@ export default class AttachmentEditor extends React.Component {
     ToastStore.dispatch({
       type: "NOTICE", message: "Embed code copied to clipboard"
     });
-  }
-
-  copySupported() {
-    return document.queryCommandSupported &&
-      document.queryCommandSupported("copy");
   }
 
   render() {
@@ -78,7 +73,7 @@ export default class AttachmentEditor extends React.Component {
             <input type="text"
                    value={`[attachment:${attachment.id}]`}
                    disabled={true} />
-            {this.copySupported() && (
+            {copySupported() && (
               <button onClick={this.copyEmbedCode}>
                 Copy
               </button>

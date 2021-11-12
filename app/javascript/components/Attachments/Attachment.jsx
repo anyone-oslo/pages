@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import copyToClipboard from "../lib/copyToClipboard";
+import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
-import ModalStore from "./ModalStore";
-import ToastStore from "./ToastStore";
+import ModalStore from "../ModalStore";
+import ToastStore from "../ToastStore";
 
 export default class Attachment extends React.Component {
   constructor(props) {
