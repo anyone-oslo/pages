@@ -14,6 +14,7 @@ __metadata:
     eslint: ^8.2.0
     eslint-plugin-react: ^7.27.0
     eslint-plugin-react-hooks: ^4.3.0
+    lodash: ^4.17.21
     prop-types: ^15.7.2
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -1007,6 +1008,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: ad580b4bdbb7ca1f7abf7e1bce63a9a0b98e370cf40194b03380a46b4ed799c9573029599caebc1b14e3f24b111aef72b96674a56cfa105e0f5ac70546cdc005
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
   languageName: node
   linkType: hard
 

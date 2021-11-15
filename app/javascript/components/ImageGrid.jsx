@@ -84,6 +84,8 @@ export default class ImageGrid extends DragUploader {
     var { primary, images } = this.getDraggedOrder();
 
     if (files.length > 0) {
+      // files.filter(f => (this.validMimeTypes.indexOf(f.type) !== -1));
+
       ({ primary, images } = this.injectUploads(
         files.map(f => this.uploadImage(f)), primary, images
       ));

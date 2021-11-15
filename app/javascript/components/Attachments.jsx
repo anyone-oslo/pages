@@ -1,224 +1,157 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Attachment from "./Attachments/Attachment";
-import DragUploader from "./DragUploader";
+import Placeholder from "./Attachments/Placeholder";
 import FileUploadButton from "./FileUploadButton";
 import { post } from "../lib/request";
 
-export default class Attachments extends DragUploader {
-  constructor(props) {
-    super(props);
+import { createDraggable,
+         draggedOrder,
+         useDragCollection,
+         useDragUploader } from "./drag";
 
-    this.state = {
-      ...this.state,
-      records: props.records.map(
-        r => ({ ...r, ref: React.createRef(), handle: this.getHandle() })),
-      deleted: []
-    };
+function filenameToName(str) {
+  return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");
+}
 
-    this.container = React.createRef();
+export default function Attachments(props) {
+  const collection = useDragCollection(props.records);
+  const locales = props.locales ? Object.keys(props.locales) : [props.locale];
 
-    this.deleteRecord = this.deleteRecord.bind(this);
-    this.receiveFiles = this.receiveFiles.bind(this);
-  }
-
-  attributeName(record) {
-    return `${this.props.attribute}[${this.index(record) + 1}]`;
-  }
-
-  deleteRecord(record) {
-    let { records, deleted } = this.state;
-    records = records.filter(i => i != record);
-    if (record.id) {
-      deleted = [...deleted, record];
-    }
-    this.setState({ records: records, deleted: deleted });
-  }
-
-  draggables() {
-    return this.state.records;
-  }
-
-  getDraggedOrder() {
-    let dragging = this.state.dragging;
-    var records = this.state.records;
-    if (dragging) {
-      if (this.hovering(this.container)) {
-        records = [];
-        this.state.records.filter(r => r !== dragging).forEach(r => {
-          if (this.hovering(r) && records.indexOf(dragging) === -1) {
-            records.push(dragging);
-          }
-          records.push(r);
-        });
-        if (records.indexOf(dragging) === -1) {
-          records.push(dragging);
-        }
-      } else {
-        records = this.state.records.filter(r => r !== dragging);
-        if (this.state.y < this.container.current.getBoundingClientRect().top) {
-          records = [dragging, ...records];
-        } else {
-          records.push(dragging);
-        }
-      }
-    }
-    return records;
-  }
-
-  index(record) {
-    let { records, deleted } = this.state;
-    let ordered = [...records, ...deleted];
-    return ordered.indexOf(record);
-  }
-
-  injectUploads(files, records) {
-    let queue = files.slice();
-    let source = records;
-
-    if (source.indexOf("Files") === -1) {
-      return [...source, ...queue];
-    } else {
-      records = [];
-      source.forEach(function (record) {
-        if (record === "Files") {
-          records = [...records, ...queue];
-        } else {
-          records.push(record);
-        }
-      });
-    }
-
-    return records;
-  }
-
-  receiveFiles(files, newState) {
-    this.setState({
-      ...newState,
-      records: this.injectUploads(files.map(f => this.uploadAttachment(f)),
-                                  this.getDraggedOrder())
-    });
-  }
-
-  render() {
-    let { dragging, deleted } = this.state;
-    let records = this.getDraggedOrder();
-    let classes = ["attachments"];
-    if (dragging) {
-      classes.push("dragover");
-    }
-    return (
-      <div className={classes.join(" ")}
-           ref={this.container}
-           onDragOver={this.drag}
-           onDrop={this.dragEnd}>
-        <div className="files">
-          {records.map(r => this.renderAttachment(r))}
-        </div>
-        <div className="deleted">
-          {deleted.map(r => this.renderDeletedRecord(r))}
-        </div>
-        <div className="drop-target">
-          <FileUploadButton multiple={true}
-                            multiline={true}
-                            callback={this.receiveFiles} />
-        </div>
-      </div>
-    );
-  }
-
-  renderAttachment(record) {
-    let dragging = this.state.dragging;
-
-    if (record === "Files") {
-      return (
-        <div className="attachment drop-placeholder"
-             key="file-placeholder">
-          Upload files here
-        </div>
-      );
-    }
-
-    let onUpdate = (attachment) => {
-      this.updateAttachment(record, attachment);
-    };
-
-    return (
-      <Attachment key={record.handle}
-                  record={record}
-                  locale={this.props.locale}
-                  locales={this.props.locales}
-                  showEmbed={this.props.showEmbed}
-                  startDrag={this.startDrag}
-                  position={this.index(record) + 1}
-                  onUpdate={onUpdate}
-                  deleteRecord={this.deleteRecord}
-                  attributeName={this.attributeName(record)}
-                  placeholder={dragging && dragging == record} />
-    );
-  }
-
-  renderDeletedRecord(record) {
-    let attachment = record.attachment;
-    let attrName = this.attributeName(record);
-    return (
-      <span className="deleted-attachment" key={`deleted-${record.id}`}>
-        <input name={`${attrName}[id]`}
-               type="hidden" value={record.id} />
-        <input name={`${attrName}[attachment_id]`}
-               type="hidden" value={(attachment && attachment.id) || ""} />
-        <input name={`${attrName}[_destroy]`}
-               type="hidden" value={true} />
-      </span>
-    );
-  }
-
-  updateAttachment(record, attachment) {
-    let records = this.state.records.slice();
-
-    records[records.indexOf(record)] = {
-      ...record,
-      attachment: { ...record.attachment, ...attachment }
-    };
-
-    this.setState({ records: records });
-  }
-
-  filenameToName(str) {
-    return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");
-  }
-
-  uploadAttachment(file) {
-    let component = this;
-    let locale = this.props.locale;
-    let locales = this.props.locales ? Object.keys(this.props.locales) : [locale];
-
+  const uploadAttachment = (file) => {
     let name = {};
     locales.forEach((l) => name[l] = file.name);
 
-    let obj = { attachment: { filename: file.name, name: name },
-                uploading: true,
-                ref: React.createRef(),
-                handle: this.getHandle() };
+    let draggable = createDraggable(
+      { attachment: { filename: file.name, name: name },
+        uploading: true }
+    );
+
     let data = new FormData();
 
     data.append("attachment[file]", file);
     locales.forEach((l) => {
-      data.append(`attachment[name][${l}]`, this.filenameToName(file.name));
+      data.append(`attachment[name][${l}]`, filenameToName(file.name));
     });
 
     post("/admin/attachments.json", data)
       .then(json => {
-        obj.attachment = json;
-        obj.uploading = false;
-        component.setState({ });
+        collection.dispatch({
+          type: "update",
+          payload: { ...draggable,
+                     record: { attachment: json, uploading: false } }
+        });
       });
 
-    return obj;
+    return draggable;
+  };
+
+  const dragEnd = (dragState, files) => {
+    collection.dispatch({
+      type: "reorder",
+      payload: draggedOrder(collection, dragState)
+    });
+    collection.dispatch({
+      type: "insertFiles",
+      payload: files.map(f => uploadAttachment(f))
+    });
+  };
+
+  const [dragState,
+         dragStart,
+         listeners] = useDragUploader([collection], dragEnd);
+
+  const [deleted, setDeleted] = useState([]);
+
+  const position = (record) => {
+    return [...collection.draggables.map(d => d.record),
+            ...deleted].indexOf(record) + 1;
+  };
+
+  const attrName = (record) => {
+    return `${props.attribute}[${position(record)}]`;
+  };
+
+  const update = (draggable) => (attachment) => {
+    const { record } = draggable;
+    const updated = {
+      ...draggable,
+      record: {
+        ...record,
+        attachment: { ...record.attachment, ...attachment }
+      }
+    };
+    collection.dispatch({ type: "update", payload: updated });
+  };
+
+  const remove = (draggable) => () => {
+    collection.dispatch({ type: "remove", payload: draggable });
+    if (draggable.record.id) {
+      setDeleted([...deleted, draggable.record]);
+    }
+  };
+
+  const attachment = (draggable) => {
+    const { dragging } = dragState;
+
+    if (draggable === "Files") {
+      return (<Placeholder key="placeholder" />);
+    }
+
+    return (
+      <Attachment key={draggable.handle}
+                  draggable={draggable}
+                  locale={props.locale}
+                  locales={props.locales}
+                  showEmbed={props.showEmbed}
+                  startDrag={dragStart(draggable)}
+                  position={position(draggable.record)}
+                  onUpdate={update(draggable)}
+                  deleteRecord={remove(draggable)}
+                  attributeName={attrName(draggable.record)}
+                  placeholder={dragging && dragging == draggable} />
+    );
+  };
+
+  const dragOrder = draggedOrder(collection, dragState);
+
+  const classes = ["attachments"];
+  if (dragState.dragging) {
+    classes.push("dragover");
   }
+
+  return (
+    <div className={classes.join(" ")}
+         ref={collection.ref}
+         {...listeners}>
+      <div className="files">
+        {dragOrder.map(d => attachment(d))}
+      </div>
+      <div className="deleted">
+        {deleted.map(r =>
+          <span className="deleted-attachment" key={r.id}>
+            <input name={`${attrName(r)}[id]`}
+                   type="hidden"
+                   value={r.id} />
+            <input name={`${attrName(r)}[attachment_id]`}
+                   type="hidden"
+                   value={(r.attachment && r.attachment.id) || ""} />
+            <input name={`${attrName(r)}[_destroy]`}
+                   type="hidden"
+                   value={true} />
+          </span>)}
+      </div>
+      <div className="drop-target">
+        <FileUploadButton multiple={true}
+                          multiline={true}
+                          callback={this.receiveFiles} />
+      </div>
+    </div>
+  );
 }
 
 Attachments.propTypes = {
+  attribute: PropTypes.string,
   locale: PropTypes.string,
   locales: PropTypes.object,
   records: PropTypes.array,
