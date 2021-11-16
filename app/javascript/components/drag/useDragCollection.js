@@ -24,6 +24,10 @@ function hideDraggable(draggable, callback) {
 
 function dragCollectionReducer(state, action) {
   switch (action.type) {
+  case "append":
+    return [...state, ...action.payload];
+  case "prepend":
+    return [...action.payload, ...state];
   case "insertFiles":
     var index = state.indexOf("Files");
 
@@ -46,6 +50,8 @@ function dragCollectionReducer(state, action) {
     });
   case "remove":
     return state.filter(d => d.handle !== action.payload.handle);
+  case "replace":
+    return action.payload;
   case "reorder":
     return action.payload;
   default:
@@ -64,7 +70,8 @@ export default function useDragCollection(records) {
   const containerRef = useRef();
   const [draggables, dispatch] = useReducer(
     dragCollectionReducer,
-    records.map(r => createDraggable(r))
+    [],
+    () => records.map(r => createDraggable(r))
   );
 
   useEffect(() => {

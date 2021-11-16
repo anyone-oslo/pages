@@ -12,12 +12,12 @@ function hovering(dragState, target) {
           y >= rect.top && y <= rect.bottom);
 }
 
-function collectionOrder(collection, dragState) {
+export function collectionOrder(collection, dragState) {
   const { draggables, ref } = collection;
   const { dragging } = dragState;
 
   if (!dragging) {
-    return [draggables, []];
+    return draggables;
   }
 
   let ordered = draggables.filter(d => d.handle !== dragging.handle);
@@ -28,13 +28,16 @@ function collectionOrder(collection, dragState) {
       ordered = [...ordered.slice(0, index),
                  dragging,
                  ...ordered.slice(index)];
+    } else {
+      ordered = [...ordered, dragging];
     }
   }
-  return [ordered, []];
+
+  return ordered;
 }
 
 export default function draggedOrder(collection, dragState) {
-  let [ordered] = collectionOrder(collection, dragState);
+  let ordered = collectionOrder(collection, dragState);
 
   if (dragState.dragging && ordered.indexOf(dragState.dragging) === -1) {
     if (dragState.y < collection.ref.current.getBoundingClientRect().top) {

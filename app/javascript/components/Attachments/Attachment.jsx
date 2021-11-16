@@ -5,10 +5,14 @@ import AttachmentEditor from "./AttachmentEditor";
 import ModalStore from "../ModalStore";
 import ToastStore from "../ToastStore";
 
+import { useDraggable } from "../drag";
+
 export default function Attachment(props) {
   const { attributeName, draggable } = props;
   const { record } = draggable;
   const { attachment, uploading } = record;
+
+  const listeners = useDraggable(draggable, props.startDrag);
 
   const copyEmbed = (evt) => {
     evt.preventDefault();
@@ -62,19 +66,13 @@ export default function Attachment(props) {
 
   return (
     <div className={classes.join(" ")}
-         onDragStart={props.startDrag}
-         ref={draggable.ref}
-         draggable>
+         {...listeners}>
       <input name={`${attributeName}[id]`}
              type="hidden" value={record.id || ""} />
       <input name={`${attributeName}[attachment_id]`}
              type="hidden" value={(attachment && attachment.id) || ""} />
       <input name={`${attributeName}[position]`}
              type="hidden" value={props.position} />
-      {props.enablePrimary && (
-        <input name={`${attributeName}[primary]`}
-               type="hidden" value={props.primary} />
-      )}
       {!uploading &&
        <div className="actions">
          <button onClick={editAttachment}>
@@ -115,11 +113,9 @@ Attachment.propTypes = {
   deleteRecord: PropTypes.func,
   startDrag: PropTypes.func,
   showEmbed: PropTypes.bool,
-  enablePrimary: PropTypes.bool,
   onUpdate: PropTypes.func,
   attributeName: PropTypes.string,
   placeholder: PropTypes.bool,
   position: PropTypes.number,
-  primary: PropTypes.bool,
   ref: PropTypes.object
 };

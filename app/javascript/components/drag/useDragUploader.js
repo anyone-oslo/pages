@@ -42,15 +42,18 @@ function mousePosition(evt) {
 }
 
 export default function useDragUploader(collections, onDragEnd) {
-  const [dragState, setDragState] = useState({ dragging: false,
-                                               x: null, y: null });
+  const [dragState, setDragState] = useState({
+    dragging: false,
+    x: null, y: null
+  });
 
   const updatePositions = (dragging) => {
-    collections.forEach(c => c.dispatch({ type: "updatePositions",
-                                          payload: dragging }));
+    collections.forEach(c => {
+      c.dispatch({ type: "updatePositions", payload: dragging });
+    });
   };
 
-  const initiateDrag = (evt, draggable) => {
+  const startDrag = (evt, draggable) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };
@@ -62,7 +65,7 @@ export default function useDragUploader(collections, onDragEnd) {
       setDragState({ ...dragState, ...mousePosition(evt) });
     } else {
       if (containsFiles(evt)) {
-        initiateDrag(evt, "Files");
+        startDrag(evt, "Files");
       }
     }
   };
@@ -90,12 +93,6 @@ export default function useDragUploader(collections, onDragEnd) {
     }
   };
 
-  const dragStart = (draggable) => (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    initiateDrag(evt, draggable);
-  };
-
   useEffect(() => {
     window.addEventListener("mousemove", drag);
     window.addEventListener("touchmove", drag);
@@ -111,7 +108,5 @@ export default function useDragUploader(collections, onDragEnd) {
     };
   });
 
-  return [dragState,
-          dragStart,
-          { onDragOver: drag, onDrop: dragEnd }];
+  return [dragState, startDrag, { onDragOver: drag, onDrop: dragEnd }];
 }

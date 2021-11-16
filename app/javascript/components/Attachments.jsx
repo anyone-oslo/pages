@@ -17,12 +17,13 @@ function filenameToName(str) {
 export default function Attachments(props) {
   const collection = useDragCollection(props.records);
   const locales = props.locales ? Object.keys(props.locales) : [props.locale];
+  const [deleted, setDeleted] = useState([]);
 
   const uploadAttachment = (file) => {
     let name = {};
     locales.forEach((l) => name[l] = file.name);
 
-    let draggable = createDraggable(
+    const draggable = createDraggable(
       { attachment: { filename: file.name, name: name },
         uploading: true }
     );
@@ -46,6 +47,13 @@ export default function Attachments(props) {
     return draggable;
   };
 
+  const receiveFiles = (files) => {
+    collection.dispatch({
+      type: "append",
+      payload: files.map(f => uploadAttachment(f))
+    });
+  };
+
   const dragEnd = (dragState, files) => {
     collection.dispatch({
       type: "reorder",
@@ -60,8 +68,6 @@ export default function Attachments(props) {
   const [dragState,
          dragStart,
          listeners] = useDragUploader([collection], dragEnd);
-
-  const [deleted, setDeleted] = useState([]);
 
   const position = (record) => {
     return [...collection.draggables.map(d => d.record),
@@ -104,7 +110,7 @@ export default function Attachments(props) {
                   locale={props.locale}
                   locales={props.locales}
                   showEmbed={props.showEmbed}
-                  startDrag={dragStart(draggable)}
+                  startDrag={dragStart}
                   position={position(draggable.record)}
                   onUpdate={update(draggable)}
                   deleteRecord={remove(draggable)}
@@ -144,7 +150,7 @@ export default function Attachments(props) {
       <div className="drop-target">
         <FileUploadButton multiple={true}
                           multiline={true}
-                          callback={this.receiveFiles} />
+                          callback={receiveFiles} />
       </div>
     </div>
   );
