@@ -29,11 +29,12 @@ export default function Editor(props) {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    handleResize();
     return function cleanup() {
       window.removeEventListener("resize", handleResize);
     };
   });
+
+  useEffect(handleResize, []);
 
   const setAspect = (aspect) => {
     props.dispatch({ type: "setAspect", payload: aspect });
