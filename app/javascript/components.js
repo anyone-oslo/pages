@@ -1,6 +1,7 @@
 export { default as Attachments } from "./components/Attachments";
 export { default as DateRangeSelect } from "./components/DateRangeSelect";
 export { default as EditableImage } from "./components/EditableImage";
+export { default as FileUploadButton } from "./components/FileUploadButton";
 export { default as ImageCropper } from "./components/ImageCropper";
 export { default as ImageGrid } from "./components/ImageGrid";
 export { default as ImageUploader } from "./components/ImageUploader";
