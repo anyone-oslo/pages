@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import ModalStore from "./ModalStore";
 import { putJson } from "../lib/request";
 
-import useCrop, { cropParams } from "./ImageEditor/useCrop";
-import Editor from "./ImageEditor/Editor";
+import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
 
 export default function ImageEditor(props) {
@@ -37,9 +36,9 @@ export default function ImageEditor(props) {
 
   return (
     <div className="image-editor">
-      <Editor croppedImage={croppedImage}
-              cropState={cropState}
-              dispatch={dispatch} />
+      <ImageCropper croppedImage={croppedImage}
+                    cropState={cropState}
+                    dispatch={dispatch} />
       {!cropState.cropping &&
        <Form alternative={localizations.alternative}
              caption={localizations.caption}

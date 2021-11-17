@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
-import Image from "./Image";
-import Toolbar from "./Toolbar";
+import Image from "./ImageCropper/Image";
+import Toolbar from "./ImageCropper/Toolbar";
+
+export { default as useCrop,
+         cropParams } from "./ImageCropper/useCrop";
 
 function focalPoint(state) {
   if (state.crop_gravity_x === null || state.crop_gravity_y === null) {
@@ -15,7 +18,7 @@ function focalPoint(state) {
   }
 }
 
-export default function Editor(props) {
+export default function ImageCropper(props) {
   const containerRef = useRef();
   const [containerSize, setContainerSize] = useState(null);
 
@@ -80,7 +83,7 @@ export default function Editor(props) {
   );
 }
 
-Editor.propTypes = {
+ImageCropper.propTypes = {
   croppedImage: PropTypes.string,
   cropState: PropTypes.object,
   dispatch: PropTypes.func
