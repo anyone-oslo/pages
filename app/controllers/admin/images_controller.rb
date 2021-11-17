@@ -23,7 +23,7 @@ module Admin
     def update
       @image.update(image_params)
       respond_to do |format|
-        format.json { render action: :show }
+        format.json { render_image_json(@image) }
       end
     end
 
