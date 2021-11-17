@@ -30,3 +30,4 @@ export default function startPages () {
 }
 
 export * from "./components";
+export * from "./hooks";
