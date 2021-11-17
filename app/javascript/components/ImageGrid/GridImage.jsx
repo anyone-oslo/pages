@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
-import ToastStore from "../ToastStore";
+import ToastStore from "../../stores/ToastStore";
 import Placeholder from "./Placeholder";
 
 import { useDraggable } from "../drag";

@@ -31,6 +31,7 @@ export default function startPages () {
 
 export * from "./components";
 export * from "./hooks";
+export * from "./stores";
 
 export * from "./lib/request.js";
 export { default as copyToClipboard,

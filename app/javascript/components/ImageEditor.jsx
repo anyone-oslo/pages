@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import ModalStore from "./ModalStore";
+import ModalStore from "../stores/ModalStore";
 import { putJson } from "../lib/request";
 
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";

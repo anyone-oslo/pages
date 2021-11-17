@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ToastStore from "./ToastStore";
+import ToastStore from "../stores/ToastStore";
 
 export default class Toast extends React.Component {
   constructor(props) {

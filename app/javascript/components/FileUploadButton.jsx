@@ -37,7 +37,7 @@ export default function FileUploadButton(props) {
              multiple={props.multiple || false} />
     </div>
   );
-};
+}
 
 FileUploadButton.propTypes = {
   callback: PropTypes.func,

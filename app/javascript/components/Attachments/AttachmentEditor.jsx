@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
-import ModalStore from "../ModalStore";
-import ToastStore from "../ToastStore";
+import ModalStore from "../../stores/ModalStore";
+import ToastStore from "../../stores/ToastStore";
 import { putJson } from "../../lib/request";
 
 export default function AttachmentEditor(props) {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ImageEditor from "./ImageEditor";
-import ModalStore from "./ModalStore";
+import ModalStore from "../stores/ModalStore";
 
 export default function EditableImage(props) {
   const [image, setImage] = useState(props.image);

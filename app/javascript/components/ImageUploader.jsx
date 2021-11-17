@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
-import ToastStore from "./ToastStore";
+import ToastStore from "../stores/ToastStore";
 import { post } from "../lib/request";
 
 function getFiles(dt) {

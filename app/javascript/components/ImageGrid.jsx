@@ -4,7 +4,7 @@ import FileUploadButton from "./FileUploadButton";
 import DragElement from "./ImageGrid/DragElement";
 import FilePlaceholder from "./ImageGrid/FilePlaceholder";
 import GridImage from "./ImageGrid/GridImage";
-import ToastStore from "./ToastStore";
+import ToastStore from "../stores/ToastStore";
 import { post } from "../lib/request";
 
 import { createDraggable,

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ModalStore from "../ModalStore";
-import ToastStore from "../ToastStore";
+import ModalStore from "../../stores/ModalStore";
+import ToastStore from "../../stores/ToastStore";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 
 export default function Form(props) {

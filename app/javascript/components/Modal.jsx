@@ -1,5 +1,5 @@
 import React from "react";
-import ModalStore from "./ModalStore";
+import ModalStore from "../stores/ModalStore";
 
 export default class Modal extends React.Component {
   constructor(props) {
