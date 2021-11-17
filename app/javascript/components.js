@@ -11,3 +11,5 @@ export { default as PageTree } from "./components/PageTree";
 export { default as RichTextArea } from "./components/RichTextArea";
 export { default as TagEditor } from "./components/TagEditor";
 export { default as Toast } from "./components/Toast";
+
+export * from "./components/drag";

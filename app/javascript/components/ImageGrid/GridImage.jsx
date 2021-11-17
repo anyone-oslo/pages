@@ -1,121 +1,103 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
 import ToastStore from "../ToastStore";
 import Placeholder from "./Placeholder";
 
-export default class GridImage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      src: (props.record.src || null)
-    };
-    this.copyEmbed = this.copyEmbed.bind(this);
-    this.deleteImage = this.deleteImage.bind(this);
-    this.dragStart = this.dragStart.bind(this);
-  }
+import { useDraggable } from "../drag";
 
-  componentDidMount() {
-    let file = this.props.record.file;
-    if (file) {
-      this.reader = new FileReader();
-      this.reader.onload = () => this.setState({src: this.reader.result });
-      this.reader.readAsDataURL(this.props.record.file);
+export default function GridImage(props) {
+  const { attributeName, draggable } = props;
+  const record = draggable.record;
+  const image = record.image;
+
+  const [src, setSrc] = useState(record.src || null);
+
+  const dragAttrs = useDraggable(draggable, props.startDrag);
+
+  useEffect(() => {
+    if (record.file) {
+      const reader = new FileReader();
+      reader.onload = () => setSrc(reader.result);
+      reader.readAsDataURL(record.file);
     }
-  }
+  }, []);
 
-  copyEmbed(evt) {
-    let image = this.props.record.image;
+  const copyEmbed = (evt) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     ToastStore.dispatch({
       type: "NOTICE", message: "Embed code copied to clipboard"
     });
-  }
+  };
 
-  deleteImage(evt) {
+  const deleteImage = (evt) => {
     evt.preventDefault();
-    if (this.props.deleteImage) {
-      this.props.deleteImage(this.props.record);
+    if (props.deleteImage) {
+      props.deleteImage();
     }
+  };
+
+  let classes = ["grid-image"];
+  if (props.placeholder) {
+    classes.push("placeholder");
+  }
+  if (record.file) {
+    classes.push("uploading");
   }
 
-  dragStart(evt) {
-    evt.preventDefault();
-    evt.stopPropagation();
-    if (this.props.startDrag) {
-      this.props.startDrag(evt, this.props.record);
-    }
-  }
-
-  render() {
-    let attributeName = this.props.attributeName;
-    let record = this.props.record;
-    let image = record.image;
-    let classes = ["grid-image"];
-    if (this.props.placeholder) {
-      classes.push("placeholder");
-    }
-    if (this.props.record.file) {
-      classes.push("uploading");
-    }
-    return (
-      <div className={classes.join(" ")}
-           onDragStart={this.dragStart}
-           ref={this.props.record.ref}>
-        <input name={`${attributeName}[id]`}
-               type="hidden" value={record.id || ""} />
-        <input name={`${attributeName}[image_id]`}
-               type="hidden" value={(image && image.id) || ""} />
-        <input name={`${attributeName}[position]`}
-               type="hidden" value={this.props.position} />
-        {this.props.enablePrimary && (
-           <input name={`${attributeName}[primary]`}
-                  type="hidden" value={this.props.primary} />
-        )}
-        {!image &&
-         <Placeholder src={this.state.src} />}
-        {image &&
-         <>
-           <EditableImage image={image}
-                          src={this.state.src || image.thumbnail_url}
-                          width={250}
-                          caption={true}
-                          locale={this.props.locale}
-                          locales={this.props.locales}
-                          csrf_token={this.props.csrf_token}
-                          onUpdate={this.props.onUpdate} />
-           <div className="actions">
-             {this.props.showEmbed && (
-               <button onClick={this.copyEmbed}>
-                 Embed
-               </button>
-             )}
-             {this.props.deleteImage && (
-               <button onClick={this.deleteImage}>
-                 Remove
-               </button>
-             )}
-           </div>
-         </>}
-      </div>
-    );
-  }
+  return (
+    <div className={classes.join(" ")}
+         {...dragAttrs}>
+      <input name={`${attributeName}[id]`}
+             type="hidden" value={record.id || ""} />
+      <input name={`${attributeName}[image_id]`}
+             type="hidden" value={(image && image.id) || ""} />
+      <input name={`${attributeName}[position]`}
+             type="hidden" value={props.position} />
+      {props.enablePrimary && (
+        <input name={`${attributeName}[primary]`}
+               type="hidden" value={props.primary} />
+      )}
+      {!image &&
+       <Placeholder src={src} />}
+      {image &&
+       <>
+         <EditableImage image={image}
+                        src={src || image.thumbnail_url}
+                        width={250}
+                        caption={true}
+                        locale={props.locale}
+                        locales={props.locales}
+                        onUpdate={props.onUpdate} />
+         <div className="actions">
+           {props.showEmbed && (
+             <button onClick={copyEmbed}>
+               Embed
+             </button>
+           )}
+           {props.deleteImage && (
+             <button onClick={deleteImage}>
+               Remove
+             </button>
+           )}
+         </div>
+       </>}
+    </div>
+  );
 }
-
 GridImage.propTypes = {
-  record: PropTypes.object,
+  draggable: PropTypes.object,
   deleteImage: PropTypes.func,
   startDrag: PropTypes.func,
   locale: PropTypes.string,
   locales: PropTypes.object,
-  csrf_token: PropTypes.string,
   onUpdate: PropTypes.func,
   attributeName: PropTypes.string,
   placeholder: PropTypes.bool,
   enablePrimary: PropTypes.bool,
   showEmbed: PropTypes.bool,
   primary: PropTypes.bool,
-  position: PropTypes.number
+  position: PropTypes.number,
 };

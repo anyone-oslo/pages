@@ -39,8 +39,7 @@ module PagesCore
           width: width,
           caption: caption,
           locale: locale || I18n.default_locale,
-          locales: PagesCore.config.locales,
-          csrf_token: form_authenticity_token
+          locales: PagesCore.config.locales
         )
       end
     end

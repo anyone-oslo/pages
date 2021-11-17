@@ -28,3 +28,5 @@ export default function startPages () {
   application.register("login", LoginController);
   application.register("page-options", PageOptionsController);
 }
+
+export * from "./components";

@@ -8,7 +8,7 @@ function jsonFetchOptions() {
                       "X-CSRF-Token": csrfToken() } });
 }
 
-export async function post(url, data) {
+export async function postJson(url, data) {
   const options = { ...jsonFetchOptions(), method: "POST" };
   if (data) {
     options.body = JSON.stringify(data);
@@ -17,11 +17,20 @@ export async function post(url, data) {
   return response.json();
 }
 
-export async function put(url, data) {
+export async function putJson(url, data) {
   const options = { ...jsonFetchOptions(), method: "PUT" };
   if (data) {
     options.body = JSON.stringify(data);
   }
   const response = await fetch(url, options);
+  return response.json();
+}
+
+export async function post(url, data) {
+  const response = await fetch(url, {
+    method: "POST",
+    body: data,
+    headers: { "X-CSRF-Token": csrfToken() }
+  });
   return response.json();
 }

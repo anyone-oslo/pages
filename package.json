@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "@rails/ujs": "^6.1.4-1",
+    "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -22,13 +23,14 @@
   },
   "devDependencies": {
     "esbuild": "^0.12.26",
-    "eslint": "^7.1.0",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.4"
+    "eslint": "^8.2.0",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react-hooks": "^4.3.0"
   },
   "scripts": {
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
-    "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
+    "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
+    "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   },
   "packageManager": "yarn@3.1.0",
   "bugs": {
