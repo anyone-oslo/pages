@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pages_core (3.8.2)
+    pages_core (3.8.3)
       RedCloth (~> 4.3.2)
       actionpack-page_caching (>= 1.1.0)
       acts_as_list (~> 0.9)
@@ -320,6 +320,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    semantic (1.6.1)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
     simplecov (0.17.1)
@@ -374,6 +375,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
+  semantic
   shoulda-matchers
   simplecov (~> 0.17.1)
   timecop (~> 0.8.0)

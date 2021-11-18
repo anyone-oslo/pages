@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "shoulda-matchers"
   s.add_development_dependency "simplecov", "~> 0.17.1"
   s.add_development_dependency "timecop", "~> 0.8.0"
+  s.add_development_dependency "semantic"
 
   s.add_dependency "rails", ">= 6.0"
 
