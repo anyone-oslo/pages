@@ -22,22 +22,22 @@ def write_version(version)
 end
 
 desc "Increment to next patch version"
-task "version:patch" do
+task "version:patch" => :environment do
   write_version(current_version.patch!)
 end
 
 desc "Increment to next minor version"
-task "version:minor" do
+task "version:minor" => :environment do
   write_version(current_version.minor!)
 end
 
 desc "Increment to next major version"
-task "version:major" do
+task "version:major" => :environment do
   write_version(current_version.major!)
 end
 
 desc "Push NPM package"
-task "release:npm" do
+task "release:npm" => :environment do
   system("npm publish --access public")
 end
 
