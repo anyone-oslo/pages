@@ -16,15 +16,6 @@ module PagesCore
         disable(&block)
         PagesCore::StaticCache.handler.sweep!
       end
-
-      def config
-        ActiveSupport::Deprecation.warn(
-          "PagesCore::CacheSweeper.config is no longer used."
-        )
-        configuration = OpenStruct.new(patterns: [])
-        yield configuration if block_given?
-        configuration
-      end
     end
 
     self.enabled ||= true
