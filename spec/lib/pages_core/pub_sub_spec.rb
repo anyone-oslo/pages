@@ -8,7 +8,7 @@ RSpec.describe PagesCore::PubSub do
   describe "#publish" do
     it "calls the subscribers" do
       foo = 1
-      described_class.subscribe(:update_foo) { |payload| foo = payload.value }
+      described_class.subscribe(:update_foo) { |payload| foo = payload[:value] }
       described_class.publish(:update_foo, value: 5)
       expect(foo).to eq(5)
     end

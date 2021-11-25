@@ -4,9 +4,8 @@ module PagesCore
   module PubSub
     class << self
       def publish(name, payload = {})
-        payload_struct = OpenStruct.new(payload)
         subscribers.select { |s| s.name == name }
-                   .each { |s| s.call(payload_struct) }
+                   .each { |s| s.call(payload) }
       end
 
       def subscribe(name, &block)

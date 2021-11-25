@@ -35,7 +35,7 @@ RSpec.describe PagesCore::CreateUserService do
         result = nil
         PagesCore::PubSub.subscribe(:create_user) { |p| result = p }
         user
-        expect([result.user, result.invite]).to eq([user, invite])
+        expect([result[:user], result[:invite]]).to eq([user, invite])
       end
     end
 
