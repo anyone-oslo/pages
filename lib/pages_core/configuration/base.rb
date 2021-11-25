@@ -5,12 +5,14 @@ module PagesCore
     class Base
       class InvalidConfigurationKey < StandardError; end
 
+      SettingStruct = Struct.new(:type, :default)
+
       def self.settings
         @settings ||= {}
       end
 
       def self.setting(key, type, default = nil)
-        settings[key] = OpenStruct.new(type: type, default: default)
+        settings[key] = SettingStruct.new(type, default)
 
         define_method key do |*args|
           args.any? ? set(key, *args) : get(key)
