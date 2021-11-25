@@ -7,17 +7,15 @@ class Role < ApplicationRecord
             uniqueness: { scope: :user_id },
             inclusion: { in: proc { Role.roles.map(&:name) } }
 
+  RoleDefinition = Struct.new(:name, :description, :default)
+
   class << self
     def define(name, description, default: false)
       if roles.map(&:name).include?(name.to_s)
         raise ArgumentError, "Tried to define role :#{role}, " \
                              "but a role by that name already exists"
       else
-        roles << OpenStruct.new(
-          name: name.to_s,
-          description: description,
-          default: default
-        )
+        roles << RoleDefinition.new(name.to_s, description, default)
       end
     end
 
@@ -39,21 +37,13 @@ class Role < ApplicationRecord
       return [] unless File.exist?(config_file)
 
       YAML.load_file(config_file).map do |key, opts|
-        OpenStruct.new(name: key.to_s,
-                       description: opts["description"],
-                       default: opts["default"])
+        RoleDefinition.new(key.to_s, opts["description"], opts["default"])
       end
     end
 
     def default_roles
-      [
-        OpenStruct.new(
-          name: "users", description: "Can manage users", default: false
-        ),
-        OpenStruct.new(
-          name: "pages", description: "Can manage pages", default: true
-        )
-      ]
+      [RoleDefinition.new("users", "Can manage users", false),
+       RoleDefinition.new("pages", "Can manage pages", true)]
     end
   end
 
