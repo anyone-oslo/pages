@@ -11,6 +11,8 @@ module PagesCore
     protected
 
     def configure_sentry_context
+      return if Rails.env.test?
+
       if Object.const_defined?("Sentry")
         Sentry.set_user(current_user_context)
         Sentry.set_tags(locale: params[:locale] || I18n.default_locale.to_s)
