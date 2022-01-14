@@ -56,7 +56,7 @@ describe PagesCore::FormBuilder do
 
       it "outputs the error" do
         expect(label).to match(
-          "<span class=\"error\">kan ikke være blank</span>"
+          "<span class=\"error\">kan ikke være tom</span>"
         )
       end
     end

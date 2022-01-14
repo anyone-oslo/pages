@@ -8,8 +8,6 @@ class Invite < ApplicationRecord
 
   before_validation :ensure_token
 
-  validates :user_id, presence: true
-
   validates :email,
             presence: true,
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i },

@@ -14,9 +14,7 @@ end
 
 def write_version(version)
   puts "Updating version to #{version}..."
-  File.open(File.expand_path("./VERSION", __dir__), "w") do |fh|
-    fh.write(version.to_s)
-  end
+  File.write(File.expand_path("./VERSION", __dir__), version.to_s)
   `npm version #{version} --git-tag-version=false`
   `bundle`
 end

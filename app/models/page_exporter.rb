@@ -74,7 +74,7 @@ class PageExporter
 
   def page_file_name(page)
     [page.path_segment,
-     page.to_param[0..250]].reject(&:blank?).first
+     page.to_param[0..250]].compact_blank.first
   end
 
   def page_path_segment(page)
@@ -95,6 +95,6 @@ class PageExporter
 
   def write_file(path, data)
     FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, "wb") { |fh| fh.write(data) }
+    File.binwrite(path, data)
   end
 end

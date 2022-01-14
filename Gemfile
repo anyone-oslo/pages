@@ -7,6 +7,11 @@ gem "rspec-rails", "~> 4.0.0.beta3"
 
 gemspec
 
+# Ruby 3.1 compatibility, remove when mail gem is updated
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "net-smtp", require: false
+
 group :development, :test do
   gem "pry"
   gem "pry-rescue"

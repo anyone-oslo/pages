@@ -4,10 +4,8 @@ class Tagging < ApplicationRecord
   belongs_to :tag
   belongs_to :taggable, polymorphic: true, touch: true
 
-  validates :taggable_id, presence: true
   validates :taggable_type, presence: true
   validates :tag_id,
-            presence: true,
             uniqueness: { scope: %i[taggable_type taggable_id] }
 
   def self.tagged_class(taggable)

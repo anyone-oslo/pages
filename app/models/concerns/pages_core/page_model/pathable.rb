@@ -107,7 +107,7 @@ module PagesCore
         siblings.reject { |p| p == self }
                 .map { |p| p.localize(locale) }
                 .map(&:path_segment)
-                .reject(&:blank?)
+                .compact_blank
       end
     end
   end
