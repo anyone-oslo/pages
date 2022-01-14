@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
     "{app,config,db,lib,vendor}/**/*",
     "Rakefile",
     "README.md",
-    "template.rb"
+    "template.rb",
+    "VERSION"
   ]
 
   s.add_development_dependency "capybara", "~> 3.32"
