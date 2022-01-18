@@ -2,8 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "~> 6.1.0"
-gem "rspec-rails", "~> 4.0.0.beta3"
+gem "rails", "~> 7.0.0"
 
 gemspec
 
