@@ -109,7 +109,7 @@ module PagesCore
       def redirect_page(page)
         return false unless page.redirects?
 
-        redirect_to(page.redirect_path(locale: locale))
+        redirect_to(page.redirect_path(locale: locale), allow_other_host: true)
       end
 
       def require_page
