@@ -90,7 +90,7 @@ Form.propTypes = {
   caption: PropTypes.object,
   image: PropTypes.object,
   locale: PropTypes.string,
-  locales: PropTypes.array,
+  locales: PropTypes.object,
   setLocale: PropTypes.func,
   save: PropTypes.func,
   showCaption: PropTypes.bool,

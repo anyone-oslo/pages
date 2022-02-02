@@ -249,7 +249,7 @@ export default function ImageGrid(props) {
 ImageGrid.propTypes = {
   attribute: PropTypes.string,
   locale: PropTypes.string,
-  locales: PropTypes.array,
+  locales: PropTypes.object,
   records: PropTypes.array,
   enablePrimary: PropTypes.bool,
   primaryAttribute: PropTypes.string,
