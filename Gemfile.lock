@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pages_core (3.9.1)
+    pages_core (3.9.2)
       RedCloth (~> 4.3.2)
       actionpack-page_caching (>= 1.1.0)
       acts_as_list (~> 0.9)
@@ -129,7 +129,7 @@ GEM
     countries (4.2.1)
       i18n_data (~> 0.15.0)
       sixarm_ruby_unaccent (~> 1.1)
-    country_select (6.1.0)
+    country_select (6.1.1)
       countries (~> 4.2)
       sort_alphabetical (~> 1.1)
     crass (1.0.6)
@@ -166,7 +166,7 @@ GEM
       excon (~> 0.58)
       formatador (~> 0.2)
       mime-types
-    fog-local (0.7.0)
+    fog-local (0.8.0)
       fog-core (>= 1.27, < 3.0)
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
@@ -294,7 +294,7 @@ GEM
       railties (>= 3.2)
       tilt
     regexp_parser (2.2.0)
-    request_store (1.5.0)
+    request_store (1.5.1)
       rack (>= 1.4)
     rexml (3.2.5)
     rspec-core (3.10.1)
