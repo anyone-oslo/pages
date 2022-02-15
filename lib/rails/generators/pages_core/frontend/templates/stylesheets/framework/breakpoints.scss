@@ -1,0 +1,42 @@
+// ---- Defaults --------------------------------------------------------------
+
+$breakpoints: (mobile: 900px,
+               large: 1400px) !default;
+
+
+// ---- Mixins ----------------------------------------------------------------
+
+@function breakpoint-value($value) {
+  @if type-of($value) == "string" {
+    @return map-get($breakpoints, $value);
+  }
+  @else {
+    @return $value;
+  }
+}
+
+@mixin breakpoint($min: "", $max: "", $orientation: "") {
+  $query: "screen";
+
+  @if $min != "" {
+    $query: $query + ' and (min-width: #{breakpoint-value($min)})';
+  }
+
+  @if $max != "" {
+    $query: $query + ' and (max-width: #{breakpoint-value($max)})';
+  }
+
+  @if $orientation != "" {
+    $query: $query + ' and (orientation: #{$orientation})';
+  }
+
+  @media #{$query} {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @include breakpoint($max: mobile) {
+    @content
+  }
+}

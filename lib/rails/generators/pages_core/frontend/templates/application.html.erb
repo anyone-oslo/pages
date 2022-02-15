@@ -7,6 +7,9 @@
   <%# google_analytics_tags "UA-xxxxxxxx-1" %>
 <% end %>
 <body>
+  <% if Rails.env.development? %>
+    <div class="grid-overlay"></div>
+  <% end %>
   <%= yield %>
 </body>
 </html>

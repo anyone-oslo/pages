@@ -1,0 +1,8 @@
+$colors: (background:        #ffffff,
+          text:              #000000,
+          text-light:        #a1a1a1,
+          border:            #e0e0e0);
+
+@function color($name) {
+  @return map-get($colors, $name);
+}

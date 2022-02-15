@@ -1,0 +1,90 @@
+$font-sans: 'Helvetica', sans-serif;
+
+// ---- Mixins ----------------------------------------------------------------
+
+@mixin child-margins {
+  &:first-child {
+    margin-top: 0px;
+  }
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+
+// ---- Definitions -----------------------------------------------------------
+
+%text-larger { font: normal 72px/1.00 $font-sans; }
+%text-large  { font: normal 54px/1.04 $font-sans; }
+%text-medium { font: normal 24px/1.25 $font-sans; }
+%text-normal { font: normal 16px/1.50 $font-sans; }
+%text-small  { font: normal 14px/1.5 $font-sans; }
+
+@include mobile {
+  %text-large  { font: normal 32px/1.13 $font-sans; }
+  %text-medium { font: normal 22px/1.27 $font-sans; }
+  %text-normal { font: normal 16px/1.31 $font-sans; }
+  %text-small-mobile,
+  %text-small { font: normal 13px/1.31 $font-sans; }
+}
+
+
+// ---- Rules -----------------------------------------------------------------
+
+body {
+  @extend %text-normal;
+}
+
+h1, h2, h3, h4, h5, h6, ul, ol, p {
+  margin: 0px 0px spacing(2) 0px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+h1 {
+  @extend %text-larger;
+}
+
+h2 {
+  @extend %text-large;
+  margin-top: spacing(10);
+  margin-bottom: spacing(10);
+  @include mobile {
+    margin-top: spacing(5);
+    margin-bottom: spacing(5);
+  }
+  @include child-margins;
+}
+
+h3 {
+  @extend %text-medium;
+  margin-top: spacing(5);
+  margin-bottom: spacing(5);
+  @include child-margins;
+}
+
+h4 {
+  font: inherit;
+  margin-top: spacing(5);
+  margin-bottom: 0px;
+  @include child-margins;
+}
+
+a, a:visited {
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  a, a:visited {
+    text-decoration: none;
+  }
+  a:hover, a:focus {
+    text-decoration: underline;
+  }
+}
+
+figcaption {
+  @extend %text-small;
+  margin-top: spacing(2);
+}

@@ -8,48 +8,47 @@ module PagesCore
 
       def create_layout
         copy_file(
-          "layout.html.erb",
+          "application.html.erb",
           File.join("app/views/layouts/application.html.erb")
         )
       end
 
-      def create_application_scss
-        template(
-          "application.scss.erb",
-          File.join("app/assets/stylesheets/application.scss")
-        )
+      def create_css_framework
+        ["application.sass.scss",
+         "config.scss",
+         "components/base.scss",
+         "framework/breakpoints.scss",
+         "framework/clearfix.scss",
+         "framework/grid.scss",
+         "framework/grid_overlay.scss",
+         "global/colors.scss",
+         "global/typography.scss",
+         "vendor/normalize.css"].each do |f|
+          template("stylesheets/#{f}", File.join("app/assets/stylesheets/#{f}"))
+        end
+      end
+
+      def create_js_framework
+        ["lib/ResponsiveEmbeds.js",
+         "lib/GridOverlay.js"].each do |f|
+          template("javascript/#{f}", File.join("app/javascript/#{f}"))
+        end
+
+        append_to_file "app/javascript/application.js" do
+          <<~JS
+            // Responsive embeds
+            import ResponsiveEmbeds from "./frontend/ResponsiveEmbeds";
+            ResponsiveEmbeds.start();
+
+            // Grid overlay
+            import GridOverlay from "./frontend/GridOverlay";
+            GridOverlay.start();
+          JS
+        end
       end
 
       def remove_application_css
         remove_file("app/assets/stylesheets/application.css")
-      end
-
-      def create_normalize_css
-        template(
-          "normalize.css.erb",
-          File.join("vendor/assets/stylesheets/normalize.css")
-        )
-      end
-
-      def create_breakpoints_css
-        template(
-          "breakpoints.scss.erb",
-          File.join("app/assets/stylesheets/mixins/breakpoints.scss")
-        )
-      end
-
-      def create_clearfix_css
-        template(
-          "clearfix.scss.erb",
-          File.join("app/assets/stylesheets/mixins/clearfix.scss")
-        )
-      end
-
-      def create_base_css
-        template(
-          "base.scss.erb",
-          File.join("app/assets/stylesheets/components/base.scss")
-        )
       end
     end
   end
