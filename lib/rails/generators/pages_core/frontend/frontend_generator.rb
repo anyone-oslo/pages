@@ -37,11 +37,11 @@ module PagesCore
         append_to_file "app/javascript/application.js" do
           <<~JS
             // Responsive embeds
-            import ResponsiveEmbeds from "./frontend/ResponsiveEmbeds";
+            import ResponsiveEmbeds from "./lib/ResponsiveEmbeds";
             ResponsiveEmbeds.start();
 
             // Grid overlay
-            import GridOverlay from "./frontend/GridOverlay";
+            import GridOverlay from "./lib/GridOverlay";
             GridOverlay.start();
           JS
         end
