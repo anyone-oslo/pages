@@ -13,18 +13,18 @@
   "dependencies": {
     "@rails/ujs": "^6.1.4-1",
     "lodash": "^4.17.21",
-    "prop-types": "^15.7.2",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-image-crop": "5.0.0",
+    "react-image-crop": "^5.0.0",
     "react_ujs": "^2.6.1",
-    "redux": "^4.1.1",
-    "stimulus": "^2.0.0"
+    "redux": "^4.1.2",
+    "stimulus": "^3.0.1"
   },
   "devDependencies": {
-    "esbuild": "^0.12.26",
-    "eslint": "^8.2.0",
-    "eslint-plugin-react": "^7.27.0",
+    "esbuild": "^0.14.23",
+    "eslint": "^8.10.0",
+    "eslint-plugin-react": "^7.29.2",
     "eslint-plugin-react-hooks": "^4.3.0"
   },
   "scripts": {
@@ -32,7 +32,7 @@
     "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   },
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "yarn@3.2.0",
   "bugs": {
     "url": "https://github.com/anyone_oslo/pages/issues"
   },
