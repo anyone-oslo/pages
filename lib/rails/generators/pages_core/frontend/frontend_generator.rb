@@ -21,6 +21,7 @@ module PagesCore
          "framework/clearfix.scss",
          "framework/grid.scss",
          "framework/grid_overlay.scss",
+         "framework/fonts.scss",
          "global/colors.scss",
          "global/typography.scss",
          "vendor/normalize.css"].each do |f|

@@ -1,0 +1,32 @@
+@use "sass:list";
+
+@function font-extension($format) {
+  $font-extensions: (opentype: "otf", truetype: "ttf");
+  $value: map-get($font-extensions, $format);
+  @if $value {
+    @return $value;
+  }
+  @else {
+    @return $format;
+  }
+}
+
+@function font-sources($filename, $formats: ()) {
+  $urls: ();
+  @each $f in list.join((woff2 woff), $formats) {
+    $urls: list.append(
+      $urls,
+      url("#{$filename}.#{font-extension($f)}") format("#{$f}")
+    );
+  }
+  @return list.join($urls, (), comma);
+}
+
+@mixin font-face($name, $filename, $weight: 400, $style: normal, $formats: ()) {
+  @font-face {
+    font-family: $name;
+    font-style: $style;
+    font-weight: $weight;
+    src: font-sources($filename, $formats);
+  }
+}

@@ -162,7 +162,7 @@ $spacings: (1: 12px,
     padding-right: 0px;
   }
 
-  &__inner {
+  .inner {
     @include grid-container-inner;
   }
 }
