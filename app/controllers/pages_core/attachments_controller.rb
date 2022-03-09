@@ -2,6 +2,8 @@
 
 module PagesCore
   class AttachmentsController < ::ApplicationController
+    include PagesCore::RangedResponse
+
     before_action :verify_signed_params
     before_action :find_attachment, only: %i[show download]
 
@@ -26,10 +28,10 @@ module PagesCore
         return
       end
 
-      send_data(@attachment.data,
-                filename: @attachment.filename,
-                type: @attachment.content_type,
-                disposition: disposition)
+      send_ranged_data(@attachment.data,
+                       filename: @attachment.filename,
+                       type: @attachment.content_type,
+                       disposition: disposition)
     end
 
     def verify_signed_params
