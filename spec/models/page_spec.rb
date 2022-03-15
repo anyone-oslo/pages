@@ -166,7 +166,7 @@ describe Page, type: :model do
   describe "uninitialized localization" do
     let(:page) { described_class.new }
 
-    specify { expect(page.body?).to eq(false) }
+    specify { expect(page.body?).to be(false) }
     specify { expect(page.body).to be_a(String) }
   end
 
@@ -174,7 +174,7 @@ describe Page, type: :model do
     let(:page) { described_class.create(excerpt: "My test page", locale: "en") }
 
     it "responds to excerpt?" do
-      expect(page.excerpt?).to eq(true)
+      expect(page.excerpt?).to be(true)
     end
 
     it "returns a string" do
@@ -193,7 +193,7 @@ describe Page, type: :model do
 
     it "removes the localization when nilified" do
       page.update(excerpt: nil)
-      expect(page.excerpt?).to eq(false)
+      expect(page.excerpt?).to be(false)
     end
   end
 
@@ -203,19 +203,19 @@ describe Page, type: :model do
     context "when page is empty" do
       let(:page) { build(:page) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when page has excerpt" do
       let(:page) { build(:page, excerpt: "e") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when page has body" do
       let(:page) { build(:page, body: "b") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -247,25 +247,25 @@ describe Page, type: :model do
     context "with no attributes" do
       let(:page) { build(:page) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with no body" do
       let(:page) { build(:page, excerpt: "e") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with no excerpt" do
       let(:page) { build(:page, body: "b") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with body and excerpt" do
       let(:page) { build(:page, body: "b", excerpt: "e") }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -346,7 +346,7 @@ describe Page, type: :model do
       end
 
       it "moves the page" do
-        expect(page.parent).to eq(nil)
+        expect(page.parent).to be_nil
       end
 
       it "updates the positions" do
@@ -369,7 +369,7 @@ describe Page, type: :model do
 
       let(:page) { create(:page, status: 4) }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when changing parent" do
@@ -404,7 +404,7 @@ describe Page, type: :model do
       end
 
       it "removes the list position" do
-        expect(page1.position).to eq(nil)
+        expect(page1.position).to be_nil
       end
 
       it "updates the position on lower items" do

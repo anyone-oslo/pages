@@ -26,7 +26,7 @@ describe PagesCore::HtmlFormatter do
     it { is_expected.to eq("<p>Hello world</p>") }
 
     it "emits a HTML safe string" do
-      expect(html.html_safe?).to eq(true)
+      expect(html.html_safe?).to be(true)
     end
 
     context "with unclosed tags" do

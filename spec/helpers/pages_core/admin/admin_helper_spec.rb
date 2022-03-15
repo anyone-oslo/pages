@@ -51,7 +51,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
   describe "page_description" do
     subject { helper.page_description }
 
-    it { is_expected.to eq(nil) }
+    it { is_expected.to be_nil }
 
     context "when description has been set" do
       before { helper.page_description = "Foo" }
@@ -71,7 +71,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
   describe "page_description_links" do
     subject { helper.page_description_links }
 
-    it { is_expected.to eq(nil) }
+    it { is_expected.to be_nil }
 
     context "when description links have been set" do
       before { helper.page_description_links = "Foo" }
@@ -91,7 +91,7 @@ RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
   describe "page_title" do
     subject { helper.page_title }
 
-    it { is_expected.to eq(nil) }
+    it { is_expected.to be_nil }
 
     context "when description has been set" do
       before { helper.page_title = "Foo" }

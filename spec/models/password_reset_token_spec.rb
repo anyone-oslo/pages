@@ -24,13 +24,13 @@ describe PasswordResetToken, type: :model do
     subject { password_reset_token.expired? }
 
     context "when token is valid" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when token is expired" do
       let(:password_reset_token) { expired_password_reset_token }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 

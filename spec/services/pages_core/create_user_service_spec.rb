@@ -23,12 +23,12 @@ RSpec.describe PagesCore::CreateUserService do
       end
 
       it "is activated" do
-        expect(user.activated?).to eq(true)
+        expect(user.activated?).to be(true)
       end
 
       it "destroys the invite" do
         user
-        expect(invite.destroyed?).to eq(true)
+        expect(invite.destroyed?).to be(true)
       end
 
       it "publishes an event" do
@@ -46,14 +46,14 @@ RSpec.describe PagesCore::CreateUserService do
       it { is_expected.not_to be_valid }
 
       it "does not destroy the invite" do
-        expect(invite.destroyed?).to eq(false)
+        expect(invite.destroyed?).to be(false)
       end
 
       it "does not publish an event" do
         result = nil
         PagesCore::PubSub.subscribe(:create_user) { |p| result = p }
         user
-        expect(result).to eq(nil)
+        expect(result).to be_nil
       end
     end
   end

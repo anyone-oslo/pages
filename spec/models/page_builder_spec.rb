@@ -25,14 +25,14 @@ describe PageBuilder do
 
     specify { expect(page1.name).to eq("Home") }
     specify { expect(page1.template).to eq("index") }
-    specify { expect(page1.published?).to eq(true) }
-    specify { expect(page1.parent).to eq(nil) }
+    specify { expect(page1.published?).to be(true) }
+    specify { expect(page1.parent).to be_nil }
     specify { expect(page1.author).to eq(user) }
 
     specify { expect(page2.parent).to eq(page1) }
     specify { expect(page2.author).to eq(user) }
 
     specify { expect(page3.template).to eq("foobar") }
-    specify { expect(page3.published?).to eq(false) }
+    specify { expect(page3.published?).to be(false) }
   end
 end

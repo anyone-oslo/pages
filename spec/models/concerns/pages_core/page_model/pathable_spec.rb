@@ -68,21 +68,21 @@ describe PagesCore::PageModel::Pathable, type: :model do
     context "when page has no parents" do
       let(:page) { create(:page) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when page has a parent without path segment" do
       let(:parent) { create(:page, locale: "en", name: "") }
       let(:page) { create(:page, locale: "en", parent: parent) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when page has a parent with path segment" do
       let(:parent) { create(:page, locale: "en", name: "Products") }
       let(:page) { create(:page, locale: "en", parent: parent) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -94,13 +94,13 @@ describe PagesCore::PageModel::Pathable, type: :model do
     let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
 
     context "when all parents have path segments" do
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when a parent is missing a path segment" do
       let(:page1) { create(:page, locale: "en", name: "") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -119,7 +119,7 @@ describe PagesCore::PageModel::Pathable, type: :model do
     context "when a parent is missing a path segment" do
       let(:page1) { create(:page, locale: "en", name: "") }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when a parent is moved" do

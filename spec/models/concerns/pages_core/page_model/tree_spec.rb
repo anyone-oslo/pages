@@ -75,7 +75,7 @@ describe PagesCore::PageModel::Tree, type: :model do
         page
       end
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 
@@ -122,7 +122,7 @@ describe PagesCore::PageModel::Tree, type: :model do
         last
       end
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 

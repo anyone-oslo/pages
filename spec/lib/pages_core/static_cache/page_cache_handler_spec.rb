@@ -21,7 +21,7 @@ describe PagesCore::StaticCache::PageCacheHandler do
 
     it "deletes all files" do
       handler.purge!
-      expect(File.exist?(test_file)).to eq(false)
+      expect(File.exist?(test_file)).to be(false)
     end
   end
 
@@ -42,13 +42,13 @@ describe PagesCore::StaticCache::PageCacheHandler do
     context "with a matching filename" do
       let(:filename) { "index.html" }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a matching path" do
       let(:filename) { "nb/index.html" }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a matching page path" do
@@ -56,7 +56,7 @@ describe PagesCore::StaticCache::PageCacheHandler do
 
       before { create(:page, name: "Home") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a paginated page path" do
@@ -64,7 +64,7 @@ describe PagesCore::StaticCache::PageCacheHandler do
 
       before { create(:page, name: "Home") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 end

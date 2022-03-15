@@ -124,7 +124,7 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to eq(true)
+        expect(assigns(:password_reset_token).destroyed?).to be(true)
       end
     end
 
@@ -166,7 +166,7 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to eq(true)
+        expect(assigns(:password_reset_token).destroyed?).to be(true)
       end
     end
 
@@ -197,7 +197,7 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "does not destroy the token" do
-        expect(assigns(:password_reset_token).destroyed?).to eq(false)
+        expect(assigns(:password_reset_token).destroyed?).to be(false)
       end
     end
 
@@ -246,7 +246,7 @@ describe Admin::PasswordResetsController, type: :controller do
       end
 
       it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to eq(true)
+        expect(assigns(:password_reset_token).destroyed?).to be(true)
       end
     end
   end

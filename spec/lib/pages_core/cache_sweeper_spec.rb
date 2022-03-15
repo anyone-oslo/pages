@@ -14,13 +14,13 @@ describe PagesCore::CacheSweeper do
   describe ".disable" do
     it "disables the sweeper" do
       singleton.disable do
-        expect(singleton.enabled).to eq(false)
+        expect(singleton.enabled).to be(false)
       end
     end
 
     it "resets the enabled value" do
       singleton.disable
-      expect(singleton.enabled).to eq(true)
+      expect(singleton.enabled).to be(true)
     end
   end
 

@@ -75,7 +75,7 @@ describe PagePath, type: :model do
     end
 
     context "when path doesn't exist" do
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 end
