@@ -95,7 +95,7 @@ module Admin
     def require_no_users
       return unless User.any?
 
-      flash[:error] = "Account holder already exists"
+      flash[:error] = t("pages_core.account_holder_exists")
       redirect_to(admin_users_url)
     end
   end

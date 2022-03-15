@@ -52,7 +52,7 @@ module Admin
       if @page.update(page_params)
         @page.categories = param_categories
         respond_with_page(@page) do
-          flash[:notice] = "Your changes were saved"
+          flash[:notice] = t("pages_core.changes_saved")
           redirect_to edit_admin_page_url(@locale, @page)
         end
       else

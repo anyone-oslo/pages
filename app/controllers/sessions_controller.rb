@@ -8,14 +8,13 @@ class SessionsController < ::ApplicationController
     if logged_in?
       redirect_to admin_default_url
     else
-      flash[:notice] = "The provided email address and password combination " \
-                       "was not valid"
+      flash[:notice] = t("pages_core.invalid_login")
       redirect_to login_admin_users_url
     end
   end
 
   def destroy
-    flash[:notice] = "You have been logged out"
+    flash[:notice] = t("pages_core.logged_out")
     deauthenticate!
     redirect_to login_admin_users_url
   end

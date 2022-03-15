@@ -1,3 +1,4 @@
+---
 en:
   date:
     formats:
@@ -16,40 +17,65 @@ en:
       user:
         email: Email address
         image: Profile picture
+  pages_core:
+    account_holder_exists: Account holder already exists
+    categories_controller:
+      created: New category created
+      deleted: Category was deleted
+      updated: Category was updated
+    changes_saved: Your changes were saved
+    invalid_login: >
+      The provided email address and password combination was not valid
+    invite_expired: This invite is no longer valid.
+    logged_out: You have been logged out
+    password_reset:
+      changed: Your password has been changed
+      expired: Your password reset link has expired
+      invalid_request: Invalid password reset request
+      not_found: Couldn't find a user with that email address
+      sent: An email with further instructions has been sent
   templates:
     default:
       blocks:
         name:
           name: Name
-          description: "This is the name of the page, and it will also be the
-            name of the link to this page."
+          description: >
+            This is the name of the page, and it will also be the name
+            of the link to this page.
         body:
           name: Body
           description: ""
         headline:
           name: Headline
-          description: "Optional, use if the headline should differ from the
-            page name."
+          description: >
+            Optional, use if the headline should differ from the page
+            name.
         excerpt:
           name: Standfirst
           description: An introductory paragraph before the start of the body.
         boxout:
           name: Boxout
-          description: "Part of the page, usually background info or facts
-            related to the article."
+          description: >
+            Part of the page, usually background info or facts related
+            to the article.
         meta_title:
           name: Title
-          description: "Document title. Will fall back to the page name if
-            empty. Recommended length: Up to 56 characters."
+          description: >
+            Document title. Will fall back to the page name if empty.
+            Recommended length: Up to 56 characters.
         meta_description:
           name: Description
-          description: "Description for search engines. Will fall back to
-            Standfirst if empty. Recommended length: Up to 156 characters."
+          description: >
+            Description for search engines. Will fall back to
+            Standfirst if empty. Recommended length: Up to 156
+            characters.
         open_graph_title:
           name: Open Graph Title
-          description: "Page title for Facebook sharing. Will fall back to the
-            document title."
+          description: >
+            Page title for Facebook sharing. Will fall back to the
+            document title.
         open_graph_description:
           name: Open Graph Description
-          description: "Description for Facebook sharing. Will fall back to
-            Description or Standfirst if empty."
+          description: >
+            Description for Facebook sharing. Will fall back to
+            Description or Standfirst if empty.

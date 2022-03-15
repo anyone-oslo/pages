@@ -13,9 +13,9 @@ module Admin
       if @user
         @password_reset_token = @user.password_reset_tokens.create
         deliver_password_reset(@user, @password_reset_token)
-        flash[:notice] = "An email with further instructions has been sent"
+        flash[:notice] = t("pages_core.password_reset.sent")
       else
-        flash[:notice] = "Couldn't find a user with that email address"
+        flash[:notice] = t("pages_core.password_reset.not_found")
       end
       redirect_to login_admin_users_url
     end
@@ -29,7 +29,7 @@ module Admin
       if user_params[:password].present? && @user.update(user_params)
         @password_reset_token.destroy
         authenticate!(@user)
-        flash[:notice] = "Your password has been changed"
+        flash[:notice] = t("pages_core.password_reset.changed")
         redirect_to login_admin_users_url
       else
         render action: :show
@@ -70,7 +70,7 @@ module Admin
 
       return if valid_token?(@password_reset_token)
 
-      flash[:notice] = "Invalid password reset request"
+      flash[:notice] = t("pages_core.password_reset.invalid_request")
       redirect_to(login_admin_users_url) && return
     end
 
@@ -78,7 +78,7 @@ module Admin
       return unless @password_reset_token.expired?
 
       @password_reset_token.destroy
-      flash[:notice] = "Your password reset link has expired"
+      flash[:notice] = t("pages_core.password_reset.expired")
       redirect_to(login_admin_users_url)
     end
   end

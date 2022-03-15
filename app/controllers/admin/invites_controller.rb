@@ -61,7 +61,7 @@ module Admin
       @invite = Invite.find_by(id: params[:id])
       return if @invite && secure_compare(@invite.token, params[:token])
 
-      flash[:notice] = "This invite is no longer valid."
+      flash[:notice] = t("pages_core.invite_expired")
       redirect_to(login_admin_users_url) && return
     end
 
