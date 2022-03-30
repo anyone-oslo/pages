@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AdminMailer < ApplicationMailer
-  default from: proc { "\"Pages\" <support@anyone.no>" }
+  default from: proc { "\"Pages\" <no-reply@anyone.no>" }
 
   def password_reset(user, url)
     @user = user
