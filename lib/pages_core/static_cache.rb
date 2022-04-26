@@ -14,12 +14,16 @@ module PagesCore
       private
 
       def default_handler
-        if ENV["VARNISH_URL"]
-          return PagesCore::StaticCache::VarnishHandler.new(ENV["VARNISH_URL"])
-        end
+        return varnish_handler if ENV["VARNISH_URL"]
 
         # PagesCore::StaticCache::NullHandler.new
         PagesCore::StaticCache::PageCacheHandler.new
+      end
+
+      def varnish_handler
+        PagesCore::StaticCache::VarnishHandler.new(
+          ENV.fetch("VARNISH_URL", nil)
+        )
       end
     end
   end
