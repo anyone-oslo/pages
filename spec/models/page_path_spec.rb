@@ -48,7 +48,7 @@ describe PagePath, type: :model do
       it { is_expected.to be_a(described_class) }
 
       it "does not create a new PagePath" do
-        expect { path }.to change(described_class, :count).by(0)
+        expect { path }.not_to change(described_class, :count)
       end
 
       it "changes the page" do
