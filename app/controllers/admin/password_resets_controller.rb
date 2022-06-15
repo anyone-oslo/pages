@@ -9,7 +9,7 @@ module Admin
     layout "admin"
 
     def create
-      @user = find_user_by_email(params[:username])
+      @user = find_user_by_email(params[:email])
       if @user
         @password_reset_token = @user.password_reset_tokens.create
         deliver_password_reset(@user, @password_reset_token)
@@ -50,7 +50,7 @@ module Admin
     def find_user_by_email(email)
       return unless email
 
-      User.login_name(params[:username])
+      User.find_by_email(params[:email])
     end
 
     def user_params

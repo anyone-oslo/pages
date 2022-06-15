@@ -23,8 +23,6 @@ class User < ApplicationRecord
 
   serialize :persistent_data
 
-  validates :username, presence: true, uniqueness: { case_sensitive: false }
-
   validates :name, presence: true
 
   validates :email,
@@ -37,7 +35,6 @@ class User < ApplicationRecord
 
   validate :confirm_password_must_match
 
-  before_validation :ensure_username
   before_validation :hash_password
   before_create :ensure_first_user_has_all_roles
 
@@ -47,17 +44,12 @@ class User < ApplicationRecord
 
   class << self
     def authenticate(email, password:)
-      user = User.login_name(email)
+      user = User.find_by_email(email)
       user if user.try { |u| u.authenticate!(password) }
     end
 
     def find_by_email(str)
       find_by("LOWER(email) = ?", str.to_s.downcase)
-    end
-
-    # Finds a user by either username or email address.
-    def login_name(string)
-      find_by(username: string.to_s) || find_by_email(string)
     end
   end
 
@@ -100,10 +92,6 @@ class User < ApplicationRecord
 
   def encrypt_password(password)
     BCrypt::Password.create(password)
-  end
-
-  def ensure_username
-    self.username ||= email
   end
 
   def ensure_first_user_has_all_roles

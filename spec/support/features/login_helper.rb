@@ -13,7 +13,7 @@ module Features
   def login_with(email, password)
     visit login_admin_users_path
     within ".password.login-tab" do
-      fill_in "username", with: email
+      fill_in "email", with: email
       fill_in "password", with: password
       click_button "Sign in"
     end
