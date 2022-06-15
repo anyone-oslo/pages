@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe PagesCore::CacheSweeper do
   let(:singleton) { described_class }
-  let(:cache_path) { Rails.root.join("public/cache") }
+  let(:cache_path) { Rails.public_path.join("cache") }
   let(:handler) { PagesCore.config.static_cache_handler }
 
   before do

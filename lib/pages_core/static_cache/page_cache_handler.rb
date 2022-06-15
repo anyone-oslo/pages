@@ -35,7 +35,7 @@ module PagesCore
       private
 
       def cache_root
-        Rails.root.join("public")
+        Rails.public_path
       end
 
       def clear_directory(path)

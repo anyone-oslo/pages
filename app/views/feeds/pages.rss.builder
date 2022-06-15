@@ -23,7 +23,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
           end
         end
         xml.guid page_url(@locale, item, only_path: false)
-        xml.pubDate item.published_at.to_formatted_s(:rfc822)
+        xml.pubDate item.published_at.to_fs(:rfc822)
         xml.tag!("dc:creator", item.author.name)
         if item.image
           xml.enclosure(
