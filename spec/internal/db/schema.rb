@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_235200) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_06_15_160300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -21,8 +20,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.string "filename", null: false
     t.string "content_type", null: false
     t.integer "content_length", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "content_hash", null: false
     t.integer "user_id"
   end
@@ -31,8 +30,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.string "name"
     t.string "slug"
     t.integer "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["slug"], name: "index_categories_on_slug"
   end
 
@@ -41,12 +40,12 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.integer "attempts", default: 0
     t.text "handler"
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "queue"
   end
 
@@ -64,8 +63,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.integer "crop_height", null: false
     t.integer "crop_start_x", null: false
     t.integer "crop_start_y", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["image_id", "image_type", "format", "width", "height", "crop_width", "crop_height", "crop_start_x", "crop_start_y"], name: "dynamic_image_variants_by_format_and_size", unique: true
     t.index ["image_id", "image_type"], name: "dynamic_image_variants_by_image"
     t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image"
@@ -74,8 +73,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
   create_table "images", id: :serial, force: :cascade do |t|
     t.string "filename", null: false
     t.string "content_type", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "content_hash", null: false
     t.integer "content_length", null: false
     t.string "colorspace", null: false
@@ -92,17 +91,17 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
   create_table "invite_roles", id: :serial, force: :cascade do |t|
     t.integer "invite_id"
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "invites", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "email"
     t.string "token"
-    t.datetime "sent_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "sent_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "localizations", id: :serial, force: :cascade do |t|
@@ -111,8 +110,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.string "name"
     t.string "locale"
     t.text "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["localizable_id", "localizable_type", "name", "locale"], name: "index_textbits_on_locale", unique: true
     t.index ["localizable_id", "localizable_type"], name: "index_localizations_on_localizable_id_and_localizable_type"
   end
@@ -128,8 +127,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.bigint "page_id"
     t.bigint "attachment_id"
     t.integer "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["attachment_id"], name: "index_page_files_on_attachment_id"
     t.index ["page_id"], name: "index_page_files_on_page_id"
   end
@@ -147,8 +146,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.integer "page_id"
     t.string "locale"
     t.string "path"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["locale", "path"], name: "index_page_paths_on_locale_and_path", unique: true
   end
 
@@ -157,23 +156,23 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.integer "position"
     t.string "byline"
     t.string "template"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "user_id"
     t.integer "status", default: 0, null: false
     t.boolean "feed_enabled", default: false, null: false
-    t.datetime "published_at"
+    t.datetime "published_at", precision: nil
     t.string "redirect_to"
     t.integer "image_id"
     t.string "image_link"
     t.boolean "news_page", default: false, null: false
     t.boolean "autopublish", default: false, null: false
     t.string "unique_name"
-    t.datetime "last_comment_at"
+    t.datetime "last_comment_at", precision: nil
     t.boolean "pinned", default: false, null: false
     t.integer "meta_image_id"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+    t.datetime "starts_at", precision: nil
+    t.datetime "ends_at", precision: nil
     t.boolean "all_day", default: false, null: false
     t.index ["ends_at"], name: "index_pages_on_ends_at"
     t.index ["parent_page_id"], name: "index_pages_on_parent_page_id"
@@ -187,16 +186,16 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
   create_table "password_reset_tokens", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "token"
-    t.datetime "expires_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "expires_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["user_id"], name: "index_roles_on_user_id"
   end
 
@@ -209,9 +208,9 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
     t.text "content"
     t.text "tags"
     t.boolean "published", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "record_updated_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "record_updated_at", precision: nil, null: false
     t.string "tsv_config", default: "simple_unaccent", null: false
     t.tsvector "tsv"
     t.index ["name"], name: "search_documents_trgm_idx", opclass: :gin_trgm_ops, using: :gin
@@ -235,13 +234,12 @@ ActiveRecord::Schema.define(version: 2021_02_10_235200) do
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
-    t.string "username"
     t.string "hashed_password"
     t.string "name"
     t.string "email"
-    t.datetime "last_login_at"
+    t.datetime "last_login_at", precision: nil
     t.integer "created_by"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.text "persistent_data"
     t.boolean "activated", default: false, null: false
     t.integer "image_id"

@@ -20,7 +20,7 @@ describe Admin::PasswordResetsController, type: :controller do
 
       before do
         perform_enqueued_jobs do
-          post :create, params: { username: user.email }
+          post :create, params: { email: user.email }
         end
       end
 
@@ -50,7 +50,7 @@ describe Admin::PasswordResetsController, type: :controller do
     end
 
     context "with a non-existant user" do
-      before { post :create, params: { username: "none@example.com" } }
+      before { post :create, params: { email: "none@example.com" } }
 
       it { is_expected.to redirect_to(login_admin_users_url) }
 

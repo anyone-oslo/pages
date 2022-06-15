@@ -15,7 +15,6 @@ describe User, type: :model do
   it { is_expected.to validate_presence_of(:email) }
   it { is_expected.to validate_presence_of(:name) }
 
-  it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
   it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
 
   it { is_expected.to allow_value("test@example.com").for(:email) }
@@ -24,12 +23,6 @@ describe User, type: :model do
 
   it { is_expected.to allow_value("long enough").for(:password) }
   it { is_expected.not_to allow_value("eep").for(:password) }
-
-  context "when email is blank" do
-    subject { build(:user, email: nil) }
-
-    it { is_expected.to validate_presence_of(:username) }
-  end
 
   describe "password validation" do
     subject { user.valid? }

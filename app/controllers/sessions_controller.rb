@@ -2,7 +2,7 @@
 
 class SessionsController < ::ApplicationController
   def create
-    user = find_user(params[:username], params[:password])
+    user = find_user(params[:email], params[:password])
     authenticate!(user) if user
 
     if logged_in?
@@ -21,7 +21,7 @@ class SessionsController < ::ApplicationController
 
   protected
 
-  def find_user(username, password)
-    User.authenticate(username, password: password) if username && password
+  def find_user(email, password)
+    User.authenticate(email, password: password) if email && password
   end
 end
