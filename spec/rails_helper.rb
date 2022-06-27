@@ -90,7 +90,7 @@ RSpec.configure do |config|
   config.after do
     # Clean the Dis storage after each example
     storage_root = Rails.root.join("db/dis/test")
-    FileUtils.rm_rf(storage_root) if File.exist?(storage_root)
+    FileUtils.rm_rf(storage_root)
 
     # Reset the ActiveJob queue
     ActiveJob::Base.queue_adapter.enqueued_jobs = []

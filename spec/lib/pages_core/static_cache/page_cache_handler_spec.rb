@@ -10,7 +10,7 @@ describe PagesCore::StaticCache::PageCacheHandler do
 
   before do
     PagesCore::CacheSweeper.enabled = true
-    FileUtils.rm_rf(cache_path) if File.exist?(cache_path)
+    FileUtils.rm_rf(cache_path)
     FileUtils.mkdir_p(cache_path)
   end
 
