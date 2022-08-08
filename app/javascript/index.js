@@ -1,5 +1,5 @@
 import Rails from "@rails/ujs";
-import { Application } from "stimulus";
+import { Application } from "@hotwired/stimulus";
 require("react_ujs");
 
 import * as Components from "./components";

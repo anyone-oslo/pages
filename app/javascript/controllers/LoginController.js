@@ -1,4 +1,4 @@
-import { Controller } from "stimulus";
+import { Controller } from "@hotwired/stimulus";
 
 export default class LoginController extends Controller {
   static get targets() {

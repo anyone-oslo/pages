@@ -9,6 +9,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@anyone-oslo/pages@workspace:."
   dependencies:
+    "@hotwired/stimulus": ^3.1.0
     "@rails/ujs": ^6.1.4-1
     esbuild: ^0.14.23
     eslint: ^8.10.0
@@ -21,7 +22,6 @@ __metadata:
     react-image-crop: ^5.0.0
     react_ujs: ^2.6.1
     redux: ^4.1.2
-    stimulus: ^3.0.1
   languageName: unknown
   linkType: soft
 
@@ -51,19 +51,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hotwired/stimulus-webpack-helpers@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@hotwired/stimulus-webpack-helpers@npm:1.0.1"
-  peerDependencies:
-    "@hotwired/stimulus": ">= 3.0"
-  checksum: 68d833f74fb90f2993c7baed6e542880c23416a129b50cadc00571102c782f6bdc8c68742ecdd668cc702aa0fafd8888f91098ed7dc43c12b2212fe5969ef6cd
-  languageName: node
-  linkType: hard
-
-"@hotwired/stimulus@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@hotwired/stimulus@npm:3.0.1"
-  checksum: 5f2dbfeb3dfff8472e1d0ef7db59a18d71540651861c0c5839fa32c56fcd5cae3fc6183a94746303c5adfbd66a9b552a3167e7e193c04dfaa6f51a8e5bea8e5e
+"@hotwired/stimulus@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@hotwired/stimulus@npm:3.1.0"
+  checksum: 82d80b17aa8cd8b69e20da4cc86b768fd8c52d06b40c1606b92526fd405264a65c617d5c051445a5b91af05620ab4475b3c5adc2011ed8d787b4955f9e924845
   languageName: node
   linkType: hard
 
@@ -1542,16 +1533,6 @@ __metadata:
     get-intrinsic: ^1.0.2
     object-inspect: ^1.9.0
   checksum: 351e41b947079c10bd0858364f32bb3a7379514c399edb64ab3dce683933483fc63fb5e4efe0a15a2e8a7e3c436b6a91736ddb8d8c6591b0460a24bb4a1ee245
-  languageName: node
-  linkType: hard
-
-"stimulus@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "stimulus@npm:3.0.1"
-  dependencies:
-    "@hotwired/stimulus": ^3.0.1
-    "@hotwired/stimulus-webpack-helpers": ^1.0.0
-  checksum: 381b80d638b3168c3b7297777724127bfa96e57600bee73393017f10c9702cf313f4391dc5cd1dbe8a118fe3ae40dd66fdb1a72ee931ea9f26c0f342e53c15e8
   languageName: node
   linkType: hard
 

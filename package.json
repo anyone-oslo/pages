@@ -1,6 +1,6 @@
 {
   "name": "@anyone-oslo/pages",
-  "version": "3.10.1",
+  "version": "3.10.2",
   "description": "Frontend for Pages",
   "repository": {
     "type": "git",
@@ -11,6 +11,7 @@
     "/app/javascript/**/*"
   ],
   "dependencies": {
+    "@hotwired/stimulus": "^3.1.0",
     "@rails/ujs": "^6.1.4-1",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
@@ -18,8 +19,7 @@
     "react-dom": "^17.0.2",
     "react-image-crop": "^5.0.0",
     "react_ujs": "^2.6.1",
-    "redux": "^4.1.2",
-    "stimulus": "^3.0.1"
+    "redux": "^4.1.2"
   },
   "devDependencies": {
     "esbuild": "^0.14.23",
