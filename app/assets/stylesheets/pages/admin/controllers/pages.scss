@@ -9,6 +9,12 @@
   background-image: image-url("pages/admin/drag-icon.png");
 }
 
+td.drag-handle {
+  float: none;
+  background-repeat: no-repeat;
+  background-position: right 0px top 50%;
+}
+
 .page-list {
   float: left;
   list-style-type:  none;
