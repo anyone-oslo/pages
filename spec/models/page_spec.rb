@@ -178,7 +178,7 @@ describe Page, type: :model do
     end
 
     it "returns a string" do
-      expect(page.excerpt).to be_kind_of(String)
+      expect(page.excerpt).to be_a(String)
     end
 
     it "excerpt should be a localization" do

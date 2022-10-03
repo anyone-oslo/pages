@@ -22,12 +22,12 @@ Gem::Specification.new do |s|
     "VERSION"
   ]
 
-  s.add_development_dependency "capybara", "~> 3.32"
-  s.add_development_dependency "factory_bot", "~> 4.11.0"
-  s.add_development_dependency "pg", "~> 1.2.3"
-  s.add_development_dependency "rails-controller-testing", "~> 1.0.0"
+  s.add_development_dependency "capybara"
+  s.add_development_dependency "factory_bot"
+  s.add_development_dependency "pg"
+  s.add_development_dependency "rails-controller-testing"
   s.add_development_dependency "rspec_junit_formatter"
-  s.add_development_dependency "rspec-rails", ">= 3.8.1"
+  s.add_development_dependency "rspec-rails"
   s.add_development_dependency "semantic"
   s.add_development_dependency "shoulda-matchers"
   s.add_development_dependency "simplecov", "~> 0.17.1"
