@@ -6,15 +6,21 @@ module PagesCore
     extend ActiveSupport::Concern
 
     def humanized_param(slug)
-      return id.to_s unless slug&.present?
+      safe_slug = safe_humanized_param(slug)
+      return id.to_s if safe_slug.blank?
 
-      "#{id}-" + transliterate(slug)
-                 .downcase
-                 .gsub(/[\[{]/, "(")
-                 .gsub(/}\]/, ")")
-                 .gsub(/[^[[:alnum:]]()-]+/, "-")
-                 .gsub(/-{2,}/, "-")
-                 .gsub(/(^-|-$)/, "")
+      "#{id}-#{safe_slug}"
+    end
+
+    private
+
+    def safe_humanized_param(str)
+      transliterate(str.to_s).downcase
+                             .gsub(/[\[{]/, "(")
+                             .gsub(/}\]/, ")")
+                             .gsub(/[^[[:alnum:]]()-]+/, "-")
+                             .gsub(/-{2,}/, "-")
+                             .gsub(/(^-|-$)/, "")
     end
   end
 end

@@ -24,6 +24,25 @@ describe PagesCore::PageModel::Pathable, type: :model do
       it { is_expected.to eq(path_segment) }
     end
 
+    context "when name is blank" do
+      let(:page_name) { "" }
+
+      it { is_expected.to eq("") }
+    end
+
+    context "when name has only non-latin characters" do
+      let(:page_name) { "الاسم العربي" }
+      let(:page) { create(:page, locale: "ar", name: page_name) }
+
+      it { is_expected.to eq("") }
+    end
+
+    context "when falling back to unique_name" do
+      let(:page) { create(:page, locale: "nb", name: "", unique_name: "test") }
+
+      it { is_expected.to eq("test") }
+    end
+
     context "when colliding with an existing route" do
       let(:page_name) { "Pages" }
       let(:path_segment) { "pages" }

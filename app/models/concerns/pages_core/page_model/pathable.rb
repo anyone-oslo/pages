@@ -24,7 +24,7 @@ module PagesCore
       end
 
       def ensure_path_segment
-        return if deleted? || path_segment? || !name?
+        return if deleted? || path_segment? || generated_path_segment.blank?
 
         segment = generated_path_segment
         segment = "#{segment}-#{id}" if path_collision?(segment)
@@ -59,11 +59,8 @@ module PagesCore
       end
 
       def generated_path_segment
-        transliterated_name.gsub(/[^[[:alnum:]]-_]+/, "-")
-                           .gsub(/-{2,}/, "-")
-                           .gsub(/(^-|-$)/, "")
-                           .mb_chars
-                           .downcase
+        safe_path_segment(transliterated_name).presence ||
+          safe_path_segment(unique_name)
       end
 
       def page_path_matches_routes?(page_path)
@@ -96,6 +93,15 @@ module PagesCore
         !page_path_route?(route)
       rescue ActionController::RoutingError
         false
+      end
+
+      def safe_path_segment(str)
+        str.to_s
+           .gsub(/[^[[:alnum:]]-_]+/, "-")
+           .gsub(/-{2,}/, "-")
+           .gsub(/(^-|-$)/, "")
+           .mb_chars
+           .downcase
       end
 
       def sibling_path_segments
