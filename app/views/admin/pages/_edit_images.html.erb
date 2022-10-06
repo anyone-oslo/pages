@@ -1,4 +1,4 @@
 <%= react_component("PageImages",
                     locale: @locale,
-                    locales: PagesCore.config.locales,
+                    locales: locales_with_dir,
                     records: @page.page_images.map { |pi| Admin::PageImageResource.new(pi).to_hash }) %>

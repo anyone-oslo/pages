@@ -6,6 +6,7 @@ module PagesCore
       include PagesCore::Admin::ContentTabsHelper
       include PagesCore::Admin::DateRangeHelper
       include PagesCore::Admin::ImageUploadsHelper
+      include PagesCore::Admin::LocalesHelper
       include PagesCore::Admin::PageJsonHelper
       include PagesCore::Admin::LabelledFieldHelper
       include PagesCore::Admin::TagEditorHelper

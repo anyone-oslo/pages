@@ -39,7 +39,7 @@ Metrics/MethodLength:
 
 Metrics/ParameterLists:
   Exclude:
-    - 'app/helpers/pages_core/form_builder.rb'
+    - 'app/helpers/pages_core/labelled_form_builder.rb'
 
 Style/AsciiComments:
   Enabled: false

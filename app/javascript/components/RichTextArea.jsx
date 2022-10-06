@@ -129,6 +129,20 @@ export default class RichTextArea extends React.Component {
     }
   }
 
+  localeOptions() {
+    let opts = {};
+
+    if (this.props.lang) {
+      opts.lang = this.props.lang;
+    }
+
+    if (this.props.dir) {
+      opts.dir = this.props.dir;
+    }
+
+    return opts;
+  }
+
   relativeUrl(str) {
     let url = null;
 
@@ -177,7 +191,8 @@ export default class RichTextArea extends React.Component {
           value={value}
           rows={rows}
           onChange={this.handleChange}
-          onKeyDown={this.handleKeyPress} />
+          onKeyDown={this.handleKeyPress}
+          {...this.localeOptions()} />
       </div>
     );
   }
@@ -209,5 +224,7 @@ RichTextArea.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
   rows: PropTypes.number,
-  simple: PropTypes.bool
+  simple: PropTypes.bool,
+  lang: PropTypes.string,
+  dir: PropTypes.string
 };
