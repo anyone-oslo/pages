@@ -139,7 +139,9 @@ export default class PageTree extends React.Component {
                          movedPage={this.movedPage}
                          toggleCollapsed={this.toggleCollapsed}
                          updatePage={this.updatePage}
-                         updateTree={this.updateTree} />
+                         updateTree={this.updateTree}
+                         locale={this.props.locale}
+                         dir={this.props.dir} />
     );
   }
 
@@ -189,5 +191,6 @@ export default class PageTree extends React.Component {
 PageTree.propTypes = {
   pages: PropTypes.array,
   locale: PropTypes.string,
+  dir: PropTypes.string,
   permissions: PropTypes.array
 };

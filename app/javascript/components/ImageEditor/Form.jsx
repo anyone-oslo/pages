@@ -19,6 +19,8 @@ export default function Form(props) {
     props.setLocale(evt.target.value);
   };
 
+  const inputDir = locales[locale].dir || "ltr";
+
   return (
     <form>
       <div className="field embed-code">
@@ -44,7 +46,7 @@ export default function Form(props) {
                   onChange={handleChangeLocale}>
             {Object.keys(locales).map(key => (
               <option key={`locale-${key}`} value={key}>
-                {locales[key]}
+                {locales[key].name}
               </option>
             ))}
           </select>
@@ -59,6 +61,8 @@ export default function Form(props) {
         </span>
         <textarea
           className="alternative"
+          lang={locale}
+          dir={inputDir}
           value={alternative[locale] || ""}
           onChange={e => props.updateLocalization("alternative", e.target.value)} />
       </div>
@@ -68,6 +72,8 @@ export default function Form(props) {
             Caption
           </label>
           <textarea
+            lang={locale}
+            dir={inputDir}
             onChange={e => props.updateLocalization("caption", e.target.value)}
             value={caption[locale] || ""}
             className="caption" />

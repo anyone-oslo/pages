@@ -125,9 +125,7 @@ export default class PageTreeNode extends React.Component {
   }
 
   childNodes() {
-    let index = this.props.index;
-    let tree = this.props.tree;
-    let dragging = this.props.dragging;
+    const { index, tree, dragging, dir, locale } = this.props;
 
     if (index.children && index.children.length && !index.node.collapsed) {
       var childrenStyles = {};
@@ -139,21 +137,22 @@ export default class PageTreeNode extends React.Component {
       return (
         <div className="children" style={childrenStyles}>
           {index.children.map((child) => {
-             var childIndex = tree.getIndex(child);
-             return (
-               <PageTreeNode
-                   tree={tree}
-                   index={childIndex}
-                   key={childIndex.id}
-                   dragging={dragging}
-                   paddingLeft={this.props.paddingLeft}
-                   addChild={this.props.addChild}
-                   onCollapse={this.props.onCollapse}
-                   onDragStart={this.props.onDragStart}
-                   updatePage={this.props.updatePage}
-               />
-             );
-           })}
+            var childIndex = tree.getIndex(child);
+            return (
+              <PageTreeNode
+                tree={tree}
+                index={childIndex}
+                key={childIndex.id}
+                dragging={dragging}
+                paddingLeft={this.props.paddingLeft}
+                addChild={this.props.addChild}
+                onCollapse={this.props.onCollapse}
+                onDragStart={this.props.onDragStart}
+                updatePage={this.props.updatePage}
+                dir={dir}
+                locale={locale} />
+            );
+          })}
         </div>
       );
     }
@@ -232,11 +231,14 @@ export default class PageTreeNode extends React.Component {
   }
 
   pageName() {
-    if (this.node().name) {
-      return this.node().name;
-    } else {
-      return <i className="untitled">Untitled</i>;
-    }
+    const name = this.node().name || <i className="untitled">Untitled</i>;
+
+    return(
+      <span dir={this.props.dir}
+            lang={this.props.locale}>
+        {name}
+      </span>
+    );
   }
 
   render() {
@@ -278,6 +280,7 @@ export default class PageTreeNode extends React.Component {
   }
 
   renderEditNode() {
+    const { dir, locale } = this.props;
     let self = this;
 
     let handleNameChange = function(event) {
@@ -303,6 +306,8 @@ export default class PageTreeNode extends React.Component {
         <form onSubmit={performEdit}>
           <input type="text"
                  value={this.state.newName}
+                 dir={dir}
+                 lang={locale}
                  autoFocus
                  onChange={handleNameChange} />
           <button className="save" type="submit">
@@ -407,5 +412,7 @@ PageTreeNode.propTypes = {
   onDragStart: PropTypes.func,
   paddingLeft: PropTypes.number,
   tree: PropTypes.object,
-  updatePage: PropTypes.func
+  updatePage: PropTypes.func,
+  locale: PropTypes.string,
+  dir: PropTypes.string,
 };

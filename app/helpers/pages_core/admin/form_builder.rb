@@ -4,12 +4,13 @@ module PagesCore
   module Admin
     class FormBuilder < PagesCore::FormBuilder
       include DynamicImage::Helper
+      include PagesCore::Admin::LocalizedFormBuilder
 
       def rich_text_area(attr, options = {})
         @template.rich_text_area_tag(
           "#{object_name}[#{attr}]",
           object.send(attr),
-          options
+          localized_form_field_options(attr).merge(options)
         )
       end
 

@@ -16,6 +16,7 @@
       "PageTree", {
         pages: @pages.map { |p| page_json(p) },
         locale: @locale,
+        dir: locale_direction(@locale),
         permissions: [(:create if policy(Page).create?)] }
     ) %>
   <% end %>

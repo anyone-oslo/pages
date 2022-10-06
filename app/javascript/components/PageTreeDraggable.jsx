@@ -75,7 +75,7 @@ export default class PageTreeDraggable extends React.Component {
   }
 
   render() {
-    var tree = this.props.tree;
+    const { tree, dir, locale } = this.props;
     var dragging = this.state.dragging;
 
     if (!tree) {
@@ -90,16 +90,17 @@ export default class PageTreeDraggable extends React.Component {
         <div className="page-tree">
           {this.getDraggingDom()}
           <PageTreeNode
-              tree={tree}
-              index={root}
-              key={root.id}
-              paddingLeft={this.props.paddingLeft}
-              addChild={id => this.addChild(id)}
-              onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
-              onCollapse={nodeId => this.toggleCollapse(nodeId)}
-              updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
-              dragging={dragging && dragging.id}
-          />
+            tree={tree}
+            index={root}
+            key={root.id}
+            paddingLeft={this.props.paddingLeft}
+            addChild={id => this.addChild(id)}
+            onDragStart={(id, dom, e) => this.dragStart(id, dom, e)}
+            onCollapse={nodeId => this.toggleCollapse(nodeId)}
+            updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
+            dragging={dragging && dragging.id}
+            dir={dir}
+            locale={locale} />
         </div>
       );
     }
@@ -303,4 +304,6 @@ PageTreeDraggable.propTypes = {
   paddingLeft: PropTypes.number,
   updatePage: PropTypes.func,
   updateTree: PropTypes.func,
+  locale: PropTypes.string,
+  dir: PropTypes.string
 };

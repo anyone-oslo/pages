@@ -39,7 +39,7 @@ module PagesCore
           width: width,
           caption: caption,
           locale: locale || I18n.default_locale,
-          locales: PagesCore.config.locales
+          locales: locales_with_dir
         )
       end
     end
