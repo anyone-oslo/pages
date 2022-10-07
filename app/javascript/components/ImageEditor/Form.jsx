@@ -19,7 +19,7 @@ export default function Form(props) {
     props.setLocale(evt.target.value);
   };
 
-  const inputDir = locales[locale].dir || "ltr";
+  const inputDir = (locales && locales[locale].dir) || "ltr";
 
   return (
     <form>

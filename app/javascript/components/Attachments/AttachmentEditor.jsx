@@ -6,7 +6,7 @@ import ToastStore from "../../stores/ToastStore";
 import { putJson } from "../../lib/request";
 
 export default function AttachmentEditor(props) {
-  const { attachment } = props;
+  const { attachment, locales } = props;
 
   const [locale, setLocale] = useState(props.locale);
   const [localizations, setLocalizations] = useState({
@@ -45,19 +45,22 @@ export default function AttachmentEditor(props) {
     ModalStore.dispatch({ type: "CLOSE" });
   };
 
+  const inputDir = (locales && locales[locale].dir) || "ltr";
+
   return (
     <div className="attachment-editor">
       <form>
-        {props.locales && Object.keys(props.locales).length > 1 && (
+        {props.locales && Object.keys(locales).length > 1 && (
           <div className="field">
             <label>
               Locale
             </label>
             <select name="locale"
+                    value={locale}
                     onChange={e => setLocale(e.target.value)}>
-              {Object.keys(props.locales).map(key => (
+              {Object.keys(locales).map(key => (
                 <option key={`locale-${key}`} value={key}>
-                  {props.locales[key]}
+                  {locales[key].name}
                 </option>
               ))}
             </select>
@@ -67,6 +70,8 @@ export default function AttachmentEditor(props) {
           <label>Name</label>
           <input type="text"
                  className="name"
+                 lang={locale}
+                 dir={inputDir}
                  value={localizations.name[locale] || ""}
                  onChange={updateLocalization("name")} />
         </div>
@@ -74,6 +79,8 @@ export default function AttachmentEditor(props) {
           <label>Description</label>
           <textarea className="description"
                     value={localizations.description[locale] || ""}
+                    lang={locale}
+                    dir={inputDir}
                     onChange={updateLocalization("description")} />
         </div>
         <div className="field embed-code">

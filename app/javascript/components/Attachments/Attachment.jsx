@@ -8,7 +8,7 @@ import ToastStore from "../../stores/ToastStore";
 import { useDraggable } from "../drag";
 
 export default function Attachment(props) {
-  const { attributeName, draggable } = props;
+  const { attributeName, draggable, locales, locale } = props;
   const { record } = draggable;
   const { attachment, uploading } = record;
 
@@ -30,15 +30,15 @@ export default function Attachment(props) {
   };
 
   const description = () => {
-    if (attachment.description && attachment.description[props.locale]) {
-      return attachment.description[props.locale];
+    if (attachment.description && attachment.description[locale]) {
+      return attachment.description[locale];
     }
     return null;
   };
 
   const name = () => {
-    if (attachment.name && attachment.name[props.locale]) {
-      return attachment.name[props.locale];
+    if (attachment.name && attachment.name[locale]) {
+      return attachment.name[locale];
     }
     return null;
   };
@@ -48,8 +48,8 @@ export default function Attachment(props) {
     ModalStore.dispatch({
       type: "OPEN",
       payload: <AttachmentEditor attachment={attachment}
-                                 locale={props.locale}
-                                 locales={props.locales}
+                                 locale={locale}
+                                 locales={locales}
                                  onUpdate={props.onUpdate} />
     });
   };
@@ -63,6 +63,8 @@ export default function Attachment(props) {
   }
 
   const icon = uploading ? "cloud-upload" : "paperclip";
+
+  const localeDir = (locales && locales[locale].dir) || "ltr";
 
   return (
     <div className={classes.join(" ")}
@@ -100,7 +102,8 @@ export default function Attachment(props) {
         <a href={attachment.url}
            rel="noreferrer"
            target="_blank">{attachment.filename}</a>}
-       {!uploading && description() && <p>{description()}</p>}
+       {!uploading && description() &&
+        <p dir={localeDir}>{description()}</p>}
      </div>}
     </div>
   );
