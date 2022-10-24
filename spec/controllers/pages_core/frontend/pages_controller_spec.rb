@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::Frontend::PagesController do
+describe PagesCore::Frontend::PagesController, type: :controller do
   controller(PagesController) do
     template(:home) do |page|
       @home_page = page
