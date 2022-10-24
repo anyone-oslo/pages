@@ -64,7 +64,7 @@ export default function Attachment(props) {
 
   const icon = uploading ? "cloud-upload" : "paperclip";
 
-  const localeDir = (locales && locales[locale].dir) || "ltr";
+  const localeDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
 
   return (
     <div className={classes.join(" ")}

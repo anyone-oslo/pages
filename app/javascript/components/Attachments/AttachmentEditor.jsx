@@ -45,7 +45,7 @@ export default function AttachmentEditor(props) {
     ModalStore.dispatch({ type: "CLOSE" });
   };
 
-  const inputDir = (locales && locales[locale].dir) || "ltr";
+  const inputDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
 
   return (
     <div className="attachment-editor">
