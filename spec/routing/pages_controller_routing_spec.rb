@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "PagesController routing", type: :routing do
+RSpec.describe "PagesController routing" do
   let(:locale) { "nb" }
   let(:page) { create(:page) }
   let(:expected_route) do

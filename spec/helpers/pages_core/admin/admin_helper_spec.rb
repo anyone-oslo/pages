@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PagesCore::Admin::AdminHelper, type: :helper do
+RSpec.describe PagesCore::Admin::AdminHelper do
   describe "#add_body_class" do
     before { helper.add_body_class("foo") }
 

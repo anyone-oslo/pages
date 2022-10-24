@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::PagesHelper, type: :helper do
+RSpec.describe Admin::PagesHelper do
   let(:page) { build(:page) }
 
   describe "#available_templates_for_select" do

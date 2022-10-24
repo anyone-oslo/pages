@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe User, type: :model do
+describe User do
   subject { build(:user) }
 
   it { is_expected.to belong_to(:creator).optional }

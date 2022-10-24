@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe SearchDocument, type: :model do
+describe SearchDocument do
   subject(:search_document) { build(:invite) }
 
   around do |example|

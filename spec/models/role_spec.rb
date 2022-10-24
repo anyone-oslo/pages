@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Role, type: :model do
+describe Role do
   let(:role) { create(:role) }
 
   it { is_expected.to belong_to(:user) }

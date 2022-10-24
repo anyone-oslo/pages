@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Category, type: :model do
+describe Category do
   let(:category) { create(:category) }
 
   it { is_expected.to have_many(:page_categories).dependent(:destroy) }
