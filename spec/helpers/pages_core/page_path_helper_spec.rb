@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PagesCore::PagePathHelper do
+RSpec.describe PagesCore::PagePathHelper, type: :helper do
   let(:parent_page) { create(:page, locale: "nb", name: "Category") }
   let(:page) do
     create(:page, locale: "nb", name: "Product", parent: parent_page)

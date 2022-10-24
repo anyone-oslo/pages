@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Admin::UsersController do
+describe Admin::UsersController, type: :controller do
   let(:user) { create(:user) }
 
   describe "GET index" do

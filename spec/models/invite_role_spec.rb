@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe InviteRole do
+describe InviteRole, type: :model do
   it { is_expected.to belong_to(:invite) }
 
   it { is_expected.to validate_presence_of(:name) }

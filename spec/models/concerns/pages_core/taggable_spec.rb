@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::Taggable do
+describe PagesCore::Taggable, type: :model do
   subject(:page) { create(:page) }
 
   it { is_expected.to have_many(:taggings).dependent(:destroy) }

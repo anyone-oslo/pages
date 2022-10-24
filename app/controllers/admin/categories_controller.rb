@@ -16,8 +16,6 @@ module Admin
       @category = Category.new
     end
 
-    def edit; end
-
     def create
       @category = Category.create(category_params)
       if @category.valid?
@@ -27,6 +25,8 @@ module Admin
         render action: :new
       end
     end
+
+    def edit; end
 
     def update
       if @category.update(category_params)

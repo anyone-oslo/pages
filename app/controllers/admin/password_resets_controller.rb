@@ -8,10 +8,6 @@ module Admin
 
     layout "admin"
 
-    def show
-      @user = @password_reset_token.user
-    end
-
     def create
       @user = find_user_by_email(params[:email])
       if @user
@@ -22,6 +18,10 @@ module Admin
         flash[:notice] = t("pages_core.password_reset.not_found")
       end
       redirect_to login_admin_users_url
+    end
+
+    def show
+      @user = @password_reset_token.user
     end
 
     def update

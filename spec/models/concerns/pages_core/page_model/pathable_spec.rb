@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::PageModel::Pathable do
+describe PagesCore::PageModel::Pathable, type: :model do
   subject { page }
 
   let(:page) { create(:page, locale: "nb") }

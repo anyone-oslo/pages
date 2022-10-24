@@ -25,13 +25,9 @@ module Admin
       redirect_to admin_default_url
     end
 
-    def show; end
-
     def new
       @user = User.new
     end
-
-    def edit; end
 
     def create
       @user = PagesCore::CreateUserService.call(user_params)
@@ -42,6 +38,10 @@ module Admin
         render action: :new
       end
     end
+
+    def show; end
+
+    def edit; end
 
     def update
       if @user.update(user_params_with_roles)

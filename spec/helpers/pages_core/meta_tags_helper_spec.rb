@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PagesCore::MetaTagsHelper do
+RSpec.describe PagesCore::MetaTagsHelper, type: :helper do
   let(:page) { build(:page, meta_description: "meta", excerpt: "excerpt") }
 
   describe "#default_meta_image" do

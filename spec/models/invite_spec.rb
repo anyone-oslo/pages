@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Invite do
+describe Invite, type: :model do
   subject(:invite) { build(:invite) }
 
   it { is_expected.to belong_to(:user) }

@@ -3,6 +3,7 @@
 require "rails_helper"
 
 RSpec.describe("Error handling",
+               type: :feature,
                realistic_error_responses: true) do
   it "renders a 404 page" do
     visit "/errors/not_found"

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PagesCore::OpenGraphTagsHelper do
+RSpec.describe PagesCore::OpenGraphTagsHelper, type: :helper do
   let(:page) do
     build(:page, open_graph_title: "Article", open_graph_description: "desc")
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Admin::PasswordResetsController do
+describe Admin::PasswordResetsController, type: :controller do
   let(:user) { create(:user) }
   let(:password_reset_token) { create(:password_reset_token) }
   let(:expired_password_reset_token) do

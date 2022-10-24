@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::MenuHelper do
+RSpec.describe Admin::MenuHelper, type: :helper do
   before { helper.instance_variable_set(:@locale, I18n.default_locale) }
 
   describe "#header_tabs" do

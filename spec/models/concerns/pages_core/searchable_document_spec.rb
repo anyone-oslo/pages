@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::SearchableDocument do
+describe PagesCore::SearchableDocument, type: :model do
   subject { page }
 
   let(:page) { create(:page) }

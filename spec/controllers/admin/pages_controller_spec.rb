@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Admin::PagesController do
+describe Admin::PagesController, type: :controller do
   let(:locale) { I18n.default_locale }
   let(:page) { create(:page) }
   let(:user) { create(:user) }

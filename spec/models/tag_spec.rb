@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Tag do
+describe Tag, type: :model do
   it { is_expected.to have_many(:taggings) }
 
   describe ".tags_and_suggestions_for" do
