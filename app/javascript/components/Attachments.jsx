@@ -16,7 +16,8 @@ function filenameToName(str) {
 
 export default function Attachments(props) {
   const collection = useDragCollection(props.records);
-  const locales = props.locales ? Object.keys(props.locales) : [props.locale];
+  const locales = props.locales && props.locales.length > 0 ?
+        Object.keys(props.locales) : [props.locale];
   const [deleted, setDeleted] = useState([]);
 
   const uploadAttachment = (file) => {
