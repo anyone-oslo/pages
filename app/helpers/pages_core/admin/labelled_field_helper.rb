@@ -53,7 +53,7 @@ module PagesCore
 
       def labelled_field_label(label, options = {})
         tag.label do
-          label + labelled_field_errors(options[:errors])
+          safe_join([label, labelled_field_errors(options[:errors])])
         end
       end
 
