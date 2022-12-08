@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ErrorsController < ::ApplicationController
+class ErrorsController < ApplicationController
   layout "errors"
 
   def show

@@ -15,7 +15,7 @@ class Category < ApplicationRecord
   def set_slug
     self.slug = name.downcase
                     .gsub(/[^\w\s]/, "")
-                    .split(/[^\w\d\-]+/)
+                    .split(/[^\w\d-]+/)
                     .compact
                     .join("-")
   end

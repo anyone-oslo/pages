@@ -29,7 +29,7 @@ class Page < ApplicationRecord
   has_many :categories, through: :page_categories
 
   validates(:unique_name,
-            format: { with: /\A[\w\d_\-]+\z/,
+            format: { with: /\A[\w\d_-]+\z/,
                       allow_blank: true },
             uniqueness: { allow_blank: true })
 

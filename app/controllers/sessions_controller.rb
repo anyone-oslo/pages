@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SessionsController < ::ApplicationController
+class SessionsController < ApplicationController
   def create
     user = find_user(params[:email], params[:password])
     authenticate!(user) if user
