@@ -58,8 +58,8 @@ module PagesCore
       end
 
       def create_delayed_job_script
-        template "delayed_job", File.join("script/delayed_job")
-        File.chmod(0o755, Rails.root.join("script/delayed_job"))
+        template "delayed_job", File.join("bin/delayed_job")
+        File.chmod(0o755, Rails.root.join("bin/delayed_job"))
       end
 
       def create_delayed_job_initializer
