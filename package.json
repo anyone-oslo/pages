@@ -32,7 +32,7 @@
     "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
   },
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.3.1",
   "bugs": {
     "url": "https://github.com/anyone_oslo/pages/issues"
   },
