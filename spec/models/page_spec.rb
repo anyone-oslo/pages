@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Page, type: :model do
+describe Page do
   describe ".archive_finder" do
     subject(:finder) { described_class.archive_finder }
 

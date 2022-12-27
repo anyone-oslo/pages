@@ -73,6 +73,10 @@ Rails/DynamicFindBy:
   AllowedMethods:
     - find_by_email
 
+Rails/ApplicationController:
+  Exclude:
+    - "app/controllers/pages_core/base_controller.rb"
+
 Rails/CreateTableWithTimestamps:
   Exclude:
-    - 'db/migrate/20111219033112_create_pages_tables.rb'
+    - "db/migrate/20111219033112_create_pages_tables.rb"

@@ -34,6 +34,8 @@ module Admin
                      end
     end
 
+    def edit; end
+
     def create
       @page = build_page(@locale, page_params, param_categories)
       if @page.valid?
@@ -45,8 +47,6 @@ module Admin
         render action: :new
       end
     end
-
-    def edit; end
 
     def update
       if @page.update(page_params)

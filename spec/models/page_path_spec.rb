@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagePath, type: :model do
+describe PagePath do
   subject { build(:page_path) }
 
   it { is_expected.to belong_to(:page) }

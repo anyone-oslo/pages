@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PagesCore::PageModel::Tree, type: :model do
+describe PagesCore::PageModel::Tree do
   subject(:page) { create(:page) }
 
   it { is_expected.to belong_to(:parent).class_name("Page").optional }
