@@ -9,7 +9,8 @@
       <%= (@page_description || @page_title).html_safe %>
     </h3>
     <% if @content_tabs %>
-      <ul class="content-tabs">
+      <ul class="content-tabs"
+          role="tablist">
         <% @content_tabs.map do |t| %>
           <li id="content-tab-link-<%= t[:key] %>"
               data-tab="<%= t[:key] %>"
@@ -23,7 +24,8 @@
                 data: {
                   action: "click->main#changeTab",
                   tab: t[:key]
-              }) %>
+                },
+                role: "tab") %>
             <% end %>
           </li>
         <% end %>

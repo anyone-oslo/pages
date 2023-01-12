@@ -43,7 +43,7 @@ export default class Toast extends React.Component {
     }
   }
 
-  render() {
+  render() {>
     let toast = this.state.toast;
     let classNames = ["toast"];
 
@@ -55,7 +55,7 @@ export default class Toast extends React.Component {
     }
 
     return (
-      <div className="toast-wrapper">
+      <div className="toast-wrapper" aria-live="polite">
         {toast && (
           <div className={classNames.join(" ")}>
             {toast.message}

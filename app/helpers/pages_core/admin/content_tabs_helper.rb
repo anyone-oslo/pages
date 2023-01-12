@@ -23,6 +23,7 @@ module PagesCore
         tag.div(content,
                 class: "content-tab",
                 id: "content-tab-#{key}",
+                role: "tabpanel",
                 data: { tab: key,
                         "main-target" => "tab" })
       end
