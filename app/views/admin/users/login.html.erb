@@ -19,11 +19,11 @@
     <%= form_tag session_path do %>
       <p>
         <label>Email address</label>
-        <%= text_field_tag :email, '' %>
+        <%= text_field_tag(:email, "", autocomplete: "email") %>
       </p>
       <p>
         <label>Password</label>
-        <%= password_field_tag :password, '' %>
+        <%= password_field_tag(:password, "", autocomplete: "current-password") %>
       </p>
       <p>
         <button type="submit">Sign in</button>
@@ -54,7 +54,7 @@
         and we'll send you a link where you can reset your password.
       </p>
       <p>
-        <%= text_field_tag :email, '' %>
+        <%= text_field_tag(:email, "", autocomplete: "email") %>
       </p>
       <p>
         <button type="submit">

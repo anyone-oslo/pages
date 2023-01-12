@@ -12,10 +12,12 @@
 <%= form_for(@user,
              url: accept_admin_invite_path(@invite, token: @invite.token),
              builder: PagesCore::FormBuilder) do |f| %>
-  <%= f.labelled_text_field :name %>
-  <%= f.labelled_text_field :email %>
-  <%= f.labelled_password_field :password %>
-  <%= f.labelled_password_field :confirm_password %>
+  <%= f.labelled_text_field :name, autocomplete: "name" %>
+  <%= f.labelled_text_field :email, autocomplete: "email" %>
+  <%= f.labelled_password_field(:password,
+                                autocomplete: "new-password") %>
+  <%= f.labelled_password_field(:confirm_password,
+                                autocomplete: "new-password") %>
   <p>
     <button type="submit">
       Sign up
