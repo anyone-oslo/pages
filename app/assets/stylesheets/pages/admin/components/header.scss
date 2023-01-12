@@ -12,7 +12,7 @@ header {
     color: $c-text-invert;
   }
 
-  #logo {
+  .logo {
     position: absolute;
     z-index: 2;
     top: 11px;
@@ -21,7 +21,7 @@ header {
     height: 27px;
   }
 
-  #site-name {
+  .site-name {
     color: $c-text-invert;
     position: absolute;
     top: 15px;
@@ -100,7 +100,7 @@ header {
   }
 }
 
-#content-tabs {
+.content-tabs {
   list-style-type: none;
   margin: 24px 0px -11px -18px;
   padding: 0;
@@ -126,7 +126,7 @@ header {
   }
 }
 
-#page-description {
+.page-description {
   @include vertical-gradient(#dceef6, #e7f3f9);
   margin: 0;
   padding: 16px 32px;

@@ -49,26 +49,6 @@ td {
   padding: 2px 16px 2px 0;
 }
 
-#flash-error,
-#flash-notice {
-  padding: 16px 32px;
-  font-size: 12px;
-}
-
-#flash-error {
-  @include vertical-gradient(#970002, $c-red);
-  border-bottom: 1px solid #9c0002;
-  color: #fff299;
-  font-weight: bold;
-}
-
-#flash-notice {
-  background: #f5f3bc;
-  border-bottom: 1px solid #dad88a;
-  color: #3d3b00;
-  font-weight: normal;
-}
-
 .errorExplanation {
   background-color: #ffd;
   border-bottom:  1px solid #dda;

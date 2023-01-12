@@ -1,8 +1,8 @@
 <header>
-  <div id="logo">
+  <div class="logo">
     <%= link_to image_tag("pages/admin/icon.png"), '/admin' %>
   </div>
-  <div id="site-name">
+  <div class="site-name">
     <h1>
       <%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %>
     </h1>
@@ -14,24 +14,12 @@
       <%= link_to("Log out", session_path, method: "delete") %>
     </div>
   <% end %>
-  <div class="tabs">
+  <nav class="tabs">
     <% if logged_in? %>
       <%= header_tabs(:pages) %>
       <%= header_tabs(:pages_plugins) %>
       <%= header_tabs(:custom) %>
       <%= header_tabs(:account) %>
     <% end -%>
-  </div>
+  </nav>
 </header>
-
-<% if flash[:error] && false %>
-  <div id="flash-error">
-    <%= flash[:error] %>
-  </div>
-<% end %>
-
-<% if flash[:notice] && false %>
-  <div id="flash-notice">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
