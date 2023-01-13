@@ -15,6 +15,43 @@ module PagesCore
       end
 
       module ClassMethods
+        def count_by_month
+          connection.select_all(count_by_month_query).map(&:symbolize_keys)
+        end
+
+        def in_year(year)
+          time = Date.new(year.to_i).to_time
+          where("ends_at >= ? AND starts_at <= ?",
+                time.beginning_of_year,
+                time.end_of_year)
+        end
+
+        def in_year_and_month(year, month)
+          time = Date.new(year.to_i, month.to_i).to_time
+          where("ends_at >= ? AND starts_at <= ?",
+                time.beginning_of_month,
+                time.end_of_month)
+        end
+
+        private
+
+        def count_by_month_query
+          <<-SQL.squish
+            SELECT extract('year' FROM s.d)::integer AS year,
+                   extract('month' FROM s.d)::integer AS month,
+                   count(p.id) AS count
+            FROM (SELECT generate_series(
+                    date_trunc('month', min(starts_at)::date),
+                    max(ends_at)::date,
+                    '1 month'::interval)::date AS d FROM pages) s
+            RIGHT JOIN pages p
+              ON p.ends_at::date >= s.d
+              AND p.starts_at::date <= (s.d + interval '1 month - 1 day')::date
+            WHERE p.starts_at IS NOT NULL
+            GROUP BY s.d
+            ORDER BY s.d DESC
+          SQL
+        end
       end
 
       # Finds the page's next sibling by date. Returns nil if there

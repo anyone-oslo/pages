@@ -68,7 +68,7 @@
       <th>Section</th>
     </tr>
     <% @pages.each do |page| %>
-      <%= render(partial: "list_item",
+      <%= render(partial: "admin/pages/list_item",
                  locals: {
                    page: page,
                    author: true,

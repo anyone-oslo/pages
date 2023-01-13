@@ -82,9 +82,11 @@ Rails.application.routes.draw do
                 only: %i[index],
                 path: "pages/news(/:year(/:month)(/page/:page))"
 
+      resource :calendar,
+               path: "pages/calendar(/:year(/:month)(/page/:page))"
+
       resources :pages do
         collection do
-          get "calendar"
           get "deleted"
         end
 

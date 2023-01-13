@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Admin::NewsController, type: :controller do
+describe Admin::NewsController do
   let(:locale) { I18n.default_locale }
   let(:page) { create(:page) }
   let(:user) { create(:user) }
