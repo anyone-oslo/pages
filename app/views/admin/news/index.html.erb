@@ -1,4 +1,5 @@
 <% content_for(:page_title, "News") %>
+
 <% content_for(:page_description) do %>
   News:
   <em>
@@ -14,54 +15,13 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <% if policy(Page).new? %>
-    <h2>New article</h2>
-    <p>
-      <%= form_tag new_admin_page_path, method: :get do %>
-        In
-        <%= select_tag('parent',
-                       options_for_select(@news_pages.map{|p| [news_section_name(p, @news_pages).gsub("&raquo;", "»"), p.id] })) %>
-        <%= submit_tag "Go", name: nil %>
-      <% end %>
-    </p>
-  <% end %>
-  <div class="archive-index">
-    <% @archive_finder.years_with_count.reverse.each do |year, year_count| %>
-      <h2>
-        <%= link_to_unless_current(year,
-                                   admin_news_index_path(
-                                     @locale,
-                                     year: year,
-                                     category: @category&.slug)
-        ) %>
-        <%= ": #{@category.name}" if @category %>
-        <span class="count">
-          (<%= year_count %>)
-        </span>
-      </h2>
-      <ul>
-        <% @archive_finder.months_in_year_with_count(year).reverse.each do |month, page_count| %>
-          <li>
-            <% if year == @year && month == @month %>
-              <strong>
-                <%= month_name(month) %>
-              </strong>
-              (<%= page_count %>)
-            <% else %>
-              <%= link_to(month_name(month),
-                          admin_news_index_path(@locale,
-                                                month: month,
-                                                year: year,
-                                                category: @category&.slug)) %>
-              <span class="count">
-                (<%= page_count %>)
-              </span>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
+  <%= render(partial: "sidebar",
+             locals: {
+               locale: @locale,
+               category: @category,
+               news_pages: @news_pages,
+               archive_finder: @archive_finder
+             }) %>
 <% end %>
 
 <% if @pages.length > 0 %>

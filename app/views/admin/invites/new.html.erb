@@ -1,10 +1,6 @@
 <% content_for :page_title, "New invite" %>
 <% content_for :page_description, "New invite" %>
 
-<% content_for(:sidebar) do %>
-  &nbsp;
-<% end %>
-
 <%= form_for [:admin, @invite], builder: PagesCore::FormBuilder do |f| %>
   <%= f.labelled_text_field :email %>
   <%= render(partial: "admin/users/access_control",

@@ -9,9 +9,6 @@
   <%= locale_links { |l| admin_pages_path(l) } %>
 <% end %>
 
-<% content_for :sidebar do %>
-<% end %>
-
 <div class="content">
   <% cache Page.visible.roots.to_a + [current_user, @locale] do %>
     <%= react_component(
