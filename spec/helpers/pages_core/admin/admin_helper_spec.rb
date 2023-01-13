@@ -33,7 +33,8 @@ RSpec.describe PagesCore::Admin::AdminHelper do
     it "renders the tab" do
       expect(tab).to(
         eq("<div class=\"content-tab\" id=\"content-tab-foo\" " \
-           "data-tab=\"foo\" data-main-target=\"tab\">Content</div>")
+           "role=\"tabpanel\" data-tab=\"foo\" " \
+           "data-main-target=\"tab\">Content</div>")
       )
     end
 

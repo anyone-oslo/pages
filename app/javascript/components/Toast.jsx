@@ -43,7 +43,7 @@ export default class Toast extends React.Component {
     }
   }
 
-  render() {>
+  render() {
     let toast = this.state.toast;
     let classNames = ["toast"];
 
