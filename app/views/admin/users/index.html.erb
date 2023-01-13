@@ -1,8 +1,5 @@
-<%
-  self.page_title = "Users"
-  self.page_description = "Viewing active users"
-%>
-
+<% content_for :page_title, "Users" %>
+<% content_for :page_description, "Viewing active users" %>
 
 <% content_for :sidebar do %>
   <% if policy(User).new? %>
@@ -24,4 +21,4 @@
 <% end %>
 
 
-<%= render partial: 'list', locals: {users: @users} %>
+<%= render partial: "list", locals: { users: @users } %>

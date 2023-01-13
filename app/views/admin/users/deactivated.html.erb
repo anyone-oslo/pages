@@ -1,12 +1,11 @@
-<%
-  self.page_title = "Deactivated users"
-  self.page_description = "Viewing deactivated users"
-  self.page_description_links = link_to("View active users", admin_users_path)
-%>
+<% content_for :page_title, "Deactivated users" %>
+<% content_for :page_description, "Viewing deactivated users" %>
 
+<% content_for(:page_description_links) do %>
+  <%= link_to("View active users", admin_users_path) %>
+<% end %>
 
 <% content_for :sidebar do %>
 <% end %>
 
-
-<%= render partial: 'list', locals: {users: @users} %>
+<%= render partial: "list", locals: { users: @users } %>

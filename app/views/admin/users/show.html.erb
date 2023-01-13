@@ -1,12 +1,14 @@
-<%
-  self.page_title = "#{@user.name}"
-  if @user == current_user
-    self.page_description = "You are viewing " + link_to( "your own", admin_user_path( @user ) ) + " profile."
-  else
-    self.page_description = "You are viewing " + link_to( "#{@user.name}", admin_user_path( @user ) ) + "'s profile."
-  end
-  self.page_description_links = [ ( link_to( "Edit", edit_admin_user_path( @user ) ) if policy(@user).edit? ), link_to( "View all users", admin_users_path ) ].compact.join( link_separator )
-%>
+<% content_for :page_title, @user.name %>
+
+<% content_for :page_description do %>
+  You are viewing
+  <%= link_to((@user == current_user ? "your own profile" : "#{@user.name}"),
+              [:admin, @user]) %>
+<% end %>
+
+<% content_for(:page_description_links) do %>
+  <%= link_to("Edit", edit_admin_user_path(@user)) if policy(@user).edit? %>
+<% end %>
 
 <% content_for :sidebar do %>
   <h2>People</h2>

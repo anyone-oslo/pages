@@ -1,12 +1,12 @@
-<% if @page_description || @content_tabs %>
+<% if content_for?(:page_description) || @content_tabs %>
   <div class="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
-    <% if @page_description_links -%>
+    <% if content_for?(:page_description_links) %>
       <div class="links">
-        <%= @page_description_links.html_safe %>
+        <%= content_for(:page_description_links) %>
       </div>
     <% end %>
     <h3>
-      <%= (@page_description || @page_title).html_safe %>
+      <%= content_for(:page_description) || content_for(:page_title) %>
     </h3>
     <% if @content_tabs %>
       <ul class="content-tabs"

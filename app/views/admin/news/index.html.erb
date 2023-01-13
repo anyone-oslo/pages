@@ -1,12 +1,17 @@
-<%
-  month_names = %w{January February March April May June July August September October November December}
-  page_title "News"
-  page_description "<em>News: #{month_names[@month - 1] if @month} #{@year}</em>"
+<% content_for(:page_title, "News") %>
+<% content_for(:page_description) do %>
+  News:
+  <em>
+    <% if @month %>
+      <%= month_name(@month) %>
+    <% end %>
+    <%= @year %>
+  </em>
+<% end %>
 
-  if PagesCore.config.localizations?
-    self.page_description_links = 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, admin_news_path(l) }.join(link_separator)
-  end
-%>
+<% content_for :page_description_links do %>
+  <%= locale_links { |l| admin_news_index_path(l, @year) } %>
+<% end %>
 
 <% content_for :sidebar do %>
   <% if policy(Page).new? %>
@@ -39,11 +44,11 @@
           <li>
             <% if year == @year && month == @month %>
               <strong>
-                <%= month_names[month-1] %>
+                <%= month_name(month) %>
               </strong>
               (<%= page_count %>)
             <% else %>
-              <%= link_to(month_names[month-1],
+              <%= link_to(month_name(month),
                           admin_news_index_path(@locale,
                                                 month: month,
                                                 year: year,

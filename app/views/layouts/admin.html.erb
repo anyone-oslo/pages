@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>
-      <%= [@page_title, "Pages"].reject(&:blank?).uniq.join(" - ") %>
+      <%= [content_for(:page_title), "Pages"].reject(&:blank?).uniq.join(" - ") %>
     </title>
 
     <link rel="shortcut icon"
@@ -34,7 +34,7 @@
     <%= google_analytics_tags "UA-5468672-21" %>
   </head>
 
-  <body class="<%= body_classes.join(" ") %>"
+  <body class="<%= content_for(:body_class) %>"
         data-controller="<%= controller.class.to_s %>"
         data-action="<%= controller.action_name %>"
         data-locale="<%= @locale %>">

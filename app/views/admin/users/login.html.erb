@@ -1,8 +1,7 @@
-<%
-  self.page_title = "Sign in"
-  self.page_description = "Please enter your email address and password to sign in"
-  add_body_class "login"
--%>
+<% content_for :page_title, "Sign in" %>
+<% content_for(:page_description,
+               "Please enter your email address and password to sign in") %>
+<% content_for :body_class, "login" %>
 
 <% content_for :sidebar do %>
   <h2>Please note</h2>

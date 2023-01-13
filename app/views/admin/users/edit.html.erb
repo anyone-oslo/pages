@@ -1,12 +1,10 @@
-<%
-  self.page_title = "Editing user: #{@user.name}"
-  if @user == current_user
-    self.page_description = "You are editing " + link_to("your own", [:admin, @user]) + " profile."
-  else
-    self.page_description = "You are editing " + link_to("#{@user.name}", [:admin, @user]) + "'s profile."
-  end
-  self.page_description_links = link_to("View all users", admin_users_path)
-%>
+<% content_for :page_title, "Editing user: #{@user.name}" %>
+
+<% content_for :page_description do %>
+  You are editing
+  <%= link_to((@user == current_user ? "your own profile" : "#{@user.name}"),
+              [:admin, @user]) %>
+<% end %>
 
 <% content_for :sidebar do %>
   <% if @user != current_user %>

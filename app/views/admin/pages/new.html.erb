@@ -1,15 +1,11 @@
-<%
-  if @page.parent
-    self.page_title = "New page"
-    self.page_description = "<em>#{@page.parent.name}</em> &raquo; New Page"
-  else
-    self.page_title = "Create new page"
-    self.page_description = "You are creating a new root page"
-  end
-
-  @url_options = { action: :new }
-  @url_options[:parent] = @page.parent if @page.parent
-%>
+<% content_for :page_title, "New page" %>
+<% content_for :page_description do %>
+  <% if @page.parent %>
+    <em><%= @page.parent.name %></em> &raquo; New Page
+  <% else %>
+    You are creating a new root page
+  <% end %>
+<% end %>
 
 <% content_for :main_wrapper do %>
   <%= form_for(@page,
@@ -25,7 +21,7 @@
 
     <% content_for :main do %>
       <div class="content">
-        <%= f.hidden_field 'parent_page_id' if @page.parent %>
+        <%= f.hidden_field "parent_page_id" if @page.parent %>
 
         <%= render(partial: "form", locals: { f: f }) %>
 
@@ -43,7 +39,7 @@
     </main>
 
     <aside class="sidebar" id="page-form-sidebar">
-      <%= render partial: 'edit_options', locals: { f: f } %>
+      <%= render partial: "edit_options", locals: { f: f } %>
     </aside>
   <% end %>
 <% end %>

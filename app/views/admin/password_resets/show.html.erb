@@ -1,8 +1,6 @@
-<%
-  self.page_title = "Reset password"
-  self.page_description = "Please choose a new password to proceed"
-  add_body_class "login"
--%>
+<% content_for :page_title, "Reset password" %>
+<% content_for :page_description, "Please choose a new password to proceed" %>
+<% content_for :body_class, "login" %>
 
 <div class="login-form">
   <%= form_for(@user,

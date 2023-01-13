@@ -1,15 +1,24 @@
-<%
-  self.page_title = "Editing “" + @page.name.to_s + "”"
-  self.page_description = "Editing " + [@page.ancestors.reverse,@page].flatten.map{|page| link_to((page.name rescue "(Untitled)"), edit_admin_page_path(@locale, page))}.join(" &raquo; ")
+<% content_for :page_title do %>
+  <% if @page.name? %>
+    Edit “<%= @page.name %>”
+  <% else %>
+    Edit page
+  <% end %>
+<% end %>
+<% content_for :page_description do %>
+  Editing
+  <% @page.ancestors.reverse.each do |page| %>
+    <%= link_to(page.name? ? page.name : tag.i("Untitled"),
+                edit_admin_page_path(@locale, page)) %>
+    &raquo;
+  <% end %>
+  <%= link_to(@page.name? ? @page.name : tag.i("Untitled"),
+              edit_admin_page_path(@locale, @page)) %>
+<% end %>
 
-  if PagesCore.config.localizations?
-    self.page_description_links = "In " + safe_join(
-      PagesCore.config.locales.map do |l, name|
-        link_to_unless((l == @locale.to_sym), name, edit_admin_page_path(l, @page.localize(l)))
-      end,
-      link_separator)
-  end
-%>
+<% content_for :page_description_links do %>
+  <%= locale_links { |l| edit_admin_page_path(l, @page.localize(l)) } %>
+<% end %>
 
 <% content_for :main_wrapper do %>
   <%= form_for(@page,
