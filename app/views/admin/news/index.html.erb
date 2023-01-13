@@ -4,15 +4,15 @@
   page_description "<em>News: #{month_names[@month - 1] if @month} #{@year}</em>"
 
   if PagesCore.config.localizations?
-    self.page_description_links = 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, news_admin_pages_path(l) }.join(link_separator)
+    self.page_description_links = 'In ' + PagesCore.config.locales.map{ |l, n| link_to_unless_current n, admin_news_path(l) }.join(link_separator)
   end
 %>
 
 <% content_for :sidebar do %>
-  <% if policy(Page).new_news? %>
+  <% if policy(Page).new? %>
     <h2>New article</h2>
     <p>
-      <%= form_tag new_news_admin_pages_path, method: :get do %>
+      <%= form_tag new_admin_page_path, method: :get do %>
         In
         <%= select_tag('parent',
                        options_for_select(@news_pages.map{|p| [news_section_name(p, @news_pages).gsub("&raquo;", "»"), p.id] })) %>
@@ -24,7 +24,7 @@
     <% @archive_finder.years_with_count.reverse.each do |year, year_count| %>
       <h2>
         <%= link_to_unless_current(year,
-                                   news_admin_pages_path(
+                                   admin_news_index_path(
                                      @locale,
                                      year: year,
                                      category: @category&.slug)
@@ -44,7 +44,7 @@
               (<%= page_count %>)
             <% else %>
               <%= link_to(month_names[month-1],
-                          news_admin_pages_path(@locale,
+                          admin_news_index_path(@locale,
                                                 month: month,
                                                 year: year,
                                                 category: @category&.slug)) %>
@@ -68,8 +68,13 @@
       <th>Section</th>
     </tr>
     <% @pages.each do |page| %>
-      <%= render(partial: "list_item",
-                 locals: { page: page, author: true, section: true }) %>
+      <%= render(partial: "admin/pages/list_item",
+                 locals: {
+                   page: page,
+                   author: true,
+                   section: true,
+                   sections: @news_pages
+                 }) %>
     <% end %>
   </table>
 

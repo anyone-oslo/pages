@@ -328,7 +328,6 @@ export default class PageTreeNode extends React.Component {
     let index = this.props.index;
     let node = index.node;
 
-    var dateLabel = "";
     var pageName = <span className="name">{this.pageName()}</span>;
     var className = "page";
 
@@ -344,12 +343,6 @@ export default class PageTreeNode extends React.Component {
       </a>;
     }
 
-    if (node.id && node.starts_at) {
-      dateLabel = <span className="date">
-        {node.starts_at}
-      </span>;
-    }
-
     if (node.news_page) {
       iconClass = "fa fa-newspaper-o icon";
     } else if (node.pinned) {
@@ -360,7 +353,6 @@ export default class PageTreeNode extends React.Component {
       <div className={className}>
         <i className={iconClass}></i>
         {pageName}
-        {dateLabel}
         {this.statusLabel()}
         {this.collapsedLabel()}
         {this.actions()}

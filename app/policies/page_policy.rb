@@ -5,8 +5,8 @@ class PagePolicy < Policy
     true
   end
 
-  def news?
-    true
+  def calendar?
+    index?
   end
 
   def deleted?
@@ -15,10 +15,6 @@ class PagePolicy < Policy
 
   def new?
     user.role?(:pages)
-  end
-
-  def new_news?
-    create?
   end
 
   def show?
