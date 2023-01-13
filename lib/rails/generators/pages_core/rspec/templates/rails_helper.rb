@@ -31,7 +31,7 @@ require "shoulda-matchers"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join("spec/support/**/*.rb")].sort.each do |f|
+Dir[Rails.root.join("spec/support/**/*.rb")].each do |f|
   require f
 end
 
