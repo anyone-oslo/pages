@@ -31,7 +31,7 @@ module PagesCore
         pages/admin.css
         pages/errors.css
         pages/favicon.gif
-        pages/admin/icon.png
+        pages/admin/icon.svg
         pages/*.gif
         pages/*.png
         pages/*.jpg
