@@ -20,10 +20,4 @@ RSpec.describe PagesCore::Admin::AdminHelper do
       expect(tabs.first[:name]).to eq("Foo")
     end
   end
-
-  describe "#link_separator" do
-    subject { helper.link_separator }
-
-    it { is_expected.to eq(" <span class=\"separator\">|</span> ") }
-  end
 end

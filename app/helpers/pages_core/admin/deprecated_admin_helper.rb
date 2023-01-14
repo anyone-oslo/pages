@@ -3,6 +3,12 @@
 module PagesCore
   module Admin
     module DeprecatedAdminHelper
+      def link_separator
+        ActiveSupport::Deprecation.warn("link_separator is deprecated")
+
+        safe_join [" ", tag.span("|", class: "separator"), " "]
+      end
+
       def page_description=(description)
         ActiveSupport::Deprecation.warn(content_helper_deprecation)
         content_for(:page_description, description.html_safe)

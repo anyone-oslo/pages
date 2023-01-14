@@ -19,17 +19,14 @@ module PagesCore
                                       value: content))
       end
 
-      def link_separator
-        safe_join [" ", tag.span("|", class: "separator"), " "]
-      end
-
       def locale_links(&block)
         return unless PagesCore.config.localizations?
 
         safe_join(
           PagesCore.config.locales.map do |locale, name|
-            link_to_unless_current(name, block.call(locale))
-          end, link_separator
+            link_to(name, block.call(locale),
+                    class: ("current" if locale == params[:locale].to_sym))
+          end
         )
       end
 

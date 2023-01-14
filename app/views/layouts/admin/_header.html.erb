@@ -10,7 +10,6 @@
   <% if logged_in? %>
     <div class="user">
       Hello, <%= link_to(current_user.name, admin_user_url(current_user)) %>
-      <%= link_separator %>
       <%= link_to("Log out", session_path, method: "delete") %>
     </div>
   <% end %>
