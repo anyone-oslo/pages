@@ -127,7 +127,9 @@ td.drag-handle {
   }
 
   .pinned .name {
-    background: transparent image-url("pages/admin/list-table-pin-blue.gif") no-repeat 13px 50%;
+    background: transparent radial-gradient(ellipse at center, #92B6C4 50%, transparent 50%)
+                no-repeat left 12px top 50%;
+    background-size: 10px 10px;
   }
 }
 
