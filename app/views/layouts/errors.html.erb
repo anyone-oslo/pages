@@ -6,7 +6,130 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= content_for(:page_title) || "We're sorry" %></title>
-  <%= stylesheet_link_tag "pages_core/errors" %>
+  <style>
+    body {
+      background: #fff;
+      background: linear-gradient(180deg, rgba(236, 236, 236, 1) 0%, rgba(255, 255, 255, 1) 50%);
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      color: #111;
+      line-height: 1.5;
+    }
+
+    main {
+      width: 600px;
+      margin: 150px auto;
+    }
+
+    h1, h2, h3, h4, h5, h6, p, ul, form {
+      margin: 0 0 16px 0;
+    }
+
+    h4 {
+      margin-bottom: 0;
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    h4 em {
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    ul {
+      list-style-type: disc;
+      list-style-position: inside;
+      padding: 0;
+    }
+
+    ul li {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-weight: bold;
+      color: #111;
+      font-size: 36px;
+    }
+
+    p.footer {
+      margin-top: 64px;
+      font-size: 12px;
+      color: #868686;
+    }
+
+    p.error_id {
+      margin-top: 64px;
+      font-size: 12px;
+      color: #dcdbd2;
+    }
+
+    input[type=text],
+    textarea {
+      vertical-align: top;
+      border: 1px solid #c4c2bb;
+      color: #444;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 18px;
+      padding: 6px 8px 6px 8px;
+      width: 490px;
+      border-radius: 3px;
+    }
+
+    input.with_button {
+      width: 400px;
+      margin-right: 4px;
+    }
+
+    a,
+    a:visited {
+      color: #0751b6;
+      text-decoration: underline;
+    }
+
+    a:hover {
+      color: #042d65;
+    }
+
+    form {
+      vertical-align: top;
+    }
+
+    button.clean-gray {
+      background-color: #eeeeee;
+      background-image: linear-gradient(top, #f8f8f8, #e0e0e0);
+      border: 1px solid #ccc;
+      border-bottom: 1px solid #bbb;
+      border-radius: 3px;
+      color: #333;
+      font: bold 15px Helvetica, Arial, sans-serif;
+      line-height: 1;
+      padding: 9px 0;
+      text-align: center;
+      text-shadow: 0 1px 0 #eee;
+      width: 150px;
+    }
+
+    button.clean-gray:hover {
+      background-color: #dddddd;
+      background-image: linear-gradient(top, #f0f0f0, #dddddd);
+      border: 1px solid #bbb;
+      border-bottom: 1px solid #aaa;
+      cursor: pointer;
+      text-shadow: 0 1px 0 #ddd;
+    }
+
+    button.clean-gray:active {
+      border: 1px solid #aaa;
+      border-bottom: 1px solid #888;
+      box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    }
+  </style>
 </head>
 <body>
   <main>
