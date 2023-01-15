@@ -54,7 +54,7 @@ export default class PageTreeNode extends React.Component {
           <button type="button"
                   className="add"
                   onClick={() => this.props.addChild(this.props.index)}>
-            <i className="fa fa-plus icon" />
+            <i className="fa-solid fa-plus icon" />
             Add child
           </button>
         </span>
@@ -113,7 +113,7 @@ export default class PageTreeNode extends React.Component {
   }
 
   button(label, options) {
-    let icon = "fa fa-" + options.icon + " icon";
+    let icon = "fa-solid fa-" + options.icon + " icon";
     return (
       <button type="button"
               className={options.className}
@@ -182,9 +182,9 @@ export default class PageTreeNode extends React.Component {
       var classnames = null;
 
       if (collapsed) {
-        classnames = "collapse fa fa-caret-right";
+        classnames = "collapse fa-solid fa-caret-right";
       } else {
-        classnames = "collapse fa fa-caret-down";
+        classnames = "collapse fa-solid fa-caret-down";
       }
 
       return (
@@ -302,7 +302,7 @@ export default class PageTreeNode extends React.Component {
 
     return (
       <div className="page edit">
-        <i className="fa fa-file-o icon"></i>
+        <i className="fa-regular fa-file icon"></i>
         <form onSubmit={performEdit}>
           <input type="text"
                  value={this.state.newName}
@@ -311,7 +311,7 @@ export default class PageTreeNode extends React.Component {
                  autoFocus
                  onChange={handleNameChange} />
           <button className="save" type="submit">
-            <i className="fa fa-cloud icon"></i>
+            <i className="fa-solid fa-cloud icon"></i>
             Save
           </button>
           {this.button("Cancel", {
@@ -331,7 +331,7 @@ export default class PageTreeNode extends React.Component {
     var pageName = <span className="name">{this.pageName()}</span>;
     var className = "page";
 
-    var iconClass = "fa fa-file-o icon";
+    var iconClass = "fa-regular fa-file icon";
 
     if (typeof(node.status) != "undefined") {
       className = `page status-${this.node().status}`;
@@ -344,9 +344,9 @@ export default class PageTreeNode extends React.Component {
     }
 
     if (node.news_page) {
-      iconClass = "fa fa-newspaper-o icon";
+      iconClass = "fa-regular fa-file-lines icon";
     } else if (node.pinned) {
-      iconClass = "fa fa-flag-o icon";
+      iconClass = "fa-regular fa-flag icon";
     }
 
     return (

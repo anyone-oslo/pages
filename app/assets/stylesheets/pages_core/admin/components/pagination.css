@@ -1,0 +1,49 @@
+.pagination {
+  margin: 30px 30px;
+  line-height: 20px;
+  font-size: 14px;
+
+  & a,
+  & .current,
+  & .disabled,
+  & .gap {
+    display: inline-block;
+    font-style: normal;
+    margin: 0px 1px;
+    text-decoration: none;
+    padding: 2px;
+    border-radius: 12px;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  & a:hover,
+  & a:focus {
+    text-decoration: underline;
+  }
+
+  & .current {
+    font-weight: bold;
+  }
+
+  & .disabled {
+    color: var(--text-light-color);
+  }
+
+  & .next,
+  & .previous {
+    background: none;
+  }
+
+  & .next {
+    margin-left: 10px;
+  }
+
+  & .previous {
+    margin-right: 10px;
+  }
+}
+
+.content .pagination {
+  margin: 20px -2px;
+}

@@ -30,12 +30,12 @@ export default function Toolbar(props) {
         <button title="Crop image"
                 onClick={props.toggleCrop}
                 className={cropping ? "active" : ""}>
-          <i className="fa fa-crop" />
+          <i className="fa-solid fa-crop" />
         </button>
         <button disabled={cropping}
                 title="Toggle focal point"
                 onClick={props.toggleFocal}>
-          <i className="fa fa-bullseye" />
+          <i className="fa-solid fa-bullseye" />
         </button>
         <a href={props.image.original_url}
            className="button"
@@ -43,7 +43,7 @@ export default function Toolbar(props) {
            disabled={cropping}
            download={props.image.filename}
            onClick={evt => cropping && evt.preventDefault()}>
-          <i className="fa fa-download" />
+          <i className="fa-solid fa-download" />
         </a>
       </div>
       {cropping && (

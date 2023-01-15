@@ -1,0 +1,3 @@
+table.users tr.invite td {
+  color: var(--text-light-color);
+}

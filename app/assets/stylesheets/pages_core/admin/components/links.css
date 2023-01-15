@@ -1,0 +1,40 @@
+a,
+a:visited {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+  color: var(--link-color);
+}
+
+a.create,
+a.create:visited {
+  color: var(--green);
+}
+
+a.create:hover,
+a.create:focus {
+  color: var(--green-hover);
+}
+
+a.cancel,
+a.cancel:visited,
+a.delete,
+a.delete:visited {
+  color: var(--red);
+}
+
+a.cancel:hover,
+a.cancel:focus,
+a.delete:hover,
+a.delete:focus {
+  color: var(--red-hover);
+}
+
+button a {
+  padding:5px 0;
+  color: var(--text-color) !important;
+  text-decoration:none;
+}

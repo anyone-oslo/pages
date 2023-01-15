@@ -1,0 +1,179 @@
+.page-tree {
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+
+  margin: 20px 0 40px 0;
+  margin-left: -20px;
+  margin-right: -10px;
+
+  & .draggable {
+    user-select: none;
+    position: absolute;
+    opacity: 0.8;
+  }
+
+  & .node {
+    &.placeholder > * {
+      visibility: hidden;
+    }
+
+    &.placeholder {
+      border: 1px dashed var(--border-color);
+    }
+
+    & .inner {
+      position: relative;
+      cursor: pointer;
+      padding-left: 10px;
+    }
+
+    & .collapse {
+      position: absolute;
+      left: 0;
+      cursor: pointer;
+      font-size: 15px;
+      padding-top: 5px;
+    }
+  }
+
+  & .page {
+    font-size: 15px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    &:hover {
+      border: 1px solid var(--border-color-light);
+      background: linear-gradient(
+        to bottom,
+        var(--background-color) 0%,
+        var(--background-disabled-color) 100%
+      );
+    }
+
+    & .date {
+      font-size: 12px;
+      margin-left: 10px;
+      color: var(--text-light-color);
+    }
+
+    & .name {
+      font-weight: bold;
+    }
+
+    & .icon {
+      margin-right: 8px;
+    }
+
+    & .status-label,
+    & .collapsed-label {
+      margin-left: 3px;
+      font-size: 12px;
+    }
+
+    & form {
+      display: inline;
+      margin: 0;
+      padding: 0;
+      & input {
+        font-size: 15px;
+        padding: 2px 4px;
+
+        margin-top: -2px;
+        margin-bottom: -2px;
+        margin-right: 5px;
+      }
+      & button {
+        margin-left: 5px;
+      }
+    }
+
+    & a,
+    & a:visited {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    & a:hover,
+    & a:focus {
+      text-decoration: underline;
+    }
+
+    &.status-0,
+    &.status-1,
+    &.status-3 {
+      &,
+      & a,
+      & a:visited {
+        color: var(--text-light-color);
+      }
+    }
+  }
+
+  & .page .actions {
+    float: right;
+    visibility: hidden;
+    margin: -4px -6px -4px 5px;
+    & button {
+      margin-left: 5px;
+    }
+  }
+  & .page:hover .actions {
+    visibility: visible;
+  }
+
+  & button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: var(--link-hover-color);
+
+    & .icon {
+      margin-right: 8px;
+    }
+
+    &:hover,
+    &:focus {
+      color: var(--blue-hover);
+      background: var(--blue-transparent);
+    }
+
+    &.add {
+      color: var(--green);
+
+      &:hover,
+      &:focus {
+        color: var(--green-hover);
+        background: var(--green-transparent);
+      }
+    }
+
+    &.delete,
+    &.cancel {
+      color: var(--red);
+
+      &:hover,
+      &:focus {
+        color: var(--red-hover);
+        background: var(--red-transparent);
+      }
+    }
+  }
+
+  & button.add-inline {
+    margin: 5px 0 5px 30px;
+  }
+
+  & .node .node .node .page .name {
+    font-weight: normal;
+  }
+}

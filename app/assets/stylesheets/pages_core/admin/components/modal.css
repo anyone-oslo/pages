@@ -1,0 +1,83 @@
+body.modal {
+  & > .wrapper {
+    transition: filter 1000ms linear;
+    filter: blur(10px);
+    @media --mobile {
+      filter: none;
+    }
+  }
+}
+
+.modal-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & .background {
+    background: radial-gradient(rgba(255, 255, 255, 0.9),
+                                rgba(255, 255, 255, 0.9) 50%,
+                                rgba(80, 80, 80, 0.9));
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 1;
+    animation-name: modal-background-appear;
+    animation-duration: 200ms;
+    animation-timing-function: ease-out;
+  }
+
+  & .modal {
+    max-width: 90%;
+    background: var(--background-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    animation-name: modal-appear;
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation-fill-mode: forwards;
+    z-index: 2;
+
+    @media --mobile {
+      max-width: 100%;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0px;
+    }
+  }
+
+  &.open {
+    display: flex;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 100;
+    opacity: 1;
+  }
+}
+
+@keyframes modal-appear {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.97) translate(0px, 10px);
+  }
+  100% {
+    opacity: 1.0;
+    transform: scale(1.0);
+  }
+}
+
+@keyframes modal-background-appear {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1.0;
+  }
+}

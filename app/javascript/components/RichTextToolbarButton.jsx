@@ -7,7 +7,7 @@ export default class RichTextToolbarButton extends React.Component {
       <a title={this.props.name}
          className={"button " + this.props.className}
          onClick={this.props.onClick}>
-        <i className={"fa fa-" + this.props.className} />
+        <i className={"fa-solid fa-" + this.props.className} />
       </a>
     );
   }

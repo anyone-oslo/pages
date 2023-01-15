@@ -11,9 +11,20 @@
     "/app/javascript/**/*"
   ],
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.1",
     "@hotwired/stimulus": "^3.1.0",
     "@rails/ujs": "^6.1.4-1",
+    "autoprefixer": "^10.4.13",
+    "cssnano": "^5.1.14",
     "lodash": "^4.17.21",
+    "postcss": "^8.4.21",
+    "postcss-calc": "^8.2.4",
+    "postcss-cli": "^10.1.0",
+    "postcss-comment": "^2.0.0",
+    "postcss-import": "^15.1.0",
+    "postcss-import-ext-glob": "^2.1.1",
+    "postcss-preset-env": "^7.8.3",
+    "postcss-url": "^10.1.3",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -30,7 +41,8 @@
   "scripts": {
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
     "build": "esbuild app/javascript/admin-dist.js --bundle --minify --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
-    "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12"
+    "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
+    "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css"
   },
   "packageManager": "yarn@3.3.1",
   "bugs": {

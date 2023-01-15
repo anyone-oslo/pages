@@ -40,7 +40,7 @@ export default function EditableImage(props) {
     <div className="editable-image">
       {altWarning &&
        <span className="alt-warning" title="Alternative text is missing">
-         <i className="fa fa-exclamation-triangle icon" />
+         <i className="fa-solid fa-triangle-exclamation icon" />
        </span>}
       <img src={src}
            width={props.width}

@@ -13,7 +13,7 @@
           href="<%= asset_path 'pages/favicon.gif' %>"
           type="image/gif" />
 
-    <%= stylesheet_link_tag "pages/admin" %>
+    <%= stylesheet_link_tag "pages_core/admin" %>
 
     <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
       <%= stylesheet_link_tag "admin" %>

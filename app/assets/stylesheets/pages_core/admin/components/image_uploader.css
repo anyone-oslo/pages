@@ -1,0 +1,53 @@
+.image-uploader {
+  border: 2px solid transparent;
+  background: var(--background-disabled-color);
+  max-width: 500px;
+  min-height: 150px;
+  display: flex;
+  color: var(--text-light-color);
+  line-height: 1.6;
+  box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.1);
+  padding: 1px;
+
+  @media --mobile {
+    flex-direction: column;
+  }
+
+  &.uploading {}
+
+  &.dragover {
+    border: 2px dashed var(--border-color);
+  }
+
+  & .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 250px;
+    max-height: 400px;
+    & .editable-image img {
+      width: auto;
+      max-height: 400px;
+    }
+    @media --mobile {
+      max-width: 100%;
+    }
+  }
+
+  & .ui-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & .ui {
+    text-align: center;
+    padding: 20px;
+  }
+
+  & .remove-image {
+    display: block;
+    margin-top: 20px;
+  }
+}

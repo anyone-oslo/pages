@@ -1,0 +1,8 @@
+@import "react-image-crop/dist/ReactCrop";
+@import "@fortawesome/fontawesome-free/css/fontawesome";
+@import "@fortawesome/fontawesome-free/css/solid";
+@import "@fortawesome/fontawesome-free/css/regular";
+
+@import "admin/vars";
+@import-glob "admin/components/*.css";
+@import-glob "admin/controllers/*.css";

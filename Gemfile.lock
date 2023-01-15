@@ -13,7 +13,6 @@ PATH
       delayed_job_active_record (~> 4.1.1)
       dis (~> 1.1.2)
       dynamic_image (>= 2.0)
-      font-awesome-rails (~> 4.7)
       jbuilder (~> 2.5)
       localizable_model (>= 0.5.3)
       lograge (~> 0.11.2)
@@ -166,8 +165,6 @@ GEM
       mime-types
     fog-local (0.8.0)
       fog-core (>= 1.27, < 3.0)
-    font-awesome-rails (4.7.0.8)
-      railties (>= 3.2, < 8.0)
     formatador (0.3.0)
     globalid (1.0.0)
       activesupport (>= 5.0)

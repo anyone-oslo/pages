@@ -1,0 +1,6 @@
+.archive-index {
+  & .count {
+    font-weight: normal;
+    color: var(--text-light-color);
+  }
+}

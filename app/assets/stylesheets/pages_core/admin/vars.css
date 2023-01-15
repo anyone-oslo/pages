@@ -1,0 +1,33 @@
+@custom-media --mobile screen and (max-width: 900px);
+@custom-media --narrow screen and (max-width: 1150px);
+
+:root {
+  --red: #c00007;
+  --red-transparent: #c0000740;
+  --red-hover: #8d0005;
+  --red-light: #d6a6a8;
+  --red-invert:  #fff0f3;
+  --blue: #1d7195;
+  --blue-hover: #15516a;
+  --blue-transparent: #1d719540;
+  --blue-dark: #114055;
+  --green: #19ac1e;
+  --green-hover: #137f16;
+  --green-transparent: #19ac1e40;
+
+  --background-color: #fff;
+  --background-invert-color: #000;
+  --background-disabled-color: #f8f8f8;
+  --background-warning-color: #ffdfa0;
+
+  --text-color: #111;
+  --text-light-color: #666;
+  --text-lighter-color: #999;
+  --text-invert-color: #fff;
+  --link-color: var(--blue);
+  --link-hover-color: var(--blue-hover);
+  --border-color: #ddd;
+  --border-color-light: #eee;
+
+  --button-color: #f6f6f6;
+}

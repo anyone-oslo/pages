@@ -28,8 +28,10 @@ module PagesCore
     initializer :assets do |_config|
       Rails.application.config.assets.precompile += %w[
         pages_core/admin-dist.js
-        pages/admin.css
-        pages/errors.css
+        pages_core/admin.css
+        pages_core/errors.css
+        pages_core/fonts/*.ttf
+        pages_core/fonts/*.woff2
         pages/favicon.gif
         pages/admin/icon.svg
         pages/*.gif

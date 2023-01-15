@@ -62,7 +62,7 @@ export default function Attachment(props) {
     classes.push("uploading");
   }
 
-  const icon = uploading ? "cloud-upload" : "paperclip";
+  const icon = uploading ? "cloud-arrow-up" : "paperclip";
 
   const localeDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
 
@@ -95,7 +95,7 @@ export default function Attachment(props) {
     {attachment &&
      <div className="attachment-info">
        <h3>
-         <i className={`fa fa-${icon} icon`} />
+         <i className={`fa-solid fa-${icon} icon`} />
          {name() || <em>Untitled</em>}<br />
        </h3>
        {!uploading &&

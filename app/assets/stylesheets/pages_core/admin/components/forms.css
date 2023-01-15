@@ -1,0 +1,169 @@
+main form {
+  margin: 16px 32px;
+}
+
+form {
+  & .field {
+    margin: 16px 0;
+    padding: 0;
+
+    & input[type=text],
+    & input[type=password],
+    & input[type=email],
+    & textarea {
+      transition: border-color 150ms ease-out;
+    }
+
+    & label {
+      display: block;
+      padding: 0;
+      margin: 0 0 4px 0;
+      font-weight: bold;
+      font-size: 13px;
+      color: var(--text-color);
+      transition: color 150ms ease-out;
+
+      &.check-box,
+      &.radio-button {
+        font-weight: normal;
+      }
+      &.radio-button {
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+
+    & .description {
+      color: var(--text-light-color);
+      margin: 0 0 6px 0;
+    }
+  }
+
+  & .field-with-warning {
+    & input[type=text],
+    & input[type=password],
+    & input[type=email],
+    & textarea {
+      border-color: var(--red-light);
+    }
+    & label {
+      color: var(--red);
+    }
+  }
+
+  & .field-with-errors {
+    background: var(--red-invert);
+    border-top: 1px solid var(--red-light);
+    border-bottom: 1px solid var(--red-light);
+    margin: 0 -32px -1px -32px;
+    padding: 12px 32px 16px 32px;
+
+    & label {
+      color: var(--red);
+    }
+  }
+
+  & .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -16px;
+
+    & .field {
+      margin-right: 16px;
+      &.text-field {
+        flex-grow: 1;
+        min-width: 300px;
+      }
+    }
+
+    & input[type=text],
+    & input[type=password] {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  & .date-range-select {
+    & .date {
+      line-height: 34px;
+      display: inline-block;
+      white-space: nowrap;
+      & .date-select {
+        display: inline-block;
+      }
+      & input[type=text] {
+        display: inline;
+        width: auto;
+        min-width: auto;
+        margin-left: 12px;
+        padding: 4px 6px;
+      }
+    }
+    & .to {
+      margin: 0px 8px;
+    }
+  }
+
+  & .page-dates {
+    margin-bottom: 40px;
+    & .toggles {
+      & label {
+        font-weight: normal;
+        display: inline-block;
+        margin-right: 12px;
+        & input {
+          margin-right: 6px;
+        }
+        &.disabled {
+          color: var(--text-light-color);
+        }
+      }
+    }
+    & .remove-dates {
+      margin-top: 12px;
+    }
+  }
+}
+
+.fieldWithErrors {
+  display: table;
+  padding: 1px;
+  padding-right: 22px;
+  background: transparent url("pages/admin/warning-icon.gif") right 5px no-repeat;
+}
+
+input[type=text],
+input[type=password],
+textarea {
+  width: 100%;
+  max-width: 450px;
+  min-width: 200px;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
+  padding: 8px 10px;
+  line-height: 1.4;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  &:disabled {
+    border-color: var(--border-color-light);
+    color: var(--text-light-color);
+  }
+
+  &.warn {
+    border-color: red;
+  }
+}
+
+main .login-form input[type=text],
+main .login-form input[type=password],
+input[type=text].large,
+input[type=password].large {
+  font-size: 1.4em;
+}
+
+fieldset {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+}

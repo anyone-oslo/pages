@@ -58,7 +58,6 @@ Gem::Specification.new do |s|
   s.add_dependency "sass-rails", ">= 5.0"
 
   # Extra asset dependencies
-  s.add_dependency "font-awesome-rails", "~> 4.7"
   s.add_dependency "react-rails", "~> 2.4"
 
   # ActiveRecord extensions
