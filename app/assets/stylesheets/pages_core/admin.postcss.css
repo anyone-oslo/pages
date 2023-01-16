@@ -1,3 +1,4 @@
+@import "normalize.css";
 @import "react-image-crop/dist/ReactCrop";
 @import "@fortawesome/fontawesome-free/css/fontawesome";
 @import "@fortawesome/fontawesome-free/css/solid";

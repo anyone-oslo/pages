@@ -52,7 +52,7 @@
     border-right: 1px solid var(--border-color);
     color: var(--text-light-color);
     font-size: 12px;
-    background-color: var(--button-color);
+    background-color: #f8f8f8;
     transition: all 200ms ease-out;
 
     & i.fa {
@@ -88,12 +88,12 @@
         margin-left: -6px;
       }
       & i:after {
-        font-family: Helvetica, Georgia, serif;
+        font-family: var(--font-os-sans);
         font-weight: bold;
         font-size: 13px;
         display: inline-block;
         position: absolute;
-        bottom: 3px;
+        bottom: 5px;
       }
       &.h1 i::after { content: "1" }
       &.h2 i::after { content: "2" }

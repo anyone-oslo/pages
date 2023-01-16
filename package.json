@@ -17,6 +17,7 @@
     "autoprefixer": "^10.4.13",
     "cssnano": "^5.1.14",
     "lodash": "^4.17.21",
+    "normalize.css": "^8.0.1",
     "postcss": "^8.4.21",
     "postcss-calc": "^8.2.4",
     "postcss-cli": "^10.1.0",

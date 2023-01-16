@@ -167,3 +167,43 @@ fieldset {
   border: none;
   border-bottom: 1px solid var(--border-color);
 }
+
+button,
+select {
+  appearance: none;
+  cursor: inherit;
+  font-family: var(--font-os-sans);
+  font-size: 13px;
+  color: var(--text-color);
+  line-height: 1.5;
+  border: 1px solid var(--button-border-color);
+  border-radius: 5px;
+  padding: 0.25em 0.75em;
+  background: var(--button-color);
+  box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.25);
+  &:hover {
+    background-color: var(--button-color-hover);
+  }
+  &:disabled {
+    color: var(--text-light-color);
+    opacity: 0.8;
+    &:hover {
+      background-color: var(--button-color);
+    }
+  }
+}
+
+select {
+  padding-right: 2em;
+  background-image: url("pages/admin/angle-down-solid.svg");
+  background-position: top 50% right 0.5em;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+  margin-bottom: 0.25em;
+}
+
+form.button-to {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
