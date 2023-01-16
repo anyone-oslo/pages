@@ -2,6 +2,7 @@ body.modal {
   & > .wrapper {
     transition: filter 1000ms linear;
     filter: blur(10px);
+
     @media --mobile {
       filter: none;
     }
@@ -14,9 +15,7 @@ body.modal {
   justify-content: center;
 
   & .background {
-    background: radial-gradient(rgba(255, 255, 255, 0.9),
-                                rgba(255, 255, 255, 0.9) 50%,
-                                rgba(80, 80, 80, 0.9));
+    background: radial-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 50%, rgba(80, 80, 80, 0.9));
     cursor: pointer;
     position: absolute;
     top: 0px;
@@ -67,6 +66,7 @@ body.modal {
     opacity: 0.1;
     transform: scale(0.97) translate(0px, 10px);
   }
+
   100% {
     opacity: 1.0;
     transform: scale(1.0);
@@ -77,6 +77,7 @@ body.modal {
   0% {
     opacity: 0.0;
   }
+
   100% {
     opacity: 1.0;
   }

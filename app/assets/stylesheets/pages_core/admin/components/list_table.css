@@ -11,11 +11,7 @@ table.list {
   }
 
   & th {
-    background: linear-gradient(
-      to bottom,
-      var(--background-color) 0%,
-      var(--background-disabled-color) 100%
-    );
+    background: linear-gradient(to bottom, var(--background-color) 0%, var(--background-disabled-color) 100%);
     color: var(--text-light-color);
     font-weight: bold;
     border-bottom: 1px solid var(--border-color);
@@ -23,9 +19,11 @@ table.list {
 
   & td {
     border-bottom: 1px solid var(--border-color);
+
     &.note {
       color: var(--text-light-color);
     }
+
     &.name {
       font-weight: bold;
     }
@@ -35,24 +33,23 @@ table.list {
   & tr th:first-child {
     padding-left: 32px;
   }
+
   & tr td:last-child,
   & tr th:last-child {
     padding-right: 32px;
   }
 
-  & tr.disabled td  {
+  & tr.disabled td {
     opacity: 0.5;
   }
 
-  & tr.disabled td:first-child  {
-    background: transparent radial-gradient(ellipse at center, #bdbdbd 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+  & tr.disabled td:first-child {
+    background: transparent radial-gradient(ellipse at center, #bdbdbd 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 
-  & tr.active td:first-child  {
-    background: transparent radial-gradient(ellipse at center, #92B6C4 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+  & tr.active td:first-child {
+    background: transparent radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 

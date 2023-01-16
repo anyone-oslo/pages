@@ -10,6 +10,7 @@
     color: var(--text-color);
     font-size: 18px;
     border-bottom: 1px solid var(--border-color);
+
     &:first-child {
       margin-top: 16px;
     }

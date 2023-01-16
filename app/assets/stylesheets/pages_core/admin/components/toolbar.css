@@ -68,7 +68,9 @@
     &[disabled] {
       opacity: 0.33;
       cursor: default;
-      &:focus, &:hover {
+
+      &:focus,
+      &:hover {
         color: var(--text-light-color);
         background: inherit;
       }
@@ -84,9 +86,11 @@
     // font-awesome doesn't have h1-h6, so we'll apply some tricks
     &.header {
       vertical-align: bottom;
+
       & i {
         margin-left: -6px;
       }
+
       & i:after {
         font-family: var(--font-os-sans);
         font-weight: bold;
@@ -95,12 +99,30 @@
         position: absolute;
         bottom: 5px;
       }
-      &.h1 i::after { content: "1" }
-      &.h2 i::after { content: "2" }
-      &.h3 i::after { content: "3" }
-      &.h4 i::after { content: "4" }
-      &.h5 i::after { content: "5" }
-      &.h6 i::after { content: "6" }
+
+      &.h1 i::after {
+        content: "1";
+      }
+
+      &.h2 i::after {
+        content: "2";
+      }
+
+      &.h3 i::after {
+        content: "3";
+      }
+
+      &.h4 i::after {
+        content: "4";
+      }
+
+      &.h5 i::after {
+        content: "5";
+      }
+
+      &.h6 i::after {
+        content: "6";
+      }
     }
   }
 

@@ -49,9 +49,11 @@
     &.placeholder {
       padding-left: 56px;
       background: var(--background-disabled-color);
+
       & .attachment-info {
         opacity: 0.5;
       }
+
       & .actions {
         display: none;
       }
@@ -67,6 +69,7 @@
 
     & h3 {
       margin: 0px 0px 12px 0px;
+
       & .icon {
         display: block;
         float: left;
@@ -89,7 +92,9 @@
       padding: 5px 20px;
       font-size: 12px;
       color: var(--text-color);
-      &:hover, &:focus {
+
+      &:hover,
+      &:focus {
         background: #fff;
       }
     }
@@ -99,6 +104,7 @@
 .attachment-editor {
   width: 60vw;
   min-height: 450px;
+
   @media --mobile {
     width: 100%;
     height: 100%;
@@ -122,6 +128,7 @@
     & textarea,
     & input[type=text] {
       max-width: 100%;
+
       &.description {
         height: 100px;
       }

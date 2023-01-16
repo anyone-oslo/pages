@@ -6860,7 +6860,7 @@ readers do not read off random characters that represent icons */
   --red-transparent: rgba(192,0,7,0.25098);
   --red-hover: #8d0005;
   --red-light: #d6a6a8;
-  --red-invert:  #fff0f3;
+  --red-invert: #fff0f3;
   --blue: #1d7195;
   --blue-hover: #15516a;
   --blue-transparent: rgba(29,113,149,0.25098);
@@ -6868,12 +6868,10 @@ readers do not read off random characters that represent icons */
   --green: #19ac1e;
   --green-hover: #137f16;
   --green-transparent: rgba(25,172,30,0.25098);
-
   --background-color: #fff;
   --background-invert-color: #000;
   --background-disabled-color: #f8f8f8;
   --background-warning-color: #ffdfa0;
-
   --text-color: #111;
   --text-light-color: #666;
   --text-lighter-color: #999;
@@ -6882,7 +6880,6 @@ readers do not read off random characters that represent icons */
   --link-hover-color: var(--blue-hover);
   --border-color: #ddd;
   --border-color-light: #eee;
-
   --button-border-color: #aaa;
   --button-color: #e8e8e8;
   --button-color-hover: #d8d8d8;
@@ -6999,7 +6996,8 @@ readers do not read off random characters that represent icons */
       color: var(--text-color);
     }
 
-.attachments .attachment button:hover, .attachments .attachment button:focus {
+.attachments .attachment button:hover,
+      .attachments .attachment button:focus {
         background: #fff;
       }
 
@@ -7046,12 +7044,20 @@ body {
   color: var(--text-color);
 }
 
-body, td, th {
+body,
+td,
+th {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 12px;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 16px 0;
 }
 
@@ -7517,11 +7523,7 @@ header .tabs a,
 header .tabs a:hover,
     header .tabs a.current,
     header .tabs a.current:visited {
-      background: linear-gradient(
-        to bottom,
-        #cfcfcf 0%,
-        #fefefe 100%
-      );
+      background: linear-gradient(to bottom, #cfcfcf 0%, #fefefe 100%);
       color: #111;
       color: var(--text-color);
     }
@@ -7533,7 +7535,7 @@ header .tabs a:hover,
 }
 
 .content-tabs li {
-    color: hsla(0,0%,0%,0.25);
+    color: hsla(0, 0%, 0%, 0.25);
     display: inline;
     background: transparent;
     padding: 6px 17px;
@@ -7575,7 +7577,7 @@ header .tabs a:hover,
   }
 
 .page-description .links a {
-      border-left: 1px solid #779CB3;
+      border-left: 1px solid #779cb3;
       padding-left: 8px;
       margin-left: 8px;
     }
@@ -7594,7 +7596,7 @@ header .tabs a:hover,
       }
 
 .page-description .separator {
-    color: #779CB3;
+    color: #779cb3;
     margin: 0 4px;
   }
 
@@ -7602,7 +7604,7 @@ main .page-description h3 {
   margin: 0;
   padding: 0;
   font-size: 13px;
-  text-shadow: #E9F6FF 1px 1px 1px;
+  text-shadow: #e9f6ff 1px 1px 1px;
 }
 
 .editable-image {
@@ -7666,12 +7668,9 @@ main .page-description h3 {
     width: 100%;
     height: 100%;
     background: #e5e5e5;
-    background-image: linear-gradient(45deg, #fff 25%, transparent 25%),
-                      linear-gradient(135deg, #fff 25%, transparent 25%),
-                      linear-gradient(45deg, transparent 75%, #fff 75%),
-                      linear-gradient(135deg, transparent 75%, #fff 75%);
-    background-size:12px 12px;
-    background-position:0 0, 6px 0, 6px -6px, 0px 6px;
+    background-image: linear-gradient(45deg, #fff 25%, transparent 25%), linear-gradient(135deg, #fff 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #fff 75%), linear-gradient(135deg, transparent 75%, #fff 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 6px 0, 6px -6px, 0px 6px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7704,7 +7703,8 @@ main .page-description h3 {
         background-color: transparent;
       }
 
-.image-editor .image-container .image-wrapper .ReactCrop__crop-selection:before, .image-editor .image-container .image-wrapper .ReactCrop__crop-selection:after {
+.image-editor .image-container .image-wrapper .ReactCrop__crop-selection:before,
+        .image-editor .image-container .image-wrapper .ReactCrop__crop-selection:after {
           content: "";
           position: absolute;
           border: 0px solid rgb(200, 200, 200);
@@ -7728,7 +7728,8 @@ main .page-description h3 {
           top: 33.33%;
         }
 
-.image-editor .image-container .image-wrapper .ReactCrop--active .ReactCrop__crop-selection:before, .image-editor .image-container .image-wrapper .ReactCrop--active .ReactCrop__crop-selection:after {
+.image-editor .image-container .image-wrapper .ReactCrop--active .ReactCrop__crop-selection:before,
+        .image-editor .image-container .image-wrapper .ReactCrop--active .ReactCrop__crop-selection:after {
           opacity: 0.75;
         }
 
@@ -7763,6 +7764,7 @@ main .page-description h3 {
       margin-left: 0px;
       padding-bottom: 20px;
   }
+
       .image-editor form textarea.caption {
         height: inherit;
       }
@@ -7789,7 +7791,6 @@ main .page-description h3 {
       }
 
 .image-editor .focal-editor .focal-point {
-
       position: absolute;
       width: 30px;
       height: 30px;
@@ -7804,8 +7805,7 @@ main .page-description h3 {
          -moz-user-select: none;
               user-select: none;
       cursor: pointer;
-      transition: border-radius 200ms, margin 200ms, width 200ms, height 200ms,
-                  border-color 200ms ease-out;
+      transition: border-radius 200ms, margin 200ms, width 200ms, height 200ms, border-color 200ms ease-out;
     }
 
 .image-editor .focal-editor .focal-point:hover:after {
@@ -7825,7 +7825,6 @@ main .page-description h3 {
 
 .image-grid {
   --image-padding: 7px;
-
   margin-bottom: 40px;
   display: flex;
 }
@@ -8066,8 +8065,13 @@ main .page-description h3 {
   }
 
 @keyframes rotate-spinner {
-  0%    { transform: rotate(0deg); }
-  100%  { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .image-uploader {
@@ -8090,8 +8094,6 @@ main .page-description h3 {
     flex-direction: column;
 }
   }
-
-.image-uploader.uploading {}
 
 .image-uploader.dragover {
     border: 2px dashed #ddd;
@@ -8141,7 +8143,8 @@ main .page-description h3 {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0px;
   padding: 0px;
   height: 100vh;
@@ -8237,8 +8240,8 @@ button a {
 }
 
 button a {
-  padding:5px 0;
-  text-decoration:none;
+  padding: 5px 0;
+  text-decoration: none;
 }
 
 table.list {
@@ -8255,16 +8258,8 @@ table.list td,
   }
 
 table.list th {
-    background: linear-gradient(
-      to bottom,
-      #fff 0%,
-      #f8f8f8 100%
-    );
-    background: linear-gradient(
-      to bottom,
-      var(--background-color) 0%,
-      var(--background-disabled-color) 100%
-    );
+    background: linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+    background: linear-gradient(to bottom, var(--background-color) 0%, var(--background-disabled-color) 100%);
     color: #666;
     color: var(--text-light-color);
     font-weight: bold;
@@ -8296,19 +8291,17 @@ table.list tr td:last-child,
     padding-right: 32px;
   }
 
-table.list tr.disabled td  {
+table.list tr.disabled td {
     opacity: 0.5;
   }
 
-table.list tr.disabled td:first-child  {
-    background: transparent radial-gradient(ellipse at center, #bdbdbd 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+table.list tr.disabled td:first-child {
+    background: transparent radial-gradient(ellipse at center, #bdbdbd 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 
-table.list tr.active td:first-child  {
-    background: transparent radial-gradient(ellipse at center, #92B6C4 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+table.list tr.active td:first-child {
+    background: transparent radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 
@@ -8376,9 +8369,7 @@ body.modal > .wrapper {
 }
 
 .modal-wrapper .background {
-    background: radial-gradient(rgba(255, 255, 255, 0.9),
-                                rgba(255, 255, 255, 0.9) 50%,
-                                rgba(80, 80, 80, 0.9));
+    background: radial-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 50%, rgba(80, 80, 80, 0.9));
     cursor: pointer;
     position: absolute;
     top: 0px;
@@ -8431,6 +8422,7 @@ body.modal > .wrapper {
     opacity: 0.1;
     transform: scale(0.97) translate(0px, 10px);
   }
+
   100% {
     opacity: 1.0;
     transform: scale(1.0);
@@ -8441,6 +8433,7 @@ body.modal > .wrapper {
   0% {
     opacity: 0.0;
   }
+
   100% {
     opacity: 1.0;
   }
@@ -8452,7 +8445,6 @@ body.modal > .wrapper {
           user-select: none;
   position: relative;
   overflow: hidden;
-
   margin: 20px 0 40px 0;
   margin-left: -20px;
   margin-right: -10px;
@@ -8504,16 +8496,8 @@ body.modal > .wrapper {
 .page-tree .page:hover {
       border: 1px solid #eee;
       border: 1px solid var(--border-color-light);
-      background: linear-gradient(
-        to bottom,
-        #fff 0%,
-        #f8f8f8 100%
-      );
-      background: linear-gradient(
-        to bottom,
-        var(--background-color) 0%,
-        var(--background-disabled-color) 100%
-      );
+      background: linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+      background: linear-gradient(to bottom, var(--background-color) 0%, var(--background-disabled-color) 100%);
     }
 
 .page-tree .page .date {
@@ -8546,7 +8530,6 @@ body.modal > .wrapper {
 .page-tree .page form input {
         font-size: 15px;
         padding: 2px 4px;
-
         margin-top: -2px;
         margin-bottom: -2px;
         margin-right: 5px;
@@ -8858,6 +8841,7 @@ textarea.rich {
   from {
     transform: translateZ(0px) translateY(60px);
   }
+
   to {
     transform: translateZ(0px) translateY(0px);
   }
@@ -8867,6 +8851,7 @@ textarea.rich {
   from {
     transform: translateZ(0px) translateY(0px);
   }
+
   to {
     transform: translateZ(0px) translateY(60px);
   }
@@ -8955,7 +8940,10 @@ textarea.rich {
       cursor: default;
     }
 
-.toolbar .button[disabled]:focus, .toolbar button[disabled]:focus, .toolbar .button[disabled]:hover, .toolbar button[disabled]:hover {
+.toolbar .button[disabled]:focus,
+      .toolbar button[disabled]:focus,
+      .toolbar .button[disabled]:hover,
+      .toolbar button[disabled]:hover {
         color: #666;
         color: var(--text-light-color);
         background: inherit;
@@ -8989,17 +8977,29 @@ textarea.rich {
         bottom: 5px;
       }
 
-.toolbar .button.header.h1 i::after, .toolbar button.header.h1 i::after { content: "1" }
+.toolbar .button.header.h1 i::after, .toolbar button.header.h1 i::after {
+        content: "1";
+      }
 
-.toolbar .button.header.h2 i::after, .toolbar button.header.h2 i::after { content: "2" }
+.toolbar .button.header.h2 i::after, .toolbar button.header.h2 i::after {
+        content: "2";
+      }
 
-.toolbar .button.header.h3 i::after, .toolbar button.header.h3 i::after { content: "3" }
+.toolbar .button.header.h3 i::after, .toolbar button.header.h3 i::after {
+        content: "3";
+      }
 
-.toolbar .button.header.h4 i::after, .toolbar button.header.h4 i::after { content: "4" }
+.toolbar .button.header.h4 i::after, .toolbar button.header.h4 i::after {
+        content: "4";
+      }
 
-.toolbar .button.header.h5 i::after, .toolbar button.header.h5 i::after { content: "5" }
+.toolbar .button.header.h5 i::after, .toolbar button.header.h5 i::after {
+        content: "5";
+      }
 
-.toolbar .button.header.h6 i::after, .toolbar button.header.h6 i::after { content: "6" }
+.toolbar .button.header.h6 i::after, .toolbar button.header.h6 i::after {
+        content: "6";
+      }
 
 .toolbar.rich-text {
     margin: 0px 1px 0px 1px;
@@ -9144,8 +9144,7 @@ td.drag-handle {
   }
 
 .news-item-list .pinned .name, .calendar-item-list .pinned .name {
-    background: transparent radial-gradient(ellipse at center, #92B6C4 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+    background: transparent radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 

@@ -26,6 +26,7 @@ header {
     position: absolute;
     top: 15px;
     left: 52px;
+
     & h1 {
       margin: 0;
       padding: 0;
@@ -33,6 +34,7 @@ header {
       display: inline;
       font-size: 20px;
       font-weight: normal;
+
       & a {
         font-weight: bold;
         text-decoration: none;
@@ -51,6 +53,7 @@ header {
       border-left: 1px solid var(--text-light-color);
       padding-left: 10px;
       margin-left: 6px;
+
       &:first-of-type {
         border-left: none;
         padding-left: 0px;
@@ -72,6 +75,7 @@ header {
       list-style-type: none;
       display: block;
       float: left;
+
       &.account {
         float: right;
       }
@@ -101,11 +105,7 @@ header {
     & a:hover,
     & a.current,
     & a.current:visited {
-      background: linear-gradient(
-        to bottom,
-        #cfcfcf 0%,
-        #fefefe 100%
-      );
+      background: linear-gradient(to bottom, #cfcfcf 0%, #fefefe 100%);
       color: var(--text-color);
     }
   }
@@ -117,7 +117,7 @@ header {
   padding: 0;
 
   & li {
-    color: hsla(0,0%,0%,0.25);
+    color: hsla(0, 0%, 0%, 0.25);
     display: inline;
     background: transparent;
     padding: 6px 17px;
@@ -129,6 +129,7 @@ header {
     padding: 5px 16px;
     border: 1px solid #cae6f1;
     border-bottom: 1px solid var(--background-color);
+
     & a,
     & a:visited {
       text-decoration: none;
@@ -152,10 +153,12 @@ header {
 
   & .links {
     float: right;
+
     & a {
-      border-left: 1px solid #779CB3;
+      border-left: 1px solid #779cb3;
       padding-left: 8px;
       margin-left: 8px;
+
       &:first-of-type {
         border-left: none;
         padding-left: 0px;
@@ -171,7 +174,7 @@ header {
   }
 
   & .separator {
-    color: #779CB3;
+    color: #779cb3;
     margin: 0 4px;
   }
 }
@@ -180,5 +183,5 @@ main .page-description h3 {
   margin: 0;
   padding: 0;
   font-size: 13px;
-  text-shadow: #E9F6FF 1px 1px 1px;
+  text-shadow: #e9f6ff 1px 1px 1px;
 }

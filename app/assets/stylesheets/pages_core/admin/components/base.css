@@ -3,12 +3,20 @@ body {
   color: var(--text-color);
 }
 
-body, td, th {
+body,
+td,
+th {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 12px;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 16px 0;
 }
 
@@ -27,6 +35,7 @@ th {
 
 .hr {
   border-top: 1px solid var(--border-color);
+
   & hr {
     display: none;
   }

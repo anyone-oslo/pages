@@ -34,7 +34,7 @@ a.delete:focus {
 }
 
 button a {
-  padding:5px 0;
+  padding: 5px 0;
   color: var(--text-color) !important;
-  text-decoration:none;
+  text-decoration: none;
 }

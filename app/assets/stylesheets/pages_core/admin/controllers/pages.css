@@ -53,6 +53,7 @@ td.drag-handle {
       text-decoration: none;
       color: #222;
     }
+
     & a.page-name:hover {
       text-decoration: underline;
     }
@@ -66,6 +67,7 @@ td.drag-handle {
     &:hover {
       background: #ffd;
       border: 1px solid #dda;
+
       & .status {
         display: none;
       }
@@ -114,6 +116,7 @@ td.drag-handle {
 .calendar-item-list {
   & .name {
     line-height: 1.5;
+
     & small {
       font-weight: normal;
     }
@@ -127,8 +130,7 @@ td.drag-handle {
   }
 
   & .pinned .name {
-    background: transparent radial-gradient(ellipse at center, #92B6C4 50%, transparent 50%)
-                no-repeat left 12px top 50%;
+    background: transparent radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat left 12px top 50%;
     background-size: 10px 10px;
   }
 }
@@ -148,6 +150,7 @@ td.drag-handle {
   & .published-date,
   & .advanced-options {
     display: none;
+
     &.show {
       display: block;
     }
@@ -166,33 +169,39 @@ td.drag-handle {
   }
 }
 
-
 .file-list {
   list-style-type: none;
   margin-left: 0;
   margin-right: 0;
   padding: 0;
+
   & .embed-code {
     display: inline-block;
     width: 60px;
     margin-right: 10px;
   }
+
   & li {
     line-height: 30px;
     border-top: 1px solid var(--border-color);
+
     &:first-child {
       border-top: 0px;
     }
+
     & .actions {
       float: right;
     }
+
     & .drag-handle {
       margin-right: 10px;
     }
   }
+
   & .placeholder {
     height: 30px;
   }
+
   & .ui-sortable-helper {
     border: 1px solid var(--border-color) !important;
     background: rgba(250, 250, 250, 0.8);

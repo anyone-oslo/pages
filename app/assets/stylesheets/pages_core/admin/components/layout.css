@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0px;
   padding: 0px;
   height: 100vh;
@@ -15,6 +16,7 @@ html, body {
   display: flex;
   flex-flow: column nowrap;
   height: 100vh;
+
   & > *,
   & .main-wrapper {
     flex-shrink: 0;
@@ -25,17 +27,21 @@ html, body {
   flex: 1 0 auto;
   display: flex;
   flex-flow: row nowrap;
+
   @media --mobile {
     flex-flow: column nowrap;
   }
+
   & > main {
     flex: 1;
     padding: 0px 0px 60px 0px;
   }
+
   & > aside {
     min-width: 300px;
     width: 20%;
     padding: 0px 16px;
+
     @media --mobile {
       width: 100%;
     }

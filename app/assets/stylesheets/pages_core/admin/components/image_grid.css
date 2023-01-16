@@ -1,6 +1,5 @@
 .image-grid {
   --image-padding: 7px;
-
   margin-bottom: 40px;
   display: flex;
 
@@ -27,23 +26,28 @@
 
   & .grid-image {
     padding: var(--image-padding);
+
     &.placeholder {
       opacity: 0.25;
     }
+
     &.uploading {
       user-select: none;
       opacity: 0.5;
       overflow: hidden;
+
       & .temp-image {
         position: relative;
         cursor: pointer;
         overflow: hidden;
         background: #000;
       }
+
       & img {
         filter: blur(20px);
         opacity: 0.75;
       }
+
       & span {
         position: absolute;
         top: 50%;
@@ -60,6 +64,7 @@
         animation: rotate-spinner 0.8s infinite linear;
       }
     }
+
     & .file-placeholder,
     & .placeholder {
       position: relative;
@@ -68,11 +73,13 @@
       border: 2px dashed var(--border-color);
       width: 100%;
       padding-bottom: 100%;
+
       & span {
         color: var(--text-light-color);
         text-shadow: none;
       }
     }
+
     & .actions {
       margin-top: 7px;
       display: flex;
@@ -88,6 +95,7 @@
         flex: 1;
       }
     }
+
     &:hover {
       & .actions {
         visibility: visible;
@@ -97,6 +105,7 @@
 
   & .primary-image {
     width: 33.33%;
+
     @media --mobile {
       width: 100%;
     }
@@ -107,6 +116,7 @@
       padding-bottom: 66.67%;
       text-align: center;
       line-height: 1.6;
+
       & > .upload-button {
         position: absolute;
         display: flex;
@@ -125,6 +135,7 @@
 
   & .grid {
     width: 100%;
+
     & .images {
       position: relative;
       display: flex;
@@ -135,6 +146,7 @@
         flex-direction: column;
         justify-content: flex-end;
         width: 16.66%;
+
         @media --narrow {
           width: 50%;
         }
@@ -147,6 +159,7 @@
 
     & .editable-image {
       padding-bottom: 75%;
+
       & img {
         position: absolute;
         top: 0px;
@@ -161,6 +174,7 @@
     & .drop-target {
       margin: 10px var(--image-padding);
       padding-top: 10px;
+
       & button {
         margin: 0px 7px;
       }
@@ -170,15 +184,19 @@
   &.with-primary-image {
     & .grid {
       width: 66.67%;
+
       @media --mobile {
         width: 100%;
       }
     }
+
     & .images .grid-image {
       width: 25%;
+
       @media --narrow {
         width: 50%;
       }
+
       @media --mobile {
         width: 50%;
       }
@@ -193,6 +211,11 @@
 }
 
 @keyframes rotate-spinner {
-  0%    { transform: rotate(0deg); }
-  100%  { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

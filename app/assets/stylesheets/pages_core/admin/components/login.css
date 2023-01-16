@@ -17,6 +17,7 @@ main .login-form {
     list-style-type: disc;
     color: var(--border-color);
     line-height: 1.5;
+
     & li {
       margin: 0px;
       padding: 0px;

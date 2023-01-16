@@ -2,7 +2,6 @@
   user-select: none;
   position: relative;
   overflow: hidden;
-
   margin: 20px 0 40px 0;
   margin-left: -20px;
   margin-right: -10px;
@@ -50,11 +49,7 @@
 
     &:hover {
       border: 1px solid var(--border-color-light);
-      background: linear-gradient(
-        to bottom,
-        var(--background-color) 0%,
-        var(--background-disabled-color) 100%
-      );
+      background: linear-gradient(to bottom, var(--background-color) 0%, var(--background-disabled-color) 100%);
     }
 
     & .date {
@@ -81,14 +76,15 @@
       display: inline;
       margin: 0;
       padding: 0;
+
       & input {
         font-size: 15px;
         padding: 2px 4px;
-
         margin-top: -2px;
         margin-bottom: -2px;
         margin-right: 5px;
       }
+
       & button {
         margin-left: 5px;
       }
@@ -99,6 +95,7 @@
       color: var(--text-color);
       text-decoration: none;
     }
+
     & a:hover,
     & a:focus {
       text-decoration: underline;
@@ -119,10 +116,12 @@
     float: right;
     visibility: hidden;
     margin: -4px -6px -4px 5px;
+
     & button {
       margin-left: 5px;
     }
   }
+
   & .page:hover .actions {
     visibility: visible;
   }
