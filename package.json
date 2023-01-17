@@ -21,7 +21,6 @@
     "postcss": "^8.4.21",
     "postcss-calc": "^8.2.4",
     "postcss-cli": "^10.1.0",
-    "postcss-comment": "^2.0.0",
     "postcss-import": "^15.1.0",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-preset-env": "^7.8.3",

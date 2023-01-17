@@ -83,7 +83,7 @@
       border-right: 1px solid #888;
     }
 
-    // font-awesome doesn't have h1-h6, so we'll apply some tricks
+    /* font-awesome doesn't have h1-h6, so we'll apply some tricks */
     &.header {
       vertical-align: bottom;
 
