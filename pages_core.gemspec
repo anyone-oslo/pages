@@ -22,17 +22,6 @@ Gem::Specification.new do |s|
     "VERSION"
   ]
 
-  s.add_development_dependency "capybara"
-  s.add_development_dependency "factory_bot"
-  s.add_development_dependency "pg"
-  s.add_development_dependency "rails-controller-testing"
-  s.add_development_dependency "rspec_junit_formatter"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "semantic"
-  s.add_development_dependency "shoulda-matchers"
-  s.add_development_dependency "simplecov", "~> 0.17.1"
-  s.add_development_dependency "timecop"
-
   s.add_dependency "rails", ">= 6.0"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
