@@ -2,6 +2,7 @@
 
 class AdminMailer < ApplicationMailer
   default from: proc { "\"Pages\" <no-reply@anyone.no>" }
+  layout false
 
   def password_reset(user, url)
     @user = user
