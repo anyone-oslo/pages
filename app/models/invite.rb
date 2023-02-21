@@ -15,9 +15,17 @@ class Invite < ApplicationRecord
 
   validates :token, presence: true
 
+  validate :user_already_exists
+
   private
 
   def ensure_token
     self.token ||= SecureRandom.hex(32)
+  end
+
+  def user_already_exists
+    return unless User.find_by_email(email)
+
+    errors.add(:email, :taken)
   end
 end
