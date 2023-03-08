@@ -21,12 +21,10 @@ module PagesCore
     end
 
     def embed_image(id, size:, class_name:, link:)
-      image = Image.find(id).localize(I18n.locale)
-      class_name = ["image", image_class_name(image), class_name].compact
-      image_tag = dynamic_image_tag(image,
-                                    size: size, crop: false, upscale: false)
-      tag.figure((link ? link_to(image_tag, link) : image_tag) +
-                  image_caption(image), class: class_name)
+      image_figure(
+        Image.find(id).localize(I18n.locale),
+        size: size, class_name: class_name, link: link
+      )
     rescue ActiveRecord::RecordNotFound
       nil
     end
@@ -35,28 +33,8 @@ module PagesCore
       if str =~ /size="(\d*x\d*)"/
         Regexp.last_match(1)
       else
-        "2000x2000"
+        default_image_size
       end
-    end
-
-    def image_caption(image)
-      return unless image.caption?
-
-      tag.figcaption(image.caption)
-    end
-
-    def image_class_name(image)
-      if image.size.x == image.size.y
-        "square"
-      elsif image.size.x > image.size.y
-        "landscape"
-      else
-        "portrait"
-      end
-    end
-
-    def link_to(content, href)
-      tag.a(content, href: href)
     end
 
     def parse_image(str)
