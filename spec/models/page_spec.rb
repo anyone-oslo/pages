@@ -27,7 +27,7 @@ describe Page do
         create(:page, feed_enabled: true, locale: "fr")
       end
 
-      it { is_expected.to match_array([page]) }
+      it { is_expected.to contain_exactly(page) }
     end
 
     context "with include_hidden" do
@@ -35,7 +35,7 @@ describe Page do
       let!(:page) { create(:page, feed_enabled: true) }
       let!(:hidden) { create(:page, feed_enabled: true, status: 3) }
 
-      it { is_expected.to match_array([page, hidden]) }
+      it { is_expected.to contain_exactly(page, hidden) }
     end
   end
 
@@ -64,7 +64,7 @@ describe Page do
     let!(:page2) { create(:page, tag_list: [foo, bar]) }
     let!(:page3) { create(:page, tag_list: [foo]) }
 
-    it { is_expected.to match_array([page3, page2, page1]) }
+    it { is_expected.to contain_exactly(page3, page2, page1) }
   end
 
   describe ".localized" do

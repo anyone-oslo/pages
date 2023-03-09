@@ -169,7 +169,7 @@ describe Admin::UsersController do
     it { is_expected.to redirect_to(admin_users_url) }
 
     it "deletes the user" do
-      expect(User.all).to match_array([user])
+      expect(User.all).to contain_exactly(user)
     end
   end
 

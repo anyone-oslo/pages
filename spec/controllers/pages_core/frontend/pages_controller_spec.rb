@@ -127,7 +127,7 @@ describe PagesCore::Frontend::PagesController do
 
     describe "JSON rendering" do
       let(:params) { { path: page.path_segment, format: :json } }
-      let(:json) { JSON.parse(response.body) }
+      let(:json) { response.parsed_body }
 
       it "renders the page as json" do
         expect(json["name"]).to eq("Home")

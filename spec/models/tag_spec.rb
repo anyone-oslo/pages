@@ -12,13 +12,13 @@ describe Tag do
     let(:taggable) { create(:page) }
 
     context "when nothing has been tagged" do
-      it { is_expected.to match_array([]) }
+      it { is_expected.to eq([]) }
     end
 
     context "when subject has been tagged" do
       before { taggable.tag_with!(tag) }
 
-      it { is_expected.to match_array([tag]) }
+      it { is_expected.to contain_exactly(tag) }
     end
 
     context "when subject has been tagged and another tagging exists" do
@@ -30,7 +30,7 @@ describe Tag do
         taggable.tag_with!(tag)
       end
 
-      it { is_expected.to match_array([tag, other_tag]) }
+      it { is_expected.to contain_exactly(tag, other_tag) }
     end
 
     context "when a pinned tag exists" do
@@ -43,7 +43,7 @@ describe Tag do
         taggable.tag_with!(tag)
       end
 
-      it { is_expected.to match_array([tag, pinned_tag, other_tag]) }
+      it { is_expected.to contain_exactly(tag, pinned_tag, other_tag) }
     end
   end
 end

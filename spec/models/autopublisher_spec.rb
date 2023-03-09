@@ -11,7 +11,7 @@ describe Autopublisher do
 
     it "autopublishes the due pages" do
       described_class.run!
-      expect(Page.where(autopublish: true)).to match_array([future])
+      expect(Page.where(autopublish: true)).to contain_exactly(future)
     end
 
     it "schedules another run" do
