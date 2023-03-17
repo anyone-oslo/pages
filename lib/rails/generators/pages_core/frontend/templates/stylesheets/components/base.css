@@ -1,0 +1,24 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.responsive-embed,
+figure.image {
+  margin: 2rem 0rem;
+  @mixin child-margins;
+}
+
+figure.image {
+  width: 100%;
+  padding: 0rem;
+
+  & img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+img {
+  display: block;
+}

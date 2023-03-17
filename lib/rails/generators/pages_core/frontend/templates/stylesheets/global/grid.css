@@ -1,0 +1,65 @@
+@define-mixin grid-container {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  grid-column-gap: var(--gutter);
+}
+
+@define-mixin grid-limit $limit {
+  @media screen and (min-width: $limit) {
+    --grid-limit: calc($limit - (var(--outer-padding) * 2));
+  }
+}
+
+:root {
+  --columns: 12;
+  --gutter: 2rem;
+  --outer-padding: 2rem;
+
+  @media (--tablet) {
+    //--columns: 9;
+    --gutter: 1.5rem;
+    --outer-padding: 1.5rem;
+  }
+
+  @media (--mobile) {
+    --columns: 4;
+    --outer-padding: 1rem;
+  }
+
+  @media print {
+    --outer-padding: 0px;
+  }
+
+  --column-width: calc(
+    (100% -
+     ((var(--gutter) * (var(--columns) - 1)) + (var(--outer-padding) * 2))) /
+    var(--columns)
+  );
+
+  /* @mixin grid-limit 1400px; */
+}
+
+.grid-overlay {
+  display: none;
+}
+
+.grid-overlay--active {
+  --grid-overlay-width: var(--grid-limit,
+                            calc(100% - (var(--outer-padding) * 2)));
+  display: block;
+  position: fixed;
+  z-index: 9000;
+  top: 0px;
+  width: var(--grid-overlay-width);
+  left: 50%;
+  margin-left: calc(var(--grid-overlay-width) / 2 * -1);
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--grid-overlay-gutter, transparent) var(--gutter),
+    var(--grid-overlay-column, rgba(255, 0, 255, 0.05)) var(--gutter)
+  );
+  background-size: calc((100% + var(--gutter)) / var(--columns, 12)) 100%;
+  background-position: top 0px left calc(var(--gutter) * -1);
+}

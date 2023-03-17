@@ -1,0 +1,18 @@
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --blue:  #0000ff;
+
+  --background-color:  var(--white);
+  --text-color:        var(--black);
+  --link-color:        var(--blue);
+}
+
+body {
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+a, a:visited {
+  color: var(--link-color);
+}

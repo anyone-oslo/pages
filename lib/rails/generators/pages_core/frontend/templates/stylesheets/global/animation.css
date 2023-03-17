@@ -1,0 +1,5 @@
+:root {
+  --ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-out-back: cubic-bezier(.35,1.47,.64,1);
+  scroll-behavior: smooth;
+}

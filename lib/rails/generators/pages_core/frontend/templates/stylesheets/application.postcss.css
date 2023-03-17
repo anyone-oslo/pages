@@ -1,0 +1,4 @@
+@import "normalize.css";
+@import "config";
+@import-glob "global/*.css";
+@import-glob "components/*.css";

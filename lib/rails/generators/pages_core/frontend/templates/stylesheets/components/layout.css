@@ -1,0 +1,21 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+}
+
+header,
+main,
+footer {
+  padding-left: var(--outer-padding);
+  padding-right: var(--outer-padding);
+  & .inner {
+    @mixin grid-container;
+    max-width: var(--grid-limit, 100%);
+    margin: 0px auto;
+  }
+}
