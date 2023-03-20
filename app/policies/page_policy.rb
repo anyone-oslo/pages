@@ -13,6 +13,10 @@ class PagePolicy < Policy
     index?
   end
 
+  def search?
+    index?
+  end
+
   def new?
     user.role?(:pages)
   end

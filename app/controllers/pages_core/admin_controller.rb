@@ -13,6 +13,8 @@ module PagesCore
 
     layout "admin"
 
+    helper_method :search_query
+
     class << self
       # Get name of class with in lowercase, with underscores.
       def underscore
@@ -29,6 +31,10 @@ module PagesCore
     end
 
     protected
+
+    def search_query
+      params[:q] || ""
+    end
 
     def set_i18n_locale
       I18n.locale = :en

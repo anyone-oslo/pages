@@ -1,0 +1,12 @@
+<% query ||= "" %>
+<%= form_tag(search_admin_pages_path(@locale),
+             method: "get",
+             class: "search-bar") do %>
+  <%= text_field_tag(:q, query,
+                     placeholder: "Search all pages",
+                     aria: { label: "Search all pages" }) %>
+  <button type="submit">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    Search
+  </button>
+<% end %>

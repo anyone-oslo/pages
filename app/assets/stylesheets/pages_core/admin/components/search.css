@@ -1,0 +1,27 @@
+.search-bar {
+  display: flex;
+  & input {
+    flex: 1 1 auto;
+    border-right: none;
+    max-width: 600px;
+    min-width: 50px;
+    &:focus {
+      z-index: 20;
+    }
+  }
+  & button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    white-space: nowrap;
+  }
+}
+
+main .search-bar {
+  background: var(--background-disabled-color);
+  padding: 16px 32px;
+  margin: 0px 0px 16px 0px;
+}
+
+.sidebar .search-bar {
+  margin-top: 16px;
+}
