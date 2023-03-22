@@ -1,3 +1,6 @@
+<%= render(partial: "admin/pages/search_bar",
+           locals: { query: search_query }) %>
+
 <% if policy(Page).new? %>
   <h2>
     New entry

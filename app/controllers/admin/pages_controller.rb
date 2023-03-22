@@ -9,14 +9,21 @@ module Admin
 
     require_authorization
 
-    helper_method :page_json
-
     def index
       @pages = Page.admin_list(@locale)
     end
 
     def deleted
       @pages = Page.deleted.by_updated_at.in_locale(@locale)
+    end
+
+    def search
+      return if search_query.blank?
+
+      @search_documents =
+        SearchDocument.where(searchable_type: "Page")
+                      .search(search_query, locale: @locale)
+                      .paginate(per_page: 50, page: params[:page])
     end
 
     def show
@@ -26,19 +33,14 @@ module Admin
     def new
       build_params = params[:page] ? page_params : nil
       @page = build_page(@locale, build_params)
-      @page.parent = if params[:parent]
-                       Page.find(params[:parent])
-                     elsif @news_pages
-                       @news_pages.first
-                     end
+      @page.parent = Page.find_by(id: params[:parent])
     end
 
     def edit; end
 
     def create
-      @page = build_page(@locale, page_params, param_categories)
+      @page = build_page(@locale, page_params, param_categories).tap(&:save)
       if @page.valid?
-        @page.save
         respond_with_page(@page) do
           redirect_to(edit_admin_page_url(@locale, @page))
         end
@@ -103,8 +105,7 @@ module Admin
     def param_categories
       return [] unless params[:category]
 
-      params.permit(category: {})[:category]
-            .to_hash
+      params.permit(category: {})[:category].to_hash
             .map { |id, _| Category.find(id) }
     end
 

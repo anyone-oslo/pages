@@ -8690,6 +8690,38 @@ body.modal > .wrapper {
   margin: 20px -2px;
 }
 
+.search-bar {
+  display: flex;
+}
+
+.search-bar input {
+    flex: 1 1 auto;
+    border-right: none;
+    max-width: 600px;
+    min-width: 50px;
+  }
+
+.search-bar input:focus {
+      z-index: 20;
+    }
+
+.search-bar button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    white-space: nowrap;
+  }
+
+main .search-bar {
+  background: #f8f8f8;
+  background: var(--background-disabled-color);
+  padding: 16px 32px;
+  margin: 0px 0px 16px 0px;
+}
+
+.sidebar .search-bar {
+  margin-top: 16px;
+}
+
 .sidebar {
   background: #f8f8f8;
   background: var(--background-disabled-color);

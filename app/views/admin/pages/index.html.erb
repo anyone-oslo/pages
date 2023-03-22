@@ -9,6 +9,9 @@
   <%= locale_links { |l| admin_pages_path(l) } %>
 <% end %>
 
+<%= render(partial: "admin/pages/search_bar",
+           locals: { query: search_query }) %>
+
 <div class="content">
   <% cache Page.visible.roots.to_a + [current_user, @locale] do %>
     <%= react_component(
