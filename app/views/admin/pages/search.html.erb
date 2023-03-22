@@ -17,13 +17,31 @@
       <th>Name</th>
       <th>Published</th>
       <th>Author</th>
+      <th>Location</th>
     </tr>
     <% @search_documents.results.each do |page| %>
-      <%= render(partial: "admin/pages/list_item",
-                 locals: {
-                   page: page,
-                   author: true
-      }) %>
+      <%= page_list_row(page) do %>
+        <td class="name">
+          <%= link_to_if(policy(page).edit?,
+                         page_name(page),
+                         edit_admin_page_url(@locale, page),
+                         class: 'name_link') %>
+          <%= autopublish_notice(page) %>
+        </td>
+        <td>
+          <%= page_published_status(page) %>
+        </td>
+        <td>
+          <%= link_to(page.author.name, admin_user_path(page.author)) %>
+        </td>
+        <td>
+          <% if page.parent %>
+            <%= page_name(page.parent, include_parents: true) %>
+          <% else %>
+            Top level
+          <% end %>
+        </td>
+      <% end %>
     <% end %>
   </table>
   <%= will_paginate(@search_documents, renderer: PagesCore::LinkRenderer) %>

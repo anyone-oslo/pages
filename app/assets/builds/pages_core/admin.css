@@ -9163,6 +9163,13 @@ td.drag-handle {
       font-weight: normal;
     }
 
+.news-item-list .autopublish-notice, .calendar-item-list .autopublish-notice {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #666;
+    color: var(--text-light-color);
+  }
+
 .news-item-list .draft,
   .calendar-item-list .draft,
   .news-item-list .hidden,

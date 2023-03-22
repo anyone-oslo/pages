@@ -4,6 +4,15 @@ module Admin
   module PagesHelper
     include PagesCore::Admin::PageBlocksHelper
 
+    def autopublish_notice(page)
+      return unless page.autopublish?
+
+      tag.div(class: "autopublish-notice") do
+        safe_join(["This page will be published",
+                   tag.b(publish_time(page.published_at))], " ")
+      end
+    end
+
     def available_templates_for_select
       PagesCore::Templates.names.collect do |template|
         if template == "index"
@@ -30,6 +39,14 @@ module Admin
       ([page.author] + User.activated).uniq
     end
 
+    def page_list_row(page, &block)
+      classes = [page.status_label.downcase]
+      classes << "autopublish" if page.autopublish?
+      classes << "pinned" if page.pinned?
+
+      tag.tr(capture(&block), class: classes.join(" "))
+    end
+
     def page_name(page, options = {})
       page_names = if options[:include_parents]
                      page.self_and_ancestors.reverse
@@ -40,6 +57,21 @@ module Admin
         page_names.map { |p| page_name_with_fallback(p) },
         raw(" &raquo; ")
       )
+    end
+
+    def page_published_status(page)
+      return page_published_date(page) if page.published?
+      return tag.em("Not published") if page.status_label == "Published"
+
+      tag.em(page.status_label)
+    end
+
+    def page_published_date(page)
+      if page.published_at.year == Time.zone.now.year
+        l(page.published_at, format: :pages_date)
+      else
+        l(page.published_at, format: :pages_full)
+      end
     end
 
     def publish_time(time)

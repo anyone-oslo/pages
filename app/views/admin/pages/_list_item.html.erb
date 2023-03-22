@@ -4,19 +4,13 @@
   section ||= false
   sections ||= []
 %>
-<tr class="<%= [page.status_label.downcase,((page.autopublish?) ? 'autopublish' : nil), ((page.pinned?) ? 'pinned' : nil)].join(' ') %>">
+<%= page_list_row(page) do %>
   <td class="name">
     <%= link_to_if(policy(page).edit?,
                    page_name(page),
                    edit_admin_page_url(@locale, page),
                    class: 'name_link') %>
-    <% if page.autopublish? %>
-      <br />
-      <small>
-        This page will be published
-        <strong><%= publish_time(page.published_at) %></strong>
-      </small>
-    <% end %>
+    <%= autopublish_notice(page) %>
   </td>
   <% if date %>
     <td class="date">
@@ -24,19 +18,7 @@
     </td>
   <% end %>
   <td>
-    <% if page.published? %>
-      <% if page.published_at.year == Time.zone.now.year %>
-        <%= l(page.published_at, format: :pages_date) %>
-      <% else %>
-        <%= l(page.published_at, format: :pages_full) %>
-      <% end %>
-    <% else %>
-      <% if page.status_label == 'Published' %>
-        <em>Not published</em>
-      <% else %>
-        <em><%= page.status_label %></em>
-      <% end %>
-    <% end %>
+    <%= page_published_status(page) %>
   </td>
   <% if author %>
     <td>
@@ -48,4 +30,4 @@
       <%= news_section_name(page.parent, sections) %>
     </td>
   <% end %>
-</tr>
+<% end %>

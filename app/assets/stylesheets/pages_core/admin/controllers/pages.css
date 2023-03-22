@@ -122,6 +122,12 @@ td.drag-handle {
     }
   }
 
+  & .autopublish-notice {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: var(--text-light-color);
+  }
+
   & .draft,
   & .hidden,
   & .autopublish,
