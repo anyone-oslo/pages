@@ -10,6 +10,10 @@ require "pages_core/templates/template_configuration"
 module PagesCore
   module Templates
     class << self
+      def all
+        names.map { |n| PagesCore::Templates::TemplateConfiguration.new(n) }
+      end
+
       def names
         @names ||= find_all_templates
       end
@@ -17,10 +21,8 @@ module PagesCore
       private
 
       def template_paths
-        [
-          PagesCore.plugin_root.join("app/views/pages/templates"),
-          Rails.root.join("app/views/pages/templates")
-        ]
+        [PagesCore.plugin_root.join("app/views/pages/templates"),
+         Rails.root.join("app/views/pages/templates")]
       end
 
       def template_files

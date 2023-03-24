@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DateRangeSelect from "./DateRangeSelect";
+import DateRangeSelect from "../DateRangeSelect";
 
 export default class PageDates extends React.Component {
   constructor(props) {
