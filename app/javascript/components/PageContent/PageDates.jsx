@@ -1,69 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import DateRangeSelect from "../DateRangeSelect";
 
-export default class PageDates extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      has_dates: props.starts_at ? true : false,
-      all_day: !!props.all_day
-    };
+export default function PageDates(props) {
+  const { starts_at, ends_at } = props;
 
-    this.toggleAllDay = this.toggleAllDay.bind(this);
-    this.toggleHasDates = this.toggleHasDates.bind(this);
-  }
+  const [hasDates, setHasDates] = useState(props.starts_at ? true : false);
+  const [allDay, setAllDay] = useState(!!props.all_day);
 
-  toggleHasDates() {
-    this.setState({ has_dates: !this.state.has_dates });
-  }
+  const toggleHasDates = () => setHasDates(!hasDates);
+  const toggleAllDay = () => setAllDay(!allDay);
 
-  toggleAllDay() {
-    this.setState({ all_day: !this.state.all_day });
-  }
-
-  timeToString(time) {
-    return time.toTimeString().slice(0, 5);
-  }
-
-  render() {
-    return (
-      <div className="page-dates field">
-        <input
-          type="hidden"
-          name="page[all_day]"
-          value={this.state.has_dates && this.state.all_day ? "1" : "0"}
-        />
-        <label>Dates</label>
-        <div className="toggles">
-          <label className="has-dates-toggle">
-            <input
-              type="checkbox"
-              checked={this.state.has_dates}
-              onChange={this.toggleHasDates}
-            />
-            Enabled
-          </label>
-          <label className={!this.state.has_dates && "disabled"}>
-            <input
-              type="checkbox"
-              disabled={!this.state.has_dates}
-              checked={this.state.all_day}
-              onChange={this.toggleAllDay}
-            />
-            All day event
-          </label>
-        </div>
-        <DateRangeSelect
-          objectName="page"
-          startsAt={this.props.starts_at}
-          endsAt={this.props.ends_at}
-          disabled={!this.state.has_dates}
-          disableTime={this.state.all_day}
-        />
+  return (
+    <div className="page-dates field">
+      <input type="hidden"
+             name="page[all_day]"
+             value={(hasDates && allDay) ? "1" : "0"} />
+      <label>
+        Dates
+      </label>
+      <div className="toggles">
+        <label className="has-dates-toggle">
+          <input type="checkbox"
+                 checked={hasDates}
+                 onChange={toggleHasDates} />
+          Enabled
+        </label>
+        <label className={!hasDates && "disabled"}>
+          <input type="checkbox"
+                 disabled={!hasDates}
+                 checked={allDay}
+                 onChange={toggleAllDay} />
+          All day event
+        </label>
       </div>
-    );
-  }
+      <DateRangeSelect objectName="page"
+                       startsAt={starts_at}
+                       endsAt={ends_at}
+                       disabled={!hasDates}
+                       disableTime={allDay}
+      />
+    </div>
+  );
 }
 
 PageDates.propTypes = {
