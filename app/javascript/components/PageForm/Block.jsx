@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import RichTextArea from "../RichTextArea";
 
-export default function PageBlock(props) {
+export default function Block(props) {
   const { block, errors, onChange, lang, dir, value } = props;
 
   const handleChange = (evt) => {
@@ -78,7 +78,7 @@ export default function PageBlock(props) {
   );
 }
 
-PageBlock.propTypes = {
+Block.propTypes = {
   block: PropTypes.object,
   errors: PropTypes.array,
   onChange: PropTypes.func,
