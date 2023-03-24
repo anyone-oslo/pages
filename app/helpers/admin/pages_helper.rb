@@ -2,8 +2,6 @@
 
 module Admin
   module PagesHelper
-    include PagesCore::Admin::PageBlocksHelper
-
     def autopublish_notice(page)
       return unless page.autopublish?
 
