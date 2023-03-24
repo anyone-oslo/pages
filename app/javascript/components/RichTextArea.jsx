@@ -95,7 +95,7 @@ export default class RichTextArea extends React.Component {
   }
 
   handleChange(evt) {
-    this.setState({ value: evt.target.value });
+    this.updateValue(evt.target.value);
   }
 
   handleKeyPress(evt) {
@@ -165,8 +165,9 @@ export default class RichTextArea extends React.Component {
   }
 
   render() {
-    let { value, rows } = this.state;
-    let { id, name } = this.props;
+    const { rows } = this.state;
+    const { id, name } = this.props;
+    const value = this.getValue();
 
     const clickHandler = (fn) => (evt) => {
       evt.preventDefault();
@@ -184,7 +185,7 @@ export default class RichTextArea extends React.Component {
               onClick={clickHandler(a.fn)} />)}
         </div>
         <textarea
-          className="rich"
+          className={this.props.className || "rich"}
           ref={this.inputRef}
           id={id}
           name={name}
@@ -211,20 +212,38 @@ export default class RichTextArea extends React.Component {
       selectionStart + prefix.length,
       selectionStart + prefix.length + replacement.length
     );
-    this.setState({ value: textarea.value });
+    this.updateValue(textarea.value);
   }
 
   strToList(str, prefix) {
     return str.split("\n").map(l => prefix +  " " + l).join("\n");
   }
+
+  getValue() {
+    if (this.props.onChange) {
+      return this.props.value;
+    } else {
+      return this.state.value;
+    }
+  }
+
+  updateValue(str) {
+    if (this.props.onChange) {
+      this.props.onChange(str);
+    } else {
+      this.setState({ value: str });
+    }
+  }
 }
 
 RichTextArea.propTypes = {
   id: PropTypes.string,
+  className: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
   rows: PropTypes.number,
   simple: PropTypes.bool,
   lang: PropTypes.string,
-  dir: PropTypes.string
+  dir: PropTypes.string,
+  onChange: PropTypes.func
 };

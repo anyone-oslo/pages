@@ -58,7 +58,7 @@ export default class DateRangeSelect extends React.Component {
   }
 
   parseDate(str) {
-    if (!str) { return; }
+    if (!str) { return null; }
     return new Date(str);
   }
 

@@ -53,6 +53,10 @@ module PagesCore
         self.class.config
       end
 
+      def name
+        value(:name) || default_name
+      end
+
       def value(*path)
         path = [path, :value].flatten
         value = config.get(*[:default, path].flatten)
@@ -102,6 +106,12 @@ module PagesCore
           optional: true,
           size: :small
         }
+      end
+
+      def default_name
+        return "[Default]" if template_name == :index
+
+        template_name.to_s.humanize
       end
     end
 

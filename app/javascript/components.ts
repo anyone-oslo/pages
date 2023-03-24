@@ -6,7 +6,7 @@ export { default as ImageCropper } from "./components/ImageCropper";
 export { default as ImageGrid } from "./components/ImageGrid";
 export { default as ImageUploader } from "./components/ImageUploader";
 export { default as Modal } from "./components/Modal";
-export { default as PageDates } from "./components/PageDates";
+export { default as PageContent } from "./components/PageContent";
 export { default as PageFiles } from "./components/PageFiles";
 export { default as PageImages } from "./components/PageImages";
 export { default as PageTree } from "./components/PageTree";
