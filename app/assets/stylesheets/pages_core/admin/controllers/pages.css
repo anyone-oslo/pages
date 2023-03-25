@@ -146,20 +146,6 @@ td.drag-handle {
 .edit-page {
   width: auto;
 
-  .hidden-options {
-    display: none;
-  }
-
-  .autopublish-notice,
-  .published-date,
-  .advanced-options {
-    display: none;
-
-    &.show {
-      display: block;
-    }
-  }
-
   .advanced-options {
     margin-top: 1.5rem;
   }

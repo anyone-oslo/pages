@@ -12,8 +12,13 @@ function defaultDate(offset = 0) {
 }
 
 function parseDate(str) {
-  if (!str) { return null; }
-  return new Date(str);
+  if (!str) {
+    return null;
+  } else if (typeof(str) === "string") {
+    return new Date(str);
+  } else {
+    return str;
+  }
 }
 
 export default function DateRangeSelect(props) {
@@ -42,24 +47,22 @@ export default function DateRangeSelect(props) {
 
   return (
     <div className="date-range-select">
-      <input type="hidden"
-             name={objectName + "[starts_at]"}
-             value={!disabled && startsAt.toJSON()} />
-      <input type="hidden"
-             name={objectName + "[ends_at]"}
-             value={!disabled && endsAt.toJSON()} />
       <div className="date">
-        <DateTimeSelect disabled={disabled}
-                        disableTime={disableTime}
-                        onChange={changeStartsAt}
-                        value={startsAt} />
+        <DateTimeSelect
+          name={objectName + "[starts_at]"}
+          disabled={disabled}
+          disableTime={disableTime}
+          onChange={changeStartsAt}
+          value={startsAt} />
       </div>
       <span className="to">to</span>
       <div className="date">
-        <DateTimeSelect disabled={disabled}
-                        disableTime={disableTime}
-                        onChange={changeEndsAt}
-                        value={endsAt} />
+        <DateTimeSelect
+          name={objectName + "[ends_at]"}
+          disabled={disabled}
+          disableTime={disableTime}
+          onChange={changeEndsAt}
+          value={endsAt} />
       </div>
     </div>
   );

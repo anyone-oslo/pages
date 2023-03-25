@@ -9551,20 +9551,6 @@ td.drag-handle {
   width: auto;
 }
 
-.edit-page .hidden-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice,
-  .edit-page .published-date,
-  .edit-page .advanced-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice.show, .edit-page .published-date.show, .edit-page .advanced-options.show {
-      display: block;
-    }
-
 .edit-page .advanced-options {
     margin-top: 1.5rem;
   }

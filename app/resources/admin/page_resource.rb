@@ -6,7 +6,7 @@ module Admin
 
     attributes :id, :starts_at, :ends_at, :all_day, :status, :published_at,
                :pinned, :template, :unique_name, :feed_enabled, :news_page,
-               :redirect_to
+               :user_id, :redirect_to
 
     PagesCore::Templates::TemplateConfiguration.all_blocks.each do |attr|
       attribute attr do

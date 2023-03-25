@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 
 export default function Block(props) {
@@ -52,29 +53,13 @@ export default function Block(props) {
                           {...textFieldOptions} />;
   }
 
-  let fieldClass = ["field"];
-  if (errors.length > 0) {
-    fieldClass.push("field-with-errors");
-  }
-
   return (
-    <div className={fieldClass.join(" ")}>
-      <label htmlFor={id}>
-        {block.title}
-        {errors &&
-         <React.Fragment>
-           {" "}
-           <span className="error">
-             {errors[errors.length - 1]}
-           </span>
-         </React.Fragment>}
-      </label>
-      {block.description &&
-       <p className="description">
-         {block.description}
-       </p>}
+    <LabelledField htmlFor={id}
+                   label={block.title}
+                   description={block.description}
+                   errors={errors}>
       {field}
-    </div>
+    </LabelledField>
   );
 }
 
