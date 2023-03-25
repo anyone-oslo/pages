@@ -9208,20 +9208,6 @@ td.drag-handle {
     padding-top: 16px;
   }
 
-.edit-page .hidden-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice,
-  .edit-page .published-date,
-  .edit-page .advanced-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice.show, .edit-page .published-date.show, .edit-page .advanced-options.show {
-      display: block;
-    }
-
 .edit-page main input[type=text],
   .edit-page main textarea {
     width: 100%;

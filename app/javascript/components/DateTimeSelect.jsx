@@ -41,7 +41,7 @@ function dayOptions() {
 }
 
 export default function DateTimeSelect(props) {
-  const { disabled, disableTime, onChange, value } = props;
+  const { name, disabled, disableTime, onChange, value } = props;
 
   const [timeString, setTimeString] = useState(timeToString(value));
 
@@ -55,6 +55,10 @@ export default function DateTimeSelect(props) {
 
   return (
     <div className="date-select">
+      {name &&
+       <input type="hidden"
+              name={name}
+              value={!disabled && value.toJSON()} />}
       <select value={value.getMonth()}
               onChange={e => handleChange({ month: e.target.value })}
               disabled={disabled}>
@@ -88,6 +92,7 @@ export default function DateTimeSelect(props) {
 }
 
 DateTimeSelect.propTypes = {
+  name: PropTypes.string,
   disabled: PropTypes.bool,
   disableTime: PropTypes.bool,
   onChange: PropTypes.func,

@@ -15,3 +15,4 @@ export { default as Toast } from "./components/Toast";
 
 export { default as PageContent } from "./components/PageForm/Content";
 export { default as PageMetadata } from "./components/PageForm/Metadata";
+export { default as PageOptions } from "./components/PageForm/Options";
