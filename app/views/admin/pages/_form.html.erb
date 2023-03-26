@@ -1,5 +1,11 @@
 <%= content_tab "Content" do %>
-  <%= render partial: "edit_content", locals: { f: f } %>
+  <%= react_component(
+    "PageContent",
+    { locale: @locale,
+      locales: locales_with_dir,
+      page: Admin::PageResource.new(@page),
+      templates: PagesCore::Templates.all.map { |t| Admin::TemplateConfigurationResource.new(t) } }
+  ) %>
 <% end %>
 
 <% if @page.unconfigured_blocks.any? %>
@@ -16,16 +22,32 @@
 
 <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
   <%= content_tab "Images" do %>
-    <%= render partial: "edit_images", locals: { f: f } %>
+    <%= react_component(
+      "PageImages",
+      { locale: @locale,
+        locales: locales_with_dir,
+        records: @page.page_images.map { |pi| Admin::PageImageResource.new(pi).to_hash } }
+    ) %>
   <% end %>
 <% end %>
 
 <% if @page.template_config.value(:files) %>
   <%= content_tab "Files" do %>
-    <%= render partial: "edit_files", locals: { f: f } %>
+    <%= react_component(
+      "PageFiles",
+      { locale: @locale,
+        locales: locales_with_dir,
+        records: @page.files.map { |pf| Admin::PageFileResource.new(pf).to_hash }}
+    ) %>
   <% end %>
 <% end %>
 
 <%= content_tab "Metadata" do %>
-  <%= render partial: "edit_metadata", locals: { f: f } %>
+  <%= react_component(
+    "PageMetadata",
+    { locale: @locale,
+      locales: locales_with_dir,
+      page: Admin::PageResource.new(@page),
+      templates: PagesCore::Templates.all.map { |t| Admin::TemplateConfigurationResource.new(t) } }
+  ) %>
 <% end %>

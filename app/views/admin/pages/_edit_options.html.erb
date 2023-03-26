@@ -1,14 +1,8 @@
 <%= react_component(
   "PageOptions",
   { page: Admin::PageResource.new(@page),
+    locale: @locale,
+    locales: locales_with_dir,
     authors: page_authors(@page).map{ |a| [a.name, a.id] },
     statuses: Page.status_labels,
     templates: PagesCore::Templates.all.map { |t| Admin::TemplateConfigurationResource.new(t) }}) %>
-
-<% if @page.id? && @page.name? %>
-  <div class="field">
-    <label>Page link</label>
-    <%= link_to(page_path(@page.locale, @page),
-                page_path(@page.locale, @page)) %>
-  </div>
-<% end %>

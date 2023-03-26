@@ -6,23 +6,33 @@ import DateTimeSelect from "../DateTimeSelect";
 import usePage, { errorsOn } from "./usePage";
 
 export default function Options(props) {
-  const { authors, statuses, templates } = props;
-  const [page, setPage] = usePage(props.page, templates);
+  const { authors, statuses } = props;
+
+  const [state, dispatch] = usePage({
+    locales: props.locales,
+    locale: props.locale,
+    page: props.page,
+    templates: props.templates
+  });
+
+  const { page, locale, templates } = state;
+
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const published = page.status == 2;
   const autopublish = published && page.published_at > new Date();
+  const url = page.urls[locale];
 
-  const handleChange = (attribute) => (evt) => {
-    setPage({ ...page, [attribute]: evt.target.value });
+  const handleChange = (attr) => (evt) => {
+    dispatch({ type: "update", payload: { [attr]: evt.target.value } });
   };
 
-  const handleChecked = (attribute) => (evt) => {
-    setPage({ ...page, [attribute]: evt.target.checked });
+  const handleChecked = (attr) => (evt) => {
+    dispatch({ type: "update", payload: { [attr]: evt.target.checked } });
   };
 
   const changePublishedAt = (value) => {
-    setPage({ ...page, published_at: value });
+    dispatch({ type: "update", payload: { published_at: value } });
   };
 
   const toggleAdvanced = (evt) => {
@@ -145,12 +155,19 @@ export default function Options(props) {
                   onChange={handleChange("redirect_to")} />
          </LabelledField>
        </React.Fragment>}
+
+      {url &&
+       <LabelledField label="Page link">
+         <a href={url}>{url}</a>
+       </LabelledField>}
     </div>
   );
 }
 
 Options.propTypes = {
   page: PropTypes.object,
+  locale: PropTypes.string,
+  locales: PropTypes.locales,
   authors: PropTypes.array,
   statuses: PropTypes.object,
   templates: PropTypes.array

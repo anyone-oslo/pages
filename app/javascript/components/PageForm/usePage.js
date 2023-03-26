@@ -1,21 +1,11 @@
-import { useState } from "react";
+import { useReducer} from "react";
 
-export function blockValue(page, block, locale) {
+export function blockValue(state, block) {
   if (block.localized) {
-    return page[block.name][locale];
+    return state.page[block.name][state.locale];
   } else {
-    return page[block.name];
+    return state.page[block.name];
   }
-}
-
-export function updateBlock(page, setPage, block, locale) {
-  return (newValue) => {
-    let nextValue = newValue;
-    if (block.localized) {
-      nextValue = { ...page[block.name], [locale]: newValue };
-    }
-    setPage({ ...page, [block.name]: nextValue });
-  };
 }
 
 export function errorsOn(page, attribute) {
@@ -34,20 +24,60 @@ function parseDate(str) {
   }
 }
 
+function derivedState(state) {
+  const { locale, locales, page, templates } = state;
+  return {
+    ...state,
+    inputDir: (locales && locales[locale] && locales[locale].dir) || "ltr",
+    templateConfig: templates.filter(t => t.template_name === page.template)[0]
+  };
+}
+
 function parsedDates(page) {
   return { published_at: parseDate(page.published_at),
            starts_at: parseDate(page.starts_at),
            ends_at: parseDate(page.ends_at) };
 }
 
-export default function usePage(initialPage, templates) {
-  const [page, setPage] = useState({
-    ...initialPage,
-    ...parsedDates(initialPage)
+function localizedAttributes(templates) {
+  return ["path_segment",
+          ...new Set(templates
+                     .flatMap(t => [...t.blocks, ...t.metadata_blocks])
+                     .filter(b => b.localized)
+                     .map(b => b.name))];
+}
+
+function prepare(state) {
+  const page = { ...state.page, ...parsedDates(state.page) };
+  return { ...state, page: page };
+}
+
+function reducer(state, action) {
+  const { type, payload } = action;
+  switch (type) {
+  case "update":
+    return updatePage(state, payload);
+  default:
+    return state;
+  }
+}
+
+function updatePage(state, attributes) {
+  const { locale, templates, page } = state;
+  let nextPage = {};
+
+  Object.keys(attributes).forEach((attr) => {
+    if (localizedAttributes(templates).indexOf(attr) !== -1) {
+      nextPage[attr] = { ...page[attr], [locale]: attributes[attr] };
+    } else {
+      nextPage[attr] = attributes[attr];
+    }
   });
 
-  const templateConfig = templates
-        .filter(t => t.template_name === page.template)[0];
+  return { ...state, page: { ...page, ...nextPage } };
+}
 
-  return [page, setPage, templateConfig];
+export default function usePage(initialState) {
+  const [state, dispatch] = useReducer(reducer, prepare(initialState));
+  return [derivedState(state), dispatch];
 }
