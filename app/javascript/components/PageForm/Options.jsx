@@ -3,17 +3,10 @@ import PropTypes from "prop-types";
 
 import LabelledField from "../LabelledField";
 import DateTimeSelect from "../DateTimeSelect";
-import usePage, { errorsOn } from "./usePage";
+import { errorsOn } from "./usePage";
 
 export default function Options(props) {
-  const { authors, statuses } = props;
-
-  const [state, dispatch] = usePage({
-    locales: props.locales,
-    locale: props.locale,
-    page: props.page,
-    templates: props.templates
-  });
+  const { state, dispatch, authors, statuses } = props;
 
   const { page, locale, templates } = state;
 
@@ -165,10 +158,8 @@ export default function Options(props) {
 }
 
 Options.propTypes = {
-  page: PropTypes.object,
-  locale: PropTypes.string,
-  locales: PropTypes.locales,
+  state: PropTypes.object,
+  dispatch: PropTypes.func,
   authors: PropTypes.array,
-  statuses: PropTypes.object,
-  templates: PropTypes.array
+  statuses: PropTypes.object
 };

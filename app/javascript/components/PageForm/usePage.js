@@ -2,9 +2,9 @@ import { useReducer} from "react";
 
 export function blockValue(state, block) {
   if (block.localized) {
-    return state.page[block.name][state.locale];
+    return state.page[block.name][state.locale] || "";
   } else {
-    return state.page[block.name];
+    return state.page[block.name] || "";
   }
 }
 
@@ -55,6 +55,8 @@ function prepare(state) {
 function reducer(state, action) {
   const { type, payload } = action;
   switch (type) {
+  case "setLocale":
+    return { ...state, locale: payload };
   case "update":
     return updatePage(state, payload);
   default:

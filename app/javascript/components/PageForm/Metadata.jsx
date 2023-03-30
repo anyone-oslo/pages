@@ -1,19 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import usePage, { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn } from "./usePage";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
 import LabelledField from "../LabelledField";
 import ImageUploader from "../ImageUploader";
 
 export default function Metadata(props) {
-  const [state, dispatch] = usePage({
-    locales: props.locales,
-    locale: props.locale,
-    page: props.page,
-    templates: props.templates
-  });
+  const { state, dispatch } = props;
 
   const { page, locale, locales, inputDir, templateConfig } = state;
 
@@ -53,8 +48,6 @@ export default function Metadata(props) {
 }
 
 Metadata.propTypes = {
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  page: PropTypes.object,
-  templates: PropTypes.array
+  state: PropTypes.object,
+  dispatch: PropTypes.func,
 };
