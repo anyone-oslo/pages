@@ -5,60 +5,14 @@
     Edit page
   <% end %>
 <% end %>
-<% content_for :page_description do %>
-  Editing
-  <% @page.ancestors.reverse.each do |page| %>
-    <%= link_to(page.name? ? page.name : tag.i("Untitled"),
-                edit_admin_page_path(content_locale, page)) %>
-    &raquo;
-  <% end %>
-  <%= link_to(@page.name? ? @page.name : tag.i("Untitled"),
-              edit_admin_page_path(content_locale, @page)) %>
-<% end %>
-
-<% content_for :page_description_links do %>
-  <%= locale_links { |l| edit_admin_page_path(l, @page.localize(l)) } %>
-<% end %>
-
 <% content_for :main_wrapper do %>
-  <%= form_for(@page,
-               url: admin_page_url(content_locale, @page),
-               builder: PagesCore::Admin::FormBuilder,
-               html: {
-                 class: "edit-page main-wrapper",
-                 method: :put,
-                 data: {
-                   controller: "edit-page",
-                   "edit-page-target": "form",
-                   "preview-url": preview_page_url(@page.locale, @page)
-                 }
-               }) do |f| %>
-
-    <% content_for :main do %>
-      <div class="content">
-        <%= render(partial: "form", locals: { f: f }) %>
-
-        <div class="buttons">
-          <button type="button"
-                  id="previewButton"
-                  data-action="click->edit-page#preview"
-                  data-url="<%= preview_page_url(@page.locale, @page) %>">
-            Preview
-          </button>
-          <button type="submit">
-            Save
-          </button>
-        </div>
-      </div>
-    <% end %>
-
-    <main data-controller="main">
-      <%= render(partial: "layouts/admin/page_header") %>
-      <%= yield :main %>
-    </main>
-
-    <aside class="sidebar" id="page-form-sidebar">
-      <%= render partial: 'edit_options', locals: { f: f } %>
-    </aside>
-  <% end %>
+  <%= react_component(
+    "PageForm",
+    { locale: @locale,
+      locales: locales_with_dir,
+      page: Admin::PageResource.new(@page),
+      templates: PagesCore::Templates.all.map { |t| Admin::TemplateConfigurationResource.new(t) },
+      authors: page_authors(@page).map{ |a| [a.name, a.id] },
+      statuses: Page.status_labels }
+  ) %>
 <% end %>

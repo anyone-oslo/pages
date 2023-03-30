@@ -18,7 +18,11 @@ module Admin
       end
     end
 
-    %i[dates tags images image files].each do |attr|
+    attribute :images do
+      object.value(:images) || object.value(:image)
+    end
+
+    %i[dates tags files].each do |attr|
       attribute attr do
         object.value(attr)
       end

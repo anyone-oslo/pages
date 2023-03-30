@@ -11,6 +11,9 @@ module Admin
                :pinned, :template, :unique_name, :feed_enabled, :news_page,
                :user_id, :redirect_to
 
+    has_many :page_images, resource: Admin::PageImageResource
+    has_many :page_files, resource: Admin::PageFileResource
+
     PagesCore::Templates::TemplateConfiguration.all_blocks.each do |attr|
       attribute attr do
         if object.template_config.block(attr)[:localized]

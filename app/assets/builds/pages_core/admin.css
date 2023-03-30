@@ -8569,6 +8569,12 @@ body {
   height: 100vh;
 }
 
+.wrapper > div[data-react-class] {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
 .wrapper > *,
   .wrapper .main-wrapper {
     flex-shrink: 0;

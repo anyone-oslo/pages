@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Attachments from "./Attachments";
+import Attachments from "../Attachments";
 
-export default class PageFiles extends React.Component {
+export default class Files extends React.Component {
   render() {
     return (
       <div className="page-files">
@@ -18,7 +18,7 @@ export default class PageFiles extends React.Component {
   }
 }
 
-PageFiles.propTypes = {
+Files.propTypes = {
   locale: PropTypes.string,
   locales: PropTypes.object,
   records: PropTypes.array

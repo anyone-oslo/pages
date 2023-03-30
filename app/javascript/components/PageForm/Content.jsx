@@ -1,19 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import usePage, { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
 import TagEditor from "../TagEditor";
 import Block from "./Block";
 import Dates from "./Dates";
 
 export default function Content(props) {
-  const [state, dispatch] = usePage({
-    locales: props.locales,
-    locale: props.locale,
-    page: props.page,
-    templates: props.templates
-  });
+  const { state, dispatch } = props;
 
   const { page, locale, inputDir, templateConfig } = state;
 
@@ -46,8 +41,6 @@ export default function Content(props) {
 }
 
 Content.propTypes = {
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  page: PropTypes.object,
-  templates: PropTypes.array
+  state: PropTypes.object,
+  dispatch: PropTypes.func,
 };
