@@ -61,30 +61,25 @@ export default class Tree {
   build(obj) {
     var indexes = this.indexes;
     var startId = this.cnt;
-    var self = this;
 
     var index = { id: startId, node: obj };
     indexes[this.cnt + ""] = index;
     this.cnt++;
 
-    if (obj.children && obj.children.length) {
-      walk(obj.children, index);
-    }
-
-    function walk(objs, parent) {
+    const walk = (objs, parent) => {
       var children = [];
-      objs.forEach(function(obj) {
+      objs.forEach((obj) => {
         var index = {};
-        index.id = self.cnt;
+        index.id = this.cnt;
         index.node = obj;
 
         if (parent) {
           index.parent = parent.id;
         }
 
-        indexes[self.cnt + ""] = index;
-        children.push(self.cnt);
-        self.cnt++;
+        indexes[this.cnt + ""] = index;
+        children.push(this.cnt);
+        this.cnt++;
 
         if (obj.children && obj.children.length) {
           walk(obj.children, index);
@@ -101,6 +96,10 @@ export default class Tree {
           index.next = children[i+1];
         }
       });
+    };
+
+    if (obj.children && obj.children.length) {
+      walk(obj.children, index);
     }
 
     return index;
@@ -114,17 +113,15 @@ export default class Tree {
   }
 
   removeIndex(index) {
-    var self = this;
-    del(index);
-
-    function del(index) {
-      delete self.indexes[index.id + ""];
+    const del = (index) => {
+      delete this.indexes[index.id + ""];
       if (index.children && index.children.length) {
         index.children.forEach(function(child) {
-          del(self.getIndex(child));
+          del(this.getIndex(child));
         });
       }
-    }
+    };
+    del(index);
   }
 
   get(id) {
@@ -212,19 +209,14 @@ export default class Tree {
     var top = 1;
     var left = 1;
     var root = this.getIndex(1);
-    var self = this;
 
     root.top = top++;
     root.left = left++;
 
-    if (root.children && root.children.length) {
-      walk(root.children, root, left, root.node.collapsed);
-    }
-
-    function walk(children, parent, left, collapsed) {
+    const walk = (children, parent, left, collapsed) => {
       var height = 1;
-      children.forEach(function(id) {
-        var node = self.getIndex(id);
+      children.forEach((id) => {
+        var node = this.getIndex(id);
         if (collapsed) {
           node.top = null;
           node.left = null;
@@ -249,6 +241,10 @@ export default class Tree {
       if(parent.node.collapsed) parent.height = 1;
       else parent.height = height;
       return parent.height;
+    };
+
+    if (root.children && root.children.length) {
+      walk(root.children, root, left, root.node.collapsed);
     }
   }
 

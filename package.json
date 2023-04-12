@@ -33,13 +33,16 @@
     "redux": "^4.1.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
     "esbuild": "^0.14.23",
-    "eslint": "^8.10.0",
+    "eslint": "^8.38.0",
     "eslint-plugin-react": "^7.29.2",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "typescript": "^5.0.4"
   },
   "scripts": {
-    "lint-javascript": "eslint 'app/javascript/**/*.js*'",
+    "lint-javascript": "eslint 'app/javascript/**/*.+(js|jsx|ts|tsx)'",
     "build": "esbuild app/javascript/admin-dist.js --bundle --minify --sourcemap --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build-debug": "esbuild app/javascript/admin-dist.js --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css"
