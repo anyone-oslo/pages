@@ -28,20 +28,20 @@ module PagesCore
       end
 
       def create_js_framework
-        ["lib/ResponsiveEmbeds.js",
-         "lib/GridOverlay.js"].each do |f|
+        ["lib/responsiveEmbeds.ts",
+         "lib/gridOverlay.ts"].each do |f|
           template("javascript/#{f}", File.join("app/javascript/#{f}"))
         end
 
         append_to_file "app/javascript/application.js" do
           <<~JS
             // Responsive embeds
-            import ResponsiveEmbeds from "./lib/ResponsiveEmbeds";
-            ResponsiveEmbeds.start();
+            import responsiveEmbeds from "./lib/responsiveEmbeds";
+            responsiveEmbeds();
 
             // Grid overlay
-            import GridOverlay from "./lib/GridOverlay";
-            GridOverlay.start();
+            import gridOverlay from "./lib/gridOverlay";
+            gridOverlay();
           JS
         end
       end
