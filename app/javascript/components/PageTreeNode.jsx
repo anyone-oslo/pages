@@ -91,11 +91,10 @@ export default class PageTreeNode extends React.Component {
   }
 
   addButton() {
-    let self = this;
     let node = this.node();
-    let handleClick = function () {
-      if (self.props.addChild) {
-        self.props.addChild(self.props.index);
+    let handleClick = () => {
+      if (this.props.addChild) {
+        this.props.addChild(this.props.index);
       }
     };
 
@@ -162,18 +161,17 @@ export default class PageTreeNode extends React.Component {
 
   collapseArrow() {
     let index = this.props.index;
-    let self = this;
 
     // Don't collapse the root node
     if (!index.parent) {
       return null;
     }
 
-    let handleCollapse = function (e) {
+    let handleCollapse = (e) => {
       e.stopPropagation();
-      let nodeId = self.props.index.id;
-      if (self.props.onCollapse) {
-        self.props.onCollapse(nodeId);
+      let nodeId = this.props.index.id;
+      if (this.props.onCollapse) {
+        this.props.onCollapse(nodeId);
       }
     };
 
@@ -242,7 +240,6 @@ export default class PageTreeNode extends React.Component {
   }
 
   render() {
-    let self = this;
     let props = this.props;
     let index = props.index;
     let dragging = props.dragging;
@@ -255,9 +252,9 @@ export default class PageTreeNode extends React.Component {
       classnames = "node placeholder";
     }
 
-    let handleMouseDown = function (e) {
-      if (self.permitted("edit") && !editing && props.onDragStart) {
-        props.onDragStart(props.index.id, self.innerRef.current, e);
+    let handleMouseDown = (e) => {
+      if (this.permitted("edit") && !editing && props.onDragStart) {
+        props.onDragStart(props.index.id, this.innerRef.current, e);
       }
     };
 
@@ -281,23 +278,22 @@ export default class PageTreeNode extends React.Component {
 
   renderEditNode() {
     const { dir, locale } = this.props;
-    let self = this;
 
-    let handleNameChange = function(event) {
-      self.setState({newName: event.target.value});
+    let handleNameChange = (event) => {
+      this.setState({newName: event.target.value});
     };
 
-    let performEdit = function(event) {
+    let performEdit = (event) => {
       event.preventDefault();
-      self.updatePage({
-        name: self.state.newName,
+      this.updatePage({
+        name: this.state.newName,
         editing: false
       });
     };
 
-    let cancelEdit = function() {
-      self.setState({newName: self.node().name});
-      self.updatePage({editing: false});
+    let cancelEdit = () => {
+      this.setState({newName: this.node().name});
+      this.updatePage({editing: false});
     };
 
     return (

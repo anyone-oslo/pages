@@ -261,9 +261,8 @@ export default class PageTreeDraggable extends React.Component {
     this._offsetY = e.clientY;
     this._start = true;
 
-    var self = this;
-    this._dragListener = (e) => self.drag(e);
-    this._dragEndListener = () => self.dragEnd();
+    this._dragListener = (e) => this.drag(e);
+    this._dragEndListener = () => this.dragEnd();
 
     window.addEventListener("mousemove", this._dragListener);
     window.addEventListener("mouseup", this._dragEndListener);

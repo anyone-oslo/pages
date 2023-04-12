@@ -1,4 +1,6 @@
-let readyHandlers = [];
+type ReadyHandlerFunc = () => void;
+
+const readyHandlers: ReadyHandlerFunc[] = [];
 
 const handleState = () => {
   if (["interactive", "complete"].indexOf(document.readyState) > -1) {
@@ -13,7 +15,7 @@ class ReadyHandler {
     document.onreadystatechange = handleState;
   }
 
-  ready (handler) {
+  ready (handler: ReadyHandlerFunc) {
     readyHandlers.push(handler);
     handleState();
   }
