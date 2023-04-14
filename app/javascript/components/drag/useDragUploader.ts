@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 
-function containsFiles(evt) {
-  if (!evt.dataTransfer || !evt.dataTransfer.types) {
-    return false;
-  }
-  const types = evt.dataTransfer.types;
-  for (var i = 0; i < types.length; i++) {
-    if (types[i] === "Files" || types[i] === "application/x-moz-file") {
-      return true;
+import { Draggable, DragCollection, DragState, Position } from "./types";
+
+function containsFiles(evt: Event) {
+  if ("dataTransfer" in evt) {
+    const dataTransfer: DataTransfer = evt.dataTransfer;
+    if ("types" in dataTransfer.types) {
+      const types = dataTransfer.types;
+      for (let i = 0; i < types.length; i++) {
+        if (types[i] === "Files" || types[i] === "application/x-moz-file") {
+          return true;
+        }
+      }
     }
   }
   return false;
 }
 
-function getFiles(dt) {
-  var files = [];
+function getFiles(dt: DataTransfer): File[] {
+  const files: File[] = [];
   if (dt.items) {
     for (let i = 0; i < dt.items.length; i++) {
       if (dt.items[i].kind == "file") {
@@ -29,36 +33,41 @@ function getFiles(dt) {
   return files;
 }
 
-function mousePosition(evt) {
-  var x, y;
-  if (evt.type == "touchmove") {
+function mousePosition(evt: TouchEvent | MouseEvent): Position {
+  let x: number | null, y: number | null;
+  if ("touches" in evt && evt.type == "touchmove") {
     x = evt.touches[0].clientX;
     y = evt.touches[0].clientY;
-  } else {
+  } else if (evt instanceof MouseEvent) {
     x = evt.clientX;
     y = evt.clientY;
   }
   return { x: x, y: y };
 }
 
-export default function useDragUploader(collections, onDragEnd) {
-  const [dragState, setDragState] = useState({
+export default function useDragUploader(
+  collections: DragCollection[],
+  onDragEnd: (dragState: DragState, files: File[]) => void
+) {
+  const initialState: DragState = {
     dragging: false,
     x: null, y: null
-  });
+  };
 
-  const updatePositions = (dragging) => {
+  const [dragState, setDragState] = useState(initialState);
+
+  const updatePositions = (dragging: Draggable | null) => {
     collections.forEach(c => {
       c.dispatch({ type: "updatePositions", payload: dragging });
     });
   };
 
-  const startDrag = (evt, draggable) => {
+  const startDrag = (evt: Event, draggable: Draggable) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };
 
-  const drag = (evt) => {
+  const drag = (evt: Event) => {
     if (dragState.dragging) {
       evt.stopPropagation();
       evt.preventDefault();
@@ -70,13 +79,13 @@ export default function useDragUploader(collections, onDragEnd) {
     }
   };
 
-  const dragEnd = (evt) => {
+  const dragEnd = (evt: Event) => {
     if (dragState.dragging) {
       const prevDragState = dragState;
-      var files = [];
+      let files: File[] = [];
       evt.preventDefault();
       evt.stopPropagation();
-      if (dragState.dragging == "Files") {
+      if ("dataTransfer" in evt && dragState.dragging == "Files") {
         files = getFiles(evt.dataTransfer);
       }
       setDragState({ dragging: false, x: null, y: null });
@@ -85,7 +94,7 @@ export default function useDragUploader(collections, onDragEnd) {
     }
   };
 
-  const dragLeave = (evt) => {
+  const dragLeave = (evt: Event) => {
     if (dragState.dragging === "Files") {
       evt.preventDefault();
       evt.stopPropagation();

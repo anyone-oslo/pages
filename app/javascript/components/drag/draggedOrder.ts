@@ -1,9 +1,14 @@
-function hovering(dragState, target) {
-  let { x, y } = dragState;
-  var rect;
-  if (target.rect) {
+import { Draggable, DragCollection, DragState } from "./types";
+
+function hovering(
+  dragState: DragState,
+  target: Draggable | React.MutableRefObject<HTMLDivElement>
+): boolean {
+  const { x, y } = dragState;
+  let rect: DOMRect;
+  if ("rect" in target) {
     rect = target.rect;
-  } else if (target.current) {
+  } else if ("current" in target) {
     rect = target.current.getBoundingClientRect();
   } else {
     return false;
@@ -12,7 +17,9 @@ function hovering(dragState, target) {
           y >= rect.top && y <= rect.bottom);
 }
 
-export function collectionOrder(collection, dragState) {
+export function collectionOrder(
+  collection: DragCollection, dragState: DragState
+): Draggable[] {
   const { draggables, ref } = collection;
   const { dragging } = dragState;
 
@@ -36,15 +43,18 @@ export function collectionOrder(collection, dragState) {
   return ordered;
 }
 
-export default function draggedOrder(collection, dragState) {
+export default function draggedOrder(
+  collection: DragCollection, dragState: DragState
+): Draggable[] {
   let ordered = collectionOrder(collection, dragState);
 
   if (dragState.dragging && ordered.indexOf(dragState.dragging) === -1) {
-    if (dragState.y < collection.ref.current.getBoundingClientRect().top) {
-      ordered = [dragState.dragging, ...ordered];
-    } else {
-      ordered.push(dragState.dragging);
-    }
+    if (collection.ref.current &&
+      dragState.y < collection.ref.current.getBoundingClientRect().top) {
+        ordered = [dragState.dragging, ...ordered];
+      } else {
+        ordered.push(dragState.dragging);
+      }
   }
 
   return ordered;
