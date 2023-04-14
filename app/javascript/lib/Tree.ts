@@ -48,28 +48,51 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
-*/
+ */
+
+type TreeId = number | string;
+type MovePlacement = "before" | "after" | "prepend" | "append";
+
+interface TreeNode {
+  children: TreeNode[],
+  collapsed: boolean
+}
+
+interface TreeIndex {
+  id: number,
+  node: TreeNode,
+  children: TreeIndex[],
+  parent: TreeIndex
+}
+
+function indexName(id: number | string): string {
+  return `${id}`;
+}
 
 export default class Tree {
-  constructor(obj) {
+  cnt: number;
+  obj: TreeNode;
+  indexes: Record<string, TreeIndex>;
+
+  constructor(obj: TreeNode) {
     this.cnt = 1;
     this.obj = obj || { children: [] };
     this.indexes = {};
     this.build(this.obj);
   }
 
-  build(obj) {
-    var indexes = this.indexes;
-    var startId = this.cnt;
+  build(obj: TreeNode): TreeIndex {
+    const indexes = this.indexes;
+    const startId = this.cnt;
 
-    var index = { id: startId, node: obj };
-    indexes[this.cnt + ""] = index;
+    const index = { id: startId, node: obj };
+    indexes[indexName(this.cnt)] = index;
     this.cnt++;
 
-    const walk = (objs, parent) => {
-      var children = [];
+    const walk = (objs: TreeIndex[], parent: TreeIndex) => {
+      const children: TreeIndex[] = [];
       objs.forEach((obj) => {
-        var index = {};
+        const index = {};
         index.id = this.cnt;
         index.node = obj;
 
@@ -77,7 +100,7 @@ export default class Tree {
           index.parent = parent.id;
         }
 
-        indexes[this.cnt + ""] = index;
+        indexes[indexName(this.cnt)] = index;
         children.push(this.cnt);
         this.cnt++;
 
@@ -88,7 +111,7 @@ export default class Tree {
       parent.children = children;
 
       children.forEach(function(id, i) {
-        var index = indexes[id + ""];
+        const index = indexes[indexName(id)];
         if (i > 0) {
           index.prev = children[i - 1];
         }
@@ -105,18 +128,15 @@ export default class Tree {
     return index;
   }
 
-  getIndex(id) {
-    var index = this.indexes[id + ""];
-    if (index) {
-      return index;
-    }
+  getIndex(id: TreeId): TreeIndex {
+    return this.indexes[indexName(id)];
   }
 
-  removeIndex(index) {
-    const del = (index) => {
-      delete this.indexes[index.id + ""];
+  removeIndex(index: TreeIndex) {
+    const del = (index: TreeIndex) => {
+      delete this.indexes[indexName(index.id)];
       if (index.children && index.children.length) {
-        index.children.forEach(function(child) {
+        index.children.forEach((child) => {
           del(this.getIndex(child));
         });
       }
@@ -124,30 +144,29 @@ export default class Tree {
     del(index);
   }
 
-  get(id) {
-    var index = this.getIndex(id);
-    if (index && index.node) {
-      return index.node;
-    }
-    return null;
+  get(id: TreeId): TreeNode {
+    return this.getIndex(id).node;
   }
 
-  remove(id) {
-    var index = this.getIndex(id);
-    var node = this.get(id);
-    var parentIndex = this.getIndex(index.parent);
-    var parentNode = this.get(index.parent);
+  remove(id: TreeId): TreeNode {
+    const index = this.getIndex(id);
+    const node = this.get(id);
+
+    const parentIndex = this.getIndex(index.parent);
+    const parentNode = this.get(index.parent);
+
     parentNode.children.splice(parentNode.children.indexOf(node), 1);
     parentIndex.children.splice(parentIndex.children.indexOf(id), 1);
+
     this.removeIndex(index);
     this.updateChildren(parentIndex.children);
 
     return node;
   }
 
-  updateChildren(children) {
-    children.forEach(function(id, i) {
-      var index = this.getIndex(id);
+  updateChildren(children: TreeIndex[]) {
+    children.forEach((id, i) => {
+      const index = this.getIndex(id);
       index.prev = index.next = null;
       if (i > 0) {
         index.prev = children[i-1];
@@ -155,14 +174,14 @@ export default class Tree {
       if (i < children.length-1) {
         index.next = children[i+1];
       }
-    }.bind(this));
+    });
   }
 
-  insert(obj, parentId, i) {
-    var parentIndex = this.getIndex(parentId);
-    var parentNode = this.get(parentId);
+  insert(obj: TreeNode, parentId: TreeId, i: number): TreeIndex {
+    const parentIndex = this.getIndex(parentId);
+    const parentNode = this.get(parentId);
 
-    var index = this.build(obj);
+    const index = this.build(obj);
     index.parent = parentId;
 
     parentNode.children = parentNode.children || [];
@@ -179,26 +198,26 @@ export default class Tree {
     return index;
   }
 
-  insertBefore(obj, destId) {
-    var destIndex = this.getIndex(destId);
-    var parentId = destIndex.parent;
-    var i = this.getIndex(parentId).children.indexOf(destId);
+  insertBefore(obj: TreeNode, destId: TreeId): TreeIndex {
+    const destIndex = this.getIndex(destId);
+    const parentId = destIndex.parent;
+    const i = this.getIndex(parentId).children.indexOf(destId);
     return this.insert(obj, parentId, i);
   }
 
-  insertAfter(obj, destId) {
-    var destIndex = this.getIndex(destId);
-    var parentId = destIndex.parent;
-    var i = this.getIndex(parentId).children.indexOf(destId);
+  insertAfter(obj: TreeNode, destId: TreeId): TreeIndex {
+    const destIndex = this.getIndex(destId);
+    const parentId = destIndex.parent;
+    const i = this.getIndex(parentId).children.indexOf(destId);
     return this.insert(obj, parentId, i+1);
   }
 
-  prepend(obj, destId) {
+  prepend(obj: TreeNode, destId: TreeId): TreeIndex {
     return this.insert(obj, destId, 0);
   }
 
-  append(obj, destId) {
-    var destIndex = this.getIndex(destId);
+  append(obj: TreeNode, destId: TreeId): TreeIndex {
+    const destIndex = this.getIndex(destId);
     destIndex.children = destIndex.children || [];
     return this.insert(obj, destId, destIndex.children.length);
   }
@@ -206,17 +225,19 @@ export default class Tree {
   // react-ui-tree methods
 
   updateNodesPosition() {
-    var top = 1;
-    var left = 1;
-    var root = this.getIndex(1);
+    let top = 1;
+    let left = 1;
+    const root = this.getIndex(1);
 
     root.top = top++;
     root.left = left++;
 
-    const walk = (children, parent, left, collapsed) => {
-      var height = 1;
-      children.forEach((id) => {
-        var node = this.getIndex(id);
+    const walk = (
+      children: TreeIndex[], parent: TreeIndex, left: number, collapsed: boolean
+    ) => {
+      let height = 1;
+      children.forEach((id: TreeId) => {
+        const node = this.getIndex(id);
         if (collapsed) {
           node.top = null;
           node.left = null;
@@ -240,7 +261,7 @@ export default class Tree {
 
       if(parent.node.collapsed) parent.height = 1;
       else parent.height = height;
-      return parent.height;
+      return parent.height as number;
     };
 
     if (root.children && root.children.length) {
@@ -248,13 +269,13 @@ export default class Tree {
     }
   }
 
-  move(fromId, toId, placement) {
+  move(fromId: TreeId, toId: TreeId, placement: MovePlacement): TreeIndex {
     if (fromId === toId || toId === 1) {
       return;
     }
 
-    var obj = this.remove(fromId);
-    var index = null;
+    const obj = this.remove(fromId);
+    let index: TreeIndex;
 
     if (placement === "before") {
       index = this.insertBefore(obj, toId);
@@ -271,16 +292,16 @@ export default class Tree {
     return index;
   }
 
-  getParent(id) {
-    var indexes = this.indexes;
+  getParent(id: string) {
+    const indexes = this.indexes;
     if (Object.prototype.hasOwnProperty.call(indexes, id)) {
       return this.getIndex(indexes[id].parent);
     }
   }
 
   getNodeByTop(top) {
-    var indexes = this.indexes;
-    for(var id in indexes) {
+    const indexes = this.indexes;
+    for(const id in indexes) {
       if (Object.prototype.hasOwnProperty.call(indexes, id)) {
         if(indexes[id].top === top) {
           return indexes[id];
