@@ -1,6 +1,7 @@
-import Rails from "@rails/ujs";
+import { start as startRails } from "@rails/ujs";
 import { Application } from "@hotwired/stimulus";
-require("react_ujs");
+import "react_ujs";
+import { FC } from "react";
 
 import * as Components from "./components";
 
@@ -11,14 +12,14 @@ import PageOptionsController from "./controllers/PageOptionsController";
 
 import RichText from "./features/RichText";
 
-export function registerComponent(name, component) {
+export function registerComponent(name: string, component: FC) {
   window[name] = component;
 }
 
 export default function startPages () {
-  Rails.start();
-  for (var name in Components) {
-    registerComponent(name, Components[name]);
+  startRails();
+  for (const name in Components) {
+    registerComponent(name, Components[name] as FC);
   }
   RichText.start();
 
@@ -33,6 +34,6 @@ export * from "./components";
 export * from "./hooks";
 export * from "./stores";
 
-export * from "./lib/request.js";
+export * from "./lib/request";
 export { default as copyToClipboard,
          copySupported } from "./lib/copyToClipboard";

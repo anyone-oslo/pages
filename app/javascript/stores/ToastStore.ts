@@ -1,6 +1,18 @@
 import { createStore } from "redux";
 
-export default createStore((state = [], action) => {
+interface Toast {
+  type: string,
+  message: string
+}
+
+type ToastState = Toast[];
+
+interface ToastAction {
+  type: string,
+  message?: string
+}
+
+export default createStore((state: ToastState = [], action: ToastAction) => {
   switch(action.type) {
   case "ERROR":
     return [...state, { message: action.message, type: "error" }];
