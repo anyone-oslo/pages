@@ -1,9 +1,49 @@
 import { useEffect, useReducer, useState } from "react";
 
-function applyAspect(state, aspect) {
-  let crop = cropSize(state);
-  let image = state.image;
-  let imageAspect = image.real_width / image.real_height;
+interface CropImage {
+  crop_start_x: number | null,
+  crop_start_y: number | null,
+  crop_width: number | null,
+  crop_height: number | null,
+  crop_gravity_x: number,
+  crop_gravity_y: number,
+  real_width: number,
+  real_height: number,
+  uncropped_url: string
+}
+
+interface CropParams {
+  crop_start_x: number,
+  crop_start_y: number,
+  crop_width: number,
+  crop_height: number,
+  crop_gravity_x: number,
+  crop_gravity_y: number,
+}
+
+interface CropState extends CropParams {
+  aspect: number | null,
+  cropping: boolean,
+  image: CropImage
+}
+
+interface CropSize {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  aspect?: number
+}
+
+interface CropAction {
+  type: string,
+  payload?: CropSize
+}
+
+function applyAspect(state: CropState, aspect: number | null) {
+  const crop = cropSize(state);
+  const image = state.image;
+  const imageAspect = image.real_width / image.real_height;
 
   // Maximize and center crop area
   if (aspect) {
@@ -25,7 +65,7 @@ function applyAspect(state, aspect) {
   return(applyCrop(state, crop));
 }
 
-function applyCrop(state, crop) {
+function applyCrop(state: CropState, crop: CropSize) {
   const { image } = state;
 
   // Don't crop if dimensions are below the threshold
@@ -44,7 +84,7 @@ function applyCrop(state, crop) {
            crop_height:  image.real_height * (crop.height / 100) });
 }
 
-function cropReducer(state, action) {
+function cropReducer(state: CropState, action: CropAction): CropState {
   const { crop_start_x,
           crop_start_y,
           crop_width,
@@ -86,7 +126,7 @@ function cropReducer(state, action) {
   }
 }
 
-function croppedImageCanvas(img, crop) {
+function croppedImageCanvas(img: HTMLImageElement, crop: CropSize) {
   const canvas = document.createElement("canvas");
   canvas.width = (img.naturalWidth * (crop.width / 100));
   canvas.height = (img.naturalHeight * (crop.height / 100));
@@ -105,9 +145,9 @@ function croppedImageCanvas(img, crop) {
   return [canvas, ctx];
 }
 
-function imageDataUrl(canvas, ctx) {
-  let pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-  for (var i = 0; i < (pixels.length / 4); i++) {
+function imageDataUrl(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): string {
+  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  for (let i = 0; i < (pixels.length / 4); i++) {
     if (pixels[(i * 4) + 3] !== 255) {
       return canvas.toDataURL("image/png");
     }
@@ -115,17 +155,19 @@ function imageDataUrl(canvas, ctx) {
   return canvas.toDataURL("image/jpeg");
 }
 
-export function cropParams(state) {
-  const maybe = (func) => (val) => (val === null) ? val : func(val);
+export function cropParams(state: CropState): CropParams {
+  const maybe = (func: (number) => number) => (val: number | null) => (val === null) ? val : func(val);
   const maybeRound = maybe(Math.round);
   const maybeCeil = maybe(Math.ceil);
 
-  let crop = { crop_start_x:   maybeRound(state.crop_start_x),
-               crop_start_y:   maybeRound(state.crop_start_y),
-               crop_width:     maybeCeil(state.crop_width),
-               crop_height:    maybeCeil(state.crop_height),
-               crop_gravity_x: maybeRound(state.crop_gravity_x),
-               crop_gravity_y: maybeRound(state.crop_gravity_y) };
+  const crop: CropParams = {
+    crop_start_x:   maybeRound(state.crop_start_x),
+    crop_start_y:   maybeRound(state.crop_start_y),
+    crop_width:     maybeCeil(state.crop_width),
+    crop_height:    maybeCeil(state.crop_height),
+    crop_gravity_x: maybeRound(state.crop_gravity_x),
+    crop_gravity_y: maybeRound(state.crop_gravity_y)
+  };
 
   if (crop.crop_start_x + crop.crop_width > state.image.real_width) {
     crop.crop_width = state.image.real_width - crop.crop_start_x;
@@ -138,7 +180,7 @@ export function cropParams(state) {
   return(crop);
 }
 
-export function cropSize(state) {
+export function cropSize(state: CropState): CropSize {
   const { image,
           aspect,
           crop_start_x,
@@ -149,8 +191,8 @@ export function cropSize(state) {
   const x = (crop_start_x / image.real_width) * 100;
   const y = (crop_start_y / image.real_height) * 100;
 
-  var width = (crop_width / image.real_width) * 100;
-  var height = (crop_height / image.real_height) * 100;
+  let width = (crop_width / image.real_width) * 100;
+  let height = (crop_height / image.real_height) * 100;
 
   if (aspect && width) {
     height = (width / aspect) * imageAspect;
@@ -165,24 +207,25 @@ export function cropSize(state) {
   }
 }
 
-export default function useCrop(image) {
-  const [state, dispatch] = useReducer(
-    cropReducer,
-    { aspect:         null,
-      cropping:       false,
-      crop_start_x:   image.crop_start_x || 0,
-      crop_start_y:   image.crop_start_y || 0,
-      crop_width:     image.crop_width || image.real_width,
-      crop_height:    image.crop_height || image.real_height,
-      crop_gravity_x: image.crop_gravity_x,
-      crop_gravity_y: image.crop_gravity_y,
-      image:          image }
-  );
+export default function useCrop(image: CropImage) {
+  const initialState: CropState = {
+    aspect:         null,
+    cropping:       false,
+    crop_start_x:   image.crop_start_x || 0,
+    crop_start_y:   image.crop_start_y || 0,
+    crop_width:     image.crop_width || image.real_width,
+    crop_height:    image.crop_height || image.real_height,
+    crop_gravity_x: image.crop_gravity_x,
+    crop_gravity_y: image.crop_gravity_y,
+    image:          image
+  };
 
-  const [croppedImage, setCroppedImage] = useState(null);
+  const [state, dispatch] = useReducer(cropReducer, initialState);
+
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
   async function updateCroppedImage() {
-    const img = new Image();
+    const img: HTMLImageElement = new Image();
     img.src = state.image.uncropped_url;
     await img.decode();
     const [canvas, ctx] = croppedImageCanvas(img, cropSize(state));
@@ -191,7 +234,7 @@ export default function useCrop(image) {
 
   useEffect(() => {
     if (!state.cropping) {
-      updateCroppedImage();
+      void updateCroppedImage();
     }
   }, [state.cropping]);
 
