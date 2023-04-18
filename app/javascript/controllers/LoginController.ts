@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class LoginController extends Controller {
+  readonly tabTargets: HTMLDivElement[];
+
   static get targets() {
     return ["tab"];
   }
@@ -12,12 +14,14 @@ export default class LoginController extends Controller {
   }
 
 
-  changeTab(evt) {
+  changeTab(evt: Event) {
     evt.preventDefault();
-    this.showTab(evt.target.dataset.tab);
+    if ("dataset" in evt.target && "tab" in evt.target.dataset) {
+      this.showTab(evt.target.dataset.tab);
+    }
   }
 
-  showTab(tab) {
+  showTab(tab: string) {
     this.tabTargets.forEach((t) => {
       if (t.dataset.tab == tab) {
         t.classList.remove("hidden");

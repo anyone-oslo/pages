@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class EditPageController extends Controller {
+export default class EditPageController extends Controller<HTMLFormElement> {
+  readonly formTarget: HTMLFormElement;
+
   static get targets() {
     return ["form"];
   }

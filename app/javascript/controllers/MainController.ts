@@ -1,18 +1,21 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class MainController extends Controller {
+  readonly linkTargets: HTMLLinkElement[];
+  readonly tabTargets: HTMLDivElement[];
+
   static get targets() {
     return ["tab", "link"];
   }
 
   connect() {
-    let tabs = this.tabNames();
+    const tabs = this.tabNames();
     if (tabs.length > 0) {
-      let initTab = null;
+      let initTab: string = null;
       const tabExpression = /#(.*)$/;
 
       if (document.location.toString().match(tabExpression)) {
-        let id = document.location.toString().match(tabExpression)[1];
+        const id = document.location.toString().match(tabExpression)[1];
         if (tabs.indexOf(id) !== -1) {
           initTab = id;
         }
@@ -21,27 +24,29 @@ export default class MainController extends Controller {
       this.showTab(initTab || tabs[0]);
     }
 
-    window.addEventListener("popstate", this.stateHandler.bind(this));
+    window.addEventListener("popstate", this.stateHandler);
   }
 
   disconnect() {
-    window.removeEventListener("popstate", this.stateHandler.bind(this));
+    window.removeEventListener("popstate", this.stateHandler);
   }
 
-  stateHandler(evt) {
-    if (evt.state && evt.state.tabId) {
+  stateHandler = (evt: Event) => {
+    if ("state" in evt && "tabId" in evt.state) {
       this.showTab(evt.state.tabId);
+    }
+  };
+
+  changeTab(evt: Event) {
+    evt.preventDefault();
+    if ("dataset" in evt.target && "tab" in evt.target.dataset) {
+      const tab = evt.target.dataset.tab as string;
+      this.showTab(tab);
+      history.pushState({ tabId: tab }, "", `${window.location.pathname}#${tab}`);
     }
   }
 
-  changeTab(evt) {
-    evt.preventDefault();
-    const tab = evt.target.dataset.tab;
-    this.showTab(tab);
-    history.pushState({ tabId: tab }, "", `${window.location.pathname}#${tab}`);
-  }
-
-  showTab(tab) {
+  showTab(tab: string | null) {
     this.linkTargets.forEach((l) => {
       if (l.dataset.tab == tab) {
         l.classList.add("current");
@@ -59,7 +64,7 @@ export default class MainController extends Controller {
     });
   }
 
-  tabNames () {
+  tabNames (): string[] {
     return this.linkTargets.map((l) => l.dataset.tab);
   }
 }
