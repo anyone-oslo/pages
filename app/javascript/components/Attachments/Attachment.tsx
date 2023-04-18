@@ -1,20 +1,39 @@
 import React from "react";
-import PropTypes from "prop-types";
 import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
 import ModalStore from "../../stores/ModalStore";
 import ToastStore from "../../stores/ToastStore";
+import { AttachmentResource, Locale } from "../../types";
 
-import { useDraggable } from "../drag";
+import { useDraggable, Draggable } from "../drag";
 
-export default function Attachment(props) {
+interface Record {
+  id: number | null,
+  attachment: AttachmentResource,
+  uploading: boolean
+}
+
+interface AttachmentProps {
+  attributeName: string,
+  placeholder: boolean,
+  draggable: { record: Record },
+  locale: string,
+  locales: { [index: string]: Locale },
+  deleteRecord: () => void,
+  showEmbed: boolean,
+  position: number,
+  onUpdate: (localizations: Record<string, Record<string, string>>) => void,
+  startDrag: (evt: Event, draggable: Draggable) => void
+}
+
+export default function Attachment(props: AttachmentProps) {
   const { attributeName, draggable, locales, locale } = props;
   const { record } = draggable;
   const { attachment, uploading } = record;
 
   const listeners = useDraggable(draggable, props.startDrag);
 
-  const copyEmbed = (evt) => {
+  const copyEmbed = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
     ToastStore.dispatch({
@@ -22,7 +41,7 @@ export default function Attachment(props) {
     });
   };
 
-  const deleteRecord = (evt) => {
+  const deleteRecord = (evt: Event) => {
     evt.preventDefault();
     if (props.deleteRecord) {
       props.deleteRecord();
@@ -43,7 +62,7 @@ export default function Attachment(props) {
     return null;
   };
 
-  const editAttachment = (evt) => {
+  const editAttachment = (evt: Event) => {
     evt.preventDefault();
     ModalStore.dispatch({
       type: "OPEN",
@@ -64,13 +83,16 @@ export default function Attachment(props) {
 
   const icon = uploading ? "cloud-arrow-up" : "paperclip";
 
-  const localeDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
+  let localeDir = "ltr";
+  if (locale in locales && locales[locale].dir) {
+    localeDir = locales[locale].dir;
+  }
 
   return (
     <div className={classes.join(" ")}
          {...listeners}>
       <input name={`${attributeName}[id]`}
-             type="hidden" value={record.id || ""} />
+             type="hidden" value={`${record.id}`} />
       <input name={`${attributeName}[attachment_id]`}
              type="hidden" value={(attachment && attachment.id) || ""} />
       <input name={`${attributeName}[position]`}
@@ -108,17 +130,3 @@ export default function Attachment(props) {
     </div>
   );
 }
-
-Attachment.propTypes = {
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  draggable: PropTypes.object,
-  deleteRecord: PropTypes.func,
-  startDrag: PropTypes.func,
-  showEmbed: PropTypes.bool,
-  onUpdate: PropTypes.func,
-  attributeName: PropTypes.string,
-  placeholder: PropTypes.bool,
-  position: PropTypes.number,
-  ref: PropTypes.object
-};

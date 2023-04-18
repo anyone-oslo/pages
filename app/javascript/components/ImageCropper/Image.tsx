@@ -1,11 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ReactCrop from "react-image-crop";
 
-import { cropSize } from "./useCrop";
+import { cropSize, CropSize, CropState, Position, Size } from "./useCrop";
 import FocalPoint from "./FocalPoint";
 
-export default function Image(props) {
+interface ImageProps {
+  containerSize: Size,
+  croppedImage: string,
+  cropState: CropState,
+  focalPoint: Position,
+  setCrop: (crop: CropSize) => void,
+  setFocal: (focal: Position) => void
+}
+
+export default function Image(props: ImageProps) {
   const imageSize = () => {
     const { image, cropping, crop_width, crop_height } = props.cropState;
     if (cropping) {
@@ -19,8 +27,8 @@ export default function Image(props) {
   const maxHeight = props.containerSize.height;
   const aspect = imageSize().width / imageSize().height;
 
-  var width = maxWidth;
-  var height = maxWidth / aspect;
+  let width = maxWidth;
+  let height = maxWidth / aspect;
 
   if (height > maxHeight) {
     height = maxHeight;
@@ -54,12 +62,3 @@ export default function Image(props) {
   }
 
 }
-
-Image.propTypes = {
-  containerSize: PropTypes.object,
-  croppedImage: PropTypes.string,
-  cropState: PropTypes.object,
-  focalPoint: PropTypes.object,
-  setCrop: PropTypes.func,
-  setFocal: PropTypes.func
-};

@@ -1,7 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function Toolbar(props) {
+import { ImageResource } from "../../types";
+import { CropState } from "./useCrop";
+
+type Ratio = number | null;
+
+interface ToolbarProps {
+  cropState: CropState,
+  image: ImageResource,
+  setAspect: (Ratio) => void,
+  toggleCrop: (evt: Event) => void,
+  toggleFocal: (evt: Event) => void
+}
+
+export default function Toolbar(props: ToolbarProps) {
   const { cropping } = props.cropState;
 
   const aspectRatios = [
@@ -10,7 +22,7 @@ export default function Toolbar(props) {
     ["16:9", 16/9]
   ];
 
-  const updateAspect = (ratio) => (evt) => {
+  const updateAspect = (ratio: Ratio) => (evt: Event) => {
     evt.preventDefault();
     props.setAspect(ratio);
   };
@@ -52,7 +64,7 @@ export default function Toolbar(props) {
             Lock aspect ratio:
           </div>
           {aspectRatios.map(ratio => (
-            <button key={"ratio-" + ratio[1]}
+            <button key={ratio[0]}
                     className={(ratio[1] == props.cropState.aspect) ? "active" : ""}
                     onClick={updateAspect(ratio[1])}>
               {ratio[0]}
@@ -63,11 +75,3 @@ export default function Toolbar(props) {
     </div>
   );
 }
-
-Toolbar.propTypes = {
-  cropState: PropTypes.object,
-  image: PropTypes.object,
-  setAspect: PropTypes.func,
-  toggleCrop: PropTypes.func,
-  toggleFocal: PropTypes.func
-};

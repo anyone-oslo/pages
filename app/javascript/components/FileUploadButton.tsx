@@ -1,13 +1,19 @@
-import React, { useRef } from "react";
-import PropTypes from "prop-types";
+import React, { ChangeEvent, useRef } from "react";
 
-export default function FileUploadButton(props) {
-  const inputRef = useRef();
+interface FileUploadButtonProps {
+  callback: (files: File[]) => void,
+  type: string,
+  multiple: boolean,
+  multiline: boolean
+}
 
-  const handleChange = (evt) => {
-    let fileList = evt.target.files;
-    let files = [];
-    for (var i = 0; i < fileList.length; i++) {
+export default function FileUploadButton(props: FileUploadButtonProps) {
+  const inputRef = useRef<HTMLInputElement>();
+
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const fileList = evt.target.files;
+    const files: File[] = [];
+    for (let i = 0; i < fileList.length; i++) {
       files.push(fileList[i]);
     }
     if (files.length > 0) {
@@ -15,7 +21,7 @@ export default function FileUploadButton(props) {
     }
   };
 
-  const triggerDialog = (evt) => {
+  const triggerDialog = (evt: Event) => {
     evt.preventDefault();
     inputRef.current.click();
   };
@@ -38,10 +44,3 @@ export default function FileUploadButton(props) {
     </div>
   );
 }
-
-FileUploadButton.propTypes = {
-  callback: PropTypes.func,
-  type: PropTypes.string,
-  multiple: PropTypes.bool,
-  multiline: PropTypes.bool
-};

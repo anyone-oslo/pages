@@ -1,22 +1,25 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { ChangeEvent, useState } from "react";
 
-export default function AddTagForm(props) {
+interface AddTagFormProps {
+  addTag: (string) => void
+}
+
+export default function AddTagForm(props: AddTagFormProps) {
   const [tag, setTag] = useState("");
 
-  const submit = (evt) => {
+  const submit = (evt: Event) => {
     evt.preventDefault();
     props.addTag(tag);
     setTag("");
   };
 
-  const handleKeyDown = (evt) => {
+  const handleKeyDown = (evt: Event) => {
     if (evt.which === 13) {
       submit(evt);
     }
   };
 
-  const handleChange = (evt) => {
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setTag(evt.target.value);
   };
 
@@ -36,7 +39,3 @@ export default function AddTagForm(props) {
     </div>
   );
 }
-
-AddTagForm.propTypes = {
-  addTag: PropTypes.func
-};

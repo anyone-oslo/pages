@@ -1,12 +1,25 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
 import ToastStore from "../stores/ToastStore";
+import { ImageResource, Locale } from "../types";
 import { post } from "../lib/request";
 
-function getFiles(dt) {
-  var files = [];
+type ImageResponse = ImageResource | { status: "error", error: string }
+
+interface ImageUploaderProps {
+  locale: string,
+  locales: { [index: string]: Locale },
+  image: ImageResource,
+  src: string,
+  width: number,
+  caption: boolean,
+  attr: string,
+  alternative: string
+}
+
+function getFiles(dt: DataTransfer): File[] {
+  const files: File[] = [];
   if (dt.items) {
     for (let i = 0; i < dt.items.length; i++) {
       if (dt.items[i].kind == "file") {
@@ -21,13 +34,13 @@ function getFiles(dt) {
   return files;
 }
 
-export default function ImageUploader(props) {
+export default function ImageUploader(props: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [dragover, setDragover] = useState(false);
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
 
-  const handleDragOver = (evt) => {
+  const handleDragOver = (evt: Event) => {
     evt.preventDefault();
     setDragover(true);
   };
@@ -36,39 +49,44 @@ export default function ImageUploader(props) {
     setDragover(false);
   };
 
-  const handleDragEnd = (evt) => {
-    if (evt.dataTransfer.items) {
-      for (var i = 0; i < evt.dataTransfer.items.length; i++) {
-        evt.dataTransfer.items.remove(i);
+  const handleDragEnd = (evt: Event) => {
+    if ("dataTransfer" in evt) {
+      if ("items" in evt.dataTransfer && "remove" in evt.dataTransfer.items) {
+        for (let i = 0; i < evt.dataTransfer.items.length; i++) {
+          evt.dataTransfer.items.remove(i);
+        }
+      } else if ("clearData" in evt.dataTransfer) {
+        evt.dataTransfer.clearData();
       }
-    } else {
-      evt.dataTransfer.clearData();
     }
     setDragover(false);
   };
 
-  const handleDrop = (evt) => {
-    let files = getFiles(evt.dataTransfer);
+  const handleDrop = (evt: Event) => {
+    let files: File[] = [];
+    if ("dataTransfer" in evt) {
+      files = getFiles(evt.dataTransfer);
+    }
     evt.preventDefault();
     if (files.length > 0) {
       uploadImage(files[0]);
     }
   };
 
-  const handleRemove = (evt) => {
+  const handleRemove = (evt: Event) => {
     evt.preventDefault();
     setImage(null);
     setSrc(null);
   };
 
-  const receiveFiles = (files) => {
+  const receiveFiles = (files: File[]) => {
     if (files.length > 0) {
       uploadImage(files[0]);
     }
   };
 
-  const uploadImage = (file) => {
-    let validTypes = ["image/gif",
+  const uploadImage = (file: File) => {
+    const validTypes = ["image/gif",
                       "image/jpeg",
                       "image/pjpeg",
                       "image/png",
@@ -80,10 +98,10 @@ export default function ImageUploader(props) {
       return;
     }
 
-    let locale = props.locale;
-    let locales = props.locales ? Object.keys(props.locales) : [locale];
+    const locale = props.locale;
+    const locales = props.locales ? Object.keys(props.locales) : [locale];
 
-    let data = new FormData();
+    const data = new FormData();
 
     setImage(null);
     setSrc(null);
@@ -95,22 +113,22 @@ export default function ImageUploader(props) {
       data.append(`image[alternative][${l}]`, (props.alternative || ""));
     });
 
-    post("/admin/images.json", data)
-      .then(response => {
+    void post("/admin/images.json", data)
+      .then((response: ImageResponse) => {
         setUploading(false);
-        if (response.status === "error") {
+        if ("status" in response && response.status === "error") {
           ToastStore.dispatch({
             type: "ERROR",
-            message: "Error uploading image: " + response.error
+            message: `Error uploading image: ${response.error}`
           });
-        } else {
+        } else if ("thumbnail_url" in response) {
           setSrc(response.thumbnail_url);
           setImage(response);
         }
       });
   };
 
-  let classes = ["image-uploader"];
+  const classes = ["image-uploader"];
   if (uploading) {
     classes.push("uploading");
   } else if (dragover) {
@@ -158,14 +176,3 @@ export default function ImageUploader(props) {
     </div>
   );
 }
-
-ImageUploader.propTypes = {
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  image: PropTypes.object,
-  src: PropTypes.string,
-  width: PropTypes.number,
-  caption: PropTypes.bool,
-  attr: PropTypes.string,
-  alternative: PropTypes.string
-};

@@ -1,7 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { RefObject } from "react";
 
-export default function DragElement(props) {
+import { ImageResource } from "../../types";
+import { DragState } from "../drag";
+
+interface DragElementProps {
+  container: RefObject<HTMLDivElement>,
+  draggable: string | { record: { image: ImageResource, src?: string } },
+  dragState: DragState
+}
+
+export default function DragElement(props: DragElementProps) {
   const { draggable, dragState, container } = props;
 
   if (draggable === "Files") {
@@ -15,16 +23,10 @@ export default function DragElement(props) {
     };
     return (
       <div className="drag-image" style={translateStyle}>
-        {draggable.record.image && (
+        {"record" in draggable && draggable.record.image && (
           <img src={draggable.record.src || draggable.record.image.thumbnail_url} />
         )}
       </div>
     );
   }
 }
-
-DragElement.propTypes = {
-  draggable: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  dragState: PropTypes.object,
-  container: PropTypes.object
-};

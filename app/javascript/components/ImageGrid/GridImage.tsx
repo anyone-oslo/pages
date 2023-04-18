@@ -1,13 +1,35 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
 import ToastStore from "../../stores/ToastStore";
+import { ImageResource, Locale } from "../../types";
 import Placeholder from "./Placeholder";
 
 import { useDraggable } from "../drag";
 
-export default function GridImage(props) {
+interface Record {
+  id: number | null,
+  image: ImageResource,
+  src: string | null,
+  file: File | null
+}
+
+interface GridImageProps {
+  draggable: { record: Record }
+  attributeName: string,
+  locale: string,
+  locales: { [index: string]: Locale },
+  placeholder: boolean,
+  enablePrimary: boolean,
+  showEmbed: boolean,
+  primary: boolean,
+  position: number,
+  deleteImage: () => void,
+  startDrag: (evt: Event, draggable: Draggable) => void,
+  onUpdate: (newImage: ImageResource, src: string) => void
+}
+
+export default function GridImage(props: GridImageProps) {
   const { attributeName, draggable } = props;
   const record = draggable.record;
   const image = record.image;
@@ -24,7 +46,7 @@ export default function GridImage(props) {
     }
   }, []);
 
-  const copyEmbed = (evt) => {
+  const copyEmbed = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     ToastStore.dispatch({
@@ -32,14 +54,14 @@ export default function GridImage(props) {
     });
   };
 
-  const deleteImage = (evt) => {
+  const deleteImage = (evt: Event) => {
     evt.preventDefault();
     if (props.deleteImage) {
       props.deleteImage();
     }
   };
 
-  let classes = ["grid-image"];
+  const classes = ["grid-image"];
   if (props.placeholder) {
     classes.push("placeholder");
   }
@@ -87,17 +109,3 @@ export default function GridImage(props) {
     </div>
   );
 }
-GridImage.propTypes = {
-  draggable: PropTypes.object,
-  deleteImage: PropTypes.func,
-  startDrag: PropTypes.func,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  onUpdate: PropTypes.func,
-  attributeName: PropTypes.string,
-  placeholder: PropTypes.bool,
-  enablePrimary: PropTypes.bool,
-  showEmbed: PropTypes.bool,
-  primary: PropTypes.bool,
-  position: PropTypes.number,
-};

@@ -1,13 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 
 import Image from "./ImageCropper/Image";
 import Toolbar from "./ImageCropper/Toolbar";
 
+import { CropAction, CropSize, CropState,
+         Position } from "./ImageCropper/useCrop";
+
 export { default as useCrop,
          cropParams } from "./ImageCropper/useCrop";
 
-function focalPoint(state) {
+interface ImageCropperProps {
+  croppedImage: string,
+  cropState: CropState,
+  dispatch: (action: CropAction) => void
+}
+
+function focalPoint(state: CropState): Position {
   if (state.crop_gravity_x === null || state.crop_gravity_y === null) {
     return null;
   } else {
@@ -18,12 +26,12 @@ function focalPoint(state) {
   }
 }
 
-export default function ImageCropper(props) {
-  const containerRef = useRef();
-  const [containerSize, setContainerSize] = useState(null);
+export default function ImageCropper(props: ImageCropperProps) {
+  const containerRef = useRef<HTMLDivElement>();
+  const [containerSize, setContainerSize] = useState();
 
   const handleResize = () => {
-    let elem = containerRef.current;
+    const elem = containerRef.current;
     if (elem) {
       setContainerSize({ width: elem.offsetWidth - 2,
                          height: elem.offsetHeight - 2 });
@@ -39,15 +47,15 @@ export default function ImageCropper(props) {
 
   useEffect(handleResize, []);
 
-  const setAspect = (aspect) => {
+  const setAspect = (aspect: number) => {
     props.dispatch({ type: "setAspect", payload: aspect });
   };
 
-  const setCrop = (crop) => {
+  const setCrop = (crop: CropSize) => {
     props.dispatch({ type: "setCrop", payload: crop });
   };
 
-  const setFocal = (focal) => {
+  const setFocal = (focal: Position) => {
     props.dispatch({ type: "setFocal", payload: focal });
   };
 
@@ -82,9 +90,3 @@ export default function ImageCropper(props) {
     </div>
   );
 }
-
-ImageCropper.propTypes = {
-  croppedImage: PropTypes.string,
-  cropState: PropTypes.object,
-  dispatch: PropTypes.func
-};

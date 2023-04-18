@@ -1,7 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function Placeholder(props) {
+interface PlaceholderProps {
+  src: string
+}
+
+export default function Placeholder(props: PlaceholderProps) {
   if (props.src) {
     return (
       <div className="temp-image">
@@ -17,7 +20,3 @@ export default function Placeholder(props) {
     );
   }
 }
-
-Placeholder.propTypes = {
-  src: PropTypes.string
-};

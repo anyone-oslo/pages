@@ -1,13 +1,25 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { ChangeEvent } from "react";
 import ModalStore from "../../stores/ModalStore";
 import ToastStore from "../../stores/ToastStore";
+import { Locale, ImageResource } from "../../types";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 
-export default function Form(props) {
+interface FormProps {
+  alternative: Record<string, string>,
+  caption: Record<string, string>,
+  image: ImageResource,
+  locale: string,
+  locales: Record<string, Locale>,
+  setLocale: (locale: string) => void,
+  save: (evt: Event) => void,
+  showCaption: boolean,
+  updateLocalization: (name: "alternative" | "caption", value: string) => void
+}
+
+export default function Form(props: FormProps) {
   const { alternative, caption, image, locale, locales } = props;
 
-  const copyEmbedCode = (evt) => {
+  const copyEmbedCode = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     ToastStore.dispatch({
@@ -15,7 +27,7 @@ export default function Form(props) {
     });
   };
 
-  const handleChangeLocale = (evt) => {
+  const handleChangeLocale = (evt: ChangeEvent<HTMLSelectElement>) => {
     props.setLocale(evt.target.value);
   };
 
@@ -90,15 +102,3 @@ export default function Form(props) {
     </form>
   );
 }
-
-Form.propTypes = {
-  alternative: PropTypes.object,
-  caption: PropTypes.object,
-  image: PropTypes.object,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  setLocale: PropTypes.func,
-  save: PropTypes.func,
-  showCaption: PropTypes.bool,
-  updateLocalization: PropTypes.func
-};

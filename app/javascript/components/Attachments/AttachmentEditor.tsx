@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { ChangeEvent, useState } from "react";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 import ModalStore from "../../stores/ModalStore";
 import ToastStore from "../../stores/ToastStore";
+import { AttachmentResource, Locale } from "../../types";
 import { putJson } from "../../lib/request";
 
-export default function AttachmentEditor(props) {
+interface AttachmentEditorProps {
+  attachment: AttachmentResource,
+  locale: string,
+  locales: { [index: string]: Locale },
+  onUpdate: (localizations: Record<string, Record<string, string>>) => void
+}
+
+export default function AttachmentEditor(props: AttachmentEditorProps) {
   const { attachment, locales } = props;
 
   const [locale, setLocale] = useState(props.locale);
@@ -14,7 +21,7 @@ export default function AttachmentEditor(props) {
     description: attachment.description || {},
   });
 
-  const updateLocalization = (name) => (evt) => {
+  const updateLocalization = (name: "name" | "description") => (evt: ChangeEvent<HTMLInputElement>) => {
     setLocalizations({
       ...localizations,
       [name]: { ...localizations[name],
@@ -22,7 +29,7 @@ export default function AttachmentEditor(props) {
     });
   };
 
-  const copyEmbedCode = (evt) => {
+  const copyEmbedCode = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
     ToastStore.dispatch({
@@ -30,14 +37,13 @@ export default function AttachmentEditor(props) {
     });
   };
 
-  const save = (evt) => {
+  const save = (evt: Event) => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    let data = { ...localizations };
+    const data = { ...localizations };
 
-    putJson(`/admin/attachments/${attachment.id}`,
-            { attachment: data });
+    void putJson(`/admin/attachments/${attachment.id}`, { attachment: data });
 
     if (props.onUpdate) {
       props.onUpdate(data);
@@ -114,10 +120,3 @@ export default function AttachmentEditor(props) {
     </div>
   );
 }
-
-AttachmentEditor.propTypes = {
-  attachment: PropTypes.object,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  onUpdate: PropTypes.func
-};

@@ -1,15 +1,15 @@
 import { useEffect, useReducer, useState } from "react";
 
-interface CropImage {
-  crop_start_x: number | null,
-  crop_start_y: number | null,
-  crop_width: number | null,
-  crop_height: number | null,
-  crop_gravity_x: number,
-  crop_gravity_y: number,
-  real_width: number,
-  real_height: number,
-  uncropped_url: string
+import { ImageResource } from "../../types";
+
+export interface Position {
+  x: number,
+  y: number,
+}
+
+export interface Size {
+  width: number,
+  height: number
 }
 
 interface CropParams {
@@ -21,13 +21,13 @@ interface CropParams {
   crop_gravity_y: number,
 }
 
-interface CropState extends CropParams {
+export interface CropState extends CropParams {
   aspect: number | null,
   cropping: boolean,
-  image: CropImage
+  image: ImageResource
 }
 
-interface CropSize {
+export interface CropSize {
   x: number,
   y: number,
   width: number,
@@ -35,9 +35,9 @@ interface CropSize {
   aspect?: number
 }
 
-interface CropAction {
+export interface CropAction {
   type: string,
-  payload?: CropSize
+  payload?: CropSize | Position
 }
 
 function applyAspect(state: CropState, aspect: number | null) {
@@ -207,7 +207,7 @@ export function cropSize(state: CropState): CropSize {
   }
 }
 
-export default function useCrop(image: CropImage) {
+export default function useCrop(image: ImageResource) {
   const initialState: CropState = {
     aspect:         null,
     cropping:       false,

@@ -1,9 +1,20 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import ImageEditor from "./ImageEditor";
 import ModalStore from "../stores/ModalStore";
 
-export default function EditableImage(props) {
+import { Locale, ImageResource } from "../types";
+
+interface EditableImageProps {
+  image: ImageResource,
+  src: string,
+  caption: boolean,
+  locale: string,
+  locales: Record<string, Locale>,
+  width: number,
+  onUpdate?: (newImage: ImageResource, src: string) => void
+}
+
+export default function EditableImage(props: EditableImageProps) {
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
 
@@ -13,8 +24,8 @@ export default function EditableImage(props) {
     return Math.round((height / width) * props.width);
   };
 
-  const updateImage = (updatedImage, src) => {
-    let newImage = { ...image, ...updatedImage };
+  const updateImage = (updatedImage: ImageResource, src: string) => {
+    const newImage = { ...image, ...updatedImage };
     setSrc(src);
     setImage(newImage);
     if (props.onUpdate) {
@@ -22,7 +33,7 @@ export default function EditableImage(props) {
     }
   };
 
-  const handleClick = (evt) => {
+  const handleClick = (evt: Event) => {
     evt.preventDefault();
     ModalStore.dispatch({
       type: "OPEN",
@@ -49,13 +60,3 @@ export default function EditableImage(props) {
     </div>
   );
 }
-
-EditableImage.propTypes = {
-  image: PropTypes.object,
-  src: PropTypes.string,
-  caption: PropTypes.bool,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  width: PropTypes.number,
-  onUpdate: PropTypes.func
-};

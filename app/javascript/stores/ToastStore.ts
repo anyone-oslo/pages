@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 
-interface Toast {
+export interface Toast {
   type: string,
   message: string
 }

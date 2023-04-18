@@ -1,12 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function Tag(props) {
+interface TagProps {
+  enabled: boolean,
+  tag: string,
+  toggleEnabled: (string) => void
+}
+
+export default function Tag(props: TagProps): JSX.Element {
   const handleChange = () => {
     props.toggleEnabled(props.tag);
   };
 
-  let classes = ["tag"];
+  const classes = ["tag"];
   if (props.enabled) {
     classes.push("enabled");
   }
@@ -24,9 +29,3 @@ export default function Tag(props) {
     </span>
   );
 }
-
-Tag.propTypes = {
-  enabled: PropTypes.bool,
-  tag: PropTypes.string,
-  toggleEnabled: PropTypes.func
-};

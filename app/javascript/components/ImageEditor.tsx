@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import ModalStore from "../stores/ModalStore";
 import { putJson } from "../lib/request";
 
+import { Locale, ImageResource } from "../types";
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
 
-export default function ImageEditor(props) {
+interface ImageEditorProps {
+  image: ImageResource,
+  caption: boolean,
+  locale: string,
+  locales: Record<string, Locale>,
+  onUpdate?: (data: ImageResource, croppedImage: string | null) => void
+}
+
+export default function ImageEditor(props: ImageEditorProps) {
   const [cropState, dispatch, croppedImage] = useCrop(props.image);
   const [locale, setLocale] = useState(props.locale);
   const [localizations, setLocalizations] = useState({
@@ -14,19 +22,19 @@ export default function ImageEditor(props) {
     alternative: props.image.alternative || {},
   });
 
-  const updateLocalization = (name, value) => {
+  const updateLocalization = (name: "alternative" | "caption", value: string) => {
     setLocalizations({
       ...localizations,
       [name]: { ...localizations[name], [locale]: value }
     });
   };
 
-  const save = (evt) => {
+  const save = (evt: Event) => {
     evt.preventDefault();
     evt.stopPropagation();
 
     const data = { ...localizations, ...cropParams(cropState) };
-    putJson(`/admin/images/${props.image.id}`, { image: data });
+    void putJson(`/admin/images/${props.image.id}`, { image: data });
 
     if (props.onUpdate) {
       props.onUpdate(data, croppedImage);
@@ -52,11 +60,3 @@ export default function ImageEditor(props) {
     </div>
   );
 }
-
-ImageEditor.propTypes = {
-  image: PropTypes.object,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  caption: PropTypes.bool,
-  onUpdate: PropTypes.func
-};
