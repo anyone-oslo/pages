@@ -25,24 +25,50 @@
    SOFTWARE.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
+import React, { createRef, ChangeEvent, Component, RefObject } from "react";
+import Tree, { TreeId, TreeIndex } from "../../lib/Tree";
+import { Attributes, PageNode } from "./types";
 
-export default class PageTreeNode extends React.Component {
-  constructor(props) {
+interface NodeProps {
+  addChild: (index: TreeIndex) => void,
+  dir: string,
+  dragging: number,
+  index: TreeIndex<PageNode>,
+  locale: string,
+  onCollapse: (id: TreeId) => void,
+  onDragStart: (id: number, element: HTMLDivElement, evt: Event) => void,
+  paddingLeft: number,
+  tree: Tree<PageNode>,
+  updatePage: (index: TreeIndex, attributes: Attributes) => void
+}
+
+interface NodeState {
+  newName: string
+}
+
+interface ButtonOptions {
+  icon: string,
+  className: string,
+  onClick: (evt: Event) => void
+}
+
+export default class Node extends Component<NodeProps, NodeState> {
+  innerRef: RefObject<HTMLDivElement>;
+
+  constructor(props: NodeProps) {
     super(props);
     this.state = { newName: props.index.node.name };
-    this.innerRef = React.createRef();
+    this.innerRef = createRef<HTMLDivElement>();
   }
 
-  permitted(action) {
+  permitted(action: string): boolean {
     return this.node().permissions &&
            this.node().permissions.indexOf(action) != -1;
   }
 
   actions() {
-    let statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
-    let statusIcon = (this.node().status != 2) ? "check" : "ban";
+    const statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
+    const statusIcon = (this.node().status != 2) ? "check" : "ban";
 
     if (this.node().editing) {
       return null;
@@ -91,8 +117,8 @@ export default class PageTreeNode extends React.Component {
   }
 
   addButton() {
-    let node = this.node();
-    let handleClick = () => {
+    const node = this.node();
+    const handleClick = () => {
       if (this.props.addChild) {
         this.props.addChild(this.props.index);
       }
@@ -111,8 +137,8 @@ export default class PageTreeNode extends React.Component {
     }
   }
 
-  button(label, options) {
-    let icon = "fa-solid fa-" + options.icon + " icon";
+  button(label: string, options: ButtonOptions) {
+    const icon = "fa-solid fa-" + options.icon + " icon";
     return (
       <button type="button"
               className={options.className}
@@ -127,18 +153,18 @@ export default class PageTreeNode extends React.Component {
     const { index, tree, dragging, dir, locale } = this.props;
 
     if (index.children && index.children.length && !index.node.collapsed) {
-      var childrenStyles = {};
+      const childrenStyles = {};
       if (index.node.collapsed) {
         childrenStyles.display = "none";
       }
-      childrenStyles["paddingLeft"] = this.props.paddingLeft + "px";
+      childrenStyles["paddingLeft"] = `${this.props.paddingLeft}px`;
 
       return (
         <div className="children" style={childrenStyles}>
           {index.children.map((child) => {
-            var childIndex = tree.getIndex(child);
+            const childIndex = tree.getIndex(child);
             return (
-              <PageTreeNode
+              <Node
                 tree={tree}
                 index={childIndex}
                 key={childIndex.id}
@@ -160,24 +186,24 @@ export default class PageTreeNode extends React.Component {
   }
 
   collapseArrow() {
-    let index = this.props.index;
+    const index = this.props.index;
 
     // Don't collapse the root node
     if (!index.parent) {
       return null;
     }
 
-    let handleCollapse = (e) => {
+    const handleCollapse = (e: Event) => {
       e.stopPropagation();
-      let nodeId = this.props.index.id;
+      const nodeId = this.props.index.id;
       if (this.props.onCollapse) {
         this.props.onCollapse(nodeId);
       }
     };
 
     if (this.visibleChildren().length > 0) {
-      let collapsed = index.node.collapsed;
-      var classnames = null;
+      const collapsed = index.node.collapsed;
+      let classnames = "";
 
       if (collapsed) {
         classnames = "collapse fa-solid fa-caret-right";
@@ -199,7 +225,7 @@ export default class PageTreeNode extends React.Component {
     if (this.node().collapsed &&
         this.node().children &&
         this.node().children.length > 0) {
-      let pluralized = (this.node().children.length == 1) ? "item" : "items";
+      const pluralized = (this.node().children.length == 1) ? "item" : "items";
       return (
         <span className="collapsed-label">
           ({this.node().children.length} {pluralized})
@@ -220,11 +246,11 @@ export default class PageTreeNode extends React.Component {
     this.updatePage({editing: true});
   }
 
-  editUrl(page) {
+  editUrl(page: PageNode) {
     return(`/admin/${page.locale}/pages/${page.param}/edit`);
   }
 
-  node() {
+  node(): PageNode {
     return this.props.index.node;
   }
 
@@ -240,19 +266,19 @@ export default class PageTreeNode extends React.Component {
   }
 
   render() {
-    let props = this.props;
-    let index = props.index;
-    let dragging = props.dragging;
-    let editing = this.node().editing;
-    var classnames = "node";
+    const props = this.props;
+    const index = props.index;
+    const dragging = props.dragging;
+    const editing = this.node().editing;
+    let classnames = "node";
 
-    var node = editing ? this.renderEditNode() : this.renderNode();
+    const node = editing ? this.renderEditNode() : this.renderNode();
 
     if (index.id === dragging) {
       classnames = "node placeholder";
     }
 
-    let handleMouseDown = (e) => {
+    const handleMouseDown = (e: Event) => {
       if (this.permitted("edit") && !editing && props.onDragStart) {
         props.onDragStart(props.index.id, this.innerRef.current, e);
       }
@@ -279,11 +305,11 @@ export default class PageTreeNode extends React.Component {
   renderEditNode() {
     const { dir, locale } = this.props;
 
-    let handleNameChange = (event) => {
-      this.setState({newName: event.target.value});
+    const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+      this.setState({ newName: event.target.value });
     };
 
-    let performEdit = (event) => {
+    const performEdit = (event: Event) => {
       event.preventDefault();
       this.updatePage({
         name: this.state.newName,
@@ -291,9 +317,9 @@ export default class PageTreeNode extends React.Component {
       });
     };
 
-    let cancelEdit = () => {
-      this.setState({newName: this.node().name});
-      this.updatePage({editing: false});
+    const cancelEdit = () => {
+      this.setState({ newName: this.node().name });
+      this.updatePage({ editing: false });
     };
 
     return (
@@ -321,13 +347,13 @@ export default class PageTreeNode extends React.Component {
   }
 
   renderNode() {
-    let index = this.props.index;
-    let node = index.node;
+    const index = this.props.index;
+    const node = index.node;
 
-    var pageName = <span className="name">{this.pageName()}</span>;
-    var className = "page";
+    let pageName = <span className="name">{this.pageName()}</span>;
+    let className = "page";
 
-    var iconClass = "fa-regular fa-file icon";
+    let iconClass = "fa-regular fa-file icon";
 
     if (typeof(node.status) != "undefined") {
       className = `page status-${this.node().status}`;
@@ -357,7 +383,7 @@ export default class PageTreeNode extends React.Component {
   }
 
   statusLabel() {
-    let labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
+    const labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
     if (typeof(this.node().status) != "undefined" && this.node().status != 2) {
       return (
         <span className="status-label">
@@ -377,13 +403,13 @@ export default class PageTreeNode extends React.Component {
     }
   }
 
-  updatePage(attributes) {
+  updatePage(attributes: Attributes) {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
   }
 
-  visibleChildren() {
+  visibleChildren(): PageNode[] {
     if (this.node().children) {
       return this.node().children.filter(p => p.status != 4);
     } else {
@@ -391,16 +417,3 @@ export default class PageTreeNode extends React.Component {
     }
   }
 }
-
-PageTreeNode.propTypes = {
-  addChild: PropTypes.func,
-  dragging: PropTypes.number,
-  index: PropTypes.object,
-  onCollapse: PropTypes.func,
-  onDragStart: PropTypes.func,
-  paddingLeft: PropTypes.number,
-  tree: PropTypes.object,
-  updatePage: PropTypes.func,
-  locale: PropTypes.string,
-  dir: PropTypes.string,
-};

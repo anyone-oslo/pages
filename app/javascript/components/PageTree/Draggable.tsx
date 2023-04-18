@@ -25,19 +25,54 @@
    SOFTWARE.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import PageTreeNode from "./PageTreeNode";
+import React, { Component } from "react";
+import Tree, { TreeId, TreeIndex } from "../../lib/Tree";
+import { Attributes, PageNode } from "./types";
+import Node from "./Node";
 
-export default class PageTreeDraggable extends React.Component {
-  constructor(props) {
+interface DragState {
+  id: number | null,
+  x: number | null,
+  y: number | null,
+  w: number | null,
+  h: number | null,
+  scrollTop: number | null,
+  scrollLeft: number | null
+}
+
+interface DraggableProps {
+  addChild: (index: TreeIndex) => void,
+  dir: string,
+  locale: string,
+  movedPage: (id: TreeId) => void,
+  paddingLeft: number,
+  toggleCollapsed: (id: TreeId) => void,
+  tree: Tree<PageNode>,
+  updatePage: (id: TreeId, attributes: Attributes) => void,
+  updateTree: (Tree) => void
+}
+
+interface DraggableState {
+  dragging: DragState
+}
+
+export default class Draggable extends Component<DraggableProps, DraggableState> {
+  _dragListener: (evt: MouseEvent) => void;
+  _dragEndListener: () => void;
+  _startX: number;
+  _startY: number;
+  _offsetX: number;
+  _offsetY: number;
+  dragging: DragState;
+
+  constructor(props: DraggableProps) {
     super(props);
     this.state = {
       dragging: this.initDragging()
     };
   }
 
-  initDragging() {
+  initDragging(): DragState {
     return {
       id: null,
       x: null,
@@ -50,11 +85,11 @@ export default class PageTreeDraggable extends React.Component {
   }
 
   getDraggingDom() {
-    var tree = this.props.tree;
-    var dragging = this.state.dragging;
+    const tree = this.props.tree;
+    const dragging = this.state.dragging;
     if (dragging && dragging.id) {
-      var draggingIndex = tree.getIndex(dragging.id);
-      var draggingStyles = {
+      const draggingIndex = tree.getIndex(dragging.id);
+      const draggingStyles = {
         top: dragging.y,
         left: dragging.x,
         width: dragging.w
@@ -62,7 +97,7 @@ export default class PageTreeDraggable extends React.Component {
 
       return (
         <div className="draggable" style={draggingStyles}>
-          <PageTreeNode
+          <Node
               tree={tree}
               index={draggingIndex}
               paddingLeft={this.props.paddingLeft}
@@ -76,7 +111,7 @@ export default class PageTreeDraggable extends React.Component {
 
   render() {
     const { tree, dir, locale } = this.props;
-    var dragging = this.state.dragging;
+    const dragging = this.state.dragging;
 
     if (!tree) {
       return (
@@ -85,11 +120,11 @@ export default class PageTreeDraggable extends React.Component {
         </div>
       );
     } else {
-      var root = tree.getIndex(1);
+      const root = tree.getIndex(1);
       return (
         <div className="page-tree">
           {this.getDraggingDom()}
-          <PageTreeNode
+          <Node
             tree={tree}
             index={root}
             key={root.id}
@@ -106,8 +141,8 @@ export default class PageTreeDraggable extends React.Component {
     }
   }
 
-  addChild(parent) {
-    let newNode = {
+  addChild(parent: TreeIndex<PageNode>) {
+    const newNode = {
       name: "",
       status: 0,
       editing: true,
@@ -120,9 +155,9 @@ export default class PageTreeDraggable extends React.Component {
     this.props.addChild(parent.id, newNode);
   }
 
-  prevAddButtonCount(tree, index) {
+  prevAddButtonCount(tree: Tree, index: TreeIndex) {
     let count = 0;
-    let parentNodes = [];
+    const parentNodes = [];
     let pointer = tree.getIndex(index.parent);
     while (pointer) {
       parentNodes.push(pointer);
@@ -147,16 +182,16 @@ export default class PageTreeDraggable extends React.Component {
   }
 
   scrollOffset() {
-    let dragging = this.state.dragging;
+    const dragging = this.state.dragging;
     return {
       top: document.body.scrollTop - dragging.scrollTop,
       left: document.body.scrollLeft - dragging.scrollLeft
     };
   }
 
-  drag(e) {
+  drag(e: MouseEvent) {
     if (this._start) {
-      var distance = Math.abs(e.clientX - this._offsetX) +
+      const distance = Math.abs(e.clientX - this._offsetX) +
                      Math.abs(e.clientY - this._offsetY);
       if (distance >= 15) {
         this.setState({
@@ -168,27 +203,27 @@ export default class PageTreeDraggable extends React.Component {
       }
     }
 
-    var tree = this.props.tree;
-    var dragging = this.state.dragging;
-    var paddingLeft = this.props.paddingLeft;
-    var newIndex = null;
-    var index = tree.getIndex(dragging.id);
-    var collapsed = index.node.collapsed;
+    const tree = this.props.tree;
+    const dragging = this.state.dragging;
+    const paddingLeft = this.props.paddingLeft;
+    let newIndex: TreeIndex = null;
+    let index = tree.getIndex(dragging.id);
+    const collapsed = index.node.collapsed;
 
-    var _startX = this._startX;
-    var _startY = this._startY;
-    var _offsetX = this._offsetX;
-    var _offsetY = this._offsetY;
+    const _startX = this._startX;
+    const _startY = this._startY;
+    const _offsetX = this._offsetX;
+    const _offsetY = this._offsetY;
 
-    var pos = {
+    const pos = {
       x: _startX + e.clientX - _offsetX + this.scrollOffset().left,
       y: _startY + e.clientY - _offsetY + this.scrollOffset().top
     };
     dragging.x = pos.x;
     dragging.y = pos.y;
 
-    var diffX = dragging.x - paddingLeft/2 - (index.left-2) * paddingLeft;
-    var diffY = dragging.y - dragging.h/2 - (index.top-2 + this.prevAddButtonCount(tree, index)) * dragging.h;
+    const diffX = dragging.x - paddingLeft/2 - (index.left-2) * paddingLeft;
+    const diffY = dragging.y - dragging.h/2 - (index.top-2 + this.prevAddButtonCount(tree, index)) * dragging.h;
 
     if (diffX < 0) {
       // left
@@ -197,8 +232,8 @@ export default class PageTreeDraggable extends React.Component {
       }
     } else if (diffX > paddingLeft) {
       // right
-      if (index.prev) {
-        var prev = tree.getIndex(index.prev);
+      if ("prev" in index) {
+        const prev = tree.getIndex(index.prev);
 
         if (!prev.node.leaf && !prev.node.collapsed) {
           newIndex = tree.move(index.id, index.prev, "append");
@@ -214,11 +249,11 @@ export default class PageTreeDraggable extends React.Component {
 
     if (diffY < (0 - dragging.h * 0.5)) {
       // up
-      var above = tree.getNodeByTop(index.top-1);
+      const above = tree.getNodeByTop(index.top-1);
       newIndex = tree.move(index.id, above.id, "before");
     } else if (diffY > dragging.h * 1.5) {
       // down
-      let below = index.next ?
+      const below = index.next ?
                   tree.getIndex(index.next) :
                   tree.getNodeByTop(index.top + index.height);
 
@@ -239,7 +274,7 @@ export default class PageTreeDraggable extends React.Component {
     this.setState({ dragging: dragging });
   }
 
-  dragStart(id, dom, e) {
+  dragStart(id: TreeId, dom: HTMLDivElement, e: MouseEvent) {
     // Only drag on left click
     if (e.button !== 0) {
       return;
@@ -261,7 +296,7 @@ export default class PageTreeDraggable extends React.Component {
     this._offsetY = e.clientY;
     this._start = true;
 
-    this._dragListener = (e) => this.drag(e);
+    this._dragListener = (e: Event) => { this.drag(e); };
     this._dragEndListener = () => this.dragEnd();
 
     window.addEventListener("mousemove", this._dragListener);
@@ -282,27 +317,15 @@ export default class PageTreeDraggable extends React.Component {
     window.removeEventListener("mouseup", this._dragEndListener);
   }
 
-  toggleCollapse(nodeId) {
+  toggleCollapse(nodeId: TreeId) {
     this.props.toggleCollapsed(nodeId);
   }
 
-  updatePage(index, attributes) {
+  updatePage(index: TreeIndex, attributes: Attributes) {
     this.props.updatePage(index.id, attributes);
   }
 }
 
-PageTreeDraggable.defaultProps = {
+Draggable.defaultProps = {
   paddingLeft: 15
-};
-
-PageTreeDraggable.propTypes = {
-  tree: PropTypes.object,
-  addChild: PropTypes.func,
-  movedPage: PropTypes.func,
-  toggleCollapsed: PropTypes.func,
-  paddingLeft: PropTypes.number,
-  updatePage: PropTypes.func,
-  updateTree: PropTypes.func,
-  locale: PropTypes.string,
-  dir: PropTypes.string
 };
