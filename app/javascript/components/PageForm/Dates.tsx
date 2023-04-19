@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 import DateRangeSelect from "../DateRangeSelect";
 
-export default function Dates(props) {
+interface DatesProps {
+  starts_at: string,
+  ends_at: string,
+  all_day: boolean
+}
+
+export default function Dates(props: DatesProps) {
   const { starts_at, ends_at } = props;
 
   const [hasDates, setHasDates] = useState(props.starts_at ? true : false);
@@ -44,9 +49,3 @@ export default function Dates(props) {
     </div>
   );
 }
-
-Dates.propTypes = {
-  starts_at: PropTypes.string,
-  ends_at: PropTypes.string,
-  all_day: PropTypes.bool
-};

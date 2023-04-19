@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, ChangeEvent } from "react";
 
 import LabelledField from "../LabelledField";
 import DateTimeSelect from "../DateTimeSelect";
-import { errorsOn } from "./usePage";
+import { errorsOn, Author, StatusLabels, PageFormState, PageFormAction } from "./usePage";
 
-export default function Options(props) {
+interface OptionsProps {
+  state: PageFormState,
+  dispatch: (action: PageFormAction) => void,
+  authors: Author[],
+  statuses: StatusLabels
+}
+
+export default function Options(props: OptionsProps) {
   const { state, dispatch, authors, statuses } = props;
 
   const { page, locale, templates } = state;
@@ -16,11 +22,11 @@ export default function Options(props) {
   const autopublish = published && page.published_at > new Date();
   const url = page.urls[locale];
 
-  const handleChange = (attr) => (evt) => {
+  const handleChange = (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "update", payload: { [attr]: evt.target.value } });
   };
 
-  const handleChecked = (attr) => (evt) => {
+  const handleChecked = (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "update", payload: { [attr]: evt.target.checked } });
   };
 
@@ -28,7 +34,7 @@ export default function Options(props) {
     dispatch({ type: "update", payload: { published_at: value } });
   };
 
-  const toggleAdvanced = (evt) => {
+  const toggleAdvanced = (evt: Event) => {
     evt.preventDefault();
     setShowAdvanced(!showAdvanced);
   };
@@ -156,10 +162,3 @@ export default function Options(props) {
     </div>
   );
 }
-
-Options.propTypes = {
-  state: PropTypes.object,
-  dispatch: PropTypes.func,
-  authors: PropTypes.array,
-  statuses: PropTypes.object
-};

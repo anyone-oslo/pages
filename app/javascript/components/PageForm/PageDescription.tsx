@@ -1,9 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 
+import { PageResource } from "../../types";
+import { PageFormAction, PageFormState } from "./usePage";
 import LocaleLinks from "./LocaleLinks";
 
-function editLink(locale, page) {
+interface PageDescriptionProps {
+  state: PageFormState,
+  dispatch: (action: PageFormAction) => void,
+  children: JSX.Element
+}
+
+function editLink(locale: string, page: PageResource): string {
   return(
     <a href={`/admin/${locale}/pages/${page.id}/edit`}>
       {pageName(locale, page)}
@@ -11,11 +18,11 @@ function editLink(locale, page) {
   );
 }
 
-function pageName(locale, page) {
+function pageName(locale: string, page: PageResource) {
   return page.name[locale] || <i>Untitled</i>;
 }
 
-export default function PageDescription(props) {
+export default function PageDescription(props: PageDescriptionProps) {
   const { state, dispatch, children } = props;
   const { locale, page } = state;
 
@@ -34,13 +41,3 @@ export default function PageDescription(props) {
     </div>
   );
 }
-
-PageDescription.propTypes = {
-  state: PropTypes.object,
-  dispatch: PropTypes.func,
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.array
-  ]),
-};

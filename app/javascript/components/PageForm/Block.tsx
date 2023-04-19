@@ -1,13 +1,22 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { ChangeEvent } from "react";
 
+import { TemplateBlock } from "../../types";
 import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 
-export default function Block(props) {
+interface BlockProps {
+  block: TemplateBlock,
+  errors: string[],
+  onChange: (value: string) => void,
+  lang: string,
+  dir: string,
+  value: string
+}
+
+export default function Block(props: BlockProps) {
   const { block, errors, onChange, lang, dir, value } = props;
 
-  const handleChange = (evt) => {
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     onChange(evt.target.value);
   };
 
@@ -29,7 +38,7 @@ export default function Block(props) {
 
   let field;
   if (block.type == "select") {
-    let options = block.options;
+    const options = block.options;
 
     // Ensure the current value is part of the options
     if (options.map(o => o[1]).indexOf(value) === -1) {
@@ -62,12 +71,3 @@ export default function Block(props) {
     </LabelledField>
   );
 }
-
-Block.propTypes = {
-  block: PropTypes.object,
-  errors: PropTypes.array,
-  onChange: PropTypes.func,
-  lang: PropTypes.string,
-  dir: PropTypes.string,
-  value: PropTypes.string
-};

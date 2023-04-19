@@ -1,8 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Attachments from "../Attachments";
 
-export default function Files(props) {
+import { AttachmentRecord, Locale } from "../../types";
+
+interface FilesProps {
+  locale: string,
+  locales: { [index: string]: Locale },
+  records: AttachmentRecord[],
+}
+
+export default function Files(props: FilesProps) {
   const { locale, locales, records } = props;
 
   return (
@@ -15,9 +22,3 @@ export default function Files(props) {
     </div>
   );
 }
-
-Files.propTypes = {
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  records: PropTypes.array
-};

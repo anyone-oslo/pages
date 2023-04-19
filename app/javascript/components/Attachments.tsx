@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import List from "./Attachments/List";
 
+import { AttachmentRecord, Locale } from "../types";
 import { useDragCollection } from "./drag";
 
-export default function Attachments(props) {
+interface AttachmentsProps {
+  attribute: string,
+  locale: string,
+  locales: { [index: string]: Locale },
+  records: AttachmentRecord[],
+  showEmbed: boolean
+}
+
+export default function Attachments(props: AttachmentsProps) {
   const { attribute, locale, locales, records, showEmbed } = props;
 
   const collection = useDragCollection(records);
@@ -20,11 +28,3 @@ export default function Attachments(props) {
           showEmbed={showEmbed} />
   );
 }
-
-Attachments.propTypes = {
-  attribute: PropTypes.string,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  records: PropTypes.array,
-  showEmbed: PropTypes.bool
-};

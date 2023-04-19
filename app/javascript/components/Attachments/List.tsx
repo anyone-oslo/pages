@@ -1,25 +1,39 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Attachment from "./Attachment";
 import Placeholder from "./Placeholder";
 import FileUploadButton from "../FileUploadButton";
 import { post } from "../../lib/request";
 
+import { AttachmentRecord, AttachmentResource, Locale } from "../../types";
+
 import { createDraggable,
          draggedOrder,
-         useDragUploader } from "../drag";
+         useDragUploader,
+         Draggable,
+         DragCollection,
+         DragState } from "../drag";
 
-function filenameToName(str) {
+interface ListProps {
+  attribute: string,
+  locale: string,
+  locales: { [index: string]: Locale },
+  collection: DragCollection,
+  deleted: AttachmentRecord[],
+  setDeleted: (records: AttachmentRecord[]) => void,
+  showEmbed: boolean
+}
+
+function filenameToName(str: string): string {
   return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");
 }
 
-export default function List(props) {
+export default function List(props: ListProps) {
   const { collection, deleted, setDeleted } = props;
   const locales = props.locales && props.locales.length > 0 ?
         Object.keys(props.locales) : [props.locale];
 
-  const uploadAttachment = (file) => {
-    let name = {};
+  const uploadAttachment = (file: File) => {
+    const name = {};
     locales.forEach((l) => name[l] = file.name);
 
     const draggable = createDraggable(
@@ -27,15 +41,15 @@ export default function List(props) {
         uploading: true }
     );
 
-    let data = new FormData();
+    const data = new FormData();
 
     data.append("attachment[file]", file);
     locales.forEach((l) => {
       data.append(`attachment[name][${l}]`, filenameToName(file.name));
     });
 
-    post("/admin/attachments.json", data)
-      .then(json => {
+    void post("/admin/attachments.json", data)
+      .then((json: AttachmentResource) => {
         collection.dispatch({
           type: "update",
           payload: { ...draggable,
@@ -46,14 +60,14 @@ export default function List(props) {
     return draggable;
   };
 
-  const receiveFiles = (files) => {
+  const receiveFiles = (files: File[]) => {
     collection.dispatch({
       type: "append",
       payload: files.map(f => uploadAttachment(f))
     });
   };
 
-  const dragEnd = (dragState, files) => {
+  const dragEnd = (dragState: DragState, files: File[]) => {
     collection.dispatch({
       type: "reorder",
       payload: draggedOrder(collection, dragState)
@@ -68,16 +82,16 @@ export default function List(props) {
          dragStart,
          listeners] = useDragUploader([collection], dragEnd);
 
-  const position = (record) => {
+  const position = (record: AttachmentRecord) => {
     return [...collection.draggables.map(d => d.record),
             ...deleted].indexOf(record) + 1;
   };
 
-  const attrName = (record) => {
+  const attrName = (record: AttachmentRecord) => {
     return `${props.attribute}[${position(record)}]`;
   };
 
-  const update = (draggable) => (attachment) => {
+  const update = (draggable: Draggable<AttachmentRecord>) => (attachment: AttachmentResource) => {
     const { record } = draggable;
     const updated = {
       ...draggable,
@@ -89,14 +103,14 @@ export default function List(props) {
     collection.dispatch({ type: "update", payload: updated });
   };
 
-  const remove = (draggable) => () => {
+  const remove = (draggable: Draggable) => () => {
     collection.dispatch({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
     }
   };
 
-  const attachment = (draggable) => {
+  const attachment = (draggable: Draggable) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
@@ -154,13 +168,3 @@ export default function List(props) {
     </div>
   );
 }
-
-List.propTypes = {
-  attribute: PropTypes.string,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  collection: PropTypes.array,
-  deleted: PropTypes.array,
-  setDeleted: PropTypes.func,
-  showEmbed: PropTypes.bool
-};

@@ -1,18 +1,22 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-import { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn, PageBlockValue, PageFormAction, PageFormState } from "./usePage";
 import LabelledField from "../LabelledField";
 import TagEditor from "../TagEditor";
 import Block from "./Block";
 import Dates from "./Dates";
 
-export default function Content(props) {
+interface ContentProps {
+  state: PageFormState,
+  dispatch: (action: PageFormAction) => void,
+}
+
+export default function Content(props: ContentProps) {
   const { state, dispatch } = props;
 
   const { page, locale, inputDir, templateConfig } = state;
 
-  const handleChange = (attr) => (value) => {
+  const handleChange = (attr: string) => (value: PageBlockValue) => {
     dispatch({ type: "update", payload: { [attr]: value } });
   };
 
@@ -39,8 +43,3 @@ export default function Content(props) {
     </React.Fragment>
   );
 }
-
-Content.propTypes = {
-  state: PropTypes.object,
-  dispatch: PropTypes.func,
-};

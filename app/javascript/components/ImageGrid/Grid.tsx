@@ -1,17 +1,41 @@
-import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useRef } from "react";
 import FileUploadButton from "../FileUploadButton";
 import DragElement from "./DragElement";
 import FilePlaceholder from "./FilePlaceholder";
 import GridImage from "./GridImage";
-import ToastStore from "../../stores/ToastStore";
+import useToastStore from "../../stores/useToastStore";
 import { post } from "../../lib/request";
 
-import { createDraggable,
-         collectionOrder,
-         useDragUploader } from "../drag";
+import {
+  ImageResponse,
+  ImageRecord,
+  ImageResource,
+  Locale
+} from "../../types";
 
-function filterFiles(files) {
+import {
+  createDraggable,
+  collectionOrder,
+  useDragUploader,
+  Draggable,
+  DragCollection,
+  DragState
+} from "../drag";
+
+interface GridProps {
+  attribute: string,
+  deleted: ImageRecord[],
+  enablePrimary: boolean,
+  images: DragCollection,
+  primary: DragCollection,
+  locale: string,
+  locales: { [index: string]: Locale },
+  primaryAttribute: string,
+  setDeleted: (records: ImageRecord[]) => void,
+  showEmbed: boolean
+}
+
+function filterFiles(files: File[]): File[] {
   const validMimeTypes = ["image/gif",
                           "image/jpeg",
                           "image/pjpeg",
@@ -20,7 +44,9 @@ function filterFiles(files) {
   return files.filter(f => (validMimeTypes.indexOf(f.type) !== -1));
 }
 
-function draggedImageOrder(primaryCollection, imagesCollection, dragState) {
+function draggedImageOrder(
+  primaryCollection: DragCollection, imagesCollection: DragCollection, dragState: DragState
+): [Draggable<ImageRecord>, Draggable<ImageRecord>[]] {
   const [primary, ...rest] = collectionOrder(primaryCollection, dragState);
   let images = [...rest, ...collectionOrder(imagesCollection, dragState)];
 
@@ -35,17 +61,18 @@ function draggedImageOrder(primaryCollection, imagesCollection, dragState) {
   return [primary, images];
 }
 
-export default function Grid(props) {
+export default function Grid(props: GridProps) {
   const { primary, images, deleted, setDeleted } = props;
 
   const containerRef = useRef();
+  const error = useToastStore((state) => state.error);
 
   const dispatchAll = (action) => {
     primary.dispatch(action);
     images.dispatch(action);
   };
 
-  const dragEnd = (dragState, files) => {
+  const dragEnd = (dragState: DragState, files: File[]) => {
     const [draggedPrimary,
            draggedImages] = draggedImageOrder(primary, images, dragState);
 
@@ -65,31 +92,29 @@ export default function Grid(props) {
          dragStart,
          listeners] = useDragUploader([primary, images], dragEnd);
 
-  const position = (record) => {
+  const position = (record: ImageRecord) => {
     return [...primary.draggables.map(d => d.record),
             ...images.draggables.map(d => d.record),
             ...deleted].indexOf(record) + 1;
   };
 
-  const attrName = (record) => {
+  const attrName = (record: ImageRecord) => {
     return `${props.attribute}[${position(record)}]`;
   };
 
-  const uploadImage = (file) => {
+  const uploadImage = (file: File) => {
     const draggable = createDraggable(
       { image: null, file: file }
     );
 
-    let data = new FormData();
+    const data = new FormData();
 
     data.append("image[file]", file);
 
-    post("/admin/images.json", data)
-      .then(json => {
-        if (json.status === "error") {
-          ToastStore.dispatch({
-            type: "ERROR", message: "Error uploading image: " + json.error
-          });
+    void post("/admin/images.json", data)
+      .then((json: ImageResponse) => {
+        if ("status" in json && json.status === "error") {
+          error(`Error uploading image: ${json.error}`);
           dispatchAll({ type: "remove", payload: draggable });
         } else {
           dispatchAll({
@@ -102,7 +127,7 @@ export default function Grid(props) {
     return draggable;
   };
 
-  const update = (draggable) => (image) => {
+  const update = (draggable: Draggable<ImageRecord>) => (image: ImageResource) => {
     const { record } = draggable;
     const updated = {
       ...draggable,
@@ -114,14 +139,14 @@ export default function Grid(props) {
     dispatchAll({ type: "update", payload: updated });
   };
 
-  const remove = (draggable) => () => {
+  const remove = (draggable: Draggable<ImageRecord>) => () => {
     dispatchAll({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
     }
   };
 
-  const renderImage = (draggable, isPrimary) => {
+  const renderImage = (draggable: Draggable<ImageRecord>, isPrimary: boolean) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
@@ -145,7 +170,7 @@ export default function Grid(props) {
     );
   };
 
-  const uploadPrimary = (files) => {
+  const uploadPrimary = (files: File[]) => {
     const [first, ...rest] = filterFiles(files).map(f => uploadImage(f));
     if (first) {
       images.dispatch({
@@ -156,20 +181,20 @@ export default function Grid(props) {
     }
   };
 
-  const uploadAdditional = (files) => {
+  const uploadAdditional = (files: File[]) => {
     images.dispatch({
       type: "append",
       payload: filterFiles(files).map(f => uploadImage(f))
     });
   };
 
-  let classNames = ["image-grid"];
+  const classNames = ["image-grid"];
   if (props.enablePrimary) {
     classNames.push("with-primary-image");
   }
 
   const [draggedPrimary,
-         draggedImages] = draggedImageOrder(primary, images, dragState);
+    draggedImages] = draggedImageOrder(primary, images, dragState);
 
   return (
     <div className={classNames.join(" ")}
@@ -233,16 +258,3 @@ export default function Grid(props) {
     </div>
   );
 }
-
-Grid.propTypes = {
-  attribute: PropTypes.string,
-  deleted: PropTypes.array,
-  setDeleted: PropTypes.func,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  enablePrimary: PropTypes.bool,
-  primary: PropTypes.array,
-  primaryAttribute: PropTypes.string,
-  images: PropTypes.array,
-  showEmbed: PropTypes.bool
-};

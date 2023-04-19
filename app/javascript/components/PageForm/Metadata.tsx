@@ -1,18 +1,22 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-import { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn, PageBlockValue, PageFormAction, PageFormState } from "./usePage";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
 import LabelledField from "../LabelledField";
 import ImageUploader from "../ImageUploader";
 
-export default function Metadata(props) {
+interface MetadataProps {
+  state: PageFormState,
+  dispatch: (action: PageFormAction) => void
+}
+
+export default function Metadata(props: MetadataProps) {
   const { state, dispatch } = props;
 
   const { page, locale, locales, inputDir, templateConfig } = state;
 
-  const handleChange = (attr) => (value) => {
+  const handleChange = (attr: string) => (value: PageBlockValue) => {
     dispatch({ type: "update", payload: { [attr]: value } });
   };
 
@@ -46,8 +50,3 @@ export default function Metadata(props) {
     </React.Fragment>
   );
 }
-
-Metadata.propTypes = {
-  state: PropTypes.object,
-  dispatch: PropTypes.func,
-};

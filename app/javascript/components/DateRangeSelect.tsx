@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 import DateTimeSelect from "./DateTimeSelect";
 
-function defaultDate(offset = 0) {
-  let coeff = 1000 * 60 * 60;
+interface DateRangeSelectProps {
+  startsAt: string,
+  endsAt: string,
+  disabled: boolean,
+  disableTime: boolean,
+  objectName: string
+}
+
+function defaultDate(offset = 0): Date {
+  const coeff = 1000 * 60 * 60;
   return new Date(
     (Math.round((new Date()).getTime() / coeff) * coeff) + coeff +
       (1000 * 60 * offset)
   );
 }
 
-function parseDate(str) {
+function parseDate(str: string): Date {
   if (!str) {
     return null;
   } else if (typeof(str) === "string") {
@@ -21,7 +28,7 @@ function parseDate(str) {
   }
 }
 
-export default function DateRangeSelect(props) {
+export default function DateRangeSelect(props: DateRangeSelectProps) {
   const { disabled, disableTime, objectName } = props;
 
   const [startsAt, setStartsAt] =
@@ -29,7 +36,7 @@ export default function DateRangeSelect(props) {
   const [endsAt, setEndsAt] =
         useState(parseDate(props.endsAt) || defaultDate(60));
 
-  const setDates = (start, end) => {
+  const setDates = (start: Date, end: Date) => {
     if (end < start) {
       end = start;
     }
@@ -37,11 +44,11 @@ export default function DateRangeSelect(props) {
     setEndsAt(end);
   };
 
-  const changeStartsAt = (newDate) => {
+  const changeStartsAt = (newDate: Date) => {
     setDates(newDate, new Date(endsAt.getTime() + (newDate - startsAt)));
   };
 
-  const changeEndsAt = (newDate) => {
+  const changeEndsAt = (newDate: Date) => {
     setDates(startsAt, newDate);
   };
 
@@ -67,11 +74,3 @@ export default function DateRangeSelect(props) {
     </div>
   );
 }
-
-DateRangeSelect.propTypes = {
-  startsAt: PropTypes.string,
-  endsAt: PropTypes.string,
-  disabled: PropTypes.bool,
-  disableTime: PropTypes.bool,
-  objectName: PropTypes.string
-};

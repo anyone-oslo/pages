@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import Grid from "./ImageGrid/Grid";
 
+import { ImageRecord, Locale } from "../types";
 import { useDragCollection } from "./drag";
 
-function initRecords(props) {
+interface ImageGridProps {
+  attribute: string,
+  enablePrimary: boolean,
+  locale: string,
+  locales: { [index: string]: Locale },
+  primaryAttribute: string,
+  records: ImageRecord[],
+  showEmbed: boolean
+}
+
+function initRecords(props: ImageGridProps) {
   const primary = props.enablePrimary ?
         props.records.filter(r => r.primary).slice(0, 1) :
         [];
@@ -12,7 +22,7 @@ function initRecords(props) {
   return [primary, props.records.filter(r => primary.indexOf(r) === -1)];
 }
 
-export default function ImageGrid(props) {
+export default function ImageGrid(props: ImageGridProps) {
   const { attribute, locale, locales, enablePrimary,
           primaryAttribute, showEmbed } = props;
 
@@ -34,13 +44,3 @@ export default function ImageGrid(props) {
           showEmbed={showEmbed} />
   );
 }
-
-ImageGrid.propTypes = {
-  attribute: PropTypes.string,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  records: PropTypes.array,
-  enablePrimary: PropTypes.bool,
-  primaryAttribute: PropTypes.string,
-  showEmbed: PropTypes.bool
-};

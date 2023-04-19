@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 
-function modifyDate(original, options = {}) {
-  var newDate = new Date(original);
-  if (Object.prototype.hasOwnProperty.call(options, "year")) {
+interface DateTimeSelectProps {
+  name: string,
+  disabled: boolean,
+  disableTime: boolean,
+  onChange: (date: Date) => void,
+  value: Date
+}
+
+interface ModifyOptions {
+  year?: number,
+  month?: number,
+  date?: number,
+  time?: string
+}
+
+function modifyDate(original: Date, options: ModifyOptions = {}): Date {
+  const newDate = new Date(original);
+  if ("year" in options) {
     newDate.setFullYear(options.year);
   }
-  if (Object.prototype.hasOwnProperty.call(options, "month")) {
+  if ("month" in options) {
     newDate.setMonth(options.month);
   }
-  if (Object.prototype.hasOwnProperty.call(options, "date")) {
+  if ("date" in options) {
     newDate.setDate(options.date);
   }
-  if (Object.prototype.hasOwnProperty.call(options, "time") &&
+  if ("time" in options &&
       options.time.match(/^[\d]{1,2}(:[\d]{1,2})?$/)) {
     newDate.setHours(options.time.split(":")[0]);
     newDate.setMinutes(options.time.split(":")[1] || 0);
@@ -20,27 +34,34 @@ function modifyDate(original, options = {}) {
   return newDate;
 }
 
-function timeToString(time) {
+function timeToString(time: Date): string {
   return time.toTimeString().slice(0, 5);
 }
 
 // Returns an array with years from 2000 to 10 years from now.
-function yearOptions() {
-  let start = 2000;
-  return Array.apply(null, Array((new Date()).getFullYear() - start + 11))
-    .map((_, i) => i + start);
+function yearOptions(): number[] {
+  const start = 2000;
+  const years: number[] = [];
+  for (let i = start; i <= (new Date()).getFullYear() - start + 11; i++) {
+    years.push(i);
+  }
+  return years;
 }
 
-function monthOptions() {
+function monthOptions(): string[] {
   return(["January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December"]);
 }
 
-function dayOptions() {
-  return Array.apply(null, Array(31)).map((_, i) => i + 1);
+function dayOptions(): number[] {
+  const numbers: number[] = [];
+  for (let i = 1; i <= 31; i++) {
+    numbers.push(i);
+  }
+  return numbers;
 }
 
-export default function DateTimeSelect(props) {
+export default function DateTimeSelect(props: DateTimeSelectProps) {
   const { name, disabled, disableTime, onChange, value } = props;
 
   const [timeString, setTimeString] = useState(timeToString(value));
@@ -90,11 +111,3 @@ export default function DateTimeSelect(props) {
     </div>
   );
 }
-
-DateTimeSelect.propTypes = {
-  name: PropTypes.string,
-  disabled: PropTypes.bool,
-  disableTime: PropTypes.bool,
-  onChange: PropTypes.func,
-  value: PropTypes.instanceOf(Date)
-};

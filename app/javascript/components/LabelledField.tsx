@@ -1,7 +1,14 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function LabelledField(props) {
+interface LabelledFieldProps {
+  htmlFor: string,
+  description: string,
+  label: string,
+  errors: string[],
+  children: JSX.Element
+}
+
+export default function LabelledField(props: LabelledFieldProps) {
   const { htmlFor, description, label, errors, children } = props;
 
   const classNames = ["field"];
@@ -29,15 +36,3 @@ export default function LabelledField(props) {
     </div>
   );
 }
-
-LabelledField.propTypes = {
-  htmlFor: PropTypes.string,
-  description: PropTypes.string,
-  label: PropTypes.string,
-  errors: PropTypes.array,
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.array
-  ]),
-};
