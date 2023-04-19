@@ -1,9 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { RefObject } from "react";
 
+import { PageFormState } from "./usePage";
 import { csrfToken } from "../../lib/request";
 
-function pageUrl(state) {
+interface FormProps {
+  ref: RefObject<HTMLFormElement>,
+  state: PageFormState,
+  children: JSX.Element
+}
+
+function pageUrl(state: PageFormState): string {
   if (state.page.id) {
     return `/admin/${state.locale}/pages/${state.page.id}`;
   } else {
@@ -11,7 +17,7 @@ function pageUrl(state) {
   }
 }
 
-export default function Form(props) {
+export default function Form(props: FormProps) {
   const { state, children } = props;
   const { page } = state;
 
@@ -26,16 +32,3 @@ export default function Form(props) {
     </form>
   );
 }
-
-Form.propTypes = {
-  ref: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any })
-  ]),
-  state: PropTypes.object,
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.array
-  ]),
-};

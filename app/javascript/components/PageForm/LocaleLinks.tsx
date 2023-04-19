@@ -1,11 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function LocaleLinks(props) {
+import { PageFormAction, PageFormState } from "./usePage";
+
+interface LocaleLinksProps {
+  state: PageFormState,
+  dispatch: (action: PageFormAction) => void
+}
+
+export default function LocaleLinks(props: LocaleLinksProps) {
   const { state, dispatch } = props;
   const { locale, locales } = state;
 
-  const handleClick = (newLocale) => (evt) => {
+  const handleClick = (newLocale: string) => (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "setLocale", payload: newLocale });
   };
@@ -26,8 +32,3 @@ export default function LocaleLinks(props) {
     </div>
   );
 }
-
-LocaleLinks.propTypes = {
-  state: PropTypes.object,
-  dispatch: PropTypes.func
-};

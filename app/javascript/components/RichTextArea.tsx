@@ -1,140 +1,154 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { createRef, ChangeEvent, Component, RefObject } from "react";
 import RichTextToolbarButton from "./RichTextToolbarButton";
 
-export default class RichTextArea extends React.Component {
-  constructor(props) {
+interface RichTextAreaProps {
+  id: string;
+  className: string;
+  name: string;
+  value: string;
+  rows: number;
+  simple: boolean;
+  lang: string;
+  dir: string;
+  onChange: (str: string) => void;
+}
+
+interface RichTextAreaState {
+  value: string;
+  rows: number;
+}
+
+type ActionFn = (str: string) => [string, string, string];
+
+interface Action {
+  name: string;
+  className: string;
+  fn: ActionFn;
+  hotkey?: string;
+}
+
+export default class RichTextArea extends Component<
+  RichTextAreaProps,
+  RichTextAreaState
+> {
+  inputRef: RefObject<HTMLTextAreaElement>;
+
+  constructor(props: RichTextAreaProps) {
     super(props);
     this.state = {
       value: props.value || "",
       rows: props.rows || 5
     };
-    this.inputRef = React.createRef();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.getSelection = this.getSelection.bind(this);
-    this.link = this.link.bind(this);
-    this.replaceSelection = this.replaceSelection.bind(this);
+    this.inputRef = createRef<HTMLTextAreaElement>();
   }
 
-  actions() {
-    const simple = [
+  actions = () => {
+    const simple: Action[] = [
       {
         name: "bold",
         className: "bold",
         hotkey: "b",
-        fn: (str) => ["<b>", str, "</b>"]
+        fn: (str: string) => ["<b>", str, "</b>"]
       },
       {
         name: "italic",
         className: "italic",
         hotkey: "i",
-        fn: (str) => ["<i>", str, "</i>"]
+        fn: (str: string) => ["<i>", str, "</i>"]
       }
     ];
 
-    const advanced = [
+    const advanced: Action[] = [
       {
         name: "Heading 2",
         className: "header h2",
-        fn: (str) => ["h2. ", str, ""]
+        fn: (str: string) => ["h2. ", str, ""]
       },
       {
         name: "Heading 3",
         className: "header h3",
-        fn: (str) => ["h3. ", str, ""]
+        fn: (str: string) => ["h3. ", str, ""]
       },
       {
         name: "Heading 4",
         className: "header h4",
-        fn: (str) => ["h4. ", str, ""]
+        fn: (str: string) => ["h4. ", str, ""]
       },
       {
         name: "Blockquote",
         className: "quote-left",
-        fn: (str) => ["bq. ", str, ""]
+        fn: (str: string) => ["bq. ", str, ""]
       },
       {
         name: "List",
         className: "list-ul",
-        fn: (str) => ["", this.strToList(str, "*"), ""]
+        fn: (str: string) => ["", this.strToList(str, "*"), ""]
       },
       {
         name: "Ordered list",
         className: "list-ol",
-        fn: (str) => ["", this.strToList(str, "#"), ""]
+        fn: (str: string) => ["", this.strToList(str, "#"), ""]
       },
-      {
-        name: "Link",
-        className: "link",
-        fn: this.link
-      },
-      {
-        name: "Email link",
-        className: "envelope",
-        fn: this.emailLink
-      }
+      { name: "Link", className: "link", fn: this.link },
+      { name: "Email link", className: "envelope", fn: this.emailLink }
     ];
 
     return this.props.simple ? simple : [...simple, ...advanced];
-  }
+  };
 
-  applyAction(fn) {
-    let [prefix, replacement, postfix] = fn(this.getSelection());
+  applyAction(fn: ActionFn) {
+    const [prefix, replacement, postfix] = fn(this.getSelection());
     this.replaceSelection(prefix, replacement, postfix);
   }
 
-  emailLink(selection) {
-    var address = prompt("Enter email address", "");
-    let name = selection.length > 0 ? selection : address;
+  emailLink = (selection: string) => {
+    const address = prompt("Enter email address", "");
+    const name = selection.length > 0 ? selection : address;
     return ['"', name, `":mailto:${address}`];
-  }
+  };
 
-  getSelection() {
-    let { selectionStart, selectionEnd, value } = this.inputRef.current;
+  getSelection = (): string => {
+    const { selectionStart, selectionEnd, value } = this.inputRef.current;
     return value.substr(selectionStart, selectionEnd - selectionStart);
-  }
+  };
 
-  handleChange(evt) {
+  handleChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     this.updateValue(evt.target.value);
-  }
+  };
 
-  handleKeyPress(evt) {
-    let key;
+  handleKeyPress = (evt: KeyboardEvent) => {
+    let key: string;
     if (evt.which >= 65 && evt.which <= 90) {
       key = String.fromCharCode(evt.keyCode).toLowerCase();
     } else if (evt.keyCode === 13) {
       key = "enter";
     }
 
-    let hotkeys = {};
+    const hotkeys: Record<string, ActionFn> = {};
     this.actions().forEach((a) => {
       if (a.hotkey) {
         hotkeys[a.hotkey] = a.fn;
       }
     });
 
-    if (
-      (evt.metaKey || evt.ctrlKey) &&
-      Object.prototype.hasOwnProperty.call(hotkeys, key)
-    ) {
+    if ((evt.metaKey || evt.ctrlKey) && key in keys) {
       evt.preventDefault();
       this.applyAction(hotkeys[key]);
     }
-  }
+  };
 
-  link(selection) {
-    let name = selection.length > 0 ? selection : "Link text";
-    var url = prompt("Enter link URL", "");
+  link = (selection: string) => {
+    const name = selection.length > 0 ? selection : "Link text";
+    const url = prompt("Enter link URL", "");
     if (url) {
       return ['"', name, `":${this.relativeUrl(url)}`];
     } else {
       return ["", name, ""];
     }
-  }
+  };
 
   localeOptions() {
-    let opts = {};
+    const opts = {};
 
     if (this.props.lang) {
       opts.lang = this.props.lang;
@@ -147,8 +161,8 @@ export default class RichTextArea extends React.Component {
     return opts;
   }
 
-  relativeUrl(str) {
-    let url = null;
+  relativeUrl(str: string): string {
+    let url: URL = null;
 
     if (!str.match(/^https:\/\//) || !document || !document.location) {
       return str;
@@ -175,7 +189,7 @@ export default class RichTextArea extends React.Component {
     const { id, name } = this.props;
     const value = this.getValue();
 
-    const clickHandler = (fn) => (evt) => {
+    const clickHandler = (fn: ActionFn) => (evt: Event) => {
       evt.preventDefault();
       this.applyAction(fn);
     };
@@ -207,9 +221,9 @@ export default class RichTextArea extends React.Component {
     );
   }
 
-  replaceSelection(prefix, replacement, postfix) {
-    let textarea = this.inputRef.current;
-    let { selectionStart, selectionEnd, value } = textarea;
+  replaceSelection = (prefix: string, replacement: string, postfix: string) => {
+    const textarea = this.inputRef.current;
+    const { selectionStart, selectionEnd, value } = textarea;
 
     textarea.value =
       value.substr(0, selectionStart) +
@@ -224,9 +238,9 @@ export default class RichTextArea extends React.Component {
       selectionStart + prefix.length + replacement.length
     );
     this.updateValue(textarea.value);
-  }
+  };
 
-  strToList(str, prefix) {
+  strToList(str: string, prefix: string) {
     return str
       .split("\n")
       .map((l) => prefix + " " + l)
@@ -241,7 +255,7 @@ export default class RichTextArea extends React.Component {
     }
   }
 
-  updateValue(str) {
+  updateValue(str: string) {
     if (this.props.onChange) {
       this.props.onChange(str);
     } else {
@@ -249,15 +263,3 @@ export default class RichTextArea extends React.Component {
     }
   }
 }
-
-RichTextArea.propTypes = {
-  id: PropTypes.string,
-  className: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.string,
-  rows: PropTypes.number,
-  simple: PropTypes.bool,
-  lang: PropTypes.string,
-  dir: PropTypes.string,
-  onChange: PropTypes.func
-};

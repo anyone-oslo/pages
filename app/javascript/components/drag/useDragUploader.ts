@@ -44,7 +44,14 @@ function mousePosition(evt: TouchEvent | MouseEvent): Drag.Position {
 export default function useDragUploader(
   collections: Drag.Collection[],
   onDragEnd: (dragState: Drag.State, files: File[]) => void
-) {
+): [
+  Drag.State,
+  (evt: MouseEvent | TouchEvent, draggable: Drag.Item) => void,
+  {
+    onDragOver: (evt: MouseEvent | TouchEvent) => void;
+    onDrop: (evt: MouseEvent | TouchEvent) => void;
+  }
+] {
   const initialState: Drag.State = {
     dragging: false,
     x: null,
@@ -59,10 +66,7 @@ export default function useDragUploader(
     });
   };
 
-  const startDrag = (
-    evt: MouseEvent | TouchEvent,
-    draggable: Drag.Draggable | string
-  ) => {
+  const startDrag = (evt: MouseEvent | TouchEvent, draggable: Drag.Item) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };
