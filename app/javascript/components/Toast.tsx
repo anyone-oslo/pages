@@ -1,15 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
-import ToastStore from "../stores/ToastStore";
+import React, { Component } from "react";
+import { Store } from "redux";
 
-export default class Toast extends React.Component {
-  constructor(props) {
+import ToastStore, { Toast as ToastRecord } from "../stores/ToastStore";
+
+interface ToastProps {
+  error: string,
+  notice: string
+}
+
+interface ToastState {
+  toast: ToastRecord | undefined,
+  fadeout: boolean
+}
+
+export default class Toast extends Component<ToastProps, ToastState> {
+  store: Store;
+
+  constructor(props: ToastProps) {
     super(props);
     this.state = { toast: undefined,
                    fadeout: false };
     this.store = ToastStore;
     this.timer = undefined;
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -23,14 +35,18 @@ export default class Toast extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
-    if (this.timer) {
+    if ("unsubscribe" in this) {
+      this.unsubscribe();
+    }
+    if ("timer" in this) {
       clearTimeout(this.timer);
     }
   }
 
-  handleChange() {
-    this.setState({ toast: this.store.getState()[0], fadeout: false });
+  handleChange = () => {
+    const toasts = this.store.getState() as ToastRecord[];
+
+    this.setState({ toast: toasts[0], fadeout: false });
     if (!this.timer) {
       this.timer = setTimeout(() => {
         this.setState({ fadeout: true });
@@ -41,11 +57,11 @@ export default class Toast extends React.Component {
         }, 500);
       }, 4000);
     }
-  }
+  };
 
   render() {
-    let toast = this.state.toast;
-    let classNames = ["toast"];
+    const toast = this.state.toast;
+    const classNames = ["toast"];
 
     if (toast) {
       classNames.push(toast.type);
@@ -65,8 +81,3 @@ export default class Toast extends React.Component {
     );
   }
 }
-
-Toast.propTypes = {
-  notice: PropTypes.string,
-  error: PropTypes.string
-};
