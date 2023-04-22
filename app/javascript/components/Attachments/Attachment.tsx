@@ -93,7 +93,7 @@ export default function Attachment(props: AttachmentProps) {
     <div className={classes.join(" ")}
          {...listeners}>
       <input name={`${attributeName}[id]`}
-             type="hidden" value={`${record.id}`} />
+             type="hidden" value={record.id || ""} />
       <input name={`${attributeName}[attachment_id]`}
              type="hidden" value={(attachment && attachment.id) || ""} />
       <input name={`${attributeName}[position]`}
