@@ -1,83 +1,61 @@
-import React, { Component } from "react";
-import { Store } from "redux";
+import React, { useEffect, useRef, useState } from "react";
 
-import ToastStore, { Toast as ToastRecord } from "../stores/ToastStore";
+import useToastStore from "../stores/useToastStore";
 
 interface ToastProps {
   error: string,
   notice: string
 }
 
-interface ToastState {
-  toast: ToastRecord | undefined,
-  fadeout: boolean
-}
+export default function Toast(props: ToastProps) {
+  const [fadeout, setFadeout] = useState(false);
+  const { toasts, error, notice, next } = useToastStore((state) => state);
+  const timerRef = useRef<number | null>(null);
 
-export default class Toast extends Component<ToastProps, ToastState> {
-  store: Store;
+  const toast = toasts[0];
 
-  constructor(props: ToastProps) {
-    super(props);
-    this.state = { toast: undefined,
-                   fadeout: false };
-    this.store = ToastStore;
-    this.timer = undefined;
-  }
-
-  componentDidMount() {
-    this.unsubscribe = this.store.subscribe(this.handleChange);
-    if (this.props.error) {
-      this.store.dispatch({ type: "ERROR", message: this.props.error });
+  useEffect(() => {
+    if (props.error) {
+      error(props.error);
     }
-    if (this.props.notice) {
-      this.store.dispatch({ type: "NOTICE", message: this.props.notice });
+    if (props.notice) {
+      notice(props.notice);
     }
-  }
+  }, [props.error, props.notice]);
 
-  componentWillUnmount() {
-    if ("unsubscribe" in this) {
-      this.unsubscribe();
-    }
-    if ("timer" in this) {
-      clearTimeout(this.timer);
-    }
-  }
-
-  handleChange = () => {
-    const toasts = this.store.getState() as ToastRecord[];
-
-    this.setState({ toast: toasts[0], fadeout: false });
-    if (!this.timer) {
-      this.timer = setTimeout(() => {
-        this.setState({ fadeout: true });
-        this.timer = setTimeout(() => {
-          this.timer = undefined;
-          this.setState({ fadeout: false });
-          this.store.dispatch({ type: "NEXT" });
+  useEffect(() => {
+    setFadeout(false);
+    if (toast && !timerRef.current) {
+      timerRef.current = setTimeout(() => {
+        setFadeout(true);
+        timerRef.current = setTimeout(() => {
+          timerRef.current = null;
+          setFadeout(false);
+          next();
         }, 500);
       }, 4000);
     }
-  };
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [toast]);
 
-  render() {
-    const toast = this.state.toast;
-    const classNames = ["toast"];
+  const classNames = ["toast"];
 
-    if (toast) {
-      classNames.push(toast.type);
-      if (this.state.fadeout) {
-        classNames.push("fadeout");
-      }
+  if (toast) {
+    classNames.push(toast.type);
+    if (fadeout) {
+      classNames.push("fadeout");
     }
-
-    return (
-      <div className="toast-wrapper" aria-live="polite">
-        {toast && (
-          <div className={classNames.join(" ")}>
-            {toast.message}
-          </div>
-        )}
-      </div>
-    );
   }
+
+  return (
+    <div className="toast-wrapper" aria-live="polite">
+      {toast && (
+        <div className={classNames.join(" ")}>
+          {toast.message}
+        </div>
+      )}
+    </div>
+  );
 }

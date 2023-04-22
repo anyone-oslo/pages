@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ImageEditor from "./ImageEditor";
-import ModalStore from "../stores/ModalStore";
+import useModalStore from "../stores/useModalStore";
 
 import { Locale, ImageResource } from "../types";
 
@@ -17,6 +17,8 @@ interface EditableImageProps {
 export default function EditableImage(props: EditableImageProps) {
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
+
+  const openModal = useModalStore((state) => state.open);
 
   const height = () => {
     const width = image.crop_width || image.real_width;
@@ -35,14 +37,14 @@ export default function EditableImage(props: EditableImageProps) {
 
   const handleClick = (evt: Event) => {
     evt.preventDefault();
-    ModalStore.dispatch({
-      type: "OPEN",
-      payload: <ImageEditor image={image}
-                            caption={props.caption}
-                            locale={props.locale}
-                            locales={props.locales}
-                            onUpdate={updateImage} />
-    });
+    openModal(
+      <ImageEditor
+        image={image}
+        caption={props.caption}
+        locale={props.locale}
+        locales={props.locales}
+        onUpdate={updateImage} />
+    );
   };
 
   const altWarning = !image.alternative[props.locale];

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
-import ToastStore from "../stores/ToastStore";
+import useToastStore from "../stores/useToastStore";
 import { ImageResource, Locale } from "../types";
 import { post } from "../lib/request";
 
@@ -39,6 +39,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
   const [dragover, setDragover] = useState(false);
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
+  const error = useToastStore((state) => state.error);
 
   const handleDragOver = (evt: Event) => {
     evt.preventDefault();
@@ -117,10 +118,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
       .then((response: ImageResponse) => {
         setUploading(false);
         if ("status" in response && response.status === "error") {
-          ToastStore.dispatch({
-            type: "ERROR",
-            message: `Error uploading image: ${response.error}`
-          });
+          error(`Error uploading image: ${response.error}`);
         } else if ("thumbnail_url" in response) {
           setSrc(response.thumbnail_url);
           setImage(response);

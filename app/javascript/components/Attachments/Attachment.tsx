@@ -1,8 +1,8 @@
 import React from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
-import ModalStore from "../../stores/ModalStore";
-import ToastStore from "../../stores/ToastStore";
+import useModalStore from "../../stores/useModalStore";
+import useToastStore from "../../stores/useToastStore";
 import { AttachmentResource, Locale } from "../../types";
 
 import { useDraggable, Draggable } from "../drag";
@@ -31,14 +31,15 @@ export default function Attachment(props: AttachmentProps) {
   const { record } = draggable;
   const { attachment, uploading } = record;
 
+  const openModal = useModalStore((state) => state.open);
+  const notice = useToastStore((state) => state.notice);
+
   const listeners = useDraggable(draggable, props.startDrag);
 
   const copyEmbed = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
-    ToastStore.dispatch({
-      type: "NOTICE", message: "Embed code copied to clipboard"
-    });
+    notice("Embed code copied to clipboard");
   };
 
   const deleteRecord = (evt: Event) => {
@@ -64,13 +65,13 @@ export default function Attachment(props: AttachmentProps) {
 
   const editAttachment = (evt: Event) => {
     evt.preventDefault();
-    ModalStore.dispatch({
-      type: "OPEN",
-      payload: <AttachmentEditor attachment={attachment}
-                                 locale={locale}
-                                 locales={locales}
-                                 onUpdate={props.onUpdate} />
-    });
+    openModal(
+      <AttachmentEditor
+        attachment={attachment}
+        locale={locale}
+        locales={locales}
+        onUpdate={props.onUpdate} />
+    );
   };
 
   const classes = ["attachment"];

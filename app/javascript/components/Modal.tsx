@@ -1,64 +1,48 @@
-import React, { Component } from "react";
-import { Store } from "redux";
+import React, { useEffect } from "react";
 
-import ModalStore, { ModalState } from "../stores/ModalStore";
+import useModalStore from "../stores/useModalStore";
 
-type ModalProps = Record<string, never>;
+export default function Modal() {
+  const component = useModalStore((state) => state.component);
+  const close = useModalStore((state) => state.close);
 
-export default class Modal extends Component<ModalProps, ModalState> {
-  store: Store;
-
-  constructor(props: ModalProps) {
-    super(props);
-    this.state = { component: null };
-    this.store = ModalStore;
-  }
-
-  componentDidMount() {
-    this.unsubscribe = this.store.subscribe(this.handleChange);
-    window.addEventListener("keypress", this.handleKeypress);
-  }
-
-  componentWillUnmount() {
-    if ("unsubscribe" in this) {
-      this.unsubscribe();
-    }
-    window.removeEventListener("keypress", this.handleKeypress);
-  }
-
-  closeModal = (evt: Event) => {
+  const handleClose = (evt: Event) => {
     evt.stopPropagation();
     evt.preventDefault();
-    ModalStore.dispatch({ type: "CLOSE" });
+    close();
   };
 
-  handleChange = () => {
-    this.setState({ ...this.store.getState() as ModalState });
-  };
-
-  handleKeypress = (evt: KeyboardEvent) => {
-    if (this.state.component && (evt.key == "Escape" || evt.keyCode === 27)) {
-      this.closeModal(evt);
+  const handleKeypress = (evt: KeyboardEvent) => {
+    if (component && (evt.key == "Escape" || evt.keyCode === 27)) {
+      handleClose(evt);
     }
   };
 
-  render() {
-    const component = this.state.component;
-
+  useEffect(() => {
     if (component) {
       document.body.classList.add("modal");
     } else {
       document.body.classList.remove("modal");
-      return (<div className="modal-wrapper"></div>);
     }
+  }, [component]);
 
+  useEffect(() => {
+    window.addEventListener("keypress", handleKeypress);
+    return () => {
+      window.removeEventListener("keypress", handleKeypress);
+    };
+  }, []);
+
+  if (component) {
     return (
       <div className="modal-wrapper open">
-        <div className="background" onClick={this.closeModal} />
+        <div className="background" onClick={handleClose} />
         <div className="modal">
           {component}
         </div>
       </div>
     );
+  } else {
+    return (<div className="modal-wrapper"></div>);
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ModalStore from "../stores/ModalStore";
+import useModalStore from "../stores/useModalStore";
 import { putJson } from "../lib/request";
 
 import { Locale, ImageResource } from "../types";
@@ -22,6 +22,8 @@ export default function ImageEditor(props: ImageEditorProps) {
     alternative: props.image.alternative || {},
   });
 
+  const closeModal = useModalStore((state) => state.close);
+
   const updateLocalization = (name: "alternative" | "caption", value: string) => {
     setLocalizations({
       ...localizations,
@@ -39,7 +41,7 @@ export default function ImageEditor(props: ImageEditorProps) {
     if (props.onUpdate) {
       props.onUpdate(data, croppedImage);
     }
-    ModalStore.dispatch({ type: "CLOSE" });
+    closeModal();
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
-import ToastStore from "../../stores/ToastStore";
+import useToastStore from "../../stores/useToastStore";
 import { ImageResource, Locale } from "../../types";
 import Placeholder from "./Placeholder";
 
@@ -34,6 +34,8 @@ export default function GridImage(props: GridImageProps) {
   const record = draggable.record;
   const image = record.image;
 
+  const notice = useToastStore((state) => state.notice);
+
   const [src, setSrc] = useState(record.src || null);
 
   const dragAttrs = useDraggable(draggable, props.startDrag);
@@ -49,9 +51,7 @@ export default function GridImage(props: GridImageProps) {
   const copyEmbed = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
-    ToastStore.dispatch({
-      type: "NOTICE", message: "Embed code copied to clipboard"
-    });
+    notice("Embed code copied to clipboard");
   };
 
   const deleteImage = (evt: Event) => {

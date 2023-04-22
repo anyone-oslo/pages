@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
-import ModalStore from "../../stores/ModalStore";
-import ToastStore from "../../stores/ToastStore";
+import useModalStore from "../../stores/useModalStore";
+import useToastStore from "../../stores/useToastStore";
 import { AttachmentResource, Locale } from "../../types";
 import { putJson } from "../../lib/request";
 
@@ -21,6 +21,9 @@ export default function AttachmentEditor(props: AttachmentEditorProps) {
     description: attachment.description || {},
   });
 
+  const notice = useToastStore((state) => state.notice);
+  const closeModal = useModalStore((state) => state.close);
+
   const updateLocalization = (name: "name" | "description") => (evt: ChangeEvent<HTMLInputElement>) => {
     setLocalizations({
       ...localizations,
@@ -32,9 +35,7 @@ export default function AttachmentEditor(props: AttachmentEditorProps) {
   const copyEmbedCode = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
-    ToastStore.dispatch({
-      type: "NOTICE", message: "Embed code copied to clipboard"
-    });
+    notice("Embed code copied to clipboard");
   };
 
   const save = (evt: Event) => {
@@ -48,7 +49,7 @@ export default function AttachmentEditor(props: AttachmentEditorProps) {
     if (props.onUpdate) {
       props.onUpdate(data);
     }
-    ModalStore.dispatch({ type: "CLOSE" });
+    closeModal();
   };
 
   const inputDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
@@ -112,7 +113,7 @@ export default function AttachmentEditor(props: AttachmentEditorProps) {
           <button onClick={save}>
             Save
           </button>
-          <button onClick={() => ModalStore.dispatch({ type: "CLOSE" })}>
+          <button onClick={closeModal}>
             Cancel
           </button>
         </div>

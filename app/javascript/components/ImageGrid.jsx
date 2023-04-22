@@ -4,7 +4,7 @@ import FileUploadButton from "./FileUploadButton";
 import DragElement from "./ImageGrid/DragElement";
 import FilePlaceholder from "./ImageGrid/FilePlaceholder";
 import GridImage from "./ImageGrid/GridImage";
-import ToastStore from "../stores/ToastStore";
+import useToastStore from "../stores/useToastStore";
 import { post } from "../lib/request";
 
 import { createDraggable,
@@ -49,6 +49,7 @@ export default function ImageGrid(props) {
   const primary = useDragCollection(initPrimary);
   const images = useDragCollection(initImages);
   const [deleted, setDeleted] = useState([]);
+  const error = useToastStore((state) => state.error);
 
   const containerRef = useRef();
 
@@ -99,9 +100,7 @@ export default function ImageGrid(props) {
     post("/admin/images.json", data)
       .then(json => {
         if (json.status === "error") {
-          ToastStore.dispatch({
-            type: "ERROR", message: "Error uploading image: " + json.error
-          });
+          error("Error uploading image: " + json.error);
           dispatchAll({ type: "remove", payload: draggable });
         } else {
           dispatchAll({

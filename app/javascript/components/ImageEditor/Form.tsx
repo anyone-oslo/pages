@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
-import ModalStore from "../../stores/ModalStore";
-import ToastStore from "../../stores/ToastStore";
+import useModalStore from "../../stores/useModalStore";
+import useToastStore from "../../stores/useToastStore";
 import { Locale, ImageResource } from "../../types";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 
@@ -19,12 +19,13 @@ interface FormProps {
 export default function Form(props: FormProps) {
   const { alternative, caption, image, locale, locales } = props;
 
+  const closeModal = useModalStore((state) => state.close);
+  const notice = useToastStore((state) => state.notice);
+
   const copyEmbedCode = (evt: Event) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
-    ToastStore.dispatch({
-      type: "NOTICE", message: "Embed code copied to clipboard"
-    });
+    notice("Embed code copied to clipboard");
   };
 
   const handleChangeLocale = (evt: ChangeEvent<HTMLSelectElement>) => {
@@ -95,7 +96,7 @@ export default function Form(props: FormProps) {
         <button onClick={props.save}>
           Save
         </button>
-        <button onClick={() => ModalStore.dispatch({ type: "CLOSE" })}>
+        <button onClick={closeModal}>
           Cancel
         </button>
       </div>

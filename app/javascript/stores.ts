@@ -1,2 +1,2 @@
-export { default as ModalStore } from "./stores/ModalStore";
-export { default as ToastStore } from "./stores/ToastStore";
+export { default as useModalStore } from "./stores/useModalStore";
+export { default as useToastStore } from "./stores/useToastStore";

@@ -15,7 +15,6 @@ __metadata:
     "@types/lodash": ^4.14.194
     "@types/rails__ujs": ^6.0.1
     "@types/react": ^18.0.35
-    "@types/redux": ^3.6.0
     "@typescript-eslint/eslint-plugin": ^5.58.0
     "@typescript-eslint/parser": ^5.58.0
     autoprefixer: ^10.4.13
@@ -38,19 +37,10 @@ __metadata:
     react-dom: ^17.0.2
     react-image-crop: ^5.0.0
     react_ujs: ^2.6.1
-    redux: ^4.1.2
     typescript: ^5.0.4
+    zustand: ^4.3.7
   languageName: unknown
   linkType: soft
-
-"@babel/runtime@npm:^7.9.2":
-  version: 7.15.4
-  resolution: "@babel/runtime@npm:7.15.4"
-  dependencies:
-    regenerator-runtime: ^0.13.4
-  checksum: c40825430400e47c19b97e4142d5315d2910305b9714d44a711472587ee2fd4521fdba5f02ddd9df3902f5e988d9854fa83f4da1e0c091f70f6983fa52480606
-  languageName: node
-  linkType: hard
 
 "@csstools/postcss-cascade-layers@npm:^1.1.1":
   version: 1.1.1
@@ -418,13 +408,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: e65670397216e037b150a509ec08189140b4c20b82b612ac00b2a7133202be2d1def1e7ee69617b2df06ab4c00c43c4ee23e84788ad661aea9664da2f27c518a
-  languageName: node
-  linkType: hard
-
-"@types/redux@npm:^3.6.0":
-  version: 3.6.31
-  resolution: "@types/redux@npm:3.6.31"
-  checksum: 7bfaa5c5390364d8ba4132033f9887f1c1ed96fda434d3f70be801e0997542a89c03dcd656e3bc8a1ea84bb6450e25e833cf17302dbd9055d6ff0e1f1b4f9a31
   languageName: node
   linkType: hard
 
@@ -4029,22 +4012,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "redux@npm:4.1.2"
-  dependencies:
-    "@babel/runtime": ^7.9.2
-  checksum: 6a839cee5bd580c5298d968e9e2302150e961318253819bcd97f9d945a5a409559eacddf6026f4118bb68b681c593d90e8a2c5bbf278f014aff9bf0d2d8fa084
-  languageName: node
-  linkType: hard
-
-"regenerator-runtime@npm:^0.13.4":
-  version: 0.13.5
-  resolution: "regenerator-runtime@npm:0.13.5"
-  checksum: afc42d8b86f5ef2003821a2fc214c60640a07992563888529f45533071545c2631805d7214e32f55b517a665f1c59f2629a641a5cc1efbd56f48b6149dd319f2
-  languageName: node
-  linkType: hard
-
 "regexp.prototype.flags@npm:^1.3.1":
   version: 1.3.1
   resolution: "regexp.prototype.flags@npm:1.3.1"
@@ -4599,6 +4566,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-sync-external-store@npm:1.2.0":
+  version: 1.2.0
+  resolution: "use-sync-external-store@npm:1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 5c639e0f8da3521d605f59ce5be9e094ca772bd44a4ce7322b055a6f58eeed8dda3c94cabd90c7a41fb6fa852210092008afe48f7038792fd47501f33299116a
+  languageName: node
+  linkType: hard
+
 "util-deprecate@npm:^1.0.1, util-deprecate@npm:^1.0.2":
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
@@ -4727,5 +4703,22 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^4.3.7":
+  version: 4.3.7
+  resolution: "zustand@npm:4.3.7"
+  dependencies:
+    use-sync-external-store: 1.2.0
+  peerDependencies:
+    immer: ">=9.0"
+    react: ">=16.8"
+  peerDependenciesMeta:
+    immer:
+      optional: true
+    react:
+      optional: true
+  checksum: 355b414ba4830b6106bcb888077c5f90f40ed649e4127e337eff4fb4ea90e88bf5cccf32344711d743cb92a676a0643a6ab3674ddc60ed49f17ea1bc8e3f58e2
   languageName: node
   linkType: hard
