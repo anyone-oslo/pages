@@ -5,7 +5,7 @@ import { Draggable, DragCollection, DragState, Position } from "./types";
 function containsFiles(evt: Event) {
   if ("dataTransfer" in evt) {
     const dataTransfer: DataTransfer = evt.dataTransfer;
-    if ("types" in dataTransfer.types) {
+    if ("types" in dataTransfer) {
       const types = dataTransfer.types;
       for (let i = 0; i < types.length; i++) {
         if (types[i] === "Files" || types[i] === "application/x-moz-file") {
