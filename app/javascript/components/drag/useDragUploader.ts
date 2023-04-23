@@ -83,8 +83,8 @@ export default function useDragUploader(
     if (dragState.dragging) {
       const prevDragState = dragState;
       let files: File[] = [];
-      evt.preventDefault();
       evt.stopPropagation();
+      evt.preventDefault();
       if ("dataTransfer" in evt && dragState.dragging == "Files") {
         files = getFiles(evt.dataTransfer);
       }

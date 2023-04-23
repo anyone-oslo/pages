@@ -15,7 +15,7 @@ interface Record {
 }
 
 interface GridImageProps {
-  draggable: { record: Record }
+  draggable: { handle: string, record: Record }
   attributeName: string,
   locale: string,
   locales: { [index: string]: Locale },
@@ -86,13 +86,15 @@ export default function GridImage(props: GridImageProps) {
        <Placeholder src={src} />}
       {image &&
        <>
-         <EditableImage image={image}
-                        src={src || image.thumbnail_url}
-                        width={250}
-                        caption={true}
-                        locale={props.locale}
-                        locales={props.locales}
-                        onUpdate={props.onUpdate} />
+         <EditableImage
+           image={image}
+           key={props.placeholder ? "placeholder" : draggable.handle}
+           src={src || image.thumbnail_url}
+           width={250}
+           caption={true}
+           locale={props.locale}
+           locales={props.locales}
+           onUpdate={props.onUpdate} />
          <div className="actions">
            {props.showEmbed && (
              <button onClick={copyEmbed}>
