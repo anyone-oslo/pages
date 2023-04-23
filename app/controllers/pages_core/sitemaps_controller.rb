@@ -20,10 +20,8 @@ module PagesCore
     end
 
     def format_record(record)
-      {
-        loc: record_url(record),
-        lastmod: format_time(record.updated_at)
-      }
+      { loc: record_url(record),
+        lastmod: format_time(record.updated_at) }
     end
 
     def formatted_entries
@@ -46,7 +44,7 @@ module PagesCore
       ([Page.root.try(:localize, I18n.default_locale)] +
        locales.flat_map do |locale|
          Page.published.localized(locale).includes(:parent)
-       end).compact.uniq
+       end).compact
     end
 
     def page_record_url(record)
