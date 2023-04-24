@@ -28,10 +28,7 @@ module PagesCore
         respond_to do |format|
           format.html { render_published_page(@page) }
           format.json { render json: PageResource.new(@page) }
-          format.rss do
-            render_rss(@page.pages.limit(20).includes(:image, :author),
-                       title: @page.name)
-          end
+          format.rss { render_page_rss(@page) }
         end
       end
 
@@ -84,6 +81,15 @@ module PagesCore
         return if @already_rendered
 
         render template: "pages/templates/#{template}"
+      end
+
+      def render_page_rss(page)
+        if page.feed_enabled?
+          render_rss(page.pages.limit(20).includes(:image, :author),
+                     title: page.name)
+        else
+          render_error 404
+        end
       end
 
       def find_page_by_path
