@@ -20,7 +20,10 @@ module PagesCore
       def index
         respond_to do |format|
           format.html { render_published_page(root_pages.try(&:first)) }
-          format.rss { render_rss(all_feed_items) }
+          format.rss do
+            render_rss(all_feed_items.paginate(per_page: per_page_param,
+                                               page: page_param))
+          end
         end
       end
 
@@ -28,7 +31,7 @@ module PagesCore
         respond_to do |format|
           format.html { render_published_page(@page) }
           format.json { render json: PageResource.new(@page) }
-          format.rss { render_page_rss(@page) }
+          format.rss { render_page_rss(@page, page_param) }
         end
       end
 
@@ -61,6 +64,16 @@ module PagesCore
         super
       end
 
+      def per_page_param(default = 20, max = 1000)
+        return default unless params[:per_page].is_a?(String)
+
+        params[:per_page].to_i.clamp(1, max)
+      end
+
+      def page_param
+        params[:page].is_a?(String) ? params[:page] : 1
+      end
+
       def page_template(page)
         if PagesCore::Templates.names.include?(page.template)
           page.template
@@ -83,9 +96,11 @@ module PagesCore
         render template: "pages/templates/#{template}"
       end
 
-      def render_page_rss(page)
+      def render_page_rss(page, pagination_page = 1)
         if page.feed_enabled?
-          render_rss(page.pages.limit(20).includes(:image, :author),
+          render_rss(page.pages.paginate(per_page: per_page_param,
+                                         page: pagination_page)
+                         .includes(:image, :author),
                      title: page.name)
         else
           render_error 404

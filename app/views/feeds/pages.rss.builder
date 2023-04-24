@@ -4,9 +4,7 @@ xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do
     xml.title(@title || PagesCore.config(:site_name))
-    xml.link(
-      url_for(controller: "pages", action: "index", only_path: false)
-    )
+    xml.link(root_url)
     xml.description "Recent items"
     xml.language locale
     xml.generator "Pages"

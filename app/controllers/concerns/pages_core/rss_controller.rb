@@ -11,7 +11,6 @@ module PagesCore
       Page.where(parent_page_id: feeds)
           .order("published_at DESC")
           .published
-          .limit(20)
           .localized(locale)
     end
 
