@@ -13,9 +13,6 @@ PagesCore.configure do |config|
   # Locales and names
   # config.locales(nb: 'Norwegian', en: 'English')
 
-  # Fulltext in RSS feeds (default: disabled)
-  # config.rss_fulltext :disabled
-
   # New pages will be created by the user with this email address:
   # config.default_author "email@example.com"
 

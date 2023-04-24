@@ -15,12 +15,8 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
       xml.item do
         xml.title { xml.cdata! item.name.to_s }
         xml.link page_url(@locale, item, only_path: false)
-        if PagesCore.config.rss_fulltext?
-          xml.description { xml.cdata! item.body.to_html }
-        else
-          xml.description do
-            xml.cdata!((item.extended? ? item.excerpt : item.body).to_html)
-          end
+        xml.description do
+          xml.cdata! item.excerpt.to_html + item.body.to_html
         end
         xml.guid page_url(@locale, item, only_path: false)
         xml.pubDate item.published_at.to_fs(:rfc822)
