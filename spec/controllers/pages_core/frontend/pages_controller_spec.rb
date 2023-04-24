@@ -119,10 +119,17 @@ describe PagesCore::Frontend::PagesController do
       it { is_expected.to render_template("pages/templates/index") }
     end
 
-    describe "RSS rendering" do
+    describe "RSS rendering when page is feed enabled" do
+      let(:page) { create(:page, name: "Home", feed_enabled: true) }
       let(:params) { { path: page.path_segment, format: :rss } }
 
       it { is_expected.to render_template("feeds/pages") }
+    end
+
+    describe "RSS rendering when page isn't feed enabled" do
+      let(:params) { { path: page.path_segment, format: :rss } }
+
+      specify { expect(response).to have_http_status(:not_found) }
     end
 
     describe "JSON rendering" do
