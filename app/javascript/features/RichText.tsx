@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import RichTextArea from "../components/RichTextArea";
 import readyHandler from "../lib/readyHandler";
 
@@ -11,10 +11,10 @@ class RichText {
     });
   }
 
-  enhance (elem) {
+  enhance (elem: HTMLTextAreaElement) {
     const container = document.createElement("div");
     elem.parentNode.appendChild(container);
-    ReactDOM.render(
+    createRoot(container).render(
       <RichTextArea value={elem.value}
                     name={elem.name}
                     rows={elem.rows}
