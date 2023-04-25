@@ -51,7 +51,7 @@
     "build-debug": "esbuild app/javascript/admin-dist.ts --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css"
   },
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.5.0",
   "bugs": {
     "url": "https://github.com/anyone_oslo/pages/issues"
   },
