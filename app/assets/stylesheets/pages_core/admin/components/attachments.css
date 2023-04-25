@@ -105,7 +105,7 @@
   width: 60vw;
   min-height: 450px;
 
-  @media --mobile {
+  @media (--mobile) {
     width: 100%;
     height: 100%;
   }

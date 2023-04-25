@@ -3,7 +3,7 @@ body.modal {
     transition: filter 1000ms linear;
     filter: blur(10px);
 
-    @media --mobile {
+    @media (--mobile) {
       filter: none;
     }
   }
@@ -41,7 +41,7 @@ body.modal {
     animation-fill-mode: forwards;
     z-index: 2;
 
-    @media --mobile {
+    @media (--mobile) {
       max-width: 100%;
       width: 100vw;
       height: 100vh;

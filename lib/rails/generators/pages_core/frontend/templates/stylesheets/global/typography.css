@@ -58,7 +58,7 @@ html {
   @media screen and (max-width: 1440px) {
     @mixin font-scale 14, 16, $breakpoint-mobile-small, 1440;
   }
-  @media --mobile-small {
+  @media (--mobile-small) {
     @mixin font-scale 12, 16, 1, $breakpoint-mobile-small;
   }
 }

@@ -9,7 +9,7 @@
   box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.1);
   padding: 1px;
 
-  @media --mobile {
+  @media (--mobile) {
     flex-direction: column;
   }
 
@@ -29,7 +29,7 @@
       max-height: 400px;
     }
 
-    @media --mobile {
+    @media (--mobile) {
       max-width: 100%;
     }
   }

@@ -28,7 +28,7 @@ body {
   display: flex;
   flex-flow: row nowrap;
 
-  @media --mobile {
+  @media (--mobile) {
     flex-flow: column nowrap;
   }
 
@@ -42,7 +42,7 @@ body {
     width: 20%;
     padding: 0px 16px;
 
-    @media --mobile {
+    @media (--mobile) {
       width: 100%;
     }
   }

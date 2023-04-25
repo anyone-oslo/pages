@@ -3,7 +3,7 @@
   margin-bottom: 40px;
   display: flex;
 
-  @media --mobile {
+  @media (--mobile) {
     flex-direction: column;
   }
 
@@ -87,7 +87,7 @@
       flex-direction: row;
       visibility: hidden;
 
-      @media --mobile {
+      @media (--mobile) {
         visibility: visible;
       }
 
@@ -106,7 +106,7 @@
   & .primary-image {
     width: 33.33%;
 
-    @media --mobile {
+    @media (--mobile) {
       width: 100%;
     }
 
@@ -147,11 +147,11 @@
         justify-content: flex-end;
         width: 16.66%;
 
-        @media --narrow {
+        @media (--narrow) {
           width: 50%;
         }
 
-        @media --mobile {
+        @media (--mobile) {
           width: 50%;
         }
       }
@@ -185,7 +185,7 @@
     & .grid {
       width: 66.67%;
 
-      @media --mobile {
+      @media (--mobile) {
         width: 100%;
       }
     }
@@ -193,11 +193,11 @@
     & .images .grid-image {
       width: 25%;
 
-      @media --narrow {
+      @media (--narrow) {
         width: 50%;
       }
 
-      @media --mobile {
+      @media (--mobile) {
         width: 50%;
       }
     }
