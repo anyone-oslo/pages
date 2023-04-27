@@ -20,11 +20,9 @@ module PagesCore
       tag.figcaption(caption)
     end
 
-    def image_figure(image, size: nil, class_name: nil, link: nil, caption: nil)
+    def image_figure(image, size: nil, class_name: nil, link: nil, caption: nil, ratio: nil)
       class_name = ["image", image_class_name(image), class_name].compact
-      size ||= default_image_size
-      image_tag = dynamic_image_tag(image,
-                                    size: size, crop: false, upscale: false)
+      image_tag = image_figure_image_tag(image, size: size, ratio: ratio)
       tag.figure((link ? image_link_to(image_tag, link) : image_tag) +
                  image_caption(image, caption: caption),
                  class: class_name)
@@ -57,6 +55,11 @@ module PagesCore
       { alt: record.alternative }
     end
 
+    def fit_ratio(size, ratio)
+      v = Vector2d(size)
+      Vector2d.new(v.y * ratio, v.y).fit(v)
+    end
+
     def image_class_name(image)
       if image.size.x == image.size.y
         "square"
@@ -65,6 +68,13 @@ module PagesCore
       else
         "portrait"
       end
+    end
+
+    def image_figure_image_tag(image, size: nil, ratio: nil)
+      size ||= default_image_size
+      size = fit_ratio(size, ratio) if ratio
+
+      dynamic_image_tag(image, size: size, crop: ratio && true, upscale: false)
     end
 
     def image_link_to(content, href)
