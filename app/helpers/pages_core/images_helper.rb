@@ -20,7 +20,8 @@ module PagesCore
       tag.figcaption(caption)
     end
 
-    def image_figure(image, size: nil, class_name: nil, link: nil, caption: nil, ratio: nil)
+    def image_figure(image, size: nil, class_name: nil, link: nil,
+                     caption: nil, ratio: nil)
       class_name = ["image", image_class_name(image), class_name].compact
       image_tag = image_figure_image_tag(image, size: size, ratio: ratio)
       tag.figure((link ? image_link_to(image_tag, link) : image_tag) +
