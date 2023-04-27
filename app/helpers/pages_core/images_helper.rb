@@ -20,12 +20,22 @@ module PagesCore
       tag.figcaption(caption)
     end
 
-    def image_figure(image, size: nil, class_name: nil, link: nil,
-                     caption: nil, ratio: nil)
-      class_name = ["image", image_class_name(image), class_name].compact
-      image_tag = image_figure_image_tag(image, size: size, ratio: ratio)
-      tag.figure((link ? image_link_to(image_tag, link) : image_tag) +
-                 image_caption(image, caption: caption),
+    # Renders an image figure tag with caption.
+    #
+    # ==== Options
+    # * <tt>:caption</tt>: Override caption with a string, or set to false to
+    #   disable captions.
+    # * <tt>:class_name</tt>: Class name to add to figure tag.
+    # * <tt>:link</tt>: Link target for image.
+    # * <tt>:ratio</tt>: Ratio to constrain image by.
+    # * <tt>:size</tt>: Max size for image.
+    def image_figure(image, opts = {})
+      class_name = ["image", image_class_name(image), opts[:class_name]].compact
+      image_tag = image_figure_image_tag(image,
+                                         size: opts[:size], ratio:
+                                         opts[:ratio])
+      content = opts[:link] ? image_link_to(image_tag, opts[:link]) : image_tag
+      tag.figure(content + image_caption(image, caption: opts[:caption]),
                  class: class_name)
     end
 
