@@ -48,9 +48,14 @@ interface PageAncestor {
   path_segment: Record<string, string>;
 }
 
+type PageBlockValue = string | Record<string, string>;
+
 interface PageResource {
-  [index: string]: string | Record<string, string>;
   id: number | null;
+  blocks: {
+    [index: string]: PageBlockValue;
+    name: Record<string, string>;
+  };
   ancestors: PageAncestor[];
   starts_at: string | null;
   ends_at: string | null;
@@ -72,7 +77,6 @@ interface PageResource {
     src: string | null;
     image: ImageResource | null;
   };
-  name: Record<string, string>;
   path_segment: Record<string, string>;
   urls: Record<string, string>;
   errors: { attribute: string; message: string }[];

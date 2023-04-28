@@ -27,11 +27,11 @@ export function blockValue(
   block: TemplateBlock
 ): PageBlockValue {
   if (block.localized) {
-    const value: Record<string, string> = state.page[block.name] || {};
+    const value: Record<string, string> = state.page.blocks[block.name] || {};
 
     return value[state.locale] || "";
   } else {
-    return state.page[block.name] || "";
+    return state.page.blocks[block.name] || "";
   }
 }
 
@@ -97,30 +97,52 @@ function reducer(state: PageFormState, action: PageFormAction): PageFormState {
       return { ...state, locale: payload };
     case "update":
       return updatePage(state, payload);
+    case "updateBlocks":
+      return updatePageBlocks(state, payload);
     default:
       return state;
   }
+}
+
+function updateLocalized(
+  state: PageFormState,
+  obj: { [index: string]: PageBlockValue },
+  attributes: Record<string, string>
+) {
+  const { locale, templates } = state;
+  const nextObj = {};
+
+  Object.keys(attributes).forEach((attr: string) => {
+    if (localizedAttributes(templates).indexOf(attr) !== -1) {
+      nextObj[attr] = {
+        ...obj[attr],
+        [locale]: attributes[attr]
+      } as PageBlockValue;
+    } else {
+      nextObj[attr] = attributes[attr];
+    }
+  });
+
+  return { ...obj, ...nextObj };
+}
+
+function updatePageBlocks(
+  state: PageFormState,
+  attributes: Record<string, string>
+): PageFormState {
+  const { page } = state;
+
+  return {
+    ...state,
+    page: { ...page, blocks: updateLocalized(state, page.blocks, attributes) }
+  };
 }
 
 function updatePage(
   state: PageFormState,
   attributes: Record<string, string>
 ): PageFormState {
-  const { locale, templates, page } = state;
-  const nextPage = {};
-
-  Object.keys(attributes).forEach((attr: string) => {
-    if (localizedAttributes(templates).indexOf(attr) !== -1) {
-      nextPage[attr] = {
-        ...page[attr],
-        [locale]: attributes[attr]
-      } as PageBlockValue;
-    } else {
-      nextPage[attr] = attributes[attr];
-    }
-  });
-
-  return { ...state, page: { ...page, ...nextPage } };
+  return { ...state, page: updateLocalized(state, state.page, attributes) };
 }
 
 export default function usePage(
