@@ -47,9 +47,14 @@ export interface PageAncestor {
   path_segment: Record<string, string>
 }
 
+export type PageBlockValue = string | Record<string, string>;
+
 export interface PageResource {
-  [index: string]: string | Record<string, string>,
   id: number | null,
+  blocks: {
+    [index: string]: PageBlockValue,
+    name: Record<string, string>,
+  },
   ancestors: PageAncestor[],
   starts_at: string | null,
   ends_at: string | null,
@@ -71,7 +76,6 @@ export interface PageResource {
     src: string | null,
     image: ImageResource | null
   },
-  name: Record<string, string>,
   path_segment: Record<string, string>,
   urls: Record<string, string>,
   errors: { attribute: string, message: string }[]

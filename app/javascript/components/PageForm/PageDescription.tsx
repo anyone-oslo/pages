@@ -1,6 +1,6 @@
 import React from "react";
 
-import { PageResource } from "../../types";
+import { PageAncestor, PageResource } from "../../types";
 import { PageFormAction, PageFormState } from "./usePage";
 import LocaleLinks from "./LocaleLinks";
 
@@ -10,7 +10,7 @@ interface PageDescriptionProps {
   children: JSX.Element
 }
 
-function editLink(locale: string, page: PageResource): string {
+function editLink(locale: string, page: PageAncestor | PageResource): string {
   return(
     <a href={`/admin/${locale}/pages/${page.id}/edit`}>
       {pageName(locale, page)}
@@ -18,8 +18,11 @@ function editLink(locale: string, page: PageResource): string {
   );
 }
 
-function pageName(locale: string, page: PageResource) {
-  return page.name[locale] || <i>Untitled</i>;
+function pageName(locale: string, page: PageAncestor | PageResource) {
+  if ("name" in page) {
+    return page.name[locale];
+  }
+  return page.blocks.name[locale] || <i>Untitled</i>;
 }
 
 export default function PageDescription(props: PageDescriptionProps) {

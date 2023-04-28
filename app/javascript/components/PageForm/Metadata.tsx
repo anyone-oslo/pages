@@ -1,6 +1,7 @@
 import React from "react";
 
-import { blockValue, errorsOn, PageBlockValue, PageFormAction, PageFormState } from "./usePage";
+import { PageBlockValue } from "../../types";
+import { blockValue, errorsOn, PageFormAction, PageFormState } from "./usePage";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
 import LabelledField from "../LabelledField";
@@ -17,7 +18,7 @@ export default function Metadata(props: MetadataProps) {
   const { page, locale, locales, inputDir, templateConfig } = state;
 
   const handleChange = (attr: string) => (value: PageBlockValue) => {
-    dispatch({ type: "update", payload: { [attr]: value } });
+    dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 
   return (

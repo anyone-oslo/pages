@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { Locale, PageResource, TemplateBlock, TemplateConfig } from "../../types";
+import { Locale, PageBlockValue, PageResource, TemplateBlock, TemplateConfig } from "../../types";
 
 export type Author = [name: string, id: number];
 
@@ -21,15 +21,13 @@ export interface PageFormState {
   templateConfig: TemplateConfig
 }
 
-export type PageBlockValue = string | Record<string, string>;
-
 export function blockValue(state: PageFormState, block: TemplateBlock): PageBlockValue {
   if (block.localized) {
-    const value: Record<string, string> = state.page[block.name] || {};
+    const value: Record<string, string> = state.page.blocks[block.name] || {};
 
     return value[state.locale] || "";
   } else {
-    return state.page[block.name] || "";
+    return state.page.blocks[block.name] || "";
   }
 }
 
@@ -91,24 +89,46 @@ function reducer(state: PageFormState, action: PageFormAction): PageFormState {
     return { ...state, locale: payload };
   case "update":
     return updatePage(state, payload);
+  case "updateBlocks":
+    return updatePageBlocks(state, payload);
   default:
     return state;
   }
 }
 
-function updatePage(state: PageFormState, attributes: Record<string, string>): PageFormState {
-  const { locale, templates, page } = state;
-  const nextPage = {};
+function updateLocalized(
+  state: PageFormState, obj: { [index: string]: PageBlockValue },
+  attributes: Record<string, string>
+) {
+  const { locale, templates } = state;
+  const nextObj = {};
 
   Object.keys(attributes).forEach((attr: string) => {
     if (localizedAttributes(templates).indexOf(attr) !== -1) {
-      nextPage[attr] = { ...page[attr], [locale]: attributes[attr] } as PageBlockValue;
+      nextObj[attr] = { ...obj[attr], [locale]: attributes[attr] } as PageBlockValue;
     } else {
-      nextPage[attr] = attributes[attr];
+      nextObj[attr] = attributes[attr];
     }
   });
 
-  return { ...state, page: { ...page, ...nextPage } };
+  return { ...obj, ...nextObj };
+}
+
+function updatePageBlocks(
+  state: PageFormState, attributes: Record<string, string>
+): PageFormState {
+  const { page } = state;
+
+  return {
+    ...state,
+    page: { ...page, blocks: updateLocalized(state, page.blocks, attributes) }
+  };
+}
+
+function updatePage(
+  state: PageFormState, attributes: Record<string, string>
+): PageFormState {
+  return { ...state, page: updateLocalized(state, state.page, attributes) };
 }
 
 export default function usePage(

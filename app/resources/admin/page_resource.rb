@@ -14,8 +14,9 @@ module Admin
     has_many :page_images, resource: Admin::PageImageResource
     has_many :page_files, resource: Admin::PageFileResource
 
-    PagesCore::Templates::TemplateConfiguration.all_blocks.each do |attr|
-      attribute attr do
+    attribute :blocks do
+      PagesCore::Templates::TemplateConfiguration.all_blocks
+                                                 .index_with do |attr|
         if object.template_config.block(attr)[:localized]
           localized_attribute(object, attr)
         else
