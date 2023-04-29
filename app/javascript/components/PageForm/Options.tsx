@@ -95,6 +95,8 @@ export default function Options(props: OptionsProps) {
         </label>
       </LabelledField>
 
+        TODO: Categories
+
       <LabelledField htmlFor="page_template"
                      label="Template"
                      errors={errorsOn(page, "template")}>

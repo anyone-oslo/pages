@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 
+import { putJson, postJson } from "../lib/request";
+import useToastStore from "../stores/useToastStore";
 import usePage, { Author, StatusLabels } from "./PageForm/usePage";
+import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
 import Metadata from "./PageForm/Metadata";
 import Form from "./PageForm/Form";
@@ -62,10 +65,10 @@ export default function PageForm(props: PageFormProps) {
   });
 
   const { page, locale, locales, templates, templateConfig } = state;
-
   const tabs = tabsList(templates, templateConfig);
-
   const [tab, setTab] = useState(initialTab(tabs));
+  const errorToast = useToastStore((state) => state.error);
+  const noticeToast = useToastStore((state) => state.notice);
 
   useEffect(() => {
     const pageUrl =
@@ -89,7 +92,22 @@ export default function PageForm(props: PageFormProps) {
 
   const handleSubmit = (evt: Event) => {
     evt.preventDefault();
-    console.log("submit");
+    let method = postJson;
+    let url = `/admin/${locale}/pages.json`;
+    const data = { page: pageParams(page) };
+
+    if (page.id) {
+      method = putJson;
+      url = `/admin/${locale}/pages/${page.id}.json`;
+    }
+
+    method(url, data)
+      .then(() => {
+        noticeToast("Your changes were saved");
+      })
+      .catch(() => {
+        errorToast("An error occured while saving your changes.");
+      });
   };
 
   return (
