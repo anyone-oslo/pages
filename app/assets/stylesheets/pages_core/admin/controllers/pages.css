@@ -148,20 +148,6 @@ td.drag-handle {
     padding-top: 16px;
   }
 
-  & .hidden-options {
-    display: none;
-  }
-
-  & .autopublish-notice,
-  & .published-date,
-  & .advanced-options {
-    display: none;
-
-    &.show {
-      display: block;
-    }
-  }
-
   & main input[type=text],
   & main textarea {
     width: 100%;

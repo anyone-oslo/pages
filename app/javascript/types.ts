@@ -3,11 +3,21 @@ export interface Locale {
   dir: "ltr" | "rtl"
 }
 
+export interface AttachmentRecord {
+  id: number | null,
+  attachment: AttachmentResource
+}
+
 export interface AttachmentResource {
   id: number | null,
   name: Record<string, string>,
   description: Record<string, string>,
   url: string
+}
+
+export interface ImageRecord {
+  id: number | null,
+  image: ImageResource
 }
 
 export interface ImageResource {
@@ -27,4 +37,70 @@ export interface ImageResource {
   original_url: string,
   thumbnail_url: string
   uncropped_url: string
+}
+
+export type ImageResponse = ImageResource | { status: "error", error: string }
+
+export interface PageAncestor {
+  id: number,
+  name: Record<string, string>,
+  path_segment: Record<string, string>
+}
+
+export type PageBlockValue = string | Record<string, string>;
+
+export interface PageResource {
+  id: number | null,
+  blocks: {
+    [index: string]: PageBlockValue,
+    name: Record<string, string>,
+  },
+  ancestors: PageAncestor[],
+  starts_at: string | null,
+  ends_at: string | null,
+  all_day: boolean,
+  status: string,
+  published_at: string,
+  pinned: boolean,
+  template: string,
+  unique_name: string,
+  feed_enabled: boolean,
+  news_page: boolean,
+  user_id: number,
+  redirect_to: string,
+  page_images: ImageRecord[],
+  page_files: AttachmentRecord[],
+  enabled_tags: string[],
+  tags_and_suggestions: string[],
+  meta_image: {
+    src: string | null,
+    image: ImageResource | null
+  },
+  path_segment: Record<string, string>,
+  urls: Record<string, string>,
+  errors: { attribute: string, message: string }[]
+}
+
+export interface TemplateBlock {
+  name: string,
+  title: string,
+  description?: string,
+  optional: boolean,
+  enforced: boolean,
+  size: string,
+  class?: string,
+  localized?: boolean,
+  placeholder: boolean,
+  options?: [string, string][]
+}
+
+export interface TemplateConfig {
+  name: string,
+  template_name: string,
+  blocks: TemplateBlock[],
+  metadata_blocks: TemplateBlock[],
+  images: boolean,
+  dates: boolean,
+  tags: boolean,
+  files: boolean
 }

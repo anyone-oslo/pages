@@ -1,7 +1,7 @@
 export type DraggableRecord = Record<string, unknown>;
 
-export interface Draggable {
-  record: DraggableRecord,
+export interface Draggable<T = DraggableRecord> {
+  record: T,
   ref: React.MutableRefObject<HTMLDivElement>,
   rect: DOMRect | null,
   handle: string

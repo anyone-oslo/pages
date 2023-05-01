@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
 import useToastStore from "../stores/useToastStore";
-import { ImageResource, Locale } from "../types";
+import { ImageResponse, ImageResource, Locale } from "../types";
 import { post } from "../lib/request";
-
-type ImageResponse = ImageResource | { status: "error", error: string }
 
 interface ImageUploaderProps {
   locale: string,

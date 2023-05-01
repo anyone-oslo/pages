@@ -29,6 +29,10 @@ class PagePolicy < Policy
     user.role?(:pages)
   end
 
+  def edit2?
+    edit?
+  end
+
   def move?
     edit?
   end

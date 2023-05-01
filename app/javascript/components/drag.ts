@@ -1,4 +1,6 @@
-export { Draggable, DragState } from "./drag/types";
+export { Draggable,
+         DragCollection,
+         DragState } from "./drag/types";
 export { default as useDragCollection,
          createDraggable } from "./drag/useDragCollection";
 export { default as useDragUploader } from "./drag/useDragUploader";

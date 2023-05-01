@@ -2,6 +2,17 @@ import { useEffect, useState } from "react";
 
 import { Draggable, DragCollection, DragState, Position } from "./types";
 
+interface DragUploaderListeners {
+  onDragOver: (evt: Event) => void,
+  onDrop: (evt: Event) => void
+}
+
+type DragUploaderReturn = [
+  DragState,
+  (evt: Event, draggable: Draggable) => void,
+  DragUploaderListeners
+];
+
 function containsFiles(evt: Event) {
   if ("dataTransfer" in evt) {
     const dataTransfer: DataTransfer = evt.dataTransfer;
@@ -48,7 +59,7 @@ function mousePosition(evt: TouchEvent | MouseEvent): Position {
 export default function useDragUploader(
   collections: DragCollection[],
   onDragEnd: (dragState: DragState, files: File[]) => void
-) {
+): DragUploaderReturn {
   const initialState: DragState = {
     dragging: false,
     x: null, y: null

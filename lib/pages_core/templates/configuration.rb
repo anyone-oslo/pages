@@ -95,7 +95,7 @@ module PagesCore
 
       def valid_template_options
         %i[template image images files text_filter blocks
-           enabled_blocks sub_template tags dates]
+           enabled_blocks sub_template tags dates name]
       end
 
       def configure_block(tpl_name, block_name, title = nil, options = {})
