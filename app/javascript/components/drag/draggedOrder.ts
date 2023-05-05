@@ -8,7 +8,7 @@ function hovering(
   let rect: DOMRect;
   if ("rect" in target) {
     rect = target.rect;
-  } else if ("current" in target) {
+  } else if ("current" in target && target.current) {
     rect = target.current.getBoundingClientRect();
   } else {
     return false;
