@@ -42,7 +42,7 @@ function timeToString(time: Date): string {
 function yearOptions(): number[] {
   const start = 2000;
   const years: number[] = [];
-  for (let i = start; i <= (new Date()).getFullYear() - start + 11; i++) {
+  for (let i = start; i <= (new Date()).getFullYear() + 11; i++) {
     years.push(i);
   }
   return years;
