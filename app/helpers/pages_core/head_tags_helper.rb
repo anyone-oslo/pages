@@ -43,15 +43,6 @@ module PagesCore
       safe_join(feed_tags, "\n")
     end
 
-    # Outputs Google Analytics tracking code.
-    #
-    #  google_analytics_tags "UA-12345678-1"
-    #
-    def google_analytics_tags(account_id)
-      render(partial: "pages_core/google_analytics",
-             locals: { account_id: account_id })
-    end
-
     # Outputs a HTML5 doctype and head tags, with document title
     # and relevant meta tags. Takes a block which will be placed
     # inside <head>.
