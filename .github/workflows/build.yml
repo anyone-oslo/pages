@@ -41,7 +41,7 @@ jobs:
         run: |
           yarn install
       - name: Check code
-        run: yarn lint-javascript
+        run: yarn lint
 
   rspec-test:
     name: RSpec

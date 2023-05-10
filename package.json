@@ -39,6 +39,7 @@
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
+    "dependency-cruiser": "^12.12.1",
     "esbuild": "^0.17.18",
     "eslint": "^8.39.0",
     "eslint-plugin-react": "^7.32.2",
@@ -46,7 +47,8 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "lint-javascript": "eslint 'app/javascript/**/*.+(js|jsx|ts|tsx)'",
+    "architecture": "depcruise --include-only \"^app/javascript\" --output-type dot app/javascript | dot -T svg > dependency-graph.svg",
+    "lint": "eslint 'app/javascript/**/*.+(js|jsx|ts|tsx)'",
     "build": "esbuild app/javascript/admin-dist.ts --bundle --minify --sourcemap --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build-debug": "esbuild app/javascript/admin-dist.ts --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css"

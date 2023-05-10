@@ -2,7 +2,7 @@ module.exports = {
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true
+    "es2021": true
   },
   "extends": [
     "eslint:recommended",
@@ -19,11 +19,7 @@ module.exports = {
     }
   ],
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    },
+    "ecmaVersion": "latest",
     "project": true,
     "sourceType": "module",
     "tsconfigRootDir": __dirname

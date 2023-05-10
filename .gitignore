@@ -1,6 +1,7 @@
 coverage/
 *.gem
 .bundle
+dependency-graph.svg
 node_modules/
 pkg/*
 doc/*
