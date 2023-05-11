@@ -4,9 +4,9 @@ import { ImageResource } from "../../types";
 import { DragState } from "../drag";
 
 interface DragElementProps {
-  container: RefObject<HTMLDivElement>,
-  draggable: string | { record: { image: ImageResource, src?: string } },
-  dragState: DragState
+  container: RefObject<HTMLDivElement>;
+  draggable: string | { record: { image: ImageResource; src?: string } };
+  dragState: DragState;
 }
 
 export default function DragElement(props: DragElementProps) {
@@ -24,7 +24,9 @@ export default function DragElement(props: DragElementProps) {
     return (
       <div className="drag-image" style={translateStyle}>
         {"record" in draggable && draggable.record.image && (
-          <img src={draggable.record.src || draggable.record.image.thumbnail_url} />
+          <img
+            src={draggable.record.src || draggable.record.image.thumbnail_url}
+          />
         )}
       </div>
     );

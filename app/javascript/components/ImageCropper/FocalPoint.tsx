@@ -1,16 +1,16 @@
 import React, { useRef, useState } from "react";
 
 interface Position {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 }
 
 interface FocalPointProps {
-  x: number,
-  y: number,
-  onChange: (pos: Position) => void,
-  width: number,
-  height: number
+  x: number;
+  y: number;
+  onChange: (pos: Position) => void;
+  width: number;
+  height: number;
 }
 
 function clamp(val: number, min: number, max: number): number {
@@ -27,7 +27,10 @@ export default function FocalPoint(props: FocalPointProps) {
   const { width, height, onChange } = props;
 
   const [dragging, setDragging] = useState(false);
-  const [position, setPosition] = useState<Position>({ x: props.x, y: props.y });
+  const [position, setPosition] = useState<Position>({
+    x: props.x,
+    y: props.y
+  });
 
   const containerRef = useRef<HTMLDivElement>();
   const pointRef = useRef<HTMLDivElement>();
@@ -49,7 +52,7 @@ export default function FocalPoint(props: FocalPointProps) {
 
   const drag = (evt: TouchEvent | MouseEvent) => {
     if (dragging) {
-      let x: number , y: number;
+      let x: number, y: number;
       const containerSize = containerRef.current.getBoundingClientRect();
       evt.preventDefault();
 
@@ -78,17 +81,16 @@ export default function FocalPoint(props: FocalPointProps) {
   };
 
   return (
-    <div className="focal-editor"
-         ref={containerRef}
-         onTouchStart={dragStart}
-         onTouchEnd={dragEnd}
-         onTouchMove={drag}
-         onMouseDown={dragStart}
-         onMouseUp={dragEnd}
-         onMouseMove={drag}>
-      <div className="focal-point"
-           style={pointStyle}
-           ref={pointRef} />
+    <div
+      className="focal-editor"
+      ref={containerRef}
+      onTouchStart={dragStart}
+      onTouchEnd={dragEnd}
+      onTouchMove={drag}
+      onMouseDown={dragStart}
+      onMouseUp={dragEnd}
+      onMouseMove={drag}>
+      <div className="focal-point" style={pointStyle} ref={pointRef} />
     </div>
   );
 }

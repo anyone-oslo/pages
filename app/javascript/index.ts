@@ -16,7 +16,7 @@ export function registerComponent(name: string, component: FC) {
   window[name] = component;
 }
 
-export default function startPages () {
+export default function startPages() {
   startRails();
   for (const name in Components) {
     registerComponent(name, Components[name] as FC);
@@ -35,5 +35,7 @@ export * from "./hooks";
 export * from "./stores";
 
 export * from "./lib/request";
-export { default as copyToClipboard,
-         copySupported } from "./lib/copyToClipboard";
+export {
+  default as copyToClipboard,
+  copySupported
+} from "./lib/copyToClipboard";

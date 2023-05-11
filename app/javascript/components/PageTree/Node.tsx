@@ -30,26 +30,26 @@ import Tree, { TreeId, TreeIndex } from "../../lib/Tree";
 import { Attributes, PageNode } from "./types";
 
 interface NodeProps {
-  addChild: (index: TreeIndex) => void,
-  dir: string,
-  dragging: number,
-  index: TreeIndex<PageNode>,
-  locale: string,
-  onCollapse: (id: TreeId) => void,
-  onDragStart: (id: number, element: HTMLDivElement, evt: Event) => void,
-  paddingLeft: number,
-  tree: Tree<PageNode>,
-  updatePage: (index: TreeIndex, attributes: Attributes) => void
+  addChild: (index: TreeIndex) => void;
+  dir: string;
+  dragging: number;
+  index: TreeIndex<PageNode>;
+  locale: string;
+  onCollapse: (id: TreeId) => void;
+  onDragStart: (id: number, element: HTMLDivElement, evt: Event) => void;
+  paddingLeft: number;
+  tree: Tree<PageNode>;
+  updatePage: (index: TreeIndex, attributes: Attributes) => void;
 }
 
 interface NodeState {
-  newName: string
+  newName: string;
 }
 
 interface ButtonOptions {
-  icon: string,
-  className: string,
-  onClick: (evt: Event) => void
+  icon: string;
+  className: string;
+  onClick: (evt: Event) => void;
 }
 
 export default class Node extends Component<NodeProps, NodeState> {
@@ -62,13 +62,14 @@ export default class Node extends Component<NodeProps, NodeState> {
   }
 
   permitted(action: string): boolean {
-    return this.node().permissions &&
-           this.node().permissions.indexOf(action) != -1;
+    return (
+      this.node().permissions && this.node().permissions.indexOf(action) != -1
+    );
   }
 
   actions() {
-    const statusLabel = (this.node().status != 2) ? "Publish" : "Hide";
-    const statusIcon = (this.node().status != 2) ? "check" : "ban";
+    const statusLabel = this.node().status != 2 ? "Publish" : "Hide";
+    const statusIcon = this.node().status != 2 ? "check" : "ban";
 
     if (this.node().editing) {
       return null;
@@ -77,9 +78,10 @@ export default class Node extends Component<NodeProps, NodeState> {
     if (this.props.index.id === 1) {
       return (
         <span className="actions">
-          <button type="button"
-                  className="add"
-                  onClick={() => this.props.addChild(this.props.index)}>
+          <button
+            type="button"
+            className="add"
+            onClick={() => this.props.addChild(this.props.index)}>
             <i className="fa-solid fa-plus icon" />
             Add child
           </button>
@@ -88,29 +90,33 @@ export default class Node extends Component<NodeProps, NodeState> {
     } else {
       return (
         <span className="actions">
-          {this.permitted("edit") && this.button(statusLabel, {
-            className: "toggle-status",
-            icon: statusIcon,
-            onClick: () => this.toggleStatus()
-           })}
+          {this.permitted("edit") &&
+            this.button(statusLabel, {
+              className: "toggle-status",
+              icon: statusIcon,
+              onClick: () => this.toggleStatus()
+            })}
 
-          {this.permitted("edit") && this.button("Rename", {
-            className: "edit",
-            icon: "pencil",
-            onClick: () => this.edit()
-           })}
+          {this.permitted("edit") &&
+            this.button("Rename", {
+              className: "edit",
+              icon: "pencil",
+              onClick: () => this.edit()
+            })}
 
-          {this.permitted("edit") && this.button("Delete", {
-            className: "delete",
-            icon: "trash",
-            onClick: () => this.deletePage()
-           })}
+          {this.permitted("edit") &&
+            this.button("Delete", {
+              className: "delete",
+              icon: "trash",
+              onClick: () => this.deletePage()
+            })}
 
-          {this.permitted("create") && this.button("Add child", {
-            className: "add",
-            icon: "plus",
-            onClick: () => this.props.addChild(this.props.index)
-           })}
+          {this.permitted("create") &&
+            this.button("Add child", {
+              className: "add",
+              icon: "plus",
+              onClick: () => this.props.addChild(this.props.index)
+            })}
         </span>
       );
     }
@@ -124,25 +130,26 @@ export default class Node extends Component<NodeProps, NodeState> {
       }
     };
 
-    if (!node.collapsed &&
-        this.permitted("create") &&
-        (node.root || this.visibleChildren().length > 0)) {
-      return (
-        this.button("Add page here", {
-          className: "add add-inline",
-          icon: "plus",
-          onClick: handleClick
-        })
-      );
+    if (
+      !node.collapsed &&
+      this.permitted("create") &&
+      (node.root || this.visibleChildren().length > 0)
+    ) {
+      return this.button("Add page here", {
+        className: "add add-inline",
+        icon: "plus",
+        onClick: handleClick
+      });
     }
   }
 
   button(label: string, options: ButtonOptions) {
     const icon = "fa-solid fa-" + options.icon + " icon";
     return (
-      <button type="button"
-              className={options.className}
-              onClick={options.onClick}>
+      <button
+        type="button"
+        className={options.className}
+        onClick={options.onClick}>
         <i className={icon} />
         {label}
       </button>
@@ -175,7 +182,8 @@ export default class Node extends Component<NodeProps, NodeState> {
                 onDragStart={this.props.onDragStart}
                 updatePage={this.props.updatePage}
                 dir={dir}
-                locale={locale} />
+                locale={locale}
+              />
             );
           })}
         </div>
@@ -212,9 +220,13 @@ export default class Node extends Component<NodeProps, NodeState> {
       }
 
       return (
-        <i className={classnames}
-           onMouseDown={function(e) {e.stopPropagation();}}
-           onClick={handleCollapse} />
+        <i
+          className={classnames}
+          onMouseDown={function (e) {
+            e.stopPropagation();
+          }}
+          onClick={handleCollapse}
+        />
       );
     }
 
@@ -222,10 +234,12 @@ export default class Node extends Component<NodeProps, NodeState> {
   }
 
   collapsedLabel() {
-    if (this.node().collapsed &&
-        this.node().children &&
-        this.node().children.length > 0) {
-      const pluralized = (this.node().children.length == 1) ? "item" : "items";
+    if (
+      this.node().collapsed &&
+      this.node().children &&
+      this.node().children.length > 0
+    ) {
+      const pluralized = this.node().children.length == 1 ? "item" : "items";
       return (
         <span className="collapsed-label">
           ({this.node().children.length} {pluralized})
@@ -238,16 +252,16 @@ export default class Node extends Component<NodeProps, NodeState> {
 
   deletePage() {
     if (confirm("Are you sure you want to delete this page?")) {
-      this.updatePage({status: 4});
+      this.updatePage({ status: 4 });
     }
   }
 
   edit() {
-    this.updatePage({editing: true});
+    this.updatePage({ editing: true });
   }
 
   editUrl(page: PageNode) {
-    return(`/admin/${page.locale}/pages/${page.param}/edit`);
+    return `/admin/${page.locale}/pages/${page.param}/edit`;
   }
 
   node(): PageNode {
@@ -257,9 +271,8 @@ export default class Node extends Component<NodeProps, NodeState> {
   pageName() {
     const name = this.node().name || <i className="untitled">Untitled</i>;
 
-    return(
-      <span dir={this.props.dir}
-            lang={this.props.locale}>
+    return (
+      <span dir={this.props.dir} lang={this.props.locale}>
         {name}
       </span>
     );
@@ -287,9 +300,10 @@ export default class Node extends Component<NodeProps, NodeState> {
     if (this.node().status != 4) {
       return (
         <div className={classnames}>
-          <div className="inner"
-               ref={this.innerRef}
-               onMouseDown={handleMouseDown}>
+          <div
+            className="inner"
+            ref={this.innerRef}
+            onMouseDown={handleMouseDown}>
             {this.collapseArrow()}
             {node}
           </div>
@@ -326,21 +340,23 @@ export default class Node extends Component<NodeProps, NodeState> {
       <div className="page edit">
         <i className="fa-regular fa-file icon"></i>
         <form onSubmit={performEdit}>
-          <input type="text"
-                 value={this.state.newName}
-                 dir={dir}
-                 lang={locale}
-                 autoFocus
-                 onChange={handleNameChange} />
+          <input
+            type="text"
+            value={this.state.newName}
+            dir={dir}
+            lang={locale}
+            autoFocus
+            onChange={handleNameChange}
+          />
           <button className="save" type="submit">
             <i className="fa-solid fa-cloud icon"></i>
             Save
           </button>
           {this.button("Cancel", {
-             className: "cancel",
-             icon: "ban",
-             onClick: cancelEdit
-           })}
+            className: "cancel",
+            icon: "ban",
+            onClick: cancelEdit
+          })}
         </form>
       </div>
     );
@@ -355,14 +371,16 @@ export default class Node extends Component<NodeProps, NodeState> {
 
     let iconClass = "fa-regular fa-file icon";
 
-    if (typeof(node.status) != "undefined") {
+    if (typeof node.status != "undefined") {
       className = `page status-${this.node().status}`;
     }
 
     if (node.id && node.locale && this.permitted("edit")) {
-      pageName = <a href={this.editUrl(node)} className="name">
-        {this.pageName()}
-      </a>;
+      pageName = (
+        <a href={this.editUrl(node)} className="name">
+          {this.pageName()}
+        </a>
+      );
     }
 
     if (node.news_page) {
@@ -384,11 +402,9 @@ export default class Node extends Component<NodeProps, NodeState> {
 
   statusLabel() {
     const labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
-    if (typeof(this.node().status) != "undefined" && this.node().status != 2) {
+    if (typeof this.node().status != "undefined" && this.node().status != 2) {
       return (
-        <span className="status-label">
-          ({labels[this.node().status]})
-        </span>
+        <span className="status-label">({labels[this.node().status]})</span>
       );
     } else {
       return "";
@@ -397,9 +413,9 @@ export default class Node extends Component<NodeProps, NodeState> {
 
   toggleStatus() {
     if (this.node().status != 2) {
-      this.updatePage({status: 2});
+      this.updatePage({ status: 2 });
     } else {
-      this.updatePage({status: 3});
+      this.updatePage({ status: 3 });
     }
   }
 
@@ -411,7 +427,7 @@ export default class Node extends Component<NodeProps, NodeState> {
 
   visibleChildren(): PageNode[] {
     if (this.node().children) {
-      return this.node().children.filter(p => p.status != 4);
+      return this.node().children.filter((p) => p.status != 4);
     } else {
       return [];
     }

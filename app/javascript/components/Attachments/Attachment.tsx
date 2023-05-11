@@ -8,22 +8,22 @@ import { AttachmentResource, Locale } from "../../types";
 import { useDraggable, Draggable } from "../drag";
 
 interface Record {
-  id: number | null,
-  attachment: AttachmentResource,
-  uploading: boolean
+  id: number | null;
+  attachment: AttachmentResource;
+  uploading: boolean;
 }
 
 interface AttachmentProps {
-  attributeName: string,
-  placeholder: boolean,
-  draggable: { record: Record },
-  locale: string,
-  locales: { [index: string]: Locale },
-  deleteRecord: () => void,
-  showEmbed: boolean,
-  position: number,
-  onUpdate: (localizations: Record<string, Record<string, string>>) => void,
-  startDrag: (evt: Event, draggable: Draggable) => void
+  attributeName: string;
+  placeholder: boolean;
+  draggable: { record: Record };
+  locale: string;
+  locales: { [index: string]: Locale };
+  deleteRecord: () => void;
+  showEmbed: boolean;
+  position: number;
+  onUpdate: (localizations: Record<string, Record<string, string>>) => void;
+  startDrag: (evt: Event, draggable: Draggable) => void;
 }
 
 export default function Attachment(props: AttachmentProps) {
@@ -70,7 +70,8 @@ export default function Attachment(props: AttachmentProps) {
         attachment={attachment}
         locale={locale}
         locales={locales}
-        onUpdate={props.onUpdate} />
+        onUpdate={props.onUpdate}
+      />
     );
   };
 
@@ -90,44 +91,46 @@ export default function Attachment(props: AttachmentProps) {
   }
 
   return (
-    <div className={classes.join(" ")}
-         {...listeners}>
-      <input name={`${attributeName}[id]`}
-             type="hidden" value={record.id || ""} />
-      <input name={`${attributeName}[attachment_id]`}
-             type="hidden" value={(attachment && attachment.id) || ""} />
-      <input name={`${attributeName}[position]`}
-             type="hidden" value={props.position} />
-      {!uploading &&
-       <div className="actions">
-         <button onClick={editAttachment}>
-           Edit
-         </button>
-         {props.showEmbed && (
-           <button onClick={copyEmbed}>
-             Embed
-           </button>
-         )}
-         {props.deleteRecord && (
-           <button onClick={deleteRecord}>
-             Remove
-           </button>
-         )}
-       </div>
-      }
-    {attachment &&
-     <div className="attachment-info">
-       <h3>
-         <i className={`fa-solid fa-${icon} icon`} />
-         {name() || <em>Untitled</em>}<br />
-       </h3>
-       {!uploading &&
-        <a href={attachment.url}
-           rel="noreferrer"
-           target="_blank">{attachment.filename}</a>}
-       {!uploading && description() &&
-        <p dir={localeDir}>{description()}</p>}
-     </div>}
+    <div className={classes.join(" ")} {...listeners}>
+      <input
+        name={`${attributeName}[id]`}
+        type="hidden"
+        value={record.id || ""}
+      />
+      <input
+        name={`${attributeName}[attachment_id]`}
+        type="hidden"
+        value={(attachment && attachment.id) || ""}
+      />
+      <input
+        name={`${attributeName}[position]`}
+        type="hidden"
+        value={props.position}
+      />
+      {!uploading && (
+        <div className="actions">
+          <button onClick={editAttachment}>Edit</button>
+          {props.showEmbed && <button onClick={copyEmbed}>Embed</button>}
+          {props.deleteRecord && <button onClick={deleteRecord}>Remove</button>}
+        </div>
+      )}
+      {attachment && (
+        <div className="attachment-info">
+          <h3>
+            <i className={`fa-solid fa-${icon} icon`} />
+            {name() || <em>Untitled</em>}
+            <br />
+          </h3>
+          {!uploading && (
+            <a href={attachment.url} rel="noreferrer" target="_blank">
+              {attachment.filename}
+            </a>
+          )}
+          {!uploading && description() && (
+            <p dir={localeDir}>{description()}</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

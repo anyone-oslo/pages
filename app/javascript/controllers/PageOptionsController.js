@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class PageOptionsController extends Controller {
   static get targets() {
-    return ["advancedOptions", "autoPublishNotice", "published", "publishedDate"];
+    return [
+      "advancedOptions",
+      "autoPublishNotice",
+      "published",
+      "publishedDate"
+    ];
   }
 
   connect() {
@@ -32,7 +37,7 @@ export default class PageOptionsController extends Controller {
     };
     return new Date(
       lookup("year"),
-      (lookup("month") - 1),
+      lookup("month") - 1,
       lookup("day"),
       lookup("hour"),
       lookup("minute")

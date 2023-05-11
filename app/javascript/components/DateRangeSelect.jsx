@@ -6,9 +6,9 @@ export default class DateRangeSelect extends React.Component {
     super(props);
     this.state = {
       startsAt: this.parseDate(props.startsAt) || this.defaultDate(),
-      endsAt:   this.parseDate(props.endsAt) || this.defaultDate(60),
+      endsAt: this.parseDate(props.endsAt) || this.defaultDate(60),
       startTime: "",
-      endTime:   ""
+      endTime: ""
     };
     this.state.startTime = this.timeToString(this.state.startsAt);
     this.state.endTime = this.timeToString(this.state.endsAt);
@@ -33,8 +33,9 @@ export default class DateRangeSelect extends React.Component {
   defaultDate(offset = 0) {
     let coeff = 1000 * 60 * 60;
     return new Date(
-      (Math.round((new Date()).getTime() / coeff) * coeff) + coeff +
-             (1000 * 60 * offset)
+      Math.round(new Date().getTime() / coeff) * coeff +
+        coeff +
+        1000 * 60 * offset
     );
   }
 
@@ -49,8 +50,10 @@ export default class DateRangeSelect extends React.Component {
     if (Object.prototype.hasOwnProperty.call(options, "date")) {
       newDate.setDate(options.date);
     }
-    if (Object.prototype.hasOwnProperty.call(options, "time") &&
-        options.time.match(/^[\d]{1,2}(:[\d]{1,2})?$/)) {
+    if (
+      Object.prototype.hasOwnProperty.call(options, "time") &&
+      options.time.match(/^[\d]{1,2}(:[\d]{1,2})?$/)
+    ) {
       newDate.setHours(options.time.split(":")[0]);
       newDate.setMinutes(options.time.split(":")[1] || 0);
     }
@@ -58,7 +61,9 @@ export default class DateRangeSelect extends React.Component {
   }
 
   parseDate(str) {
-    if (!str) { return; }
+    if (!str) {
+      return;
+    }
     return new Date(str);
   }
 
@@ -75,40 +80,50 @@ export default class DateRangeSelect extends React.Component {
   }
 
   startsAtToString() {
-    if (this.props.disabled) { return ""; }
+    if (this.props.disabled) {
+      return "";
+    }
     return this.state.startsAt.toJSON();
   }
 
   endsAtToString() {
-    if (this.props.disabled) { return ""; }
+    if (this.props.disabled) {
+      return "";
+    }
     return this.state.endsAt.toJSON();
   }
 
   renderDateSelect(key, date, handleChange) {
     return (
       <div className="date-select">
-        <select value={date.getMonth()}
-                onChange={e => handleChange({ month: e.target.value })}
-                disabled={this.props.disabled}>
+        <select
+          value={date.getMonth()}
+          onChange={(e) => handleChange({ month: e.target.value })}
+          disabled={this.props.disabled}>
           {this.monthOptions().map((m, i) => (
-            <option key={key + "-month-" + i}
-                    value={i}>{m}</option>
+            <option key={key + "-month-" + i} value={i}>
+              {m}
+            </option>
           ))}
         </select>
-        <select value={date.getDate()}
-                onChange={e => handleChange({ date: e.target.value })}
-                disabled={this.props.disabled}>
-          {this.dayOptions().map(d => (
-            <option key={key + "-date-" + d}
-                    value={d}>{d}</option>
+        <select
+          value={date.getDate()}
+          onChange={(e) => handleChange({ date: e.target.value })}
+          disabled={this.props.disabled}>
+          {this.dayOptions().map((d) => (
+            <option key={key + "-date-" + d} value={d}>
+              {d}
+            </option>
           ))}
         </select>
-        <select value={date.getFullYear()}
-                onChange={e => handleChange({ year: e.target.value })}
-                disabled={this.props.disabled}>
-          {this.yearOptions().map(y => (
-            <option key={key + "-year-" + y}
-                    value={y}>{y}</option>
+        <select
+          value={date.getFullYear()}
+          onChange={(e) => handleChange({ year: e.target.value })}
+          disabled={this.props.disabled}>
+          {this.yearOptions().map((y) => (
+            <option key={key + "-year-" + y} value={y}>
+              {y}
+            </option>
           ))}
         </select>
       </div>
@@ -118,37 +133,49 @@ export default class DateRangeSelect extends React.Component {
   render() {
     return (
       <div className="date-range-select">
-        <input type="hidden"
-               name={this.props.objectName + "[starts_at]"}
-               value={this.startsAtToString()} />
-        <input type="hidden"
-               name={this.props.objectName + "[ends_at]"}
-               value={this.endsAtToString()} />
+        <input
+          type="hidden"
+          name={this.props.objectName + "[starts_at]"}
+          value={this.startsAtToString()}
+        />
+        <input
+          type="hidden"
+          name={this.props.objectName + "[ends_at]"}
+          value={this.endsAtToString()}
+        />
         <div className="date">
-          {this.renderDateSelect("starts-at",
-                                 this.state.startsAt,
-                                 this.changeStartsAt)}
+          {this.renderDateSelect(
+            "starts-at",
+            this.state.startsAt,
+            this.changeStartsAt
+          )}
           {!this.props.disableTime && (
-             <input type="text"
-                    size="5"
-                    value={this.state.startTime}
-                    disabled={this.props.disabled}
-                    onChange={e => this.setState({ startTime: e.target.value })}
-                    onBlur={e => this.changeStartsAt({ time: e.target.value })} />
+            <input
+              type="text"
+              size="5"
+              value={this.state.startTime}
+              disabled={this.props.disabled}
+              onChange={(e) => this.setState({ startTime: e.target.value })}
+              onBlur={(e) => this.changeStartsAt({ time: e.target.value })}
+            />
           )}
         </div>
         <span className="to">to</span>
         <div className="date">
-          {this.renderDateSelect("ends-at",
-                                 this.state.endsAt,
-                                 this.changeEndsAt)}
+          {this.renderDateSelect(
+            "ends-at",
+            this.state.endsAt,
+            this.changeEndsAt
+          )}
           {!this.props.disableTime && (
-             <input type="text"
-                    size="5"
-                    value={this.state.endTime}
-                    disabled={this.props.disabled}
-                    onChange={e => this.setState({ endTime: e.target.value })}
-                    onBlur={e => this.changeEndsAt({ time: e.target.value })} />
+            <input
+              type="text"
+              size="5"
+              value={this.state.endTime}
+              disabled={this.props.disabled}
+              onChange={(e) => this.setState({ endTime: e.target.value })}
+              onBlur={(e) => this.changeEndsAt({ time: e.target.value })}
+            />
           )}
         </div>
       </div>
@@ -162,13 +189,26 @@ export default class DateRangeSelect extends React.Component {
   // Returns an array with years from 2000 to 10 years from now.
   yearOptions() {
     let start = 2000;
-    return Array.apply(null, Array((new Date()).getFullYear() - start + 11))
-                .map((_, i) => i + start);
+    return Array.apply(null, Array(new Date().getFullYear() - start + 11)).map(
+      (_, i) => i + start
+    );
   }
 
   monthOptions() {
-    return(["January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December"]);
+    return [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
   }
 
   dayOptions() {

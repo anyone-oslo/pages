@@ -51,13 +51,14 @@ export default function useDragUploader(
 ) {
   const initialState: DragState = {
     dragging: false,
-    x: null, y: null
+    x: null,
+    y: null
   };
 
   const [dragState, setDragState] = useState(initialState);
 
   const updatePositions = (dragging: Draggable | null) => {
-    collections.forEach(c => {
+    collections.forEach((c) => {
       c.dispatch({ type: "updatePositions", payload: dragging });
     });
   };

@@ -1,9 +1,10 @@
-export function copySupported () {
-  return document.queryCommandSupported &&
-    document.queryCommandSupported("copy");
+export function copySupported() {
+  return (
+    document.queryCommandSupported && document.queryCommandSupported("copy")
+  );
 }
 
-export default function copyToClipboard (str: string) {
+export default function copyToClipboard(str: string) {
   const el = document.createElement("textarea");
   el.value = str;
   document.body.appendChild(el);

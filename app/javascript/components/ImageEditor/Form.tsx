@@ -5,15 +5,15 @@ import { Locale, ImageResource } from "../../types";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 
 interface FormProps {
-  alternative: Record<string, string>,
-  caption: Record<string, string>,
-  image: ImageResource,
-  locale: string,
-  locales: Record<string, Locale>,
-  setLocale: (locale: string) => void,
-  save: (evt: Event) => void,
-  showCaption: boolean,
-  updateLocalization: (name: "alternative" | "caption", value: string) => void
+  alternative: Record<string, string>;
+  caption: Record<string, string>;
+  image: ImageResource;
+  locale: string;
+  locales: Record<string, Locale>;
+  setLocale: (locale: string) => void;
+  save: (evt: Event) => void;
+  showCaption: boolean;
+  updateLocalization: (name: "alternative" | "caption", value: string) => void;
 }
 
 export default function Form(props: FormProps) {
@@ -37,27 +37,15 @@ export default function Form(props: FormProps) {
   return (
     <form>
       <div className="field embed-code">
-        <label>
-          Embed code
-        </label>
-        <input type="text"
-               value={`[image:${image.id}]`}
-               disabled={true} />
-        {copySupported() && (
-          <button onClick={copyEmbedCode}>
-            Copy
-          </button>
-        )}
+        <label>Embed code</label>
+        <input type="text" value={`[image:${image.id}]`} disabled={true} />
+        {copySupported() && <button onClick={copyEmbedCode}>Copy</button>}
       </div>
       {locales && Object.keys(locales).length > 1 && (
         <div className="field">
-          <label>
-            Locale
-          </label>
-          <select name="locale"
-                  value={locale}
-                  onChange={handleChangeLocale}>
-            {Object.keys(locales).map(key => (
+          <label>Locale</label>
+          <select name="locale" value={locale} onChange={handleChangeLocale}>
+            {Object.keys(locales).map((key) => (
               <option key={`locale-${key}`} value={key}>
                 {locales[key].name}
               </option>
@@ -65,10 +53,11 @@ export default function Form(props: FormProps) {
           </select>
         </div>
       )}
-      <div className={"field " + (alternative[locale] ? "" : "field-with-warning")}>
-        <label>
-          Alternative text
-        </label>
+      <div
+        className={
+          "field " + (alternative[locale] ? "" : "field-with-warning")
+        }>
+        <label>Alternative text</label>
         <span className="description">
           For visually impaired users and search engines.
         </span>
@@ -77,28 +66,28 @@ export default function Form(props: FormProps) {
           lang={locale}
           dir={inputDir}
           value={alternative[locale] || ""}
-          onChange={e => props.updateLocalization("alternative", e.target.value)} />
+          onChange={(e) =>
+            props.updateLocalization("alternative", e.target.value)
+          }
+        />
       </div>
       {props.showCaption && (
         <div className="field">
-          <label>
-            Caption
-          </label>
+          <label>Caption</label>
           <textarea
             lang={locale}
             dir={inputDir}
-            onChange={e => props.updateLocalization("caption", e.target.value)}
+            onChange={(e) =>
+              props.updateLocalization("caption", e.target.value)
+            }
             value={caption[locale] || ""}
-            className="caption" />
+            className="caption"
+          />
         </div>
       )}
       <div className="buttons">
-        <button onClick={props.save}>
-          Save
-        </button>
-        <button onClick={closeModal}>
-          Cancel
-        </button>
+        <button onClick={props.save}>Save</button>
+        <button onClick={closeModal}>Cancel</button>
       </div>
     </form>
   );

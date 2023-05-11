@@ -5,17 +5,17 @@ import useToastStore from "../stores/useToastStore";
 import { ImageResource, Locale } from "../types";
 import { post } from "../lib/request";
 
-type ImageResponse = ImageResource | { status: "error", error: string }
+type ImageResponse = ImageResource | { status: "error"; error: string };
 
 interface ImageUploaderProps {
-  locale: string,
-  locales: { [index: string]: Locale },
-  image: ImageResource,
-  src: string,
-  width: number,
-  caption: boolean,
-  attr: string,
-  alternative: string
+  locale: string;
+  locales: { [index: string]: Locale };
+  image: ImageResource;
+  src: string;
+  width: number;
+  caption: boolean;
+  attr: string;
+  alternative: string;
 }
 
 function getFiles(dt: DataTransfer): File[] {
@@ -87,15 +87,19 @@ export default function ImageUploader(props: ImageUploaderProps) {
   };
 
   const uploadImage = (file: File) => {
-    const validTypes = ["image/gif",
-                      "image/jpeg",
-                      "image/pjpeg",
-                      "image/png",
-                      "image/tiff"];
+    const validTypes = [
+      "image/gif",
+      "image/jpeg",
+      "image/pjpeg",
+      "image/png",
+      "image/tiff"
+    ];
 
     if (validTypes.indexOf(file.type) == -1) {
-      alert("Invalid file type, only images in JPEG, PNG or GIF " +
-            "formats are supported");
+      alert(
+        "Invalid file type, only images in JPEG, PNG or GIF " +
+          "formats are supported"
+      );
       return;
     }
 
@@ -111,19 +115,18 @@ export default function ImageUploader(props: ImageUploaderProps) {
 
     data.append("image[file]", file);
     locales.forEach((l) => {
-      data.append(`image[alternative][${l}]`, (props.alternative || ""));
+      data.append(`image[alternative][${l}]`, props.alternative || "");
     });
 
-    void post("/admin/images.json", data)
-      .then((response: ImageResponse) => {
-        setUploading(false);
-        if ("status" in response && response.status === "error") {
-          error(`Error uploading image: ${response.error}`);
-        } else if ("thumbnail_url" in response) {
-          setSrc(response.thumbnail_url);
-          setImage(response);
-        }
-      });
+    void post("/admin/images.json", data).then((response: ImageResponse) => {
+      setUploading(false);
+      if ("status" in response && response.status === "error") {
+        error(`Error uploading image: ${response.error}`);
+      } else if ("thumbnail_url" in response) {
+        setSrc(response.thumbnail_url);
+        setImage(response);
+      }
+    });
   };
 
   const classes = ["image-uploader"];
@@ -133,38 +136,39 @@ export default function ImageUploader(props: ImageUploaderProps) {
     classes.push("dragover");
   }
   return (
-    <div className={classes.join(" ")}
-         onDragOver={handleDragOver}
-         onDragLeave={handleDragLeave}
-         onDragEnd={handleDragEnd}
-         onDrop={handleDrop}>
-      <input type="hidden"
-             name={props.attr}
-             value={image ? image.id : ""} />
-      {image &&
-       <div className="image">
-         <EditableImage image={image}
-                        src={src}
-                        width={props.width}
-                        caption={props.caption}
-                        locale={props.locale}
-                        locales={props.locales} />
-       </div>}
+    <div
+      className={classes.join(" ")}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDragEnd={handleDragEnd}
+      onDrop={handleDrop}>
+      <input type="hidden" name={props.attr} value={image ? image.id : ""} />
+      {image && (
+        <div className="image">
+          <EditableImage
+            image={image}
+            src={src}
+            width={props.width}
+            caption={props.caption}
+            locale={props.locale}
+            locales={props.locales}
+          />
+        </div>
+      )}
       <div className="ui-wrapper">
-        {uploading && (
-          <div className="ui">
-            Uploading image...
-          </div>
-        )}
+        {uploading && <div className="ui">Uploading image...</div>}
         {!uploading && (
           <div className="ui">
-            <FileUploadButton type="image"
-                              multiline={true}
-                              callback={receiveFiles} />
+            <FileUploadButton
+              type="image"
+              multiline={true}
+              callback={receiveFiles}
+            />
             {image && (
-              <a className="delete remove-image"
-                 href="#"
-                 onClick={handleRemove}>
+              <a
+                className="delete remove-image"
+                href="#"
+                onClick={handleRemove}>
                 Remove image
               </a>
             )}

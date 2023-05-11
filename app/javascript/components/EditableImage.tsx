@@ -5,13 +5,13 @@ import useModalStore from "../stores/useModalStore";
 import { Locale, ImageResource } from "../types";
 
 interface EditableImageProps {
-  image: ImageResource,
-  src: string,
-  caption: boolean,
-  locale: string,
-  locales: Record<string, Locale>,
-  width: number,
-  onUpdate?: (newImage: ImageResource, src: string) => void
+  image: ImageResource;
+  src: string;
+  caption: boolean;
+  locale: string;
+  locales: Record<string, Locale>;
+  width: number;
+  onUpdate?: (newImage: ImageResource, src: string) => void;
 }
 
 export default function EditableImage(props: EditableImageProps) {
@@ -43,7 +43,8 @@ export default function EditableImage(props: EditableImageProps) {
         caption={props.caption}
         locale={props.locale}
         locales={props.locales}
-        onUpdate={updateImage} />
+        onUpdate={updateImage}
+      />
     );
   };
 
@@ -51,14 +52,17 @@ export default function EditableImage(props: EditableImageProps) {
 
   return (
     <div className="editable-image">
-      {altWarning &&
-       <span className="alt-warning" title="Alternative text is missing">
-         <i className="fa-solid fa-triangle-exclamation icon" />
-       </span>}
-      <img src={src}
-           width={props.width}
-           height={height()}
-           onClick={handleClick} />
+      {altWarning && (
+        <span className="alt-warning" title="Alternative text is missing">
+          <i className="fa-solid fa-triangle-exclamation icon" />
+        </span>
+      )}
+      <img
+        src={src}
+        width={props.width}
+        height={height()}
+        onClick={handleClick}
+      />
     </div>
   );
 }

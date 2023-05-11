@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import useToastStore from "../stores/useToastStore";
 
 interface ToastProps {
-  error: string,
-  notice: string
+  error: string;
+  notice: string;
 }
 
 export default function Toast(props: ToastProps) {
@@ -51,11 +51,7 @@ export default function Toast(props: ToastProps) {
 
   return (
     <div className="toast-wrapper" aria-live="polite">
-      {toast && (
-        <div className={classNames.join(" ")}>
-          {toast.message}
-        </div>
-      )}
+      {toast && <div className={classNames.join(" ")}>{toast.message}</div>}
     </div>
   );
 }

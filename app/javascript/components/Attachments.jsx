@@ -5,10 +5,12 @@ import Placeholder from "./Attachments/Placeholder";
 import FileUploadButton from "./FileUploadButton";
 import { post } from "../lib/request";
 
-import { createDraggable,
-         draggedOrder,
-         useDragCollection,
-         useDragUploader } from "./drag";
+import {
+  createDraggable,
+  draggedOrder,
+  useDragCollection,
+  useDragUploader
+} from "./drag";
 
 function filenameToName(str) {
   return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");
@@ -16,18 +18,20 @@ function filenameToName(str) {
 
 export default function Attachments(props) {
   const collection = useDragCollection(props.records);
-  const locales = props.locales && props.locales.length > 0 ?
-        Object.keys(props.locales) : [props.locale];
+  const locales =
+    props.locales && props.locales.length > 0
+      ? Object.keys(props.locales)
+      : [props.locale];
   const [deleted, setDeleted] = useState([]);
 
   const uploadAttachment = (file) => {
     let name = {};
-    locales.forEach((l) => name[l] = file.name);
+    locales.forEach((l) => (name[l] = file.name));
 
-    const draggable = createDraggable(
-      { attachment: { filename: file.name, name: name },
-        uploading: true }
-    );
+    const draggable = createDraggable({
+      attachment: { filename: file.name, name: name },
+      uploading: true
+    });
 
     let data = new FormData();
 
@@ -36,14 +40,15 @@ export default function Attachments(props) {
       data.append(`attachment[name][${l}]`, filenameToName(file.name));
     });
 
-    post("/admin/attachments.json", data)
-      .then(json => {
-        collection.dispatch({
-          type: "update",
-          payload: { ...draggable,
-                     record: { attachment: json, uploading: false } }
-        });
+    post("/admin/attachments.json", data).then((json) => {
+      collection.dispatch({
+        type: "update",
+        payload: {
+          ...draggable,
+          record: { attachment: json, uploading: false }
+        }
       });
+    });
 
     return draggable;
   };
@@ -51,7 +56,7 @@ export default function Attachments(props) {
   const receiveFiles = (files) => {
     collection.dispatch({
       type: "append",
-      payload: files.map(f => uploadAttachment(f))
+      payload: files.map((f) => uploadAttachment(f))
     });
   };
 
@@ -62,17 +67,21 @@ export default function Attachments(props) {
     });
     collection.dispatch({
       type: "insertFiles",
-      payload: files.map(f => uploadAttachment(f))
+      payload: files.map((f) => uploadAttachment(f))
     });
   };
 
-  const [dragState,
-         dragStart,
-         listeners] = useDragUploader([collection], dragEnd);
+  const [dragState, dragStart, listeners] = useDragUploader(
+    [collection],
+    dragEnd
+  );
 
   const position = (record) => {
-    return [...collection.draggables.map(d => d.record),
-            ...deleted].indexOf(record) + 1;
+    return (
+      [...collection.draggables.map((d) => d.record), ...deleted].indexOf(
+        record
+      ) + 1
+    );
   };
 
   const attrName = (record) => {
@@ -102,21 +111,23 @@ export default function Attachments(props) {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
-      return (<Placeholder key="placeholder" />);
+      return <Placeholder key="placeholder" />;
     }
 
     return (
-      <Attachment key={draggable.handle}
-                  draggable={draggable}
-                  locale={props.locale}
-                  locales={props.locales}
-                  showEmbed={props.showEmbed}
-                  startDrag={dragStart}
-                  position={position(draggable.record)}
-                  onUpdate={update(draggable)}
-                  deleteRecord={remove(draggable)}
-                  attributeName={attrName(draggable.record)}
-                  placeholder={dragging && dragging == draggable} />
+      <Attachment
+        key={draggable.handle}
+        draggable={draggable}
+        locale={props.locale}
+        locales={props.locales}
+        showEmbed={props.showEmbed}
+        startDrag={dragStart}
+        position={position(draggable.record)}
+        onUpdate={update(draggable)}
+        deleteRecord={remove(draggable)}
+        attributeName={attrName(draggable.record)}
+        placeholder={dragging && dragging == draggable}
+      />
     );
   };
 
@@ -128,30 +139,31 @@ export default function Attachments(props) {
   }
 
   return (
-    <div className={classes.join(" ")}
-         ref={collection.ref}
-         {...listeners}>
-      <div className="files">
-        {dragOrder.map(d => attachment(d))}
-      </div>
+    <div className={classes.join(" ")} ref={collection.ref} {...listeners}>
+      <div className="files">{dragOrder.map((d) => attachment(d))}</div>
       <div className="deleted">
-        {deleted.map(r =>
+        {deleted.map((r) => (
           <span className="deleted-attachment" key={r.id}>
-            <input name={`${attrName(r)}[id]`}
-                   type="hidden"
-                   value={r.id} />
-            <input name={`${attrName(r)}[attachment_id]`}
-                   type="hidden"
-                   value={(r.attachment && r.attachment.id) || ""} />
-            <input name={`${attrName(r)}[_destroy]`}
-                   type="hidden"
-                   value={true} />
-          </span>)}
+            <input name={`${attrName(r)}[id]`} type="hidden" value={r.id} />
+            <input
+              name={`${attrName(r)}[attachment_id]`}
+              type="hidden"
+              value={(r.attachment && r.attachment.id) || ""}
+            />
+            <input
+              name={`${attrName(r)}[_destroy]`}
+              type="hidden"
+              value={true}
+            />
+          </span>
+        ))}
       </div>
       <div className="drop-target">
-        <FileUploadButton multiple={true}
-                          multiline={true}
-                          callback={receiveFiles} />
+        <FileUploadButton
+          multiple={true}
+          multiline={true}
+          callback={receiveFiles}
+        />
       </div>
     </div>
   );

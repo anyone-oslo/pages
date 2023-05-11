@@ -4,9 +4,9 @@ import AddTagForm from "./TagEditor/AddTagForm";
 import Tag from "./TagEditor/Tag";
 
 interface TagEditorProps {
-  name: string,
-  enabled: string[],
-  tags: string[]
+  name: string;
+  enabled: string[];
+  tags: string[];
 }
 
 function onlyUnique(value: string, index: number, self: string[]): number {
@@ -21,12 +21,14 @@ export default function TagEditor(props: TagEditorProps) {
 
   const normalize = (tag: string): string => {
     return (
-      tagList.filter(t => t.toLowerCase() == tag.toLowerCase())[0] || tag
+      tagList.filter((t) => t.toLowerCase() == tag.toLowerCase())[0] || tag
     );
   };
 
   const tagEnabled = (tag: string): boolean => {
-    return enabled.map(t => t.toLowerCase()).indexOf(tag.toLowerCase()) !== -1;
+    return (
+      enabled.map((t) => t.toLowerCase()).indexOf(tag.toLowerCase()) !== -1
+    );
   };
 
   const toggleEnabled = (tag: string) => {
@@ -49,11 +51,14 @@ export default function TagEditor(props: TagEditorProps) {
   return (
     <div className="tag-editor clearfix">
       <input type="hidden" name={props.name} value={JSON.stringify(enabled)} />
-      {tagList.map((t) =>
-        <Tag key={t}
-             tag={t}
-             enabled={tagEnabled(t)}
-             toggleEnabled={toggleEnabled} />)}
+      {tagList.map((t) => (
+        <Tag
+          key={t}
+          tag={t}
+          enabled={tagEnabled(t)}
+          toggleEnabled={toggleEnabled}
+        />
+      ))}
       <AddTagForm addTag={addTag} />
     </div>
   );

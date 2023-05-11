@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useRef } from "react";
 
 interface FileUploadButtonProps {
-  callback: (files: File[]) => void,
-  type: string,
-  multiple: boolean,
-  multiline: boolean
+  callback: (files: File[]) => void;
+  type: string;
+  multiple: boolean;
+  multiline: boolean;
 }
 
 export default function FileUploadButton(props: FileUploadButtonProps) {
@@ -32,15 +32,15 @@ export default function FileUploadButton(props: FileUploadButtonProps) {
         Drag and drop {props.type || "file"}
         {props.multiple && "s"} here, or
         {props.multiline && <br />}
-        <button onClick={triggerDialog}>
-          choose a file
-        </button>
+        <button onClick={triggerDialog}>choose a file</button>
       </span>
-      <input type="file"
-             onChange={handleChange}
-             ref={inputRef}
-             style={{ display: "none" }}
-             multiple={props.multiple || false} />
+      <input
+        type="file"
+        onChange={handleChange}
+        ref={inputRef}
+        style={{ display: "none" }}
+        multiple={props.multiple || false}
+      />
     </div>
   );
 }

@@ -4,18 +4,18 @@ const readyHandlers: ReadyHandlerFunc[] = [];
 
 const handleState = () => {
   if (["interactive", "complete"].indexOf(document.readyState) > -1) {
-    while(readyHandlers.length > 0) {
-      (readyHandlers.shift())();
+    while (readyHandlers.length > 0) {
+      readyHandlers.shift()();
     }
   }
 };
 
 class ReadyHandler {
-  constructor () {
+  constructor() {
     document.onreadystatechange = handleState;
   }
 
-  ready (handler: ReadyHandlerFunc) {
+  ready(handler: ReadyHandlerFunc) {
     readyHandlers.push(handler);
     handleState();
   }

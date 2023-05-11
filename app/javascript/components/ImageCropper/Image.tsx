@@ -5,12 +5,12 @@ import { cropSize, CropSize, CropState, Position, Size } from "./useCrop";
 import FocalPoint from "./FocalPoint";
 
 interface ImageProps {
-  containerSize: Size,
-  croppedImage: string,
-  cropState: CropState,
-  focalPoint: Position,
-  setCrop: (crop: CropSize) => void,
-  setFocal: (focal: Position) => void
+  containerSize: Size;
+  croppedImage: string;
+  cropState: CropState;
+  focalPoint: Position;
+  setCrop: (crop: CropSize) => void;
+  setFocal: (focal: Position) => void;
 }
 
 export default function Image(props: ImageProps) {
@@ -40,25 +40,29 @@ export default function Image(props: ImageProps) {
   if (props.cropState.cropping) {
     return (
       <div className="image-wrapper" style={style}>
-        <ReactCrop src={props.cropState.image.uncropped_url}
-                   crop={cropSize(props.cropState)}
-                   minWidth={10}
-                   minHeight={10}
-                   onChange={props.setCrop} />
+        <ReactCrop
+          src={props.cropState.image.uncropped_url}
+          crop={cropSize(props.cropState)}
+          minWidth={10}
+          minHeight={10}
+          onChange={props.setCrop}
+        />
       </div>
     );
   } else {
     return (
       <div className="image-wrapper" style={style}>
         {props.focalPoint && (
-          <FocalPoint width={width} height={height}
-                      x={props.focalPoint.x}
-                      y={props.focalPoint.y}
-                      onChange={props.setFocal} />
+          <FocalPoint
+            width={width}
+            height={height}
+            x={props.focalPoint.x}
+            y={props.focalPoint.y}
+            onChange={props.setFocal}
+          />
         )}
         <img src={props.croppedImage} />
       </div>
     );
   }
-
 }

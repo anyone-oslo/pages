@@ -1,9 +1,9 @@
 import React from "react";
 
 interface TagProps {
-  enabled: boolean,
-  tag: string,
-  toggleEnabled: (string) => void
+  enabled: boolean;
+  tag: string;
+  toggleEnabled: (string) => void;
 }
 
 export default function Tag(props: TagProps): JSX.Element {
@@ -19,11 +19,13 @@ export default function Tag(props: TagProps): JSX.Element {
   return (
     <span className={classes.join(" ")}>
       <label className="check-box">
-        <input type="checkbox"
-               name={"tag-" + props.tag}
-               value="1"
-               checked={props.enabled}
-               onChange={handleChange} />
+        <input
+          type="checkbox"
+          name={"tag-" + props.tag}
+          value="1"
+          checked={props.enabled}
+          onChange={handleChange}
+        />
         <span className="name">{props.tag}</span>
       </label>
     </span>

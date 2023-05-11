@@ -37,12 +37,10 @@ export default function Modal() {
     return (
       <div className="modal-wrapper open">
         <div className="background" onClick={handleClose} />
-        <div className="modal">
-          {component}
-        </div>
+        <div className="modal">{component}</div>
       </div>
     );
   } else {
-    return (<div className="modal-wrapper"></div>);
+    return <div className="modal-wrapper"></div>;
   }
 }

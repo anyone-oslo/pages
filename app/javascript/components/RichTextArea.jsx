@@ -20,59 +20,60 @@ export default class RichTextArea extends React.Component {
   actions() {
     const simple = [
       {
-        name:      "bold",
+        name: "bold",
         className: "bold",
-        hotkey:    "b",
-        fn:        (str) => ["<b>", str, "</b>"]
+        hotkey: "b",
+        fn: (str) => ["<b>", str, "</b>"]
       },
-      { name:      "italic",
+      {
+        name: "italic",
         className: "italic",
-        hotkey:    "i",
-        fn:        (str) => ["<i>", str, "</i>"]
-      },
+        hotkey: "i",
+        fn: (str) => ["<i>", str, "</i>"]
+      }
     ];
 
     const advanced = [
       {
-        name:      "Heading 2",
+        name: "Heading 2",
         className: "header h2",
-        fn:        (str) => ["h2. ", str, ""]
+        fn: (str) => ["h2. ", str, ""]
       },
       {
-        name:      "Heading 3",
+        name: "Heading 3",
         className: "header h3",
-        fn:        (str) => ["h3. ", str, ""]
+        fn: (str) => ["h3. ", str, ""]
       },
       {
-        name:      "Heading 4",
+        name: "Heading 4",
         className: "header h4",
-        fn:        (str) => ["h4. ", str, ""]
+        fn: (str) => ["h4. ", str, ""]
       },
       {
-        name:      "Blockquote",
+        name: "Blockquote",
         className: "quote-left",
-        fn:        (str) => ["bq. ", str, ""]
+        fn: (str) => ["bq. ", str, ""]
       },
       {
-        name:      "List",
+        name: "List",
         className: "list-ul",
-        fn:        (str) => ["", this.strToList(str, "*"), ""]
+        fn: (str) => ["", this.strToList(str, "*"), ""]
       },
       {
-        name:      "Ordered list",
+        name: "Ordered list",
         className: "list-ol",
-        fn:        (str) => ["", this.strToList(str, "#"), ""]
+        fn: (str) => ["", this.strToList(str, "#"), ""]
       },
       {
-        name:      "Link",
+        name: "Link",
         className: "link",
-        fn:        this.link
+        fn: this.link
       },
       {
-        name:      "Email link",
+        name: "Email link",
         className: "envelope",
-        fn:        this.emailLink
-      },
+        fn: this.emailLink
+      }
     ];
 
     return this.props.simple ? simple : [...simple, ...advanced];
@@ -86,12 +87,12 @@ export default class RichTextArea extends React.Component {
   emailLink(selection) {
     var address = prompt("Enter email address", "");
     let name = selection.length > 0 ? selection : address;
-    return ["\"", name, `":mailto:${address}`];
+    return ['"', name, `":mailto:${address}`];
   }
 
   getSelection() {
     let { selectionStart, selectionEnd, value } = this.inputRef.current;
-    return value.substr(selectionStart, (selectionEnd - selectionStart));
+    return value.substr(selectionStart, selectionEnd - selectionStart);
   }
 
   handleChange(evt) {
@@ -107,13 +108,16 @@ export default class RichTextArea extends React.Component {
     }
 
     let hotkeys = {};
-    this.actions().forEach(a => {
+    this.actions().forEach((a) => {
       if (a.hotkey) {
         hotkeys[a.hotkey] = a.fn;
       }
     });
 
-    if ((evt.metaKey || evt.ctrlKey) && Object.prototype.hasOwnProperty.call(hotkeys, key)) {
+    if (
+      (evt.metaKey || evt.ctrlKey) &&
+      Object.prototype.hasOwnProperty.call(hotkeys, key)
+    ) {
       evt.preventDefault();
       this.applyAction(hotkeys[key]);
     }
@@ -123,7 +127,7 @@ export default class RichTextArea extends React.Component {
     let name = selection.length > 0 ? selection : "Link text";
     var url = prompt("Enter link URL", "");
     if (url) {
-      return ["\"", name, `":${this.relativeUrl(url)}`];
+      return ['"', name, `":${this.relativeUrl(url)}`];
     } else {
       return ["", name, ""];
     }
@@ -156,9 +160,11 @@ export default class RichTextArea extends React.Component {
       console.log("Error parsing URL: ", error);
     }
 
-    if (url &&
-        url.hostname == document.location.hostname &&
-        (document.location.port || "80") == (url.port || "80")) {
+    if (
+      url &&
+      url.hostname == document.location.hostname &&
+      (document.location.port || "80") == (url.port || "80")
+    ) {
       return url.pathname;
     }
     return str;
@@ -176,12 +182,14 @@ export default class RichTextArea extends React.Component {
     return (
       <div className="rich-text-area">
         <div className="rich-text toolbar">
-          {this.actions().map(a =>
+          {this.actions().map((a) => (
             <RichTextToolbarButton
               key={a.name}
               name={a.name}
               className={a.className}
-              onClick={clickHandler(a.fn)} />)}
+              onClick={clickHandler(a.fn)}
+            />
+          ))}
         </div>
         <textarea
           className="rich"
@@ -192,7 +200,8 @@ export default class RichTextArea extends React.Component {
           rows={rows}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyPress}
-          {...this.localeOptions()} />
+          {...this.localeOptions()}
+        />
       </div>
     );
   }
@@ -203,7 +212,9 @@ export default class RichTextArea extends React.Component {
 
     textarea.value =
       value.substr(0, selectionStart) +
-      prefix + replacement + postfix +
+      prefix +
+      replacement +
+      postfix +
       value.substr(selectionEnd, value.length);
 
     textarea.focus({ preventScroll: true });
@@ -215,7 +226,10 @@ export default class RichTextArea extends React.Component {
   }
 
   strToList(str, prefix) {
-    return str.split("\n").map(l => prefix +  " " + l).join("\n");
+    return str
+      .split("\n")
+      .map((l) => prefix + " " + l)
+      .join("\n");
   }
 }
 

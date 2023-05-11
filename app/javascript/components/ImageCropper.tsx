@@ -3,16 +3,19 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "./ImageCropper/Image";
 import Toolbar from "./ImageCropper/Toolbar";
 
-import { CropAction, CropSize, CropState,
-         Position } from "./ImageCropper/useCrop";
+import {
+  CropAction,
+  CropSize,
+  CropState,
+  Position
+} from "./ImageCropper/useCrop";
 
-export { default as useCrop,
-         cropParams } from "./ImageCropper/useCrop";
+export { default as useCrop, cropParams } from "./ImageCropper/useCrop";
 
 interface ImageCropperProps {
-  croppedImage: string,
-  cropState: CropState,
-  dispatch: (action: CropAction) => void
+  croppedImage: string;
+  cropState: CropState;
+  dispatch: (action: CropAction) => void;
 }
 
 function focalPoint(state: CropState): Position {
@@ -33,8 +36,10 @@ export default function ImageCropper(props: ImageCropperProps) {
   const handleResize = () => {
     const elem = containerRef.current;
     if (elem) {
-      setContainerSize({ width: elem.offsetWidth - 2,
-                         height: elem.offsetHeight - 2 });
+      setContainerSize({
+        width: elem.offsetWidth - 2,
+        height: elem.offsetHeight - 2
+      });
     }
   };
 
@@ -69,23 +74,27 @@ export default function ImageCropper(props: ImageCropperProps) {
 
   return (
     <div className="visual">
-      <Toolbar cropState={props.cropState}
-               image={props.cropState.image}
-               setAspect={setAspect}
-               toggleCrop={toggleCrop}
-               toggleFocal={() => props.dispatch({ type: "toggleFocal" })} />
+      <Toolbar
+        cropState={props.cropState}
+        image={props.cropState.image}
+        setAspect={setAspect}
+        toggleCrop={toggleCrop}
+        toggleFocal={() => props.dispatch({ type: "toggleFocal" })}
+      />
       <div className="image-container" ref={containerRef}>
-        {!props.croppedImage &&
-         <div className="loading">
-           Loading image&hellip;
-         </div>}
-        {props.croppedImage && containerSize &&
-         <Image cropState={props.cropState}
-                containerSize={containerSize}
-                croppedImage={props.croppedImage}
-                focalPoint={focalPoint(props.cropState)}
-                setCrop={setCrop}
-                setFocal={setFocal} />}
+        {!props.croppedImage && (
+          <div className="loading">Loading image&hellip;</div>
+        )}
+        {props.croppedImage && containerSize && (
+          <Image
+            cropState={props.cropState}
+            containerSize={containerSize}
+            croppedImage={props.croppedImage}
+            focalPoint={focalPoint(props.cropState)}
+            setCrop={setCrop}
+            setFocal={setFocal}
+          />
+        )}
       </div>
     </div>
   );

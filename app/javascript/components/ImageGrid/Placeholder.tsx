@@ -1,7 +1,7 @@
 import React from "react";
 
 interface PlaceholderProps {
-  src: string
+  src: string;
 }
 
 export default function Placeholder(props: PlaceholderProps) {

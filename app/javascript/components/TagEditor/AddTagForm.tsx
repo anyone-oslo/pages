@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 
 interface AddTagFormProps {
-  addTag: (string) => void
+  addTag: (string) => void;
 }
 
 export default function AddTagForm(props: AddTagFormProps) {
@@ -25,15 +25,16 @@ export default function AddTagForm(props: AddTagFormProps) {
 
   return (
     <div className="add-tag-form">
-      <input name="add-tag"
-             type="text"
-             className="add-tag"
-             value={tag}
-             onKeyDown={handleKeyDown}
-             onChange={handleChange}
-             placeholder="Add tag..." />
-      <button onClick={submit}
-              disabled={!tag}>
+      <input
+        name="add-tag"
+        type="text"
+        className="add-tag"
+        value={tag}
+        onKeyDown={handleKeyDown}
+        onChange={handleChange}
+        placeholder="Add tag..."
+      />
+      <button onClick={submit} disabled={!tag}>
         Add
       </button>
     </div>

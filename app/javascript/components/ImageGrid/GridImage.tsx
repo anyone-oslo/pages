@@ -8,25 +8,25 @@ import Placeholder from "./Placeholder";
 import { useDraggable } from "../drag";
 
 interface Record {
-  id: number | null,
-  image: ImageResource,
-  src: string | null,
-  file: File | null
+  id: number | null;
+  image: ImageResource;
+  src: string | null;
+  file: File | null;
 }
 
 interface GridImageProps {
-  draggable: { handle: string, record: Record }
-  attributeName: string,
-  locale: string,
-  locales: { [index: string]: Locale },
-  placeholder: boolean,
-  enablePrimary: boolean,
-  showEmbed: boolean,
-  primary: boolean,
-  position: number,
-  deleteImage: () => void,
-  startDrag: (evt: Event, draggable: Draggable) => void,
-  onUpdate: (newImage: ImageResource, src: string) => void
+  draggable: { handle: string; record: Record };
+  attributeName: string;
+  locale: string;
+  locales: { [index: string]: Locale };
+  placeholder: boolean;
+  enablePrimary: boolean;
+  showEmbed: boolean;
+  primary: boolean;
+  position: number;
+  deleteImage: () => void;
+  startDrag: (evt: Event, draggable: Draggable) => void;
+  onUpdate: (newImage: ImageResource, src: string) => void;
 }
 
 export default function GridImage(props: GridImageProps) {
@@ -70,44 +70,48 @@ export default function GridImage(props: GridImageProps) {
   }
 
   return (
-    <div className={classes.join(" ")}
-         {...dragAttrs}>
-      <input name={`${attributeName}[id]`}
-             type="hidden" value={record.id || ""} />
-      <input name={`${attributeName}[image_id]`}
-             type="hidden" value={(image && image.id) || ""} />
-      <input name={`${attributeName}[position]`}
-             type="hidden" value={props.position} />
+    <div className={classes.join(" ")} {...dragAttrs}>
+      <input
+        name={`${attributeName}[id]`}
+        type="hidden"
+        value={record.id || ""}
+      />
+      <input
+        name={`${attributeName}[image_id]`}
+        type="hidden"
+        value={(image && image.id) || ""}
+      />
+      <input
+        name={`${attributeName}[position]`}
+        type="hidden"
+        value={props.position}
+      />
       {props.enablePrimary && (
-        <input name={`${attributeName}[primary]`}
-               type="hidden" value={props.primary} />
+        <input
+          name={`${attributeName}[primary]`}
+          type="hidden"
+          value={props.primary}
+        />
       )}
-      {!image &&
-       <Placeholder src={src} />}
-      {image &&
-       <>
-         <EditableImage
-           image={image}
-           key={props.placeholder ? "placeholder" : draggable.handle}
-           src={src || image.thumbnail_url}
-           width={250}
-           caption={true}
-           locale={props.locale}
-           locales={props.locales}
-           onUpdate={props.onUpdate} />
-         <div className="actions">
-           {props.showEmbed && (
-             <button onClick={copyEmbed}>
-               Embed
-             </button>
-           )}
-           {props.deleteImage && (
-             <button onClick={deleteImage}>
-               Remove
-             </button>
-           )}
-         </div>
-       </>}
+      {!image && <Placeholder src={src} />}
+      {image && (
+        <>
+          <EditableImage
+            image={image}
+            key={props.placeholder ? "placeholder" : draggable.handle}
+            src={src || image.thumbnail_url}
+            width={250}
+            caption={true}
+            locale={props.locale}
+            locales={props.locales}
+            onUpdate={props.onUpdate}
+          />
+          <div className="actions">
+            {props.showEmbed && <button onClick={copyEmbed}>Embed</button>}
+            {props.deleteImage && <button onClick={deleteImage}>Remove</button>}
+          </div>
+        </>
+      )}
     </div>
   );
 }

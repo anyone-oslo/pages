@@ -13,7 +13,6 @@ export default class LoginController extends Controller {
     }
   }
 
-
   changeTab(evt: Event) {
     evt.preventDefault();
     if ("dataset" in evt.target && "tab" in evt.target.dataset) {

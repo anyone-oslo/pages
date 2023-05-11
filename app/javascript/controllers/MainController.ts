@@ -42,7 +42,11 @@ export default class MainController extends Controller {
     if ("dataset" in evt.target && "tab" in evt.target.dataset) {
       const tab = evt.target.dataset.tab as string;
       this.showTab(tab);
-      history.pushState({ tabId: tab }, "", `${window.location.pathname}#${tab}`);
+      history.pushState(
+        { tabId: tab },
+        "",
+        `${window.location.pathname}#${tab}`
+      );
     }
   }
 
@@ -64,7 +68,7 @@ export default class MainController extends Controller {
     });
   }
 
-  tabNames (): string[] {
+  tabNames(): string[] {
     return this.linkTargets.map((l) => l.dataset.tab);
   }
 }

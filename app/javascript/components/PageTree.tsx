@@ -5,31 +5,36 @@ import { Attributes, PageNode } from "./PageTree/types";
 import Draggable from "./PageTree/Draggable";
 
 interface Page extends Record<string, unknown> {
-  parent_page_id: number | null
+  parent_page_id: number | null;
 }
 
 type CollapsedState = Record<number, boolean>;
 
 interface ParentMap {
-  [index: number]: Page[]
+  [index: number]: Page[];
 }
 
 interface PageTreeProps {
-  dir: string,
-  locale: string,
-  pages: Page[],
-  permissions: string[]
+  dir: string;
+  locale: string;
+  pages: Page[];
+  permissions: string[];
 }
 
 interface PageTreeState {
-  tree: Tree<PageNode>
+  tree: Tree<PageNode>;
 }
 
 function collapsedState(): CollapsedState {
-  if (window && window.localStorage &&
-    typeof(window.localStorage.collapsedPages) != "undefined") {
-      return JSON.parse(window.localStorage.getItem("collapsedPages")) as CollapsedState;
-    }
+  if (
+    window &&
+    window.localStorage &&
+    typeof window.localStorage.collapsedPages != "undefined"
+  ) {
+    return JSON.parse(
+      window.localStorage.getItem("collapsedPages")
+    ) as CollapsedState;
+  }
   return {};
 }
 
@@ -62,15 +67,16 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
         node.collapsed = true;
       }
       if (index.children && index.children.length) {
-        index.children.forEach(c => walk(c));
+        index.children.forEach((c) => walk(c));
       }
     };
     walk(1);
   }
 
   createPage(index: TreeIndex<PageNode>, attributes: Attributes) {
-    void postJson(`/admin/${index.node.locale}/pages.json`, { page: attributes })
-      .then((response: Attributes) => this.updateNode(index, response));
+    void postJson(`/admin/${index.node.locale}/pages.json`, {
+      page: attributes
+    }).then((response: Attributes) => this.updateNode(index, response));
   }
 
   buildTree(pages: Page[]) {
@@ -81,7 +87,9 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       return m;
     }, {});
 
-    pages.forEach((p: Page) => { p.children = parentMap[p.id] || []; });
+    pages.forEach((p: Page) => {
+      p.children = parentMap[p.id] || [];
+    });
 
     const tree = new Tree({
       name: "All Pages",
@@ -95,7 +103,11 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
     return tree;
   }
 
-  movePage(index: TreeIndex<PageNode>, parent: TreeIndex<PageNode>, position: number) {
+  movePage(
+    index: TreeIndex<PageNode>,
+    parent: TreeIndex<PageNode>,
+    position: number
+  ) {
     const data = {
       parent_id: parent.node.id,
       position: position
@@ -105,8 +117,9 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
   }
 
   performUpdate(index: TreeIndex, url: string, data: Attributes) {
-    void putJson(url, data)
-      .then((response: Page) => this.updateNode(index, response));
+    void putJson(url, data).then((response: Page) =>
+      this.updateNode(index, response)
+    );
   }
 
   render() {
@@ -116,7 +129,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       this.reorderChildren(id);
       this.setCollapsed(id, false);
       this.createPage(index, attributes);
-      this.setState({tree: tree});
+      this.setState({ tree: tree });
     };
 
     const movedPage = (id: TreeId) => {
@@ -135,7 +148,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       const tree = this.state.tree;
       const node = tree.getIndex(id).node;
       this.setCollapsed(id, !node.collapsed);
-      this.setState({tree: tree});
+      this.setState({ tree: tree });
     };
 
     const updatePage = (id: TreeId, attributes: Attributes) => {
@@ -150,15 +163,17 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       this.setState({ tree: tree });
     };
 
-    return(
-      <Draggable tree={this.state.tree}
-                 addChild={addChild}
-                 movedPage={movedPage}
-                 toggleCollapsed={toggleCollapsed}
-                 updatePage={updatePage}
-                 updateTree={updateTree}
-                 locale={this.props.locale}
-                 dir={this.props.dir} />
+    return (
+      <Draggable
+        tree={this.state.tree}
+        addChild={addChild}
+        movedPage={movedPage}
+        toggleCollapsed={toggleCollapsed}
+        updatePage={updatePage}
+        updateTree={updateTree}
+        locale={this.props.locale}
+        dir={this.props.dir}
+      />
     );
   }
 
