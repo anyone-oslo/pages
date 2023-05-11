@@ -52,8 +52,8 @@
     "build": "esbuild app/javascript/admin-dist.ts --bundle --minify --sourcemap --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build-debug": "esbuild app/javascript/admin-dist.ts --bundle --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css",
-    "prettier": "prettier app/javascript --check",
-    "prettier:fix": "prettier app/javascript --write"
+    "prettier": "prettier app/javascript app/assets/stylesheets --check",
+    "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
   "packageManager": "yarn@3.5.0",
   "bugs": {

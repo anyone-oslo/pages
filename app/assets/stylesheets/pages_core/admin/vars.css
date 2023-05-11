@@ -2,7 +2,8 @@
 @custom-media --narrow screen and (max-width: 1150px);
 
 :root {
-  --font-os-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  --font-os-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
 
   --red: #c00007;
   --red-transparent: #c0000740;

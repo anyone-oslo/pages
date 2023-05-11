@@ -7,9 +7,9 @@ form {
     margin: 16px 0;
     padding: 0;
 
-    & input[type=text],
-    & input[type=password],
-    & input[type=email],
+    & input[type="text"],
+    & input[type="password"],
+    & input[type="email"],
     & textarea {
       transition: border-color 150ms ease-out;
     }
@@ -41,9 +41,9 @@ form {
   }
 
   & .field-with-warning {
-    & input[type=text],
-    & input[type=password],
-    & input[type=email],
+    & input[type="text"],
+    & input[type="password"],
+    & input[type="email"],
     & textarea {
       border-color: var(--red-light);
     }
@@ -79,8 +79,8 @@ form {
       }
     }
 
-    & input[type=text],
-    & input[type=password] {
+    & input[type="text"],
+    & input[type="password"] {
       width: 100%;
       max-width: none;
     }
@@ -96,7 +96,7 @@ form {
         display: inline-block;
       }
 
-      & input[type=text] {
+      & input[type="text"] {
         display: inline;
         width: auto;
         min-width: auto;
@@ -139,11 +139,12 @@ form {
   display: table;
   padding: 1px;
   padding-right: 22px;
-  background: transparent url("pages/admin/warning-icon.gif") right 5px no-repeat;
+  background: transparent url("pages/admin/warning-icon.gif") right 5px
+    no-repeat;
 }
 
-input[type=text],
-input[type=password],
+input[type="text"],
+input[type="password"],
 textarea {
   width: 100%;
   max-width: 450px;
@@ -165,10 +166,10 @@ textarea {
   }
 }
 
-main .login-form input[type=text],
-main .login-form input[type=password],
-input[type=text].large,
-input[type=password].large {
+main .login-form input[type="text"],
+main .login-form input[type="password"],
+input[type="text"].large,
+input[type="password"].large {
   font-size: 1.4em;
 }
 

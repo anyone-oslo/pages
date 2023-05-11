@@ -136,7 +136,9 @@ td.drag-handle {
   }
 
   & .pinned .name {
-    background: transparent radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat left 12px top 50%;
+    background: transparent
+      radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat
+      left 12px top 50%;
     background-size: 10px 10px;
   }
 }
@@ -162,7 +164,7 @@ td.drag-handle {
     }
   }
 
-  & main input[type=text],
+  & main input[type="text"],
   & main textarea {
     width: 100%;
     max-width: 100%;
