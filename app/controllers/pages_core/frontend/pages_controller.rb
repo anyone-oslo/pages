@@ -106,6 +106,14 @@ module PagesCore
         end
       end
 
+      def redirect_to_parent_or_root(page)
+        if page.parent
+          redirect_to page_url(locale, page.parent)
+        else
+          redirect_to root_url
+        end
+      end
+
       def redirect_page(page)
         return false unless page.redirects?
 
