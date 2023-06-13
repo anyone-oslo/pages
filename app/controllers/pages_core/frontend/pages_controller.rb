@@ -64,10 +64,6 @@ module PagesCore
         super
       end
 
-      def page_param
-        params[:page].is_a?(String) ? params[:page] : 1
-      end
-
       def page_template(page)
         if PagesCore::Templates.names.include?(page.template)
           page.template

@@ -6,6 +6,7 @@ module PagesCore
     include ApplicationHelper
 
     before_action :set_i18n_locale
+    helper_method :page_param
 
     # Loads @root_pages and @rss_feeds. To automatically load these in your
     # own controllers, add the following line to your controller definition:
@@ -20,10 +21,12 @@ module PagesCore
     private
 
     def legacy_locales
-      {
-        "nor" => "nb",
-        "eng" => "en"
-      }
+      { "nor" => "nb",
+        "eng" => "en" }
+    end
+
+    def page_param
+      params[:page].is_a?(String) ? params[:page] : 1
     end
 
     def set_i18n_locale
