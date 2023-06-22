@@ -11,7 +11,7 @@
 <%= render(partial: "admin/pages/search_bar",
            locals: { query: search_query }) %>
 
-<% if @search_documents.any? %>
+<% if @search_documents&.any? %>
   <table class="list calendar-item-list">
     <tr>
       <th>Name</th>
@@ -45,7 +45,7 @@
     <% end %>
   </table>
   <%= will_paginate(@search_documents, renderer: PagesCore::LinkRenderer) %>
-<% else %>
+<% elsif @search_documents %>
   <div class="content">
     <p>
       Found no results for your search query.
