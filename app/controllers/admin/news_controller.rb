@@ -33,7 +33,7 @@ module Admin
     def find_news_pages
       @news_pages = Page.news_pages
                         .in_locale(@locale)
-                        .reorder("parent_page_id ASC, position ASC")
+                        .sort { |a, b| b.children.count <=> a.children.count }
       return if @news_pages.any?
 
       redirect_to(admin_pages_url(@locale))
