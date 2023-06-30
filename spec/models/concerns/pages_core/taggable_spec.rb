@@ -82,7 +82,7 @@ describe PagesCore::Taggable do
     end
 
     context "with tags array argument" do
-      before { page.tag_with!([create(:tag), create(:tag)]) }
+      before { page.tag_with!(create_list(:tag, 2)) }
 
       specify { expect(page.tags.count).to eq(2) }
     end

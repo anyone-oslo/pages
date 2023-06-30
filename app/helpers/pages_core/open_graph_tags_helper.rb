@@ -11,7 +11,7 @@ module PagesCore
       properties = default_open_graph_properties.merge(open_graph_properties)
       safe_join(
         properties
-          .delete_if { |_, content| content.nil? }
+          .compact
           .map do |name, content|
           tag.meta(property: "og:#{name}", content: content)
         end,

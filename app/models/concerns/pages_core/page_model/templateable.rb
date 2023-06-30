@@ -47,7 +47,7 @@ module PagesCore
       end
 
       def base_template
-        template.split(/_/)
+        template.split("_")
                 .reject { |w| %w[index list archive liste arkiv].include?(w) }
                 .join(" ")
       end
