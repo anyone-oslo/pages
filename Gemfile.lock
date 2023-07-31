@@ -416,6 +416,8 @@ DEPENDENCIES
   rspec-rails
   rspec_junit_formatter
   rubocop
+  rubocop-capybara
+  rubocop-factory_bot
   rubocop-rails
   rubocop-rspec
   semantic
