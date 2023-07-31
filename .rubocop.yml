@@ -1,5 +1,6 @@
 require:
   - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-rails
   - rubocop-rspec
 
@@ -11,7 +12,7 @@ AllCops:
   TargetRubyVersion: 3.0
   Exclude:
     - "spec/internal/db/schema.rb"
-    - 'node_modules/**/*'
+    - "node_modules/**/*"
     - "vendor/**/*"
 
 Metrics/AbcSize:
@@ -35,12 +36,13 @@ Metrics/ClassLength:
 
 Metrics/MethodLength:
   Exclude:
+    - "app/models/concerns/pages_core/page_model/dated_page.rb"
     - "db/migrate/*"
     - "lib/rails/generators/**/*_generator.rb"
 
 Metrics/ParameterLists:
   Exclude:
-    - 'app/helpers/pages_core/labelled_form_builder.rb'
+    - "app/helpers/pages_core/labelled_form_builder.rb"
 
 Style/AsciiComments:
   Enabled: false
