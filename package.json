@@ -7,7 +7,9 @@
     "url": "git+https://github.com/anyone_oslo/pages.git"
   },
   "main": "/app/javascript/index.ts",
-  "files": ["/app/javascript/**/*"],
+  "files": [
+    "/app/javascript/**/*"
+  ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@hotwired/stimulus": "^3.1.0",
