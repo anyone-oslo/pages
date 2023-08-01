@@ -10,7 +10,6 @@ module PagesCore
     include PagesCore::PoliciesHelper
     include PagesCore::StaticCacheController
 
-    before_action :set_locale
     after_action :set_content_language_header
 
     protected
@@ -19,11 +18,6 @@ module PagesCore
       super
       payload[:remote_ip] = request.remote_ip
       payload.merge!(current_user_context)
-    end
-
-    # Sets @locale from params[:locale], with I18n.default_locale as fallback
-    def set_locale
-      @locale = content_locale
     end
 
     def set_content_language_header
