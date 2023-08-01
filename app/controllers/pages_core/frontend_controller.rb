@@ -14,8 +14,10 @@ module PagesCore
     #   before_action :load_root_pages
     #
     def load_root_pages
-      @root_pages = Page.roots.localized(@locale).published
-      @rss_feeds = Page.where(feed_enabled: true).localized(@locale).published
+      @root_pages = Page.roots.localized(content_locale).published
+      @rss_feeds = Page.where(feed_enabled: true)
+                       .localized(content_locale)
+                       .published
     end
 
     private
@@ -30,7 +32,7 @@ module PagesCore
     end
 
     def set_i18n_locale
-      locale_param = params[:locale] || I18n.default_locale
+      locale_param = content_locale
       if legacy_locales[locale_param]
         locale_param = legacy_locales[locale_param]
       end

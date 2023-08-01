@@ -30,7 +30,7 @@ module PagesCore
     end
 
     def preview_page(page)
-      redirect_to(page_url(@locale, page)) && return unless logged_in?
+      redirect_to(page_url(content_locale, page)) && return unless logged_in?
 
       disable_xss_protection
 
@@ -38,7 +38,7 @@ module PagesCore
       page.attributes = page_params.merge(
         status: 2,
         published_at: Time.zone.now,
-        locale: @locale,
+        locale: content_locale,
         redirect_to: nil
       )
       render_page

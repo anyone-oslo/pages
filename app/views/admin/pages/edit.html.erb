@@ -9,11 +9,11 @@
   Editing
   <% @page.ancestors.reverse.each do |page| %>
     <%= link_to(page.name? ? page.name : tag.i("Untitled"),
-                edit_admin_page_path(@locale, page)) %>
+                edit_admin_page_path(content_locale, page)) %>
     &raquo;
   <% end %>
   <%= link_to(@page.name? ? @page.name : tag.i("Untitled"),
-              edit_admin_page_path(@locale, @page)) %>
+              edit_admin_page_path(content_locale, @page)) %>
 <% end %>
 
 <% content_for :page_description_links do %>
@@ -22,7 +22,7 @@
 
 <% content_for :main_wrapper do %>
   <%= form_for(@page,
-               url: admin_page_url(@locale, @page),
+               url: admin_page_url(content_locale, @page),
                builder: PagesCore::Admin::FormBuilder,
                html: {
                  class: "edit-page main-wrapper",

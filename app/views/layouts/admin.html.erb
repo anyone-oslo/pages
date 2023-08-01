@@ -36,7 +36,7 @@
   <body class="<%= content_for(:body_class) %>"
         data-controller="<%= controller.class.to_s %>"
         data-action="<%= controller.action_name %>"
-        data-locale="<%= @locale %>">
+        data-locale="<%= content_locale %>">
 
     <div class="wrapper">
       <%= render partial: "layouts/admin/header" %>

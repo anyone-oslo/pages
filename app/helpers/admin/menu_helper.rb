@@ -2,6 +2,8 @@
 
 module Admin
   module MenuHelper
+    include PagesCore::LocalesHelper
+
     def header_tabs(group)
       tag.ul(class: group.to_s) do
         safe_join(menu_items_for(group).map do |item|

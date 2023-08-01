@@ -24,9 +24,9 @@ module PagesCore
 
     def redirect
       if Page.news_pages.any?
-        redirect_to news_admin_pages_url(@locale)
+        redirect_to news_admin_pages_url(content_locale)
       else
-        redirect_to admin_pages_url(@locale)
+        redirect_to admin_pages_url(content_locale)
       end
     end
 

@@ -2,7 +2,7 @@
 
 <% content_for :page_description do %>
   All pages /
-  <%= link_to("Deleted pages", deleted_admin_pages_path(@locale)) %>
+  <%= link_to("Deleted pages", deleted_admin_pages_path(content_locale)) %>
 <% end %>
 
 <% content_for :page_description_links do %>
@@ -13,12 +13,12 @@
            locals: { query: search_query }) %>
 
 <div class="content">
-  <% cache Page.visible.roots.to_a + [current_user, @locale] do %>
+  <% cache Page.visible.roots.to_a + [current_user, content_locale] do %>
     <%= react_component(
       "PageTree", {
         pages: @pages.map { |p| page_json(p) },
-        locale: @locale,
-        dir: locale_direction(@locale),
+        locale: content_locale,
+        dir: locale_direction(content_locale),
         permissions: [(:create if policy(Page).create?)] }
     ) %>
   <% end %>

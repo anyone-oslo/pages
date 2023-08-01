@@ -54,7 +54,7 @@ module PagesCore
       ActiveSupport::Deprecation.warn(
         "Calling page_url without locale is deprecated"
       )
-      [(opts[:locale] || @locale), page_or_locale]
+      [(opts[:locale] || content_locale), page_or_locale]
     end
 
     def paginated_section(opts)

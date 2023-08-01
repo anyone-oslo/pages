@@ -22,13 +22,12 @@ module PagesCore
     end
 
     def unique_page(page_name, &block)
-      locale = @locale || I18n.default_locale.to_s
       page = Page.where(unique_name: page_name).first
       if page && block_given?
-        output = capture(page.localize(locale), &block)
+        output = capture(page.localize(content_locale), &block)
         concat(output)
       end
-      page&.localize(locale)
+      page&.localize(content_locale)
     end
 
     private

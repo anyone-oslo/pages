@@ -5,6 +5,7 @@ module PagesCore
     include PagesCore::Authentication
     include PagesCore::ErrorRenderer
     include PagesCore::ErrorReporting
+    include PagesCore::LocalesHelper
     include PagesCore::ProcessTitler
     include PagesCore::PoliciesHelper
     include PagesCore::StaticCacheController
@@ -22,9 +23,7 @@ module PagesCore
 
     # Sets @locale from params[:locale], with I18n.default_locale as fallback
     def set_locale
-      legacy_locales = { "nor" => "nb", "eng" => "en" }
-      @locale = params[:locale] || I18n.default_locale.to_s
-      @locale = legacy_locales[@locale] if legacy_locales[@locale]
+      @locale = content_locale
     end
 
     def set_content_language_header

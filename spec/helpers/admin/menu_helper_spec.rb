@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Admin::MenuHelper do
-  before { helper.instance_variable_set(:@locale, I18n.default_locale) }
-
   describe "#header_tabs" do
     subject(:tabs) { helper.header_tabs(:pages) }
 

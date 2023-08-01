@@ -3,7 +3,7 @@
 module PagesCore
   module FrontendHelper
     def root_pages
-      @root_pages ||= Page.roots.localized(@locale).published
+      @root_pages ||= Page.roots.localized(content_locale).published
     end
 
     def root_page

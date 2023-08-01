@@ -1,7 +1,7 @@
 <% content_for :page_title, "Deleted pages" %>
 
 <% content_for :page_description do %>
-  <%= link_to("All pages", admin_pages_path(@locale)) %> /
+  <%= link_to("All pages", admin_pages_path(content_locale)) %> /
   Deleted pages
 <% end %>
 
@@ -22,7 +22,7 @@
         <td class="name">
           <%= link_to_if(policy(page).edit?,
                          page_name(page),
-                         edit_admin_page_url(@locale, page),
+                         edit_admin_page_url(content_locale, page),
                          class: 'name_link') %>
         </td>
         <td>

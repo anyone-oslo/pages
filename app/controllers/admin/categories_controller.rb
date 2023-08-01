@@ -22,7 +22,7 @@ module Admin
       @category = Category.create(category_params)
       if @category.valid?
         flash[:notice] = t("pages_core.categories_controller.created")
-        redirect_to admin_pages_url(@locale)
+        redirect_to admin_pages_url(content_locale)
       else
         render action: :new
       end
@@ -31,7 +31,7 @@ module Admin
     def update
       if @category.update(category_params)
         flash[:notice] = t("pages_core.categories_controller.updated")
-        redirect_to admin_pages_url(@locale)
+        redirect_to admin_pages_url(content_locale)
       else
         render action: :edit
       end
@@ -40,7 +40,7 @@ module Admin
     def destroy
       @category.destroy
       flash[:notice] = t("pages_core.categories_controller.deleted")
-      redirect_to admin_pages_url(@locale)
+      redirect_to admin_pages_url(content_locale)
     end
 
     protected

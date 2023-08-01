@@ -9,9 +9,9 @@ module Admin
     require_authorization object: Page
 
     def index
-      @archive_finder = archive_finder(@news_pages, @locale)
+      @archive_finder = archive_finder(@news_pages, content_locale)
       unless @year
-        redirect_to(admin_news_index_path(@locale,
+        redirect_to(admin_news_index_path(content_locale,
                                           (@archive_finder.latest_year ||
                                            Time.zone.now.year)))
         return
@@ -32,11 +32,11 @@ module Admin
 
     def find_news_pages
       @news_pages = Page.news_pages
-                        .in_locale(@locale)
+                        .in_locale(content_locale)
                         .sort { |a, b| b.children.count <=> a.children.count }
       return if @news_pages.any?
 
-      redirect_to(admin_pages_url(@locale))
+      redirect_to(admin_pages_url(content_locale))
     end
 
     def find_year_and_month
@@ -48,7 +48,7 @@ module Admin
     def require_news_pages
       return if Page.news_pages.any?
 
-      redirect_to(admin_pages_url(@locale))
+      redirect_to(admin_pages_url(content_locale))
     end
 
     def latest_year

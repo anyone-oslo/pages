@@ -8,7 +8,7 @@
   <td class="name">
     <%= link_to_if(policy(page).edit?,
                    page_name(page),
-                   edit_admin_page_url(@locale, page),
+                   edit_admin_page_url(content_locale, page),
                    class: 'name_link') %>
     <%= autopublish_notice(page) %>
   </td>

@@ -10,11 +10,11 @@ module Admin
     require_authorization
 
     def index
-      @pages = Page.admin_list(@locale)
+      @pages = Page.admin_list(content_locale)
     end
 
     def deleted
-      @pages = Page.deleted.by_updated_at.in_locale(@locale)
+      @pages = Page.deleted.by_updated_at.in_locale(content_locale)
     end
 
     def search
@@ -22,27 +22,28 @@ module Admin
 
       @search_documents =
         SearchDocument.where(searchable_type: "Page")
-                      .search(search_query, locale: @locale)
+                      .search(search_query, locale: content_locale)
                       .paginate(per_page: 50, page: params[:page])
     end
 
     def show
-      redirect_to edit_admin_page_url(@locale, @page)
+      redirect_to edit_admin_page_url(content_locale, @page)
     end
 
     def new
       build_params = params[:page] ? page_params : nil
-      @page = build_page(@locale, build_params)
+      @page = build_page(content_locale, build_params)
       @page.parent = Page.find_by(id: params[:parent])
     end
 
     def edit; end
 
     def create
-      @page = build_page(@locale, page_params, param_categories).tap(&:save)
+      @page = build_page(content_locale, page_params,
+                         param_categories).tap(&:save)
       if @page.valid?
         respond_with_page(@page) do
-          redirect_to(edit_admin_page_url(@locale, @page))
+          redirect_to(edit_admin_page_url(content_locale, @page))
         end
       else
         render action: :new
@@ -54,7 +55,7 @@ module Admin
         @page.categories = param_categories
         respond_with_page(@page) do
           flash[:notice] = t("pages_core.changes_saved")
-          redirect_to edit_admin_page_url(@locale, @page)
+          redirect_to edit_admin_page_url(content_locale, @page)
         end
       else
         render action: :edit
@@ -64,12 +65,12 @@ module Admin
     def move
       parent = params[:parent_id] ? Page.find(params[:parent_id]) : nil
       @page.update(parent: parent, position: params[:position])
-      respond_with_page(@page) { redirect_to admin_pages_url(@locale) }
+      respond_with_page(@page) { redirect_to admin_pages_url(content_locale) }
     end
 
     def destroy
       Page.find(params[:id]).flag_as_deleted!
-      redirect_to admin_pages_url(@locale)
+      redirect_to admin_pages_url(content_locale)
     end
 
     private
@@ -110,7 +111,7 @@ module Admin
     end
 
     def find_page
-      @page = Page.find(params[:id]).localize(@locale)
+      @page = Page.find(params[:id]).localize(content_locale)
     end
 
     def find_categories

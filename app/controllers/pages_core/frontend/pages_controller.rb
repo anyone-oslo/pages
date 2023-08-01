@@ -98,7 +98,7 @@ module PagesCore
 
       def find_page
         @page ||= Page.find_by(id: params[:id]) || unique_page(params[:id])
-        @page.locale = @locale || I18n.default_locale.to_s if @page
+        @page.locale = content_locale if @page
       end
 
       def render_published_page(page)

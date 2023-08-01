@@ -8,7 +8,7 @@ module Admin
 
     def show
       unless @year
-        redirect_to(admin_calendar_path(@locale, Time.zone.now.year))
+        redirect_to(admin_calendar_path(content_locale, Time.zone.now.year))
         return
       end
       @pages = if @month
@@ -23,7 +23,7 @@ module Admin
     def calendar_items
       Page.with_dates
           .order("starts_at DESC")
-          .in_locale(@locale)
+          .in_locale(content_locale)
           .visible
           .paginate(per_page: 50, page: params[:page])
     end

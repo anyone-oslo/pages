@@ -9,7 +9,7 @@
 
 <% content_for :main_wrapper do %>
   <%= form_for(@page,
-               url: admin_pages_url(@locale),
+               url: admin_pages_url(content_locale),
                builder: PagesCore::Admin::FormBuilder,
                html: {
                  class: "edit-page main-wrapper",
