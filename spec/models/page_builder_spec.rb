@@ -5,9 +5,9 @@ require "rails_helper"
 describe PageBuilder do
   let(:user) { create(:user) }
   let(:locale) { I18n.default_locale }
-  let(:page1) { Page.first.localize(locale) }
-  let(:page2) { page1.children.first }
-  let(:page3) { page1.children.last }
+  let(:root) { Page.first.localize(locale) }
+  let(:foo) { root.children.first }
+  let(:bar) { root.children.last }
 
   describe ".build" do
     before do
@@ -23,16 +23,16 @@ describe PageBuilder do
       expect(Page.count).to eq(3)
     end
 
-    specify { expect(page1.name).to eq("Home") }
-    specify { expect(page1.template).to eq("index") }
-    specify { expect(page1.published?).to be(true) }
-    specify { expect(page1.parent).to be_nil }
-    specify { expect(page1.author).to eq(user) }
+    specify { expect(root.name).to eq("Home") }
+    specify { expect(root.template).to eq("index") }
+    specify { expect(root.published?).to be(true) }
+    specify { expect(root.parent).to be_nil }
+    specify { expect(root.author).to eq(user) }
 
-    specify { expect(page2.parent).to eq(page1) }
-    specify { expect(page2.author).to eq(user) }
+    specify { expect(foo.parent).to eq(root) }
+    specify { expect(foo.author).to eq(user) }
 
-    specify { expect(page3.template).to eq("foobar") }
-    specify { expect(page3.published?).to be(false) }
+    specify { expect(bar.template).to eq("foobar") }
+    specify { expect(bar.published?).to be(false) }
   end
 end

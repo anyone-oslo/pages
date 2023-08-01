@@ -27,6 +27,10 @@ module PagesCore
         end
       end
 
+      def preview
+        preview_page(@page)
+      end
+
       def show
         respond_to do |format|
           format.html { render_published_page(@page) }

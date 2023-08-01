@@ -1,5 +1,5 @@
-<% if content_for?(:page_description) || @content_tabs %>
-  <div class="page-description"<% if @content_tabs %> class="with_content_tabs"<% end %>>
+<% if content_for?(:page_description) || content_tabs? %>
+  <div class="page-description"<% if content_tabs? %> class="with_content_tabs"<% end %>>
     <% if content_for?(:page_description_links) %>
       <div class="links">
         <%= content_for(:page_description_links) %>
@@ -8,10 +8,10 @@
     <h3>
       <%= content_for(:page_description) || content_for(:page_title) %>
     </h3>
-    <% if @content_tabs %>
+    <% if content_tabs? %>
       <ul class="content-tabs"
           role="tablist">
-        <% @content_tabs.map do |t| %>
+        <% content_tabs.map do |t| %>
           <li id="content-tab-link-<%= t[:key] %>"
               data-tab="<%= t[:key] %>"
               data-main-target="link">

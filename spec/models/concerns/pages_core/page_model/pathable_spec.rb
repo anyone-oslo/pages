@@ -106,43 +106,43 @@ describe PagesCore::PageModel::Pathable do
   end
 
   describe "#full_path?" do
-    subject { page3.full_path? }
+    subject { page.full_path? }
 
-    let(:page1) { create(:page, locale: "en", name: "Products") }
-    let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }
-    let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
+    let(:root) { create(:page, locale: "en", name: "Products") }
+    let(:parent) { create(:page, locale: "en", name: "Category", parent: root) }
+    let(:page) { create(:page, locale: "en", name: "My thing", parent: parent) }
 
     context "when all parents have path segments" do
       it { is_expected.to be(true) }
     end
 
     context "when a parent is missing a path segment" do
-      let(:page1) { create(:page, locale: "en", name: "") }
+      let(:root) { create(:page, locale: "en", name: "") }
 
       it { is_expected.to be(false) }
     end
   end
 
   describe "#full_path" do
-    subject { page3.full_path }
+    subject { page.full_path }
 
-    let(:page1) { create(:page, locale: "en", name: "Products") }
-    let(:page2) { create(:page, locale: "en", name: "Category", parent: page1) }
-    let(:page3) { create(:page, locale: "en", name: "My thing", parent: page2) }
-    let(:page4) { create(:page, locale: "en", name: "Other products") }
+    let(:root) { create(:page, locale: "en", name: "Products") }
+    let(:parent) { create(:page, locale: "en", name: "Category", parent: root) }
+    let(:page) { create(:page, locale: "en", name: "My thing", parent: parent) }
+    let(:other_root) { create(:page, locale: "en", name: "Other products") }
 
     context "when all parents have path segments" do
       it { is_expected.to eq("products/category/my-thing") }
     end
 
     context "when a parent is missing a path segment" do
-      let(:page1) { create(:page, locale: "en", name: "") }
+      let(:root) { create(:page, locale: "en", name: "") }
 
       it { is_expected.to be_nil }
     end
 
     context "when a parent is moved" do
-      before { page2.update(parent: page4) }
+      before { parent.update(parent: other_root) }
 
       it { is_expected.to eq("other-products/category/my-thing") }
     end

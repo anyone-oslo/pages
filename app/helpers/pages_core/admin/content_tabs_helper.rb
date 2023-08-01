@@ -3,8 +3,15 @@
 module PagesCore
   module Admin
     module ContentTabsHelper
-      def content_tab(name, options = {}, &block)
+      def content_tabs
         @content_tabs ||= []
+      end
+
+      def content_tabs?
+        content_tabs.any?
+      end
+
+      def content_tab(name, options = {}, &block)
         return unless block_given?
 
         tab = {
@@ -13,7 +20,7 @@ module PagesCore
           options: options,
           content: capture(&block)
         }
-        @content_tabs << tab
+        content_tabs.push(tab)
         content_tab_tag(tab[:key], tab[:content])
       end
 

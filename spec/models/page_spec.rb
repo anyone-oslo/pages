@@ -60,11 +60,11 @@ describe Page do
 
     let(:foo) { Tag.create(name: "Foo") }
     let(:bar) { Tag.create(name: "Bar") }
-    let!(:page1) { create(:page, tag_list: [Tag.create(name: "Baz")]) }
-    let!(:page2) { create(:page, tag_list: [foo, bar]) }
-    let!(:page3) { create(:page, tag_list: [foo]) }
+    let!(:baz_page) { create(:page, tag_list: [Tag.create(name: "Baz")]) }
+    let!(:foobar_page) { create(:page, tag_list: [foo, bar]) }
+    let!(:foo_page) { create(:page, tag_list: [foo]) }
 
-    it { is_expected.to contain_exactly(page3, page2, page1) }
+    it { is_expected.to contain_exactly(foo_page, foobar_page, baz_page) }
   end
 
   describe ".localized" do
@@ -272,7 +272,7 @@ describe Page do
   describe "#subpages" do
     subject { page.subpages.map(&:id) }
 
-    let!(:page1) do
+    let!(:pinned_page) do
       create(:page,
              position: 2,
              pinned: true,
@@ -280,14 +280,14 @@ describe Page do
              published_at: 3.days.ago)
     end
 
-    let!(:page2) do
+    let!(:last_page) do
       create(:page,
              position: 3,
              parent: page,
              published_at: 2.days.ago)
     end
 
-    let!(:page3) do
+    let!(:newest_page) do
       create(:page,
              position: 1,
              parent: page,
@@ -297,13 +297,13 @@ describe Page do
     context "when page is a regular page" do
       let(:page) { create(:page) }
 
-      it { is_expected.to eq([page3.id, page1.id, page2.id]) }
+      it { is_expected.to eq([newest_page.id, pinned_page.id, last_page.id]) }
     end
 
     context "when page is a news page" do
       let(:page) { create(:page, news_page: true) }
 
-      it { is_expected.to eq([page1.id, page3.id, page2.id]) }
+      it { is_expected.to eq([pinned_page.id, newest_page.id, last_page.id]) }
     end
   end
 
@@ -373,42 +373,38 @@ describe Page do
     end
 
     context "when changing parent" do
-      let!(:root1) { create(:page) }
-      let!(:root2) { create(:page) }
-      let!(:page1) { create(:page, position: 1, parent: root1) }
-      let!(:page2) { create(:page, position: 2, parent: root1) }
-      let!(:page3) { create(:page, position: 1, parent: root2) }
+      let!(:old_root) { create(:page) }
+      let!(:new_root) { create(:page) }
+      let!(:moved) { create(:page, position: 1, parent: old_root) }
+      let!(:old_sibling) { create(:page, position: 2, parent: old_root) }
+      let!(:new_sibling) { create(:page, position: 1, parent: new_root) }
 
       before do
-        page1.update(parent: root2)
-        page2.reload
-        page3.reload
+        moved.update(parent: new_root)
+        old_sibling.reload
+        new_sibling.reload
       end
 
-      it "updates the positions on the new parent" do
-        expect([page1, page3].map(&:position)).to eq([1, 2])
-      end
-
-      it "updates the position on lower items" do
-        expect(page2.position).to eq(1)
-      end
+      specify { expect(moved.position).to eq(1) }
+      specify { expect(old_sibling.position).to eq(1) }
+      specify { expect(new_sibling.position).to eq(2) }
     end
 
     context "when deleting a page" do
-      let!(:page1) { create(:page, position: 1) }
-      let!(:page2) { create(:page, position: 2) }
+      let!(:deleted) { create(:page, position: 1) }
+      let!(:page) { create(:page, position: 2) }
 
       before do
-        page1.update(status: 4)
-        page2.reload
+        deleted.update(status: 4)
+        page.reload
       end
 
       it "removes the list position" do
-        expect(page1.position).to be_nil
+        expect(deleted.position).to be_nil
       end
 
       it "updates the position on lower items" do
-        expect(page2.position).to eq(1)
+        expect(page.position).to eq(1)
       end
     end
 
@@ -426,16 +422,16 @@ describe Page do
     end
 
     context "when destroying a page" do
-      let!(:page1) { create(:page, position: 1) }
-      let!(:page2) { create(:page, position: 2) }
+      let!(:deleted) { create(:page, position: 1) }
+      let!(:page) { create(:page, position: 2) }
 
       before do
-        page1.destroy
-        page2.reload
+        deleted.destroy
+        page.reload
       end
 
       it "updates the position on lower items" do
-        expect(page2.position).to eq(1)
+        expect(page.position).to eq(1)
       end
     end
   end

@@ -48,7 +48,7 @@ module Admin
         flash[:notice] = "Your changed to #{@user.name} were saved."
         redirect_to admin_users_url
       else
-        flash.now[:error] = "There were problems saving your changes."
+        flash.now[:error] = t("pages_core.problems_saving")
         render action: :edit
       end
     end

@@ -4,23 +4,6 @@ module PagesCore
   module PreviewPagesController
     extend ActiveSupport::Concern
 
-    included do
-      before_action :disable_xss_protection, only: [:preview]
-    end
-
-    def preview
-      redirect_to(page_url(@locale, @page)) && return unless logged_in?
-
-      @preview = true
-      @page.attributes = page_params.merge(
-        status: 2,
-        published_at: Time.zone.now,
-        locale: @locale,
-        redirect_to: nil
-      )
-      render_page
-    end
-
     def preview?
       @preview || false
     end
@@ -44,6 +27,21 @@ module PagesCore
       params.require(:page).permit(
         Page.localized_attributes + permitted_page_attributes
       )
+    end
+
+    def preview_page(page)
+      redirect_to(page_url(@locale, page)) && return unless logged_in?
+
+      disable_xss_protection
+
+      @preview = true
+      page.attributes = page_params.merge(
+        status: 2,
+        published_at: Time.zone.now,
+        locale: @locale,
+        redirect_to: nil
+      )
+      render_page
     end
   end
 end

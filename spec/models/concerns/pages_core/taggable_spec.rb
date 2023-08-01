@@ -9,38 +9,37 @@ describe PagesCore::Taggable do
   it { is_expected.to have_many(:tags).through(:taggings) }
 
   describe ".tagged_with" do
-    let!(:foo) { create(:tag, name: "foo") }
-    let!(:bar) { create(:tag, name: "bar") }
-    let!(:page1) { create(:page) }
-    let!(:page2) { create(:page) }
+    let(:foo) { create(:tag, name: "foo") }
+    let(:bar) { create(:tag, name: "bar") }
+    let(:other_page) { create(:page) }
 
     before do
-      page1.tag_with!(foo)
-      page2.tag_with!(bar)
+      page.tag_with!(foo)
+      other_page.tag_with!(bar)
     end
 
     context "with tag argument" do
       subject { Page.tagged_with(foo) }
 
-      it { is_expected.to eq([page1]) }
+      it { is_expected.to eq([page]) }
     end
 
     context "with string argument" do
       subject { Page.tagged_with("foo") }
 
-      it { is_expected.to eq([page1]) }
+      it { is_expected.to eq([page]) }
     end
 
     context "with array argument" do
       subject { Page.tagged_with(%w[foo bar]) }
 
-      it { is_expected.to match([page1, page2]) }
+      it { is_expected.to match([page, other_page]) }
     end
 
     context "with multiple arguments" do
       subject { Page.tagged_with(foo, bar) }
 
-      it { is_expected.to match([page1, page2]) }
+      it { is_expected.to match([page, other_page]) }
     end
   end
 

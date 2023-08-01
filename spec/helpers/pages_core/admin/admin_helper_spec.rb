@@ -6,7 +6,7 @@ RSpec.describe PagesCore::Admin::AdminHelper do
   describe "#content_tab" do
     subject!(:tab) { helper.content_tab(:foo) { "Content" } }
 
-    let(:tabs) { helper.instance_variable_get(:@content_tabs) }
+    let(:tabs) { helper.content_tabs }
 
     it "renders the tab" do
       expect(tab).to(
