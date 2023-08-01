@@ -83,3 +83,7 @@ Rails/ApplicationController:
 Rails/CreateTableWithTimestamps:
   Exclude:
     - "db/migrate/20111219033112_create_pages_tables.rb"
+
+Rails/HelperInstanceVariable:
+  Exclude:
+    - "app/helpers/pages_core/admin/form_builder.rb"
