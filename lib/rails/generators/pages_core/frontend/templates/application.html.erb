@@ -1,14 +1,16 @@
-<%= head_tag do %>
-  <%# default_meta_image "/images/facebook-share.png" %>
-  <%= stylesheet_link_tag "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= feed_tags %>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<% end %>
-<body>
-  <% if Rails.env.development? %>
-    <div class="grid-overlay"></div>
+<!doctype html>
+<%= tag.html(lang: locale) do %>
+  <%= head_tag do %>
+    <%# default_meta_image "/images/facebook-share.png" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= feed_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <% end %>
-  <%= yield %>
-</body>
-</html>
+  <body>
+    <% if Rails.env.development? %>
+      <div class="grid-overlay"></div>
+    <% end %>
+    <%= yield %>
+  </body>
+<% end %>
