@@ -10,13 +10,10 @@ module PagesCore
       if args.any?
         @document_title = args.first
       else
-        safe_join(
-          [@document_title, PagesCore.config(:site_name)].compact.uniq,
-          " - "
-        )
+        safe_join([@document_title, PagesCore.config(:site_name)].compact.uniq,
+                  " - ")
       end
     end
-    alias page_title document_title
 
     # Returns true if document title has been set.
     def document_title?
@@ -57,14 +54,8 @@ module PagesCore
       # The block output must be captured first
       block_output = block_given? ? capture(&block) : nil
 
-      safe_join(
-        [
-          "<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe,
-          tag.head do
-            safe_join(head_tag_contents(block_output), "\n")
-          end
-        ]
-      )
+      safe_join(["<!doctype html>\n<html lang=\"#{I18n.locale}\">".html_safe,
+                 tag.head { safe_join(head_tag_contents(block_output), "\n") }])
     end
 
     # Generates a link to an RSS feed.
@@ -78,30 +69,18 @@ module PagesCore
                href: href)
     end
 
-    # Outputs Typekit tags.
-    #
-    #  typekit_tags "aadgrag"
-    #
-    def typekit_tags(kit_id)
-      safe_join([
-                  javascript_include_tag("http://use.typekit.com/#{kit_id}.js"),
-                  javascript_tag("try{Typekit.load();}catch(e){}")
-                ], "\n")
-    end
-
     private
 
     def head_tag_contents(block_output)
-      [
-        tag.meta(charset: "utf-8"),
-        tag.meta("http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
-        tag.title(document_title),
-        meta_description_tag, meta_keywords_tag,
-        (tag.link(rel: "image_src", href: meta_image) if meta_image?),
-        open_graph_tags,
-        csrf_meta_tags,
-        block_output
-      ]
+      [tag.meta(charset: "utf-8"),
+       tag.meta("http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
+       tag.title(document_title),
+       meta_description_tag,
+       meta_keywords_tag,
+       (tag.link(rel: "image_src", href: meta_image) if meta_image?),
+       open_graph_tags,
+       csrf_meta_tags,
+       block_output]
     end
 
     def meta_description_tag
