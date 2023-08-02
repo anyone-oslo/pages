@@ -4,7 +4,6 @@ module PagesCore
   module Admin
     module AdminHelper
       include PagesCore::Admin::ContentTabsHelper
-      include PagesCore::Admin::DeprecatedAdminHelper
       include PagesCore::Admin::DateRangeHelper
       include PagesCore::Admin::ImageUploadsHelper
       include PagesCore::Admin::LocalesHelper
