@@ -91,3 +91,7 @@ Rails/CreateTableWithTimestamps:
 Rails/HelperInstanceVariable:
   Exclude:
     - "app/helpers/pages_core/admin/form_builder.rb"
+
+Rails/OutputSafety:
+  Exclude:
+    - "app/formatters/pages_core/html_formatter.rb"

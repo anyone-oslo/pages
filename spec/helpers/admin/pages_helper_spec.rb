@@ -34,7 +34,7 @@ RSpec.describe Admin::PagesHelper do
     context "with parents" do
       subject { helper.page_name(page, include_parents: true) }
 
-      it { is_expected.to eq("#{parent.name} &raquo; #{page.name}") }
+      it { is_expected.to eq("#{parent.name} » #{page.name}") }
     end
 
     context "with fallback locale" do

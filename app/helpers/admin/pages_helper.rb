@@ -53,10 +53,7 @@ module Admin
                    else
                      [page]
                    end
-      safe_join(
-        page_names.map { |p| page_name_with_fallback(p) },
-        raw(" &raquo; ")
-      )
+      safe_join(page_names.map { |p| page_name_with_fallback(p) }, " » ")
     end
 
     def page_published_status(page)
