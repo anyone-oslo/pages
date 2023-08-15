@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class LoginController extends Controller {
-  readonly tabTargets: HTMLDivElement[];
+  declare readonly tabTargets: HTMLDivElement[];
 
   static get targets() {
     return ["tab"];

@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class MainController extends Controller {
-  readonly linkTargets: HTMLLinkElement[];
-  readonly tabTargets: HTMLDivElement[];
+  declare readonly linkTargets: HTMLLinkElement[];
+  declare readonly tabTargets: HTMLDivElement[];
 
   static get targets() {
     return ["tab", "link"];

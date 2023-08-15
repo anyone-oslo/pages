@@ -543,9 +543,9 @@ template {
       margin-left: -7px; } }
 
 /*!
- * Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 
 .fa {
@@ -6814,9 +6814,9 @@ readers do not read off random characters that represent icons */
   border-width: 0; }
 
 /*!
- * Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 
 :root, :host {
@@ -6827,16 +6827,16 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("../fonts/a18fc2d2.woff2") format("woff2"), url("../fonts/661557ef.ttf") format("truetype"); }
+  src: url("../fonts/47262711.woff2") format("woff2"), url("../fonts/2a3059ad.ttf") format("truetype"); }
 
 .fas,
 .fa-solid {
   font-weight: 900; }
 
 /*!
- * Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 
 :root, :host {
@@ -6848,7 +6848,7 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("../fonts/b2c7b78f.woff2") format("woff2"), url("../fonts/ceddc204.ttf") format("truetype"); }
+  src: url("../fonts/500ddeb0.woff2") format("woff2"), url("../fonts/81221036.ttf") format("truetype"); }
 
 .far,
 .fa-regular {
@@ -7803,8 +7803,7 @@ main .page-description h3 {
          -moz-user-select: none;
               user-select: none;
       cursor: pointer;
-      transition: border-radius 200ms, margin 200ms, width 200ms, height 200ms,
-        border-color 200ms ease-out;
+      transition: border-radius 200ms, margin 200ms, width 200ms, height 200ms, border-color 200ms ease-out;
     }
 
 .image-editor .focal-editor .focal-point:after {
