@@ -260,7 +260,7 @@ export default function ImageGrid(props) {
           <span className="deleted-image" key={r.id}>
             <input name={`${attrName(r)}[id]`} type="hidden" value={r.id} />
             <input
-              name={`${attrName(r)}[attachment_id]`}
+              name={`${attrName(r)}[image_id]`}
               type="hidden"
               value={(r.image && r.image.id) || ""}
             />
