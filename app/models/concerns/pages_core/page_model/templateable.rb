@@ -7,6 +7,8 @@ module PagesCore
 
       included do
         before_validation :ensure_template
+
+        delegate :enabled_blocks, to: :template_config
       end
 
       def template_config
@@ -27,7 +29,26 @@ module PagesCore
           template
       end
 
+      def unconfigured_blocks
+        blocks = localizations.where(locale: locale).pluck(:name)
+                              .map(&:to_sym) -
+                 configured_blocks
+
+        if block_given?
+          blocks.each do |block_name|
+            yield block_name, template_config.block(block_name)
+          end
+        end
+
+        blocks
+      end
+
       private
+
+      def configured_blocks
+        enabled_blocks + %i[name path_segment meta_title meta_description
+                            open_graph_title open_graph_description]
+      end
 
       def singularized_subtemplate
         singularized = ActiveSupport::Inflector.singularize(base_template)

@@ -2,6 +2,18 @@
   <%= render partial: "edit_content", locals: { f: f } %>
 <% end %>
 
+<% if @page.unconfigured_blocks.any? %>
+  <%= content_tab "Unconfigured content" do %>
+    <p>
+      This page has additional content fields not enabled by the
+      selected template.
+    </p>
+    <% @page.unconfigured_blocks do |block_name, block_options| %>
+      <%= page_block_field(f, block_name, block_options) %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <% if @page.template_config.value(:images) || @page.template_config.value(:image) %>
   <%= content_tab "Images" do %>
     <%= render partial: "edit_images", locals: { f: f } %>
