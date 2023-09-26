@@ -30,9 +30,10 @@ module PagesCore
       end
 
       def unconfigured_blocks
-        blocks = localizations.where(locale: locale).pluck(:name)
-                              .map(&:to_sym) -
-                 configured_blocks
+        blocks = (localizations.where(locale: locale).pluck(:name)
+                               .map(&:to_sym) -
+                  configured_blocks) &
+                 PagesCore::Templates::TemplateConfiguration.all_blocks
 
         if block_given?
           blocks.each do |block_name|
