@@ -15,7 +15,7 @@ class PageImage < ApplicationRecord
 
   class << self
     def cleanup!
-      all.find_each do |page_image|
+      find_each do |page_image|
         page_image.destroy unless page_image.image
       end
     end

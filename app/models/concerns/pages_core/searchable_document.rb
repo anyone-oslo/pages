@@ -18,7 +18,7 @@ module PagesCore
 
       class << self
         def index_all!(scope)
-          scope.all.find_each { |r| new(r).index! }
+          scope.find_each { |r| new(r).index! }
         end
       end
 
