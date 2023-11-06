@@ -22,21 +22,12 @@ module PagesCore
 
     private
 
-    def legacy_locales
-      { "nor" => "nb",
-        "eng" => "en" }
-    end
-
     def page_param
       params[:page].is_a?(String) ? params[:page] : 1
     end
 
     def set_i18n_locale
-      locale_param = content_locale
-      if legacy_locales[locale_param]
-        locale_param = legacy_locales[locale_param]
-      end
-      I18n.locale = locale_param
+      I18n.locale = content_locale
     rescue I18n::InvalidLocale
       raise if Rails.application.config.consider_all_requests_local
 
