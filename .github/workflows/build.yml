@@ -114,7 +114,7 @@ jobs:
     steps:
     - name: Prepare message
       id: message
-      uses: anyone-oslo/github-action-notify-slack@master
+      uses: anyone-oslo/github-action-notify-slack@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         run-id: ${{ github.run_id }}
