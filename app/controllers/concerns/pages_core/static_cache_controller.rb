@@ -4,10 +4,13 @@ module PagesCore
   module StaticCacheController
     extend ActiveSupport::Concern
 
+    included do
+      helper_method :static_cached?
+    end
+
     module ClassMethods
       def static_cache(*actions, permanent: false)
-        return unless perform_caching
-
+        before_action :prepare_static_cache
         if permanent
           after_action :cache_static_page_permanently, only: actions
         else
@@ -20,6 +23,10 @@ module PagesCore
 
     def disable_static_cache!
       @static_cache_disabled = true
+    end
+
+    def static_cached?
+      @static_cached ? true : false
     end
 
     private
@@ -38,6 +45,10 @@ module PagesCore
       PagesCore::StaticCache.handler.cache_page_permanently(
         self, request, response
       )
+    end
+
+    def prepare_static_cache
+      @static_cached = true
     end
 
     def static_cache_allowed?

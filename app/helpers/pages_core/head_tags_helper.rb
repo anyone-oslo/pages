@@ -72,26 +72,25 @@ module PagesCore
 
     def head_tag_contents(block_output)
       [tag.meta(charset: "utf-8"),
-       tag.meta("http-equiv" => "X-UA-Compatible", "content" => "IE=edge"),
        tag.title(document_title),
        meta_description_tag,
        meta_keywords_tag,
        (tag.link(rel: "image_src", href: meta_image) if meta_image?),
        open_graph_tags,
-       csrf_meta_tags,
-       block_output]
+       (csrf_meta_tags unless static_cached?),
+       block_output].compact_blank
     end
 
     def meta_description_tag
       return unless meta_description?
 
-      tag.meta(name: "description", content: meta_description)
+      tag.meta(name: "description", content: meta_description&.strip)
     end
 
     def meta_keywords_tag
       return unless meta_keywords?
 
-      tag.meta(name: "keywords", content: meta_keywords)
+      tag.meta(name: "keywords", content: meta_keywords&.strip)
     end
   end
 end

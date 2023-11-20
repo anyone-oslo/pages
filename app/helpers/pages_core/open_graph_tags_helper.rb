@@ -42,7 +42,7 @@ module PagesCore
         site_name: PagesCore.config(:site_name),
         title: default_open_graph_title,
         image: (meta_image if meta_image?),
-        description: default_open_graph_description,
+        description: default_open_graph_description&.strip,
         url: request.url }
     end
   end
