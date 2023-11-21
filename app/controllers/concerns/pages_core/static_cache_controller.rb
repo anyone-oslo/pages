@@ -26,7 +26,7 @@ module PagesCore
     end
 
     def static_cached?
-      @static_cached ? true : false
+      !@static_cache_disabled && @static_cached ? true : false
     end
 
     private
