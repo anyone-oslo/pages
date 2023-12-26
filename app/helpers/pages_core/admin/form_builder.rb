@@ -38,7 +38,7 @@ module PagesCore
 
       def foreign_key(attr)
         object.class.reflections[attr.to_s].options[:foreign_key] ||
-          "#{attr}_id".to_sym
+          :"#{attr}_id"
       end
     end
   end

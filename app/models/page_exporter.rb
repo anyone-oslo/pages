@@ -88,7 +88,7 @@ class PageExporter
   def text_page(page)
     PagesCore::Templates::TemplateConfiguration
       .all_blocks
-      .select { |attr| page.send("#{attr}?".to_sym) }
+      .select { |attr| page.send(:"#{attr}?") }
       .map { |attr| ["-- #{attr}: --", page.send(attr).strip].join("\n\n") }
       .join("\n\n\n")
   end

@@ -24,7 +24,7 @@ module PagesCore
             [labelled_field_label(label, options),
              labelled_field_description(options[:description]),
              field,
-             (options[:check_box_description] || "")]
+             options[:check_box_description] || ""]
           )
         end
       end
