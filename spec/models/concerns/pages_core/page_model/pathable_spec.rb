@@ -92,14 +92,14 @@ describe PagesCore::PageModel::Pathable do
 
     context "when page has a parent without path segment" do
       let(:parent) { create(:page, locale: "en", name: "") }
-      let(:page) { create(:page, locale: "en", parent: parent) }
+      let(:page) { create(:page, locale: "en", parent:) }
 
       it { is_expected.to be(false) }
     end
 
     context "when page has a parent with path segment" do
       let(:parent) { create(:page, locale: "en", name: "Products") }
-      let(:page) { create(:page, locale: "en", parent: parent) }
+      let(:page) { create(:page, locale: "en", parent:) }
 
       it { is_expected.to be(true) }
     end
@@ -110,7 +110,7 @@ describe PagesCore::PageModel::Pathable do
 
     let(:root) { create(:page, locale: "en", name: "Products") }
     let(:parent) { create(:page, locale: "en", name: "Category", parent: root) }
-    let(:page) { create(:page, locale: "en", name: "My thing", parent: parent) }
+    let(:page) { create(:page, locale: "en", name: "My thing", parent:) }
 
     context "when all parents have path segments" do
       it { is_expected.to be(true) }
@@ -128,7 +128,7 @@ describe PagesCore::PageModel::Pathable do
 
     let(:root) { create(:page, locale: "en", name: "Products") }
     let(:parent) { create(:page, locale: "en", name: "Category", parent: root) }
-    let(:page) { create(:page, locale: "en", name: "My thing", parent: parent) }
+    let(:page) { create(:page, locale: "en", name: "My thing", parent:) }
     let(:other_root) { create(:page, locale: "en", name: "Other products") }
 
     context "when all parents have path segments" do

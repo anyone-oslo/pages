@@ -6,7 +6,7 @@ module PagesCore
       def locales_with_dir
         locales = PagesCore.config.locales || {}
         locales.each_with_object({}) do |(key, name), hash|
-          hash[key] = { name: name, dir: locale_direction(key) }
+          hash[key] = { name:, dir: locale_direction(key) }
         end
       end
 

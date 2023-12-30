@@ -57,7 +57,7 @@ class Tag < ApplicationRecord
   end
 
   def on(taggable)
-    taggings.create(taggable: taggable)
+    taggings.create(taggable:)
   end
 
   def ==(other)

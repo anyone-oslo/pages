@@ -64,7 +64,7 @@ module Admin
 
     def move
       parent = params[:parent_id] ? Page.find(params[:parent_id]) : nil
-      @page.update(parent: parent, position: params[:position])
+      @page.update(parent:, position: params[:position])
       respond_with_page(@page) { redirect_to admin_pages_url(content_locale) }
     end
 

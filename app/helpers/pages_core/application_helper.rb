@@ -21,10 +21,10 @@ module PagesCore
       end
     end
 
-    def unique_page(page_name, &block)
+    def unique_page(page_name, &)
       page = Page.where(unique_name: page_name).first
       if page && block_given?
-        output = capture(page.localize(content_locale), &block)
+        output = capture(page.localize(content_locale), &)
         concat(output)
       end
       page&.localize(content_locale)
@@ -44,7 +44,7 @@ module PagesCore
 
     def page_link_path(locale, page)
       if page.redirects?
-        page.redirect_path(locale: locale)
+        page.redirect_path(locale:)
       else
         page_path(locale, page)
       end

@@ -10,14 +10,14 @@ module PagesCore
 
     class << self
       def call(invite:)
-        new(invite: invite).call
+        new(invite:).call
       end
     end
 
     def call
       Invite.transaction do
         invite.destroy
-        PagesCore::PubSub.publish(:destroy_invite, invite: invite)
+        PagesCore::PubSub.publish(:destroy_invite, invite:)
         invite
       end
     end

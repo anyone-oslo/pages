@@ -14,14 +14,14 @@ describe Admin::PagesController do
       page
       create(:hidden_page)
       create(:deleted_page)
-      get :index, params: { locale: locale }
+      get :index, params: { locale: }
     end
 
     it { is_expected.to render_template("admin/pages/index") }
   end
 
   describe "GET new" do
-    before { get :new, params: { locale: locale } }
+    before { get :new, params: { locale: } }
 
     let(:page) { assigns(:page) }
 
@@ -38,7 +38,7 @@ describe Admin::PagesController do
     context "with parent" do
       let(:parent) { create(:page) }
 
-      before { get :new, params: { locale: locale, parent: parent.id } }
+      before { get :new, params: { locale:, parent: parent.id } }
 
       it "sets the parent" do
         expect(page.parent).to eq(parent)
@@ -49,7 +49,7 @@ describe Admin::PagesController do
   describe "POST create" do
     let(:params) { { name: "Page name" } }
 
-    before { post(:create, params: { locale: locale, page: params }) }
+    before { post(:create, params: { locale:, page: params }) }
 
     it "redirects to the edit page" do
       expect(controller).to(
@@ -65,7 +65,7 @@ describe Admin::PagesController do
   end
 
   describe "GET show" do
-    before { get :show, params: { locale: locale, id: page.id } }
+    before { get :show, params: { locale:, id: page.id } }
 
     it "redirects to the edit page" do
       expect(controller).to(
@@ -75,7 +75,7 @@ describe Admin::PagesController do
   end
 
   describe "GET edit" do
-    before { get :edit, params: { locale: locale, id: page.id } }
+    before { get :edit, params: { locale:, id: page.id } }
 
     it { is_expected.to render_template("admin/pages/edit") }
 
@@ -86,11 +86,11 @@ describe Admin::PagesController do
 
   describe "PUT move" do
     let(:parent) { create(:page) }
-    let!(:other) { create(:page, parent: parent, position: 1) }
+    let!(:other) { create(:page, parent:, position: 1) }
 
     before do
       put(:move, params: { id: page.id,
-                           locale: locale,
+                           locale:,
                            parent_id: parent.id,
                            position: 1 })
       page.reload

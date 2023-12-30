@@ -11,7 +11,7 @@ module PagesCore
 
     class << self
       def call(attrs, invite: nil)
-        new(attrs, invite: invite).call
+        new(attrs, invite:).call
       end
     end
 
@@ -19,7 +19,7 @@ module PagesCore
       User.transaction do
         user = User.create(attributes.merge(invite_attributes))
         if user.valid?
-          PagesCore::PubSub.publish(:create_user, user: user, invite: invite)
+          PagesCore::PubSub.publish(:create_user, user:, invite:)
           invite&.destroy
         end
         user

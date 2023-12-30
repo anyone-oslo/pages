@@ -50,9 +50,9 @@ module PagesCore
     #    <%= feed_tags %>
     #  <% end %>
     #
-    def head_tag(&block)
+    def head_tag(&)
       # The block output must be captured first
-      block_output = block_given? ? capture(&block) : nil
+      block_output = block_given? ? capture(&) : nil
 
       tag.head { safe_join(head_tag_contents(block_output), "\n") }
     end
@@ -64,8 +64,8 @@ module PagesCore
     def rss_link_tag(title, href)
       tag.link(rel: "alternate",
                type: "application/rss+xml",
-               title: title,
-               href: href)
+               title:,
+               href:)
     end
 
     private

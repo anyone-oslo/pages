@@ -42,7 +42,7 @@ describe PagePath do
 
     context "when path already exists" do
       before do
-        create(:page_path, page: page, locale: "nb", path: "foo")
+        create(:page_path, page:, locale: "nb", path: "foo")
       end
 
       it { is_expected.to be_a(described_class) }

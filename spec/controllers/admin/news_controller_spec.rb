@@ -11,7 +11,7 @@ describe Admin::NewsController do
 
   describe "GET index" do
     context "without a news page" do
-      before { get :index, params: { locale: locale } }
+      before { get :index, params: { locale: } }
 
       it { is_expected.to redirect_to(admin_pages_url(locale)) }
     end
@@ -22,7 +22,7 @@ describe Admin::NewsController do
 
       before do
         create(:page, parent: root, published_at: 1.year.ago)
-        get :index, params: { locale: locale, year: article1.published_at.year }
+        get :index, params: { locale:, year: article1.published_at.year }
       end
 
       it { is_expected.to render_template("admin/news/index") }

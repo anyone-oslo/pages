@@ -23,7 +23,7 @@ module PagesCore
     def embed_image(id, size:, class_name:, link:)
       image_figure(
         Image.find(id).localize(I18n.locale),
-        size: size, class_name: class_name, link: link
+        size:, class_name:, link:
       )
     rescue ActiveRecord::RecordNotFound
       nil
@@ -44,8 +44,8 @@ module PagesCore
       link = (Regexp.last_match(1) if options =~ /link="([^"]+)"/)
       embed_image(id,
                   size: embed_image_size(options),
-                  class_name: class_name,
-                  link: link)
+                  class_name:,
+                  link:)
     end
 
     def parse_images(string)

@@ -6,7 +6,7 @@ RSpec.describe PagesCore::CreateUserService do
   let(:attributes) { attributes_for(:user) }
 
   describe "with invite" do
-    subject(:user) { described_class.call(attributes, invite: invite) }
+    subject(:user) { described_class.call(attributes, invite:) }
 
     let(:invite) { create(:invite, role_names: ["users"]) }
 

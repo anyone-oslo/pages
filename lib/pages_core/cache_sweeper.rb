@@ -5,15 +5,15 @@ module PagesCore
     class << self
       attr_accessor :enabled
 
-      def disable(&_block)
+      def disable(&)
         old_value = enabled
         self.enabled = false
         yield if block_given?
         self.enabled = old_value
       end
 
-      def once(&block)
-        disable(&block)
+      def once(&)
+        disable(&)
         PagesCore::StaticCache.handler.sweep!
       end
     end

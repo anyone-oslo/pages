@@ -9,10 +9,10 @@ module PagesCore
         react_component("EditableImage",
                         editable_image_options(
                           image,
-                          width: width,
-                          caption: caption,
-                          locale: locale
-                        ).merge(width: width))
+                          width:,
+                          caption:,
+                          locale:
+                        ).merge(width:))
       end
 
       def image_uploader_tag(name, image, options = {})
@@ -36,8 +36,8 @@ module PagesCore
 
       def editable_image_options(image, width: 250, caption: false, locale: nil)
         editable_image_src_options(image, width).merge(
-          width: width,
-          caption: caption,
+          width:,
+          caption:,
           locale: locale || I18n.default_locale,
           locales: locales_with_dir
         )

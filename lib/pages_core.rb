@@ -71,7 +71,7 @@ module PagesCore
       Pathname.new(File.dirname(__FILE__)).join("..").expand_path
     end
 
-    def configure(_options = {}, &_block)
+    def configure(_options = {}, &)
       yield configuration if block_given?
     end
 

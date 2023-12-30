@@ -106,7 +106,7 @@ module PagesCore
     end
 
     class << self
-      def configure(options = {}, &_block)
+      def configure(options = {}, &)
         case options[:reset]
         when :defaults
           load_default_configuration

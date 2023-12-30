@@ -8,7 +8,7 @@ RSpec.describe "PagesController routing" do
   let(:expected_route) do
     { controller: "pages",
       action: "show",
-      locale: locale,
+      locale:,
       path: "foo/bar" }
   end
 
@@ -30,7 +30,7 @@ RSpec.describe "PagesController routing" do
 
     context "when path exists" do
       before do
-        create(:page_path, page: page, locale: "nb", path: "foo/bar")
+        create(:page_path, page:, locale: "nb", path: "foo/bar")
       end
 
       it "recognizes the route" do
@@ -51,7 +51,7 @@ RSpec.describe "PagesController routing" do
 
     context "when path exists" do
       before do
-        create(:page_path, page: page, locale: locale, path: "foo/bar")
+        create(:page_path, page:, locale:, path: "foo/bar")
       end
 
       it "recognizes the route" do

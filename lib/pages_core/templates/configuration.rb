@@ -149,7 +149,7 @@ module PagesCore
       def template_config(setting, value, options)
         value = true if value == :enabled
         value = false if value == :disabled
-        { setting => { value: value, options: options } }
+        { setting => { value:, options: } }
       end
 
       def template_path(name)

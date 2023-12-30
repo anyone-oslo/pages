@@ -39,12 +39,12 @@ module Admin
       ([page.author] + User.activated).uniq
     end
 
-    def page_list_row(page, &block)
+    def page_list_row(page, &)
       classes = [page.status_label.downcase]
       classes << "autopublish" if page.autopublish?
       classes << "pinned" if page.pinned?
 
-      tag.tr(capture(&block), class: classes.join(" "))
+      tag.tr(capture(&), class: classes.join(" "))
     end
 
     def page_name(page, options = {})

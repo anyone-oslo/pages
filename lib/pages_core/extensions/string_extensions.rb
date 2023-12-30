@@ -4,7 +4,7 @@ module PagesCore
   module Extensions
     module StringExtensions
       def to_html_with(append, options = {})
-        to_html(options.merge(append: append))
+        to_html(options.merge(append:))
       end
 
       def to_html(options = {})

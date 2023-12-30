@@ -15,7 +15,7 @@ module PagesCore
 
     class << self
       def call(attrs, user:, host:, protocol: "http")
-        new(attrs, user: user, host: host, protocol: protocol).call
+        new(attrs, user:, host:, protocol:).call
       end
     end
 
@@ -36,7 +36,7 @@ module PagesCore
       AdminMailer.invite(
         invite,
         admin_invite_with_token_url(invite, invite.token,
-                                    host: host, protocol: protocol)
+                                    host:, protocol:)
       ).deliver_later
     end
   end

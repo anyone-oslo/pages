@@ -111,7 +111,7 @@ RSpec.describe PagesCore::MetaTagsHelper do
     end
 
     context "when page has an image" do
-      let(:page) { build(:page, image: image) }
+      let(:page) { build(:page, image:) }
 
       before { helper.default_meta_image "default.png" }
 

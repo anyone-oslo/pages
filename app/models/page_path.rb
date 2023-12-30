@@ -28,7 +28,7 @@ class PagePath < ApplicationRecord
     end
 
     def get(locale, path)
-      find_by(locale: locale, path: path)
+      find_by(locale:, path:)
     end
 
     def associate(page, locale: nil, path: nil)
@@ -39,14 +39,14 @@ class PagePath < ApplicationRecord
       raise NoPathError unless path
 
       page_path = get_or_create(locale, path, page)
-      page_path.update(page: page) unless page_path.page_id == page.id
+      page_path.update(page:) unless page_path.page_id == page.id
       page_path
     end
 
     private
 
     def get_or_create(locale, path, page)
-      get(locale, path) || create(locale: locale, path: path, page: page)
+      get(locale, path) || create(locale:, path:, page:)
     end
   end
 end

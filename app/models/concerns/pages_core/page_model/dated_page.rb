@@ -90,7 +90,7 @@ module PagesCore
       def siblings_by_date
         siblings.reorder("starts_at ASC, pages.id DESC")
                 .where
-                .not(id: id)
+                .not(id:)
       end
     end
   end

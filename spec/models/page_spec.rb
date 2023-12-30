@@ -105,7 +105,7 @@ describe Page do
   describe "with ancestors" do
     let(:root)   { described_class.create }
     let(:parent) { described_class.create(parent: root) }
-    let(:page)   { described_class.create(parent: parent) }
+    let(:page)   { described_class.create(parent:) }
 
     it "belongs to the parent" do
       expect(page.parent).to eq(parent)

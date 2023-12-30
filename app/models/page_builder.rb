@@ -19,7 +19,7 @@ class PageBuilder
 
   class << self
     def build(user, locale: nil, parent: nil, &block)
-      new(user, locale: locale, parent: parent)
+      new(user, locale:, parent:)
         .run(&block)
     end
   end
@@ -30,20 +30,20 @@ class PageBuilder
     @parent = parent
   end
 
-  def page(name, options = {}, &block)
+  def page(name, options = {}, &)
     page = Page.create(
-      { name: name }.merge(default_options).merge(options)
+      { name: }.merge(default_options).merge(options)
     )
     if block_given?
       self.class
-          .new(user, locale: locale, parent: page)
-          .run(&block)
+          .new(user, locale:, parent: page)
+          .run(&)
     end
     page
   end
 
-  def run(&block)
-    instance_eval(&block)
+  def run(&)
+    instance_eval(&)
   end
 
   private
@@ -51,9 +51,9 @@ class PageBuilder
   def default_options
     {
       author: user,
-      parent: parent,
+      parent:,
       status: 2,
-      locale: locale
+      locale:
     }
   end
 end

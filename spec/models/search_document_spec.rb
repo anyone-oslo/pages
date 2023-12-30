@@ -13,13 +13,13 @@ describe SearchDocument do
 
   describe ".search" do
     def query(str)
-      described_class.search(str, locale: locale).results
+      described_class.search(str, locale:).results
     end
 
     let(:locale) { :en }
 
     describe "when searching name" do
-      let!(:page) { create(:page, locale: locale, name: "foobar walking") }
+      let!(:page) { create(:page, locale:, name: "foobar walking") }
 
       it "supports trigram similarity matching" do
         expect(query("fooobar")).to include(page)
@@ -27,7 +27,7 @@ describe SearchDocument do
     end
 
     describe "when searching body in english" do
-      let!(:page) { create(:page, locale: locale, body: "foobar walking") }
+      let!(:page) { create(:page, locale:, body: "foobar walking") }
 
       it "returns the result" do
         expect(query("foobar")).to include(page)
@@ -60,7 +60,7 @@ describe SearchDocument do
 
     describe "when searching body in norwegian" do
       let(:locale) { :nb }
-      let!(:page) { create(:page, locale: locale, body: "løsningen") }
+      let!(:page) { create(:page, locale:, body: "løsningen") }
 
       it "ignores accents" do
         expect(query("losningen")).to include(page)

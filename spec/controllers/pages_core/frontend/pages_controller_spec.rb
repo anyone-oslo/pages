@@ -56,7 +56,7 @@ describe PagesCore::Frontend::PagesController do
         get(":locale/*path" => "pages#show")
         get("*path" => "pages#show")
       end
-      get :show, params: params
+      get :show, params:
     end
 
     let(:params) { { path: page.path_segment } }
@@ -73,26 +73,26 @@ describe PagesCore::Frontend::PagesController do
 
     context "when page redirects" do
       let(:page) { create(:page, redirect_to: "http://anyone.no") }
-      let(:params) { { id: page.id, locale: locale } }
+      let(:params) { { id: page.id, locale: } }
 
       it { is_expected.to redirect_to("http://anyone.no") }
     end
 
     context "when page does not exist" do
-      let(:params) { { id: 123, locale: locale } }
+      let(:params) { { id: 123, locale: } }
 
       it { is_expected.to render_template("errors/404") }
     end
 
     context "when requested by ID" do
-      let(:params) { { id: page.id, locale: locale } }
+      let(:params) { { id: page.id, locale: } }
 
       it { is_expected.to redirect_to("/home") }
     end
 
     context "when path is outdated" do
       let(:params) do
-        PagePath.associate(page, locale: locale, path: "foo")
+        PagePath.associate(page, locale:, path: "foo")
         { path: "foo" }
       end
 

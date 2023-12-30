@@ -7,7 +7,7 @@ RSpec.describe "Page templates", type: :system do
 
   let(:page_model) do
     create(:page,
-           template: template,
+           template:,
            headline: "My headline",
            body: "My body",
            excerpt: "My excerpt")

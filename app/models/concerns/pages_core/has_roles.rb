@@ -16,9 +16,9 @@ module PagesCore
     def role_names=(names)
       self.roles = names.map do |name|
         if role?(name)
-          roles.find_by(name: name)
+          roles.find_by(name:)
         else
-          roles.new(name: name)
+          roles.new(name:)
         end
       end
     end

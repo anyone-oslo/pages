@@ -57,12 +57,12 @@ module PagesCore
     def picture_tag(image, ratio: nil, sizes: "100vw")
       tag.picture do
         safe_join(
-          [webp_source(image, ratio: ratio, sizes: sizes || "100vw"),
+          [webp_source(image, ratio:, sizes: sizes || "100vw"),
            dynamic_image_tag(image,
                              size: image_size(1050, ratio),
                              crop: (ratio ? true : false),
-                             sizes: sizes,
-                             srcset: srcset(image, ratio: ratio))]
+                             sizes:,
+                             srcset: srcset(image, ratio:))]
         )
       end
     end
@@ -106,11 +106,11 @@ module PagesCore
       size ||= default_image_size
       size = fit_ratio(size, ratio) if ratio
 
-      dynamic_image_tag(image, size: size, crop: ratio && true, upscale: false)
+      dynamic_image_tag(image, size:, crop: ratio && true, upscale: false)
     end
 
     def image_link_to(content, href)
-      tag.a(content, href: href)
+      tag.a(content, href:)
     end
 
     def image_size(width, ratio)
@@ -139,8 +139,8 @@ module PagesCore
       return unless webp_compatible?(image)
 
       tag.source(type: "image/webp",
-                 srcset: srcset(image, ratio: ratio, format: :webp),
-                 sizes: sizes)
+                 srcset: srcset(image, ratio:, format: :webp),
+                 sizes:)
     end
 
     def webp_compatible?(image)

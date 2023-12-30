@@ -13,7 +13,7 @@ module PagesCore
         properties
           .compact
           .map do |name, content|
-          tag.meta(property: "og:#{name}", content: content)
+          tag.meta(property: "og:#{name}", content:)
         end,
         "\n"
       )

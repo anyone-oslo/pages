@@ -53,7 +53,7 @@ module PagesCore
       end
 
       def update_index(locale, attrs)
-        record.search_documents.create_or_find_by!(locale: locale).update(attrs)
+        record.search_documents.create_or_find_by!(locale:).update(attrs)
       end
     end
 
@@ -61,7 +61,7 @@ module PagesCore
       return {} unless respond_to?(:localized_attributes)
 
       content = localized_attributes.keys.map { |a| localizer.get(a) }.join(" ")
-      { content: content }
+      { content: }
     end
 
     def update_search_documents!

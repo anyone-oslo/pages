@@ -22,6 +22,6 @@ class SessionsController < ApplicationController
   protected
 
   def find_user(email, password)
-    User.authenticate(email, password: password) if email && password
+    User.authenticate(email, password:) if email && password
   end
 end

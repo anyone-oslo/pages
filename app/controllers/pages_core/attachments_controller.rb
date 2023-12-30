@@ -31,7 +31,7 @@ module PagesCore
       send_ranged_data(@attachment.data,
                        filename: @attachment.filename,
                        type: @attachment.content_type,
-                       disposition: disposition)
+                       disposition:)
     end
 
     def verify_signed_params

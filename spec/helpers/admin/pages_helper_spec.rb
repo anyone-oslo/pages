@@ -25,7 +25,7 @@ RSpec.describe Admin::PagesHelper do
     subject { helper.page_name(page) }
 
     let(:parent) { build(:page) }
-    let(:page) { build(:page, parent: parent) }
+    let(:page) { build(:page, parent:) }
 
     context "without parents" do
       it { is_expected.to eq(page.name) }

@@ -11,14 +11,14 @@ module PagesCore
         content_tabs.any?
       end
 
-      def content_tab(name, options = {}, &block)
+      def content_tab(name, options = {}, &)
         return unless block_given?
 
         tab = {
           name: name.to_s.humanize,
           key: options[:key] || name.to_s.underscore.gsub(/\s+/, "_"),
-          options: options,
-          content: capture(&block)
+          options:,
+          content: capture(&)
         }
         content_tabs.push(tab)
         content_tab_tag(tab[:key], tab[:content])

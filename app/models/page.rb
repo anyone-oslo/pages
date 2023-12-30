@@ -78,7 +78,7 @@ class Page < ApplicationRecord
 
   def move(parent:, position:)
     Page.transaction do
-      update(parent: parent) unless self.parent == parent
+      update(parent:) unless self.parent == parent
       insert_at(position)
     end
   end

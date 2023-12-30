@@ -11,7 +11,7 @@ describe PageBuilder do
 
   describe ".build" do
     before do
-      described_class.build(user, locale: locale) do
+      described_class.build(user, locale:) do
         page "Home" do
           page "Foo"
           page "Bar", template: "foobar", status: 1
