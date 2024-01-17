@@ -106,6 +106,4 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Delayed::Worker.backend = :active_record
-
 FactoryBot.find_definitions

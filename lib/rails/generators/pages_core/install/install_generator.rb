@@ -22,11 +22,6 @@ module PagesCore
         nil
       end
 
-      def create_active_job_initializer
-        template("active_job_initializer.rb",
-                 File.join("config/initializers/active_job.rb"))
-      end
-
       def create_application_controller
         template("application_controller.rb",
                  File.join("app/controllers/application_controller.rb"))
@@ -55,16 +50,6 @@ module PagesCore
       def create_default_template
         copy_file("default_page_template.html.erb",
                   File.join("app/views/pages/templates/index.html.erb"))
-      end
-
-      def create_delayed_job_script
-        template "delayed_job", File.join("bin/delayed_job")
-        File.chmod(0o755, Rails.root.join("bin/delayed_job"))
-      end
-
-      def create_delayed_job_initializer
-        template("delayed_job_initializer.rb",
-                 File.join("config/initializers/delayed_job.rb"))
       end
 
       def create_initializer_file
