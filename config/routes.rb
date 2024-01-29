@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     resources :categories
 
     resource :otp_secret, only: %i[new create destroy]
+    resource :recovery_codes, only: %i[new create]
 
     # Pages
     scope ":locale" do

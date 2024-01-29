@@ -50,6 +50,7 @@
       </p>
       <p>
         You have <%= @user.hashed_recovery_codes.length %> recovery codes remaining.
+        <%= link_to("Generate new codes", new_admin_recovery_codes_path) %>
       </p>
     <% else %>
       <p>

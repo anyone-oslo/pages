@@ -32,6 +32,7 @@ en:
       already_enabled: 2FA has already been enabled
       disabled: 2FA has been disabled
       invalid_code: Invalid 6 digit code
+      required: 2FA is required for this
     password_reset:
       changed: Your password has been changed
       expired: Your password reset link has expired

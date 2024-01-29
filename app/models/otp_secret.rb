@@ -38,14 +38,23 @@ class OtpSecret
     totp.provisioning_uri(account_name)
   end
 
+  def regenerate_recovery_codes!
+    generate_recovery_codes.tap do |recovery_codes|
+      user.update(recovery_codes:)
+    end
+  end
+
   def signed_message
     message_verifier.generate(
       { user_id: user.id, secret: }, expires_in: 1.hour
     )
   end
 
-  def valid_otp?(otp)
-    otp.present? && totp.verify(otp)
+  def validate_otp!(otp)
+    return false unless valid_otp?(otp)
+
+    user.update(last_otp_at: Time.zone.now)
+    true
   end
 
   def verify(params)
@@ -61,6 +70,14 @@ class OtpSecret
 
   def totp
     ROTP::TOTP.new(secret)
+  end
+
+  def valid_otp?(otp)
+    if user.otp_enabled?
+      totp.verify(otp, after: user.last_otp_at, drift_behind: 10)
+    else
+      totp.verify(otp, drift_behind: 10)
+    end
   end
 
   def verify_secret(signed)
