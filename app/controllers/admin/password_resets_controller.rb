@@ -26,7 +26,10 @@ module Admin
 
     def update
       @user = @password_reset_token.user
-      if user_params[:password].present? && @user.update(user_params)
+      if !valid_otp(@user, params[:otp])
+        flash.now[:notice] = t("pages_core.otp.invalid_code")
+        render action: :show
+      elsif user_params[:password].present? && @user.update(user_params)
         @password_reset_token.destroy
         authenticate!(@user)
         flash[:notice] = t("pages_core.password_reset.changed")
@@ -80,6 +83,12 @@ module Admin
       @password_reset_token.destroy
       flash[:notice] = t("pages_core.password_reset.expired")
       redirect_to(admin_login_url)
+    end
+
+    def valid_otp(user, otp)
+      return true unless user.otp_enabled?
+
+      OtpSecret.new(user).validate_otp!(otp)
     end
   end
 end

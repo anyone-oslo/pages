@@ -4,4 +4,9 @@
 <%= form_tag(verify_otp_admin_session_path, method: :post) do |f| %>
   <%= hidden_field_tag :signed_user_id, @signed_user_id %>
   <%= render(partial: "admin/sessions/otp_form") %>
+  <p>
+    <button type="submit">
+      Verify
+    </button>
+  </p>
 <% end %>

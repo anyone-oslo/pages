@@ -3,4 +3,9 @@
 
 <%= form_tag(admin_recovery_codes_path, method: :post) do |f| %>
   <%= render(partial: "admin/sessions/otp_form") %>
+  <p>
+    <button type="submit">
+      Verify
+    </button>
+  </p>
 <% end %>

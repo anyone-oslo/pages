@@ -11,6 +11,11 @@
                                   autocomplete: "new-password") %>
     <%= f.labelled_password_field(:confirm_password,
                                   autocomplete: "new-password") %>
+
+    <% if @user.otp_enabled? %>
+      <%= render(partial: "admin/sessions/otp_form") %>
+    <% end %>
+
     <p>
       <button type="submit">
         Change Password
