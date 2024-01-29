@@ -75,7 +75,7 @@ module Admin
                              { role_names: [] }]
       end
       if User.none? || (@user && policy(@user).change_password?)
-        permitted_params += %i[password confirm_password]
+        permitted_params += %i[password password_confirmation]
       end
       params.require(:user).permit(permitted_params)
     end

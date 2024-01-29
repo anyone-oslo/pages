@@ -81,7 +81,7 @@ describe Admin::UsersController do
       it { is_expected.to redirect_to(admin_default_url) }
 
       it "authenticates the user" do
-        expect(session[:current_user_id]).to eq(User.last.id)
+        expect(assigns(:current_user)).to eq(User.last)
       end
     end
 

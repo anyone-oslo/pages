@@ -80,7 +80,7 @@ FactoryBot.define do
     sequence(:name) { |n| "John Doe #{n}" }
     email
     password { "Correct Horse Battery Staple" }
-    confirm_password { "Correct Horse Battery Staple" }
+    password_confirmation { "Correct Horse Battery Staple" }
     activated { true }
     role_names { %w[pages] }
 

@@ -31,7 +31,7 @@
   <% if policy(@user).change_password? %>
     <h2>Password</h2>
     <%= f.labelled_password_field :password, 'Change password' %>
-    <%= f.labelled_password_field :confirm_password, 'Confirm password' %>
+    <%= f.labelled_password_field :password_confirmation, 'Confirm password' %>
     <p>
       Leave the password blank if you do not wish to change the password.
     </p>

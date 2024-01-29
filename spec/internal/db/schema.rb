@@ -226,7 +226,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_29_201300) do
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
-    t.string "hashed_password"
+    t.string "password_digest"
     t.string "name"
     t.string "email"
     t.datetime "last_login_at", precision: nil
@@ -239,6 +239,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_29_201300) do
     t.string "otp_secret"
     t.datetime "last_otp_at"
     t.jsonb "hashed_recovery_codes", default: [], null: false
+    t.string "session_token", null: false
   end
 
 end

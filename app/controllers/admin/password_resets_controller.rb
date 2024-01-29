@@ -81,7 +81,7 @@ module Admin
     end
 
     def user_params
-      params.require(:user).permit(:password, :confirm_password)
+      params.require(:user).permit(:password, :password_confirmation)
     end
 
     def valid_otp(user, otp)

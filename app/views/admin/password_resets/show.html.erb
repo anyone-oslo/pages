@@ -11,7 +11,7 @@
     <%= f.labelled_password_field(:password,
                                   autofocus: true,
                                   autocomplete: "new-password") %>
-    <%= f.labelled_password_field(:confirm_password,
+    <%= f.labelled_password_field(:password_confirmation,
                                   autocomplete: "new-password") %>
 
     <% if @user.otp_enabled? %>

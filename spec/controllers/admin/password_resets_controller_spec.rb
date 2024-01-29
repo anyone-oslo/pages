@@ -115,7 +115,7 @@ describe Admin::PasswordResetsController do
             params: {
               token: valid_token,
               user: { password: "new password",
-                      confirm_password: "new password" }
+                      password_confirmation: "new password" }
             })
       end
 
@@ -130,7 +130,7 @@ describe Admin::PasswordResetsController do
       end
 
       it "logs the user in" do
-        expect(session[:current_user_id]).to eq(user.id)
+        expect(assigns(:current_user)&.id).to eq(user.id)
       end
     end
 
@@ -142,7 +142,7 @@ describe Admin::PasswordResetsController do
             token: valid_token,
             user: {
               password: "new password",
-              confirm_password: "wrong password"
+              password_confirmation: "wrong password"
             }
           }
         )
@@ -162,7 +162,7 @@ describe Admin::PasswordResetsController do
             params: {
               user: {
                 password: "new password",
-                confirm_password: "new password"
+                password_confirmation: "new password"
               }
             }
       end
@@ -183,7 +183,7 @@ describe Admin::PasswordResetsController do
               token: expired_token,
               user: {
                 password: "new password",
-                confirm_password: "new password"
+                password_confirmation: "new password"
               }
             }
       end

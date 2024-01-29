@@ -6,7 +6,6 @@ module PagesCore
 
     included do
       before_action :start_authenticated_session
-      after_action :finalize_authenticated_session
       helper_method :current_user, :logged_in?
     end
 
@@ -20,6 +19,7 @@ module PagesCore
 
     def authenticate!(user)
       reset_session
+      session[:current_user] = { id: user.id, token: user.session_token }
       authenticated(user)
     end
 
@@ -36,19 +36,14 @@ module PagesCore
     end
 
     def start_authenticated_session
-      if session[:current_user_id]
-        user = User.where(id: session[:current_user_id]).first
-      end
+      user_session = session.fetch(:current_user, nil)&.symbolize_keys
 
-      return unless user&.can_login?
+      return unless user_session
+
+      user = User.find_by(id: user_session[:id])
+      return unless user && user.session_token == user_session[:token]
 
       authenticated(user)
-    end
-
-    def finalize_authenticated_session
-      return unless current_user
-
-      session[:current_user_id] = current_user.id
     end
   end
 end
