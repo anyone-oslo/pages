@@ -12,11 +12,9 @@ module Features
 
   def login_with(email, password)
     visit admin_login_path
-    within ".password.login-tab" do
-      fill_in "email", with: email
-      fill_in "password", with: password
-      click_button "Sign in"
-    end
+    fill_in "email", with: email
+    fill_in "password", with: password
+    click_button "Sign in"
   end
 
   def user_is_logged_in

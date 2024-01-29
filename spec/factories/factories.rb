@@ -67,10 +67,6 @@ FactoryBot.define do
     end
   end
 
-  factory :password_reset_token do
-    user
-  end
-
   factory :role do
     user
     name { "pages" }

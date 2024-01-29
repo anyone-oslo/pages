@@ -3,21 +3,18 @@
 require "rails_helper"
 
 describe Admin::PasswordResetsController do
+  def message_verifier
+    Rails.application.message_verifier(:password_reset)
+  end
+
   let(:user) { create(:user) }
-  let(:password_reset_token) { create(:password_reset_token) }
-  let(:expired_password_reset_token) do
-    create(:password_reset_token, expires_at: 2.days.ago)
+  let(:valid_token) { message_verifier.generate({ id: user.id }) }
+  let(:expired_token) do
+    message_verifier.generate({ id: user.id }, expires_at: 2.days.ago)
   end
 
   describe "POST create" do
     context "with an existing user" do
-      let(:token_url) do
-        admin_password_reset_with_token_url(
-          assigns(:password_reset_token).id,
-          assigns(:password_reset_token).token
-        )
-      end
-
       before do
         perform_enqueued_jobs do
           post :create, params: { email: user.email }
@@ -36,16 +33,12 @@ describe Admin::PasswordResetsController do
         expect(assigns(:user)).to be_a(User)
       end
 
-      it "assigns the password reset token" do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
-
       it "emails the user" do
         expect(last_email.to).to eq([user.email])
       end
 
       it "sends the URL" do
-        expect(last_email.body.encoded).to(match(token_url))
+        expect(last_email.body.encoded).to(match("admin/password_reset"))
       end
     end
 
@@ -68,15 +61,7 @@ describe Admin::PasswordResetsController do
 
   describe "GET show" do
     context "with a valid token" do
-      before do
-        get(
-          :show,
-          params: {
-            id: password_reset_token.id,
-            token: password_reset_token.token
-          }
-        )
-      end
+      before { get(:show, params: { token: valid_token }) }
 
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
@@ -84,57 +69,41 @@ describe Admin::PasswordResetsController do
       it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
-
-      it "assigns the password reset token" do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
     end
 
     context "without a valid token" do
-      before { get :show, params: { id: password_reset_token.id } }
+      before { get :show, params: {} }
 
-      it { is_expected.to redirect_to(admin_login_url) }
+      it { is_expected.to redirect_to(new_admin_password_reset_url) }
 
       it "sets the flash" do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash.now[:notice]).to(
+          eq(I18n.t("pages_core.password_reset.invalid_request"))
+        )
       end
     end
 
     context "with an expired token" do
-      before do
-        get(
-          :show,
-          params: {
-            id: expired_password_reset_token.id,
-            token: expired_password_reset_token.token
-          }
-        )
-      end
+      before { get(:show, params: { token: expired_token }) }
 
-      it { is_expected.to redirect_to(admin_login_url) }
-
-      it "assigns the password reset token" do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
+      it { is_expected.to redirect_to(new_admin_password_reset_url) }
 
       it "sets the flash" do
-        expect(flash.now[:notice]).to match(
-          /Your password reset link has expired/
+        expect(flash.now[:notice]).to(
+          eq(I18n.t("pages_core.password_reset.invalid_request"))
         )
-      end
-
-      it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to be(true)
       end
     end
 
     context "with a non-existant token" do
-      before { get :show, params: { id: 123, token: "456" } }
+      before { get :show, params: { token: "456" } }
 
-      it { is_expected.to redirect_to(admin_login_url) }
+      it { is_expected.to redirect_to(new_admin_password_reset_url) }
 
       it "sets the flash" do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash.now[:notice]).to(
+          eq(I18n.t("pages_core.password_reset.invalid_request"))
+        )
       end
     end
   end
@@ -144,8 +113,7 @@ describe Admin::PasswordResetsController do
       before do
         put(:update,
             params: {
-              id: password_reset_token.id,
-              token: password_reset_token.token,
+              token: valid_token,
               user: { password: "new password",
                       confirm_password: "new password" }
             })
@@ -162,11 +130,7 @@ describe Admin::PasswordResetsController do
       end
 
       it "logs the user in" do
-        expect(session[:current_user_id]).to eq(password_reset_token.user.id)
-      end
-
-      it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to be(true)
+        expect(session[:current_user_id]).to eq(user.id)
       end
     end
 
@@ -175,8 +139,7 @@ describe Admin::PasswordResetsController do
         put(
           :update,
           params: {
-            id: password_reset_token.id,
-            token: password_reset_token.token,
+            token: valid_token,
             user: {
               password: "new password",
               confirm_password: "wrong password"
@@ -191,21 +154,12 @@ describe Admin::PasswordResetsController do
       it "assigns the user" do
         expect(assigns(:user)).to be_a(User)
       end
-
-      it "assigns the password reset token" do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
-
-      it "does not destroy the token" do
-        expect(assigns(:password_reset_token).destroyed?).to be(false)
-      end
     end
 
     context "without a valid token" do
       before do
         put :update,
             params: {
-              id: password_reset_token.id,
               user: {
                 password: "new password",
                 confirm_password: "new password"
@@ -213,10 +167,12 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(admin_login_url) }
+      it { is_expected.to redirect_to(new_admin_password_reset_url) }
 
       it "sets the flash" do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash.now[:notice]).to(
+          eq(I18n.t("pages_core.password_reset.invalid_request"))
+        )
       end
     end
 
@@ -224,8 +180,7 @@ describe Admin::PasswordResetsController do
       before do
         put :update,
             params: {
-              id: expired_password_reset_token.id,
-              token: expired_password_reset_token.token,
+              token: expired_token,
               user: {
                 password: "new password",
                 confirm_password: "new password"
@@ -233,20 +188,12 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(admin_login_url) }
-
-      it "assigns the password reset token" do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
+      it { is_expected.to redirect_to(new_admin_password_reset_url) }
 
       it "sets the flash" do
-        expect(flash.now[:notice]).to match(
-          /Your password reset link has expired/
+        expect(flash.now[:notice]).to(
+          eq(I18n.t("pages_core.password_reset.invalid_request"))
         )
-      end
-
-      it "destroys the token" do
-        expect(assigns(:password_reset_token).destroyed?).to be(true)
       end
     end
   end

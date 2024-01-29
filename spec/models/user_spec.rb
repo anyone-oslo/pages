@@ -8,7 +8,6 @@ describe User do
   it { is_expected.to belong_to(:creator).optional }
   it { is_expected.to have_many(:created_users) }
   it { is_expected.to have_many(:pages) }
-  it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
   it { is_expected.to have_many(:roles) }
   it { is_expected.to belong_to(:image).optional }
 

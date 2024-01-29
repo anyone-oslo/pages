@@ -2,21 +2,18 @@
 
 module Admin
   class PasswordResetsController < Admin::AdminController
-    before_action :find_password_reset_token, only: %i[show update]
-    before_action :check_for_expired_token, only: %i[show update]
-    before_action :require_authentication, except: %i[create show update]
+    before_action :require_authentication, except: %i[new create show update]
+    before_action :find_by_token, only: %i[show update]
+    before_action :require_otp, only: %i[update]
 
-    layout "admin"
+    def show; end
 
-    def show
-      @user = @password_reset_token.user
-    end
+    def new; end
 
     def create
       @user = find_user_by_email(params[:email])
       if @user
-        @password_reset_token = @user.password_reset_tokens.create
-        deliver_password_reset(@user, @password_reset_token)
+        deliver_password_reset(@user)
         flash[:notice] = t("pages_core.password_reset.sent")
       else
         flash[:notice] = t("pages_core.password_reset.not_found")
@@ -25,12 +22,7 @@ module Admin
     end
 
     def update
-      @user = @password_reset_token.user
-      if !valid_otp(@user, params[:otp])
-        flash.now[:notice] = t("pages_core.otp.invalid_code")
-        render action: :show
-      elsif user_params[:password].present? && @user.update(user_params)
-        @password_reset_token.destroy
+      if user_params[:password].present? && @user.update(user_params)
         authenticate!(@user)
         flash[:notice] = t("pages_core.password_reset.changed")
         redirect_to admin_login_url
@@ -41,13 +33,26 @@ module Admin
 
     private
 
-    def deliver_password_reset(user, password_reset)
+    def deliver_password_reset(user)
       AdminMailer.password_reset(
         user,
-        admin_password_reset_with_token_url(
-          password_reset, password_reset.token
-        )
+        recovery_url(user)
       ).deliver_later
+    end
+
+    def fail_reset(message)
+      flash[:notice] = message
+      redirect_to new_admin_password_reset_url
+    end
+
+    def find_by_token
+      @token = params[:token]
+      @user = User.find(message_verifier.verify(@token)[:id])
+      return if @user
+
+      fail_reset(t("pages_core.password_reset.invalid_request"))
+    rescue ActiveSupport::MessageVerifier::InvalidSignature
+      fail_reset(t("pages_core.password_reset.invalid_request"))
     end
 
     def find_user_by_email(email)
@@ -56,33 +61,27 @@ module Admin
       User.find_by_email(params[:email])
     end
 
+    def message_verifier
+      Rails.application.message_verifier(:password_reset)
+    end
+
+    def recovery_token(user)
+      message_verifier.generate({ id: user.id }, expires_in: 24.hours)
+    end
+
+    def recovery_url(user)
+      admin_password_reset_url(token: recovery_token(user))
+    end
+
+    def require_otp
+      return if valid_otp(@user, params[:otp])
+
+      flash.now[:notice] = t("pages_core.otp.invalid_code")
+      render action: :show
+    end
+
     def user_params
       params.require(:user).permit(:password, :confirm_password)
-    end
-
-    def valid_token?(reset)
-      reset && secure_compare(reset.token, params[:token])
-    end
-
-    def find_password_reset_token
-      @password_reset_token = begin
-        PasswordResetToken.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        nil
-      end
-
-      return if valid_token?(@password_reset_token)
-
-      flash[:notice] = t("pages_core.password_reset.invalid_request")
-      redirect_to(admin_login_url)
-    end
-
-    def check_for_expired_token
-      return unless @password_reset_token.expired?
-
-      @password_reset_token.destroy
-      flash[:notice] = t("pages_core.password_reset.expired")
-      redirect_to(admin_login_url)
     end
 
     def valid_otp(user, otp)

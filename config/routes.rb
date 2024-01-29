@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     end
 
     # Password resets
-    resources :password_resets, only: %i[create show update]
+    resource :password_reset
     controller :password_resets do
       get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
     end

@@ -17,7 +17,6 @@ class User < ApplicationRecord
            dependent: :nullify,
            inverse_of: :creator)
   has_many :pages, dependent: :nullify
-  has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
   has_many :invites, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id, optional: true

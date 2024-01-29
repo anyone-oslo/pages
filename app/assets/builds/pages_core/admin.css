@@ -8370,10 +8370,6 @@ main .login-form ul li {
       font-size: 1.2em;
     }
 
-.login-tab.hidden {
-    display: none;
-  }
-
 body.modal > .wrapper {
     transition: filter 1000ms linear;
     filter: blur(10px);

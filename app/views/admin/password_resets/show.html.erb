@@ -4,10 +4,12 @@
 
 <div class="login-form">
   <%= form_for(@user,
-               url: admin_password_reset_path(@password_reset_token, token: @password_reset_token.token),
+               url: admin_password_reset_path,
                builder: PagesCore::Admin::FormBuilder,
                class: 'form') do |f| %>
+    <%= hidden_field_tag :token, @token %>
     <%= f.labelled_password_field(:password,
+                                  autofocus: true,
                                   autocomplete: "new-password") %>
     <%= f.labelled_password_field(:confirm_password,
                                   autocomplete: "new-password") %>

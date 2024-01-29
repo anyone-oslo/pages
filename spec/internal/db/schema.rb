@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_26_160700) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_29_201300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -181,14 +181,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_26_160700) do
     t.index ["status", "parent_page_id", "position"], name: "index_pages_on_status_and_parent_page_id_and_position"
     t.index ["status"], name: "index_pages_on_status"
     t.index ["user_id"], name: "index_pages_on_user_id"
-  end
-
-  create_table "password_reset_tokens", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.string "token"
-    t.datetime "expires_at", precision: nil
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|

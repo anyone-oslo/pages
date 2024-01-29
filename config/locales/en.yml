@@ -35,8 +35,7 @@ en:
       required: 2FA is required for this
     password_reset:
       changed: Your password has been changed
-      expired: Your password reset link has expired
-      invalid_request: Invalid password reset request
+      invalid_request: This link is no longer valid
       not_found: Couldn't find a user with that email address
       sent: An email with further instructions has been sent
       problems_saving: There were problems saving your changes
