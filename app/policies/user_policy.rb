@@ -48,4 +48,8 @@ class UserPolicy < Policy
   def change_password?
     user == record
   end
+
+  def otp?
+    user == record
+  end
 end

@@ -28,6 +28,10 @@ en:
       The provided email address and password combination was not valid
     invite_expired: This invite is no longer valid.
     logged_out: You have been logged out
+    otp:
+      already_enabled: 2FA has already been enabled
+      disabled: 2FA has been disabled
+      invalid_code: Invalid 6 digit code
     password_reset:
       changed: Your password has been changed
       expired: Your password reset link has expired

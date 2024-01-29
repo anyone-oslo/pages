@@ -37,6 +37,8 @@ Gem::Specification.new do |s|
   s.add_dependency "progress_bar"
   s.add_dependency "rails-healthcheck", "~> 1.0.3"
   s.add_dependency "RedCloth", "~> 4.3.2"
+  s.add_dependency "rotp", "~> 6.3.0"
+  s.add_dependency "rqrcode"
   s.add_dependency "tty-table"
   s.add_dependency "typhoeus", "~> 1.4.0"
   s.add_dependency "will_paginate"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include PagesCore::HasOtp
   include PagesCore::HasRoles
 
   attr_accessor :password, :confirm_password

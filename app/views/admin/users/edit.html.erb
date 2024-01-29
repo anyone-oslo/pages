@@ -37,6 +37,31 @@
     </p>
   <% end %>
 
+  <% if policy(@user).otp? %>
+    <h2>Two-factor authentication</h2>
+    <% if @user.otp_enabled? %>
+      <p>
+        Two-factor authentication has been enabled.
+        <%= link_to("Disable",
+                    admin_otp_secret_path,
+                    class: :delete,
+                    method: :delete,
+                    data: { confirm: "Are you sure you want to disable 2FA?" }) %>
+      </p>
+      <p>
+        You have <%= @user.hashed_recovery_codes.length %> recovery codes remaining.
+      </p>
+    <% else %>
+      <p>
+        Protect your account with an additional layer of security by
+        requiring an authentication app to sign in.
+      </p>
+      <p>
+        <%= link_to("Enable 2FA", new_admin_otp_secret_path) %>
+      </p>
+    <% end %>
+  <% end %>
+
   <%= render partial: "access_control", locals: { user: @user, f: f } %>
 
   <p>

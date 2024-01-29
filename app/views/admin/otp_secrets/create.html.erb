@@ -1,0 +1,19 @@
+<% content_for :page_title, "2FA enabled" %>
+<% content_for :page_description, "Two-factor authentication enabled" %>
+
+<div class="content">
+  <h2>
+    Recovery codes
+  </h2>
+  <p>
+    Please save the recovery codes below in a safe place, ideally
+    using a secure password manager.<br>
+    Without them, you will lose access to your account if you lose your device.
+  </p>
+
+  <ul class="recovery-codes">
+    <% @recovery_codes.each do |c| %>
+      <li><%= c %></li>
+    <% end %>
+  </ul>
+</div>
