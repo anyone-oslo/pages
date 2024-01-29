@@ -39,23 +39,6 @@ describe Admin::UsersController do
     end
   end
 
-  describe "GET login" do
-    context "when not logged in" do
-      before { get :login }
-
-      it { is_expected.to render_template("admin/users/login") }
-    end
-
-    context "when logged in" do
-      before do
-        login(user)
-        get :login
-      end
-
-      it { is_expected.to redirect_to(admin_default_url) }
-    end
-  end
-
   describe "GET new" do
     context "with no users" do
       before { get :new }

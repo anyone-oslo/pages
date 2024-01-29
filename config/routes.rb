@@ -33,9 +33,6 @@ Rails.application.routes.draw do
   get "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
       locale: /\w\w\w/
 
-  # Authentication
-  resource :session, only: %i[create destroy]
-
   # Sitemap
   resource :sitemap, only: [:show]
 
@@ -76,8 +73,13 @@ Rails.application.routes.draw do
     # Categories
     resources :categories
 
+    # Authentication
+    resource :session, only: %i[create destroy] do
+      member { post :verify_otp }
+    end
     resource :otp_secret, only: %i[new create destroy]
     resource :recovery_codes, only: %i[new create]
+    get "login" => "sessions#new", as: "login"
 
     # Pages
     scope ":locale" do

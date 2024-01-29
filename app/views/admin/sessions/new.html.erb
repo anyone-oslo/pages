@@ -15,7 +15,7 @@
   <div class="login-tab password"
        data-login-target="tab"
        data-tab="password">
-    <%= form_tag session_path do %>
+    <%= form_tag admin_session_path do %>
       <p>
         <label>Email address</label>
         <%= text_field_tag(:email, "", autocomplete: "email") %>
@@ -30,7 +30,7 @@
       <ul>
         <li>
           <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
-                      login_admin_users_path,
+                      admin_login_path,
                       data: {
                         action: "click->login#changeTab",
                         tab: "password-reset"

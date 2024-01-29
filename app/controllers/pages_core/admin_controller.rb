@@ -48,7 +48,7 @@ module PagesCore
       if User.count < 1
         redirect_to(new_admin_user_url)
       else
-        redirect_to(login_admin_users_url)
+        redirect_to(admin_login_url)
       end
     end
 

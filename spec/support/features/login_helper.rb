@@ -11,7 +11,7 @@ module Features
   end
 
   def login_with(email, password)
-    visit login_admin_users_path
+    visit admin_login_path
     within ".password.login-tab" do
       fill_in "email", with: email
       fill_in "password", with: password

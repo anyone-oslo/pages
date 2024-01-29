@@ -21,7 +21,7 @@ module Admin
       else
         flash[:notice] = t("pages_core.password_reset.not_found")
       end
-      redirect_to login_admin_users_url
+      redirect_to admin_login_url
     end
 
     def update
@@ -30,7 +30,7 @@ module Admin
         @password_reset_token.destroy
         authenticate!(@user)
         flash[:notice] = t("pages_core.password_reset.changed")
-        redirect_to login_admin_users_url
+        redirect_to admin_login_url
       else
         render action: :show
       end
@@ -71,7 +71,7 @@ module Admin
       return if valid_token?(@password_reset_token)
 
       flash[:notice] = t("pages_core.password_reset.invalid_request")
-      redirect_to(login_admin_users_url) && return
+      redirect_to(admin_login_url)
     end
 
     def check_for_expired_token
@@ -79,7 +79,7 @@ module Admin
 
       @password_reset_token.destroy
       flash[:notice] = t("pages_core.password_reset.expired")
-      redirect_to(login_admin_users_url)
+      redirect_to(admin_login_url)
     end
   end
 end

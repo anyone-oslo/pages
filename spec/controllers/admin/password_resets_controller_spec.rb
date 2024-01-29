@@ -24,7 +24,7 @@ describe Admin::PasswordResetsController do
         end
       end
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "sets the flash" do
         expect(flash[:notice]).to match(
@@ -52,7 +52,7 @@ describe Admin::PasswordResetsController do
     context "with a non-existant user" do
       before { post :create, params: { email: "none@example.com" } }
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "does not assign the password reset token" do
         expect(assigns(:password_reset_token)).to be_nil
@@ -93,7 +93,7 @@ describe Admin::PasswordResetsController do
     context "without a valid token" do
       before { get :show, params: { id: password_reset_token.id } }
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -111,7 +111,7 @@ describe Admin::PasswordResetsController do
         )
       end
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
@@ -131,7 +131,7 @@ describe Admin::PasswordResetsController do
     context "with a non-existant token" do
       before { get :show, params: { id: 123, token: "456" } }
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -151,7 +151,7 @@ describe Admin::PasswordResetsController do
             })
       end
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to match(/Your password has been changed/)
@@ -213,7 +213,7 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -233,7 +233,7 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(login_admin_users_url) }
+      it { is_expected.to redirect_to(admin_login_url) }
 
       it "assigns the password reset token" do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)

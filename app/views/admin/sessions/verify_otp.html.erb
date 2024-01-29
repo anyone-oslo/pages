@@ -1,0 +1,7 @@
+<% content_for :page_title, "Two-factor authentication" %>
+<% content_for :page_description, "Two-factor authentication" %>
+
+<%= form_tag(verify_otp_admin_session_path, method: :post) do |f| %>
+  <%= hidden_field_tag :signed_user_id, @signed_user_id %>
+  <%= render(partial: "admin/sessions/otp_form") %>
+<% end %>
