@@ -49,7 +49,11 @@
                     data: { confirm: "Are you sure you want to disable 2FA?" }) %>
       </p>
       <p>
-        You have <%= @user.hashed_recovery_codes.length %> recovery codes remaining.
+
+        You have
+        <%= t("pages_core.recovery_codes",
+              count: @user.hashed_recovery_codes.length) %>
+        remaining.
         <%= link_to("Generate new codes", new_admin_recovery_codes_path) %>
       </p>
     <% else %>

@@ -85,5 +85,9 @@ module PagesCore
       end
     end
     alias config configuration
+
+    def reset_configuration!
+      @configuration = PagesCore::Configuration::Pages.new
+    end
   end
 end

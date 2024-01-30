@@ -2,24 +2,24 @@
 
 require "rails_helper"
 
-RSpec.describe "Users" do
+RSpec.describe "Roles" do
   let!(:admin) { create(:user, :admin) }
   let!(:user) { create(:user) }
 
   before do
     login_as(admin)
-    click_link "Users"
+    click_on "Users"
   end
 
   describe "removing all roles" do
     before do
       within ".user-#{user.id}" do
-        click_link "edit"
+        click_on "edit"
       end
       all("input.role").each do |checkbox|
         checkbox.click if checkbox.checked?
       end
-      click_button "Save"
+      click_on "Save"
       user.reload
     end
 

@@ -1,0 +1,12 @@
+<%= react_component "Toast", { notice: flash[:notice], error: flash[:error] } %>
+<% if Rails.env.test? && flash.any? %>
+  <div class="flash-test-helper">
+    <% %i[notice error].each do |type| %>
+      <% if flash[type] || true %>
+        <div class="<%= type %>">
+          <%= flash[type] %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

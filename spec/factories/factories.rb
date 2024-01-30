@@ -87,6 +87,12 @@ FactoryBot.define do
     trait :admin do
       role_names { %w[pages users] }
     end
+
+    trait :otp do
+      otp_enabled { true }
+      otp_secret { ROTP::Base32.random }
+      recovery_codes { %w[recovery-code-1 recovery-code-2] }
+    end
   end
 
   sequence :email do |n|

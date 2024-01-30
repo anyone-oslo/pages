@@ -39,6 +39,10 @@ en:
       not_found: Couldn't find a user with that email address
       sent: An email with further instructions has been sent
       problems_saving: There were problems saving your changes
+    recovery_codes:
+      zero: "no recovery codes"
+      one: "one recovery code"
+      other: "%{count} recovery codes"
   templates:
     default:
       blocks:

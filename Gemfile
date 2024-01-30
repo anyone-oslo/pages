@@ -22,6 +22,7 @@ group :development, :test do
   gem "rubocop-factory_bot", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
+  gem "selenium-webdriver"
   gem "semantic"
   gem "shoulda-matchers"
   gem "simplecov", "~> 0.17.1"
