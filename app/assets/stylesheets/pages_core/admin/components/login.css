@@ -25,9 +25,3 @@ main .login-form {
     }
   }
 }
-
-.login-tab {
-  &.hidden {
-    display: none;
-  }
-}

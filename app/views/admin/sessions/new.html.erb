@@ -1,0 +1,33 @@
+<% content_for :page_title, "Sign in" %>
+<% content_for(:page_description,
+               "Please enter your email address and password to sign in") %>
+<% content_for :body_class, "login" %>
+
+<% content_for :sidebar do %>
+  <h2>Please note</h2>
+  <p>
+    Please contact support if you experience problems logging in or using Pages.
+  </p>
+<% end %>
+
+<div class="login-form">
+  <%= form_tag admin_session_path do %>
+    <p>
+      <label>Email address</label>
+      <%= text_field_tag(:email, "", autocomplete: "email") %>
+    </p>
+    <p>
+      <label>Password</label>
+      <%= password_field_tag(:password, "", autocomplete: "current-password") %>
+    </p>
+    <p>
+      <button type="submit">Sign in</button>
+    </p>
+    <ul>
+      <li>
+        <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
+                    new_admin_account_recovery_path) %>
+      </li>
+    </ul>
+  <% end %>
+</div>

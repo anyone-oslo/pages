@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_15_160300) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_29_201300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -183,14 +183,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_160300) do
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
-  create_table "password_reset_tokens", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.string "token"
-    t.datetime "expires_at", precision: nil
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-  end
-
   create_table "roles", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -234,7 +226,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_160300) do
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
-    t.string "hashed_password"
+    t.string "password_digest"
     t.string "name"
     t.string "email"
     t.datetime "last_login_at", precision: nil
@@ -243,6 +235,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_160300) do
     t.text "persistent_data"
     t.boolean "activated", default: false, null: false
     t.integer "image_id"
+    t.boolean "otp_enabled", default: false, null: false
+    t.string "otp_secret"
+    t.datetime "last_otp_at"
+    t.jsonb "hashed_recovery_codes", default: [], null: false
+    t.string "session_token", null: false
   end
 
 end

@@ -1,0 +1,7 @@
+<% content_for :page_title, "2FA enabled" %>
+<% content_for :page_description, "Two-factor authentication enabled" %>
+
+<div class="content">
+  <%= render(partial: "admin/recovery_codes/codes",
+             locals: { recovery_codes: @recovery_codes }) %>
+</div>

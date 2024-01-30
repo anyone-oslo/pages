@@ -33,6 +33,17 @@ module PagesCore
         %w[January February March April May June July August September October
            November December][month - 1]
       end
+
+      def qr_code(url)
+        ActiveSupport::SafeBuffer.new(
+          RQRCode::QRCode.new(url)
+                         .as_svg({ color: "000",
+                                   shape_rendering: "crispEdges",
+                                   module_size: 10,
+                                   use_path: true,
+                                   viewbox: true })
+        )
+      end
     end
   end
 end

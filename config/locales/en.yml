@@ -28,13 +28,21 @@ en:
       The provided email address and password combination was not valid
     invite_expired: This invite is no longer valid.
     logged_out: You have been logged out
-    password_reset:
+    otp:
+      already_enabled: 2FA has already been enabled
+      disabled: 2FA has been disabled
+      invalid_code: Invalid 2FA code
+      required: 2FA is required for this
+    account_recovery:
       changed: Your password has been changed
-      expired: Your password reset link has expired
-      invalid_request: Invalid password reset request
+      invalid_request: This link is no longer valid
       not_found: Couldn't find a user with that email address
       sent: An email with further instructions has been sent
       problems_saving: There were problems saving your changes
+    recovery_codes:
+      zero: "no recovery codes"
+      one: "one recovery code"
+      other: "%{count} recovery codes"
   templates:
     default:
       blocks:

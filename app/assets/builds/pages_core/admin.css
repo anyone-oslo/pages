@@ -8370,10 +8370,6 @@ main .login-form ul li {
       font-size: 1.2em;
     }
 
-.login-tab.hidden {
-    display: none;
-  }
-
 body.modal > .wrapper {
     transition: filter 1000ms linear;
     filter: blur(10px);
@@ -9080,6 +9076,33 @@ textarea.rich {
     border-right: none;
     box-shadow: 0px 1px 1px #fff;
   }
+
+.totp-enrollment .qr-code {
+    width: 20rem;
+    height: 20rem;
+    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+.totp-enrollment .qr-code svg {
+      width: 100%;
+      height: 100%;
+    }
+
+ul.recovery-codes {
+  list-style-type: none;
+  padding: 0rem;
+  margin: 2rem 0rem;
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 1.2em;
+  font-weight: bold;
+}
 
 .drag-handle {
   cursor: pointer;

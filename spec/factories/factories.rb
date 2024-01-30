@@ -67,10 +67,6 @@ FactoryBot.define do
     end
   end
 
-  factory :password_reset_token do
-    user
-  end
-
   factory :role do
     user
     name { "pages" }
@@ -84,12 +80,18 @@ FactoryBot.define do
     sequence(:name) { |n| "John Doe #{n}" }
     email
     password { "Correct Horse Battery Staple" }
-    confirm_password { "Correct Horse Battery Staple" }
+    password_confirmation { "Correct Horse Battery Staple" }
     activated { true }
     role_names { %w[pages] }
 
     trait :admin do
       role_names { %w[pages users] }
+    end
+
+    trait :otp do
+      otp_enabled { true }
+      otp_secret { ROTP::Base32.random }
+      recovery_codes { %w[recovery-code-1 recovery-code-2] }
     end
   end
 

@@ -35,20 +35,22 @@ module PagesCore
       @current_user = user
     end
 
-    def start_authenticated_session
-      if session[:current_user_id]
-        user = User.where(id: session[:current_user_id]).first
-      end
+    def finalize_authenticated_session
+      return unless logged_in?
 
-      return unless user&.can_login?
-
-      authenticated(user)
+      session[:current_user] =
+        { id: current_user.id, token: current_user.session_token }
     end
 
-    def finalize_authenticated_session
-      return unless current_user
+    def start_authenticated_session
+      user_session = session.fetch(:current_user, nil)&.symbolize_keys
 
-      session[:current_user_id] = current_user.id
+      return unless user_session
+
+      user = User.find_by(id: user_session[:id])
+      return unless user && user.session_token == user_session[:token]
+
+      authenticated(user)
     end
   end
 end

@@ -31,10 +31,40 @@
   <% if policy(@user).change_password? %>
     <h2>Password</h2>
     <%= f.labelled_password_field :password, 'Change password' %>
-    <%= f.labelled_password_field :confirm_password, 'Confirm password' %>
+    <%= f.labelled_password_field :password_confirmation, 'Confirm password' %>
     <p>
       Leave the password blank if you do not wish to change the password.
     </p>
+  <% end %>
+
+  <% if policy(@user).otp? %>
+    <h2>Two-factor authentication</h2>
+    <% if @user.otp_enabled? %>
+      <p>
+        Two-factor authentication has been enabled.
+        <%= link_to("Disable",
+                    admin_otp_secret_path,
+                    class: :delete,
+                    method: :delete,
+                    data: { confirm: "Are you sure you want to disable 2FA?" }) %>
+      </p>
+      <p>
+
+        You have
+        <%= t("pages_core.recovery_codes",
+              count: @user.hashed_recovery_codes.length) %>
+        remaining.
+        <%= link_to("Generate new codes", new_admin_recovery_codes_path) %>
+      </p>
+    <% else %>
+      <p>
+        Protect your account with an additional layer of security by
+        requiring an authentication app to sign in.
+      </p>
+      <p>
+        <%= link_to("Enable 2FA", new_admin_otp_secret_path) %>
+      </p>
+    <% end %>
   <% end %>
 
   <%= render partial: "access_control", locals: { user: @user, f: f } %>

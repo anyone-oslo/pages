@@ -1,0 +1,13 @@
+<h2>
+  Two-factor authentication
+</h2>
+<p>
+  Enter a one-time code from your authenticator app to proceed.
+</p>
+<div class="field">
+  <label for="otp">6 digit code</label>
+  <%= text_field_tag(:otp, "",
+                     autofocus: true,
+                     autocomplete: "one-time-code",
+                     size: 6) %>
+</div>

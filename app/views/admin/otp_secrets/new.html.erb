@@ -1,0 +1,60 @@
+<% content_for :page_title, "Enable 2FA" %>
+<% content_for :page_description, "Enable two-factor authentication" %>
+
+<%= form_tag(admin_otp_secret_path, method: :post, class: "totp-enrollment") do |f| %>
+  <h2>
+    Scan the QR-code
+  </h2>
+  <p>
+    Use an authenticator app or browser extension to scan the QR code below.<br>
+    Don't have one? Some options are
+    <%= link_to("1Password", "https://1password.com/") %>,
+    <%= link_to("LastPass Authenticator", "https://www.lastpass.com/") %>,
+    <%= link_to("Microsoft Authenticator",
+                "https://www.microsoft.com/en-us/security/mobile-authenticator-app") %>
+    or
+    <%= link_to("Google Authenticator",
+                "https://support.google.com/accounts/answer/1066447") %>.
+  </p>
+
+
+  <div class="qr-code">
+    <%= qr_code(@otp_secret.provisioning_uri) %>
+  </div>
+
+  <p>
+    If you are unable to scan the code, you can enter the following
+    info instead:
+  </p>
+
+  <p>
+    <b>Account name:</b><br>
+    <%= @otp_secret.account_name %>
+  </p>
+  <p>
+    <b>Secret:</b><br>
+    <span class="otp-secret">
+      <%= @otp_secret.secret %>
+    </span>
+  </p>
+
+  <h2>
+    Enter the code from the app
+  </h2>
+
+  <div class="field">
+    <label for="otp">6 digit code</label>
+    <%= text_field_tag(:otp, "",
+                       autofocus: true,
+                       autocomplete: "one-time-code",
+                       size: 6) %>
+  </div>
+
+  <%= hidden_field_tag :signed_message, @otp_secret.signed_message %>
+
+  <p>
+    <button type="submit">
+      Verify
+    </button>
+  </p>
+<% end %>

@@ -1,0 +1,37 @@
+<% content_for :page_title, "Account recovery" %>
+<% content_for :page_description, "Please choose a new password to proceed" %>
+<% content_for :body_class, "login" %>
+
+<div class="login-form">
+  <%= form_for(@user,
+               url: admin_account_recovery_path,
+               builder: PagesCore::Admin::FormBuilder,
+               class: 'form') do |f| %>
+    <%= hidden_field_tag :token, @token %>
+    <%= f.labelled_password_field(:password,
+                                  autofocus: true,
+                                  autocomplete: "new-password") %>
+    <%= f.labelled_password_field(:password_confirmation,
+                                  autocomplete: "new-password") %>
+
+    <% if @user.otp_enabled? %>
+      <div class="field">
+        <label for="otp">6 digit code or recovery code</label>
+        <%= text_field_tag(:otp, "",
+                           autocomplete: "one-time-code",
+                           size: 6) %>
+      </div>
+      <p>
+        Lost your authenticator device? You can use one of your
+        emergency recovery codes instead.
+      </p>
+    <% end %>
+
+    <p>
+      <button type="submit">
+        Change password
+      </button>
+      or <%= link_to "Return to login screen", admin_login_path %>
+    </p>
+  <% end %>
+</div>

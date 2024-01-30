@@ -32,6 +32,8 @@ require "pg_search"
 require "progress_bar"
 require "rails_i18n"
 require "RedCloth"
+require "rotp"
+require "rqrcode"
 require "sass-rails"
 require "typhoeus"
 require "will_paginate"
@@ -83,5 +85,9 @@ module PagesCore
       end
     end
     alias config configuration
+
+    def reset_configuration!
+      @configuration = PagesCore::Configuration::Pages.new
+    end
   end
 end

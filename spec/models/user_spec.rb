@@ -8,7 +8,6 @@ describe User do
   it { is_expected.to belong_to(:creator).optional }
   it { is_expected.to have_many(:created_users) }
   it { is_expected.to have_many(:pages) }
-  it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
   it { is_expected.to have_many(:roles) }
   it { is_expected.to belong_to(:image).optional }
 
@@ -32,7 +31,7 @@ describe User do
         build(
           :user,
           password: "validpassword",
-          confirm_password: "validpassword"
+          password_confirmation: "validpassword"
         )
       end
 
@@ -44,16 +43,8 @@ describe User do
         build(
           :user,
           password: "validpassword",
-          confirm_password: "invalidpassword"
+          password_confirmation: "invalidpassword"
         )
-      end
-
-      it { is_expected.to be(false) }
-    end
-
-    context "when confirm_password is omitted" do
-      let(:user) do
-        build(:user, password: "validpassword", confirm_password: nil)
       end
 
       it { is_expected.to be(false) }

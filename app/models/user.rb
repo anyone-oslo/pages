@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include PagesCore::HasOtp
   include PagesCore::HasRoles
 
-  attr_accessor :password, :confirm_password
+  has_secure_password
 
   belongs_to(:creator,
              class_name: "User",
@@ -16,7 +17,6 @@ class User < ApplicationRecord
            dependent: :nullify,
            inverse_of: :creator)
   has_many :pages, dependent: :nullify
-  has_many :password_reset_tokens, dependent: :destroy
   has_many :roles, dependent: :destroy
   has_many :invites, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id, optional: true
@@ -30,12 +30,14 @@ class User < ApplicationRecord
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i },
             uniqueness: { case_sensitive: false }
 
-  validates :password, presence: true, on: :create
-  validates :password, length: { minimum: 8 }, allow_blank: true
+  validates :password,
+            length: {
+              minimum: 8,
+              maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED,
+              allow_blank: true
+            }
 
-  validate :confirm_password_must_match
-
-  before_validation :hash_password
+  before_save :update_session_token
   before_create :ensure_first_user_has_all_roles
 
   scope :by_name,     -> { order("name ASC") }
@@ -44,12 +46,11 @@ class User < ApplicationRecord
 
   class << self
     def authenticate(email, password:)
-      user = User.find_by_email(email)
-      user if user.try { |u| u.authenticate!(password) }
+      User.find_by_email(email).try(:authenticate, password)
     end
 
     def find_by_email(str)
-      find_by("LOWER(email) = ?", str.to_s.downcase)
+      find_by("LOWER(email) = ?", str.to_s.downcase.strip)
     end
   end
 
@@ -84,16 +85,6 @@ class User < ApplicationRecord
 
   private
 
-  def confirm_password_must_match
-    return if password.blank? || password == confirm_password
-
-    errors.add(:confirm_password, "does not match")
-  end
-
-  def encrypt_password(password)
-    BCrypt::Password.create(password)
-  end
-
   def ensure_first_user_has_all_roles
     return if User.any?
 
@@ -103,23 +94,10 @@ class User < ApplicationRecord
     end
   end
 
-  def hash_password
-    self.hashed_password = encrypt_password(password) if password.present?
-  end
+  def update_session_token
+    return unless !session_token? || password_digest_changed? ||
+                  otp_enabled_changed?
 
-  def password_needs_rehash?
-    hashed_password.length <= 40
-  end
-
-  def rehash_password!(password)
-    update(hashed_password: encrypt_password(password))
-  end
-
-  def valid_password?(password)
-    if hashed_password.length <= 40
-      hashed_password == Digest::SHA1.hexdigest(password)
-    else
-      BCrypt::Password.new(hashed_password) == password
-    end
+    self.session_token = SecureRandom.hex(32)
   end
 end

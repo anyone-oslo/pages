@@ -79,10 +79,14 @@ RSpec.configure do |config|
   # config.include JsonSpec::Helpers
   config.include ActiveJob::TestHelper
   config.include ErrorResponses
-  config.include Features, type: :feature
+  config.include SystemHelpers, type: :system
   config.include LoginMacros
   config.include MailerMacros
-  config.before { reset_email }
+
+  config.before do
+    PagesCore.reset_configuration!
+    reset_email
+  end
 
   config.around(realistic_error_responses: true) do |example|
     respond_without_detailed_exceptions(&example)
@@ -96,6 +100,14 @@ RSpec.configure do |config|
     # Reset the ActiveJob queue
     ActiveJob::Base.queue_adapter.enqueued_jobs = []
     ActiveJob::Base.queue_adapter.performed_jobs = []
+  end
+
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, :js) do
+    driven_by :selenium_chrome_headless
   end
 end
 

@@ -2,7 +2,7 @@
 
 module Admin
   class UsersController < Admin::AdminController
-    before_action :require_authentication, except: %i[new create login]
+    before_action :require_authentication, except: %i[new create]
     before_action :require_no_users, only: %i[new create]
     before_action(
       :find_user,
@@ -17,12 +17,6 @@ module Admin
     def deactivated
       @users = User.deactivated
       @invites = []
-    end
-
-    def login
-      return unless logged_in?
-
-      redirect_to admin_default_url
     end
 
     def show; end
@@ -81,7 +75,7 @@ module Admin
                              { role_names: [] }]
       end
       if User.none? || (@user && policy(@user).change_password?)
-        permitted_params += %i[password confirm_password]
+        permitted_params += %i[password password_confirmation]
       end
       params.require(:user).permit(permitted_params)
     end

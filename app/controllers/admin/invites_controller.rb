@@ -62,11 +62,12 @@ module Admin
       return if @invite && secure_compare(@invite.token, params[:token])
 
       flash[:notice] = t("pages_core.invite_expired")
-      redirect_to(login_admin_users_url) && return
+      redirect_to(admin_login_url)
     end
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :confirm_password)
+      params.require(:user)
+            .permit(:name, :email, :password, :password_confirmation)
     end
 
     def invite_params
