@@ -31,9 +31,9 @@ en:
     otp:
       already_enabled: 2FA has already been enabled
       disabled: 2FA has been disabled
-      invalid_code: Invalid 6 digit code
+      invalid_code: Invalid 2FA code
       required: 2FA is required for this
-    password_reset:
+    account_recovery:
       changed: Your password has been changed
       invalid_request: This link is no longer valid
       not_found: Couldn't find a user with that email address

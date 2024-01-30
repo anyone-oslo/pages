@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-describe Admin::PasswordResetsController do
+describe Admin::AccountRecoveriesController do
   def message_verifier
-    Rails.application.message_verifier(:password_reset)
+    Rails.application.message_verifier(:account_recovery)
   end
 
   let(:user) { create(:user) }
@@ -38,7 +38,7 @@ describe Admin::PasswordResetsController do
       end
 
       it "sends the URL" do
-        expect(last_email.body.encoded).to(match("admin/password_reset"))
+        expect(last_email.body.encoded).to(match("admin/account_recovery"))
       end
     end
 
@@ -46,10 +46,6 @@ describe Admin::PasswordResetsController do
       before { post :create, params: { email: "none@example.com" } }
 
       it { is_expected.to redirect_to(admin_login_url) }
-
-      it "does not assign the password reset token" do
-        expect(assigns(:password_reset_token)).to be_nil
-      end
 
       it "sets the flash" do
         expect(flash[:notice]).to match(
@@ -74,11 +70,11 @@ describe Admin::PasswordResetsController do
     context "without a valid token" do
       before { get :show, params: {} }
 
-      it { is_expected.to redirect_to(new_admin_password_reset_url) }
+      it { is_expected.to redirect_to(new_admin_account_recovery_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to(
-          eq(I18n.t("pages_core.password_reset.invalid_request"))
+          eq(I18n.t("pages_core.account_recovery.invalid_request"))
         )
       end
     end
@@ -86,11 +82,11 @@ describe Admin::PasswordResetsController do
     context "with an expired token" do
       before { get(:show, params: { token: expired_token }) }
 
-      it { is_expected.to redirect_to(new_admin_password_reset_url) }
+      it { is_expected.to redirect_to(new_admin_account_recovery_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to(
-          eq(I18n.t("pages_core.password_reset.invalid_request"))
+          eq(I18n.t("pages_core.account_recovery.invalid_request"))
         )
       end
     end
@@ -98,11 +94,11 @@ describe Admin::PasswordResetsController do
     context "with a non-existant token" do
       before { get :show, params: { token: "456" } }
 
-      it { is_expected.to redirect_to(new_admin_password_reset_url) }
+      it { is_expected.to redirect_to(new_admin_account_recovery_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to(
-          eq(I18n.t("pages_core.password_reset.invalid_request"))
+          eq(I18n.t("pages_core.account_recovery.invalid_request"))
         )
       end
     end
@@ -167,11 +163,11 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(new_admin_password_reset_url) }
+      it { is_expected.to redirect_to(new_admin_account_recovery_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to(
-          eq(I18n.t("pages_core.password_reset.invalid_request"))
+          eq(I18n.t("pages_core.account_recovery.invalid_request"))
         )
       end
     end
@@ -188,11 +184,11 @@ describe Admin::PasswordResetsController do
             }
       end
 
-      it { is_expected.to redirect_to(new_admin_password_reset_url) }
+      it { is_expected.to redirect_to(new_admin_account_recovery_url) }
 
       it "sets the flash" do
         expect(flash.now[:notice]).to(
-          eq(I18n.t("pages_core.password_reset.invalid_request"))
+          eq(I18n.t("pages_core.account_recovery.invalid_request"))
         )
       end
     end

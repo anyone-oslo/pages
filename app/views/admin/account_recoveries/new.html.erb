@@ -1,0 +1,22 @@
+<% content_for :page_title, "Account recovery" %>
+<% content_for :page_description, "Account recovery" %>
+
+<%= form_tag admin_account_recovery_path do %>
+  <h2>
+    Forgot your password or lost your authenticator?
+  </h2>
+  <p>
+    Don't worry, it happens.
+    Enter your email address below, and we'll send you a link where you
+    can recover your account.
+  </p>
+  <div class="field">
+    <label for="email">Email address</label>
+    <%= text_field_tag(:email, "", autocomplete: "email", autofocus: true) %>
+  </div>
+  <p>
+    <button type="submit">
+      Send
+    </button>
+  </p>
+<% end %>

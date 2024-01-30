@@ -48,9 +48,9 @@ Rails.application.routes.draw do
     end
 
     # Password resets
-    resource :password_reset
-    controller :password_resets do
-      get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
+    resource :account_recovery
+    controller :account_recoveries do
+      get "/account_recovery/:token" => :show, as: :account_recovery_with_token
     end
 
     # Attachments

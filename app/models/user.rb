@@ -50,7 +50,7 @@ class User < ApplicationRecord
     end
 
     def find_by_email(str)
-      find_by("LOWER(email) = ?", str.to_s.downcase)
+      find_by("LOWER(email) = ?", str.to_s.downcase.strip)
     end
   end
 
@@ -95,7 +95,8 @@ class User < ApplicationRecord
   end
 
   def update_session_token
-    return unless !session_token? || password_digest_changed?
+    return unless !session_token? || password_digest_changed? ||
+                  otp_enabled_changed?
 
     self.session_token = SecureRandom.hex(32)
   end

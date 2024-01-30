@@ -4,12 +4,12 @@ class AdminMailer < ApplicationMailer
   default from: proc { "\"Pages\" <no-reply@anyone.no>" }
   layout false
 
-  def password_reset(user, url)
+  def account_recovery(user, url)
     @user = user
     @url = url
     mail(
       to: @user.email,
-      subject: "Reset your password on #{PagesCore.config(:site_name)}"
+      subject: "Recover your account on #{PagesCore.config(:site_name)}"
     )
   end
 

@@ -50,11 +50,23 @@ class OtpSecret
     )
   end
 
-  def validate_otp!(otp)
-    return false unless valid_otp?(otp)
+  def validate_otp!(code)
+    return false unless valid_otp?(code)
 
     user.update(last_otp_at: Time.zone.now)
     true
+  end
+
+  def validate_otp_or_recovery_code!(code)
+    if code =~ /^[\d]{6}$/
+      validate_otp!(code)
+    else
+      validate_recovery_code!(code)
+    end
+  end
+
+  def validate_recovery_code!(code)
+    user.use_recovery_code!(code)
   end
 
   def verify(params)
