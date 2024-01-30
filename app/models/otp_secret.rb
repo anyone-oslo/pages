@@ -81,7 +81,7 @@ class OtpSecret
   end
 
   def totp
-    ROTP::TOTP.new(secret)
+    ROTP::TOTP.new(secret, issuer: PagesCore.config.site_name)
   end
 
   def valid_otp?(otp)
