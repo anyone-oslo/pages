@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include PagesCore::HasOtp
+  include PagesCore::AuthenticableUser
   include PagesCore::HasRoles
-
-  has_secure_password
 
   belongs_to(:creator,
              class_name: "User",
@@ -30,14 +28,6 @@ class User < ApplicationRecord
             format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i },
             uniqueness: { case_sensitive: false }
 
-  validates :password,
-            length: {
-              minimum: 8,
-              maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED,
-              allow_blank: true
-            }
-
-  before_save :update_session_token
   before_create :ensure_first_user_has_all_roles
 
   scope :by_name,     -> { order("name ASC") }
@@ -45,24 +35,9 @@ class User < ApplicationRecord
   scope :deactivated, -> { by_name.includes(:roles).where(activated: false) }
 
   class << self
-    def authenticate(email, password:)
-      User.find_by_email(email).try(:authenticate, password)
-    end
-
     def find_by_email(str)
       find_by("LOWER(email) = ?", str.to_s.downcase.strip)
     end
-  end
-
-  def authenticate!(password)
-    return false unless can_login? && valid_password?(password)
-
-    rehash_password!(password) if password_needs_rehash?
-    true
-  end
-
-  def can_login?
-    activated?
   end
 
   def mark_active!
@@ -92,12 +67,5 @@ class User < ApplicationRecord
     Role.roles.each do |r|
       roles.new(name: r.name) unless role?(r.name)
     end
-  end
-
-  def update_session_token
-    return unless !session_token? || password_digest_changed? ||
-                  otp_enabled_changed?
-
-    self.session_token = SecureRandom.hex(32)
   end
 end
