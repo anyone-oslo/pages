@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe User do
-  subject { build(:user) }
+  subject(:user) { build(:user) }
 
   it { is_expected.to belong_to(:creator).optional }
   it { is_expected.to have_many(:created_users) }
@@ -22,6 +22,34 @@ describe User do
 
   it { is_expected.to allow_value("long enough").for(:password) }
   it { is_expected.not_to allow_value("eep").for(:password) }
+
+  describe "email normalization" do
+    subject(:user) { build(:user, email: "  whitespace@example.com ") }
+
+    it { is_expected.to be_valid }
+    specify { expect(user.email).to eq("whitespace@example.com") }
+  end
+
+  describe ".find_by(email)" do
+    subject { described_class.find_by(email:) }
+
+    let!(:user) { create(:user, email: "test@example.com") }
+    let(:email) { "test@example.com" }
+
+    it { is_expected.to eq(user) }
+
+    context "when query includes whitespace" do
+      let(:email) { " test@example.com  " }
+
+      it { is_expected.to eq(user) }
+    end
+
+    context "when query is the wrong case" do
+      let(:email) { "Test@EXAMPLE.COM" }
+
+      it { is_expected.to eq(user) }
+    end
+  end
 
   describe "password validation" do
     subject { user.valid? }

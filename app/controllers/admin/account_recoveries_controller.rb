@@ -11,7 +11,7 @@ module Admin
     def new; end
 
     def create
-      @user = User.find_by_email(params[:email])
+      @user = User.find_by(email: params[:email])
       if @user
         deliver_account_recovery(@user)
         flash[:notice] = t("pages_core.account_recovery.sent")

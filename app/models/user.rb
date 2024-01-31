@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   include PagesCore::AuthenticableUser
+  include PagesCore::Emailable
   include PagesCore::HasRoles
 
   belongs_to(:creator,
@@ -23,22 +24,11 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :email,
-            presence: true,
-            format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i },
-            uniqueness: { case_sensitive: false }
-
   before_create :ensure_first_user_has_all_roles
 
   scope :by_name,     -> { order("name ASC") }
   scope :activated,   -> { by_name.includes(:roles).where(activated: true) }
   scope :deactivated, -> { by_name.includes(:roles).where(activated: false) }
-
-  class << self
-    def find_by_email(str)
-      find_by("LOWER(email) = ?", str.to_s.downcase.strip)
-    end
-  end
 
   def mark_active!
     return if last_login_at && last_login_at > 10.minutes.ago

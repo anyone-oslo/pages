@@ -22,7 +22,7 @@ module PagesCore
 
     module ClassMethods
       def authenticate(email, password:)
-        User.find_by_email(email).try(:authenticate, password)
+        User.find_by(email:).try(:authenticate, password)
       end
     end
 
