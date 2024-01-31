@@ -3,6 +3,7 @@
     <th>Name</th>
     <th>Email</th>
     <th>Can access</th>
+    <th>2FA</th>
     <th>Last seen</th>
     <th></th>
   </tr>
@@ -15,6 +16,7 @@
     <td>
       <%= invite.roles.map(&:to_s).sort.to_sentence %>
     </td>
+    <td></td>
     <td>
       <% if invite.sent_at? %>
         Invited
@@ -46,6 +48,7 @@
       <%= user.email %>
     </td>
     <td><%= user.roles.map(&:to_s).sort.to_sentence %></td>
+    <td><%= user.otp_enabled? ? "Enabled" : "" %></td>
     <td>
       <% if user.online? -%>
         <strong>Online now</strong>
