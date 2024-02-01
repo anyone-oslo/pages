@@ -26,13 +26,6 @@ module PagesCore
       end
     end
 
-    def authenticate!(password)
-      return false unless can_login? && valid_password?(password)
-
-      rehash_password!(password) if password_needs_rehash?
-      true
-    end
-
     def can_login?
       activated?
     end
