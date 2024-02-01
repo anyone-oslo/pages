@@ -47,7 +47,7 @@ module Admin
 
     def find_by_token
       @token = params[:token]
-      @user = User.find(message_verifier.verify(@token)[:id])
+      @user = User.find(message_verifier.verify(@token).symbolize_keys[:id])
       return if @user
 
       fail_recovery(t("pages_core.account_recovery.invalid_request"))

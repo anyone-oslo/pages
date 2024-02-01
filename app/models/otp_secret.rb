@@ -93,7 +93,7 @@ class OtpSecret
   end
 
   def verify_secret(signed)
-    payload = message_verifier.verify(signed)
+    payload = message_verifier.verify(signed).symbolize_keys
     raise "Wrong user" unless payload[:user_id] == user.id
 
     payload[:secret]
