@@ -20,8 +20,6 @@ class User < ApplicationRecord
   has_many :invites, dependent: :destroy
   belongs_to_image :image, foreign_key: :image_id, optional: true
 
-  serialize :persistent_data
-
   validates :name, presence: true
 
   before_create :ensure_first_user_has_all_roles

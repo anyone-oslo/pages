@@ -4,8 +4,6 @@
 # authorization and other common code for the Admin set of controllers.
 module PagesCore
   class AdminController < ::ApplicationController
-    include PagesCore::Admin::PersistentParams
-
     protect_from_forgery with: :exception
 
     before_action :set_i18n_locale

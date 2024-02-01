@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_31_140700) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_01_160700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -233,7 +233,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_31_140700) do
     t.datetime "last_login_at", precision: nil
     t.integer "created_by"
     t.datetime "created_at", precision: nil
-    t.text "persistent_data"
     t.boolean "activated", default: false, null: false
     t.integer "image_id"
     t.boolean "otp_enabled", default: false, null: false
