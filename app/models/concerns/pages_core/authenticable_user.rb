@@ -17,12 +17,17 @@ module PagesCore
         }
       )
 
-      before_save :update_session_token
+      after_initialize { |u| u.session_token ||= u.class.random_session_token }
+      before_validation :update_session_token
     end
 
     module ClassMethods
       def authenticate(email, password:)
         User.find_by(email:).try(:authenticate, password)
+      end
+
+      def random_session_token
+        SecureRandom.hex(32)
       end
     end
 
@@ -49,10 +54,10 @@ module PagesCore
     private
 
     def update_session_token
-      return unless !session_token? || password_digest_changed? ||
+      return unless password_digest_changed? ||
                     otp_enabled_changed?
 
-      self.session_token = SecureRandom.hex(32)
+      self.session_token = self.class.random_session_token
     end
   end
 end

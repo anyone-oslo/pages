@@ -78,4 +78,24 @@ describe User do
       it { is_expected.to be(false) }
     end
   end
+
+  describe "session_token" do
+    subject(:session_token) { user.session_token }
+
+    let(:user) { create(:user, :otp) }
+
+    it { is_expected.to be_present }
+
+    it "changes when password is changed" do
+      previous = user.session_token
+      user.update(password: "new password")
+      expect(session_token).not_to eq(previous)
+    end
+
+    it "changes when OTP status is changed" do
+      previous = user.session_token
+      user.update(otp_enabled: false)
+      expect(session_token).not_to eq(previous)
+    end
+  end
 end
