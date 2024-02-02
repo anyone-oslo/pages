@@ -95,3 +95,7 @@ Rails/HelperInstanceVariable:
 Rails/OutputSafety:
   Exclude:
     - "app/formatters/pages_core/html_formatter.rb"
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - "db/migrate/**/*"
