@@ -37,6 +37,8 @@ Rails.application.routes.draw do
   resource :sitemap, only: [:show]
 
   namespace :admin do
+    get "users/login" => redirect("/admin/login")
+
     # Invites
     resources :invites do
       member do
@@ -63,7 +65,6 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         get "deactivated"
-        get "login"
       end
       member do
         delete "delete_image"
