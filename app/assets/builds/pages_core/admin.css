@@ -8246,12 +8246,9 @@ a.delete:focus {
 }
 
 button a {
+  padding: 5px 0;
   color: #111 !important;
   color: var(--text-color) !important;
-}
-
-button a {
-  padding: 5px 0;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -9132,11 +9129,8 @@ td.drag-handle {
 }
 
 .page-list .page-listing {
-    padding: 3px 8px 2px 8px !important;
-  }
-
-.page-list .page-listing {
     border: 1px solid transparent;
+    padding: 3px 8px 2px 8px !important;
   }
 
 .page-list ul {
@@ -9328,9 +9322,6 @@ td.drag-handle {
 .file-list .ui-sortable-helper {
     border: 1px solid #ddd !important;
     border: 1px solid var(--border-color) !important;
-  }
-
-.file-list .ui-sortable-helper {
     background: rgba(250, 250, 250, 0.8);
   }
 
