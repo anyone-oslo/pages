@@ -30,15 +30,10 @@ module PagesCore
     end
 
     def labelled_country_select(
-      attr, label = nil, priority = {}, opts = {}, html_opts = {}
+      attr, label = nil, opts = {}, html_opts = {}
     )
-      if priority.is_a?(Hash)
-        return labelled_field(attr, label, priority) do |options|
-          country_select(attr, options, opts, html_opts)
-        end
-      end
       labelled_field(attr, label, opts) do |options|
-        country_select(attr, priority, options, html_opts)
+        country_select(attr, options, html_opts)
       end
     end
 

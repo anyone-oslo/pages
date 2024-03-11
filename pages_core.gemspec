@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "alba", "~> 1.3.0"
   s.add_dependency "bcrypt"
-  s.add_dependency "country_select"
+  s.add_dependency "country_select", ">= 9.0.0"
   s.add_dependency "dis", "~> 1.1.2"
   s.add_dependency "dynamic_image", ">= 2.0"
   s.add_dependency "lograge", "~> 0.11.2"

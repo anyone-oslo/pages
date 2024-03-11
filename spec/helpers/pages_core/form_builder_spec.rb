@@ -87,7 +87,7 @@ describe PagesCore::FormBuilder do
       allow(builder).to receive(:country_select)
       builder.labelled_country_select(:email)
       expect(builder).to have_received(:country_select)
-        .with(:email, {}, {}, {})
+        .with(:email, {}, {})
     end
   end
 
