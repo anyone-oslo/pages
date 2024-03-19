@@ -18,11 +18,11 @@ module PagesCore
           args.any? ? set(key, *args) : get(key)
         end
 
-        define_method "#{key}=" do |value|
+        define_method :"#{key}=" do |value|
           set(key, value)
         end
 
-        define_method "#{key}?" do
+        define_method :"#{key}?" do
           get(key) ? true : false
         end
       end

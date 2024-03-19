@@ -61,7 +61,7 @@ class Attachment < ApplicationRecord
   end
 
   def filename_extension?
-    filename =~ /\./
+    filename.include?(".")
   end
 
   # Includes a timestamp fingerprint in the URL param, so

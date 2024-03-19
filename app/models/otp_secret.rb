@@ -31,7 +31,7 @@ class OtpSecret
   end
 
   def generate_recovery_codes
-    10.times.map { SecureRandom.alphanumeric(16) }
+    Array.new(10) { SecureRandom.alphanumeric(16) }
   end
 
   def provisioning_uri
@@ -58,7 +58,7 @@ class OtpSecret
   end
 
   def validate_otp_or_recovery_code!(code)
-    if code =~ /^[\d]{6}$/
+    if /^[\d]{6}$/.match?(code)
       validate_otp!(code)
     else
       validate_recovery_code!(code)

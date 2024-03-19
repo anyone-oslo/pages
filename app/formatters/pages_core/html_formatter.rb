@@ -38,8 +38,7 @@ module PagesCore
     def find_attachments(str)
       str.match(attachment_expression)[1]
          .split(",")
-         .map { |id| find_attachment(id) }
-         .compact
+         .filter_map { |id| find_attachment(id) }
     end
 
     def find_file(id)
@@ -51,8 +50,7 @@ module PagesCore
     def find_files(str)
       str.match(file_expression)[1]
          .split(",")
-         .map { |id| find_file(id) }
-         .compact
+         .filter_map { |id| find_file(id) }
     end
 
     def fix_markup(str)

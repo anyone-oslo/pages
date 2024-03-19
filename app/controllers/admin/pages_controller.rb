@@ -120,7 +120,7 @@ module Admin
 
     def respond_with_page(page, &block)
       respond_to do |format|
-        format.html { block.call }
+        format.html(&block)
         format.json { render json: page_json(page) }
       end
     end

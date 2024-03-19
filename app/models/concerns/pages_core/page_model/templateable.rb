@@ -69,8 +69,9 @@ module PagesCore
       end
 
       def base_template
+        reject_words = %w[index list archive liste arkiv]
         template.split("_")
-                .reject { |w| %w[index list archive liste arkiv].include?(w) }
+                .reject { |w| reject_words.include?(w) }
                 .join(" ")
       end
 

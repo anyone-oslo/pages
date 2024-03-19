@@ -31,7 +31,7 @@ module PagesCore
 
     def page_redirect_url(locale, page)
       redirect = page.redirect_path(locale:)
-      return redirect if redirect =~ %r{^https?://}
+      return redirect if %r{^https?://}.match?(redirect)
 
       base_page_url + redirect
     end

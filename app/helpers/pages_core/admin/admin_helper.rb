@@ -18,12 +18,12 @@ module PagesCore
                                       value: content))
       end
 
-      def locale_links(&block)
+      def locale_links
         return unless PagesCore.config.localizations?
 
         safe_join(
           PagesCore.config.locales.map do |locale, name|
-            link_to(name, block.call(locale),
+            link_to(name, yield(locale),
                     class: ("current" if locale == params[:locale].to_sym))
           end
         )

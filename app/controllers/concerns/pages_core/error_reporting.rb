@@ -11,7 +11,7 @@ module PagesCore
     protected
 
     def configure_sentry_scope
-      return if Rails.env.test? || !Object.const_defined?("Sentry")
+      return if Rails.env.test? || !Object.const_defined?(:Sentry)
 
       Sentry.set_context("params", params.to_unsafe_h)
       Sentry.set_tags(locale: params[:locale] || I18n.default_locale.to_s)
