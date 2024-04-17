@@ -28,7 +28,8 @@ module PagesCore
     # * <tt>:ratio</tt>: Ratio to constrain image by.
     # * <tt>:size</tt>: Max size for image.
     def image_figure(image, opts = {})
-      class_name = ["image", image_class_name(image), opts[:class_name]].compact
+      class_name = ["image", image_class_name(image, ratio: opts[:ratio]),
+                    opts[:class_name]].compact
       image_tag = image_figure_image_tag(image,
                                          size: opts[:size],
                                          ratio: opts[:ratio])
@@ -47,7 +48,8 @@ module PagesCore
     # * <tt>:ratio</tt>: Ratio to constrain image by.
     # * <tt>:sizes</tt>: Sizes attribute for image tag, default: "100vw".
     def picture(image, opts = {})
-      class_name = ["image", image_class_name(image), opts[:class_name]].compact
+      class_name = ["image", image_class_name(image, ratio: opts[:ratio]),
+                    opts[:class_name]].compact
       pict = picture_tag(image, ratio: opts[:ratio], sizes: opts[:sizes])
       content = opts[:link] ? image_link_to(pict, opts[:link]) : pict
       tag.figure(content + image_caption(image, caption: opts[:caption]),
@@ -95,9 +97,11 @@ module PagesCore
       Vector2d.new(v.y * ratio, v.y).fit(v)
     end
 
-    def image_class_name(image)
-      return "square" if image.size.x == image.size.y
-      return "landscape" if image.size.x > image.size.y
+    def image_class_name(image, ratio: nil)
+      size = ratio ? fit_ratio(image.size, ratio) : image.size
+
+      return "square" if size.x == size.y
+      return "landscape" if size.x > size.y
 
       "portrait"
     end
@@ -120,9 +124,7 @@ module PagesCore
     end
 
     def image_widths(image)
-      [233, 350, 700, 1050, 1400, 2100, 2800].select do |w|
-        image.size.x >= w
-      end
+      [233, 350, 700, 1050, 1400, 2100, 2800].select { |w| image.size.x >= w }
     end
 
     def srcset(image, ratio: nil, format: nil)
