@@ -3,6 +3,7 @@ coverage/
 .bundle
 dependency-graph.svg
 node_modules/
+dist/*
 pkg/*
 doc/*
 tmp/*

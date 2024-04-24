@@ -1,2 +1,3 @@
 js: yarn build --watch
+tsc: yarn tsc --watch
 css: yarn build:css --watch
