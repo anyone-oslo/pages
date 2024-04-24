@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
 
 interface Position {
   x: number;
   y: number;
 }
 
-interface FocalPointProps {
+interface Props {
   x: number;
   y: number;
   onChange: (pos: Position) => void;
@@ -23,7 +23,7 @@ function clamp(val: number, min: number, max: number): number {
   }
 }
 
-export default function FocalPoint(props: FocalPointProps) {
+export default function FocalPoint(props: Props) {
   const { width, height, onChange } = props;
 
   const [dragging, setDragging] = useState(false);
@@ -35,7 +35,7 @@ export default function FocalPoint(props: FocalPointProps) {
   const containerRef = useRef<HTMLDivElement>();
   const pointRef = useRef<HTMLDivElement>();
 
-  const dragStart = (evt: Event) => {
+  const dragStart = (evt: MouseEvent | TouchEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
     if (evt.target == pointRef.current) {
@@ -50,7 +50,7 @@ export default function FocalPoint(props: FocalPointProps) {
     }
   };
 
-  const drag = (evt: TouchEvent | MouseEvent) => {
+  const drag = (evt: MouseEvent | TouchEvent) => {
     if (dragging) {
       let x: number, y: number;
       const containerSize = containerRef.current.getBoundingClientRect();
@@ -59,7 +59,7 @@ export default function FocalPoint(props: FocalPointProps) {
       if ("touches" in evt && evt.type == "touchmove") {
         x = evt.touches[0].clientX - (containerSize.x || containerSize.left);
         y = evt.touches[0].clientY - (containerSize.y || containerSize.top);
-      } else {
+      } else if ("clientX" in evt) {
         x = evt.clientX - (containerSize.x || containerSize.left);
         y = evt.clientY - (containerSize.y || containerSize.top);
       }

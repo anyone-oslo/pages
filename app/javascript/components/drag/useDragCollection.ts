@@ -1,25 +1,19 @@
 import { createRef, useEffect, useReducer, useRef } from "react";
 import { uniqueId } from "lodash";
 
-import {
-  Draggable,
-  DraggableRecord,
-  DragCollectionAction,
-  DragCollection
-} from "./types";
-
-type Draggables = Draggable[];
-
-function getPosition(draggable: Draggable) {
-  if (draggable && draggable.ref && draggable.ref.current) {
+function getPosition<T>(draggable: Drag.Draggable<T>) {
+  if (draggable && "ref" in draggable && draggable.ref.current) {
     return draggable.ref.current.getBoundingClientRect();
   } else {
     return null;
   }
 }
 
-function hideDraggable(draggable: Draggable | null, callback: () => void) {
-  if (draggable && draggable.ref && draggable.ref.current) {
+function hideDraggable<T>(
+  draggable: Drag.Draggable<T> | null,
+  callback: () => Drag.Draggable<T>[]
+) {
+  if (draggable && "ref" in draggable && draggable.ref.current) {
     const prevDisplay = draggable.ref.current.style.display;
     draggable.ref.current.style.display = "none";
     const result = callback();
@@ -30,7 +24,10 @@ function hideDraggable(draggable: Draggable | null, callback: () => void) {
   }
 }
 
-function insertFiles(state: Draggable[], files: Draggable[]): Draggable[] {
+function insertFiles<T>(
+  state: Drag.Item<T>[],
+  files: Drag.Item<T>[]
+): Drag.Item<T>[] {
   const index = state.indexOf("Files");
   if (index === -1 || !files) {
     return state;
@@ -39,39 +36,46 @@ function insertFiles(state: Draggable[], files: Draggable[]): Draggable[] {
   }
 }
 
-function dragCollectionReducer(
-  state: Draggable[],
-  action: DragCollectionAction
-): Draggable[] {
+function dragCollectionReducer<T = Drag.DraggableRecord>(
+  state: Drag.Item<T>[],
+  action: Drag.CollectionAction<T>
+): Drag.Item<T>[] {
   switch (action.type) {
     case "append":
-      return [...state, ...(action.payload as Draggable[])];
+      return [...state, ...(action.payload as Drag.Item<T>[])];
     case "prepend":
-      return [...(action.payload as Draggable[]), ...state];
+      return [...(action.payload as Drag.Item<T>[]), ...state];
     case "insertFiles":
-      return insertFiles(state, action.payload);
+      return insertFiles(state, action.payload as Drag.Item<T>[]);
     case "update":
-      return state.map((d) => {
-        return d.handle === action.payload.handle ? action.payload : d;
+      return state.map((d: Drag.Draggable<T>) => {
+        return d.handle === (action.payload as Drag.Draggable<T>).handle
+          ? (action.payload as Drag.Item<T>)
+          : d;
       });
     case "updatePositions":
-      return hideDraggable(action.payload, () => {
-        return state.map((d) => {
+      return hideDraggable(action.payload as Drag.Draggable<T>, () => {
+        return state.map((d: Drag.Draggable<T>) => {
           return { ...d, rect: getPosition(d) };
         });
       });
     case "remove":
-      return state.filter((d) => d.handle !== action.payload.handle);
+      return state.filter(
+        (d: Drag.Draggable<T>) =>
+          d.handle !== (action.payload as Drag.Draggable<T>).handle
+      );
     case "replace":
-      return action.payload;
+      return action.payload as Drag.Item<T>[];
     case "reorder":
-      return action.payload;
+      return action.payload as Drag.Item<T>[];
     default:
       return state;
   }
 }
 
-export function createDraggable(record: Record<string, unknown>): Draggable {
+export function createDraggable<T = Drag.DraggableRecord>(
+  record: T
+): Drag.Item<T> {
   return {
     record: record,
     rect: null,
@@ -80,13 +84,13 @@ export function createDraggable(record: Record<string, unknown>): Draggable {
   };
 }
 
-export default function useDragCollection(
-  records: DraggableRecord[]
-): DragCollection {
-  const containerRef = useRef<HTMLElement>(null);
-  const [draggables, dispatch] = useReducer(dragCollectionReducer, [], () =>
+export default function useDragCollection<T = Drag.DraggableRecord>(
+  records: Array<T>
+): Drag.Collection<T> {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [draggables, dispatch] = useReducer(dragCollectionReducer<T>, [], () =>
     records.map((r) => createDraggable(r))
-  ) as [Draggables, (Draggables) => Draggable[]];
+  );
 
   useEffect(() => {
     dispatch({ type: "updatePositions" });

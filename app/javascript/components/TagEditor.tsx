@@ -3,17 +3,17 @@ import React, { useState } from "react";
 import AddTagForm from "./TagEditor/AddTagForm";
 import Tag from "./TagEditor/Tag";
 
-interface TagEditorProps {
+interface Props {
   name: string;
   enabled: string[];
   tags: string[];
 }
 
-function onlyUnique(value: string, index: number, self: string[]): number {
+function onlyUnique(value: string, index: number, self: string[]) {
   return self.indexOf(value) === index;
 }
 
-export default function TagEditor(props: TagEditorProps) {
+export default function TagEditor(props: Props) {
   const [tags, setTags] = useState(props.tags);
   const [enabled, setEnabled] = useState(props.enabled);
 

@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, MouseEvent, useRef } from "react";
 
-interface FileUploadButtonProps {
+interface Props {
   callback: (files: File[]) => void;
   type: string;
-  multiple: boolean;
   multiline: boolean;
+  multiple?: boolean;
 }
 
-export default function FileUploadButton(props: FileUploadButtonProps) {
+export default function FileUploadButton(props: Props) {
   const inputRef = useRef<HTMLInputElement>();
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ export default function FileUploadButton(props: FileUploadButtonProps) {
     }
   };
 
-  const triggerDialog = (evt: Event) => {
+  const triggerDialog = (evt: MouseEvent) => {
     evt.preventDefault();
     inputRef.current.click();
   };

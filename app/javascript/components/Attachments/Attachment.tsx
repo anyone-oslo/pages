@@ -1,32 +1,34 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
-import { AttachmentResource, Locale } from "../../types";
 
-import { useDraggable, Draggable } from "../drag";
+import { useDraggable } from "../drag";
 
-interface Record {
-  id: number | null;
+interface AttachmentRecord {
+  id?: number;
   attachment: AttachmentResource;
   uploading: boolean;
 }
 
-interface AttachmentProps {
+interface Props {
   attributeName: string;
   placeholder: boolean;
-  draggable: { record: Record };
+  draggable: Drag.Draggable<AttachmentRecord>;
   locale: string;
   locales: { [index: string]: Locale };
   deleteRecord: () => void;
   showEmbed: boolean;
   position: number;
   onUpdate: (localizations: Record<string, Record<string, string>>) => void;
-  startDrag: (evt: Event, draggable: Draggable) => void;
+  startDrag: (
+    evt: MouseEvent,
+    draggable: Drag.Draggable<AttachmentRecord>
+  ) => void;
 }
 
-export default function Attachment(props: AttachmentProps) {
+export default function Attachment(props: Props) {
   const { attributeName, draggable, locales, locale } = props;
   const { record } = draggable;
   const { attachment, uploading } = record;
@@ -34,15 +36,15 @@ export default function Attachment(props: AttachmentProps) {
   const openModal = useModalStore((state) => state.open);
   const notice = useToastStore((state) => state.notice);
 
-  const listeners = useDraggable(draggable, props.startDrag);
+  const listeners = useDraggable<AttachmentRecord>(draggable, props.startDrag);
 
-  const copyEmbed = (evt: Event) => {
+  const copyEmbed = (evt: MouseEvent) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
     notice("Embed code copied to clipboard");
   };
 
-  const deleteRecord = (evt: Event) => {
+  const deleteRecord = (evt: MouseEvent) => {
     evt.preventDefault();
     if (props.deleteRecord) {
       props.deleteRecord();
@@ -63,7 +65,7 @@ export default function Attachment(props: AttachmentProps) {
     return null;
   };
 
-  const editAttachment = (evt: Event) => {
+  const editAttachment = (evt: MouseEvent) => {
     evt.preventDefault();
     openModal(
       <AttachmentEditor

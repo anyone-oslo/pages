@@ -1,13 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { Draggable } from "./types";
+import React, { DragEvent, useEffect, useRef } from "react";
 
-export default function useDraggable(
-  draggable: Draggable,
-  startDrag: (evt: React.MouseEvent, draggable: Draggable) => void
+export default function useDraggable<T = Drag.DraggableRecord>(
+  draggable: Drag.Draggable<T>,
+  startDrag: (evt: React.MouseEvent, draggable: Drag.Draggable<T>) => void
 ) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const handleDrag = (evt: Event) => {
+  const handleDrag = (evt: DragEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
     startDrag(evt, draggable);

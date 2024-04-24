@@ -3,22 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "./ImageCropper/Image";
 import Toolbar from "./ImageCropper/Toolbar";
 
-import {
-  CropAction,
-  CropSize,
-  CropState,
-  Position
-} from "./ImageCropper/useCrop";
-
 export { default as useCrop, cropParams } from "./ImageCropper/useCrop";
 
-interface ImageCropperProps {
+interface Props {
   croppedImage: string;
-  cropState: CropState;
-  dispatch: (action: CropAction) => void;
+  cropState: Crop.State;
+  dispatch: (action: Crop.Action) => void;
 }
 
-function focalPoint(state: CropState): Position {
+function focalPoint(state: Crop.State): Crop.Position {
   if (state.crop_gravity_x === null || state.crop_gravity_y === null) {
     return null;
   } else {
@@ -29,9 +22,9 @@ function focalPoint(state: CropState): Position {
   }
 }
 
-export default function ImageCropper(props: ImageCropperProps) {
+export default function ImageCropper(props: Props) {
   const containerRef = useRef<HTMLDivElement>();
-  const [containerSize, setContainerSize] = useState();
+  const [containerSize, setContainerSize] = useState<Crop.Size>();
 
   const handleResize = () => {
     const elem = containerRef.current;
@@ -56,11 +49,11 @@ export default function ImageCropper(props: ImageCropperProps) {
     props.dispatch({ type: "setAspect", payload: aspect });
   };
 
-  const setCrop = (crop: CropSize) => {
+  const setCrop = (crop: Crop.CropSize) => {
     props.dispatch({ type: "setCrop", payload: crop });
   };
 
-  const setFocal = (focal: Position) => {
+  const setFocal = (focal: Crop.Position) => {
     props.dispatch({ type: "setFocal", payload: focal });
   };
 

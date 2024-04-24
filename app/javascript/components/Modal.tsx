@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { MouseEvent, useEffect } from "react";
 
 import useModalStore from "../stores/useModalStore";
 
@@ -6,7 +6,7 @@ export default function Modal() {
   const component = useModalStore((state) => state.component);
   const close = useModalStore((state) => state.close);
 
-  const handleClose = (evt: Event) => {
+  const handleClose = (evt: KeyboardEvent | MouseEvent) => {
     evt.stopPropagation();
     evt.preventDefault();
     close();

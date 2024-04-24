@@ -1,28 +1,27 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, MouseEvent } from "react";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
-import { Locale, ImageResource } from "../../types";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 
-interface FormProps {
+interface Props {
   alternative: Record<string, string>;
   caption: Record<string, string>;
   image: ImageResource;
   locale: string;
   locales: Record<string, Locale>;
   setLocale: (locale: string) => void;
-  save: (evt: Event) => void;
+  save: (evt: MouseEvent) => void;
   showCaption: boolean;
   updateLocalization: (name: "alternative" | "caption", value: string) => void;
 }
 
-export default function Form(props: FormProps) {
+export default function Form(props: Props) {
   const { alternative, caption, image, locale, locales } = props;
 
   const closeModal = useModalStore((state) => state.close);
   const notice = useToastStore((state) => state.notice);
 
-  const copyEmbedCode = (evt: Event) => {
+  const copyEmbedCode = (evt: MouseEvent) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     notice("Embed code copied to clipboard");

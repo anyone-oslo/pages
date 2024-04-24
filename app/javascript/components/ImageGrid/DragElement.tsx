@@ -1,20 +1,23 @@
 import React, { RefObject } from "react";
 
-import { ImageResource } from "../../types";
-import { DragState } from "../drag";
-
-interface DragElementProps {
-  container: RefObject<HTMLDivElement>;
-  draggable: string | { record: { image: ImageResource; src?: string } };
-  dragState: DragState;
+interface Record {
+  image: ImageResource;
+  src?: string;
 }
 
-export default function DragElement(props: DragElementProps) {
+interface Props {
+  container: RefObject<HTMLDivElement>;
+  draggable: string | Drag.Draggable<Record>;
+  dragState: Drag.State;
+}
+
+export default function DragElement(props: Props) {
   const { draggable, dragState, container } = props;
 
   if (draggable === "Files") {
     return "";
-  } else {
+  } else if (typeof draggable !== "string") {
+    const record = draggable.record;
     const containerSize = container.current.getBoundingClientRect();
     const x = dragState.x - (containerSize.x || containerSize.left);
     const y = dragState.y - (containerSize.y || containerSize.top);
@@ -23,11 +26,7 @@ export default function DragElement(props: DragElementProps) {
     };
     return (
       <div className="drag-image" style={translateStyle}>
-        {"record" in draggable && draggable.record.image && (
-          <img
-            src={draggable.record.src || draggable.record.image.thumbnail_url}
-          />
-        )}
+        {record.image && <img src={record.src || record.image.thumbnail_url} />}
       </div>
     );
   }

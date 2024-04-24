@@ -1,5 +1,4 @@
 import React from "react";
-import { ImageResource, Locale } from "../types";
 import ImageGrid from "./ImageGrid";
 
 interface PageImage {
@@ -7,13 +6,13 @@ interface PageImage {
   image: ImageResource;
 }
 
-interface PageImagesProps {
+interface Props {
   locale: string;
   locales: { [index: string]: Locale };
   records: PageImage[];
 }
 
-export default function PageImages(props: PageImagesProps) {
+export default function PageImages(props: Props) {
   return (
     <div className="page-images">
       <ImageGrid

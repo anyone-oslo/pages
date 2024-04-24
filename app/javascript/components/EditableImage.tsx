@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import ImageEditor from "./ImageEditor";
 import useModalStore from "../stores/useModalStore";
 
-import { Locale, ImageResource } from "../types";
-
-interface EditableImageProps {
+interface Props {
   image: ImageResource;
   src: string;
   caption: boolean;
@@ -14,7 +12,7 @@ interface EditableImageProps {
   onUpdate?: (newImage: ImageResource, src: string) => void;
 }
 
-export default function EditableImage(props: EditableImageProps) {
+export default function EditableImage(props: Props) {
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
 
@@ -35,7 +33,7 @@ export default function EditableImage(props: EditableImageProps) {
     }
   };
 
-  const handleClick = (evt: Event) => {
+  const handleClick = (evt: MouseEvent) => {
     evt.preventDefault();
     openModal(
       <ImageEditor

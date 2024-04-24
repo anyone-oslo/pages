@@ -1,16 +1,17 @@
-export interface Locale {
+interface Locale {
   name: string;
   dir: "ltr" | "rtl";
 }
 
-export interface AttachmentResource {
+interface AttachmentResource {
   id: number | null;
   name: Record<string, string>;
   description: Record<string, string>;
   url: string;
+  filename: string;
 }
 
-export interface ImageResource {
+interface ImageResource {
   id: number | null;
   alternative: Record<string, string>;
   caption: Record<string, string>;

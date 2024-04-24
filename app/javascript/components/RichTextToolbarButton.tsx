@@ -1,14 +1,12 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 
-interface RichTextToolbarButtonProps {
+interface Props {
   className: string;
   name: string;
-  onClick: (evt: Event) => void;
+  onClick: (evt: MouseEvent) => void;
 }
 
-export default function RichTextToolbarButton(
-  props: RichTextToolbarButtonProps
-) {
+export default function RichTextToolbarButton(props: Props) {
   return (
     <a
       title={props.name}

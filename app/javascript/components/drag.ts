@@ -1,4 +1,3 @@
-export { Draggable, DragState } from "./drag/types";
 export {
   default as useDragCollection,
   createDraggable

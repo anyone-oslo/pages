@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { DragEvent, MouseEvent, useState } from "react";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
 import useToastStore from "../stores/useToastStore";
-import { ImageResource, Locale } from "../types";
 import { post } from "../lib/request";
 
 type ImageResponse = ImageResource | { status: "error"; error: string };
 
-interface ImageUploaderProps {
+interface Props {
   locale: string;
   locales: { [index: string]: Locale };
   image: ImageResource;
@@ -34,14 +33,14 @@ function getFiles(dt: DataTransfer): File[] {
   return files;
 }
 
-export default function ImageUploader(props: ImageUploaderProps) {
+export default function ImageUploader(props: Props) {
   const [uploading, setUploading] = useState(false);
   const [dragover, setDragover] = useState(false);
   const [image, setImage] = useState(props.image);
   const [src, setSrc] = useState(props.src);
   const error = useToastStore((state) => state.error);
 
-  const handleDragOver = (evt: Event) => {
+  const handleDragOver = (evt: DragEvent) => {
     evt.preventDefault();
     setDragover(true);
   };
@@ -50,7 +49,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     setDragover(false);
   };
 
-  const handleDragEnd = (evt: Event) => {
+  const handleDragEnd = (evt: DragEvent) => {
     if ("dataTransfer" in evt) {
       if ("items" in evt.dataTransfer && "remove" in evt.dataTransfer.items) {
         for (let i = 0; i < evt.dataTransfer.items.length; i++) {
@@ -63,7 +62,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     setDragover(false);
   };
 
-  const handleDrop = (evt: Event) => {
+  const handleDrop = (evt: DragEvent) => {
     let files: File[] = [];
     if ("dataTransfer" in evt) {
       files = getFiles(evt.dataTransfer);
@@ -74,7 +73,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
     }
   };
 
-  const handleRemove = (evt: Event) => {
+  const handleRemove = (evt: MouseEvent) => {
     evt.preventDefault();
     setImage(null);
     setSrc(null);

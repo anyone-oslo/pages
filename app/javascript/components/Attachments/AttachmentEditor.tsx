@@ -1,8 +1,7 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, MouseEvent, useState } from "react";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
-import { AttachmentResource, Locale } from "../../types";
 import { putJson } from "../../lib/request";
 
 interface AttachmentEditorProps {
@@ -25,20 +24,21 @@ export default function AttachmentEditor(props: AttachmentEditorProps) {
   const closeModal = useModalStore((state) => state.close);
 
   const updateLocalization =
-    (name: "name" | "description") => (evt: ChangeEvent<HTMLInputElement>) => {
+    (name: "name" | "description") =>
+    (evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
       setLocalizations({
         ...localizations,
         [name]: { ...localizations[name], [locale]: evt.target.value }
       });
     };
 
-  const copyEmbedCode = (evt: Event) => {
+  const copyEmbedCode = (evt: MouseEvent) => {
     evt.preventDefault();
     copyToClipboard(`[attachment:${attachment.id}]`);
     notice("Embed code copied to clipboard");
   };
 
-  const save = (evt: Event) => {
+  const save = (evt: MouseEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
 

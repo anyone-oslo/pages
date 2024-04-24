@@ -1,11 +1,12 @@
-import { Draggable, DragCollection, DragState } from "./types";
-
 function hovering(
-  dragState: DragState,
-  target: Draggable | React.MutableRefObject<HTMLDivElement>
-): boolean {
+  dragState: Drag.State,
+  target: Drag.Item | React.MutableRefObject<HTMLDivElement>
+) {
   const { x, y } = dragState;
   let rect: DOMRect;
+  if (typeof target === "string") {
+    return false;
+  }
   if ("rect" in target) {
     rect = target.rect;
   } else if ("current" in target && target.current) {
@@ -17,9 +18,9 @@ function hovering(
 }
 
 export function collectionOrder(
-  collection: DragCollection,
-  dragState: DragState
-): Draggable[] {
+  collection: Drag.Collection,
+  dragState: Drag.State
+) {
   const { draggables, ref } = collection;
   const { dragging } = dragState;
 
@@ -27,7 +28,12 @@ export function collectionOrder(
     return draggables;
   }
 
-  let ordered = draggables.filter((d) => d.handle !== dragging.handle);
+  let ordered = draggables;
+  if (typeof dragging !== "string") {
+    ordered = draggables
+      .filter((d) => typeof d !== "string")
+      .filter((d: Drag.Draggable) => d.handle !== dragging.handle);
+  }
   if (hovering(dragState, ref)) {
     const hovered = ordered.filter((d) => hovering(dragState, d))[0];
     if (hovered) {
@@ -42,9 +48,9 @@ export function collectionOrder(
 }
 
 export default function draggedOrder(
-  collection: DragCollection,
-  dragState: DragState
-): Draggable[] {
+  collection: Drag.Collection,
+  dragState: Drag.State
+) {
   let ordered = collectionOrder(collection, dragState);
 
   if (dragState.dragging && ordered.indexOf(dragState.dragging) === -1) {

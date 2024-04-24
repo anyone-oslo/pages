@@ -1,5 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 
+interface WindowState {
+  tabId: string;
+}
+
 export default class MainController extends Controller {
   declare readonly linkTargets: HTMLLinkElement[];
   declare readonly tabTargets: HTMLDivElement[];
@@ -31,16 +35,18 @@ export default class MainController extends Controller {
     window.removeEventListener("popstate", this.stateHandler);
   }
 
-  stateHandler = (evt: Event) => {
-    if ("state" in evt && "tabId" in evt.state) {
-      this.showTab(evt.state.tabId);
+  stateHandler = (evt: PopStateEvent) => {
+    if (evt.state && "tabId" in evt.state) {
+      const { tabId } = evt.state as WindowState;
+      this.showTab(tabId);
     }
   };
 
   changeTab(evt: Event) {
     evt.preventDefault();
-    if ("dataset" in evt.target && "tab" in evt.target.dataset) {
-      const tab = evt.target.dataset.tab as string;
+    const link = evt.target as HTMLAnchorElement;
+    if ("tab" in link.dataset) {
+      const tab = link.dataset.tab;
       this.showTab(tab);
       history.pushState(
         { tabId: tab },

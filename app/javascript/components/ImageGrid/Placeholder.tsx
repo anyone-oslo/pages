@@ -1,10 +1,10 @@
 import React from "react";
 
-interface PlaceholderProps {
+interface Props {
   src: string;
 }
 
-export default function Placeholder(props: PlaceholderProps) {
+export default function Placeholder(props: Props) {
   if (props.src) {
     return (
       <div className="temp-image">

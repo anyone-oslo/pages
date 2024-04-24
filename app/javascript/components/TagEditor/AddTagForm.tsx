@@ -1,21 +1,26 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
 
-interface AddTagFormProps {
+interface Props {
   addTag: (string) => void;
 }
 
-export default function AddTagForm(props: AddTagFormProps) {
+export default function AddTagForm(props: Props) {
   const [tag, setTag] = useState("");
 
-  const submit = (evt: Event) => {
-    evt.preventDefault();
+  const submit = () => {
     props.addTag(tag);
     setTag("");
   };
 
-  const handleKeyDown = (evt: Event) => {
+  const handleSubmit = (evt: MouseEvent) => {
+    evt.preventDefault();
+    submit();
+  };
+
+  const handleKeyDown = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.which === 13) {
-      submit(evt);
+      evt.preventDefault();
+      submit();
     }
   };
 
@@ -34,7 +39,7 @@ export default function AddTagForm(props: AddTagFormProps) {
         onChange={handleChange}
         placeholder="Add tag..."
       />
-      <button onClick={submit} disabled={!tag}>
+      <button onClick={handleSubmit} disabled={!tag}>
         Add
       </button>
     </div>

@@ -1,28 +1,23 @@
 import React, { Component } from "react";
-import Tree, { TreeId, TreeIndex } from "../lib/Tree";
+import Tree from "../lib/Tree";
 import { postJson, putJson } from "../lib/request";
-import { Attributes, PageNode } from "./PageTree/types";
 import Draggable from "./PageTree/Draggable";
-
-interface Page extends Record<string, unknown> {
-  parent_page_id: number | null;
-}
 
 type CollapsedState = Record<number, boolean>;
 
 interface ParentMap {
-  [index: number]: Page[];
+  [index: number]: Page.Node[];
 }
 
-interface PageTreeProps {
+interface Props {
   dir: string;
   locale: string;
-  pages: Page[];
+  pages: Page.Node[];
   permissions: string[];
 }
 
-interface PageTreeState {
-  tree: Tree<PageNode>;
+interface State {
+  tree: Tree<Page.Node>;
 }
 
 function collapsedState(): CollapsedState {
@@ -38,15 +33,15 @@ function collapsedState(): CollapsedState {
   return {};
 }
 
-export default class PageTree extends Component<PageTreeProps, PageTreeState> {
-  constructor(props: PageTreeProps) {
+export default class PageTree extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = { tree: this.buildTree(props.pages) };
   }
 
-  applyCollapsed(tree: Tree<PageNode>) {
-    const depth = (t: Tree, index: TreeIndex) => {
+  applyCollapsed(tree: Tree<Page.Node>) {
+    const depth = (t: Tree, index: Tree.Index) => {
       let depth = 0;
       let pointer = t.getIndex(index.parent);
       while (pointer) {
@@ -56,7 +51,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       return depth;
     };
 
-    const walk = (id: TreeId) => {
+    const walk = (id: Tree.Id) => {
       const index = tree.getIndex(id);
       const node = index.node;
       if (node.id && node.id in collapsedState()) {
@@ -73,30 +68,34 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
     walk(1);
   }
 
-  createPage(index: TreeIndex<PageNode>, attributes: Attributes) {
+  createPage(index: Tree.Index<Page.Node>, attributes: Page.Attributes) {
     void postJson(`/admin/${index.node.locale}/pages.json`, {
       page: attributes
-    }).then((response: Attributes) => this.updateNode(index, response));
+    }).then((response: Page.Attributes) => this.updateNode(index, response));
   }
 
-  buildTree(pages: Page[]) {
+  buildTree(pages: Page.Node[]) {
     // Build tree
-    const parentMap: ParentMap = pages.reduce((m: ParentMap, page: Page) => {
-      const id = page.parent_page_id || 0;
-      m[id] = [...(m[id] || []), page];
-      return m;
-    }, {});
+    const parentMap: ParentMap = pages.reduce(
+      (m: ParentMap, page: Page.Node) => {
+        const id = page.parent_page_id || 0;
+        m[id] = [...(m[id] || []), page];
+        return m;
+      },
+      {}
+    );
 
-    pages.forEach((p: Page) => {
+    pages.forEach((p: Page.Node) => {
       p.children = parentMap[p.id] || [];
     });
 
-    const tree = new Tree({
+    const tree = new Tree<Page.Node>({
       name: "All Pages",
       locale: this.props.locale,
       permissions: this.props.permissions,
       root: true,
-      children: parentMap[0]
+      children: parentMap[0],
+      collapsed: false
     });
     this.applyCollapsed(tree);
     tree.updateNodesPosition();
@@ -104,8 +103,8 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
   }
 
   movePage(
-    index: TreeIndex<PageNode>,
-    parent: TreeIndex<PageNode>,
+    index: Tree.Index<Page.Node>,
+    parent: Tree.Index<Page.Node>,
     position: number
   ) {
     const data = {
@@ -116,14 +115,18 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
     this.performUpdate(index, url, data);
   }
 
-  performUpdate(index: TreeIndex, url: string, data: Attributes) {
-    void putJson(url, data).then((response: Page) =>
+  performUpdate(
+    index: Tree.Index<Page.Node>,
+    url: string,
+    data: Record<string, unknown>
+  ) {
+    void putJson(url, data).then((response: Page.Attributes) =>
       this.updateNode(index, response)
     );
   }
 
   render() {
-    const addChild = (id: TreeId, attributes: Attributes) => {
+    const addChild = (id: Tree.Id, attributes: Page.Node) => {
       const tree = this.state.tree;
       const index = tree.append(attributes, id);
       this.reorderChildren(id);
@@ -132,7 +135,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       this.setState({ tree: tree });
     };
 
-    const movedPage = (id: TreeId) => {
+    const movedPage = (id: Tree.Id) => {
       const tree = this.state.tree;
       const index = tree.getIndex(id);
       this.reorderChildren(index.parent);
@@ -144,14 +147,14 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       this.setState({ tree: tree });
     };
 
-    const toggleCollapsed = (id: TreeId) => {
+    const toggleCollapsed = (id: Tree.Id) => {
       const tree = this.state.tree;
       const node = tree.getIndex(id).node;
       this.setCollapsed(id, !node.collapsed);
       this.setState({ tree: tree });
     };
 
-    const updatePage = (id: TreeId, attributes: Attributes) => {
+    const updatePage = (id: Tree.Id, attributes: Page.Attributes) => {
       const tree = this.state.tree;
       const index = tree.getIndex(id);
       const url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
@@ -159,7 +162,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       this.performUpdate(index, url, { page: attributes });
     };
 
-    const updateTree = (tree: Tree) => {
+    const updateTree = (tree: Tree<Page.Node>) => {
       this.setState({ tree: tree });
     };
 
@@ -177,7 +180,7 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
     );
   }
 
-  reorderChildren(id: TreeId) {
+  reorderChildren(id: Tree.Id) {
     const tree = this.state.tree;
     const index = this.state.tree.getIndex(id);
     const node = index.node;
@@ -188,7 +191,10 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
       const aNode = tree.getIndex(a).node;
       const bNode = tree.getIndex(b).node;
       if (aNode.pinned == bNode.pinned) {
-        return new Date(bNode.published_at) - new Date(aNode.published_at);
+        return (
+          new Date(bNode.published_at).getTime() -
+          new Date(aNode.published_at).getTime()
+        );
       } else {
         return aNode.pinned ? -1 : 1;
       }
@@ -196,26 +202,22 @@ export default class PageTree extends Component<PageTreeProps, PageTreeState> {
     tree.updateNodesPosition();
   }
 
-  setCollapsed(id: TreeId, value: boolean) {
+  setCollapsed(id: Tree.Id, value: boolean) {
     const node = this.state.tree.getIndex(id).node;
     node.collapsed = value;
     this.storeCollapsed(id, node.collapsed);
     this.state.tree.updateNodesPosition();
   }
 
-  storeCollapsed(id: TreeId, newState: boolean) {
+  storeCollapsed(id: Tree.Id, newState: boolean) {
     const node = this.state.tree.getIndex(id).node;
     const store = collapsedState();
     store[node.id] = newState;
     window.localStorage.collapsedPages = JSON.stringify(store);
   }
 
-  updateNode(index: TreeIndex, attributes: Attributes) {
-    for (const attr in attributes) {
-      if (Object.prototype.hasOwnProperty.call(attributes, attr)) {
-        index.node[attr] = attributes[attr];
-      }
-    }
+  updateNode(index: Tree.Index<Page.Node>, attributes: Page.Attributes) {
+    index.node = { ...index.node, ...attributes };
     this.setState({ tree: this.state.tree });
   }
 }

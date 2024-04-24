@@ -6,7 +6,7 @@ import readyHandler from "../lib/readyHandler";
 class RichText {
   apply() {
     const elems = document.querySelectorAll("textarea.rich");
-    elems.forEach((elem) => {
+    elems.forEach((elem: HTMLTextAreaElement) => {
       this.enhance(elem);
     });
   }
@@ -20,8 +20,7 @@ class RichText {
         name={elem.name}
         rows={elem.rows}
         id={elem.id}
-      />,
-      container
+      />
     );
     elem.parentNode.removeChild(elem);
   }

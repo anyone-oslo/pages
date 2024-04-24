@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 import useToastStore from "../stores/useToastStore";
 
-interface ToastProps {
+interface Props {
   error: string;
   notice: string;
 }
 
-export default function Toast(props: ToastProps) {
+export default function Toast(props: Props) {
   const [fadeout, setFadeout] = useState(false);
   const { toasts, error, notice, next } = useToastStore((state) => state);
   const timerRef = useRef<number | null>(null);

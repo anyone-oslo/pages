@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { Draggable, DragCollection, DragState, Position } from "./types";
-
-function containsFiles(evt: Event) {
+function containsFiles(evt: MouseEvent | TouchEvent) {
   if ("dataTransfer" in evt) {
-    const dataTransfer: DataTransfer = evt.dataTransfer;
-    if ("types" in dataTransfer) {
-      const types = dataTransfer.types;
-      for (let i = 0; i < types.length; i++) {
-        if (types[i] === "Files" || types[i] === "application/x-moz-file") {
-          return true;
-        }
+    const dataTransfer = evt.dataTransfer as DataTransfer;
+    const types = dataTransfer.types;
+    for (let i = 0; i < types.length; i++) {
+      if (types[i] === "Files" || types[i] === "application/x-moz-file") {
+        return true;
       }
     }
   }
@@ -33,7 +29,7 @@ function getFiles(dt: DataTransfer): File[] {
   return files;
 }
 
-function mousePosition(evt: TouchEvent | MouseEvent): Position {
+function mousePosition(evt: TouchEvent | MouseEvent): Drag.Position {
   let x: number | null, y: number | null;
   if ("touches" in evt && evt.type == "touchmove") {
     x = evt.touches[0].clientX;
@@ -46,10 +42,10 @@ function mousePosition(evt: TouchEvent | MouseEvent): Position {
 }
 
 export default function useDragUploader(
-  collections: DragCollection[],
-  onDragEnd: (dragState: DragState, files: File[]) => void
+  collections: Drag.Collection[],
+  onDragEnd: (dragState: Drag.State, files: File[]) => void
 ) {
-  const initialState: DragState = {
+  const initialState: Drag.State = {
     dragging: false,
     x: null,
     y: null
@@ -57,18 +53,21 @@ export default function useDragUploader(
 
   const [dragState, setDragState] = useState(initialState);
 
-  const updatePositions = (dragging: Draggable | null) => {
+  const updatePositions = (dragging?: Drag.Draggable | string) => {
     collections.forEach((c) => {
       c.dispatch({ type: "updatePositions", payload: dragging });
     });
   };
 
-  const startDrag = (evt: Event, draggable: Draggable) => {
+  const startDrag = (
+    evt: MouseEvent | TouchEvent,
+    draggable: Drag.Draggable | string
+  ) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };
 
-  const drag = (evt: Event) => {
+  const drag = (evt: MouseEvent | TouchEvent) => {
     if (dragState.dragging) {
       evt.stopPropagation();
       evt.preventDefault();
@@ -80,14 +79,14 @@ export default function useDragUploader(
     }
   };
 
-  const dragEnd = (evt: Event) => {
+  const dragEnd = (evt: MouseEvent | TouchEvent) => {
     if (dragState.dragging) {
       const prevDragState = dragState;
       let files: File[] = [];
       evt.stopPropagation();
       evt.preventDefault();
       if ("dataTransfer" in evt && dragState.dragging == "Files") {
-        files = getFiles(evt.dataTransfer);
+        files = getFiles(evt.dataTransfer as DataTransfer);
       }
       setDragState({ dragging: false, x: null, y: null });
       onDragEnd(prevDragState, files);
@@ -95,7 +94,7 @@ export default function useDragUploader(
     }
   };
 
-  const dragLeave = (evt: Event) => {
+  const dragLeave = (evt: MouseEvent | TouchEvent) => {
     if (dragState.dragging === "Files") {
       evt.preventDefault();
       evt.stopPropagation();

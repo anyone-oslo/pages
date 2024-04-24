@@ -1,19 +1,19 @@
 import React from "react";
 import ReactCrop from "react-image-crop";
 
-import { cropSize, CropSize, CropState, Position, Size } from "./useCrop";
+import { cropSize } from "./useCrop";
 import FocalPoint from "./FocalPoint";
 
-interface ImageProps {
-  containerSize: Size;
+interface Props {
+  containerSize: Crop.Size;
   croppedImage: string;
-  cropState: CropState;
-  focalPoint: Position;
-  setCrop: (crop: CropSize) => void;
-  setFocal: (focal: Position) => void;
+  cropState: Crop.State;
+  focalPoint: Crop.Position;
+  setCrop: (crop: Crop.CropSize) => void;
+  setFocal: (focal: Crop.Position) => void;
 }
 
-export default function Image(props: ImageProps) {
+export default function Image(props: Props) {
   const imageSize = () => {
     const { image, cropping, crop_width, crop_height } = props.cropState;
     if (cropping) {

@@ -1,22 +1,19 @@
-import React from "react";
-
-import { ImageResource } from "../../types";
-import { CropState } from "./useCrop";
+import React, { MouseEvent } from "react";
 
 type Ratio = number | null;
 
-interface ToolbarProps {
-  cropState: CropState;
+interface Props {
+  cropState: Crop.State;
   image: ImageResource;
   setAspect: (Ratio) => void;
-  toggleCrop: (evt: Event) => void;
-  toggleFocal: (evt: Event) => void;
+  toggleCrop: (evt: MouseEvent) => void;
+  toggleFocal: (evt: MouseEvent) => void;
 }
 
-export default function Toolbar(props: ToolbarProps) {
+export default function Toolbar(props: Props) {
   const { cropping } = props.cropState;
 
-  const aspectRatios = [
+  const aspectRatios: Array<[string, Ratio]> = [
     ["Free", null],
     ["1:1", 1],
     ["3:2", 3 / 2],
@@ -28,7 +25,7 @@ export default function Toolbar(props: ToolbarProps) {
     ["16:9", 16 / 9]
   ];
 
-  const updateAspect = (ratio: Ratio) => (evt: Event) => {
+  const updateAspect = (ratio: Ratio) => (evt: MouseEvent) => {
     evt.preventDefault();
     props.setAspect(ratio);
   };
@@ -61,7 +58,6 @@ export default function Toolbar(props: ToolbarProps) {
           href={props.image.original_url}
           className="button"
           title="Download original image"
-          disabled={cropping}
           download={props.image.filename}
           onClick={(evt) => cropping && evt.preventDefault()}>
           <i className="fa-solid fa-download" />

@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import useModalStore from "../stores/useModalStore";
 import { putJson } from "../lib/request";
 
-import { Locale, ImageResource } from "../types";
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
 
-interface ImageEditorProps {
+interface Props {
   image: ImageResource;
   caption: boolean;
   locale: string;
   locales: Record<string, Locale>;
-  onUpdate?: (data: ImageResource, croppedImage: string | null) => void;
+  onUpdate?: (
+    data: Partial<ImageResource>,
+    croppedImage: string | null
+  ) => void;
 }
 
-export default function ImageEditor(props: ImageEditorProps) {
+export default function ImageEditor(props: Props) {
   const [cropState, dispatch, croppedImage] = useCrop(props.image);
   const [locale, setLocale] = useState(props.locale);
   const [localizations, setLocalizations] = useState({
@@ -34,7 +36,7 @@ export default function ImageEditor(props: ImageEditorProps) {
     });
   };
 
-  const save = (evt: Event) => {
+  const save = (evt: MouseEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
 

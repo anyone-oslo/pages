@@ -1,12 +1,12 @@
 import React from "react";
 
-interface TagProps {
+interface Props {
   enabled: boolean;
   tag: string;
   toggleEnabled: (string) => void;
 }
 
-export default function Tag(props: TagProps): JSX.Element {
+export default function Tag(props: Props) {
   const handleChange = () => {
     props.toggleEnabled(props.tag);
   };

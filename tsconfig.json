@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
     "target": "es5",
     "lib": ["es2019", "dom"],
     "outDir": "dist",
     "allowJs": true,
+    "jsx": "react-jsx"
   },
   "include": ["./app/javascript/**/*"]
 }

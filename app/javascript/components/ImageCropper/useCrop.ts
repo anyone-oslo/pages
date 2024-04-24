@@ -1,46 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 
-import { ImageResource } from "../../types";
-
-export interface Position {
-  x: number;
-  y: number;
-}
-
-export interface Size {
-  width: number;
-  height: number;
-}
-
-interface CropParams {
-  crop_start_x: number;
-  crop_start_y: number;
-  crop_width: number;
-  crop_height: number;
-  crop_gravity_x: number;
-  crop_gravity_y: number;
-}
-
-export interface CropState extends CropParams {
-  aspect: number | null;
-  cropping: boolean;
-  image: ImageResource;
-}
-
-export interface CropSize {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  aspect?: number;
-}
-
-export interface CropAction {
-  type: string;
-  payload?: CropSize | Position;
-}
-
-function applyAspect(state: CropState, aspect: number | null) {
+function applyAspect(state: Crop.State, aspect: number | null) {
   const crop = cropSize(state);
   const image = state.image;
   const imageAspect = image.real_width / image.real_height;
@@ -65,7 +25,7 @@ function applyAspect(state: CropState, aspect: number | null) {
   return applyCrop(state, crop);
 }
 
-function applyCrop(state: CropState, crop: CropSize) {
+function applyCrop(state: Crop.State, crop: Crop.CropSize) {
   const { image } = state;
 
   // Don't crop if dimensions are below the threshold
@@ -86,7 +46,14 @@ function applyCrop(state: CropState, crop: CropSize) {
   };
 }
 
-function cropReducer(state: CropState, action: CropAction): CropState {
+function setFocal(state: Crop.State, position: Crop.Position) {
+  return {
+    crop_gravity_x: state.crop_width * (position.x / 100) + state.crop_start_x,
+    crop_gravity_y: state.crop_height * (position.y / 100) + state.crop_start_y
+  };
+}
+
+function cropReducer(state: Crop.State, action: Crop.Action): Crop.State {
   const {
     crop_start_x,
     crop_start_y,
@@ -115,15 +82,11 @@ function cropReducer(state: CropState, action: CropAction): CropState {
         return { ...state, cropping: false };
       }
     case "setCrop":
-      return { ...state, ...applyCrop(state, action.payload) };
+      return { ...state, ...applyCrop(state, action.payload as Crop.CropSize) };
     case "setAspect":
-      return { ...state, ...applyAspect(state, action.payload) };
+      return { ...state, ...applyAspect(state, action.payload as number) };
     case "setFocal":
-      return {
-        ...state,
-        crop_gravity_x: crop_width * (action.payload.x / 100) + crop_start_x,
-        crop_gravity_y: crop_height * (action.payload.y / 100) + crop_start_y
-      };
+      return { ...state, ...setFocal(state, action.payload as Crop.Position) };
     case "startCrop":
       return { ...state, cropping: true };
     case "toggleFocal":
@@ -140,7 +103,10 @@ function cropReducer(state: CropState, action: CropAction): CropState {
   }
 }
 
-function croppedImageCanvas(img: HTMLImageElement, crop: CropSize) {
+function croppedImageCanvas(
+  img: HTMLImageElement,
+  crop: Crop.CropSize
+): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const canvas = document.createElement("canvas");
   canvas.width = img.naturalWidth * (crop.width / 100);
   canvas.height = img.naturalHeight * (crop.height / 100);
@@ -172,13 +138,13 @@ function imageDataUrl(
   return canvas.toDataURL("image/jpeg");
 }
 
-export function cropParams(state: CropState): CropParams {
+export function cropParams(state: Crop.State): Crop.Params {
   const maybe = (func: (number) => number) => (val: number | null) =>
     val === null ? val : func(val);
   const maybeRound = maybe(Math.round);
   const maybeCeil = maybe(Math.ceil);
 
-  const crop: CropParams = {
+  const crop: Crop.Params = {
     crop_start_x: maybeRound(state.crop_start_x),
     crop_start_y: maybeRound(state.crop_start_y),
     crop_width: maybeCeil(state.crop_width),
@@ -198,7 +164,7 @@ export function cropParams(state: CropState): CropParams {
   return crop;
 }
 
-export function cropSize(state: CropState): CropSize {
+export function cropSize(state: Crop.State): Crop.CropSize {
   const { image, aspect, crop_start_x, crop_start_y, crop_width, crop_height } =
     state;
   const imageAspect = image.real_width / image.real_height;
@@ -221,8 +187,10 @@ export function cropSize(state: CropState): CropSize {
   }
 }
 
-export default function useCrop(image: ImageResource) {
-  const initialState: CropState = {
+export default function useCrop(
+  image: ImageResource
+): [Crop.State, (action: Crop.Action) => void, string] {
+  const initialState: Crop.State = {
     aspect: null,
     cropping: false,
     crop_start_x: image.crop_start_x || 0,

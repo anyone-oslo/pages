@@ -25,37 +25,47 @@
    SOFTWARE.
  */
 
-import React, { createRef, ChangeEvent, Component, RefObject } from "react";
-import Tree, { TreeId, TreeIndex } from "../../lib/Tree";
-import { Attributes, PageNode } from "./types";
+import React, {
+  createRef,
+  ChangeEvent,
+  Component,
+  CSSProperties,
+  FormEvent,
+  MouseEvent,
+  RefObject
+} from "react";
+import Tree from "../../lib/Tree";
 
-interface NodeProps {
-  addChild: (index: TreeIndex) => void;
-  dir: string;
-  dragging: number;
-  index: TreeIndex<PageNode>;
-  locale: string;
-  onCollapse: (id: TreeId) => void;
-  onDragStart: (id: number, element: HTMLDivElement, evt: Event) => void;
+interface Props {
+  index: Tree.Index<Page.Node>;
   paddingLeft: number;
-  tree: Tree<PageNode>;
-  updatePage: (index: TreeIndex, attributes: Attributes) => void;
+  tree: Tree<Page.Node>;
+  addChild?: (index: Tree.Index<Page.Node>) => void;
+  dir?: string;
+  dragging?: Tree.Id;
+  locale?: string;
+  onCollapse?: (id: Tree.Id) => void;
+  onDragStart?: (id: number, element: HTMLDivElement, evt: MouseEvent) => void;
+  updatePage?: (
+    index: Tree.Index<Page.Node>,
+    attributes: Partial<Page.Attributes>
+  ) => void;
 }
 
-interface NodeState {
+interface State {
   newName: string;
 }
 
 interface ButtonOptions {
   icon: string;
   className: string;
-  onClick: (evt: Event) => void;
+  onClick: (evt: MouseEvent) => void;
 }
 
-export default class Node extends Component<NodeProps, NodeState> {
+export default class Node extends Component<Props, State> {
   innerRef: RefObject<HTMLDivElement>;
 
-  constructor(props: NodeProps) {
+  constructor(props: Props) {
     super(props);
     this.state = { newName: props.index.node.name };
     this.innerRef = createRef<HTMLDivElement>();
@@ -160,7 +170,7 @@ export default class Node extends Component<NodeProps, NodeState> {
     const { index, tree, dragging, dir, locale } = this.props;
 
     if (index.children && index.children.length && !index.node.collapsed) {
-      const childrenStyles = {};
+      const childrenStyles: CSSProperties = {};
       if (index.node.collapsed) {
         childrenStyles.display = "none";
       }
@@ -201,7 +211,7 @@ export default class Node extends Component<NodeProps, NodeState> {
       return null;
     }
 
-    const handleCollapse = (e: Event) => {
+    const handleCollapse = (e: MouseEvent) => {
       e.stopPropagation();
       const nodeId = this.props.index.id;
       if (this.props.onCollapse) {
@@ -260,11 +270,11 @@ export default class Node extends Component<NodeProps, NodeState> {
     this.updatePage({ editing: true });
   }
 
-  editUrl(page: PageNode) {
+  editUrl(page: Page.Node) {
     return `/admin/${page.locale}/pages/${page.param}/edit`;
   }
 
-  node(): PageNode {
+  node(): Page.Node {
     return this.props.index.node;
   }
 
@@ -291,7 +301,7 @@ export default class Node extends Component<NodeProps, NodeState> {
       classnames = "node placeholder";
     }
 
-    const handleMouseDown = (e: Event) => {
+    const handleMouseDown = (e: MouseEvent) => {
       if (this.permitted("edit") && !editing && props.onDragStart) {
         props.onDragStart(props.index.id, this.innerRef.current, e);
       }
@@ -323,7 +333,7 @@ export default class Node extends Component<NodeProps, NodeState> {
       this.setState({ newName: event.target.value });
     };
 
-    const performEdit = (event: Event) => {
+    const performEdit = (event: FormEvent) => {
       event.preventDefault();
       this.updatePage({
         name: this.state.newName,
@@ -419,13 +429,13 @@ export default class Node extends Component<NodeProps, NodeState> {
     }
   }
 
-  updatePage(attributes: Attributes) {
+  updatePage(attributes: Partial<Page.Attributes>) {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
   }
 
-  visibleChildren(): PageNode[] {
+  visibleChildren(): Page.Node[] {
     if (this.node().children) {
       return this.node().children.filter((p) => p.status != 4);
     } else {

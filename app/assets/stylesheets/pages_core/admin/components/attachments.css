@@ -28,7 +28,9 @@
     padding: 16px 0px 16px 40px;
     cursor: pointer;
     background: #fff;
-    transition: padding-left 50ms ease-in-out, background 150ms ease-in-out;
+    transition:
+      padding-left 50ms ease-in-out,
+      background 150ms ease-in-out;
 
     & .attachment-info {
       transition: all 50ms ease-in-out;

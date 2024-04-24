@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { DragEvent, MouseEvent, useEffect, useState } from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
 import useToastStore from "../../stores/useToastStore";
-import { ImageResource, Locale } from "../../types";
 import Placeholder from "./Placeholder";
 
 import { useDraggable } from "../drag";
 
-interface Record {
+interface Record extends Drag.DraggableRecord {
   id: number | null;
   image: ImageResource;
   src: string | null;
   file: File | null;
 }
 
-interface GridImageProps {
-  draggable: { handle: string; record: Record };
+interface Props {
+  draggable: Drag.Draggable<Record>;
   attributeName: string;
   locale: string;
   locales: { [index: string]: Locale };
@@ -25,36 +24,36 @@ interface GridImageProps {
   primary: boolean;
   position: number;
   deleteImage: () => void;
-  startDrag: (evt: Event, draggable: Draggable) => void;
+  startDrag: (evt: DragEvent, draggable: Drag.Draggable) => void;
   onUpdate: (newImage: ImageResource, src: string) => void;
 }
 
-export default function GridImage(props: GridImageProps) {
+export default function GridImage(props: Props) {
   const { attributeName, draggable } = props;
   const record = draggable.record;
   const image = record.image;
 
   const notice = useToastStore((state) => state.notice);
 
-  const [src, setSrc] = useState(record.src || null);
+  const [src, setSrc] = useState<string>(record.src || null);
 
   const dragAttrs = useDraggable(draggable, props.startDrag);
 
   useEffect(() => {
     if (record.file) {
       const reader = new FileReader();
-      reader.onload = () => setSrc(reader.result);
+      reader.onload = () => setSrc(reader.result as string);
       reader.readAsDataURL(record.file);
     }
   }, []);
 
-  const copyEmbed = (evt: Event) => {
+  const copyEmbed = (evt: MouseEvent) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     notice("Embed code copied to clipboard");
   };
 
-  const deleteImage = (evt: Event) => {
+  const deleteImage = (evt: MouseEvent) => {
     evt.preventDefault();
     if (props.deleteImage) {
       props.deleteImage();
@@ -90,7 +89,7 @@ export default function GridImage(props: GridImageProps) {
         <input
           name={`${attributeName}[primary]`}
           type="hidden"
-          value={props.primary}
+          value={props.primary ? "true" : "false"}
         />
       )}
       {!image && <Placeholder src={src} />}
