@@ -1,13 +1,13 @@
 {
   "name": "@anyone-oslo/pages",
-  "version": "3.14.0",
+  "version": "3.14.2",
   "description": "Frontend for Pages",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anyone_oslo/pages.git"
   },
-  "main": "/dist/index.js",
-  "types": "/dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "/dist/**/*"
   ],
@@ -15,6 +15,10 @@
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@hotwired/stimulus": "^3.2.2",
     "@rails/ujs": "^6.1.4-1",
+    "@types/lodash": "^4.14.194",
+    "@types/rails__ujs": "^6.0.1",
+    "@types/react": "^18.0.35",
+    "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.18",
     "cssnano": "^6.1.0",
     "lodash": "^4.17.21",
@@ -31,13 +35,10 @@
     "react-dom": "^18.2.0",
     "react-image-crop": "^5.0.0",
     "react_ujs": "^2.6.2",
+    "typescript": "^5.4.5",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.194",
-    "@types/rails__ujs": "^6.0.1",
-    "@types/react": "^18.0.35",
-    "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
     "dependency-cruiser": "^16.2.3",
@@ -46,8 +47,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "prettier": "^3.2.5"
   },
   "scripts": {
     "architecture": "depcruise --include-only \"^app/javascript\" --output-type dot app/javascript | dot -T svg > dependency-graph.svg",

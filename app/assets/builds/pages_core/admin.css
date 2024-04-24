@@ -6926,7 +6926,8 @@ readers do not read off random characters that represent icons */
     padding: 16px 0px 16px 40px;
     cursor: pointer;
     background: #fff;
-    transition: padding-left 50ms ease-in-out, background 150ms ease-in-out;
+    transition:
+      padding-left 50ms ease-in-out, background 150ms ease-in-out;
   }
 
 .attachments .attachment .attachment-info {
@@ -7617,7 +7618,8 @@ main .page-description h3 {
 .editable-image {
   cursor: pointer;
   display: block;
-  transition: transform 200ms, box-shadow 200ms, border-color 200ms ease-out;
+  transition:
+    transform 200ms, box-shadow 200ms, border-color 200ms ease-out;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0);
   border: 1px solid #fff;
   position: relative;
@@ -7680,7 +7682,11 @@ main .page-description h3 {
       linear-gradient(45deg, transparent 75%, #fff 75%),
       linear-gradient(135deg, transparent 75%, #fff 75%);
     background-size: 12px 12px;
-    background-position: 0 0, 6px 0, 6px -6px, 0px 6px;
+    background-position:
+      0 0,
+      6px 0,
+      6px -6px,
+      0px 6px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7803,7 +7809,8 @@ main .page-description h3 {
          -moz-user-select: none;
               user-select: none;
       cursor: pointer;
-      transition: border-radius 200ms, margin 200ms, width 200ms, height 200ms, border-color 200ms ease-out;
+      transition:
+        border-radius 200ms, margin 200ms, width 200ms, height 200ms, border-color 200ms ease-out;
     }
 
 .image-editor .focal-editor .focal-point:after {
