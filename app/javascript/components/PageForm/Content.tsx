@@ -1,22 +1,22 @@
 import React from "react";
 
-import { blockValue, errorsOn, PageFormAction, PageFormState } from "./usePage";
+import { blockValue, errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
 import TagEditor from "../TagEditor";
 import Block from "./Block";
 import Dates from "./Dates";
 
-interface ContentProps {
-  state: PageFormState;
-  dispatch: (action: PageFormAction) => void;
+interface Props {
+  state: PageForm.State;
+  dispatch: (action: PageForm.Action) => void;
 }
 
-export default function Content(props: ContentProps) {
+export default function Content(props: Props) {
   const { state, dispatch } = props;
 
   const { page, locale, inputDir, templateConfig } = state;
 
-  const handleChange = (attr: string) => (value: PageBlockValue) => {
+  const handleChange = (attr: string) => (value: MaybeLocalizedValue) => {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 

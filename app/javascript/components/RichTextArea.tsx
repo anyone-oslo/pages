@@ -1,24 +1,25 @@
 import React, { createRef, ChangeEvent, Component, RefObject } from "react";
 import RichTextToolbarButton from "./RichTextToolbarButton";
 
-interface RichTextAreaProps {
+interface Props {
   id: string;
-  className: string;
   name: string;
   value: string;
   rows: number;
-  simple: boolean;
-  lang: string;
-  dir: string;
-  onChange: (str: string) => void;
+  className?: string;
+  simple?: boolean;
+  lang?: string;
+  dir?: string;
+  onChange?: (str: string) => void;
 }
 
-interface RichTextAreaState {
+interface State {
   value: string;
   rows: number;
 }
 
-type ActionFn = (str: string) => [string, string, string];
+type Replacement = [string, string, string];
+type ActionFn = (str: string) => Replacement;
 
 interface Action {
   name: string;
@@ -27,13 +28,10 @@ interface Action {
   hotkey?: string;
 }
 
-export default class RichTextArea extends Component<
-  RichTextAreaProps,
-  RichTextAreaState
-> {
+export default class RichTextArea extends Component<Props, State> {
   inputRef: RefObject<HTMLTextAreaElement>;
 
-  constructor(props: RichTextAreaProps) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       value: props.value || "",
@@ -101,7 +99,7 @@ export default class RichTextArea extends Component<
     this.replaceSelection(prefix, replacement, postfix);
   }
 
-  emailLink = (selection: string) => {
+  emailLink = (selection: string): Replacement => {
     const address = prompt("Enter email address", "");
     const name = selection.length > 0 ? selection : address;
     return ['"', name, `":mailto:${address}`];
@@ -116,7 +114,7 @@ export default class RichTextArea extends Component<
     this.updateValue(evt.target.value);
   };
 
-  handleKeyPress = (evt: KeyboardEvent) => {
+  handleKeyPress = (evt: React.KeyboardEvent) => {
     let key: string;
     if (evt.which >= 65 && evt.which <= 90) {
       key = String.fromCharCode(evt.keyCode).toLowerCase();
@@ -131,13 +129,13 @@ export default class RichTextArea extends Component<
       }
     });
 
-    if ((evt.metaKey || evt.ctrlKey) && key in keys) {
+    if ((evt.metaKey || evt.ctrlKey) && key in hotkeys) {
       evt.preventDefault();
       this.applyAction(hotkeys[key]);
     }
   };
 
-  link = (selection: string) => {
+  link = (selection: string): Replacement => {
     const name = selection.length > 0 ? selection : "Link text";
     const url = prompt("Enter link URL", "");
     if (url) {
@@ -148,7 +146,7 @@ export default class RichTextArea extends Component<
   };
 
   localeOptions() {
-    const opts = {};
+    const opts: React.HTMLProps<HTMLTextAreaElement> = {};
 
     if (this.props.lang) {
       opts.lang = this.props.lang;
@@ -189,7 +187,7 @@ export default class RichTextArea extends Component<
     const { id, name } = this.props;
     const value = this.getValue();
 
-    const clickHandler = (fn: ActionFn) => (evt: Event) => {
+    const clickHandler = (fn: ActionFn) => (evt: React.MouseEvent) => {
       evt.preventDefault();
       this.applyAction(fn);
     };

@@ -3,8 +3,8 @@ import React, { ChangeEvent } from "react";
 import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 
-interface BlockProps {
-  block: TemplateBlock;
+interface Props {
+  block: Template.Block;
   errors: string[];
   onChange: (value: string) => void;
   lang: string;
@@ -12,10 +12,12 @@ interface BlockProps {
   value: string;
 }
 
-export default function Block(props: BlockProps) {
+export default function Block(props: Props) {
   const { block, errors, onChange, lang, dir, value } = props;
 
-  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
     onChange(evt.target.value);
   };
 
@@ -35,7 +37,7 @@ export default function Block(props: BlockProps) {
     placeholder: block.placeholder
   };
 
-  let field;
+  let field: React.ReactNode;
   if (block.type == "select") {
     const options = block.options;
 

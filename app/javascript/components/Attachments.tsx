@@ -3,7 +3,7 @@ import List from "./Attachments/List";
 
 import { useDragCollection } from "./drag";
 
-interface AttachmentsProps {
+interface Props {
   attribute: string;
   locale: string;
   locales: { [index: string]: Locale };
@@ -11,11 +11,11 @@ interface AttachmentsProps {
   showEmbed: boolean;
 }
 
-export default function Attachments(props: AttachmentsProps) {
+export default function Attachments(props: Props) {
   const { attribute, locale, locales, records, showEmbed } = props;
 
   const collection = useDragCollection(records);
-  const [deleted, setDeleted] = useState([]);
+  const [deleted, setDeleted] = useState<AttachmentRecord[]>([]);
 
   return (
     <List

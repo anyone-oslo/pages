@@ -2,8 +2,8 @@ import React, { ChangeEvent, MouseEvent, useRef } from "react";
 
 interface Props {
   callback: (files: File[]) => void;
-  type: string;
-  multiline: boolean;
+  type?: string;
+  multiline?: boolean;
   multiple?: boolean;
 }
 

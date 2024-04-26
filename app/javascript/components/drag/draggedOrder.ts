@@ -1,6 +1,6 @@
-function hovering(
-  dragState: Drag.State,
-  target: Drag.Item | React.MutableRefObject<HTMLDivElement>
+function hovering<T>(
+  dragState: Drag.State<T>,
+  target: Drag.Item<T> | React.MutableRefObject<HTMLDivElement>
 ) {
   const { x, y } = dragState;
   let rect: DOMRect;
@@ -17,10 +17,10 @@ function hovering(
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
 
-export function collectionOrder(
-  collection: Drag.Collection,
-  dragState: Drag.State
-) {
+export function collectionOrder<T>(
+  collection: Drag.Collection<T>,
+  dragState: Drag.State<T>
+): Array<Drag.Item<T>> {
   const { draggables, ref } = collection;
   const { dragging } = dragState;
 
@@ -28,11 +28,11 @@ export function collectionOrder(
     return draggables;
   }
 
-  let ordered = draggables;
+  let ordered: Drag.Item<T>[] = draggables;
   if (typeof dragging !== "string") {
     ordered = draggables
       .filter((d) => typeof d !== "string")
-      .filter((d: Drag.Draggable) => d.handle !== dragging.handle);
+      .filter((d: Drag.Draggable<T>) => d.handle !== dragging.handle);
   }
   if (hovering(dragState, ref)) {
     const hovered = ordered.filter((d) => hovering(dragState, d))[0];
@@ -47,9 +47,9 @@ export function collectionOrder(
   return ordered;
 }
 
-export default function draggedOrder(
-  collection: Drag.Collection,
-  dragState: Drag.State
+export default function draggedOrder<T>(
+  collection: Drag.Collection<T>,
+  dragState: Drag.State<T>
 ) {
   let ordered = collectionOrder(collection, dragState);
 

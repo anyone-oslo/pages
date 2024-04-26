@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { putJson, postJson } from "../lib/request";
 import useToastStore from "../stores/useToastStore";
-import usePage, { Author, StatusLabels } from "./PageForm/usePage";
+import usePage from "./PageForm/usePage";
 import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
 import Metadata from "./PageForm/Metadata";
@@ -13,13 +13,13 @@ import TabPanel from "./PageForm/TabPanel";
 import Files from "./PageForm/Files";
 import Images from "./PageForm/Images";
 
-interface PageFormProps {
+interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  page: PageResource;
-  templates: TemplateConfig[];
-  authors: Author[];
-  statuses: StatusLabels;
+  page: Page.SerializedResource;
+  templates: Template.Config[];
+  authors: Page.Author[];
+  statuses: Page.StatusLabels;
 }
 
 interface Tab {
@@ -29,8 +29,8 @@ interface Tab {
 }
 
 function tabsList(
-  templates: TemplateConfig[],
-  templateConfig: TemplateConfig
+  templates: Template.Config[],
+  templateConfig: Template.Config
 ): Tab[] {
   const tabs: Tab[] = [{ id: "content", name: "Content", enabled: true }];
   if (templates.filter((t) => t.images).length > 0) {
@@ -55,7 +55,7 @@ function initialTab(tabs: Tab[]): string {
   return tabs[0].id;
 }
 
-export default function PageForm(props: PageFormProps) {
+export default function PageForm(props: Props) {
   const formRef = useRef(null);
   const [state, dispatch] = usePage({
     locales: props.locales,
@@ -80,17 +80,17 @@ export default function PageForm(props: PageFormProps) {
     }
   }, [page.id, locale, tab]);
 
-  const handleTabChange = (tab: Tab) => (evt: Event) => {
+  const handleTabChange = (tab: Tab) => (evt: React.MouseEvent) => {
     evt.preventDefault();
     setTab(tab.id);
   };
 
-  const handlePreview = (evt: Event) => {
+  const handlePreview = (evt: React.MouseEvent) => {
     evt.preventDefault();
     console.log("preview");
   };
 
-  const handleSubmit = (evt: Event) => {
+  const handleSubmit = (evt: React.MouseEvent) => {
     evt.preventDefault();
     let method = postJson;
     let url = `/admin/${locale}/pages.json`;

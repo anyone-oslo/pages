@@ -1,22 +1,22 @@
 import React from "react";
 
-import { blockValue, errorsOn, PageFormAction, PageFormState } from "./usePage";
+import { blockValue, errorsOn } from "./usePage";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
 import LabelledField from "../LabelledField";
 import ImageUploader from "../ImageUploader";
 
-interface MetadataProps {
-  state: PageFormState;
-  dispatch: (action: PageFormAction) => void;
+interface Props {
+  state: PageForm.State;
+  dispatch: (action: PageForm.Action) => void;
 }
 
-export default function Metadata(props: MetadataProps) {
+export default function Metadata(props: Props) {
   const { state, dispatch } = props;
 
   const { page, locale, locales, inputDir, templateConfig } = state;
 
-  const handleChange = (attr: string) => (value: PageBlockValue) => {
+  const handleChange = (attr: string) => (value: MaybeLocalizedValue) => {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 

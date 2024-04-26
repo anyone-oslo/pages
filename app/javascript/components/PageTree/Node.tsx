@@ -37,18 +37,18 @@ import React, {
 import Tree from "../../lib/Tree";
 
 interface Props {
-  index: Tree.Index<Page.Node>;
+  index: Tree.Index<Page.TreeNode>;
   paddingLeft: number;
-  tree: Tree<Page.Node>;
-  addChild?: (index: Tree.Index<Page.Node>) => void;
+  tree: Tree<Page.TreeNode>;
+  addChild?: (index: Tree.Index<Page.TreeNode>) => void;
   dir?: string;
   dragging?: Tree.Id;
   locale?: string;
   onCollapse?: (id: Tree.Id) => void;
   onDragStart?: (id: number, element: HTMLDivElement, evt: MouseEvent) => void;
   updatePage?: (
-    index: Tree.Index<Page.Node>,
-    attributes: Partial<Page.Attributes>
+    index: Tree.Index<Page.TreeNode>,
+    attributes: Partial<Page.TreeItem>
   ) => void;
 }
 
@@ -270,11 +270,11 @@ export default class Node extends Component<Props, State> {
     this.updatePage({ editing: true });
   }
 
-  editUrl(page: Page.Node) {
+  editUrl(page: Page.TreeNode) {
     return `/admin/${page.locale}/pages/${page.param}/edit`;
   }
 
-  node(): Page.Node {
+  node(): Page.TreeNode {
     return this.props.index.node;
   }
 
@@ -430,13 +430,13 @@ export default class Node extends Component<Props, State> {
     }
   }
 
-  updatePage(attributes: Partial<Page.Attributes>) {
+  updatePage(attributes: Partial<Page.TreeItem>) {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
   }
 
-  visibleChildren(): Page.Node[] {
+  visibleChildren(): Page.TreeNode[] {
     if (this.node().children) {
       return this.node().children.filter((p) => p.status != 4);
     } else {

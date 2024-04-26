@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import DateRangeSelect from "../DateRangeSelect";
 
 interface DatesProps {
-  starts_at: string,
-  ends_at: string,
-  all_day: boolean
+  starts_at: Date | string;
+  ends_at: Date | string;
+  all_day: boolean;
 }
 
 export default function Dates(props: DatesProps) {
@@ -19,32 +19,33 @@ export default function Dates(props: DatesProps) {
 
   return (
     <div className="page-dates field">
-      <input type="hidden"
-             name="page[all_day]"
-             value={(hasDates && allDay) ? "1" : "0"} />
-      <label>
-        Dates
-      </label>
+      <input
+        type="hidden"
+        name="page[all_day]"
+        value={hasDates && allDay ? "1" : "0"}
+      />
+      <label>Dates</label>
       <div className="toggles">
         <label className="has-dates-toggle">
-          <input type="checkbox"
-                 checked={hasDates}
-                 onChange={toggleHasDates} />
+          <input type="checkbox" checked={hasDates} onChange={toggleHasDates} />
           Enabled
         </label>
         <label className={!hasDates && "disabled"}>
-          <input type="checkbox"
-                 disabled={!hasDates}
-                 checked={allDay}
-                 onChange={toggleAllDay} />
+          <input
+            type="checkbox"
+            disabled={!hasDates}
+            checked={allDay}
+            onChange={toggleAllDay}
+          />
           All day event
         </label>
       </div>
-      <DateRangeSelect objectName="page"
-                       startsAt={starts_at}
-                       endsAt={ends_at}
-                       disabled={!hasDates}
-                       disableTime={allDay}
+      <DateRangeSelect
+        objectName="page"
+        startsAt={starts_at}
+        endsAt={ends_at}
+        disabled={!hasDates}
+        disableTime={allDay}
       />
     </div>
   );

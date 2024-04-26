@@ -8,7 +8,7 @@ declare namespace Drag {
     handle: string;
   }
 
-  type Item<T = DraggableRecord> = Draggable<T> | string;
+  type Item<T = DraggableRecord> = Draggable<T> | "Files";
 
   interface CollectionAction<T = DraggableRecord> {
     type: string;
@@ -26,7 +26,7 @@ declare namespace Drag {
     y: number | null;
   }
 
-  interface State extends Position {
-    dragging: Item | false;
+  interface State<T = DraggableRecord> extends Position {
+    dragging: Item<T> | false;
   }
 }

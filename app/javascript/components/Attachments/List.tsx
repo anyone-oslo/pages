@@ -6,11 +6,11 @@ import { post } from "../../lib/request";
 
 import { createDraggable, draggedOrder, useDragUploader } from "../drag";
 
-interface ListProps {
+interface Props {
   attribute: string;
   locale: string;
   locales: { [index: string]: Locale };
-  collection: Drag.Collection;
+  collection: Drag.Collection<AttachmentRecord>;
   deleted: AttachmentRecord[];
   setDeleted: (records: AttachmentRecord[]) => void;
   showEmbed: boolean;
@@ -20,12 +20,9 @@ function filenameToName(str: string): string {
   return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");
 }
 
-export default function List(props: ListProps) {
+export default function List(props: Props) {
   const { collection, deleted, setDeleted } = props;
-  const locales =
-    props.locales && props.locales.length > 0
-      ? Object.keys(props.locales)
-      : [props.locale];
+  const locales = props.locales ? Object.keys(props.locales) : [props.locale];
 
   const uploadAttachment = (file: File) => {
     const name = {};
@@ -76,7 +73,7 @@ export default function List(props: ListProps) {
     });
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader(
+  const [dragState, dragStart, listeners] = useDragUploader<AttachmentRecord>(
     [collection],
     dragEnd
   );
@@ -84,7 +81,9 @@ export default function List(props: ListProps) {
   const position = (record: AttachmentRecord) => {
     return (
       [
-        ...collection.draggables.map((d: Drag.Draggable) => d.record),
+        ...collection.draggables.map(
+          (d: Drag.Draggable<AttachmentRecord>) => d.record
+        ),
         ...deleted
       ].indexOf(record) + 1
     );
@@ -96,7 +95,7 @@ export default function List(props: ListProps) {
 
   const update =
     (draggable: Drag.Draggable<AttachmentRecord>) =>
-    (attachment: AttachmentResource) => {
+    (attachment: Partial<AttachmentResource>) => {
       const { record } = draggable;
       const updated = {
         ...draggable,
@@ -108,14 +107,14 @@ export default function List(props: ListProps) {
       collection.dispatch({ type: "update", payload: updated });
     };
 
-  const remove = (draggable: Drag.Draggable) => () => {
+  const remove = (draggable: Drag.Draggable<AttachmentRecord>) => () => {
     collection.dispatch({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
     }
   };
 
-  const attachment = (draggable: Drag.Draggable) => {
+  const attachment = (draggable: Drag.Item<AttachmentRecord>) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
@@ -161,7 +160,7 @@ export default function List(props: ListProps) {
             <input
               name={`${attrName(r)}[_destroy]`}
               type="hidden"
-              value={true}
+              value="true"
             />
           </span>
         ))}

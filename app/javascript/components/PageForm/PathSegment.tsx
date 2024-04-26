@@ -1,14 +1,14 @@
 import React, { ChangeEvent } from "react";
 
-import { errorsOn, PageFormAction, PageFormState } from "./usePage";
+import { errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
 
-interface PathSegmentProps {
-  state: PageFormState;
-  dispatch: (action: PageFormAction) => void;
+interface Props {
+  state: PageForm.State;
+  dispatch: (action: PageForm.Action) => void;
 }
 
-function missingPathSegment(ancestors: PageAncestor[], locale: string) {
+function missingPathSegment(ancestors: Page.Ancestor[], locale: string) {
   for (let i = 0; i < ancestors.length; i++) {
     if (!ancestors[i].path_segment[locale]) {
       return ancestors[i];
@@ -17,7 +17,7 @@ function missingPathSegment(ancestors: PageAncestor[], locale: string) {
   return null;
 }
 
-export default function PathSegment(props: PathSegmentProps) {
+export default function PathSegment(props: Props) {
   const { state, dispatch } = props;
   const { page, locale } = state;
 

@@ -14,7 +14,7 @@ interface Props {
   width: number;
   caption: boolean;
   attr: string;
-  alternative: string;
+  alternative?: string;
 }
 
 function getFiles(dt: DataTransfer): File[] {

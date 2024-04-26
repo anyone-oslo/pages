@@ -1,15 +1,14 @@
 import React from "react";
 
-import { PageFormAction, PageFormState } from "./usePage";
 import LocaleLinks from "./LocaleLinks";
 
 interface PageDescriptionProps {
-  state: PageFormState;
-  dispatch: (action: PageFormAction) => void;
+  state: PageForm.State;
+  dispatch: (action: PageForm.Action) => void;
   children: JSX.Element;
 }
 
-function editLink(locale: string, page: PageAncestor | PageResource): string {
+function editLink(locale: string, page: Page.Ancestor | Page.Resource) {
   return (
     <a href={`/admin/${locale}/pages/${page.id}/edit`}>
       {pageName(locale, page)}
@@ -17,7 +16,7 @@ function editLink(locale: string, page: PageAncestor | PageResource): string {
   );
 }
 
-function pageName(locale: string, page: PageAncestor | PageResource) {
+function pageName(locale: string, page: Page.Ancestor | Page.Resource) {
   if ("name" in page) {
     return page.name[locale];
   }

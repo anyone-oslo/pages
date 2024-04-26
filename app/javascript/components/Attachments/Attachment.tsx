@@ -6,12 +6,6 @@ import useToastStore from "../../stores/useToastStore";
 
 import { useDraggable } from "../drag";
 
-interface AttachmentRecord {
-  id?: number;
-  attachment: AttachmentResource;
-  uploading: boolean;
-}
-
 interface Props {
   attributeName: string;
   placeholder: boolean;
@@ -21,7 +15,7 @@ interface Props {
   deleteRecord: () => void;
   showEmbed: boolean;
   position: number;
-  onUpdate: (localizations: Record<string, Record<string, string>>) => void;
+  onUpdate: (attachment: Partial<AttachmentResource>) => void;
   startDrag: (
     evt: MouseEvent,
     draggable: Drag.Draggable<AttachmentRecord>

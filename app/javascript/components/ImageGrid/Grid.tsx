@@ -33,10 +33,10 @@ function filterFiles(files: File[]): File[] {
 }
 
 function draggedImageOrder(
-  primaryCollection: Drag.Collection,
-  imagesCollection: Drag.Collection,
-  dragState: Drag.State
-): [Drag.Draggable<ImageRecord>, Drag.Draggable<ImageRecord>[]] {
+  primaryCollection: Drag.Collection<ImageRecord>,
+  imagesCollection: Drag.Collection<ImageRecord>,
+  dragState: Drag.State<ImageRecord>
+): [Drag.Item<ImageRecord>, Drag.Item<ImageRecord>[]] {
   const [primary, ...rest] = collectionOrder(primaryCollection, dragState);
   let images = [...rest, ...collectionOrder(imagesCollection, dragState)];
 
@@ -67,7 +67,7 @@ export default function Grid(props: Props) {
     images.dispatch(action);
   };
 
-  const dragEnd = (dragState: Drag.State, files: File[]) => {
+  const dragEnd = (dragState: Drag.State<ImageRecord>, files: File[]) => {
     const [draggedPrimary, draggedImages] = draggedImageOrder(
       primary,
       images,
@@ -86,7 +86,7 @@ export default function Grid(props: Props) {
     }
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader(
+  const [dragState, dragStart, listeners] = useDragUploader<ImageRecord>(
     [primary, images],
     dragEnd
   );
@@ -94,8 +94,8 @@ export default function Grid(props: Props) {
   const position = (record: ImageRecord) => {
     return (
       [
-        ...primary.draggables.map((d: Drag.Draggable) => d.record),
-        ...images.draggables.map((d: Drag.Draggable) => d.record),
+        ...primary.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
+        ...images.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
         ...deleted
       ].indexOf(record) + 1
     );
@@ -148,7 +148,7 @@ export default function Grid(props: Props) {
   };
 
   const renderImage = (
-    draggable: Drag.Draggable<ImageRecord>,
+    draggable: Drag.Item<ImageRecord>,
     isPrimary: boolean
   ) => {
     const { dragging } = dragState;
@@ -225,7 +225,7 @@ export default function Grid(props: Props) {
                   type="hidden"
                   name={props.primaryAttribute}
                   value={
-                    (draggedPrimary.record &&
+                    (draggedPrimary !== "Files" &&
                       draggedPrimary.record.image &&
                       draggedPrimary.record.image.id) ||
                     ""
@@ -271,7 +271,7 @@ export default function Grid(props: Props) {
             <input
               name={`${attrName(r)}[_destroy]`}
               type="hidden"
-              value={true}
+              value={"true"}
             />
           </span>
         ))}

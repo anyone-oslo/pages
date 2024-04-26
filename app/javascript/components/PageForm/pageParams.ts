@@ -1,4 +1,4 @@
-export default function pageParams(page: PageResource) {
+export default function pageParams(page: Page.Resource) {
   // meta_image_id
   // page_images
   // page_files

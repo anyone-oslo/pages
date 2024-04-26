@@ -1,4 +1,4 @@
-import React, { DragEvent, MouseEvent, useEffect, useState } from "react";
+import React, { MouseEvent, useEffect, useState } from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import EditableImage from "../EditableImage";
 import useToastStore from "../../stores/useToastStore";
@@ -6,15 +6,8 @@ import Placeholder from "./Placeholder";
 
 import { useDraggable } from "../drag";
 
-interface Record extends Drag.DraggableRecord {
-  id: number | null;
-  image: ImageResource;
-  src: string | null;
-  file: File | null;
-}
-
 interface Props {
-  draggable: Drag.Draggable<Record>;
+  draggable: Drag.Draggable<ImageRecord>;
   attributeName: string;
   locale: string;
   locales: { [index: string]: Locale };
@@ -24,7 +17,7 @@ interface Props {
   primary: boolean;
   position: number;
   deleteImage: () => void;
-  startDrag: (evt: DragEvent, draggable: Drag.Draggable) => void;
+  startDrag: (evt: MouseEvent, draggable: Drag.Draggable<ImageRecord>) => void;
   onUpdate: (newImage: ImageResource, src: string) => void;
 }
 
@@ -40,7 +33,7 @@ export default function GridImage(props: Props) {
   const dragAttrs = useDraggable(draggable, props.startDrag);
 
   useEffect(() => {
-    if (record.file) {
+    if ("file" in record && record.file) {
       const reader = new FileReader();
       reader.onload = () => setSrc(reader.result as string);
       reader.readAsDataURL(record.file);
@@ -64,7 +57,7 @@ export default function GridImage(props: Props) {
   if (props.placeholder) {
     classes.push("placeholder");
   }
-  if (record.file) {
+  if ("file" in record) {
     classes.push("uploading");
   }
 

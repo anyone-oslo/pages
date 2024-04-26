@@ -6,18 +6,18 @@ import Draggable from "./PageTree/Draggable";
 type CollapsedState = Record<number, boolean>;
 
 interface ParentMap {
-  [index: number]: Page.Node[];
+  [index: number]: Page.TreeNode[];
 }
 
 interface Props {
   dir: string;
   locale: string;
-  pages: Page.Node[];
+  pages: Page.TreeNode[];
   permissions: string[];
 }
 
 interface State {
-  tree: Tree<Page.Node>;
+  tree: Tree<Page.TreeNode>;
 }
 
 function collapsedState(): CollapsedState {
@@ -40,7 +40,7 @@ export default class PageTree extends Component<Props, State> {
     this.state = { tree: this.buildTree(props.pages) };
   }
 
-  applyCollapsed(tree: Tree<Page.Node>) {
+  applyCollapsed(tree: Tree<Page.TreeNode>) {
     const depth = (t: Tree, index: Tree.Index) => {
       let depth = 0;
       let pointer = t.getIndex(index.parent);
@@ -68,16 +68,16 @@ export default class PageTree extends Component<Props, State> {
     walk(1);
   }
 
-  createPage(index: Tree.Index<Page.Node>, attributes: Page.Attributes) {
+  createPage(index: Tree.Index<Page.TreeNode>, attributes: Page.TreeItem) {
     void postJson(`/admin/${index.node.locale}/pages.json`, {
       page: attributes
-    }).then((response: Page.Attributes) => this.updateNode(index, response));
+    }).then((response: Page.TreeItem) => this.updateNode(index, response));
   }
 
-  buildTree(pages: Page.Node[]) {
+  buildTree(pages: Page.TreeNode[]) {
     // Build tree
     const parentMap: ParentMap = pages.reduce(
-      (m: ParentMap, page: Page.Node) => {
+      (m: ParentMap, page: Page.TreeNode) => {
         const id = page.parent_page_id || 0;
         m[id] = [...(m[id] || []), page];
         return m;
@@ -85,11 +85,11 @@ export default class PageTree extends Component<Props, State> {
       {}
     );
 
-    pages.forEach((p: Page.Node) => {
+    pages.forEach((p: Page.TreeNode) => {
       p.children = parentMap[p.id] || [];
     });
 
-    const tree = new Tree<Page.Node>({
+    const tree = new Tree<Page.TreeNode>({
       name: "All Pages",
       locale: this.props.locale,
       permissions: this.props.permissions,
@@ -103,8 +103,8 @@ export default class PageTree extends Component<Props, State> {
   }
 
   movePage(
-    index: Tree.Index<Page.Node>,
-    parent: Tree.Index<Page.Node>,
+    index: Tree.Index<Page.TreeNode>,
+    parent: Tree.Index<Page.TreeNode>,
     position: number
   ) {
     const data = {
@@ -116,17 +116,17 @@ export default class PageTree extends Component<Props, State> {
   }
 
   performUpdate(
-    index: Tree.Index<Page.Node>,
+    index: Tree.Index<Page.TreeNode>,
     url: string,
     data: Record<string, unknown>
   ) {
-    void putJson(url, data).then((response: Page.Attributes) =>
+    void putJson(url, data).then((response: Page.TreeItem) =>
       this.updateNode(index, response)
     );
   }
 
   render() {
-    const addChild = (id: Tree.Id, attributes: Page.Node) => {
+    const addChild = (id: Tree.Id, attributes: Page.TreeNode) => {
       const tree = this.state.tree;
       const index = tree.append(attributes, id);
       this.reorderChildren(id);
@@ -154,7 +154,7 @@ export default class PageTree extends Component<Props, State> {
       this.setState({ tree: tree });
     };
 
-    const updatePage = (id: Tree.Id, attributes: Page.Attributes) => {
+    const updatePage = (id: Tree.Id, attributes: Page.TreeItem) => {
       const tree = this.state.tree;
       const index = tree.getIndex(id);
       const url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
@@ -162,7 +162,7 @@ export default class PageTree extends Component<Props, State> {
       this.performUpdate(index, url, { page: attributes });
     };
 
-    const updateTree = (tree: Tree<Page.Node>) => {
+    const updateTree = (tree: Tree<Page.TreeNode>) => {
       this.setState({ tree: tree });
     };
 
@@ -216,7 +216,7 @@ export default class PageTree extends Component<Props, State> {
     window.localStorage.collapsedPages = JSON.stringify(store);
   }
 
-  updateNode(index: Tree.Index<Page.Node>, attributes: Page.Attributes) {
+  updateNode(index: Tree.Index<Page.TreeNode>, attributes: Page.TreeItem) {
     index.node = { ...index.node, ...attributes };
     this.setState({ tree: this.state.tree });
   }

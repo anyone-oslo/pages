@@ -1,41 +1,20 @@
 import { useReducer } from "react";
 
-export type Author = [name: string, id: number];
-
-export interface StatusLabels {
-  [index: number]: string;
-}
-
-export interface PageFormAction {
-  type: string;
-  payload?: string | Record<string, unknown>;
-}
-
-export interface PageFormState {
-  locale: string;
-  locales: { [index: string]: Locale };
-  page: PageResource;
-  templates: TemplateConfig[];
-  inputDir: "ltr" | "rtl";
-  templateConfig: TemplateConfig;
-}
-
-export type PageBlockValue = string | Record<string, string>;
-
 export function blockValue(
-  state: PageFormState,
-  block: TemplateBlock
-): PageBlockValue {
+  state: PageForm.State,
+  block: Template.Block
+): string {
   if (block.localized) {
-    const value: Record<string, string> = state.page.blocks[block.name] || {};
+    const value: LocalizedValue =
+      (state.page.blocks[block.name] as LocalizedValue) || {};
 
     return value[state.locale] || "";
   } else {
-    return state.page.blocks[block.name] || "";
+    return (state.page.blocks[block.name] as string) || "";
   }
 }
 
-export function errorsOn(page: PageResource, attribute: string): string[] {
+export function errorsOn(page: Page.Resource, attribute: string): string[] {
   return page.errors
     .filter((e) => e.attribute === attribute)
     .map((e) => e.message);
@@ -51,7 +30,7 @@ function parseDate(str: string): Date | null {
   }
 }
 
-function derivedState(state: PageFormState): PageFormState {
+function derivedState(state: PageForm.State): PageForm.State {
   const { locale, locales, page, templates } = state;
   return {
     ...state,
@@ -62,7 +41,7 @@ function derivedState(state: PageFormState): PageFormState {
   };
 }
 
-function parsedDates(page: PageResource) {
+function parsedDates(page: Page.SerializedResource) {
   return {
     published_at: parseDate(page.published_at),
     starts_at: parseDate(page.starts_at),
@@ -70,8 +49,8 @@ function parsedDates(page: PageResource) {
   };
 }
 
-function localizedAttributes(templates: TemplateConfig[]): string[] {
-  const allBlocks = (t: TemplateConfig): TemplateBlock[] => {
+function localizedAttributes(templates: Template.Config[]): string[] {
+  const allBlocks = (t: Template.Config): Template.Block[] => {
     return [...t.blocks, ...t.metadata_blocks];
   };
 
@@ -85,41 +64,44 @@ function localizedAttributes(templates: TemplateConfig[]): string[] {
   return ["path_segment", ...blockNames];
 }
 
-function prepare(state: PageFormState): PageFormState {
+function prepare(
+  state: PageForm.State<Page.SerializedResource>
+): PageForm.State {
   const page = { ...state.page, ...parsedDates(state.page) };
   return { ...state, page: page };
 }
 
-function reducer(state: PageFormState, action: PageFormAction): PageFormState {
+function reducer(
+  state: PageForm.State,
+  action: PageForm.Action
+): PageForm.State {
   const { type, payload } = action;
   switch (type) {
     case "setLocale":
-      return { ...state, locale: payload };
+      return { ...state, locale: payload as string };
     case "update":
-      return updatePage(state, payload);
+      return updatePage(state, payload as Partial<Page.Resource>);
     case "updateBlocks":
-      return updatePageBlocks(state, payload);
+      return updatePageBlocks(state, payload as Partial<Page.Blocks>);
     default:
       return state;
   }
 }
 
-function updateLocalized(
-  state: PageFormState,
-  obj: { [index: string]: PageBlockValue },
-  attributes: Record<string, string>
-) {
+function updateLocalized<T>(
+  state: PageForm.State,
+  obj: T,
+  attributes: Partial<T>
+): T {
   const { locale, templates } = state;
   const nextObj = {};
 
   Object.keys(attributes).forEach((attr: string) => {
+    const value = attributes[attr] as MaybeLocalizedValue;
     if (localizedAttributes(templates).indexOf(attr) !== -1) {
-      nextObj[attr] = {
-        ...obj[attr],
-        [locale]: attributes[attr]
-      } as PageBlockValue;
+      nextObj[attr] = { ...obj[attr], [locale]: value } as LocalizedValue;
     } else {
-      nextObj[attr] = attributes[attr];
+      nextObj[attr] = value;
     }
   });
 
@@ -127,9 +109,9 @@ function updateLocalized(
 }
 
 function updatePageBlocks(
-  state: PageFormState,
-  attributes: Record<string, string>
-): PageFormState {
+  state: PageForm.State,
+  attributes: Partial<Page.Blocks>
+): PageForm.State {
   const { page } = state;
 
   return {
@@ -139,15 +121,15 @@ function updatePageBlocks(
 }
 
 function updatePage(
-  state: PageFormState,
-  attributes: Record<string, string>
-): PageFormState {
+  state: PageForm.State,
+  attributes: Partial<Page.Resource>
+): PageForm.State {
   return { ...state, page: updateLocalized(state, state.page, attributes) };
 }
 
 export default function usePage(
-  initialState: PageFormState
-): [PageFormState, (PageFormAction) => void] {
+  initialState: PageForm.State<Page.SerializedResource>
+): [PageForm.State, (action: PageForm.Action) => void] {
   const [state, dispatch] = useReducer(reducer, prepare(initialState));
   return [derivedState(state), dispatch];
 }
