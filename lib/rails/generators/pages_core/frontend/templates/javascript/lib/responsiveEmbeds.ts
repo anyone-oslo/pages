@@ -1,14 +1,17 @@
 const selectors = [
-  "iframe[src*=\"bandcamp.com\"]",
-  "iframe[src*=\"player.vimeo.com\"]",
-  "iframe[src*=\"youtube.com\"]",
-  "iframe[src*=\"youtube-nocookie.com\"]",
-  "iframe[src*=\"spotify.com\"]",
-  "iframe[src*=\"kickstarter.com\"][src*=\"video.html\"]"
+  'iframe[src*="bandcamp.com"]',
+  'iframe[src*="player.vimeo.com"]',
+  'iframe[src*="youtube.com"]',
+  'iframe[src*="youtube-nocookie.com"]',
+  'iframe[src*="spotify.com"]',
+  'iframe[src*="kickstarter.com"][src*="video.html"]'
 ];
 
 function readyHandler(fn: () => void) {
-  if (document.readyState === "complete" || document.readyState === "interactive") {
+  if (
+    document.readyState === "complete" ||
+    document.readyState === "interactive"
+  ) {
     setTimeout(fn, 1);
   } else {
     document.addEventListener("DOMContentLoaded", fn);
@@ -19,12 +22,14 @@ function wrapEmbed(embed: HTMLElement): HTMLElement {
   const parent = embed.parentNode as HTMLElement;
 
   // Recycle the existing container if the embed is already responsive.
-  if (parent &&
+  if (
+    parent &&
     parent.tagName === "DIV" &&
     parent.childNodes.length === 1 &&
-    parent.style.position === "relative") {
-      return parent;
-    }
+    parent.style.position === "relative"
+  ) {
+    return parent;
+  }
 
   const wrapper = document.createElement("div");
   if (parent.tagName === "P") {
@@ -51,7 +56,7 @@ function applyEmbed(embed: HTMLElement) {
   wrapper.classList.add("responsive-embed");
   wrapper.style.position = "relative";
   wrapper.style.width = "100%";
-  wrapper.style.paddingTop = 0;
+  wrapper.style.paddingTop = "0";
   wrapper.style.paddingBottom = `${ratio * 100}%`;
 
   embed.style.position = "absolute";

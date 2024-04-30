@@ -1,13 +1,12 @@
 function ready(callback: () => void) {
-  if (document.readyState === "complete" ||
-    (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-      callback();
-    } else {
-      document.addEventListener("DOMContentLoaded", callback);
-    }
+  if (document.readyState !== "loading") {
+    callback();
+  } else {
+    document.addEventListener("DOMContentLoaded", callback);
+  }
 }
 
-function applyGrid () {
+function applyGrid() {
   let showGrid = false;
   const gridOverlay = document.querySelector(".grid-overlay");
 
