@@ -1,7 +1,7 @@
 <%= react_component(
   "PageOptions",
   { page: Admin::PageResource.new(@page),
-    locale: @locale,
+    locale: content_locale,
     locales: locales_with_dir,
     authors: page_authors(@page).map{ |a| [a.name, a.id] },
     statuses: Page.status_labels,

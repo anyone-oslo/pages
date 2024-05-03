@@ -8,7 +8,7 @@
 <% content_for :main_wrapper do %>
   <%= react_component(
     "PageForm",
-    { locale: @locale,
+    { locale: content_locale,
       locales: locales_with_dir,
       page: Admin::PageResource.new(@page),
       templates: PagesCore::Templates.all.map { |t| Admin::TemplateConfigurationResource.new(t) },
