@@ -20,6 +20,31 @@ export function errorsOn(page: Page.Resource, attribute: string): string[] {
     .map((e) => e.message);
 }
 
+export function unconfiguredBlocks(state: PageForm.State): Template.Block[] {
+  const allBlocks: Record<string, Template.Block> = state.templates
+    .flatMap((t) => t.blocks)
+    .reduce((bs, b) => ({ [b.name]: b, ...bs }), {});
+
+  const anyValue = (v: MaybeLocalizedValue) => {
+    if (typeof v === "string") {
+      return v ? true : false;
+    } else {
+      return Object.values(v).filter((v) => v).length > 0;
+    }
+  };
+
+  const hasValue = Object.keys(allBlocks).filter((k) => {
+    const value = state.page.blocks[k];
+    return anyValue(value);
+  });
+
+  const enabled = state.templateConfig.blocks.map((b) => b.name);
+
+  return hasValue
+    .filter((b) => enabled.indexOf(b) === -1)
+    .map((n) => allBlocks[n]);
+}
+
 function parseDate(str: string): Date | null {
   if (!str) {
     return null;

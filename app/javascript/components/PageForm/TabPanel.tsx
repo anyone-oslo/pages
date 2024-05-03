@@ -1,8 +1,8 @@
 import React from "react";
 
 interface TabPanelProps {
-  active: boolean,
-  children: JSX.Element
+  active: boolean;
+  children: React.ReactNode;
 }
 
 export default function TabPanel(props: TabPanelProps) {
@@ -14,8 +14,7 @@ export default function TabPanel(props: TabPanelProps) {
   }
 
   return (
-    <div className={classNames.join(" ")}
-         role="tabpanel">
+    <div className={classNames.join(" ")} role="tabpanel">
       {children}
     </div>
   );

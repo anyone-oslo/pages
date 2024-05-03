@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { putJson, postJson } from "../lib/request";
 import useToastStore from "../stores/useToastStore";
-import usePage from "./PageForm/usePage";
+import usePage, { unconfiguredBlocks } from "./PageForm/usePage";
 import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
+import UnconfiguredContent from "./PageForm/UnconfiguredContent";
 import Metadata from "./PageForm/Metadata";
 import Form from "./PageForm/Form";
 import PageDescription from "./PageForm/PageDescription";
@@ -28,10 +29,8 @@ interface Tab {
   enabled: boolean;
 }
 
-function tabsList(
-  templates: Template.Config[],
-  templateConfig: Template.Config
-): Tab[] {
+function tabsList(state: PageForm.State): Tab[] {
+  const { templates, templateConfig } = state;
   const tabs: Tab[] = [{ id: "content", name: "Content", enabled: true }];
   if (templates.filter((t) => t.images).length > 0) {
     tabs.push({ id: "images", name: "Images", enabled: templateConfig.images });
@@ -40,6 +39,13 @@ function tabsList(
     tabs.push({ id: "files", name: "Files", enabled: templateConfig.files });
   }
   tabs.push({ id: "metadata", name: "Metadata", enabled: true });
+  if (unconfiguredBlocks(state).length > 0) {
+    tabs.push({
+      id: "unconfigured-content",
+      name: "Unconfigured content",
+      enabled: true
+    });
+  }
   return tabs;
 }
 
@@ -64,8 +70,8 @@ export default function PageForm(props: Props) {
     templates: props.templates
   });
 
-  const { page, locale, locales, templates, templateConfig } = state;
-  const tabs = tabsList(templates, templateConfig);
+  const { page, locale, locales } = state;
+  const tabs = tabsList(state);
   const [tab, setTab] = useState(initialTab(tabs));
   const errorToast = useToastStore((state) => state.error);
   const noticeToast = useToastStore((state) => state.notice);
@@ -130,6 +136,9 @@ export default function PageForm(props: Props) {
         <div className="content">
           <TabPanel active={tab == "content"}>
             <Content state={state} dispatch={dispatch} />
+          </TabPanel>
+          <TabPanel active={tab == "unconfigured-content"}>
+            <UnconfiguredContent state={state} dispatch={dispatch} />
           </TabPanel>
           <TabPanel active={tab == "images"}>
             <Images
