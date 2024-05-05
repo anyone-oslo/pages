@@ -2,17 +2,19 @@ import React from "react";
 
 import { blockValue, errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
-import TagEditor from "../TagEditor";
+import { default as TagEditor } from "../TagEditor/Editor";
 import Block from "./Block";
 import Dates from "./Dates";
 
 interface Props {
   state: PageForm.State;
   dispatch: (action: PageForm.Action) => void;
+  tagsState: TagEditor.State;
+  tagsDispatch: (action: TagEditor.Action) => void;
 }
 
 export default function Content(props: Props) {
-  const { state, dispatch } = props;
+  const { state, dispatch, tagsState, tagsDispatch } = props;
 
   const { page, locale, inputDir, templateConfig } = state;
 
@@ -38,8 +40,8 @@ export default function Content(props: Props) {
         <LabelledField label="Tags">
           <TagEditor
             name="page[serialized_tags]"
-            enabled={page.enabled_tags}
-            tags={page.tags_and_suggestions}
+            state={tagsState}
+            dispatch={tagsDispatch}
           />
         </LabelledField>
       )}

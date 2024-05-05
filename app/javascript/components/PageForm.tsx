@@ -4,6 +4,7 @@ import { putJson, postJson } from "../lib/request";
 import useToastStore from "../stores/useToastStore";
 import useAttachments from "./Attachments/useAttachments";
 import useImageGrid from "./ImageGrid/useImageGrid";
+import useTags from "./TagEditor/useTags";
 import usePage, { unconfiguredBlocks } from "./PageForm/usePage";
 import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
@@ -68,10 +69,13 @@ export default function PageForm(props: Props) {
     page: props.page,
     templates: props.templates
   });
-
   const { page, locale, locales } = state;
   const filesState = useAttachments(page.page_files);
   const imagesState = useImageGrid(page.page_images, true);
+  const [tagsState, tagsDispatch] = useTags(
+    page.tags_and_suggestions,
+    page.enabled_tags
+  );
   const tabs = tabsList(state);
   const [tab, setTab] = useState(initialTab(tabs));
   const errorToast = useToastStore((state) => state.error);
@@ -96,7 +100,13 @@ export default function PageForm(props: Props) {
     evt.preventDefault();
     let method = postJson;
     let url = `/admin/${locale}/pages.json`;
-    const data = { page: pageParams(state) };
+    const data = {
+      page: pageParams(state, {
+        files: filesState,
+        images: imagesState,
+        tags: tagsState
+      })
+    };
 
     if (page.id) {
       method = putJson;
@@ -120,7 +130,12 @@ export default function PageForm(props: Props) {
         </PageDescription>
         <div className="content">
           <TabPanel active={tab == "content"}>
-            <Content state={state} dispatch={dispatch} />
+            <Content
+              state={state}
+              dispatch={dispatch}
+              tagsState={tagsState}
+              tagsDispatch={tagsDispatch}
+            />
           </TabPanel>
           <TabPanel active={tab == "unconfigured-content"}>
             <UnconfiguredContent state={state} dispatch={dispatch} />

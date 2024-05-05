@@ -1,3 +1,9 @@
+interface Options {
+  files: Attachments.State;
+  images: ImageGrid.State;
+  tags: TagEditor.State;
+}
+
 function dates(state: PageForm.State) {
   if (state.datesEnabled) {
     return {
@@ -14,12 +20,54 @@ function dates(state: PageForm.State) {
   }
 }
 
-export default function pageParams(state: PageForm.State) {
+function pageFiles(state: Attachments.State) {
+  const files = state.collection.draggables
+    .filter((r) => r !== "Files")
+    .map((r: Drag.Draggable<AttachmentRecord>, i: number) => {
+      const a = r.record;
+      return { id: a.id, attachment_id: a.attachment.id, position: i + 1 };
+    });
+  const deleted = state.deleted.map((a) => {
+    return { id: a.id, attachment_id: a.attachment.id, _destroy: "true" };
+  });
+  return [...files, ...deleted];
+}
+
+function pageImages(state: ImageGrid.State) {
+  const primary = state.primary.draggables
+    .filter((r) => r !== "Files")
+    .map((r: Drag.Draggable<ImageRecord>, i: number) => {
+      const pi = r.record;
+      return {
+        id: pi.id,
+        image_id: pi.image.id,
+        primary: true,
+        position: i + 1
+      };
+    });
+  const images = state.images.draggables
+    .filter((r) => r !== "Files")
+    .map((r: Drag.Draggable<ImageRecord>, i: number) => {
+      const pi = r.record;
+      return {
+        id: pi.id,
+        image_id: pi.image.id,
+        primary: false,
+        position: primary.length + i + 1
+      };
+    });
+
+  const deleted = state.deleted.map((i) => {
+    return { id: i.id, image_id: i.image.id, _destroy: "true" };
+  });
+  return [...primary, ...images, ...deleted];
+}
+
+export default function pageParams(state: PageForm.State, options: Options) {
+  const { files, images, tags } = options;
   const { page } = state;
 
   // meta_image_id
-  // page_images
-  // page_files
   return {
     ...dates(state),
     ...page.blocks,
@@ -32,7 +80,9 @@ export default function pageParams(state: PageForm.State) {
     news_page: page.news_page,
     user_id: page.user_id,
     redirect_to: page.redirect_to,
-    serialized_tags: JSON.stringify(page.enabled_tags),
-    path_segment: page.path_segment
+    serialized_tags: JSON.stringify(tags.enabled),
+    path_segment: page.path_segment,
+    page_files_attributes: pageFiles(files),
+    page_images_attributes: pageImages(images)
   };
 }
