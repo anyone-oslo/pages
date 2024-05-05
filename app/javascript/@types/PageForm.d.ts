@@ -12,4 +12,10 @@ declare namespace PageForm {
     inputDir?: "ltr" | "rtl";
     templateConfig?: Template.Config;
   }
+
+  interface Tab {
+    id: string;
+    name: string;
+    enabled: boolean;
+  }
 }

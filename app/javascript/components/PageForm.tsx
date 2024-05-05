@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { putJson, postJson } from "../lib/request";
 import useToastStore from "../stores/useToastStore";
+import useAttachments from "./Attachments/useAttachments";
+import useImageGrid from "./ImageGrid/useImageGrid";
 import usePage, { unconfiguredBlocks } from "./PageForm/usePage";
 import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
@@ -10,6 +12,7 @@ import Metadata from "./PageForm/Metadata";
 import Form from "./PageForm/Form";
 import PageDescription from "./PageForm/PageDescription";
 import Options from "./PageForm/Options";
+import Tabs from "./PageForm/Tabs";
 import TabPanel from "./PageForm/TabPanel";
 import Files from "./PageForm/Files";
 import Images from "./PageForm/Images";
@@ -23,15 +26,11 @@ interface Props {
   statuses: Page.StatusLabels;
 }
 
-interface Tab {
-  id: string;
-  name: string;
-  enabled: boolean;
-}
-
-function tabsList(state: PageForm.State): Tab[] {
+function tabsList(state: PageForm.State): PageForm.Tab[] {
   const { templates, templateConfig } = state;
-  const tabs: Tab[] = [{ id: "content", name: "Content", enabled: true }];
+  const tabs: PageForm.Tab[] = [
+    { id: "content", name: "Content", enabled: true }
+  ];
   if (templates.filter((t) => t.images).length > 0) {
     tabs.push({ id: "images", name: "Images", enabled: templateConfig.images });
   }
@@ -49,7 +48,7 @@ function tabsList(state: PageForm.State): Tab[] {
   return tabs;
 }
 
-function initialTab(tabs: Tab[]): string {
+function initialTab(tabs: PageForm.Tab[]): string {
   const tabExpression = /#(.*)$/;
   if (document.location.toString().match(tabExpression)) {
     const id = document.location.toString().match(tabExpression)[1];
@@ -71,6 +70,8 @@ export default function PageForm(props: Props) {
   });
 
   const { page, locale, locales } = state;
+  const filesState = useAttachments(page.page_files);
+  const imagesState = useImageGrid(page.page_images, true);
   const tabs = tabsList(state);
   const [tab, setTab] = useState(initialTab(tabs));
   const errorToast = useToastStore((state) => state.error);
@@ -85,11 +86,6 @@ export default function PageForm(props: Props) {
       history.replaceState(null, "", pageUrl);
     }
   }, [page.id, locale, tab]);
-
-  const handleTabChange = (tab: Tab) => (evt: React.MouseEvent) => {
-    evt.preventDefault();
-    setTab(tab.id);
-  };
 
   const handlePreview = (evt: React.MouseEvent) => {
     evt.preventDefault();
@@ -120,18 +116,7 @@ export default function PageForm(props: Props) {
     <Form ref={formRef} state={state}>
       <main>
         <PageDescription state={state} dispatch={dispatch}>
-          <ul className="content-tabs" role="tablist">
-            {tabs.map((t) => (
-              <li key={t.id} className={t.id == tab ? "current" : ""}>
-                {!t.enabled && t.name}
-                {t.enabled && (
-                  <a href={`#${t.id}`} onClick={handleTabChange(t)}>
-                    {t.name}
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
+          <Tabs tabs={tabs} tab={tab} setTab={setTab} />
         </PageDescription>
         <div className="content">
           <TabPanel active={tab == "content"}>
@@ -141,18 +126,10 @@ export default function PageForm(props: Props) {
             <UnconfiguredContent state={state} dispatch={dispatch} />
           </TabPanel>
           <TabPanel active={tab == "images"}>
-            <Images
-              locale={locale}
-              locales={locales}
-              records={page.page_images}
-            />
+            <Images locale={locale} locales={locales} state={imagesState} />
           </TabPanel>
           <TabPanel active={tab == "files"}>
-            <Files
-              locale={locale}
-              locales={locales}
-              records={page.page_files}
-            />
+            <Files locale={locale} locales={locales} state={filesState} />
           </TabPanel>
           <TabPanel active={tab == "metadata"}>
             <Metadata state={state} dispatch={dispatch} />

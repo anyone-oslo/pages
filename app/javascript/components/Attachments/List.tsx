@@ -6,14 +6,8 @@ import { post } from "../../lib/request";
 
 import { createDraggable, draggedOrder, useDragUploader } from "../drag";
 
-interface Props {
-  attribute: string;
-  locale: string;
-  locales: { [index: string]: Locale };
-  collection: Drag.Collection<AttachmentRecord>;
-  deleted: AttachmentRecord[];
-  setDeleted: (records: AttachmentRecord[]) => void;
-  showEmbed: boolean;
+interface Props extends Attachments.Options {
+  state: Attachments.State;
 }
 
 function filenameToName(str: string): string {
@@ -21,7 +15,7 @@ function filenameToName(str: string): string {
 }
 
 export default function List(props: Props) {
-  const { collection, deleted, setDeleted } = props;
+  const { collection, deleted, setDeleted } = props.state;
   const locales = props.locales ? Object.keys(props.locales) : [props.locale];
 
   const uploadAttachment = (file: File) => {

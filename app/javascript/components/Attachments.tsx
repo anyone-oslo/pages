@@ -1,31 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import useAttachments from "./Attachments/useAttachments";
 import List from "./Attachments/List";
 
-import { useDragCollection } from "./drag";
-
-interface Props {
-  attribute: string;
-  locale: string;
-  locales: { [index: string]: Locale };
+interface Props extends Attachments.Options {
   records: AttachmentRecord[];
-  showEmbed: boolean;
 }
 
 export default function Attachments(props: Props) {
-  const { attribute, locale, locales, records, showEmbed } = props;
+  const state = useAttachments(props.records);
 
-  const collection = useDragCollection(records);
-  const [deleted, setDeleted] = useState<AttachmentRecord[]>([]);
-
-  return (
-    <List
-      attribute={attribute}
-      locale={locale}
-      locales={locales}
-      collection={collection}
-      deleted={deleted}
-      setDeleted={setDeleted}
-      showEmbed={showEmbed}
-    />
-  );
+  return <List state={state} {...props} />;
 }

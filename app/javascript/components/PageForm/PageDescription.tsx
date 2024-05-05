@@ -5,7 +5,7 @@ import LocaleLinks from "./LocaleLinks";
 interface PageDescriptionProps {
   state: PageForm.State;
   dispatch: (action: PageForm.Action) => void;
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 function editLink(locale: string, page: Page.Ancestor | Page.Resource) {

@@ -1,23 +1,23 @@
 import React from "react";
-import ImageGrid from "../ImageGrid";
+import Grid from "../ImageGrid/Grid";
 
-interface ImagesProps {
+interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  records: ImageRecord[];
+  state: ImageGrid.State;
 }
 
-export default function Images(props: ImagesProps) {
+export default function Images(props: Props) {
   return (
     <div className="page-images">
-      <ImageGrid
+      <Grid
         attribute="page[page_images_attributes]"
         primaryAttribute="page[image_id]"
         enablePrimary={true}
         showEmbed={true}
         locale={props.locale}
         locales={props.locales}
-        records={props.records}
+        state={props.state}
       />
     </div>
   );

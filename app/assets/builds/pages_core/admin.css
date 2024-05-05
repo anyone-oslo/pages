@@ -7514,6 +7514,17 @@ form .field:last-child {
     margin-bottom: 0px;
   }
 
+form .field .date-select {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+form .field .date-select .time {
+        width: 4rem;
+        min-width: 2rem;
+      }
+
 form .field input[type="text"],
     form .field input[type="password"],
     form .field input[type="email"],

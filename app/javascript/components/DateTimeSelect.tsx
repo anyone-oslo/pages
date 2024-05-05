@@ -122,6 +122,7 @@ export default function DateTimeSelect(props: DateTimeSelectProps) {
       </select>
       {!disableTime && (
         <input
+          className="time"
           type="text"
           size={5}
           disabled={disabled}

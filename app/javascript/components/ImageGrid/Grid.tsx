@@ -8,17 +8,8 @@ import { post } from "../../lib/request";
 
 import { createDraggable, collectionOrder, useDragUploader } from "../drag";
 
-interface Props {
-  attribute: string;
-  deleted: ImageRecord[];
-  enablePrimary: boolean;
-  images: Drag.Collection<ImageRecord>;
-  primary: Drag.Collection<ImageRecord>;
-  locale: string;
-  locales: { [index: string]: Locale };
-  primaryAttribute: string;
-  setDeleted: (records: ImageRecord[]) => void;
-  showEmbed: boolean;
+interface Props extends ImageGrid.Options {
+  state: ImageGrid.State;
 }
 
 function filterFiles(files: File[]): File[] {
@@ -57,7 +48,7 @@ function draggedImageOrder(
 }
 
 export default function Grid(props: Props) {
-  const { primary, images, deleted, setDeleted } = props;
+  const { primary, images, deleted, setDeleted } = props.state;
 
   const containerRef = useRef();
   const error = useToastStore((state) => state.error);

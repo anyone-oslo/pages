@@ -1,53 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import useImageGrid from "./ImageGrid/useImageGrid";
 import Grid from "./ImageGrid/Grid";
 
-import { useDragCollection } from "./drag";
-
-interface ImageGridProps {
-  attribute: string;
-  enablePrimary: boolean;
-  locale: string;
-  locales: { [index: string]: Locale };
-  primaryAttribute: string;
+interface Props extends ImageGrid.Options {
   records: ImageRecord[];
-  showEmbed: boolean;
 }
 
-function initRecords(props: ImageGridProps) {
-  const primary = props.enablePrimary
-    ? props.records.filter((r) => r.primary).slice(0, 1)
-    : [];
+export default function ImageGrid(props: Props) {
+  const state = useImageGrid(props.records, props.showEmbed);
 
-  return [primary, props.records.filter((r) => primary.indexOf(r) === -1)];
-}
-
-export default function ImageGrid(props: ImageGridProps) {
-  const {
-    attribute,
-    locale,
-    locales,
-    enablePrimary,
-    primaryAttribute,
-    showEmbed
-  } = props;
-
-  const [initPrimary, initImages] = initRecords(props);
-  const primary = useDragCollection(initPrimary);
-  const images = useDragCollection(initImages);
-  const [deleted, setDeleted] = useState([]);
-
-  return (
-    <Grid
-      attribute={attribute}
-      deleted={deleted}
-      setDeleted={setDeleted}
-      locale={locale}
-      locales={locales}
-      enablePrimary={enablePrimary}
-      primaryAttribute={primaryAttribute}
-      primary={primary}
-      images={images}
-      showEmbed={showEmbed}
-    />
-  );
+  return <Grid state={state} {...props} />;
 }

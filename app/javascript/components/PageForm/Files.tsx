@@ -1,23 +1,23 @@
 import React from "react";
-import Attachments from "../Attachments";
+import List from "../Attachments/List";
 
 interface FilesProps {
   locale: string;
   locales: { [index: string]: Locale };
-  records: AttachmentRecord[];
+  state: Attachments.State;
 }
 
 export default function Files(props: FilesProps) {
-  const { locale, locales, records } = props;
+  const { locale, locales, state } = props;
 
   return (
     <div className="page-files">
-      <Attachments
+      <List
         attribute="page[page_files_attributes]"
         showEmbed={true}
         locale={locale}
         locales={locales}
-        records={records}
+        state={state}
       />
     </div>
   );
