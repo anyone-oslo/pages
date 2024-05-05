@@ -1,12 +1,28 @@
-export default function pageParams(page: Page.Resource) {
+function dates(state: PageForm.State) {
+  if (state.datesEnabled) {
+    return {
+      all_day: state.page.all_day,
+      starts_at: state.page.starts_at,
+      ends_at: state.page.ends_at
+    };
+  } else {
+    return {
+      all_day: false,
+      starts_at: null,
+      ends_at: null
+    };
+  }
+}
+
+export default function pageParams(state: PageForm.State) {
+  const { page } = state;
+
   // meta_image_id
   // page_images
   // page_files
   return {
+    ...dates(state),
     ...page.blocks,
-    starts_at: page.starts_at,
-    ends_at: page.ends_at,
-    all_day: page.all_day,
     status: page.status,
     published_at: page.published_at,
     pinned: page.pinned,

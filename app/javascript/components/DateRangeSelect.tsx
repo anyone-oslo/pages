@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DateTimeSelect from "./DateTimeSelect";
 
-interface DateRangeSelectProps {
+interface Props {
+  objectName: string;
   startsAt: Date | string;
   endsAt: Date | string;
-  disabled: boolean;
-  disableTime: boolean;
-  objectName: string;
+  setStartsAt?: (date: Date) => void;
+  setEndsAt?: (date: Date) => void;
+  disabled?: boolean;
+  disableTime?: boolean;
 }
 
 function defaultDate(offset = 0): Date {
@@ -29,15 +31,24 @@ function parseDate(str: Date | string): Date {
   }
 }
 
-export default function DateRangeSelect(props: DateRangeSelectProps) {
+export default function DateRangeSelect(props: Props) {
   const { disabled, disableTime, objectName } = props;
 
-  const [startsAt, setStartsAt] = useState(
-    parseDate(props.startsAt) || defaultDate()
+  const [uncontrolledStartsAt, setUncontrolledStartsAt] = useState(
+    parseDate(props.startsAt)
   );
-  const [endsAt, setEndsAt] = useState(
+
+  const [uncontrolledEndsAt, setUncontrolledEndsAt] = useState(
     parseDate(props.endsAt) || defaultDate(60)
   );
+
+  const startsAt = parseDate(
+    props.setStartsAt ? props.startsAt : uncontrolledStartsAt
+  );
+  const setStartsAt = props.setStartsAt || setUncontrolledStartsAt;
+
+  const endsAt = parseDate(props.setEndsAt ? props.endsAt : uncontrolledEndsAt);
+  const setEndsAt = props.setEndsAt || setUncontrolledEndsAt;
 
   const setDates = (start: Date, end: Date) => {
     if (end < start) {
@@ -58,27 +69,37 @@ export default function DateRangeSelect(props: DateRangeSelectProps) {
     setDates(startsAt, newDate);
   };
 
+  useEffect(() => {
+    if (!startsAt || !endsAt) {
+      setDates(startsAt || defaultDate(), endsAt || defaultDate(60));
+    }
+  }, [startsAt, endsAt]);
+
   return (
     <div className="date-range-select">
-      <div className="date">
-        <DateTimeSelect
-          name={objectName + "[starts_at]"}
-          disabled={disabled}
-          disableTime={disableTime}
-          onChange={changeStartsAt}
-          value={startsAt}
-        />
-      </div>
+      {startsAt && (
+        <div className="date">
+          <DateTimeSelect
+            name={objectName + "[starts_at]"}
+            disabled={disabled}
+            disableTime={disableTime}
+            onChange={changeStartsAt}
+            value={startsAt}
+          />
+        </div>
+      )}
       <span className="to">to</span>
-      <div className="date">
-        <DateTimeSelect
-          name={objectName + "[ends_at]"}
-          disabled={disabled}
-          disableTime={disableTime}
-          onChange={changeEndsAt}
-          value={endsAt}
-        />
-      </div>
+      {endsAt && (
+        <div className="date">
+          <DateTimeSelect
+            name={objectName + "[ends_at]"}
+            disabled={disabled}
+            disableTime={disableTime}
+            onChange={changeEndsAt}
+            value={endsAt}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -33,13 +33,7 @@ export default function Content(props: Props) {
           value={blockValue(state, b)}
         />
       ))}
-      {templateConfig.dates && (
-        <Dates
-          starts_at={page.starts_at}
-          ends_at={page.ends_at}
-          all_day={page.all_day}
-        />
-      )}
+      {templateConfig.dates && <Dates state={state} dispatch={dispatch} />}
       {templateConfig.tags && (
         <LabelledField label="Tags">
           <TagEditor

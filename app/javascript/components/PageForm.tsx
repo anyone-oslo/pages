@@ -96,7 +96,7 @@ export default function PageForm(props: Props) {
     evt.preventDefault();
     let method = postJson;
     let url = `/admin/${locale}/pages.json`;
-    const data = { page: pageParams(page) };
+    const data = { page: pageParams(state) };
 
     if (page.id) {
       method = putJson;

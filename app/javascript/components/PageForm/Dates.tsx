@@ -1,40 +1,50 @@
-import React, { useState } from "react";
+import React from "react";
 
 import DateRangeSelect from "../DateRangeSelect";
 
 interface DatesProps {
-  starts_at: Date | string;
-  ends_at: Date | string;
-  all_day: boolean;
+  state: PageForm.State;
+  dispatch: (action: PageForm.Action) => void;
 }
 
 export default function Dates(props: DatesProps) {
-  const { starts_at, ends_at } = props;
+  const { state, dispatch } = props;
+  const { datesEnabled, page } = state;
 
-  const [hasDates, setHasDates] = useState(props.starts_at ? true : false);
-  const [allDay, setAllDay] = useState(!!props.all_day);
+  const toggleAllDay = () => {
+    dispatch({ type: "update", payload: { all_day: !page.all_day } });
+  };
 
-  const toggleHasDates = () => setHasDates(!hasDates);
-  const toggleAllDay = () => setAllDay(!allDay);
+  const toggleDatesEnabled = () => {
+    dispatch({ type: "setDatesEnabled", payload: !datesEnabled });
+  };
+
+  const setDate = (attr: "starts_at" | "ends_at") => (date: Date) => {
+    dispatch({ type: "update", payload: { [attr]: date } });
+  };
 
   return (
     <div className="page-dates field">
       <input
         type="hidden"
         name="page[all_day]"
-        value={hasDates && allDay ? "1" : "0"}
+        value={datesEnabled && page.all_day ? "1" : "0"}
       />
       <label>Dates</label>
       <div className="toggles">
         <label className="has-dates-toggle">
-          <input type="checkbox" checked={hasDates} onChange={toggleHasDates} />
-          Enabled
-        </label>
-        <label className={!hasDates && "disabled"}>
           <input
             type="checkbox"
-            disabled={!hasDates}
-            checked={allDay}
+            checked={datesEnabled}
+            onChange={toggleDatesEnabled}
+          />
+          Enabled
+        </label>
+        <label className={!datesEnabled && "disabled"}>
+          <input
+            type="checkbox"
+            disabled={!datesEnabled}
+            checked={page.all_day}
             onChange={toggleAllDay}
           />
           All day event
@@ -42,10 +52,12 @@ export default function Dates(props: DatesProps) {
       </div>
       <DateRangeSelect
         objectName="page"
-        startsAt={starts_at}
-        endsAt={ends_at}
-        disabled={!hasDates}
-        disableTime={allDay}
+        startsAt={page.starts_at}
+        setStartsAt={setDate("starts_at")}
+        endsAt={page.ends_at}
+        setEndsAt={setDate("ends_at")}
+        disabled={!datesEnabled}
+        disableTime={page.all_day}
       />
     </div>
   );

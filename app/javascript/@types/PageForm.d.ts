@@ -1,7 +1,7 @@
 declare namespace PageForm {
   interface Action {
     type: string;
-    payload?: string | Partial<Page.Resource> | Partial<Page.Blocks>;
+    payload?: boolean | string | Partial<Page.Resource> | Partial<Page.Blocks>;
   }
 
   interface State<T = Page.Resource> {
@@ -9,6 +9,7 @@ declare namespace PageForm {
     locales: { [index: string]: Locale };
     page: T;
     templates: Template.Config[];
+    datesEnabled?: boolean;
     inputDir?: "ltr" | "rtl";
     templateConfig?: Template.Config;
   }

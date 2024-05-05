@@ -93,7 +93,7 @@ function prepare(
   state: PageForm.State<Page.SerializedResource>
 ): PageForm.State {
   const page = { ...state.page, ...parsedDates(state.page) };
-  return { ...state, page: page };
+  return { ...state, page: page, datesEnabled: page.starts_at ? true : false };
 }
 
 function reducer(
@@ -102,6 +102,8 @@ function reducer(
 ): PageForm.State {
   const { type, payload } = action;
   switch (type) {
+    case "setDatesEnabled":
+      return { ...state, datesEnabled: payload as boolean };
     case "setLocale":
       return { ...state, locale: payload as string };
     case "update":
