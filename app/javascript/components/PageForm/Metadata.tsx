@@ -20,6 +20,10 @@ export default function Metadata(props: Props) {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 
+  const handleMetaImage = (value: Page.MetaImage) => {
+    dispatch({ type: "update", payload: { meta_image: value } });
+  };
+
   return (
     <React.Fragment>
       <PathSegment state={state} dispatch={dispatch} />
@@ -38,6 +42,7 @@ export default function Metadata(props: Props) {
           locales={locales}
           image={page.meta_image.image}
           src={page.meta_image.src}
+          onChange={handleMetaImage}
           width={250}
           caption={false}
         />

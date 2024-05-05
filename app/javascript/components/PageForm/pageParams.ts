@@ -67,7 +67,6 @@ export default function pageParams(state: PageForm.State, options: Options) {
   const { files, images, tags } = options;
   const { page } = state;
 
-  // meta_image_id
   return {
     ...dates(state),
     ...page.blocks,
@@ -82,6 +81,7 @@ export default function pageParams(state: PageForm.State, options: Options) {
     redirect_to: page.redirect_to,
     serialized_tags: JSON.stringify(tags.enabled),
     path_segment: page.path_segment,
+    meta_image_id: page.meta_image.image && page.meta_image.image.id,
     page_files_attributes: pageFiles(files),
     page_images_attributes: pageImages(images)
   };

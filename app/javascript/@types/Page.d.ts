@@ -32,14 +32,16 @@ declare namespace Page {
     name: LocalizedValue;
   }
 
+  interface MetaImage {
+    src?: string;
+    image?: ImageResource;
+  }
+
   interface Resource extends Attributes {
     blocks: Blocks;
     ancestors: Ancestor[];
     tags_and_suggestions: string[];
-    meta_image: {
-      src?: string;
-      image?: ImageResource;
-    };
+    meta_image: MetaImage;
     enabled_tags: string[];
     path_segment: LocalizedValue;
     urls: LocalizedValue;
