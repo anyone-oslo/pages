@@ -43,6 +43,7 @@ export default function PathSegment(props: Props) {
     <LabelledField
       htmlFor="page_path_segment"
       label="Path segment"
+      description="Only alpanumeric characters and dashes are allowed."
       errors={errorsOn(page, "path_segment")}>
       <input
         type="text"

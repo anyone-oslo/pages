@@ -103,10 +103,6 @@ form {
       display: inline-block;
       white-space: nowrap;
 
-      .date-select {
-        display: inline-block;
-      }
-
       input[type="text"] {
         display: inline;
         width: auto;
@@ -183,6 +179,12 @@ fieldset {
   margin: 0px;
   border: none;
   border-bottom: 1px solid var(--border-color);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 button,

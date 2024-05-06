@@ -99,7 +99,6 @@ export default function Options(props: OptionsProps) {
           Make post featured
         </label>
       </LabelledField>
-      TODO: Categories
       <LabelledField
         htmlFor="page_template"
         label="Template"
