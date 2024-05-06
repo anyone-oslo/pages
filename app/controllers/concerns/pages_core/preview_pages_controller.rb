@@ -3,9 +3,25 @@
 module PagesCore
   module PreviewPagesController
     extend ActiveSupport::Concern
+    include PagesCore::PageParameters
+
+    included do
+      before_action :disable_xss_protection, only: %i[preview]
+    end
 
     def preview?
       @preview || false
+    end
+
+    def preview
+      render_error 403 unless logged_in?
+
+      @preview = true
+      @page = Page.find_by(id: params[:page_id]) || Page.new
+      @page.readonly!
+      @page.assign_attributes(preview_page_params)
+
+      render_page
     end
 
     private
@@ -17,31 +33,15 @@ module PagesCore
       response.headers["X-XSS-Protection"] = "0"
     end
 
-    def permitted_page_attributes
-      %i[template user_id status feed_enabled published_at
-         redirect_to image_link news_page
-         unique_name pinned parent_page_id]
-    end
-
-    def page_params
-      params.require(:page).permit(
-        Page.localized_attributes + permitted_page_attributes
-      )
-    end
-
-    def preview_page(page)
-      redirect_to(page_url(content_locale, page)) && return unless logged_in?
-
-      disable_xss_protection
-
-      @preview = true
-      page.attributes = page_params.merge(
+    def preview_page_params
+      ActionController::Parameters.new(
+        JSON.parse(params.require(:preview_page))
+      ).permit(:id, page_content_attributes).merge(
         status: 2,
         published_at: Time.zone.now,
         locale: content_locale,
         redirect_to: nil
       )
-      render_page
     end
   end
 end

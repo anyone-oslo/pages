@@ -3,6 +3,7 @@
 module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::PageJsonHelper
+    include PagesCore::PageParameters
 
     before_action :find_page, only: %i[show edit update destroy move]
 
@@ -83,20 +84,8 @@ module Admin
       User.find_by(email: PagesCore.config.default_author)
     end
 
-    def page_attributes
-      %i[template user_id status feed_enabled published_at redirect_to
-         image_link news_page unique_name pinned parent_page_id serialized_tags
-         meta_image_id starts_at ends_at all_day image_id path_segment
-         meta_title meta_description open_graph_title open_graph_description]
-    end
-
     def page_params
-      params.require(:page).permit(
-        PagesCore::Templates::TemplateConfiguration.all_blocks +
-        page_attributes,
-        page_images_attributes: %i[id position image_id primary _destroy],
-        page_files_attributes: %i[id position attachment_id _destroy]
-      )
+      params.require(:page).permit(page_content_attributes)
     end
 
     def find_page

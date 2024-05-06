@@ -29,7 +29,7 @@ module PagesCore
 
           (config.get(:default, :blocks).to_a + template_blocks)
             .compact
-            .select { |_, opts| opts[:localized] }.map(&:first)
+            .select { |_, opts| opts[:localized] }.map(&:first).uniq
         end
 
         private

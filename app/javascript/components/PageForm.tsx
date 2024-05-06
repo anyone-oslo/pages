@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import { putJson, postJson } from "../lib/request";
+import { openPreview } from "./PageForm/preview";
 import useToastStore from "../stores/useToastStore";
 import useAttachments from "./Attachments/useAttachments";
 import useImageGrid from "./ImageGrid/useImageGrid";
@@ -81,6 +82,14 @@ export default function PageForm(props: Props) {
   const errorToast = useToastStore((state) => state.error);
   const noticeToast = useToastStore((state) => state.notice);
 
+  const params = () => {
+    return pageParams(state, {
+      files: filesState,
+      images: imagesState,
+      tags: tagsState
+    });
+  };
+
   useEffect(() => {
     const pageUrl =
       `/admin/${locale}/pages/` +
@@ -93,7 +102,10 @@ export default function PageForm(props: Props) {
 
   const handlePreview = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    console.log("preview");
+    openPreview(`/${locale}/pages/preview`, {
+      page_id: `${page.id}`,
+      preview_page: JSON.stringify(params())
+    });
   };
 
   const handleSubmit = (evt: React.MouseEvent) => {
