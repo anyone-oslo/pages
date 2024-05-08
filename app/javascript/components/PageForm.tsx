@@ -98,7 +98,11 @@ export default function PageForm(props: Props) {
     method(url, data)
       .then((response: Page.SerializedResource) => {
         dispatch({ type: "setPage", payload: response });
-        noticeToast("Your changes were saved");
+        if (response.errors && response.errors.length > 0) {
+          errorToast("A validation error prevented the page from being saved.");
+        } else {
+          noticeToast("Your changes were saved");
+        }
       })
       .catch(() => {
         errorToast("An error occured while saving your changes.");

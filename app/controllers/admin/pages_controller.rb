@@ -39,23 +39,25 @@ module Admin
 
     def create
       @page = build_page(content_locale, page_params).tap(&:save)
-      if @page.valid?
-        respond_with_page(@page) do
+
+      respond_with_page(@page) do
+        if @page.valid?
           redirect_to(edit_admin_page_url(content_locale, @page))
+        else
+          render action: :new
         end
-      else
-        render action: :new
       end
     end
 
     def update
-      if @page.update(page_params)
-        respond_with_page(@page) do
+      @page.update(page_params)
+      respond_with_page(@page) do
+        if @page.valid?
           flash[:notice] = t("pages_core.changes_saved")
           redirect_to edit_admin_page_url(content_locale, @page)
+        else
+          render action: :edit
         end
-      else
-        render action: :edit
       end
     end
 

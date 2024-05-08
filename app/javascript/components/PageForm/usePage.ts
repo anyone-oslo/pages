@@ -34,7 +34,7 @@ export function unconfiguredBlocks(state: PageForm.State): Template.Block[] {
   };
 
   const hasValue = Object.keys(allBlocks).filter((k) => {
-    const value = state.page.blocks[k];
+    const value = state.page.blocks[k] || "";
     return anyValue(value);
   });
 
