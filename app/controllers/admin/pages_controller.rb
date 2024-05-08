@@ -2,7 +2,6 @@
 
 module Admin
   class PagesController < Admin::AdminController
-    include PagesCore::Admin::PageJsonHelper
     include PagesCore::PageParameters
 
     before_action :find_page, only: %i[show edit update destroy move]
@@ -95,7 +94,12 @@ module Admin
     def respond_with_page(page, &block)
       respond_to do |format|
         format.html(&block)
-        format.json { render json: page_json(page) }
+        format.json do
+          render json: ::Admin::PageResource.new(
+            page,
+            params: { user: current_user }
+          )
+        end
       end
     end
   end

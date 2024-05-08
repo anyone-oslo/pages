@@ -9,7 +9,7 @@ module Admin
 
     attributes :id, :starts_at, :ends_at, :all_day, :status, :published_at,
                :pinned, :template, :unique_name, :feed_enabled, :news_page,
-               :user_id, :redirect_to
+               :parent_page_id, :user_id, :redirect_to
 
     has_many :page_images, resource: Admin::PageImageResource
     has_many :page_files, resource: Admin::PageFileResource
@@ -66,6 +66,11 @@ module Admin
           name: localized_attribute(p, :name),
           path_segment: localized_attribute(p, :path_segment) }
       end
+    end
+
+    attribute :permissions do
+      [(:edit if Policy.for(params[:user], object).edit?),
+       (:create if Policy.for(params[:user], object).edit?)].compact
     end
 
     private

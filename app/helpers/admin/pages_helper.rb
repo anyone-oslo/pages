@@ -11,20 +11,6 @@ module Admin
       end
     end
 
-    def available_templates_for_select
-      PagesCore::Templates.names.collect do |template|
-        if template == "index"
-          ["[Default]", "index"]
-        else
-          [template.humanize, template]
-        end
-      end
-    end
-
-    def file_embed_code(file)
-      "[file:#{file.id}]"
-    end
-
     def news_section_name(page, news_pages)
       if news_pages.count { |p| p.name == page.name } > 1
         page_name(page, include_parents: true)
@@ -80,10 +66,6 @@ module Admin
     end
 
     private
-
-    def nested_array?(array)
-      array.present? && array.first.is_a?(Array)
-    end
 
     def page_name_with_fallback(page)
       if page.name?

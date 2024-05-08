@@ -37,7 +37,7 @@ export default class PageTree extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { tree: this.buildTree(props.pages) };
+    this.state = { tree: this.buildTree(props.pages, props.locale) };
   }
 
   applyCollapsed(tree: Tree<Page.TreeNode>) {
@@ -69,12 +69,12 @@ export default class PageTree extends Component<Props, State> {
   }
 
   createPage(index: Tree.Index<Page.TreeNode>, attributes: Page.TreeItem) {
-    void postJson(`/admin/${index.node.locale}/pages.json`, {
+    void postJson(`/admin/${this.props.locale}/pages.json`, {
       page: attributes
     }).then((response: Page.TreeItem) => this.updateNode(index, response));
   }
 
-  buildTree(pages: Page.TreeNode[]) {
+  buildTree(pages: Page.TreeNode[], locale: string) {
     // Build tree
     const parentMap: ParentMap = pages.reduce(
       (m: ParentMap, page: Page.TreeNode) => {
@@ -85,13 +85,14 @@ export default class PageTree extends Component<Props, State> {
       {}
     );
 
-    pages.forEach((p: Page.TreeNode) => {
+    pages.forEach((p) => {
       p.children = parentMap[p.id] || [];
     });
 
     const tree = new Tree<Page.TreeNode>({
-      name: "All Pages",
-      locale: this.props.locale,
+      blocks: {
+        name: { [locale]: "All Pages" }
+      },
       permissions: this.props.permissions,
       root: true,
       children: parentMap[0],
@@ -111,7 +112,7 @@ export default class PageTree extends Component<Props, State> {
       parent_id: parent.node.id,
       position: position
     };
-    const url = `/admin/${index.node.locale}/pages/${index.node.id}/move.json`;
+    const url = `/admin/${this.props.locale}/pages/${index.node.id}/move.json`;
     this.performUpdate(index, url, data);
   }
 
@@ -157,9 +158,14 @@ export default class PageTree extends Component<Props, State> {
     const updatePage = (id: Tree.Id, attributes: Page.TreeItem) => {
       const tree = this.state.tree;
       const index = tree.getIndex(id);
-      const url = `/admin/${index.node.locale}/pages/${index.node.id}.json`;
+      const url = `/admin/${this.props.locale}/pages/${index.node.id}.json`;
       this.updateNode(index, attributes);
-      this.performUpdate(index, url, { page: attributes });
+
+      const data: Record<string, unknown> = { ...attributes };
+      if ("blocks" in attributes && "name" in attributes.blocks) {
+        data.name = attributes.blocks.name[this.props.locale];
+      }
+      this.performUpdate(index, url, { page: data });
     };
 
     const updateTree = (tree: Tree<Page.TreeNode>) => {

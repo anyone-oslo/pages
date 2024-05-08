@@ -11,20 +11,15 @@ declare namespace Page {
     [index: number]: string;
   }
 
-  interface Attributes {
+  interface TreeResource {
     id?: number;
-    published_at: Date;
-    pinned: boolean;
-    status: number;
-    page_images: ImageRecord[];
-    page_files: AttachmentRecord[];
-    all_day: boolean;
-    unique_name: string;
-    feed_enabled: boolean;
+    blocks: Blocks;
     news_page: boolean;
-    redirect_to: string;
-    starts_at: Date;
-    ends_at: Date;
+    parent_page_id: number;
+    permissions: string[];
+    pinned: boolean;
+    published_at: Date;
+    status: number;
   }
 
   interface Blocks {
@@ -37,17 +32,25 @@ declare namespace Page {
     image?: ImageResource;
   }
 
-  interface Resource extends Attributes {
-    blocks: Blocks;
+  interface Resource extends TreeResource {
+    all_day: boolean;
     ancestors: Ancestor[];
-    tags_and_suggestions: string[];
-    meta_image: MetaImage;
+    blocks: Blocks;
     enabled_tags: string[];
-    path_segment: LocalizedValue;
-    urls: LocalizedValue;
+    ends_at: Date;
     errors: { attribute: string; message: string }[];
-    user_id: number;
+    feed_enabled: boolean;
+    meta_image: MetaImage;
+    page_files: AttachmentRecord[];
+    page_images: ImageRecord[];
+    path_segment: LocalizedValue;
+    redirect_to: string;
+    starts_at: Date;
+    tags_and_suggestions: string[];
     template: string;
+    unique_name: string;
+    urls: LocalizedValue;
+    user_id: number;
   }
 
   interface SerializedResource
@@ -57,16 +60,13 @@ declare namespace Page {
     ends_at: string;
   }
 
-  interface TreeItem extends Partial<Attributes> {
-    name: string;
-    locale: string;
-    parent_page_id?: number;
-    param?: string;
+  interface TreeItem extends Partial<TreeResource> {
+    blocks: Blocks;
     editing?: boolean;
+    permissions?: string[];
   }
 
   interface TreeNode extends TreeItem, Tree.Node {
     children: TreeNode[];
-    permissions?: string[];
   }
 }

@@ -5,22 +5,6 @@ require "rails_helper"
 RSpec.describe Admin::PagesHelper do
   let(:page) { build(:page) }
 
-  describe "#available_templates_for_select" do
-    subject { helper.available_templates_for_select }
-
-    let(:template_options) { [%w([Default] index), %w[Home home]] }
-
-    it { is_expected.to eq(template_options) }
-  end
-
-  describe "#file_embed_code" do
-    subject { helper.file_embed_code(file) }
-
-    let(:file) { create(:page_file) }
-
-    it { is_expected.to eq("[file:#{file.id}]") }
-  end
-
   describe "#page_name" do
     subject { helper.page_name(page) }
 

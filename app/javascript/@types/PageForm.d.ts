@@ -1,7 +1,12 @@
 declare namespace PageForm {
   interface Action {
     type: string;
-    payload?: boolean | string | Partial<Page.Resource> | Partial<Page.Blocks>;
+    payload?:
+      | boolean
+      | string
+      | Page.SerializedResource
+      | Partial<Page.Resource>
+      | Partial<Page.Blocks>;
   }
 
   interface State<T = Page.Resource> {

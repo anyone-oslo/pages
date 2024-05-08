@@ -1,9 +1,8 @@
-import React, { RefObject } from "react";
+import React from "react";
 
 import { csrfToken } from "../../lib/request";
 
 interface FormProps {
-  ref: RefObject<HTMLFormElement>;
   state: PageForm.State;
   children: React.ReactNode;
 }
@@ -24,7 +23,6 @@ export default function Form(props: FormProps) {
     <form
       className="edit-page main-wrapper"
       method="post"
-      ref={props.ref}
       acceptCharset="UTF-8"
       action={pageUrl(state)}>
       {page.id && (

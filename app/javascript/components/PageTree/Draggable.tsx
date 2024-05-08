@@ -102,6 +102,7 @@ export default class Draggable extends Component<Props, State> {
           <Node
             tree={tree}
             index={draggingIndex}
+            locale={this.props.locale}
             paddingLeft={this.props.paddingLeft || defaultPadding}
           />
         </div>
@@ -142,13 +143,12 @@ export default class Draggable extends Component<Props, State> {
 
   addChild(parent: Tree.Index<Page.TreeNode>) {
     const newNode: Page.TreeNode = {
-      name: "",
+      blocks: { name: { [this.props.locale]: "" } },
       status: 0,
       editing: true,
       children: [],
       published_at: new Date(),
       pinned: false,
-      locale: parent.node.locale,
       parent_page_id: parent.node.id,
       collapsed: false
     };

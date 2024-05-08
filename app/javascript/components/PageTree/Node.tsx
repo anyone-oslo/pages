@@ -35,6 +35,7 @@ import React, {
   RefObject
 } from "react";
 import Tree from "../../lib/Tree";
+import PageName from "./PageName";
 
 interface Props {
   index: Tree.Index<Page.TreeNode>;
@@ -43,7 +44,7 @@ interface Props {
   addChild?: (index: Tree.Index<Page.TreeNode>) => void;
   dir?: string;
   dragging?: Tree.Id;
-  locale?: string;
+  locale: string;
   onCollapse?: (id: Tree.Id) => void;
   onDragStart?: (id: number, element: HTMLDivElement, evt: MouseEvent) => void;
   updatePage?: (
@@ -67,7 +68,7 @@ export default class Node extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { newName: props.index.node.name };
+    this.state = { newName: this.pageName() };
     this.innerRef = createRef<HTMLDivElement>();
   }
 
@@ -271,7 +272,7 @@ export default class Node extends Component<Props, State> {
   }
 
   editUrl(page: Page.TreeNode) {
-    return `/admin/${page.locale}/pages/${page.param}/edit`;
+    return `/admin/${this.props.locale}/pages/${page.id}/edit`;
   }
 
   node(): Page.TreeNode {
@@ -279,13 +280,7 @@ export default class Node extends Component<Props, State> {
   }
 
   pageName() {
-    const name = this.node().name || <i className="untitled">Untitled</i>;
-
-    return (
-      <span dir={this.props.dir} lang={this.props.locale}>
-        {name}
-      </span>
-    );
+    return this.node().blocks.name[this.props.locale];
   }
 
   render() {
@@ -336,13 +331,13 @@ export default class Node extends Component<Props, State> {
     const performEdit = (event: FormEvent) => {
       event.preventDefault();
       this.updatePage({
-        name: this.state.newName,
+        blocks: { name: { [locale]: this.state.newName } },
         editing: false
       });
     };
 
     const cancelEdit = () => {
-      this.setState({ newName: this.node().name });
+      this.setState({ newName: this.pageName() });
       this.updatePage({ editing: false });
     };
 
@@ -377,21 +372,12 @@ export default class Node extends Component<Props, State> {
     const index = this.props.index;
     const node = index.node;
 
-    let pageName = <span className="name">{this.pageName()}</span>;
     let className = "page";
 
     let iconClass = "fa-regular fa-file icon";
 
     if (typeof node.status != "undefined") {
       className = `page status-${this.node().status}`;
-    }
-
-    if (node.id && node.locale && this.permitted("edit")) {
-      pageName = (
-        <a href={this.editUrl(node)} className="name">
-          {this.pageName()}
-        </a>
-      );
     }
 
     if (node.news_page) {
@@ -403,7 +389,12 @@ export default class Node extends Component<Props, State> {
     return (
       <div className={className}>
         <i className={iconClass}></i>
-        {pageName}
+        <PageName
+          name={this.pageName()}
+          dir={this.props.dir}
+          locale={this.props.locale}
+          editUrl={node.id && this.permitted("edit") && this.editUrl(node)}
+        />
         {this.statusLabel()}
         {this.collapsedLabel()}
         {this.actions()}

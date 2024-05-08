@@ -18,7 +18,7 @@ class PagePolicy < Policy
   end
 
   def new?
-    user.role?(:pages)
+    user&.role?(:pages)
   end
 
   def show?
@@ -26,7 +26,7 @@ class PagePolicy < Policy
   end
 
   def edit?
-    user.role?(:pages)
+    user&.role?(:pages)
   end
 
   def edit2?

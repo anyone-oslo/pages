@@ -102,6 +102,8 @@ function reducer(
 ): PageForm.State {
   const { type, payload } = action;
   switch (type) {
+    case "setPage":
+      return prepare({ ...state, page: payload as Page.SerializedResource });
     case "setDatesEnabled":
       return { ...state, datesEnabled: payload as boolean };
     case "setLocale":
