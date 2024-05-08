@@ -19,9 +19,8 @@
     <h2>
       <%= link_to_unless_current(
         year,
-        admin_news_index_path(locale, year: year, category: category&.slug)
+        admin_news_index_path(locale, year: year)
       ) %>
-      <%= ": #{@category.name}" if @category %>
       <span class="count">
         (<%= year_count %>)
       </span>
@@ -37,8 +36,7 @@
           <% else %>
             <%= link_to(
               month_name(month),
-              admin_news_index_path(locale, year: year, month: month,
-                                    category: category&.slug)
+              admin_news_index_path(locale, year: year, month: month)
             ) %>
             <span class="count">
               (<%= page_count %>)

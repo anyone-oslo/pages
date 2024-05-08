@@ -10,6 +10,6 @@ module PagesCore
       @root_page ||= root_pages.first
     end
 
-    attr_reader :search_query, :search_category_id
+    attr_reader :search_query
   end
 end

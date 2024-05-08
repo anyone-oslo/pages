@@ -71,9 +71,6 @@ Rails.application.routes.draw do
       end
     end
 
-    # Categories
-    resources :categories
-
     # Authentication
     resource :session, only: %i[create destroy] do
       member { post :verify_otp }
