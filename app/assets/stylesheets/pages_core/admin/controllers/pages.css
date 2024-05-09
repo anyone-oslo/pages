@@ -24,42 +24,42 @@ td.drag-handle {
   margin-left: -8px;
   margin-top: 16px;
 
-  & .page-listing {
+  .page-listing {
     border: 1px solid transparent;
     padding: 3px 8px 2px 8px !important;
   }
 
-  & ul {
+  ul {
     border-left: 1px dotted #ccc !important;
     margin-left: 12px !important;
     padding-left: 8px !important;
   }
 
-  & ul li {
+  ul li {
     overflow: auto;
   }
 
-  & .page {
+  .page {
     padding: 4px 8px;
     line-height: 17px;
     float: left;
 
-    & .status {
+    .status {
       font-weight: normal;
     }
 
-    & a.page-name,
-    & a.page-name:visited {
+    a.page-name,
+    a.page-name:visited {
       text-decoration: none;
       color: #222;
     }
 
-    & a.page-name:hover {
+    a.page-name:hover {
       text-decoration: underline;
     }
 
     &.hidden {
-      & a.page-name {
+      a.page-name {
         color: #666;
       }
     }
@@ -68,30 +68,30 @@ td.drag-handle {
       background: #ffd;
       border: 1px solid #dda;
 
-      & .status {
+      .status {
         display: none;
       }
     }
   }
 
-  & .page-without-locale {
+  .page-without-locale {
     color: #888;
   }
 
-  & li {
-    font-weight: bold;
+  li {
+    font-weight: var(--bold-weight);
     margin: 0;
     padding: 0;
     clear: both;
   }
 
-  & li li {
+  li li {
     font-weight: normal;
     font-size: 12px;
     padding: 0;
   }
 
-  & ul {
+  ul {
     clear: both;
     list-style-type: none;
     border-left: 1px dashed #ccc;
@@ -99,11 +99,11 @@ td.drag-handle {
     padding: 0 0 0 12px;
   }
 
-  & .hover {
+  .hover {
     background: #cef;
   }
 
-  & .drag-handle {
+  .drag-handle {
     display: none;
   }
 
@@ -114,28 +114,28 @@ td.drag-handle {
 
 .news-item-list,
 .calendar-item-list {
-  & .name {
+  .name {
     line-height: 1.5;
 
-    & small {
+    small {
       font-weight: normal;
     }
   }
 
-  & .autopublish-notice {
+  .autopublish-notice {
     font-size: 0.75rem;
     font-weight: normal;
     color: var(--text-light-color);
   }
 
-  & .draft,
-  & .hidden,
-  & .autopublish,
-  & .reviewed {
+  .draft,
+  .hidden,
+  .autopublish,
+  .reviewed {
     background: var(--background-disabled-color);
   }
 
-  & .pinned .name {
+  .pinned .name {
     background: transparent
       radial-gradient(ellipse at center, #92b6c4 50%, transparent 50%) no-repeat
       left 12px top 50%;
@@ -146,17 +146,13 @@ td.drag-handle {
 .edit-page {
   width: auto;
 
-  & main div.content {
-    padding-top: 16px;
-  }
-
-  & .hidden-options {
+  .hidden-options {
     display: none;
   }
 
-  & .autopublish-notice,
-  & .published-date,
-  & .advanced-options {
+  .autopublish-notice,
+  .published-date,
+  .advanced-options {
     display: none;
 
     &.show {
@@ -164,14 +160,18 @@ td.drag-handle {
     }
   }
 
-  & main input[type="text"],
-  & main textarea {
+  .advanced-options {
+    margin-top: 1.5rem;
+  }
+
+  main input[type="text"],
+  main textarea {
     width: 100%;
     max-width: 100%;
   }
 
-  & main input.page_title {
-    font-weight: bold;
+  main input.page_title {
+    font-weight: var(--bold-weight);
     font-size: 1.4em;
     color: var(--text-color);
   }
@@ -183,13 +183,13 @@ td.drag-handle {
   margin-right: 0;
   padding: 0;
 
-  & .embed-code {
+  .embed-code {
     display: inline-block;
     width: 60px;
     margin-right: 10px;
   }
 
-  & li {
+  li {
     line-height: 30px;
     border-top: 1px solid var(--border-color);
 
@@ -197,20 +197,20 @@ td.drag-handle {
       border-top: 0px;
     }
 
-    & .actions {
+    .actions {
       float: right;
     }
 
-    & .drag-handle {
+    .drag-handle {
       margin-right: 10px;
     }
   }
 
-  & .placeholder {
+  .placeholder {
     height: 30px;
   }
 
-  & .ui-sortable-helper {
+  .ui-sortable-helper {
     border: 1px solid var(--border-color) !important;
     background: rgba(250, 250, 250, 0.8);
   }

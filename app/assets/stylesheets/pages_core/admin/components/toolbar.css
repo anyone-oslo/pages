@@ -15,27 +15,27 @@
     clear: both;
   }
 
-  & li {
+  li {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  & .info {
+  .info {
     float: right;
     color: var(--text-lighter-color);
     padding: 0px 10px;
   }
 
-  & .label {
+  .label {
     float: left;
     padding: 0px 10px;
     color: var(--text-light-color);
     border-right: 1px solid var(--border-color);
   }
 
-  & .button,
-  & button {
+  .button,
+  button {
     float: left;
     display: inline;
     margin: 0px;
@@ -51,12 +51,12 @@
     border-left: 1px solid #fff;
     border-right: 1px solid var(--border-color);
     color: var(--text-light-color);
-    font-size: 12px;
+    font-size: 0.875rem;
     background-color: #f8f8f8;
     transition: all 200ms ease-out;
 
-    & i.fa {
-      font-size: 14px;
+    i.fa {
+      font-size: 1rem;
     }
 
     &:focus,
@@ -87,11 +87,11 @@
     &.header {
       vertical-align: bottom;
 
-      & i {
+      i {
         margin-left: -6px;
       }
 
-      & i:after {
+      i:after {
         font-family: var(--font-os-sans);
         font-weight: bold;
         font-size: 13px;

@@ -1,10 +1,8 @@
 <header>
-  <div class="logo">
-    <%= link_to image_tag("pages/admin/icon.svg"), '/admin' %>
-  </div>
   <div class="site-name">
     <h1>
-      <%= link_to "Pages", "/admin" %> <%= PagesCore.config :site_name %>
+      <%= link_to("Pages", "/admin", class: "logo") %>
+      <%= PagesCore.config :site_name %>
     </h1>
   </div>
   <% if logged_in? %>

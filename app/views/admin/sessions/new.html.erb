@@ -12,22 +12,20 @@
 
 <div class="login-form">
   <%= form_tag admin_session_path do %>
-    <p>
+    <div class="field">
       <label>Email address</label>
       <%= text_field_tag(:email, "", autocomplete: "email") %>
-    </p>
-    <p>
+    </div>
+    <div class="field">
       <label>Password</label>
       <%= password_field_tag(:password, "", autocomplete: "current-password") %>
-    </p>
-    <p>
+    </div>
+    <div class="buttons">
       <button type="submit">Sign in</button>
+    </div>
+    <p>
+      <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
+                  new_admin_account_recovery_path) %>
     </p>
-    <ul>
-      <li>
-        <%= link_to("<b>Help!</b> I forgot my password!".html_safe,
-                    new_admin_account_recovery_path) %>
-      </li>
-    </ul>
   <% end %>
 </div>

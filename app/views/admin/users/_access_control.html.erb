@@ -4,7 +4,11 @@
   </h2>
   <p>
     <% if f.object.kind_of?(User) && f.object != current_user %>
-      <%= f.check_box :activated %> The user account is activated<br />
+      <%= f.check_box :activated %>
+      <label for="user_activated">
+        The user account is activated
+      </label>
+      <br />
     <% end %>
     <% Role.roles.each do |role| %>
       <%= check_box_tag("#{model_name_from_record_or_class(f.object).param_key}[role_names][]",

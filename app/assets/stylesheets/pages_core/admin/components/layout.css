@@ -40,7 +40,7 @@ body {
   & > aside {
     min-width: 300px;
     width: 20%;
-    padding: 0px 16px;
+    padding: 1rem;
 
     @media (--mobile) {
       width: 100%;

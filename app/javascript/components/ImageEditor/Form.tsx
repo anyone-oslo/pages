@@ -85,7 +85,9 @@ export default function Form(props: Props) {
         </div>
       )}
       <div className="buttons">
-        <button onClick={props.save}>Save</button>
+        <button className="primary" onClick={props.save}>
+          Save
+        </button>
         <button onClick={closeModal}>Cancel</button>
       </div>
     </form>

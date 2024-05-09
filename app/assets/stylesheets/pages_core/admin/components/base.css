@@ -3,29 +3,11 @@ body {
   color: var(--text-color);
 }
 
-body,
-td,
-th {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 12px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin: 16px 0;
-}
-
 img {
   border: 0;
 }
 
 small {
-  font-size: 0.9em;
   color: var(--text-light-color);
 }
 
@@ -42,61 +24,13 @@ th {
 }
 
 div.content {
-  margin: 0 32px;
+  margin: 1.5rem 2rem;
 }
 
 table.show th,
 td {
   font-weight: normal;
   padding: 2px 16px 2px 0;
-}
-
-.errorExplanation {
-  background-color: #ffd;
-  border-bottom: 1px solid #dda;
-  margin: -32px -32px 16px -32px;
-  padding: 0px 32px;
-  color: #333;
-
-  & h2 {
-    font-weight: normal;
-    font-size: 1.4em;
-    margin: 0 -32px 16px -32px;
-    padding: 8px 32px;
-    background-color: var(--red);
-    color: #fff;
-  }
-
-  & p {
-    margin-bottom: 0;
-    padding: 0;
-  }
-
-  & ul {
-    padding: 0;
-    list-style-position: inside;
-  }
-
-  & ul li {
-    font-weight: bold;
-  }
-}
-
-.flash {
-  background: #fffbdf;
-  border-bottom: 1px solid #ccc9b2;
-  margin: -32px -32px 32px -32px;
-  padding: 16px 32px;
-  font-weight: bold;
-  color: #6f2d1b;
-  font-size: 1.2em;
-}
-
-div.paginator {
-  margin: 32px 0;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: var(--text-light-color);
 }
 
 img.thumbnail {
@@ -106,7 +40,6 @@ img.thumbnail {
 li .actions {
   font-weight: normal;
   display: inline;
-  font-size: 12px;
   color: var(--text-light-color);
   margin-top: 1px;
 }

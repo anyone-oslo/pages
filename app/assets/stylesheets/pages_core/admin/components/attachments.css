@@ -1,18 +1,17 @@
 .attachments {
   margin-bottom: 40px;
 
-  & .drop-target {
+  .drop-target {
     position: relative;
     width: 100%;
     text-align: center;
-    line-height: 1.6;
     margin-top: 20px;
 
     &:first-child {
       margin-top: 0px;
     }
 
-    & .upload-button {
+    .upload-button {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -23,7 +22,7 @@
     }
   }
 
-  & .attachment {
+  .attachment {
     border-bottom: 1px solid var(--border-color);
     padding: 16px 0px 16px 40px;
     cursor: pointer;
@@ -32,12 +31,12 @@
       padding-left 50ms ease-in-out,
       background 150ms ease-in-out;
 
-    & .attachment-info {
+    .attachment-info {
       transition: all 50ms ease-in-out;
     }
 
     &.drop-placeholder {
-      font-size: 14px;
+      font-size: 0.875rem;
       margin-top: -1px;
       border-top: 1px solid var(--border-color);
       background: var(--background-disabled-color);
@@ -51,11 +50,11 @@
       padding-left: 56px;
       background: var(--background-disabled-color);
 
-      & .attachment-info {
+      .attachment-info {
         opacity: 0.5;
       }
 
-      & .actions {
+      .actions {
         display: none;
       }
     }
@@ -64,14 +63,16 @@
       margin-bottom: 0px;
     }
 
-    & .actions {
+    .actions {
       float: right;
+      display: flex;
+      gap: 0.25rem;
     }
 
-    & h3 {
+    h3 {
       margin: 0px 0px 12px 0px;
 
-      & .icon {
+      .icon {
         display: block;
         float: left;
         margin-left: -40px;
@@ -79,24 +80,9 @@
       }
     }
 
-    & p {
+    p {
       &:last-child {
         margin-bottom: 0px;
-      }
-    }
-
-    & button {
-      cursor: pointer;
-      border: 1px solid var(--border-color);
-      border-radius: 3px;
-      background: var(--button-color);
-      padding: 5px 20px;
-      font-size: 12px;
-      color: var(--text-color);
-
-      &:hover,
-      &:focus {
-        background: #fff;
       }
     }
   }
@@ -111,23 +97,23 @@
     height: 100%;
   }
 
-  & form {
+  form {
     width: 100%;
 
-    & .buttons {
+    .buttons {
       margin-top: 24px;
     }
 
-    & .embed-code {
-      & input[type="text"] {
+    .embed-code {
+      input[type="text"] {
         width: 50%;
         max-width: 100px;
         margin-right: 8px;
       }
     }
 
-    & textarea,
-    & input[type="text"] {
+    textarea,
+    input[type="text"] {
       max-width: 100%;
 
       &.description {

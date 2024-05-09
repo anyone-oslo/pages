@@ -2,9 +2,6 @@
 @custom-media --narrow screen and (max-width: 1150px);
 
 :root {
-  --font-os-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
-
   --red: #c00007;
   --red-transparent: #c0000740;
   --red-hover: #8d0005;
@@ -21,6 +18,7 @@
   --background-invert-color: #000;
   --background-disabled-color: #f8f8f8;
   --background-warning-color: #ffdfa0;
+  --background-highlight-color: #e7f3f9;
   --text-color: #111;
   --text-light-color: #666;
   --text-lighter-color: #999;

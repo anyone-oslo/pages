@@ -146,7 +146,7 @@ export default class Node extends Component<Props, State> {
       (node.root || this.visibleChildren().length > 0)
     ) {
       return this.button("Add page here", {
-        className: "add add-inline",
+        className: "add add-inline transparent",
         icon: "plus",
         onClick: handleClick
       });
@@ -221,17 +221,17 @@ export default class Node extends Component<Props, State> {
 
     if (this.visibleChildren().length > 0) {
       const collapsed = index.node.collapsed;
-      let classnames = "";
+      const classnames = ["collapse fa-solid fa-caret-right"];
 
       if (collapsed) {
-        classnames = "collapse fa-solid fa-caret-right";
+        classnames.push("collapsed");
       } else {
-        classnames = "collapse fa-solid fa-caret-down";
+        classnames.push("open");
       }
 
       return (
         <i
-          className={classnames}
+          className={classnames.join(" ")}
           onMouseDown={function (e) {
             e.stopPropagation();
           }}
@@ -349,8 +349,9 @@ export default class Node extends Component<Props, State> {
     return (
       <div className="page edit">
         <i className="fa-regular fa-file icon"></i>
-        <form onSubmit={performEdit}>
+        <form className="edit-name" onSubmit={performEdit}>
           <input
+            className="tight"
             type="text"
             value={this.state.newName}
             dir={dir}
@@ -358,7 +359,7 @@ export default class Node extends Component<Props, State> {
             autoFocus
             onChange={handleNameChange}
           />
-          <button className="save" type="submit">
+          <button className="save primary" type="submit">
             <i className="fa-solid fa-cloud icon"></i>
             Save
           </button>
@@ -394,9 +395,9 @@ export default class Node extends Component<Props, State> {
     }
 
     if (node.news_page) {
-      iconClass = "fa-regular fa-file-lines icon";
+      iconClass = "fa-regular fa-file-lines page-icon";
     } else if (node.pinned) {
-      iconClass = "fa-regular fa-flag icon";
+      iconClass = "fa-regular fa-flag page-icon";
     }
 
     return (

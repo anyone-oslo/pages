@@ -6,8 +6,7 @@
   overflow: hidden;
   z-index: 200;
 
-  & .toast {
-    font-size: 14px;
+  .toast {
     display: inline-block;
     background: var(--background-invert-color);
     color: white;

@@ -1,12 +1,11 @@
 .pagination {
   margin: 30px 30px;
   line-height: 20px;
-  font-size: 14px;
 
-  & a,
-  & .current,
-  & .disabled,
-  & .gap {
+  a,
+  .current,
+  .disabled,
+  .gap {
     display: inline-block;
     font-style: normal;
     margin: 0px 1px;
@@ -17,29 +16,29 @@
     text-align: center;
   }
 
-  & a:hover,
-  & a:focus {
+  a:hover,
+  a:focus {
     text-decoration: underline;
   }
 
-  & .current {
+  .current {
     font-weight: bold;
   }
 
-  & .disabled {
+  .disabled {
     color: var(--text-light-color);
   }
 
-  & .next,
-  & .previous {
+  .next,
+  .previous {
     background: none;
   }
 
-  & .next {
+  .next {
     margin-left: 10px;
   }
 
-  & .previous {
+  .previous {
     margin-right: 10px;
   }
 }

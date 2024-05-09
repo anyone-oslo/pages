@@ -1,7 +1,7 @@
 <% query ||= "" %>
 <%= form_tag(search_admin_pages_path(content_locale),
              method: "get",
-             class: "search-bar") do %>
+             class: "search-bar inline-form") do %>
   <%= text_field_tag(:q, query,
                      placeholder: "Search all pages",
                      aria: { label: "Search all pages" }) %>
