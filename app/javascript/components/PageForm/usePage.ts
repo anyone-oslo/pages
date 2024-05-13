@@ -103,15 +103,15 @@ function reducer(
   const { type, payload } = action;
   switch (type) {
     case "setPage":
-      return prepare({ ...state, page: payload as Page.SerializedResource });
+      return prepare({ ...state, page: payload });
     case "setDatesEnabled":
-      return { ...state, datesEnabled: payload as boolean };
+      return { ...state, datesEnabled: payload };
     case "setLocale":
-      return { ...state, locale: payload as string };
+      return { ...state, locale: payload };
     case "update":
-      return updatePage(state, payload as Partial<Page.Resource>);
+      return updatePage(state, payload);
     case "updateBlocks":
-      return updatePageBlocks(state, payload as Partial<Page.Blocks>);
+      return updatePageBlocks(state, payload);
     default:
       return state;
   }

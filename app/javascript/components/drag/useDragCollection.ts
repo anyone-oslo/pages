@@ -42,32 +42,31 @@ function dragCollectionReducer<T = Drag.DraggableRecord>(
 ): Drag.Item<T>[] {
   switch (action.type) {
     case "append":
-      return [...state, ...(action.payload as Drag.Item<T>[])];
+      return [...state, ...action.payload];
     case "prepend":
-      return [...(action.payload as Drag.Item<T>[]), ...state];
+      return [...action.payload, ...state];
     case "insertFiles":
-      return insertFiles(state, action.payload as Drag.Item<T>[]);
+      return insertFiles(state, action.payload);
     case "update":
       return state.map((d: Drag.Draggable<T>) => {
         return d.handle === (action.payload as Drag.Draggable<T>).handle
-          ? (action.payload as Drag.Item<T>)
+          ? action.payload
           : d;
       });
     case "updatePositions":
-      return hideDraggable(action.payload as Drag.Draggable<T>, () => {
+      return hideDraggable(action.payload, () => {
         return state.map((d: Drag.Draggable<T>) => {
           return { ...d, rect: getPosition(d) };
         });
       });
     case "remove":
       return state.filter(
-        (d: Drag.Draggable<T>) =>
-          d.handle !== (action.payload as Drag.Draggable<T>).handle
+        (d: Drag.Draggable<T>) => d.handle !== action.payload.handle
       );
     case "replace":
-      return action.payload as Drag.Item<T>[];
+      return action.payload;
     case "reorder":
-      return action.payload as Drag.Item<T>[];
+      return action.payload;
     default:
       return state;
   }

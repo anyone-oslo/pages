@@ -10,10 +10,14 @@ declare namespace Drag {
 
   type Item<T = DraggableRecord> = Draggable<T> | "Files";
 
-  interface CollectionAction<T = DraggableRecord> {
-    type: string;
-    payload?: Item<T>[] | Item<T>;
-  }
+  type CollectionAction<T = DraggableRecord> =
+    | {
+        type: "append" | "prepend" | "insertFiles" | "replace" | "reorder";
+        payload: Item<T>[];
+      }
+    | { type: "update"; payload: Item<T> }
+    | { type: "remove"; payload: Drag.Draggable<T> }
+    | { type: "updatePositions"; payload?: Drag.Draggable<T> };
 
   interface Collection<T = DraggableRecord> {
     ref: React.MutableRefObject<HTMLDivElement>;

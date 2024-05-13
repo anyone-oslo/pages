@@ -43,7 +43,7 @@ declare namespace Page {
     meta_image: MetaImage;
     page_files: AttachmentRecord[];
     page_images: ImageRecord[];
-    path_segment: LocalizedValue;
+    path_segment: MaybeLocalizedValue;
     redirect_to: string;
     starts_at: Date;
     tags_and_suggestions: string[];

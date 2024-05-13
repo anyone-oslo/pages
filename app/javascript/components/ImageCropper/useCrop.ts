@@ -82,11 +82,11 @@ function cropReducer(state: Crop.State, action: Crop.Action): Crop.State {
         return { ...state, cropping: false };
       }
     case "setCrop":
-      return { ...state, ...applyCrop(state, action.payload as Crop.CropSize) };
+      return { ...state, ...applyCrop(state, action.payload) };
     case "setAspect":
-      return { ...state, ...applyAspect(state, action.payload as number) };
+      return { ...state, ...applyAspect(state, action.payload) };
     case "setFocal":
-      return { ...state, ...setFocal(state, action.payload as Crop.Position) };
+      return { ...state, ...setFocal(state, action.payload) };
     case "startCrop":
       return { ...state, cropping: true };
     case "toggleFocal":

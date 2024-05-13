@@ -28,8 +28,9 @@ declare namespace Crop {
     aspect?: number;
   }
 
-  interface Action {
-    type: string;
-    payload?: CropSize | Position | number;
-  }
+  type Action =
+    | { type: "completeCrop" | "startCrop" | "toggleFocal" }
+    | { type: "setCrop"; payload: CropSize }
+    | { type: "setAspect"; payload: number }
+    | { type: "setFocal"; payload: Position };
 }

@@ -21,6 +21,8 @@ export default function PathSegment(props: Props) {
   const { state, dispatch } = props;
   const { page, locale } = state;
 
+  const value = (page.path_segment as LocalizedValue)[locale];
+
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "update", payload: { path_segment: evt.target.value } });
   };
@@ -52,7 +54,7 @@ export default function PathSegment(props: Props) {
         lang={state.locale}
         dir="ltr"
         onChange={handleChange}
-        value={page.path_segment[locale]}
+        value={value}
       />
     </LabelledField>
   );
