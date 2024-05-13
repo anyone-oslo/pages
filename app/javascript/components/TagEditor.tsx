@@ -1,65 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
-import AddTagForm from "./TagEditor/AddTagForm";
-import Tag from "./TagEditor/Tag";
+import useTags from "./TagEditor/useTags";
+import Editor from "./TagEditor/Editor";
 
-interface Props {
+interface Props extends TagEditor.State {
   name: string;
-  enabled: string[];
-  tags: string[];
-}
-
-function onlyUnique(value: string, index: number, self: string[]) {
-  return self.indexOf(value) === index;
 }
 
 export default function TagEditor(props: Props) {
-  const [tags, setTags] = useState(props.tags);
-  const [enabled, setEnabled] = useState(props.enabled);
+  const [state, dispatch] = useTags(props.tags, props.enabled);
 
-  const tagList = [...tags, ...enabled].filter(onlyUnique);
-
-  const normalize = (tag: string): string => {
-    return (
-      tagList.filter((t) => t.toLowerCase() == tag.toLowerCase())[0] || tag
-    );
-  };
-
-  const tagEnabled = (tag: string): boolean => {
-    return (
-      enabled.map((t) => t.toLowerCase()).indexOf(tag.toLowerCase()) !== -1
-    );
-  };
-
-  const toggleEnabled = (tag: string) => {
-    const normalized = normalize(tag);
-
-    if (tagEnabled(normalized)) {
-      setEnabled(enabled.filter((t) => t !== normalized));
-    } else {
-      setEnabled([...enabled, normalized]);
-    }
-  };
-
-  const addTag = (tag: string) => {
-    const normalized = normalize(tag);
-
-    setTags([...tags, normalized].filter(onlyUnique));
-    setEnabled([...enabled, normalized].filter(onlyUnique));
-  };
-
-  return (
-    <div className="tag-editor">
-      <input type="hidden" name={props.name} value={JSON.stringify(enabled)} />
-      {tagList.map((t) => (
-        <Tag
-          key={t}
-          tag={t}
-          enabled={tagEnabled(t)}
-          toggleEnabled={toggleEnabled}
-        />
-      ))}
-      <AddTagForm addTag={addTag} />
-    </div>
-  );
+  return <Editor name={props.name} state={state} dispatch={dispatch} />;
 }

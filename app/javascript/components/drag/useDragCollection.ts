@@ -75,7 +75,7 @@ function dragCollectionReducer<T = Drag.DraggableRecord>(
 
 export function createDraggable<T = Drag.DraggableRecord>(
   record: T
-): Drag.Item<T> {
+): Drag.Draggable<T> {
   return {
     record: record,
     rect: null,

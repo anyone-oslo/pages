@@ -2,7 +2,7 @@
 
 module Admin
   class PagesController < Admin::AdminController
-    include PagesCore::Admin::PageJsonHelper
+    include PagesCore::PageParameters
 
     before_action :find_page, only: %i[show edit update destroy move]
 
@@ -39,23 +39,25 @@ module Admin
 
     def create
       @page = build_page(content_locale, page_params).tap(&:save)
-      if @page.valid?
-        respond_with_page(@page) do
+
+      respond_with_page(@page) do
+        if @page.valid?
           redirect_to(edit_admin_page_url(content_locale, @page))
+        else
+          render action: :new
         end
-      else
-        render action: :new
       end
     end
 
     def update
-      if @page.update(page_params)
-        respond_with_page(@page) do
+      @page.update(page_params)
+      respond_with_page(@page) do
+        if @page.valid?
           flash[:notice] = t("pages_core.changes_saved")
           redirect_to edit_admin_page_url(content_locale, @page)
+        else
+          render action: :edit
         end
-      else
-        render action: :edit
       end
     end
 
@@ -83,20 +85,8 @@ module Admin
       User.find_by(email: PagesCore.config.default_author)
     end
 
-    def page_attributes
-      %i[template user_id status feed_enabled published_at redirect_to
-         image_link news_page unique_name pinned parent_page_id serialized_tags
-         meta_image_id starts_at ends_at all_day image_id path_segment
-         meta_title meta_description open_graph_title open_graph_description]
-    end
-
     def page_params
-      params.require(:page).permit(
-        PagesCore::Templates::TemplateConfiguration.all_blocks +
-        page_attributes,
-        page_images_attributes: %i[id position image_id primary _destroy],
-        page_files_attributes: %i[id position attachment_id _destroy]
-      )
+      params.require(:page).permit(page_content_attributes)
     end
 
     def find_page
@@ -106,7 +96,12 @@ module Admin
     def respond_with_page(page, &block)
       respond_to do |format|
         format.html(&block)
-        format.json { render json: page_json(page) }
+        format.json do
+          render json: ::Admin::PageResource.new(
+            page,
+            params: { user: current_user }
+          )
+        end
       end
     end
   end

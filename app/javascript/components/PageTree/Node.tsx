@@ -35,20 +35,21 @@ import React, {
   RefObject
 } from "react";
 import Tree from "../../lib/Tree";
+import PageName from "./PageName";
 
 interface Props {
-  index: Tree.Index<Page.Node>;
+  index: Tree.Index<Page.TreeNode>;
   paddingLeft: number;
-  tree: Tree<Page.Node>;
-  addChild?: (index: Tree.Index<Page.Node>) => void;
+  tree: Tree<Page.TreeNode>;
+  addChild?: (index: Tree.Index<Page.TreeNode>) => void;
   dir?: string;
   dragging?: Tree.Id;
-  locale?: string;
+  locale: string;
   onCollapse?: (id: Tree.Id) => void;
   onDragStart?: (id: number, element: HTMLDivElement, evt: MouseEvent) => void;
   updatePage?: (
-    index: Tree.Index<Page.Node>,
-    attributes: Partial<Page.Attributes>
+    index: Tree.Index<Page.TreeNode>,
+    attributes: Partial<Page.TreeItem>
   ) => void;
 }
 
@@ -67,7 +68,7 @@ export default class Node extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { newName: props.index.node.name };
+    this.state = { newName: this.pageName() };
     this.innerRef = createRef<HTMLDivElement>();
   }
 
@@ -270,22 +271,16 @@ export default class Node extends Component<Props, State> {
     this.updatePage({ editing: true });
   }
 
-  editUrl(page: Page.Node) {
-    return `/admin/${page.locale}/pages/${page.param}/edit`;
+  editUrl(page: Page.TreeNode) {
+    return `/admin/${this.props.locale}/pages/${page.id}/edit`;
   }
 
-  node(): Page.Node {
+  node(): Page.TreeNode {
     return this.props.index.node;
   }
 
   pageName() {
-    const name = this.node().name || <i className="untitled">Untitled</i>;
-
-    return (
-      <span dir={this.props.dir} lang={this.props.locale}>
-        {name}
-      </span>
-    );
+    return this.node().blocks.name[this.props.locale];
   }
 
   render() {
@@ -336,13 +331,13 @@ export default class Node extends Component<Props, State> {
     const performEdit = (event: FormEvent) => {
       event.preventDefault();
       this.updatePage({
-        name: this.state.newName,
+        blocks: { name: { [locale]: this.state.newName } },
         editing: false
       });
     };
 
     const cancelEdit = () => {
-      this.setState({ newName: this.node().name });
+      this.setState({ newName: this.pageName() });
       this.updatePage({ editing: false });
     };
 
@@ -377,21 +372,12 @@ export default class Node extends Component<Props, State> {
     const index = this.props.index;
     const node = index.node;
 
-    let pageName = <span className="name">{this.pageName()}</span>;
     let className = "page";
 
     let iconClass = "fa-regular fa-file icon";
 
     if (typeof node.status != "undefined") {
       className = `page status-${this.node().status}`;
-    }
-
-    if (node.id && node.locale && this.permitted("edit")) {
-      pageName = (
-        <a href={this.editUrl(node)} className="name">
-          {this.pageName()}
-        </a>
-      );
     }
 
     if (node.news_page) {
@@ -403,7 +389,12 @@ export default class Node extends Component<Props, State> {
     return (
       <div className={className}>
         <i className={iconClass}></i>
-        {pageName}
+        <PageName
+          name={this.pageName()}
+          dir={this.props.dir}
+          locale={this.props.locale}
+          editUrl={node.id && this.permitted("edit") && this.editUrl(node)}
+        />
         {this.statusLabel()}
         {this.collapsedLabel()}
         {this.actions()}
@@ -430,13 +421,13 @@ export default class Node extends Component<Props, State> {
     }
   }
 
-  updatePage(attributes: Partial<Page.Attributes>) {
+  updatePage(attributes: Partial<Page.TreeItem>) {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
   }
 
-  visibleChildren(): Page.Node[] {
+  visibleChildren(): Page.TreeNode[] {
     if (this.node().children) {
       return this.node().children.filter((p) => p.status != 4);
     } else {

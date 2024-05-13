@@ -17,6 +17,12 @@ body {
   flex-flow: column nowrap;
   height: 100vh;
 
+  & > div[data-react-class] {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
   & > *,
   & .main-wrapper {
     flex-shrink: 0;

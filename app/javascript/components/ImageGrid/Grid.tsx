@@ -1,20 +1,18 @@
-import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
-import FileUploadButton from "./FileUploadButton";
-import DragElement from "./ImageGrid/DragElement";
-import FilePlaceholder from "./ImageGrid/FilePlaceholder";
-import GridImage from "./ImageGrid/GridImage";
-import useToastStore from "../stores/useToastStore";
-import { post } from "../lib/request";
+import React, { useRef } from "react";
+import FileUploadButton from "../FileUploadButton";
+import DragElement from "./DragElement";
+import FilePlaceholder from "./FilePlaceholder";
+import GridImage from "./GridImage";
+import useToastStore from "../../stores/useToastStore";
+import { post } from "../../lib/request";
 
-import {
-  createDraggable,
-  collectionOrder,
-  useDragCollection,
-  useDragUploader
-} from "./drag";
+import { createDraggable, collectionOrder, useDragUploader } from "../drag";
 
-function filterFiles(files) {
+interface Props extends ImageGrid.Options {
+  state: ImageGrid.State;
+}
+
+function filterFiles(files: File[]): File[] {
   const validMimeTypes = [
     "image/gif",
     "image/jpeg",
@@ -25,7 +23,11 @@ function filterFiles(files) {
   return files.filter((f) => validMimeTypes.indexOf(f.type) !== -1);
 }
 
-function draggedImageOrder(primaryCollection, imagesCollection, dragState) {
+function draggedImageOrder(
+  primaryCollection: Drag.Collection<ImageRecord>,
+  imagesCollection: Drag.Collection<ImageRecord>,
+  dragState: Drag.State<ImageRecord>
+): [Drag.Item<ImageRecord>, Drag.Item<ImageRecord>[]] {
   const [primary, ...rest] = collectionOrder(primaryCollection, dragState);
   let images = [...rest, ...collectionOrder(imagesCollection, dragState)];
 
@@ -45,29 +47,18 @@ function draggedImageOrder(primaryCollection, imagesCollection, dragState) {
   return [primary, images];
 }
 
-function initRecords(props) {
-  const primary = props.enablePrimary
-    ? props.records.filter((r) => r.primary).slice(0, 1)
-    : [];
-
-  return [primary, props.records.filter((r) => primary.indexOf(r) === -1)];
-}
-
-export default function ImageGrid(props) {
-  const [initPrimary, initImages] = initRecords(props);
-  const primary = useDragCollection(initPrimary);
-  const images = useDragCollection(initImages);
-  const [deleted, setDeleted] = useState([]);
-  const error = useToastStore((state) => state.error);
+export default function Grid(props: Props) {
+  const { primary, images, deleted, setDeleted } = props.state;
 
   const containerRef = useRef();
+  const error = useToastStore((state) => state.error);
 
   const dispatchAll = (action) => {
     primary.dispatch(action);
     images.dispatch(action);
   };
 
-  const dragEnd = (dragState, files) => {
+  const dragEnd = (dragState: Drag.State<ImageRecord>, files: File[]) => {
     const [draggedPrimary, draggedImages] = draggedImageOrder(
       primary,
       images,
@@ -86,40 +77,40 @@ export default function ImageGrid(props) {
     }
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader(
+  const [dragState, dragStart, listeners] = useDragUploader<ImageRecord>(
     [primary, images],
     dragEnd
   );
 
-  const position = (record) => {
+  const position = (record: ImageRecord) => {
     return (
       [
-        ...primary.draggables.map((d) => d.record),
-        ...images.draggables.map((d) => d.record),
+        ...primary.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
+        ...images.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
         ...deleted
       ].indexOf(record) + 1
     );
   };
 
-  const attrName = (record) => {
+  const attrName = (record: ImageRecord) => {
     return `${props.attribute}[${position(record)}]`;
   };
 
-  const uploadImage = (file) => {
+  const uploadImage = (file: File) => {
     const draggable = createDraggable({ image: null, file: file });
 
-    let data = new FormData();
+    const data = new FormData();
 
     data.append("image[file]", file);
 
-    post("/admin/images.json", data).then((json) => {
-      if (json.status === "error") {
-        error("Error uploading image: " + json.error);
+    void post("/admin/images.json", data).then((json: ImageResponse) => {
+      if ("status" in json && json.status === "error") {
+        error(`Error uploading image: ${json.error}`);
         dispatchAll({ type: "remove", payload: draggable });
       } else {
         dispatchAll({
           type: "update",
-          payload: { ...draggable, record: { image: json } }
+          payload: { ...draggable, record: { image: json } } as Drag.Draggable
         });
       }
     });
@@ -127,26 +118,30 @@ export default function ImageGrid(props) {
     return draggable;
   };
 
-  const update = (draggable) => (image) => {
-    const { record } = draggable;
-    const updated = {
-      ...draggable,
-      record: {
-        ...record,
-        image: { ...record.image, ...image }
-      }
+  const update =
+    (draggable: Drag.Draggable<ImageRecord>) => (image: ImageResource) => {
+      const { record } = draggable;
+      const updated = {
+        ...draggable,
+        record: {
+          ...record,
+          image: { ...record.image, ...image }
+        }
+      };
+      dispatchAll({ type: "update", payload: updated });
     };
-    dispatchAll({ type: "update", payload: updated });
-  };
 
-  const remove = (draggable) => () => {
+  const remove = (draggable: Drag.Draggable<ImageRecord>) => () => {
     dispatchAll({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
     }
   };
 
-  const renderImage = (draggable, isPrimary) => {
+  const renderImage = (
+    draggable: Drag.Item<ImageRecord>,
+    isPrimary: boolean
+  ) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
@@ -172,7 +167,7 @@ export default function ImageGrid(props) {
     );
   };
 
-  const uploadPrimary = (files) => {
+  const uploadPrimary = (files: File[]) => {
     const [first, ...rest] = filterFiles(files).map((f) => uploadImage(f));
     if (first) {
       images.dispatch({
@@ -183,14 +178,14 @@ export default function ImageGrid(props) {
     }
   };
 
-  const uploadAdditional = (files) => {
+  const uploadAdditional = (files: File[]) => {
     images.dispatch({
       type: "append",
       payload: filterFiles(files).map((f) => uploadImage(f))
     });
   };
 
-  let classNames = ["image-grid"];
+  const classNames = ["image-grid"];
   if (props.enablePrimary) {
     classNames.push("with-primary-image");
   }
@@ -221,7 +216,7 @@ export default function ImageGrid(props) {
                   type="hidden"
                   name={props.primaryAttribute}
                   value={
-                    (draggedPrimary.record &&
+                    (draggedPrimary !== "Files" &&
                       draggedPrimary.record.image &&
                       draggedPrimary.record.image.id) ||
                     ""
@@ -260,14 +255,14 @@ export default function ImageGrid(props) {
           <span className="deleted-image" key={r.id}>
             <input name={`${attrName(r)}[id]`} type="hidden" value={r.id} />
             <input
-              name={`${attrName(r)}[image_id]`}
+              name={`${attrName(r)}[attachment_id]`}
               type="hidden"
               value={(r.image && r.image.id) || ""}
             />
             <input
               name={`${attrName(r)}[_destroy]`}
               type="hidden"
-              value={true}
+              value={"true"}
             />
           </span>
         ))}
@@ -275,13 +270,3 @@ export default function ImageGrid(props) {
     </div>
   );
 }
-
-ImageGrid.propTypes = {
-  attribute: PropTypes.string,
-  locale: PropTypes.string,
-  locales: PropTypes.object,
-  records: PropTypes.array,
-  enablePrimary: PropTypes.bool,
-  primaryAttribute: PropTypes.string,
-  showEmbed: PropTypes.bool
-};

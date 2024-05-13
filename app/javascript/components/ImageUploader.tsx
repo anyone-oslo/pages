@@ -14,7 +14,13 @@ interface Props {
   width: number;
   caption: boolean;
   attr: string;
-  alternative: string;
+  alternative?: string;
+  onChange?: (state: State) => void;
+}
+
+interface State {
+  image?: ImageResource;
+  src?: string;
 }
 
 function getFiles(dt: DataTransfer): File[] {
@@ -36,9 +42,18 @@ function getFiles(dt: DataTransfer): File[] {
 export default function ImageUploader(props: Props) {
   const [uploading, setUploading] = useState(false);
   const [dragover, setDragover] = useState(false);
-  const [image, setImage] = useState(props.image);
-  const [src, setSrc] = useState(props.src);
+  const [state, setState] = useState<State>({
+    image: props.image,
+    src: props.src
+  });
+  const { image, src } = props.onChange ? props : state;
+
   const error = useToastStore((state) => state.error);
+
+  const update = (image: ImageResource | null, src?: string) => {
+    const handler = props.onChange || setState;
+    handler({ image: image, src: src || null });
+  };
 
   const handleDragOver = (evt: DragEvent) => {
     evt.preventDefault();
@@ -75,8 +90,7 @@ export default function ImageUploader(props: Props) {
 
   const handleRemove = (evt: MouseEvent) => {
     evt.preventDefault();
-    setImage(null);
-    setSrc(null);
+    update(null);
   };
 
   const receiveFiles = (files: File[]) => {
@@ -107,8 +121,7 @@ export default function ImageUploader(props: Props) {
 
     const data = new FormData();
 
-    setImage(null);
-    setSrc(null);
+    update(null);
     setDragover(false);
     setUploading(true);
 
@@ -122,8 +135,7 @@ export default function ImageUploader(props: Props) {
       if ("status" in response && response.status === "error") {
         error(`Error uploading image: ${response.error}`);
       } else if ("thumbnail_url" in response) {
-        setSrc(response.thumbnail_url);
-        setImage(response);
+        update(response, response.thumbnail_url);
       }
     });
   };

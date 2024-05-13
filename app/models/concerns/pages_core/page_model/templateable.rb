@@ -29,21 +29,6 @@ module PagesCore
           template
       end
 
-      def unconfigured_blocks
-        blocks = (localizations.where(locale:).pluck(:name)
-                               .map(&:to_sym) -
-                  configured_blocks) &
-                 PagesCore::Templates::TemplateConfiguration.all_blocks
-
-        if block_given?
-          blocks.each do |block_name|
-            yield block_name, template_config.block(block_name)
-          end
-        end
-
-        blocks
-      end
-
       private
 
       def configured_blocks

@@ -3,18 +3,27 @@ interface Locale {
   dir: "ltr" | "rtl";
 }
 
+type LocalizedValue = Record<string, string>;
+type MaybeLocalizedValue = LocalizedValue | string;
+
 interface AttachmentResource {
   id: number | null;
-  name: Record<string, string>;
-  description: Record<string, string>;
+  name: LocalizedValue;
+  description: LocalizedValue;
   url: string;
   filename: string;
 }
 
+interface AttachmentRecord extends Drag.DraggableRecord {
+  id?: number;
+  attachment: AttachmentResource;
+  uploading?: boolean;
+}
+
 interface ImageResource {
   id: number | null;
-  alternative: Record<string, string>;
-  caption: Record<string, string>;
+  alternative: LocalizedValue;
+  caption: LocalizedValue;
   content_type: string;
   filename: string;
   crop_start_x: number | null;
@@ -29,3 +38,15 @@ interface ImageResource {
   thumbnail_url: string;
   uncropped_url: string;
 }
+
+interface ImageRecord extends Drag.DraggableRecord {
+  id?: number;
+  image: ImageResource;
+  primary?: boolean;
+  src?: string;
+  file?: File;
+}
+
+type ImageResponse = ImageResource | { status: "error"; error: string };
+
+type PageBlockValue = LocalizedValue | string;

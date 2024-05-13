@@ -1,13 +1,8 @@
 import React, { RefObject } from "react";
 
-interface Record {
-  image: ImageResource;
-  src?: string;
-}
-
 interface Props {
   container: RefObject<HTMLDivElement>;
-  draggable: string | Drag.Draggable<Record>;
+  draggable: Drag.Item<ImageRecord>;
   dragState: Drag.State;
 }
 

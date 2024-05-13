@@ -1,4 +1,0 @@
-<%= react_component("PageFiles",
-                    locale: content_locale,
-                    locales: locales_with_dir,
-                    records: @page.files.map { |pf| Admin::PageFileResource.new(pf).to_hash }) %>

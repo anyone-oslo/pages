@@ -4,14 +4,14 @@ import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
 import { putJson } from "../../lib/request";
 
-interface AttachmentEditorProps {
+interface Props {
   attachment: AttachmentResource;
   locale: string;
   locales: { [index: string]: Locale };
-  onUpdate: (localizations: Record<string, Record<string, string>>) => void;
+  onUpdate: (attachment: Partial<AttachmentResource>) => void;
 }
 
-export default function AttachmentEditor(props: AttachmentEditorProps) {
+export default function AttachmentEditor(props: Props) {
   const { attachment, locales } = props;
 
   const [locale, setLocale] = useState(props.locale);

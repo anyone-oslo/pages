@@ -29,7 +29,7 @@ module PagesCore
 
           (config.get(:default, :blocks).to_a + template_blocks)
             .compact
-            .select { |_, opts| opts[:localized] }.map(&:first)
+            .select { |_, opts| opts[:localized] }.map(&:first).uniq
         end
 
         private
@@ -51,6 +51,10 @@ module PagesCore
 
       def config
         self.class.config
+      end
+
+      def name
+        value(:name) || default_name
       end
 
       def value(*path)
@@ -102,6 +106,12 @@ module PagesCore
           optional: true,
           size: :small
         }
+      end
+
+      def default_name
+        return "[Default]" if template_name == :index
+
+        template_name.to_s.humanize
       end
     end
 

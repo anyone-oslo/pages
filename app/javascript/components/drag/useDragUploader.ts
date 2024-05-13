@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 
-function containsFiles(evt: MouseEvent | TouchEvent) {
+type AnyTouchEvent =
+  | MouseEvent
+  | TouchEvent
+  | React.MouseEvent
+  | React.TouchEvent;
+
+function containsFiles(evt: AnyTouchEvent) {
   if ("dataTransfer" in evt) {
     const dataTransfer = evt.dataTransfer as DataTransfer;
     const types = dataTransfer.types;
@@ -29,7 +35,7 @@ function getFiles(dt: DataTransfer): File[] {
   return files;
 }
 
-function mousePosition(evt: TouchEvent | MouseEvent): Drag.Position {
+function mousePosition(evt: AnyTouchEvent): Drag.Position {
   let x: number | null, y: number | null;
   if ("touches" in evt && evt.type == "touchmove") {
     x = evt.touches[0].clientX;
@@ -41,11 +47,18 @@ function mousePosition(evt: TouchEvent | MouseEvent): Drag.Position {
   return { x: x, y: y };
 }
 
-export default function useDragUploader(
-  collections: Drag.Collection[],
-  onDragEnd: (dragState: Drag.State, files: File[]) => void
-) {
-  const initialState: Drag.State = {
+export default function useDragUploader<T>(
+  collections: Drag.Collection<T>[],
+  onDragEnd: (dragState: Drag.State<T>, files: File[]) => void
+): [
+  Drag.State<T>,
+  (evt: AnyTouchEvent, draggable: Drag.Item<T>) => void,
+  {
+    onDragOver: (evt: AnyTouchEvent) => void;
+    onDrop: (evt: AnyTouchEvent) => void;
+  }
+] {
+  const initialState: Drag.State<T> = {
     dragging: false,
     x: null,
     y: null
@@ -53,21 +66,18 @@ export default function useDragUploader(
 
   const [dragState, setDragState] = useState(initialState);
 
-  const updatePositions = (dragging?: Drag.Draggable | string) => {
+  const updatePositions = (dragging?: Drag.Draggable<T> | string) => {
     collections.forEach((c) => {
       c.dispatch({ type: "updatePositions", payload: dragging });
     });
   };
 
-  const startDrag = (
-    evt: MouseEvent | TouchEvent,
-    draggable: Drag.Draggable | string
-  ) => {
+  const startDrag = (evt: AnyTouchEvent, draggable: Drag.Item<T>) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };
 
-  const drag = (evt: MouseEvent | TouchEvent) => {
+  const drag = (evt: AnyTouchEvent) => {
     if (dragState.dragging) {
       evt.stopPropagation();
       evt.preventDefault();
@@ -79,7 +89,7 @@ export default function useDragUploader(
     }
   };
 
-  const dragEnd = (evt: MouseEvent | TouchEvent) => {
+  const dragEnd = (evt: AnyTouchEvent) => {
     if (dragState.dragging) {
       const prevDragState = dragState;
       let files: File[] = [];
@@ -94,7 +104,7 @@ export default function useDragUploader(
     }
   };
 
-  const dragLeave = (evt: MouseEvent | TouchEvent) => {
+  const dragLeave = (evt: AnyTouchEvent) => {
     if (dragState.dragging === "Files") {
       evt.preventDefault();
       evt.stopPropagation();

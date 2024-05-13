@@ -17,9 +17,7 @@ Rails.application.routes.draw do
     collection do
       get "search"
       post "search"
-    end
-    member do
-      put "preview"
+      post "preview"
     end
     resources :files, controller: "page_files"
   end

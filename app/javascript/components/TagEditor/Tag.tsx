@@ -3,12 +3,12 @@ import React from "react";
 interface Props {
   enabled: boolean;
   tag: string;
-  toggleEnabled: (string) => void;
+  dispatch: (action: TagEditor.Action) => void;
 }
 
 export default function Tag(props: Props) {
   const handleChange = () => {
-    props.toggleEnabled(props.tag);
+    props.dispatch({ type: "toggleTag", payload: props.tag });
   };
 
   const classes = ["tag"];

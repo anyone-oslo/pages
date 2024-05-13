@@ -1,14 +1,14 @@
 import React, { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
 
 interface Props {
-  addTag: (string) => void;
+  dispatch: (action: TagEditor.Action) => void;
 }
 
 export default function AddTagForm(props: Props) {
   const [tag, setTag] = useState("");
 
   const submit = () => {
-    props.addTag(tag);
+    props.dispatch({ type: "addTag", payload: tag });
     setTag("");
   };
 

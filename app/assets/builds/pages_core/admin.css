@@ -7514,6 +7514,17 @@ form .field:last-child {
     margin-bottom: 0px;
   }
 
+form .field .date-select {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+form .field .date-select .time {
+        width: 4rem;
+        min-width: 2rem;
+      }
+
 form .field input[type="text"],
     form .field input[type="password"],
     form .field input[type="email"],
@@ -7605,10 +7616,6 @@ form .date-range-select .date {
       white-space: nowrap;
     }
 
-form .date-range-select .date .date-select {
-        display: inline-block;
-      }
-
 form .date-range-select .date input[type="text"] {
         display: inline;
         width: auto;
@@ -7685,6 +7692,10 @@ fieldset {
   border: none;
   border-bottom: 1px solid #ddd;
   border-bottom: 1px solid var(--border-color);
+}
+
+.buttons {
+  gap: 4px;
 }
 
 button,
@@ -8568,6 +8579,12 @@ body {
   flex-flow: column nowrap;
   height: 100vh;
 }
+
+.wrapper > div[data-react-class] {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+  }
 
 .wrapper > *,
   .wrapper .main-wrapper {
@@ -9550,20 +9567,6 @@ td.drag-handle {
 .edit-page {
   width: auto;
 }
-
-.edit-page .hidden-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice,
-  .edit-page .published-date,
-  .edit-page .advanced-options {
-    display: none;
-  }
-
-.edit-page .autopublish-notice.show, .edit-page .published-date.show, .edit-page .advanced-options.show {
-      display: block;
-    }
 
 .edit-page .advanced-options {
     margin-top: 1.5rem;

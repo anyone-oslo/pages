@@ -3,7 +3,7 @@ import React, { MouseEvent } from "react";
 interface Props {
   className: string;
   name: string;
-  onClick: (evt: MouseEvent) => void;
+  onClick: (evt: React.MouseEvent) => void;
 }
 
 export default function RichTextToolbarButton(props: Props) {

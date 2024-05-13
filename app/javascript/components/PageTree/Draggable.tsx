@@ -40,14 +40,14 @@ interface DragState {
 }
 
 interface Props {
-  addChild: (id: Tree.Id, attrs: Page.Node) => void;
+  addChild: (id: Tree.Id, attrs: Page.TreeNode) => void;
   dir: string;
   locale: string;
   movedPage: (id: Tree.Id) => void;
   paddingLeft?: number;
   toggleCollapsed: (id: Tree.Id) => void;
-  tree: Tree<Page.Node>;
-  updatePage: (id: Tree.Id, attributes: Partial<Page.Attributes>) => void;
+  tree: Tree<Page.TreeNode>;
+  updatePage: (id: Tree.Id, attributes: Partial<Page.TreeItem>) => void;
   updateTree: (Tree) => void;
 }
 
@@ -102,6 +102,7 @@ export default class Draggable extends Component<Props, State> {
           <Node
             tree={tree}
             index={draggingIndex}
+            locale={this.props.locale}
             paddingLeft={this.props.paddingLeft || defaultPadding}
           />
         </div>
@@ -127,7 +128,7 @@ export default class Draggable extends Component<Props, State> {
             index={root}
             key={root.id}
             paddingLeft={this.props.paddingLeft || defaultPadding}
-            addChild={(idx: Tree.Index<Page.Node>) => this.addChild(idx)}
+            addChild={(idx: Tree.Index<Page.TreeNode>) => this.addChild(idx)}
             onDragStart={this.dragStart}
             onCollapse={(nodeId) => this.toggleCollapse(nodeId)}
             updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
@@ -140,15 +141,14 @@ export default class Draggable extends Component<Props, State> {
     }
   }
 
-  addChild(parent: Tree.Index<Page.Node>) {
-    const newNode: Page.Node = {
-      name: "",
+  addChild(parent: Tree.Index<Page.TreeNode>) {
+    const newNode: Page.TreeNode = {
+      blocks: { name: { [this.props.locale]: "" } },
       status: 0,
       editing: true,
       children: [],
       published_at: new Date(),
       pinned: false,
-      locale: parent.node.locale,
       parent_page_id: parent.node.id,
       collapsed: false
     };
@@ -171,7 +171,8 @@ export default class Draggable extends Component<Props, State> {
       if (
         parentNodes.indexOf(pointer) == -1 &&
         !pointer.node.collapsed &&
-        pointer.node.children.filter((p: Page.Node) => p.status != 4).length > 0
+        pointer.node.children.filter((p: Page.TreeNode) => p.status != 4)
+          .length > 0
       ) {
         count += 1;
       }
@@ -207,7 +208,7 @@ export default class Draggable extends Component<Props, State> {
     const tree = this.props.tree;
     const dragging = this.state.dragging;
     const paddingLeft = this.props.paddingLeft || defaultPadding;
-    let newIndex: Tree.Index<Page.Node> = null;
+    let newIndex: Tree.Index<Page.TreeNode> = null;
     let index = tree.getIndex(dragging.id);
     const collapsed = index.node.collapsed;
 
@@ -327,7 +328,7 @@ export default class Draggable extends Component<Props, State> {
     this.props.toggleCollapsed(nodeId);
   }
 
-  updatePage(index: Tree.Index, attributes: Partial<Page.Attributes>) {
+  updatePage(index: Tree.Index, attributes: Partial<Page.TreeItem>) {
     this.props.updatePage(index.id, attributes);
   }
 }
