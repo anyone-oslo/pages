@@ -1,14 +1,11 @@
 import { start as startRails } from "@rails/ujs";
-import { Application } from "@hotwired/stimulus";
 import "react_ujs";
 import { FC } from "react";
 
 import * as Components from "./components";
 
-import EditPageController from "./controllers/EditPageController";
-import MainController from "./controllers/MainController";
-
 import RichText from "./features/RichText";
+import contentTabs from "./features/contentTabs";
 
 export function registerComponent(name: string, component: FC) {
   window[name] = component;
@@ -19,11 +16,9 @@ export default function startPages() {
   for (const name in Components) {
     registerComponent(name, Components[name] as FC);
   }
-  RichText.start();
 
-  const application = Application.start();
-  application.register("edit-page", EditPageController);
-  application.register("main", MainController);
+  RichText.start();
+  contentTabs();
 }
 
 export * from "./components";

@@ -17,7 +17,6 @@ __metadata:
   resolution: "@anyone-oslo/pages@workspace:."
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.2.1"
-    "@hotwired/stimulus": "npm:^3.2.2"
     "@rails/ujs": "npm:^6.1.4-1"
     "@types/lodash": "npm:^4.14.194"
     "@types/rails__ujs": "npm:^6.0.1"
@@ -718,13 +717,6 @@ __metadata:
   version: 6.4.2
   resolution: "@fortawesome/fontawesome-free@npm:6.4.2"
   checksum: 10/6bbfb492b0b139f77cddc54b64b3166739a9b46afd68a4b15664722808406a5cbe17820c40cf010a15ab1b5f18847886b5cd52a857ba79fa269981e1318265cb
-  languageName: node
-  linkType: hard
-
-"@hotwired/stimulus@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@hotwired/stimulus@npm:3.2.2"
-  checksum: 10/31b9dc3a36a73b87a30570d6e73d27b387a8f6c3caf934aedc4dc96e5b40dde8fc36d530e16056b3d590b1d31b8a13bc1fca002e83df838f1bf5148b188046de
   languageName: node
   linkType: hard
 

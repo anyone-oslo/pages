@@ -31,8 +31,7 @@ module PagesCore
                 class: "content-tab",
                 id: "content-tab-#{key}",
                 role: "tabpanel",
-                data: { tab: key,
-                        "main-target" => "tab" })
+                data: { tab: key })
       end
     end
   end
