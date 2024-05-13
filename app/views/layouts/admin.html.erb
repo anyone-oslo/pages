@@ -44,7 +44,7 @@
         <%= yield :main_wrapper %>
       <% else %>
         <div class="main-wrapper">
-          <main data-controller="main">
+          <main>
             <%= render(partial: "layouts/admin/page_header") %>
             <%= yield %>
           </main>

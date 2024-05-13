@@ -13,8 +13,7 @@
           role="tablist">
         <% content_tabs.map do |t| %>
           <li id="content-tab-link-<%= t[:key] %>"
-              data-tab="<%= t[:key] %>"
-              data-main-target="link">
+              data-tab="<%= t[:key] %>">
             <% if t[:options][:disabled] == true %>
               <%= t[:name] %>
             <% else %>
