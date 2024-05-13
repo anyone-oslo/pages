@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_01_160700) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_08_145300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -25,15 +25,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_01_160700) do
     t.datetime "updated_at", precision: nil
     t.string "content_hash", null: false
     t.integer "user_id"
-  end
-
-  create_table "categories", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
-    t.integer "position"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["slug"], name: "index_categories_on_slug"
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -115,13 +106,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_01_160700) do
     t.datetime "updated_at", precision: nil
     t.index ["localizable_id", "localizable_type", "name", "locale"], name: "index_textbits_on_locale", unique: true
     t.index ["localizable_id", "localizable_type"], name: "index_localizations_on_localizable_id_and_localizable_type"
-  end
-
-  create_table "page_categories", id: :serial, force: :cascade do |t|
-    t.integer "page_id"
-    t.integer "category_id"
-    t.index ["category_id"], name: "index_page_categories_on_category_id"
-    t.index ["page_id"], name: "index_page_categories_on_page_id"
   end
 
   create_table "page_files", id: :serial, force: :cascade do |t|

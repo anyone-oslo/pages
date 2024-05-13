@@ -19,10 +19,6 @@ en:
         image: Profile picture
   pages_core:
     account_holder_exists: Account holder already exists
-    categories_controller:
-      created: New category created
-      deleted: Category was deleted
-      updated: Category was updated
     changes_saved: Your changes were saved
     invalid_login: >
       The provided email address and password combination was not valid

@@ -49,18 +49,6 @@
     Make post featured<br />
   </div>
 
-  <% if @categories.length > 0 %>
-    <div class="field">
-      <label>Categories</label>
-      <% @categories.each do |category| %>
-        <%= check_box_tag("category[#{category.id}]",
-                          "1",
-                          @page.categories.map { |c| c.id }.include?(category.id)) %>
-        <%= category.name %><br />
-      <% end %>
-    </div>
-  <% end %>
-
   <%= labelled_field(f.select(:template, available_templates_for_select),
                      "Template",
                      errors: @page.errors[:template]) %>

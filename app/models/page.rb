@@ -25,9 +25,6 @@ class Page < ApplicationRecord
              optional: true,
              inverse_of: :pages
 
-  has_many :page_categories, dependent: :destroy
-  has_many :categories, through: :page_categories
-
   validates(:unique_name,
             format: { with: /\A[\w\d_-]+\z/,
                       allow_blank: true },

@@ -4,7 +4,6 @@ module Admin
   class PagesController < Admin::AdminController
     include PagesCore::Admin::PageJsonHelper
 
-    before_action :find_categories
     before_action :find_page, only: %i[show edit update destroy move]
 
     require_authorization
@@ -39,8 +38,7 @@ module Admin
     def edit; end
 
     def create
-      @page = build_page(content_locale, page_params,
-                         param_categories).tap(&:save)
+      @page = build_page(content_locale, page_params).tap(&:save)
       if @page.valid?
         respond_with_page(@page) do
           redirect_to(edit_admin_page_url(content_locale, @page))
@@ -52,7 +50,6 @@ module Admin
 
     def update
       if @page.update(page_params)
-        @page.categories = param_categories
         respond_with_page(@page) do
           flash[:notice] = t("pages_core.changes_saved")
           redirect_to edit_admin_page_url(content_locale, @page)
@@ -75,11 +72,10 @@ module Admin
 
     private
 
-    def build_page(locale, attributes = nil, categories = nil)
+    def build_page(locale, attributes = nil)
       Page.new.localize(locale).tap do |page|
         page.author = default_author || current_user
         page.attributes = attributes if attributes
-        page.categories = categories if categories
       end
     end
 
@@ -103,19 +99,8 @@ module Admin
       )
     end
 
-    def param_categories
-      return [] unless params[:category]
-
-      params.permit(category: {})[:category].to_hash
-            .map { |id, _| Category.find(id) }
-    end
-
     def find_page
       @page = Page.find(params[:id]).localize(content_locale)
-    end
-
-    def find_categories
-      @categories = Category.order("name")
     end
 
     def respond_with_page(page, &block)
