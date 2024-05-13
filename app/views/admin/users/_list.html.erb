@@ -5,7 +5,7 @@
     <th>Can access</th>
     <th>2FA</th>
     <th>Last seen</th>
-    <th></th>
+    <th colspan="2"></th>
   </tr>
 <% @invites.each do |invite| %>
   <tr class="invite">
@@ -23,7 +23,7 @@
         <%= time_ago_in_words(invite.sent_at) %> ago
       <% end %>
     </td>
-    <td>
+    <td colspan="2">
       <% if current_user.role?(:users) %>
         <%= link_to("View invite",
                     admin_invite_with_token_url(invite, invite.token)) %> /
@@ -38,11 +38,8 @@
 <% end %>
 <% @users.each do |user| -%>
   <tr class="user-<%= user.id %>">
-    <td>
-      <strong><%= link_to user.name, admin_user_url( user ) %></strong>
-      <% if policy(user).edit? %>
-        (<%= link_to "edit", edit_admin_user_url( user ), class: :edit %>)
-      <% end %>
+    <td class="name">
+      <%= link_to user.name, admin_user_url( user ) %>
     </td>
     <td>
       <%= user.email %>
@@ -64,6 +61,11 @@
         notes << "Deactivated" unless user.activated?
         notes.join( ", " )
       %>
+    </td>
+    <td>
+      <% if policy(user).edit? %>
+        <%= link_to("Edit", edit_admin_user_url(user), class: :edit) %>
+      <% end %>
     </td>
   </tr>
 <% end -%>

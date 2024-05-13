@@ -8,7 +8,7 @@ RSpec.describe "Two-factor authentication" do
   before do
     login_as(user)
     click_on "Users"
-    click_on "edit"
+    click_on "Edit"
   end
 
   context "when enabling 2FA" do

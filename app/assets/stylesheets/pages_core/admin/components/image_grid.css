@@ -1,30 +1,31 @@
 .image-grid {
-  --image-padding: 7px;
+  --image-padding: 0.5rem;
   margin-bottom: 40px;
   display: flex;
+  gap: 1rem;
 
   @media (--mobile) {
     flex-direction: column;
   }
 
-  & input[type="file"] {
+  input[type="file"] {
     display: none;
   }
 
-  & h3 {
+  h3 {
     margin: 10px var(--image-padding) 10px var(--image-padding);
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 5px;
   }
 
-  & img {
+  img {
     display: block;
     width: 100%;
     height: auto;
     min-height: 1px; /* Hack for IE11 */
   }
 
-  & .grid-image {
+  .grid-image {
     padding: var(--image-padding);
 
     &.placeholder {
@@ -36,19 +37,19 @@
       opacity: 0.5;
       overflow: hidden;
 
-      & .temp-image {
+      .temp-image {
         position: relative;
         cursor: pointer;
         overflow: hidden;
         background: #000;
       }
 
-      & img {
+      img {
         filter: blur(20px);
         opacity: 0.75;
       }
 
-      & span {
+      span {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -65,8 +66,8 @@
       }
     }
 
-    & .file-placeholder,
-    & .placeholder {
+    .file-placeholder,
+    .placeholder {
       position: relative;
       vertical-align: middle;
       background: var(--background-disabled-color);
@@ -74,13 +75,13 @@
       width: 100%;
       padding-bottom: 100%;
 
-      & span {
+      span {
         color: var(--text-light-color);
         text-shadow: none;
       }
     }
 
-    & .actions {
+    .actions {
       margin-top: 7px;
       display: flex;
       gap: 4px;
@@ -91,33 +92,33 @@
         visibility: visible;
       }
 
-      & button {
+      button {
         flex: 1;
       }
     }
 
     &:hover {
-      & .actions {
+      .actions {
         visibility: visible;
       }
     }
   }
 
-  & .primary-image {
+  .primary-image {
     width: 33.33%;
 
     @media (--mobile) {
       width: 100%;
     }
 
-    & .drop-target {
+    .drop-target {
       position: relative;
       width: 100%;
       padding-bottom: 66.67%;
       text-align: center;
       line-height: 1.6;
 
-      & > .upload-button {
+      > .upload-button {
         position: absolute;
         display: flex;
         flex-direction: column;
@@ -133,15 +134,15 @@
     }
   }
 
-  & .grid {
+  .grid {
     width: 100%;
 
-    & .images {
+    .images {
       position: relative;
       display: flex;
       flex-wrap: wrap;
 
-      & .grid-image {
+      .grid-image {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -157,10 +158,10 @@
       }
     }
 
-    & .editable-image {
+    .editable-image {
       padding-bottom: 75%;
 
-      & img {
+      img {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -171,18 +172,18 @@
       }
     }
 
-    & .drop-target {
+    .drop-target {
       margin: 10px var(--image-padding);
       padding-top: 10px;
 
-      & button {
+      button {
         margin: 0px 7px;
       }
     }
   }
 
   &.with-primary-image {
-    & .grid {
+    .grid {
       width: 66.67%;
 
       @media (--mobile) {
@@ -190,7 +191,7 @@
       }
     }
 
-    & .images .grid-image {
+    .images .grid-image {
       width: 25%;
 
       @media (--narrow) {
@@ -203,7 +204,7 @@
     }
   }
 
-  & .drag-image {
+  .drag-image {
     position: absolute;
     width: 150px;
     z-index: 100;

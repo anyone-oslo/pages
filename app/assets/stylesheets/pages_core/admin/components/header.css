@@ -1,10 +1,13 @@
 header {
   background: var(--background-invert-color);
-  height: 86px;
+  padding: 1.25rem 1rem 0rem 1rem;
   color: var(--text-invert-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 
-  & a,
-  & a:visited {
+  a,
+  a:visited {
     background: none;
     border: 0;
     padding: 0;
@@ -12,44 +15,38 @@ header {
     color: var(--text-invert-color);
   }
 
-  & .logo {
-    position: absolute;
-    z-index: 2;
-    top: 11px;
-    left: 16px;
-    width: 21px;
-    height: 27px;
+  .logo {
+    background: url("pages/admin/icon.svg");
+    background-repeat: no-repeat;
+    min-height: 27px;
+    padding-left: 38px;
   }
 
-  & .site-name {
+  .site-name {
     color: var(--text-invert-color);
-    position: absolute;
-    top: 15px;
-    left: 52px;
+    flex-grow: 1;
 
-    & h1 {
+    h1 {
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
       display: inline;
-      font-size: 20px;
+      font-size: 1.4rem;
+      letter-spacing: -0.04rem;
       font-weight: normal;
 
-      & a {
-        font-weight: bold;
+      a {
+        font-weight: 800;
         text-decoration: none;
         padding-right: 6px;
       }
     }
   }
 
-  & .user {
-    font-size: 13px;
-    position: absolute;
-    top: 20px;
-    right: 16px;
+  .user {
+    display: flex;
+    align-items: center;
 
-    & a {
+    a {
       border-left: 1px solid var(--text-light-color);
       padding-left: 10px;
       margin-left: 6px;
@@ -62,35 +59,32 @@ header {
     }
   }
 
-  & .tabs {
-    position: absolute;
-    top: 54px;
-    height: 29px;
-    left: 16px;
-    right: 8px;
+  .tabs {
+    display: flex;
+    overflow: scroll;
+    width: 100%;
+    gap: 8px;
 
-    & ul {
-      padding: 0;
-      margin: 0 8px 0 0;
+    ul {
+      padding: 0px;
+      margin: 0px;
       list-style-type: none;
-      display: block;
-      float: left;
+      display: flex;
+      gap: 4px;
 
       &.account {
-        float: right;
+        flex-grow: 1;
+        justify-content: flex-end;
       }
     }
 
-    & li {
-      display: inline;
+    li {
       margin: 0;
       padding: 0;
-      font-weight: normal;
-      font-size: 13px;
     }
 
-    & a,
-    & a:visited {
+    a,
+    a:visited {
       background: #333;
       color: var(--text-invert-color);
       display: block;
@@ -98,13 +92,13 @@ header {
       padding: 0 15px;
       line-height: 32px;
       height: 32px;
-      margin: 0 2px 0 0;
+      margin: 0px;
       text-decoration: none;
     }
 
-    & a:hover,
-    & a.current,
-    & a.current:visited {
+    a:hover,
+    a.current,
+    a.current:visited {
       background: linear-gradient(to bottom, #cfcfcf 0%, #fefefe 100%);
       color: var(--text-color);
     }
@@ -116,22 +110,22 @@ header {
   margin: 24px 0px -12px -18px;
   padding: 0;
 
-  & li {
+  li {
     color: hsla(0, 0%, 0%, 0.25);
     display: inline;
     background: transparent;
     padding: 6px 17px;
-    font-weight: bold;
   }
 
-  & li.current {
+  li.current {
     background: var(--background-color);
     padding: 5px 16px;
     border: 1px solid #cae6f1;
     border-bottom: 1px solid var(--background-color);
+    font-weight: var(--bold-weight);
 
-    & a,
-    & a:visited {
+    a,
+    a:visited {
       text-decoration: none;
       color: #444;
     }
@@ -146,15 +140,19 @@ header {
   border-bottom: 1px solid #d4eaf4;
   color: var(--text-color);
 
-  & em {
+  h3 {
+    font-weight: var(--bold-weight);
+  }
+
+  em {
     font-style: normal;
     color: #4a5357;
   }
 
-  & .links {
+  .links {
     float: right;
 
-    & a {
+    a {
       border-left: 1px solid #779cb3;
       padding-left: 8px;
       margin-left: 8px;
@@ -166,14 +164,14 @@ header {
       }
 
       &.current {
-        font-weight: bold;
+        font-weight: var(--bold-weight);
         text-decoration: none;
         color: var(--text-color);
       }
     }
   }
 
-  & .separator {
+  .separator {
     color: #779cb3;
     margin: 0 4px;
   }
@@ -182,6 +180,6 @@ header {
 main .page-description h3 {
   margin: 0;
   padding: 0;
-  font-size: 13px;
+  font-size: 0.875rem;
   text-shadow: #e9f6ff 1px 1px 1px;
 }

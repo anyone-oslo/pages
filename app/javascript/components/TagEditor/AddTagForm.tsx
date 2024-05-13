@@ -29,11 +29,11 @@ export default function AddTagForm(props: Props) {
   };
 
   return (
-    <div className="add-tag-form">
+    <div className="add-tag-form inline-form">
       <input
         name="add-tag"
         type="text"
-        className="add-tag"
+        className="add-tag tight"
         value={tag}
         onKeyDown={handleKeyDown}
         onChange={handleChange}

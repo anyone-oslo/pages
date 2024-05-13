@@ -1,60 +1,46 @@
 .tag-editor {
-  margin-top: 10px;
-  margin-bottom: 1.5em;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 
-  & .tags {
-    line-height: 1.5;
-  }
-
-  & .tag {
-    font-size: 13px;
+  .tag {
+    font-size: 1rem;
     cursor: pointer;
-    display: block;
-    float: left;
-    margin: 0 5px 5px 0;
     padding: 0px;
     background: var(--background-disabled-color);
     border-radius: 5px;
-    line-height: 26px;
-    line-height: 36px;
     min-width: 40px;
+    height: 2rem;
     transition: all 200ms ease-out;
     user-select: none;
+    display: flex;
 
-    & label {
+    label {
+      display: flex;
       margin: 0px;
       padding: 0px 10px;
       color: inherit;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    & input {
-      margin: 2px 3px 0 0;
+    input {
+      /*margin: 2px 3px 0 0;*/
     }
 
-    & .name {
-      padding: 1px 5px;
-      margin: 0;
+    .name {
+    }
+
+    &:hover,
+    &:focus {
+      background: var(--background-highlight-color);
     }
 
     &.enabled {
       color: #fff;
       background: var(--blue-dark);
-    }
-  }
-
-  & .add-tag-form {
-    float: left;
-    width: 178px;
-    white-space: nowrap;
-  }
-
-  & input.add-tag {
-    margin-top: 0px;
-    border-radius: 5px;
-    margin: 0 4px 0 0;
-
-    &.example {
-      color: var(--text-light-color);
     }
   }
 }

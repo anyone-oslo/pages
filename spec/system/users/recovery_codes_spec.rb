@@ -8,7 +8,7 @@ RSpec.describe "Recovery codes" do
   before do
     Timecop.travel(10.minutes.ago) { login_as(user) }
     click_on "Users"
-    click_on "edit"
+    click_on "Edit"
   end
 
   specify { expect(page).to have_text("You have 2 recovery codes remaining") }
@@ -25,7 +25,7 @@ RSpec.describe "Recovery codes" do
 
     specify do
       click_on "Users"
-      click_on "edit"
+      click_on "Edit"
       expect(page).to have_text("You have 10 recovery codes remaining")
     end
   end

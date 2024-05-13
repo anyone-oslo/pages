@@ -14,7 +14,7 @@ RSpec.describe "Roles" do
   describe "removing all roles" do
     before do
       within ".user-#{user.id}" do
-        click_on "edit"
+        click_on "Edit"
       end
       all("input.role").each do |checkbox|
         checkbox.click if checkbox.checked?

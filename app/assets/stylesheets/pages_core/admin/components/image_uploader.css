@@ -17,14 +17,14 @@
     border: 2px dashed var(--border-color);
   }
 
-  & .image {
+  .image {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 250px;
     max-height: 400px;
 
-    & .editable-image img {
+    .editable-image img {
       width: auto;
       max-height: 400px;
     }
@@ -34,19 +34,19 @@
     }
   }
 
-  & .ui-wrapper {
+  .ui-wrapper {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  & .ui {
+  .ui {
     text-align: center;
     padding: 20px;
   }
 
-  & .remove-image {
+  .remove-image {
     display: block;
     margin-top: 20px;
   }

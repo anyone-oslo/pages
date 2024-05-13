@@ -5,12 +5,13 @@ module Admin
     include PagesCore::LocalesHelper
 
     def header_tabs(group)
+      return unless menu_items_for(group).any?
+
       tag.ul(class: group.to_s) do
         safe_join(menu_items_for(group).map do |item|
           tag.li do
             path = instance_eval(&item.path)
-            link_to(item.label,
-                    path,
+            link_to(item.label, path,
                     class: (current_menu_item?(item) ? "current" : ""))
           end
         end)

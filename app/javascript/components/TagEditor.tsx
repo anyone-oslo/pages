@@ -49,7 +49,7 @@ export default function TagEditor(props: Props) {
   };
 
   return (
-    <div className="tag-editor clearfix">
+    <div className="tag-editor">
       <input type="hidden" name={props.name} value={JSON.stringify(enabled)} />
       {tagList.map((t) => (
         <Tag

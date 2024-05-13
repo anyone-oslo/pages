@@ -1,25 +1,25 @@
 main form {
-  margin: 16px 32px;
+  margin: 1.5rem 2rem;
 }
 
 form {
-  & .field {
-    margin: 16px 0;
+  .field {
+    margin: 1.5rem 0;
     padding: 0;
+    @mixin child-margins;
 
-    & input[type="text"],
-    & input[type="password"],
-    & input[type="email"],
-    & textarea {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    textarea {
       transition: border-color 150ms ease-out;
     }
 
-    & label {
+    label {
       display: block;
       padding: 0;
       margin: 0 0 4px 0;
-      font-weight: bold;
-      font-size: 13px;
+      font-weight: var(--bold-weight);
       color: var(--text-color);
       transition: color 150ms ease-out;
 
@@ -34,43 +34,44 @@ form {
       }
     }
 
-    & .description {
+    .description {
+      display: block;
       color: var(--text-light-color);
       margin: 0 0 6px 0;
     }
   }
 
-  & .field-with-warning {
-    & input[type="text"],
-    & input[type="password"],
-    & input[type="email"],
-    & textarea {
+  .field-with-warning {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    textarea {
       border-color: var(--red-light);
     }
 
-    & label {
+    label {
       color: var(--red);
     }
   }
 
-  & .field-with-errors {
+  .field-with-errors {
     background: var(--red-invert);
     border-top: 1px solid var(--red-light);
     border-bottom: 1px solid var(--red-light);
     margin: 0 -32px -1px -32px;
     padding: 12px 32px 16px 32px;
 
-    & label {
+    label {
       color: var(--red);
     }
   }
 
-  & .row {
+  .row {
     display: flex;
     flex-wrap: wrap;
     margin-right: -16px;
 
-    & .field {
+    .field {
       margin-right: 16px;
 
       &.text-field {
@@ -79,24 +80,24 @@ form {
       }
     }
 
-    & input[type="text"],
-    & input[type="password"] {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
       max-width: none;
     }
   }
 
-  & .date-range-select {
-    & .date {
+  .date-range-select {
+    .date {
       line-height: 34px;
       display: inline-block;
       white-space: nowrap;
 
-      & .date-select {
+      .date-select {
         display: inline-block;
       }
 
-      & input[type="text"] {
+      input[type="text"] {
         display: inline;
         width: auto;
         min-width: auto;
@@ -105,21 +106,21 @@ form {
       }
     }
 
-    & .to {
+    .to {
       margin: 0px 8px;
     }
   }
 
-  & .page-dates {
+  .page-dates {
     margin-bottom: 40px;
 
-    & .toggles {
-      & label {
+    .toggles {
+      label {
         font-weight: normal;
         display: inline-block;
         margin-right: 12px;
 
-        & input {
+        input {
           margin-right: 6px;
         }
 
@@ -129,7 +130,7 @@ form {
       }
     }
 
-    & .remove-dates {
+    .remove-dates {
       margin-top: 12px;
     }
   }
@@ -151,10 +152,11 @@ textarea {
   min-width: 200px;
   border: 1px solid var(--border-color);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
-  padding: 8px 10px;
-  line-height: 1.4;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  padding: 0.5rem 0.75rem;
+
+  &.tight {
+    padding: 0.25rem 0.5rem;
+  }
 
   &:disabled {
     border-color: var(--border-color-light);
@@ -164,13 +166,6 @@ textarea {
   &.warn {
     border-color: red;
   }
-}
-
-main .login-form input[type="text"],
-main .login-form input[type="password"],
-input[type="text"].large,
-input[type="password"].large {
-  font-size: 1.4em;
 }
 
 fieldset {
@@ -185,7 +180,7 @@ select {
   appearance: none;
   cursor: inherit;
   font-family: var(--font-os-sans);
-  font-size: 13px;
+  font-size: 0.875rem;
   color: var(--text-color);
   line-height: 1.5;
   border: 1px solid var(--button-border-color);
@@ -193,6 +188,10 @@ select {
   padding: 0.25em 0.75em;
   background: var(--button-color);
   box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.25);
+
+  .icon {
+    margin-right: 8px;
+  }
 
   &:hover {
     background-color: var(--button-color-hover);
@@ -204,6 +203,27 @@ select {
 
     &:hover {
       background-color: var(--button-color);
+    }
+  }
+
+  &.primary {
+    background: var(--text-color);
+    border-color: var(--text-color);
+    color: var(--text-invert-color);
+    box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.2);
+    &:hover {
+      box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &.transparent {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.25rem 0.25rem;
+    &:hover,
+    &:focus {
+      text-decoration: underline;
     }
   }
 }
@@ -221,4 +241,31 @@ form.button-to {
   display: inline;
   margin: 0;
   padding: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.inline-form {
+  display: flex;
+  input {
+    flex: 1 1 auto;
+    border-right: none;
+    &:focus {
+      z-index: 20;
+    }
+  }
+  button {
+    border-radius: 0px;
+    white-space: nowrap;
+    border-right: none;
+    &:last-child {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-right: 1px solid var(--button-border-color);
+    }
+  }
 }

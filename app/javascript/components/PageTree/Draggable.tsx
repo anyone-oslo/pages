@@ -55,7 +55,7 @@ interface State {
   dragging: DragState;
 }
 
-const defaultPadding = 15;
+const defaultPadding = 20;
 
 export default class Draggable extends Component<Props, State> {
   _dragListener: (evt: MouseEvent) => void;

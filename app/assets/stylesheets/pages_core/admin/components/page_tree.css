@@ -5,14 +5,15 @@
   margin: 20px 0 40px 0;
   margin-left: -20px;
   margin-right: -10px;
+  max-width: 90rem;
 
-  & .draggable {
+  .draggable {
     user-select: none;
     position: absolute;
     opacity: 0.8;
   }
 
-  & .node {
+  .node {
     &.placeholder > * {
       visibility: hidden;
     }
@@ -21,33 +22,45 @@
       border: 1px dashed var(--border-color);
     }
 
-    & .inner {
+    .inner {
       position: relative;
-      cursor: pointer;
-      padding-left: 10px;
+      padding-left: 1.75rem;
+      display: flex;
+      border-radius: 5px;
+      &:hover {
+        background: var(--background-highlight-color);
+      }
     }
 
-    & .collapse {
+    .collapse {
       position: absolute;
-      left: 0;
+      left: 0.625rem;
+      top: 0.5rem;
       cursor: pointer;
-      font-size: 15px;
-      padding-top: 5px;
+      padding-top: 0px;
+      transition: transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      &.open {
+        transform: rotate(90deg);
+      }
+    }
+
+    .inner:has(.edit-name) {
+      .collapse {
+        top: 0.75rem;
+      }
     }
   }
 
-  & .page {
-    font-size: 15px;
-    padding: 6px 10px;
-    border: 1px solid transparent;
+  .page {
+    padding: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
 
-    &:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
+    gap: 0.5rem;
+    align-items: baseline;
+    width: 100%;
 
-    &:hover {
+    &:hove2r {
       border: 1px solid var(--border-color-light);
       background: linear-gradient(
         to bottom,
@@ -56,52 +69,42 @@
       );
     }
 
-    & .date {
-      font-size: 12px;
+    .page-icon {
+      margin-right: 0rem;
+    }
+
+    .date {
       margin-left: 10px;
       color: var(--text-light-color);
     }
 
-    & .name {
-      font-weight: bold;
+    .name {
+      font-weight: var(--bold-weight);
     }
 
-    & .icon {
-      margin-right: 8px;
-    }
-
-    & .status-label,
-    & .collapsed-label {
-      margin-left: 3px;
-      font-size: 12px;
-    }
-
-    & form {
-      display: inline;
+    .edit-name {
       margin: 0;
       padding: 0;
-
-      & input {
-        font-size: 15px;
-        padding: 2px 4px;
-        margin-top: -2px;
-        margin-bottom: -2px;
-        margin-right: 5px;
+      flex-grow: 1;
+      display: flex;
+      gap: 0.5rem;
+      input {
+        max-width: 100%;
+        flex: 1 1 auto;
       }
-
-      & button {
-        margin-left: 5px;
+      button {
+        white-space: nowrap;
       }
     }
 
-    & a,
-    & a:visited {
+    a,
+    a:visited {
       color: var(--text-color);
       text-decoration: none;
     }
 
-    & a:hover,
-    & a:focus {
+    a:hover,
+    a:focus {
       text-decoration: underline;
     }
 
@@ -109,74 +112,30 @@
     &.status-1,
     &.status-3 {
       &,
-      & a,
-      & a:visited {
+      a,
+      a:visited {
         color: var(--text-light-color);
       }
     }
   }
 
-  & .page .actions {
-    float: right;
+  .page .actions {
     visibility: hidden;
-    margin: -4px -6px -4px 5px;
-
-    & button {
-      margin-left: 5px;
-    }
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
   }
 
-  & .page:hover .actions {
+  .page:hover .actions {
     visibility: visible;
   }
 
-  & button {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    font-size: 13px;
-    padding: 3px 5px;
-    border-radius: 3px;
-    color: var(--link-hover-color);
-
-    & .icon {
-      margin-right: 8px;
-    }
-
-    &:hover,
-    &:focus {
-      color: var(--blue-hover);
-      background: var(--blue-transparent);
-    }
-
-    &.add {
-      color: var(--green);
-
-      &:hover,
-      &:focus {
-        color: var(--green-hover);
-        background: var(--green-transparent);
-      }
-    }
-
-    &.delete,
-    &.cancel {
-      color: var(--red);
-
-      &:hover,
-      &:focus {
-        color: var(--red-hover);
-        background: var(--red-transparent);
-      }
-    }
+  button.add-inline {
+    margin: 0.25rem 0 0.25rem 2.875rem;
   }
 
-  & button.add-inline {
-    margin: 5px 0 5px 30px;
-  }
-
-  & .node .node .node .page .name {
+  .node .node .node .page .name {
     font-weight: normal;
   }
 }

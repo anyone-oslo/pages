@@ -6855,9 +6855,6 @@ readers do not read off random characters that represent icons */
   font-weight: 400; }
 
 :root {
-  --font-os-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
-
   --red: #c00007;
   --red-transparent: rgba(192,0,7,0.25098);
   --red-hover: #8d0005;
@@ -6874,6 +6871,7 @@ readers do not read off random characters that represent icons */
   --background-invert-color: #000;
   --background-disabled-color: #f8f8f8;
   --background-warning-color: #ffdfa0;
+  --background-highlight-color: #e7f3f9;
   --text-color: #111;
   --text-light-color: #666;
   --text-lighter-color: #999;
@@ -6885,6 +6883,419 @@ readers do not read off random characters that represent icons */
   --button-border-color: #aaa;
   --button-color: #e8e8e8;
   --button-color-hover: #d8d8d8;
+}
+
+/* Inter */
+
+@font-face {
+  font-family: "InterVariable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("InterVariable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterVariable";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("InterVariable-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100;
+  src: url("Inter-Thin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100;
+  src: url("Inter-ThinItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 200;
+  src: url("Inter-ExtraLight.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 200;
+  src: url("Inter-ExtraLightItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  src: url("Inter-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 300;
+  src: url("Inter-LightItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  src: url("Inter-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 400;
+  src: url("Inter-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  src: url("Inter-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 500;
+  src: url("Inter-MediumItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  src: url("Inter-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 600;
+  src: url("Inter-SemiBoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  src: url("Inter-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 700;
+  src: url("Inter-BoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  src: url("Inter-ExtraBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 800;
+  src: url("Inter-ExtraBoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  src: url("Inter-Black.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 900;
+  src: url("Inter-BlackItalic.woff2") format("woff2");
+}
+
+/* InterDisplay */
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 100;
+  src: url("InterDisplay-Thin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 100;
+  src: url("InterDisplay-ThinItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 200;
+  src: url("InterDisplay-ExtraLight.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 200;
+  src: url("InterDisplay-ExtraLightItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 300;
+  src: url("InterDisplay-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 300;
+  src: url("InterDisplay-LightItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 400;
+  src: url("InterDisplay-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 400;
+  src: url("InterDisplay-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 500;
+  src: url("InterDisplay-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 500;
+  src: url("InterDisplay-MediumItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 600;
+  src: url("InterDisplay-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 600;
+  src: url("InterDisplay-SemiBoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 700;
+  src: url("InterDisplay-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 700;
+  src: url("InterDisplay-BoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 800;
+  src: url("InterDisplay-ExtraBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 800;
+  src: url("InterDisplay-ExtraBoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: normal;
+  font-weight: 900;
+  src: url("InterDisplay-Black.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterDisplay";
+  font-style: italic;
+  font-weight: 900;
+  src: url("InterDisplay-BlackItalic.woff2") format("woff2");
+}
+
+:root {
+  --bold-weight: 600;
+
+  --font-os-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  --font-sans: "Inter", var(--font-os-sans);
+
+  --font-heading-2: 600 1.4rem/1.2 var(--font-sans);
+  --font-heading-3: 600 1.2rem/1.4 var(--font-sans);
+
+  --font-large: 400 1.2rem/1.4 var(--font-sans);
+  --font-normal: 400 1rem/1.5 var(--font-sans);
+  --font-small: 400 0.875rem/1.33 var(--font-sans);
+}
+
+html {
+  font-size: 1rem;
+}
+
+body {
+  font: 400 1rem/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-normal);
+}
+
+b,
+strong {
+  font-weight: 600;
+  font-weight: var(--bold-weight);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 1.25rem 0;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child, p:first-child {
+    margin-top: 0px;
+  }
+
+h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:last-child, p:last-child {
+    margin-bottom: 0px;
+  }
+
+h2 {
+  font: 600 1.4rem/1.2 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-heading-2);
+  margin-top: 3rem;
+  letter-spacing: -0.04rem;
+}
+
+h2:first-child {
+    margin-top: 0px;
+  }
+
+h2:last-child {
+    margin-bottom: 0px;
+  }
+
+form h2:first-of-type {
+    margin-top: 0px;
+  }
+
+h3,
+.sidebar h2 {
+  font: 600 1.2rem/1.4 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-heading-3);
+  margin-top: 2rem;
+  letter-spacing: -0.02rem;
+}
+
+h3:first-child, .sidebar h2:first-child {
+    margin-top: 0px;
+  }
+
+h3:last-child, .sidebar h2:last-child {
+    margin-bottom: 0px;
+  }
+
+table,
+small,
+.page-description,
+header,
+.sidebar,
+.pagination {
+  font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-small);
+}
+
+.page-tree .date,
+  .page-tree .status-label,
+  .page-tree .collapsed-label,
+  .page-tree button {
+    font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+    font: var(--font-small);
+  }
+
+.login-form label, form .field label {
+    font-weight: 600;
+    font-weight: var(--bold-weight);
+  }
+
+.login-form label,
+  form .field label,
+  .login-form .description,
+  form .field .description {
+    font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+    font: var(--font-small);
+  }
+
+input,
+textarea {
+  font: 400 1rem/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-normal);
+}
+
+button,
+select {
+  font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-small);
+}
+
+input[type="text"].large,
+input[type="password"].large {
+  font: 400 1.2rem/1.4 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
+  font: var(--font-large);
 }
 
 .archive-index .count {
@@ -6901,7 +7312,6 @@ readers do not read off random characters that represent icons */
     position: relative;
     width: 100%;
     text-align: center;
-    line-height: 1.6;
     margin-top: 20px;
   }
 
@@ -6935,7 +7345,7 @@ readers do not read off random characters that represent icons */
     }
 
 .attachments .attachment.drop-placeholder {
-      font-size: 14px;
+      font-size: 0.875rem;
       margin-top: -1px;
       border-top: 1px solid #ddd;
       border-top: 1px solid var(--border-color);
@@ -6968,6 +7378,8 @@ readers do not read off random characters that represent icons */
 
 .attachments .attachment .actions {
       float: right;
+      display: flex;
+      gap: 0.25rem;
     }
 
 .attachments .attachment h3 {
@@ -6983,24 +7395,6 @@ readers do not read off random characters that represent icons */
 
 .attachments .attachment p:last-child {
         margin-bottom: 0px;
-      }
-
-.attachments .attachment button {
-      cursor: pointer;
-      border: 1px solid #ddd;
-      border: 1px solid var(--border-color);
-      border-radius: 3px;
-      background: #e8e8e8;
-      background: var(--button-color);
-      padding: 5px 20px;
-      font-size: 12px;
-      color: #111;
-      color: var(--text-color);
-    }
-
-.attachments .attachment button:hover,
-      .attachments .attachment button:focus {
-        background: #fff;
       }
 
 .attachment-editor {
@@ -7046,29 +7440,11 @@ body {
   color: var(--text-color);
 }
 
-body,
-td,
-th {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 12px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin: 16px 0;
-}
-
 img {
   border: 0;
 }
 
 small {
-  font-size: 0.9em;
   color: #666;
   color: var(--text-light-color);
 }
@@ -7087,63 +7463,13 @@ th {
   }
 
 div.content {
-  margin: 0 32px;
+  margin: 1.5rem 2rem;
 }
 
 table.show th,
 td {
   font-weight: normal;
   padding: 2px 16px 2px 0;
-}
-
-.errorExplanation {
-  background-color: #ffd;
-  border-bottom: 1px solid #dda;
-  margin: -32px -32px 16px -32px;
-  padding: 0px 32px;
-  color: #333;
-}
-
-.errorExplanation h2 {
-    font-weight: normal;
-    font-size: 1.4em;
-    margin: 0 -32px 16px -32px;
-    padding: 8px 32px;
-    background-color: #c00007;
-    background-color: var(--red);
-    color: #fff;
-  }
-
-.errorExplanation p {
-    margin-bottom: 0;
-    padding: 0;
-  }
-
-.errorExplanation ul {
-    padding: 0;
-    list-style-position: inside;
-  }
-
-.errorExplanation ul li {
-    font-weight: bold;
-  }
-
-.flash {
-  background: #fffbdf;
-  border-bottom: 1px solid #ccc9b2;
-  margin: -32px -32px 32px -32px;
-  padding: 16px 32px;
-  font-weight: bold;
-  color: #6f2d1b;
-  font-size: 1.2em;
-}
-
-div.paginator {
-  margin: 32px 0;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #666;
-  color: var(--text-light-color);
 }
 
 img.thumbnail {
@@ -7153,7 +7479,6 @@ img.thumbnail {
 li .actions {
   font-weight: normal;
   display: inline;
-  font-size: 12px;
   color: #666;
   color: var(--text-light-color);
   margin-top: 1px;
@@ -7173,12 +7498,20 @@ li .actions {
 }
 
 main form {
-  margin: 16px 32px;
+  margin: 1.5rem 2rem;
 }
 
 form .field {
-    margin: 16px 0;
+    margin: 1.5rem 0;
     padding: 0;
+  }
+
+form .field:first-child {
+    margin-top: 0px;
+  }
+
+form .field:last-child {
+    margin-bottom: 0px;
   }
 
 form .field input[type="text"],
@@ -7192,8 +7525,8 @@ form .field label {
       display: block;
       padding: 0;
       margin: 0 0 4px 0;
-      font-weight: bold;
-      font-size: 13px;
+      font-weight: 600;
+      font-weight: var(--bold-weight);
       color: #111;
       color: var(--text-color);
       transition: color 150ms ease-out;
@@ -7210,6 +7543,7 @@ form .field label.radio-button {
       }
 
 form .field .description {
+      display: block;
       color: #666;
       color: var(--text-light-color);
       margin: 0 0 6px 0;
@@ -7327,11 +7661,12 @@ textarea {
   border: 1px solid #ddd;
   border: 1px solid var(--border-color);
   box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.03);
-  padding: 8px 10px;
-  line-height: 1.4;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  padding: 0.5rem 0.75rem;
 }
+
+input.tight[type="text"], input.tight[type="password"], textarea.tight {
+    padding: 0.25rem 0.5rem;
+  }
 
 input[type="text"]:disabled, input[type="password"]:disabled, textarea:disabled {
     border-color: #eee;
@@ -7343,13 +7678,6 @@ input[type="text"]:disabled, input[type="password"]:disabled, textarea:disabled 
 input.warn[type="text"], input.warn[type="password"], textarea.warn {
     border-color: red;
   }
-
-main .login-form input[type="text"],
-main .login-form input[type="password"],
-input[type="text"].large,
-input[type="password"].large {
-  font-size: 1.4em;
-}
 
 fieldset {
   padding: 0px;
@@ -7368,7 +7696,7 @@ select {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
     Roboto, Ubuntu, "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font-family: var(--font-os-sans);
-  font-size: 13px;
+  font-size: 0.875rem;
   color: #111;
   color: var(--text-color);
   line-height: 1.5;
@@ -7380,6 +7708,10 @@ select {
   background: var(--button-color);
   box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.25);
 }
+
+button .icon, select .icon {
+    margin-right: 8px;
+  }
 
 button:hover, select:hover {
     background-color: #d8d8d8;
@@ -7397,6 +7729,35 @@ button:disabled:hover, select:disabled:hover {
       background-color: var(--button-color);
     }
 
+button.primary, select.primary {
+    background: #111;
+    background: var(--text-color);
+    border-color: #111;
+    border-color: var(--text-color);
+    color: #fff;
+    color: var(--text-invert-color);
+    box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.2);
+  }
+
+button.primary:hover, select.primary:hover {
+      box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.1);
+    }
+
+button.transparent, select.transparent {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.25rem 0.25rem;
+  }
+
+button.transparent:hover,
+    select.transparent:hover,
+    button.transparent:focus,
+    select.transparent:focus {
+      -webkit-text-decoration: underline;
+      text-decoration: underline;
+    }
+
 select {
   padding-right: 2em;
   background-image: url("pages/admin/angle-down-solid.svg");
@@ -7412,12 +7773,47 @@ form.button-to {
   padding: 0;
 }
 
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.inline-form {
+  display: flex;
+}
+
+.inline-form input {
+    flex: 1 1 auto;
+    border-right: none;
+  }
+
+.inline-form input:focus {
+      z-index: 20;
+    }
+
+.inline-form button {
+    border-radius: 0px;
+    white-space: nowrap;
+    border-right: none;
+  }
+
+.inline-form button:last-child {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-right: 1px solid #aaa;
+      border-right: 1px solid var(--button-border-color);
+    }
+
 header {
   background: #000;
   background: var(--background-invert-color);
-  height: 86px;
+  padding: 1.25rem 1rem 0rem 1rem;
   color: #fff;
   color: var(--text-invert-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 header a,
@@ -7431,43 +7827,37 @@ header a,
   }
 
 header .logo {
-    position: absolute;
-    z-index: 2;
-    top: 11px;
-    left: 16px;
-    width: 21px;
-    height: 27px;
+    background: url("pages/admin/icon.svg");
+    background-repeat: no-repeat;
+    min-height: 27px;
+    padding-left: 38px;
   }
 
 header .site-name {
     color: #fff;
     color: var(--text-invert-color);
-    position: absolute;
-    top: 15px;
-    left: 52px;
+    flex-grow: 1;
   }
 
 header .site-name h1 {
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
       display: inline;
-      font-size: 20px;
+      font-size: 1.4rem;
+      letter-spacing: -0.04rem;
       font-weight: normal;
     }
 
 header .site-name h1 a {
-        font-weight: bold;
+        font-weight: 800;
         -webkit-text-decoration: none;
         text-decoration: none;
         padding-right: 6px;
       }
 
 header .user {
-    font-size: 13px;
-    position: absolute;
-    top: 20px;
-    right: 16px;
+    display: flex;
+    align-items: center;
   }
 
 header .user a {
@@ -7484,31 +7874,28 @@ header .user a:first-of-type {
       }
 
 header .tabs {
-    position: absolute;
-    top: 54px;
-    height: 29px;
-    left: 16px;
-    right: 8px;
+    display: flex;
+    overflow: scroll;
+    width: 100%;
+    gap: 8px;
   }
 
 header .tabs ul {
-      padding: 0;
-      margin: 0 8px 0 0;
+      padding: 0px;
+      margin: 0px;
       list-style-type: none;
-      display: block;
-      float: left;
+      display: flex;
+      gap: 4px;
     }
 
 header .tabs ul.account {
-        float: right;
+        flex-grow: 1;
+        justify-content: flex-end;
       }
 
 header .tabs li {
-      display: inline;
       margin: 0;
       padding: 0;
-      font-weight: normal;
-      font-size: 13px;
     }
 
 header .tabs a,
@@ -7521,7 +7908,7 @@ header .tabs a,
       padding: 0 15px;
       line-height: 32px;
       height: 32px;
-      margin: 0 2px 0 0;
+      margin: 0px;
       -webkit-text-decoration: none;
       text-decoration: none;
     }
@@ -7545,7 +7932,6 @@ header .tabs a:hover,
     display: inline;
     background: transparent;
     padding: 6px 17px;
-    font-weight: bold;
   }
 
 .content-tabs li.current {
@@ -7555,6 +7941,8 @@ header .tabs a:hover,
     border: 1px solid #cae6f1;
     border-bottom: 1px solid #fff;
     border-bottom: 1px solid var(--background-color);
+    font-weight: 600;
+    font-weight: var(--bold-weight);
   }
 
 .content-tabs li.current a,
@@ -7573,6 +7961,11 @@ header .tabs a:hover,
   color: #111;
   color: var(--text-color);
 }
+
+.page-description h3 {
+    font-weight: 600;
+    font-weight: var(--bold-weight);
+  }
 
 .page-description em {
     font-style: normal;
@@ -7596,7 +7989,8 @@ header .tabs a:hover,
       }
 
 .page-description .links a.current {
-        font-weight: bold;
+        font-weight: 600;
+        font-weight: var(--bold-weight);
         -webkit-text-decoration: none;
         text-decoration: none;
         color: #111;
@@ -7611,7 +8005,7 @@ header .tabs a:hover,
 main .page-description h3 {
   margin: 0;
   padding: 0;
-  font-size: 13px;
+  font-size: 0.875rem;
   text-shadow: #e9f6ff 1px 1px 1px;
 }
 
@@ -7630,7 +8024,7 @@ main .page-description h3 {
     position: absolute;
     bottom: 5px;
     right: 6px;
-    font-size: 14px;
+    font-size: 1rem;
     color: #ffdfa0;
     color: var(--background-warning-color);
     text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
@@ -7644,7 +8038,7 @@ main .page-description h3 {
 .editable-image:hover {
     border-color: rgba(20, 20, 20, 0.5);
     transform: scale(1.01) translate(0px, -1px);
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
   }
 
 .image-editor {
@@ -7841,9 +8235,10 @@ main .page-description h3 {
         }
 
 .image-grid {
-  --image-padding: 7px;
+  --image-padding: 0.5rem;
   margin-bottom: 40px;
   display: flex;
+  gap: 1rem;
 }
 
 @media screen and (max-width: 900px) {
@@ -8200,7 +8595,7 @@ body {
 .main-wrapper > aside {
     min-width: 300px;
     width: 20%;
-    padding: 0px 16px;
+    padding: 1rem;
   }
 
 @media screen and (max-width: 900px) {
@@ -8286,7 +8681,8 @@ table.list th {
     );
     color: #666;
     color: var(--text-light-color);
-    font-weight: bold;
+    font-weight: 600;
+    font-weight: var(--bold-weight);
     border-bottom: 1px solid #ddd;
     border-bottom: 1px solid var(--border-color);
   }
@@ -8302,8 +8698,23 @@ table.list td.note {
     }
 
 table.list td.name {
-      font-weight: bold;
+      font-weight: 600;
+      font-weight: var(--bold-weight);
     }
+
+table.list td.name a,
+      table.list td.name a:visited {
+        -webkit-text-decoration: none;
+        text-decoration: none;
+        color: #111;
+        color: var(--text-color);
+      }
+
+table.list td.name a:focus,
+      table.list td.name a:hover {
+        border-bottom: 1px solid #111;
+        border-bottom: 1px solid var(--text-color);
+      }
 
 table.list tr td:first-child,
   table.list tr th:first-child {
@@ -8343,36 +8754,6 @@ table.list p {
     margin: 0;
     padding: 0;
   }
-
-main .login-form {
-  padding-top: 10px;
-}
-
-main .login-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 1.2em;
-    color: #111;
-    color: var(--text-color);
-  }
-
-main .login-form ul {
-    margin: 0px;
-    padding: 0px;
-    margin-top: 30px;
-    list-style-position: inside;
-    list-style-type: disc;
-    color: #ddd;
-    color: var(--border-color);
-    line-height: 1.5;
-  }
-
-main .login-form ul li {
-      margin: 0px;
-      padding: 0px;
-      font-size: 1.2em;
-    }
 
 body.modal > .wrapper {
     transition: filter 1000ms linear;
@@ -8476,6 +8857,7 @@ body.modal > .wrapper {
   margin: 20px 0 40px 0;
   margin-left: -20px;
   margin-right: -10px;
+  max-width: 90rem;
 }
 
 .page-tree .draggable {
@@ -8497,31 +8879,44 @@ body.modal > .wrapper {
 
 .page-tree .node .inner {
       position: relative;
-      cursor: pointer;
-      padding-left: 10px;
+      padding-left: 1.75rem;
+      display: flex;
+      border-radius: 5px;
     }
+
+.page-tree .node .inner:hover {
+        background: #e7f3f9;
+        background: var(--background-highlight-color);
+      }
 
 .page-tree .node .collapse {
       position: absolute;
-      left: 0;
+      left: 0.625rem;
+      top: 0.5rem;
       cursor: pointer;
-      font-size: 15px;
-      padding-top: 5px;
+      padding-top: 0px;
+      transition: transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
     }
+
+.page-tree .node .collapse.open {
+        transform: rotate(90deg);
+      }
+
+.page-tree .node .inner:has(.edit-name) .collapse {
+        top: 0.75rem;
+      }
 
 .page-tree .page {
-    font-size: 15px;
-    padding: 6px 10px;
-    border: 1px solid transparent;
+    padding: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.5rem;
+    align-items: baseline;
+    width: 100%;
   }
 
-.page-tree .page:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-.page-tree .page:hover {
+.page-tree .page:hove2r {
       border: 1px solid #eee;
       border: 1px solid var(--border-color-light);
       background: linear-gradient(
@@ -8536,43 +8931,36 @@ body.modal > .wrapper {
       );
     }
 
+.page-tree .page .page-icon {
+      margin-right: 0rem;
+    }
+
 .page-tree .page .date {
-      font-size: 12px;
       margin-left: 10px;
       color: #666;
       color: var(--text-light-color);
     }
 
 .page-tree .page .name {
-      font-weight: bold;
+      font-weight: 600;
+      font-weight: var(--bold-weight);
     }
 
-.page-tree .page .icon {
-      margin-right: 8px;
-    }
-
-.page-tree .page .status-label,
-    .page-tree .page .collapsed-label {
-      margin-left: 3px;
-      font-size: 12px;
-    }
-
-.page-tree .page form {
-      display: inline;
+.page-tree .page .edit-name {
       margin: 0;
       padding: 0;
+      flex-grow: 1;
+      display: flex;
+      gap: 0.5rem;
     }
 
-.page-tree .page form input {
-        font-size: 15px;
-        padding: 2px 4px;
-        margin-top: -2px;
-        margin-bottom: -2px;
-        margin-right: 5px;
+.page-tree .page .edit-name input {
+        max-width: 100%;
+        flex: 1 1 auto;
       }
 
-.page-tree .page form button {
-        margin-left: 5px;
+.page-tree .page .edit-name button {
+        white-space: nowrap;
       }
 
 .page-tree .page a,
@@ -8603,74 +8991,19 @@ body.modal > .wrapper {
       }
 
 .page-tree .page .actions {
-    float: right;
     visibility: hidden;
-    margin: -4px -6px -4px 5px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
   }
-
-.page-tree .page .actions button {
-      margin-left: 5px;
-    }
 
 .page-tree .page:hover .actions {
     visibility: visible;
   }
 
-.page-tree button {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    font-size: 13px;
-    padding: 3px 5px;
-    border-radius: 3px;
-    color: #15516a;
-    color: var(--link-hover-color);
-  }
-
-.page-tree button .icon {
-      margin-right: 8px;
-    }
-
-.page-tree button:hover,
-    .page-tree button:focus {
-      color: #15516a;
-      color: var(--blue-hover);
-      background: rgba(29,113,149,0.25098);
-      background: var(--blue-transparent);
-    }
-
-.page-tree button.add {
-      color: #19ac1e;
-      color: var(--green);
-    }
-
-.page-tree button.add:hover,
-      .page-tree button.add:focus {
-        color: #137f16;
-        color: var(--green-hover);
-        background: rgba(25,172,30,0.25098);
-        background: var(--green-transparent);
-      }
-
-.page-tree button.delete,
-    .page-tree button.cancel {
-      color: #c00007;
-      color: var(--red);
-    }
-
-.page-tree button.delete:hover,
-      .page-tree button.cancel:hover,
-      .page-tree button.delete:focus,
-      .page-tree button.cancel:focus {
-        color: #8d0005;
-        color: var(--red-hover);
-        background: rgba(192,0,7,0.25098);
-        background: var(--red-transparent);
-      }
-
 .page-tree button.add-inline {
-    margin: 5px 0 5px 30px;
+    margin: 0.25rem 0 0.25rem 2.875rem;
   }
 
 .page-tree .node .node .node .page .name {
@@ -8680,7 +9013,6 @@ body.modal > .wrapper {
 .pagination {
   margin: 30px 30px;
   line-height: 20px;
-  font-size: 14px;
 }
 
 .pagination a,
@@ -8730,25 +9062,9 @@ body.modal > .wrapper {
   margin: 20px -2px;
 }
 
-.search-bar {
-  display: flex;
-}
-
 .search-bar input {
-    flex: 1 1 auto;
-    border-right: none;
     max-width: 600px;
     min-width: 50px;
-  }
-
-.search-bar input:focus {
-      z-index: 20;
-    }
-
-.search-bar button {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    white-space: nowrap;
   }
 
 main .search-bar {
@@ -8756,10 +9072,6 @@ main .search-bar {
   background: var(--background-disabled-color);
   padding: 16px 32px;
   margin: 0px 0px 16px 0px;
-}
-
-.sidebar .search-bar {
-  margin-top: 16px;
 }
 
 .sidebar {
@@ -8772,18 +9084,11 @@ main .search-bar {
 }
 
 .sidebar h2 {
-    margin: 20px 0 0px 0;
-    padding: 0 0 10px 0;
-    color: #111;
-    color: var(--text-color);
-    font-size: 18px;
     border-bottom: 1px solid #ddd;
     border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
   }
-
-.sidebar h2:first-child {
-      margin-top: 16px;
-    }
 
 .sidebar ul {
     list-style-type: disc;
@@ -8801,69 +9106,55 @@ main .search-bar {
   }
 
 .tag-editor {
-  margin-top: 10px;
-  margin-bottom: 1.5em;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.tag-editor .tags {
-    line-height: 1.5;
-  }
-
 .tag-editor .tag {
-    font-size: 13px;
+    font-size: 1rem;
     cursor: pointer;
-    display: block;
-    float: left;
-    margin: 0 5px 5px 0;
     padding: 0px;
     background: #f8f8f8;
     background: var(--background-disabled-color);
     border-radius: 5px;
-    line-height: 26px;
-    line-height: 36px;
     min-width: 40px;
+    height: 2rem;
     transition: all 200ms ease-out;
     -webkit-user-select: none;
        -moz-user-select: none;
             user-select: none;
+    display: flex;
   }
 
 .tag-editor .tag label {
+      display: flex;
       margin: 0px;
       padding: 0px 10px;
       color: inherit;
+      align-items: center;
+      gap: 0.5rem;
     }
 
 .tag-editor .tag input {
-      margin: 2px 3px 0 0;
+      /*margin: 2px 3px 0 0;*/
     }
 
 .tag-editor .tag .name {
-      padding: 1px 5px;
-      margin: 0;
+    }
+
+.tag-editor .tag:hover,
+    .tag-editor .tag:focus {
+      background: #e7f3f9;
+      background: var(--background-highlight-color);
     }
 
 .tag-editor .tag.enabled {
       color: #fff;
       background: #114055;
       background: var(--blue-dark);
-    }
-
-.tag-editor .add-tag-form {
-    float: left;
-    width: 178px;
-    white-space: nowrap;
-  }
-
-.tag-editor input.add-tag {
-    margin-top: 0px;
-    border-radius: 5px;
-    margin: 0 4px 0 0;
-  }
-
-.tag-editor input.add-tag.example {
-      color: #666;
-      color: var(--text-light-color);
     }
 
 textarea.rich {
@@ -8883,7 +9174,6 @@ textarea.rich {
 }
 
 .toast-wrapper .toast {
-    font-size: 14px;
     display: inline-block;
     background: #000;
     background: var(--background-invert-color);
@@ -8989,13 +9279,13 @@ textarea.rich {
     border-right: 1px solid var(--border-color);
     color: #666;
     color: var(--text-light-color);
-    font-size: 12px;
+    font-size: 0.875rem;
     background-color: #f8f8f8;
     transition: all 200ms ease-out;
   }
 
 .toolbar .button i.fa, .toolbar button i.fa {
-      font-size: 14px;
+      font-size: 1rem;
     }
 
 .toolbar .button:focus,
@@ -9104,7 +9394,7 @@ ul.recovery-codes {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  font-size: 1.2em;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -9190,7 +9480,8 @@ td.drag-handle {
   }
 
 .page-list li {
-    font-weight: bold;
+    font-weight: 600;
+    font-weight: var(--bold-weight);
     margin: 0;
     padding: 0;
     clear: both;
@@ -9260,10 +9551,6 @@ td.drag-handle {
   width: auto;
 }
 
-.edit-page main div.content {
-    padding-top: 16px;
-  }
-
 .edit-page .hidden-options {
     display: none;
   }
@@ -9278,6 +9565,10 @@ td.drag-handle {
       display: block;
     }
 
+.edit-page .advanced-options {
+    margin-top: 1.5rem;
+  }
+
 .edit-page main input[type="text"],
   .edit-page main textarea {
     width: 100%;
@@ -9285,7 +9576,8 @@ td.drag-handle {
   }
 
 .edit-page main input.page_title {
-    font-weight: bold;
+    font-weight: 600;
+    font-weight: var(--bold-weight);
     font-size: 1.4em;
     color: #111;
     color: var(--text-color);
