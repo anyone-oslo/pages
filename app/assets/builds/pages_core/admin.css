@@ -543,9 +543,9 @@ template {
       margin-left: -7px; } }
 
 /*!
- * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2023 Fonticons, Inc.
+ * Copyright 2024 Fonticons, Inc.
  */
 
 .fa {
@@ -903,8 +903,8 @@ template {
   transform: scale(-1, -1); }
 
 .fa-rotate-by {
-  transform: rotate(none);
-          transform: rotate(var(--fa-rotate-angle, none)); }
+  transform: rotate(0);
+          transform: rotate(var(--fa-rotate-angle, 0)); }
 
 .fa-stack {
   display: inline-block;
@@ -3210,6 +3210,9 @@ readers do not read off random characters that represent icons */
 .fa-italic::before {
   content: "\f033"; }
 
+.fa-table-cells-column-lock::before {
+  content: "\e678"; }
+
 .fa-church::before {
   content: "\f51d"; }
 
@@ -5382,6 +5385,9 @@ readers do not read off random characters that represent icons */
 .fa-font::before {
   content: "\f031"; }
 
+.fa-table-cells-row-lock::before {
+  content: "\e67a"; }
+
 .fa-rupiah-sign::before {
   content: "\e23d"; }
 
@@ -6411,9 +6417,6 @@ readers do not read off random characters that represent icons */
 .fa-share::before {
   content: "\f064"; }
 
-.fa-arrow-turn-right::before {
-  content: "\f064"; }
-
 .fa-mail-forward::before {
   content: "\f064"; }
 
@@ -6814,9 +6817,9 @@ readers do not read off random characters that represent icons */
   border-width: 0; }
 
 /*!
- * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2023 Fonticons, Inc.
+ * Copyright 2024 Fonticons, Inc.
  */
 
 :root, :host {
@@ -6827,16 +6830,16 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("../fonts/47262711.woff2") format("woff2"), url("../fonts/2a3059ad.ttf") format("truetype"); }
+  src: url("../fonts/7b7db107.woff2") format("woff2"), url("../fonts/6569749d.ttf") format("truetype"); }
 
 .fas,
 .fa-solid {
   font-weight: 900; }
 
 /*!
- * Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- * Copyright 2023 Fonticons, Inc.
+ * Copyright 2024 Fonticons, Inc.
  */
 
 :root, :host {
@@ -6848,7 +6851,7 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("../fonts/500ddeb0.woff2") format("woff2"), url("../fonts/81221036.ttf") format("truetype"); }
+  src: url("../fonts/921961e9.woff2") format("woff2"), url("../fonts/ee32bc60.ttf") format("truetype"); }
 
 .far,
 .fa-regular {
@@ -7521,7 +7524,7 @@ form .field .date-select {
     }
 
 form .field .date-select .time {
-        width: 4rem;
+        width: 5rem;
         min-width: 2rem;
       }
 
