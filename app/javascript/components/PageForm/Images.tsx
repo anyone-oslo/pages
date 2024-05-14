@@ -1,10 +1,14 @@
 import React from "react";
+
+import { GridState } from "../../types/Images";
+import { Locale } from "../../types";
+
 import Grid from "../ImageGrid/Grid";
 
 interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  state: ImageGrid.State;
+  state: GridState;
 }
 
 export default function Images(props: Props) {

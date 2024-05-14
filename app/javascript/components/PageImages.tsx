@@ -1,10 +1,14 @@
 import React from "react";
+
+import * as Images from "../types/Images";
+import { Locale } from "../types";
+
 import ImageGrid from "./ImageGrid";
 
 interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  records: ImageRecord[];
+  records: Images.Record[];
 }
 
 export default function PageImages(props: Props) {

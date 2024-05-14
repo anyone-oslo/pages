@@ -1,14 +1,18 @@
 import React, { ChangeEvent } from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+import * as Pages from "../../types/Pages";
+import { LocalizedValue } from "../../types";
+
 import { errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
 
 interface Props {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
 }
 
-function missingPathSegment(ancestors: Page.Ancestor[], locale: string) {
+function missingPathSegment(ancestors: Pages.Ancestor[], locale: string) {
   for (let i = 0; i < ancestors.length; i++) {
     if (!ancestors[i].path_segment[locale]) {
       return ancestors[i];

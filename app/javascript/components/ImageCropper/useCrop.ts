@@ -1,5 +1,8 @@
 import { useEffect, useReducer, useState } from "react";
 
+import * as Crop from "../../types/Crop";
+import * as Images from "../../types/Images";
+
 function applyAspect(state: Crop.State, aspect: number | null) {
   const crop = cropSize(state);
   const image = state.image;
@@ -188,7 +191,7 @@ export function cropSize(state: Crop.State): Crop.CropSize {
 }
 
 export default function useCrop(
-  image: ImageResource
+  image: Images.Resource
 ): [Crop.State, (action: Crop.Action) => void, string] {
   const initialState: Crop.State = {
     aspect: null,

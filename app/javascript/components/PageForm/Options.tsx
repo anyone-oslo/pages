@@ -1,14 +1,16 @@
 import React, { useState, ChangeEvent } from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+import * as Pages from "../../types/Pages";
 import LabelledField from "../LabelledField";
 import DateTimeSelect from "../DateTimeSelect";
 import { errorsOn } from "./usePage";
 
 interface OptionsProps {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
-  authors: Page.Author[];
-  statuses: Page.StatusLabels;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
+  authors: Pages.Author[];
+  statuses: Pages.StatusLabels;
 }
 
 export default function Options(props: OptionsProps) {

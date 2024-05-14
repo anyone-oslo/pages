@@ -1,7 +1,9 @@
 import React, { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
 
+import * as Tags from "../../types/Tags";
+
 interface Props {
-  dispatch: (action: TagEditor.Action) => void;
+  dispatch: (action: Tags.Action) => void;
 }
 
 export default function AddTagForm(props: Props) {

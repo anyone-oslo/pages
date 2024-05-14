@@ -1,13 +1,14 @@
 import React from "react";
 
 import { csrfToken } from "../../lib/request";
+import * as PageEditor from "../../types/PageEditor";
 
 interface FormProps {
-  state: PageForm.State;
+  state: PageEditor.State;
   children: React.ReactNode;
 }
 
-function pageUrl(state: PageForm.State): string {
+function pageUrl(state: PageEditor.State): string {
   if (state.page.id) {
     return `/admin/${state.locale}/pages/${state.page.id}`;
   } else {

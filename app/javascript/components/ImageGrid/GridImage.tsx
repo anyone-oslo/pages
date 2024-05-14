@@ -1,13 +1,17 @@
 import React, { MouseEvent, useEffect, useState } from "react";
-import copyToClipboard from "../../lib/copyToClipboard";
-import EditableImage from "../EditableImage";
-import useToastStore from "../../stores/useToastStore";
-import Placeholder from "./Placeholder";
 
+import copyToClipboard from "../../lib/copyToClipboard";
+import useToastStore from "../../stores/useToastStore";
+import * as Drag from "../../types/Drag";
+import * as Images from "../../types/Images";
+import { Locale } from "../../types";
 import { useDraggable } from "../drag";
 
+import EditableImage from "../EditableImage";
+import Placeholder from "./Placeholder";
+
 interface Props {
-  draggable: Drag.Draggable<ImageRecord>;
+  draggable: Drag.Draggable<Images.Record>;
   attributeName: string;
   locale: string;
   locales: { [index: string]: Locale };
@@ -17,8 +21,11 @@ interface Props {
   primary: boolean;
   position: number;
   deleteImage: () => void;
-  startDrag: (evt: MouseEvent, draggable: Drag.Draggable<ImageRecord>) => void;
-  onUpdate: (newImage: ImageResource, src: string) => void;
+  startDrag: (
+    evt: MouseEvent,
+    draggable: Drag.Draggable<Images.Record>
+  ) => void;
+  onUpdate: (newImage: Images.Resource, src: string) => void;
 }
 
 export default function GridImage(props: Props) {

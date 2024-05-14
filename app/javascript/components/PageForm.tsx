@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 
 import { putJson, postJson } from "../lib/request";
-import { openPreview } from "./PageForm/preview";
 import useToastStore from "../stores/useToastStore";
+import * as Pages from "../types/Pages";
+import * as Template from "../types/Template";
+import { Locale } from "../types";
+
+import { openPreview } from "./PageForm/preview";
 import useAttachments from "./Attachments/useAttachments";
 import useImageGrid from "./ImageGrid/useImageGrid";
 import useTags from "./TagEditor/useTags";
@@ -23,10 +27,10 @@ import Images from "./PageForm/Images";
 interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  page: Page.SerializedResource;
+  page: Pages.SerializedResource;
   templates: Template.Config[];
-  authors: Page.Author[];
-  statuses: Page.StatusLabels;
+  authors: Pages.Author[];
+  statuses: Pages.StatusLabels;
 }
 
 export default function PageForm(props: Props) {
@@ -96,7 +100,7 @@ export default function PageForm(props: Props) {
     }
 
     method(url, data)
-      .then((response: Page.SerializedResource) => {
+      .then((response: Pages.SerializedResource) => {
         dispatch({ type: "setPage", payload: response });
         if (response.errors && response.errors.length > 0) {
           errorToast("A validation error prevented the page from being saved.");

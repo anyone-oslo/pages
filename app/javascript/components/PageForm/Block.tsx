@@ -1,5 +1,7 @@
 import React, { ChangeEvent } from "react";
 
+import * as Template from "../../types/Template";
+
 import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 

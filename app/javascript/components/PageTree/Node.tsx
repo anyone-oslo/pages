@@ -34,22 +34,26 @@ import React, {
   MouseEvent,
   RefObject
 } from "react";
+
 import Tree from "../../lib/Tree";
+import * as Trees from "../../types/Trees";
+import * as Pages from "../../types/Pages";
+
 import PageName from "./PageName";
 
 interface Props {
-  index: Tree.Index<Page.TreeNode>;
+  index: Trees.Index<Pages.TreeNode>;
   paddingLeft: number;
-  tree: Tree<Page.TreeNode>;
-  addChild?: (index: Tree.Index<Page.TreeNode>) => void;
+  tree: Tree<Pages.TreeNode>;
+  addChild?: (index: Trees.Index<Pages.TreeNode>) => void;
   dir?: string;
-  dragging?: Tree.Id;
+  dragging?: Trees.Id;
   locale: string;
-  onCollapse?: (id: Tree.Id) => void;
+  onCollapse?: (id: Trees.Id) => void;
   onDragStart?: (id: number, element: HTMLDivElement, evt: MouseEvent) => void;
   updatePage?: (
-    index: Tree.Index<Page.TreeNode>,
-    attributes: Partial<Page.TreeItem>
+    index: Trees.Index<Pages.TreeNode>,
+    attributes: Partial<Pages.TreeItem>
   ) => void;
 }
 
@@ -271,11 +275,11 @@ export default class Node extends Component<Props, State> {
     this.updatePage({ editing: true });
   }
 
-  editUrl(page: Page.TreeNode) {
+  editUrl(page: Pages.TreeNode) {
     return `/admin/${this.props.locale}/pages/${page.id}/edit`;
   }
 
-  node(): Page.TreeNode {
+  node(): Pages.TreeNode {
     return this.props.index.node;
   }
 
@@ -421,13 +425,13 @@ export default class Node extends Component<Props, State> {
     }
   }
 
-  updatePage(attributes: Partial<Page.TreeItem>) {
+  updatePage(attributes: Partial<Pages.TreeItem>) {
     if (this.props.updatePage) {
       return this.props.updatePage(this.props.index, attributes);
     }
   }
 
-  visibleChildren(): Page.TreeNode[] {
+  visibleChildren(): Pages.TreeNode[] {
     if (this.node().children) {
       return this.node().children.filter((p) => p.status != 4);
     } else {

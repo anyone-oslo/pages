@@ -1,15 +1,17 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+
 interface Props {
   tab: string;
-  tabs: PageForm.Tab[];
+  tabs: PageEditor.Tab[];
   setTab: (tab: string) => void;
 }
 
 export default function Tabs(props: Props) {
   const { tab, tabs, setTab } = props;
 
-  const handleTabChange = (tab: PageForm.Tab) => (evt: React.MouseEvent) => {
+  const handleTabChange = (tab: PageEditor.Tab) => (evt: React.MouseEvent) => {
     evt.preventDefault();
     setTab(tab.id);
   };

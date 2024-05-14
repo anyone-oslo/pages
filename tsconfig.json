@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "declaration": true,
     "esModuleInterop": true,
-    "target": "es5",
-    "lib": ["es2019", "dom"],
+    "target": "es6",
+    "lib": ["es2022", "dom"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "outDir": "dist",
     "allowJs": true,
     "jsx": "react-jsx"

@@ -1,3 +1,5 @@
+import * as Drag from "../../types/Drag";
+
 function hovering<T>(
   dragState: Drag.State<T>,
   target: Drag.Item<T> | React.MutableRefObject<HTMLDivElement>

@@ -3,6 +3,8 @@ import Attachment from "./Attachment";
 import Placeholder from "./Placeholder";
 import FileUploadButton from "../FileUploadButton";
 import { post } from "../../lib/request";
+import * as Attachments from "../../types/Attachments";
+import * as Drag from "../../types/Drag";
 
 import { createDraggable, draggedOrder, useDragUploader } from "../drag";
 
@@ -35,7 +37,7 @@ export default function List(props: Props) {
     });
 
     void post("/admin/attachments.json", data).then(
-      (json: AttachmentResource) => {
+      (json: Attachments.Resource) => {
         collection.dispatch({
           type: "update",
           payload: {
@@ -67,29 +69,29 @@ export default function List(props: Props) {
     });
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader<AttachmentRecord>(
+  const [dragState, dragStart, listeners] = useDragUploader<Attachments.Record>(
     [collection],
     dragEnd
   );
 
-  const position = (record: AttachmentRecord) => {
+  const position = (record: Attachments.Record) => {
     return (
       [
         ...collection.draggables.map(
-          (d: Drag.Draggable<AttachmentRecord>) => d.record
+          (d: Drag.Draggable<Attachments.Record>) => d.record
         ),
         ...deleted
       ].indexOf(record) + 1
     );
   };
 
-  const attrName = (record: AttachmentRecord) => {
+  const attrName = (record: Attachments.Record) => {
     return `${props.attribute}[${position(record)}]`;
   };
 
   const update =
-    (draggable: Drag.Draggable<AttachmentRecord>) =>
-    (attachment: Partial<AttachmentResource>) => {
+    (draggable: Drag.Draggable<Attachments.Record>) =>
+    (attachment: Partial<Attachments.Resource>) => {
       const { record } = draggable;
       const updated = {
         ...draggable,
@@ -101,14 +103,14 @@ export default function List(props: Props) {
       collection.dispatch({ type: "update", payload: updated });
     };
 
-  const remove = (draggable: Drag.Draggable<AttachmentRecord>) => () => {
+  const remove = (draggable: Drag.Draggable<Attachments.Record>) => () => {
     collection.dispatch({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
     }
   };
 
-  const attachment = (draggable: Drag.Item<AttachmentRecord>) => {
+  const attachment = (draggable: Drag.Item<Attachments.Record>) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {

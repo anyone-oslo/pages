@@ -1,12 +1,15 @@
 import React, { ChangeEvent, MouseEvent } from "react";
+
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
+import * as Images from "../../types/Images";
+import { Locale } from "../../types";
 
 interface Props {
   alternative: Record<string, string>;
   caption: Record<string, string>;
-  image: ImageResource;
+  image: Images.Resource;
   locale: string;
   locales: Record<string, Locale>;
   setLocale: (locale: string) => void;

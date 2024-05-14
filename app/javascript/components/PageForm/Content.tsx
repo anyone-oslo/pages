@@ -1,5 +1,9 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+import * as Tags from "../../types/Tags";
+import { MaybeLocalizedValue } from "../../types";
+
 import { blockValue, errorsOn } from "./usePage";
 import LabelledField from "../LabelledField";
 import { default as TagEditor } from "../TagEditor/Editor";
@@ -7,10 +11,10 @@ import Block from "./Block";
 import Dates from "./Dates";
 
 interface Props {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
-  tagsState: TagEditor.State;
-  tagsDispatch: (action: TagEditor.Action) => void;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
+  tagsState: Tags.State;
+  tagsDispatch: (action: Tags.Action) => void;
 }
 
 export default function Content(props: Props) {

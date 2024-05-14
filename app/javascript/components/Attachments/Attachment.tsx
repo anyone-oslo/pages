@@ -3,22 +3,25 @@ import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
+import * as Attachments from "../../types/Attachments";
+import * as Drag from "../../types/Drag";
+import { Locale } from "../../types";
 
 import { useDraggable } from "../drag";
 
 interface Props {
   attributeName: string;
   placeholder: boolean;
-  draggable: Drag.Draggable<AttachmentRecord>;
+  draggable: Drag.Draggable<Attachments.Record>;
   locale: string;
   locales: { [index: string]: Locale };
   deleteRecord: () => void;
   showEmbed: boolean;
   position: number;
-  onUpdate: (attachment: Partial<AttachmentResource>) => void;
+  onUpdate: (attachment: Partial<Attachments.Resource>) => void;
   startDrag: (
     evt: MouseEvent,
-    draggable: Drag.Draggable<AttachmentRecord>
+    draggable: Drag.Draggable<Attachments.Record>
   ) => void;
 }
 
@@ -30,7 +33,10 @@ export default function Attachment(props: Props) {
   const openModal = useModalStore((state) => state.open);
   const notice = useToastStore((state) => state.notice);
 
-  const listeners = useDraggable<AttachmentRecord>(draggable, props.startDrag);
+  const listeners = useDraggable<Attachments.Record>(
+    draggable,
+    props.startDrag
+  );
 
   const copyEmbed = (evt: MouseEvent) => {
     evt.preventDefault();

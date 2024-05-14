@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import * as Crop from "../types/Crop";
+
 import Image from "./ImageCropper/Image";
 import Toolbar from "./ImageCropper/Toolbar";
 

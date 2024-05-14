@@ -5,11 +5,13 @@ import FilePlaceholder from "./FilePlaceholder";
 import GridImage from "./GridImage";
 import useToastStore from "../../stores/useToastStore";
 import { post } from "../../lib/request";
+import * as Drag from "../../types/Drag";
+import * as Images from "../../types/Images";
 
 import { createDraggable, collectionOrder, useDragUploader } from "../drag";
 
-interface Props extends ImageGrid.Options {
-  state: ImageGrid.State;
+interface Props extends Images.GridOptions {
+  state: Images.GridState;
 }
 
 function filterFiles(files: File[]): File[] {
@@ -24,10 +26,10 @@ function filterFiles(files: File[]): File[] {
 }
 
 function draggedImageOrder(
-  primaryCollection: Drag.Collection<ImageRecord>,
-  imagesCollection: Drag.Collection<ImageRecord>,
-  dragState: Drag.State<ImageRecord>
-): [Drag.Item<ImageRecord>, Drag.Item<ImageRecord>[]] {
+  primaryCollection: Drag.Collection<Images.Record>,
+  imagesCollection: Drag.Collection<Images.Record>,
+  dragState: Drag.State<Images.Record>
+): [Drag.Item<Images.Record>, Drag.Item<Images.Record>[]] {
   const [primary, ...rest] = collectionOrder(primaryCollection, dragState);
   let images = [...rest, ...collectionOrder(imagesCollection, dragState)];
 
@@ -58,7 +60,7 @@ export default function Grid(props: Props) {
     images.dispatch(action);
   };
 
-  const dragEnd = (dragState: Drag.State<ImageRecord>, files: File[]) => {
+  const dragEnd = (dragState: Drag.State<Images.Record>, files: File[]) => {
     const [draggedPrimary, draggedImages] = draggedImageOrder(
       primary,
       images,
@@ -77,22 +79,26 @@ export default function Grid(props: Props) {
     }
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader<ImageRecord>(
+  const [dragState, dragStart, listeners] = useDragUploader<Images.Record>(
     [primary, images],
     dragEnd
   );
 
-  const position = (record: ImageRecord) => {
+  const position = (record: Images.Record) => {
     return (
       [
-        ...primary.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
-        ...images.draggables.map((d: Drag.Draggable<ImageRecord>) => d.record),
+        ...primary.draggables.map(
+          (d: Drag.Draggable<Images.Record>) => d.record
+        ),
+        ...images.draggables.map(
+          (d: Drag.Draggable<Images.Record>) => d.record
+        ),
         ...deleted
       ].indexOf(record) + 1
     );
   };
 
-  const attrName = (record: ImageRecord) => {
+  const attrName = (record: Images.Record) => {
     return `${props.attribute}[${position(record)}]`;
   };
 
@@ -103,7 +109,7 @@ export default function Grid(props: Props) {
 
     data.append("image[file]", file);
 
-    void post("/admin/images.json", data).then((json: ImageResponse) => {
+    void post("/admin/images.json", data).then((json: Images.Response) => {
       if ("status" in json && json.status === "error") {
         error(`Error uploading image: ${json.error}`);
         dispatchAll({ type: "remove", payload: draggable });
@@ -119,7 +125,7 @@ export default function Grid(props: Props) {
   };
 
   const update =
-    (draggable: Drag.Draggable<ImageRecord>) => (image: ImageResource) => {
+    (draggable: Drag.Draggable<Images.Record>) => (image: Images.Resource) => {
       const { record } = draggable;
       const updated = {
         ...draggable,
@@ -131,7 +137,7 @@ export default function Grid(props: Props) {
       dispatchAll({ type: "update", payload: updated });
     };
 
-  const remove = (draggable: Drag.Draggable<ImageRecord>) => () => {
+  const remove = (draggable: Drag.Draggable<Images.Record>) => () => {
     dispatchAll({ type: "remove", payload: draggable });
     if (draggable.record.id) {
       setDeleted([...deleted, draggable.record]);
@@ -139,7 +145,7 @@ export default function Grid(props: Props) {
   };
 
   const renderImage = (
-    draggable: Drag.Item<ImageRecord>,
+    draggable: Drag.Item<Images.Record>,
     isPrimary: boolean
   ) => {
     const { dragging } = dragState;

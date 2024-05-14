@@ -1,15 +1,17 @@
 import React, { DragEvent, MouseEvent, useState } from "react";
-import EditableImage from "./EditableImage";
-import FileUploadButton from "./FileUploadButton";
+
 import useToastStore from "../stores/useToastStore";
 import { post } from "../lib/request";
+import * as Images from "../types/Images";
+import { Locale } from "../types";
 
-type ImageResponse = ImageResource | { status: "error"; error: string };
+import EditableImage from "./EditableImage";
+import FileUploadButton from "./FileUploadButton";
 
 interface Props {
   locale: string;
   locales: { [index: string]: Locale };
-  image: ImageResource;
+  image: Images.Resource;
   src: string;
   width: number;
   caption: boolean;
@@ -19,7 +21,7 @@ interface Props {
 }
 
 interface State {
-  image?: ImageResource;
+  image?: Images.Resource;
   src?: string;
 }
 
@@ -50,7 +52,7 @@ export default function ImageUploader(props: Props) {
 
   const error = useToastStore((state) => state.error);
 
-  const update = (image: ImageResource | null, src?: string) => {
+  const update = (image: Images.Resource | null, src?: string) => {
     const handler = props.onChange || setState;
     handler({ image: image, src: src || null });
   };
@@ -130,7 +132,7 @@ export default function ImageUploader(props: Props) {
       data.append(`image[alternative][${l}]`, props.alternative || "");
     });
 
-    void post("/admin/images.json", data).then((response: ImageResponse) => {
+    void post("/admin/images.json", data).then((response: Images.Response) => {
       setUploading(false);
       if ("status" in response && response.status === "error") {
         error(`Error uploading image: ${response.error}`);

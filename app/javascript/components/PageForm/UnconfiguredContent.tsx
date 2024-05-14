@@ -1,11 +1,14 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+import { MaybeLocalizedValue } from "../../types";
 import { blockValue, errorsOn, unconfiguredBlocks } from "./usePage";
+
 import Block from "./Block";
 
 interface Props {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
 }
 
 export default function UnconfiguredContent(props: Props) {

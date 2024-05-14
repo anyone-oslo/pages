@@ -1,8 +1,10 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+
 interface Props {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
 }
 
 export default function LocaleLinks(props: Props) {

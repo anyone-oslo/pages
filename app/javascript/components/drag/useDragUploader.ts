@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import * as Drag from "../../types/Drag";
+
 type AnyTouchEvent =
   | MouseEvent
   | TouchEvent

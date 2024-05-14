@@ -1,9 +1,11 @@
 import { useState } from "react";
+
+import * as PageEditor from "../../types/PageEditor";
 import { unconfiguredBlocks } from "./usePage";
 
-function tabsList(state: PageForm.State): PageForm.Tab[] {
+function tabsList(state: PageEditor.State): PageEditor.Tab[] {
   const { templates, templateConfig } = state;
-  const tabs: PageForm.Tab[] = [
+  const tabs: PageEditor.Tab[] = [
     { id: "content", name: "Content", enabled: true }
   ];
   if (templates.filter((t) => t.images).length > 0) {
@@ -23,7 +25,7 @@ function tabsList(state: PageForm.State): PageForm.Tab[] {
   return tabs;
 }
 
-function initialTab(tabs: PageForm.Tab[]): string {
+function initialTab(tabs: PageEditor.Tab[]): string {
   const tabExpression = /#(.*)$/;
   if (document.location.toString().match(tabExpression)) {
     const id = document.location.toString().match(tabExpression)[1];
@@ -36,8 +38,8 @@ function initialTab(tabs: PageForm.Tab[]): string {
 }
 
 export default function useTabs(
-  state: PageForm.State
-): [PageForm.Tab[], string, (tab: string) => void] {
+  state: PageEditor.State
+): [PageEditor.Tab[], string, (tab: string) => void] {
   const tabs = tabsList(state);
   const [tab, setTab] = useState<string>(initialTab(tabs));
   return [tabs, tab, setTab];

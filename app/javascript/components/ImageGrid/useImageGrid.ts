@@ -1,10 +1,13 @@
 import { useState } from "react";
+
+import * as Images from "../../types/Images";
+
 import { useDragCollection } from "../drag";
 
 export default function useImageGrid(
-  records: ImageRecord[],
+  records: Images.Record[],
   enablePrimary = false
-): ImageGrid.State {
+): Images.GridState {
   const primaryRecords = enablePrimary
     ? records.filter((r) => r.primary).slice(0, 1)
     : [];
@@ -12,7 +15,7 @@ export default function useImageGrid(
 
   const primary = useDragCollection(primaryRecords);
   const images = useDragCollection(imageRecords);
-  const [deleted, setDeleted] = useState<ImageRecord[]>([]);
+  const [deleted, setDeleted] = useState<Images.Record[]>([]);
 
   return {
     primary: primary,

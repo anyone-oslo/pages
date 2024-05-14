@@ -1,17 +1,20 @@
 import React, { MouseEvent, useState } from "react";
+
 import useModalStore from "../stores/useModalStore";
 import { putJson } from "../lib/request";
+import * as Images from "../types/Images";
+import { Locale } from "../types";
 
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
 
 interface Props {
-  image: ImageResource;
+  image: Images.Resource;
   caption: boolean;
   locale: string;
   locales: Record<string, Locale>;
   onUpdate?: (
-    data: Partial<ImageResource>,
+    data: Partial<Images.Resource>,
     croppedImage: string | null
   ) => void;
 }

@@ -1,10 +1,13 @@
 import React, { MouseEvent } from "react";
 
+import * as Crop from "../../types/Crop";
+import * as Images from "../../types/Images";
+
 type Ratio = number | null;
 
 interface Props {
   cropState: Crop.State;
-  image: ImageResource;
+  image: Images.Resource;
   setAspect: (Ratio) => void;
   toggleCrop: (evt: MouseEvent) => void;
   toggleFocal: (evt: MouseEvent) => void;

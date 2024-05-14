@@ -1,5 +1,9 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+import * as Pages from "../../types/Pages";
+import { MaybeLocalizedValue } from "../../types";
+
 import { blockValue, errorsOn } from "./usePage";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
@@ -7,8 +11,8 @@ import LabelledField from "../LabelledField";
 import ImageUploader from "../ImageUploader";
 
 interface Props {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
 }
 
 export default function Metadata(props: Props) {
@@ -20,7 +24,7 @@ export default function Metadata(props: Props) {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 
-  const handleMetaImage = (value: Page.MetaImage) => {
+  const handleMetaImage = (value: Pages.MetaImage) => {
     dispatch({ type: "update", payload: { meta_image: value } });
   };
 

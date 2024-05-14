@@ -1,10 +1,16 @@
+import * as Attachments from "../../types/Attachments";
+import * as Drag from "../../types/Drag";
+import * as PageEditor from "../../types/PageEditor";
+import * as Images from "../../types/Images";
+import * as Tags from "../../types/Tags";
+
 interface Options {
   files: Attachments.State;
-  images: ImageGrid.State;
-  tags: TagEditor.State;
+  images: Images.GridState;
+  tags: Tags.State;
 }
 
-function dates(state: PageForm.State) {
+function dates(state: PageEditor.State) {
   if (state.datesEnabled) {
     return {
       all_day: state.page.all_day,
@@ -23,7 +29,7 @@ function dates(state: PageForm.State) {
 function pageFiles(state: Attachments.State) {
   const files = state.collection.draggables
     .filter((r) => r !== "Files")
-    .map((r: Drag.Draggable<AttachmentRecord>, i: number) => {
+    .map((r: Drag.Draggable<Attachments.Record>, i: number) => {
       const a = r.record;
       return { id: a.id, attachment_id: a.attachment.id, position: i + 1 };
     });
@@ -33,10 +39,10 @@ function pageFiles(state: Attachments.State) {
   return [...files, ...deleted];
 }
 
-function pageImages(state: ImageGrid.State) {
+function pageImages(state: Images.GridState) {
   const primary = state.primary.draggables
     .filter((r) => r !== "Files")
-    .map((r: Drag.Draggable<ImageRecord>, i: number) => {
+    .map((r: Drag.Draggable<Images.Record>, i: number) => {
       const pi = r.record;
       return {
         id: pi.id,
@@ -47,7 +53,7 @@ function pageImages(state: ImageGrid.State) {
     });
   const images = state.images.draggables
     .filter((r) => r !== "Files")
-    .map((r: Drag.Draggable<ImageRecord>, i: number) => {
+    .map((r: Drag.Draggable<Images.Record>, i: number) => {
       const pi = r.record;
       return {
         id: pi.id,
@@ -63,7 +69,7 @@ function pageImages(state: ImageGrid.State) {
   return [...primary, ...images, ...deleted];
 }
 
-export default function pageParams(state: PageForm.State, options: Options) {
+export default function pageParams(state: PageEditor.State, options: Options) {
   const { files, images, tags } = options;
   const { page } = state;
 

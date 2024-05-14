@@ -3,12 +3,14 @@ import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
 import { putJson } from "../../lib/request";
+import * as Attachments from "../../types/Attachments";
+import { Locale } from "../../types";
 
 interface Props {
-  attachment: AttachmentResource;
+  attachment: Attachments.Resource;
   locale: string;
   locales: { [index: string]: Locale };
-  onUpdate: (attachment: Partial<AttachmentResource>) => void;
+  onUpdate: (attachment: Partial<Attachments.Resource>) => void;
 }
 
 export default function AttachmentEditor(props: Props) {

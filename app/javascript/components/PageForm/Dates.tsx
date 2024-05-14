@@ -1,13 +1,15 @@
 import React from "react";
 
+import * as PageEditor from "../../types/PageEditor";
+
 import DateRangeSelect from "../DateRangeSelect";
 
-interface DatesProps {
-  state: PageForm.State;
-  dispatch: (action: PageForm.Action) => void;
+interface Props {
+  state: PageEditor.State;
+  dispatch: (action: PageEditor.Action) => void;
 }
 
-export default function Dates(props: DatesProps) {
+export default function Dates(props: Props) {
   const { state, dispatch } = props;
   const { datesEnabled, page } = state;
 

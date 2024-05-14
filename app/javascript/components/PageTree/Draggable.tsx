@@ -26,11 +26,15 @@
  */
 
 import React, { Component } from "react";
+
 import Tree from "../../lib/Tree";
+import * as Trees from "../../types/Trees";
+import * as Pages from "../../types/Pages";
+
 import Node from "./Node";
 
 interface DragState {
-  id?: Tree.Id;
+  id?: Trees.Id;
   x: number | null;
   y: number | null;
   w: number | null;
@@ -40,14 +44,14 @@ interface DragState {
 }
 
 interface Props {
-  addChild: (id: Tree.Id, attrs: Page.TreeNode) => void;
+  addChild: (id: Trees.Id, attrs: Pages.TreeNode) => void;
   dir: string;
   locale: string;
-  movedPage: (id: Tree.Id) => void;
+  movedPage: (id: Trees.Id) => void;
   paddingLeft?: number;
-  toggleCollapsed: (id: Tree.Id) => void;
-  tree: Tree<Page.TreeNode>;
-  updatePage: (id: Tree.Id, attributes: Partial<Page.TreeItem>) => void;
+  toggleCollapsed: (id: Trees.Id) => void;
+  tree: Tree<Pages.TreeNode>;
+  updatePage: (id: Trees.Id, attributes: Partial<Pages.TreeItem>) => void;
   updateTree: (Tree) => void;
 }
 
@@ -128,7 +132,7 @@ export default class Draggable extends Component<Props, State> {
             index={root}
             key={root.id}
             paddingLeft={this.props.paddingLeft || defaultPadding}
-            addChild={(idx: Tree.Index<Page.TreeNode>) => this.addChild(idx)}
+            addChild={(idx: Trees.Index<Pages.TreeNode>) => this.addChild(idx)}
             onDragStart={this.dragStart}
             onCollapse={(nodeId) => this.toggleCollapse(nodeId)}
             updatePage={(idx, attrs) => this.updatePage(idx, attrs)}
@@ -141,8 +145,8 @@ export default class Draggable extends Component<Props, State> {
     }
   }
 
-  addChild(parent: Tree.Index<Page.TreeNode>) {
-    const newNode: Page.TreeNode = {
+  addChild(parent: Trees.Index<Pages.TreeNode>) {
+    const newNode: Pages.TreeNode = {
       blocks: { name: { [this.props.locale]: "" } },
       status: 0,
       editing: true,
@@ -155,7 +159,7 @@ export default class Draggable extends Component<Props, State> {
     this.props.addChild(parent.id, newNode);
   }
 
-  prevAddButtonCount(tree: Tree, index: Tree.Index) {
+  prevAddButtonCount(tree: Tree, index: Trees.Index) {
     let count = 0;
     const parentNodes = [];
     let pointer = tree.getIndex(index.parent);
@@ -171,7 +175,7 @@ export default class Draggable extends Component<Props, State> {
       if (
         parentNodes.indexOf(pointer) == -1 &&
         !pointer.node.collapsed &&
-        pointer.node.children.filter((p: Page.TreeNode) => p.status != 4)
+        pointer.node.children.filter((p: Pages.TreeNode) => p.status != 4)
           .length > 0
       ) {
         count += 1;
@@ -208,7 +212,7 @@ export default class Draggable extends Component<Props, State> {
     const tree = this.props.tree;
     const dragging = this.state.dragging;
     const paddingLeft = this.props.paddingLeft || defaultPadding;
-    let newIndex: Tree.Index<Page.TreeNode> = null;
+    let newIndex: Trees.Index<Pages.TreeNode> = null;
     let index = tree.getIndex(dragging.id);
     const collapsed = index.node.collapsed;
 
@@ -279,7 +283,7 @@ export default class Draggable extends Component<Props, State> {
     this.setState({ dragging: dragging });
   }
 
-  dragStart = (id: Tree.Id, dom: HTMLDivElement, e: React.MouseEvent) => {
+  dragStart = (id: Trees.Id, dom: HTMLDivElement, e: React.MouseEvent) => {
     // Only drag on left click
     if (e.button !== 0) {
       return;
@@ -324,11 +328,11 @@ export default class Draggable extends Component<Props, State> {
     window.removeEventListener("mouseup", this._dragEndListener);
   }
 
-  toggleCollapse(nodeId: Tree.Id) {
+  toggleCollapse(nodeId: Trees.Id) {
     this.props.toggleCollapsed(nodeId);
   }
 
-  updatePage(index: Tree.Index, attributes: Partial<Page.TreeItem>) {
+  updatePage(index: Trees.Index, attributes: Partial<Pages.TreeItem>) {
     this.props.updatePage(index.id, attributes);
   }
 }

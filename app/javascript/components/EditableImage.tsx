@@ -1,15 +1,19 @@
 import React, { MouseEvent, useState } from "react";
-import ImageEditor from "./ImageEditor";
+
 import useModalStore from "../stores/useModalStore";
+import * as Images from "../types/Images";
+import { Locale } from "../types";
+
+import ImageEditor from "./ImageEditor";
 
 interface Props {
-  image: ImageResource;
+  image: Images.Resource;
   src: string;
   caption: boolean;
   locale: string;
   locales: Record<string, Locale>;
   width: number;
-  onUpdate?: (newImage: ImageResource, src: string) => void;
+  onUpdate?: (newImage: Images.Resource, src: string) => void;
 }
 
 export default function EditableImage(props: Props) {
@@ -24,7 +28,7 @@ export default function EditableImage(props: Props) {
     return Math.round((height / width) * props.width);
   };
 
-  const updateImage = (updatedImage: ImageResource, src: string) => {
+  const updateImage = (updatedImage: Images.Resource, src: string) => {
     const newImage = { ...image, ...updatedImage };
     setSrc(src);
     setImage(newImage);

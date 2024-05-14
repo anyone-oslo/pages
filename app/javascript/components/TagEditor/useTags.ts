@@ -1,26 +1,28 @@
 import { useReducer } from "react";
 
+import * as Tags from "../../types/Tags";
+
 function onlyUnique(value: string, index: number, self: string[]) {
   return self.indexOf(value) === index;
 }
 
-export function allTags(state: TagEditor.State) {
+export function allTags(state: Tags.State) {
   return [...state.tags, ...state.enabled].filter(onlyUnique);
 }
 
-function normalize(tag: string, state: TagEditor.State) {
+function normalize(tag: string, state: Tags.State) {
   return (
     allTags(state).filter((t) => t.toLowerCase() == tag.toLowerCase())[0] || tag
   );
 }
 
-export function isEnabled(tag: string, state: TagEditor.State) {
+export function isEnabled(tag: string, state: Tags.State) {
   return (
     state.enabled.map((t) => t.toLowerCase()).indexOf(tag.toLowerCase()) !== -1
   );
 }
 
-function toggle(tag: string, state: TagEditor.State) {
+function toggle(tag: string, state: Tags.State) {
   if (isEnabled(tag, state)) {
     return { ...state, enabled: state.enabled.filter((t) => t !== tag) };
   } else {
@@ -28,7 +30,7 @@ function toggle(tag: string, state: TagEditor.State) {
   }
 }
 
-function reducer(state: TagEditor.State, action: TagEditor.Action) {
+function reducer(state: Tags.State, action: Tags.Action) {
   const { type, payload } = action;
   const normalized = normalize(payload, state);
   switch (type) {
@@ -47,7 +49,7 @@ function reducer(state: TagEditor.State, action: TagEditor.Action) {
 export default function useTags(
   initTags: string[],
   initEnabled: string[]
-): [TagEditor.State, (action: TagEditor.Action) => void] {
+): [Tags.State, (action: Tags.Action) => void] {
   const [state, dispatch] = useReducer(reducer, {
     tags: initTags,
     enabled: initEnabled

@@ -1,14 +1,11 @@
 import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
 
-interface Position {
-  x: number;
-  y: number;
-}
+import * as Crop from "../../types/Crop";
 
 interface Props {
   x: number;
   y: number;
-  onChange: (pos: Position) => void;
+  onChange: (pos: Crop.Position) => void;
   width: number;
   height: number;
 }
@@ -27,7 +24,7 @@ export default function FocalPoint(props: Props) {
   const { width, height, onChange } = props;
 
   const [dragging, setDragging] = useState(false);
-  const [position, setPosition] = useState<Position>({
+  const [position, setPosition] = useState<Crop.Position>({
     x: props.x,
     y: props.y
   });

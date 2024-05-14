@@ -2,8 +2,9 @@ import React from "react";
 
 import useTags from "./TagEditor/useTags";
 import Editor from "./TagEditor/Editor";
+import * as Tags from "../types/Tags";
 
-interface Props extends TagEditor.State {
+interface Props extends Tags.State {
   name: string;
 }
 

@@ -1,9 +1,11 @@
 import React from "react";
 
+import * as Tags from "../../types/Tags";
+
 interface Props {
   enabled: boolean;
   tag: string;
-  dispatch: (action: TagEditor.Action) => void;
+  dispatch: (action: Tags.Action) => void;
 }
 
 export default function Tag(props: Props) {

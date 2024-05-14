@@ -1,6 +1,8 @@
 import { createRef, useEffect, useReducer, useRef } from "react";
 import { uniqueId } from "lodash";
 
+import * as Drag from "../../types/Drag";
+
 function getPosition<T>(draggable: Drag.Draggable<T>) {
   if (draggable && "ref" in draggable && draggable.ref.current) {
     return draggable.ref.current.getBoundingClientRect();

@@ -1,13 +1,17 @@
 import React from "react";
+
+import * as Attachments from "../../types/Attachments";
+import { Locale } from "../../types";
+
 import List from "../Attachments/List";
 
-interface FilesProps {
+interface Props {
   locale: string;
   locales: { [index: string]: Locale };
   state: Attachments.State;
 }
 
-export default function Files(props: FilesProps) {
+export default function Files(props: Props) {
   const { locale, locales, state } = props;
 
   return (

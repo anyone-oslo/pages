@@ -1,6 +1,8 @@
 import React from "react";
 import ReactCrop from "react-image-crop";
 
+import * as Crop from "../../types/Crop";
+
 import { cropSize } from "./useCrop";
 import FocalPoint from "./FocalPoint";
 

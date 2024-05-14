@@ -1,5 +1,7 @@
 import React, { DragEvent, useEffect, useRef } from "react";
 
+import * as Drag from "../../types/Drag";
+
 export default function useDraggable<T = Drag.DraggableRecord>(
   draggable: Drag.Draggable<T>,
   startDrag: (evt: React.MouseEvent, draggable: Drag.Draggable<T>) => void
