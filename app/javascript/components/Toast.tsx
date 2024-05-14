@@ -10,7 +10,7 @@ interface Props {
 export default function Toast(props: Props) {
   const [fadeout, setFadeout] = useState(false);
   const { toasts, error, notice, next } = useToastStore((state) => state);
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   const toast = toasts[0];
 

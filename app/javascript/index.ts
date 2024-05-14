@@ -1,4 +1,4 @@
-import { start as startRails } from "@rails/ujs";
+import Rails from "@rails/ujs";
 import "react_ujs";
 import { FC } from "react";
 
@@ -12,7 +12,7 @@ export function registerComponent(name: string, component: FC) {
 }
 
 export default function startPages() {
-  startRails();
+  Rails.start();
   for (const name in Components) {
     registerComponent(name, Components[name] as FC);
   }
