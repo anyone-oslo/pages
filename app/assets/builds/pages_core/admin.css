@@ -7791,7 +7791,16 @@ form.button-to {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
+  margin-top: 2rem;
 }
+
+.buttons:first-child {
+    margin-top: 0px;
+  }
+
+.buttons:last-child {
+    margin-bottom: 0px;
+  }
 
 .inline-form {
   display: flex;
