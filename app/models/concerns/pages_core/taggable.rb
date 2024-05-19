@@ -4,15 +4,12 @@ module PagesCore
   module Taggable
     extend ActiveSupport::Concern
 
-    attr_accessor :new_tags
-
     included do
       has_many :taggings,
                as: :taggable,
                dependent: :destroy,
                inverse_of: :taggable
       has_many :tags, through: :taggings
-      after_save :update_taggings
     end
 
     module ClassMethods
@@ -32,7 +29,7 @@ module PagesCore
     end
 
     def tag_with(*list)
-      @new_tags = Tag.parse(list)
+      self.tags = Tag.parse(list).map { |n| Tag.find_or_initialize_by(name: n) }
     end
 
     def tag_with!(*list)
@@ -48,21 +45,7 @@ module PagesCore
     end
 
     def tag_names
-      @new_tags || tags.by_name.map(&:name)
-    end
-
-    private
-
-    def update_taggings
-      return unless new_tags
-
-      Tag.transaction do
-        taggings.includes(:tag).where.not(tag: { name: new_tags }).destroy_all
-        new_tags.map { |n| Tag.find_or_create_by(name: n) }
-                .each { |t| taggings.create(tag: t) }
-      end
-
-      @new_tags = nil
+      tags.by_name.map(&:name)
     end
   end
 end
