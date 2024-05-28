@@ -17,7 +17,7 @@ module PagesCore
       page_file = args.detect { |a| a.is_a?(PageFile) }
       return attachment_path(page_file.attachment) if page_file
 
-      super(*args)
+      super
     end
 
     private

@@ -10,7 +10,7 @@ module PagesCore
         before_validation :ensure_ends_at
 
         scope :upcoming, -> { where("ends_at > ?", Time.zone.now) }
-        scope :past, -> { where("ends_at <= ?", Time.zone.now) }
+        scope :past, -> { where(ends_at: ..Time.zone.now) }
         scope :with_dates, -> { where.not(starts_at: nil) }
       end
 
@@ -57,13 +57,13 @@ module PagesCore
       # Finds the page's next sibling by date. Returns nil if there
       # isn't one.
       def next_sibling_by_date
-        siblings_by_date.where("starts_at >= ?", starts_at)&.first
+        siblings_by_date.where(starts_at: starts_at..)&.first
       end
 
       # Finds the page's previous sibling by date. Returns nil if
       # there isn't one.
       def previous_sibling_by_date
-        siblings_by_date.where("starts_at < ?", starts_at)&.last
+        siblings_by_date.where(starts_at: ...starts_at)&.last
       end
 
       def upcoming?

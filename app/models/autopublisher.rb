@@ -30,7 +30,7 @@ class Autopublisher
     end
 
     def due_pages
-      queued_pages.where("published_at < ?", (Time.now.utc + 2.minutes))
+      queued_pages.where(published_at: ...(Time.now.utc + 2.minutes))
     end
   end
 end
