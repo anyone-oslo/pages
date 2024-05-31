@@ -1,0 +1,11 @@
+<h1>
+  Welcome!
+</h1>
+<p>
+  <%= @invite.user.name %> has invited you to Pages on
+  <%= PagesCore.config(:site_name) %>.<br>
+  Click the button below to create your account and get started.
+</p>
+<div class="buttons">
+  <%= link_to("Create account", @url, class: "primary button") %>
+</div>

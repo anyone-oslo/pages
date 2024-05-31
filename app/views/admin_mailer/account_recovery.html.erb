@@ -1,0 +1,20 @@
+<h1>
+  Recover your account
+</h1>
+<p>
+  Hi, <%= @user.name %>!
+</p>
+<p>
+  We've received a request to recover your account on
+  <%= PagesCore.config(:site_name) %>.
+</p>
+<p>
+  Please click the following link to continue:<br>
+  <%= link_to(@url, @url) %>
+</p>
+<p>
+  The link will expire in 24 hours.
+</p>
+<p>
+  If you do not want to recover your password, please ignore this email.
+</p>

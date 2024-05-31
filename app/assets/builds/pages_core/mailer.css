@@ -1,0 +1,99 @@
+body,
+input,
+textarea,
+a.button,
+a.button:visited,
+button {
+  font-family: -apple-system, BlinkMacSystemFont, Calibri, sans-serif;
+  color: #111;
+}
+
+body {
+  font-size: 1rem;
+  padding: 2rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+p {
+  max-width: 80ch;
+  margin: 0 0 1rem 0;
+}
+
+h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:last-child, ul:last-child, ol:last-child, p:last-child {
+    margin-bottom: 0rem;
+  }
+
+h1 {
+  font-size: 2rem;
+  margin-top: 2rem;
+}
+
+h1:first-child {
+    margin-top: 0rem;
+  }
+
+a,
+a:visited {
+  color: #1d7195;
+}
+
+a:hover,
+a:focus {
+  color: #15516a;
+}
+
+button,
+a.button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  cursor: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  padding: 0.5em 0.75em;
+  background: #e8e8e8;
+  box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.25);
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+button.primary, a.button.primary {
+    background: #111;
+    border-color: #111;
+    color: #fff;
+    box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.2);
+  }
+
+button.primary:hover, a.button.primary:hover {
+      box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.1);
+    }
+
+.buttons,
+table {
+  margin: 1.5rem 0;
+}
+
+.buttons:last-child, table:last-child {
+    margin-bottom: 0px;
+  }
+
+table {
+  border-collapse: collapse;
+  border-top: 1px solid #ddd;
+}
+
+table th,
+  table td {
+    text-align: left;
+    padding: 0.5rem 1rem 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+  }

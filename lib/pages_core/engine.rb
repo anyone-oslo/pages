@@ -29,6 +29,7 @@ module PagesCore
       Rails.application.config.assets.precompile += %w[
         pages_core/admin-dist.js
         pages_core/admin.css
+        pages_core/mailer.css
         pages_core/fonts/*.ttf
         pages_core/fonts/*.woff2
         pages/favicon.gif

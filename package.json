@@ -8,9 +8,7 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "/dist/**/*"
-  ],
+  "files": ["/dist/**/*"],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@rails/ujs": "7.1.3-2",
@@ -56,7 +54,7 @@
     "build": "run build-debug --minify",
     "build-debug": "esbuild app/javascript/admin-dist.ts --bundle --sourcemap --outdir=app/assets/builds/pages_core --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build-dist": "tsc",
-    "build:css": "postcss ./app/assets/stylesheets/pages_core/admin.postcss.css -o ./app/assets/builds/pages_core/admin.css",
+    "build:css": "postcss ./app/assets/stylesheets/pages_core/*.css --dir ./app/assets/builds/pages_core",
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
