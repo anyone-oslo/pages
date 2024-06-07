@@ -82,6 +82,11 @@ export default function PageForm(props: Props) {
     });
   };
 
+  const clearDeletedObjects = () => {
+    filesState.setDeleted([]);
+    imagesState.setDeleted([]);
+  };
+
   const handleSubmit = (evt: React.MouseEvent) => {
     evt.preventDefault();
     let method = postJson;
@@ -105,6 +110,7 @@ export default function PageForm(props: Props) {
         if (response.errors && response.errors.length > 0) {
           errorToast("A validation error prevented the page from being saved.");
         } else {
+          clearDeletedObjects();
           noticeToast("Your changes were saved");
         }
       })
