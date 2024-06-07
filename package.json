@@ -1,6 +1,6 @@
 {
   "name": "@anyone-oslo/pages",
-  "version": "3.15.0",
+  "version": "3.15.1",
   "description": "Frontend for Pages",
   "repository": {
     "type": "git",
@@ -8,7 +8,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["/dist/**/*"],
+  "files": [
+    "/dist/**/*"
+  ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@rails/ujs": "7.1.3-2",
