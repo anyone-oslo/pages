@@ -33,6 +33,11 @@ module PagesCore
         super.in_locale(locale)
       end
 
+      def page_files_attributes=(attrs)
+        ids = page_files.map(&:id)
+        super(attrs.reject { |a| a["_destroy"] && ids.exclude?(a["id"]) })
+      end
+
       def files
         page_files
       end

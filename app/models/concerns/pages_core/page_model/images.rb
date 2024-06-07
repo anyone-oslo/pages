@@ -19,11 +19,11 @@ module PagesCore
 
         after_save :update_primary_image
 
-        accepts_nested_attributes_for :page_images,
-                                      reject_if: proc { |a|
-                                                   a["image_id"].blank?
-                                                 },
-                                      allow_destroy: true
+        accepts_nested_attributes_for(
+          :page_images,
+          reject_if: proc { |a| a["image_id"].blank? },
+          allow_destroy: true
+        )
       end
 
       def image?
@@ -40,6 +40,11 @@ module PagesCore
 
       def page_images
         super.in_locale(locale)
+      end
+
+      def page_images_attributes=(attrs)
+        ids = page_images.map(&:id)
+        super(attrs.reject { |a| a["_destroy"] && ids.exclude?(a["id"]) })
       end
 
       private
