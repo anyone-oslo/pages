@@ -15,6 +15,7 @@ export type CollectionAction<T = DraggableRecord> =
       payload: Item<T>[];
     }
   | { type: "update"; payload: Item<T> }
+  | { type: "reinitialize"; payload: Array<T> }
   | { type: "remove"; payload: Draggable<T> }
   | { type: "updatePositions"; payload?: Draggable<T> };
 

@@ -26,4 +26,5 @@ export interface State {
   collection: Drag.Collection<Record>;
   deleted: Record[];
   setDeleted: (records: Record[]) => void;
+  update: (records: Record[]) => void;
 }

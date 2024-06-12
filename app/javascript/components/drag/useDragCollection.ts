@@ -66,6 +66,8 @@ function dragCollectionReducer<T = Drag.DraggableRecord>(
           return { ...d, rect: getPosition(d) };
         });
       });
+    case "reinitialize":
+      return action.payload.map((r) => createDraggable(r));
     case "remove":
       return state.filter(
         (d: Drag.Draggable<T>) => d.handle !== action.payload.handle

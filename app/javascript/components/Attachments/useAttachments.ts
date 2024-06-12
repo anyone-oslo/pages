@@ -6,10 +6,17 @@ export default function useAttachments(
   records: Attachments.Record[]
 ): Attachments.State {
   const [deleted, setDeleted] = useState<Attachments.Record[]>([]);
+  const collection = useDragCollection(records);
+
+  const update = (records: Attachments.Record[]) => {
+    collection.dispatch({ type: "reinitialize", payload: records });
+    setDeleted([]);
+  };
 
   return {
-    collection: useDragCollection(records),
+    collection: collection,
     deleted: deleted,
-    setDeleted: setDeleted
+    setDeleted: setDeleted,
+    update: update
   };
 }

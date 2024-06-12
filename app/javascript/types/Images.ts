@@ -44,4 +44,5 @@ export interface GridState {
   images: Drag.Collection<Record>;
   deleted: Record[];
   setDeleted: (records: Record[]) => void;
+  update: (records: Record[]) => void;
 }
