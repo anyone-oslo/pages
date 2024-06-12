@@ -42,7 +42,7 @@ function mousePosition(evt: AnyTouchEvent): Drag.Position {
   if ("touches" in evt && evt.type == "touchmove") {
     x = evt.touches[0].clientX;
     y = evt.touches[0].clientY;
-  } else if (evt instanceof MouseEvent) {
+  } else if ("clientX" in evt && "clientY" in evt) {
     x = evt.clientX;
     y = evt.clientY;
   }

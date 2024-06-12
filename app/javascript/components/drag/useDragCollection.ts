@@ -12,10 +12,15 @@ function getPosition<T>(draggable: Drag.Draggable<T>) {
 }
 
 function hideDraggable<T>(
-  draggable: Drag.Draggable<T> | null,
-  callback: () => Drag.Draggable<T>[]
+  draggable: Drag.Item<T> | null,
+  callback: () => Drag.Item<T>[]
 ) {
-  if (draggable && "ref" in draggable && draggable.ref.current) {
+  if (
+    draggable &&
+    draggable !== "Files" &&
+    "ref" in draggable &&
+    draggable.ref.current
+  ) {
     const prevDisplay = draggable.ref.current.style.display;
     draggable.ref.current.style.display = "none";
     const result = callback();
