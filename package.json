@@ -60,7 +60,7 @@
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.3.0",
   "bugs": {
     "url": "https://github.com/anyone_oslo/pages/issues"
   },
