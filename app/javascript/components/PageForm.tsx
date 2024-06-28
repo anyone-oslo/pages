@@ -107,6 +107,13 @@ export default function PageForm(props: Props) {
         } else {
           filesState.update(response.page_files);
           imagesState.update(response.page_images);
+          tagsDispatch({
+            type: "update",
+            payload: {
+              tags: response.tags_and_suggestions,
+              enabled: response.enabled_tags
+            }
+          });
           noticeToast("Your changes were saved");
         }
       })

@@ -1,7 +1,6 @@
-export interface Action {
-  type: "addTag" | "toggleTag";
-  payload: string;
-}
+export type Action =
+  | { type: "addTag" | "toggleTag"; payload: string }
+  | { type: "update"; payload: State };
 
 export interface State {
   enabled: string[];
