@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import * as Crop from "../types/Crop";
 
@@ -24,28 +24,28 @@ function focalPoint(state: Crop.State): Crop.Position {
   }
 }
 
-export default function ImageCropper(props: Props) {
-  const containerRef = useRef<HTMLDivElement>();
+function useContainerSize(): [(node?: HTMLDivElement) => void, Crop.Size] {
   const [containerSize, setContainerSize] = useState<Crop.Size>();
 
-  const handleResize = () => {
-    const elem = containerRef.current;
-    if (elem) {
+  const ref = useCallback((node?: HTMLDivElement) => {
+    const measure = () => {
       setContainerSize({
-        width: elem.offsetWidth - 2,
-        height: elem.offsetHeight - 2
+        width: node.offsetWidth - 2,
+        height: node.offsetHeight - 2
       });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return function cleanup() {
-      window.removeEventListener("resize", handleResize);
     };
-  });
+    if (node !== null) {
+      measure();
+      const observer = new ResizeObserver(measure);
+      observer.observe(node);
+    }
+  }, []);
 
-  useEffect(handleResize, []);
+  return [ref, containerSize];
+}
+
+export default function ImageCropper(props: Props) {
+  const [containerRef, containerSize] = useContainerSize();
 
   const setAspect = (aspect: number) => {
     props.dispatch({ type: "setAspect", payload: aspect });
