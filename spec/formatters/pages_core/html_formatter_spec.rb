@@ -118,7 +118,7 @@ describe PagesCore::HtmlFormatter do
     context "with image without attributes" do
       let(:string) { "[image:#{image.id}]" }
       let(:pattern) do
-        %r{<figure.class="image.landscape"><img.alt="Image".
+        %r{<figure.class="image.landscape"><img.
         src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
         .width="320".height="200"></figure>}x
       end
@@ -129,7 +129,7 @@ describe PagesCore::HtmlFormatter do
     context "with image with size" do
       let(:string) { "[image:#{image.id} size=\"100x100\"]" }
       let(:pattern) do
-        %r{<figure.class="image.landscape"><img.alt="Image".
+        %r{<figure.class="image.landscape"><img.
         src="/dynamic_images/([\w\d]+)/100x62/#{image.id}-([\w\d]+)\.png"
         .width="100".height="62"></figure>}x
       end
@@ -140,7 +140,7 @@ describe PagesCore::HtmlFormatter do
     context "with image with class name" do
       let(:string) { "[image:#{image.id} class=\"float-left\"]" }
       let(:pattern) do
-        %r{<figure.class="image.landscape.float-left"><img.alt="Image".
+        %r{<figure.class="image.landscape.float-left"><img.
         src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
         .width="320".height="200"></figure>}x
       end
@@ -152,7 +152,7 @@ describe PagesCore::HtmlFormatter do
       let(:string) { "[image:#{image.id} link=\"http://example.com\"]" }
       let(:pattern) do
         %r{<figure.class="image.landscape"><a.href="http://example.com">
-        <img.alt="Image".src="/dynamic_images/([\w\d]+)/320x200/#{image.id}
+        <img.src="/dynamic_images/([\w\d]+)/320x200/#{image.id}
         -([\w\d]+)\.png".width="320".height="200"></a></figure>}x
       end
 
@@ -175,7 +175,7 @@ describe PagesCore::HtmlFormatter do
       end
       let(:string) { "[image:#{image.id}]" }
       let(:pattern) do
-        %r{<figure.class="image.landscape"><img.alt="Image".
+        %r{<figure.class="image.landscape"><img.
         src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
         .width="320".height="200">
         <figcaption>This.is.a.caption</figcaption></figure>}x
