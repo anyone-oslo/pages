@@ -33,12 +33,13 @@ function toggle(tag: string, state: Tags.State) {
 function reducer(state: Tags.State, action: Tags.Action) {
   const { type, payload } = action;
   switch (type) {
-    case "addTag":
+    case "addTag": {
       const normalized = normalize(payload, state);
       return {
         tags: [...state.tags, normalized].filter(onlyUnique),
         enabled: [...state.enabled, normalized].filter(onlyUnique)
       };
+    }
     case "toggleTag":
       return toggle(normalize(payload, state), state);
     case "update":
