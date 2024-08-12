@@ -33,13 +33,13 @@ describe PagesCore::Taggable do
     context "with array argument" do
       subject { Page.tagged_with(%w[foo bar]).map(&:id) }
 
-      it { is_expected.to match([page, other_page].map(&:id)) }
+      it { is_expected.to match_array([page, other_page].map(&:id)) }
     end
 
     context "with multiple arguments" do
       subject { Page.tagged_with(foo, bar).map(&:id) }
 
-      it { is_expected.to match([page, other_page].map(&:id)) }
+      it { is_expected.to match_array([page, other_page].map(&:id)) }
     end
   end
 
