@@ -1,233 +1,208 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import Tree from "../lib/Tree";
-import { postJson, putJson } from "../lib/request";
-import * as Trees from "../types/Trees";
 import * as Pages from "../types/Pages";
+import * as Tree from "./PageTree/tree";
+import usePageTree, {
+  State,
+  movePage,
+  visibleChildNodes
+} from "./PageTree/usePageTree";
+import Node, { paddingLeft } from "./PageTree/Node";
 
-import Draggable from "./PageTree/Draggable";
+type DragState = {
+  id: Tree.Id;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  scrollTop: number;
+  scrollLeft: number;
+  startX: number;
+  startY: number;
+  offsetX: number;
+  offsetY: number;
+  tree: State;
+};
 
-type CollapsedState = Record<number, boolean>;
-
-interface ParentMap {
-  [index: number]: Pages.TreeNode[];
-}
-
-interface Props {
+type Props = {
   dir: string;
   locale: string;
-  pages: Pages.TreeNode[];
+  pages: Pages.TreeResource[];
   permissions: string[];
+};
+
+function prevAddButtonCount(state: State, id: Tree.Id) {
+  let count = 0;
+  const parentNodes = Tree.parents(state, id);
+
+  let pointer = Tree.getNodeByTop(state, state.nodes[id].top - 1);
+  while (pointer) {
+    if (
+      parentNodes.indexOf(pointer.id) == -1 &&
+      !pointer.collapsed &&
+      visibleChildNodes(state, pointer.id).length > 0
+    ) {
+      count += 1;
+    }
+    pointer = Tree.getNodeByTop(state, pointer.top - 1);
+  }
+  return count;
 }
 
-interface State {
-  tree: Tree<Pages.TreeNode>;
-}
+export default function PageTree({ dir, locale, pages, permissions }: Props) {
+  const [state, dispatch] = usePageTree(pages, locale, dir, permissions);
 
-function collapsedState(): CollapsedState {
-  if (
-    window &&
-    window.localStorage &&
-    typeof window.localStorage.collapsedPages != "undefined"
-  ) {
-    return JSON.parse(
-      window.localStorage.getItem("collapsedPages")
-    ) as CollapsedState;
-  }
-  return {};
-}
+  const [dragging, setDragging] = useState(false);
+  const [dragState, setDragState] = useState<DragState | null>(null);
 
-export default class PageTree extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  const getDraggingDom = () => {
+    if (dragging) {
+      const dragStateStyles = {
+        top: dragState.y,
+        left: dragState.x,
+        width: dragState.w
+      };
 
-    this.state = { tree: this.buildTree(props.pages, props.locale) };
-  }
+      return (
+        <div className="draggable" style={dragStateStyles}>
+          <Node state={dragState.tree} id={dragState.id} dispatch={dispatch} />
+        </div>
+      );
+    }
+  };
 
-  applyCollapsed(tree: Tree<Pages.TreeNode>) {
-    const depth = (t: Tree, index: Trees.Index) => {
-      let depth = 0;
-      let pointer = t.getIndex(index.parent);
-      while (pointer) {
-        depth += 1;
-        pointer = t.getIndex(pointer.parent);
-      }
-      return depth;
-    };
-
-    const walk = (id: Trees.Id) => {
-      const index = tree.getIndex(id);
-      const node = index.node;
-      if (node.id && node.id in collapsedState()) {
-        node.collapsed = collapsedState()[node.id];
-      } else if (node.news_page) {
-        node.collapsed = true;
-      } else if (depth(tree, index) > 1) {
-        node.collapsed = true;
-      }
-      if (index.children && index.children.length) {
-        index.children.forEach((c) => walk(c));
-      }
-    };
-    walk(1);
-  }
-
-  createPage(index: Trees.Index<Pages.TreeNode>, attributes: Pages.TreeItem) {
-    void postJson(`/admin/${this.props.locale}/pages.json`, {
-      page: attributes
-    }).then((response: Pages.TreeItem) => this.updateNode(index, response));
-  }
-
-  buildTree(pages: Pages.TreeNode[], locale: string) {
-    // Build tree
-    const parentMap: ParentMap = pages.reduce(
-      (m: ParentMap, page: Pages.TreeNode) => {
-        const id = page.parent_page_id || 0;
-        m[id] = [...(m[id] || []), page];
-        return m;
-      },
-      {}
-    );
-
-    pages.forEach((p) => {
-      p.children = parentMap[p.id] || [];
-    });
-
-    const tree = new Tree<Pages.TreeNode>({
-      blocks: {
-        name: { [locale]: "All Pages" }
-      },
-      permissions: this.props.permissions,
-      root: true,
-      children: parentMap[0],
-      collapsed: false
-    });
-    this.applyCollapsed(tree);
-    tree.updateNodesPosition();
-    return tree;
-  }
-
-  movePage(
-    index: Trees.Index<Pages.TreeNode>,
-    parent: Trees.Index<Pages.TreeNode>,
-    position: number
-  ) {
-    const data = {
-      parent_id: parent.node.id,
-      position: position
-    };
-    const url = `/admin/${this.props.locale}/pages/${index.node.id}/move.json`;
-    this.performUpdate(index, url, data);
-  }
-
-  performUpdate(
-    index: Trees.Index<Pages.TreeNode>,
-    url: string,
-    data: Record<string, unknown>
-  ) {
-    void putJson(url, data).then((response: Pages.TreeItem) =>
-      this.updateNode(index, response)
-    );
-  }
-
-  render() {
-    const addChild = (id: Trees.Id, attributes: Pages.TreeNode) => {
-      const tree = this.state.tree;
-      const index = tree.append(attributes, id);
-      this.reorderChildren(id);
-      this.setCollapsed(id, false);
-      this.createPage(index, attributes);
-      this.setState({ tree: tree });
-    };
-
-    const movedPage = (id: Trees.Id) => {
-      const tree = this.state.tree;
-      const index = tree.getIndex(id);
-      this.reorderChildren(index.parent);
-
-      const parent = tree.getIndex(index.parent);
-      const position = parent.children.indexOf(id) + 1;
-
-      this.movePage(index, parent, position);
-      this.setState({ tree: tree });
-    };
-
-    const toggleCollapsed = (id: Trees.Id) => {
-      const tree = this.state.tree;
-      const node = tree.getIndex(id).node;
-      this.setCollapsed(id, !node.collapsed);
-      this.setState({ tree: tree });
-    };
-
-    const updatePage = (id: Trees.Id, attributes: Pages.TreeItem) => {
-      const tree = this.state.tree;
-      const index = tree.getIndex(id);
-      const url = `/admin/${this.props.locale}/pages/${index.node.id}.json`;
-      this.updateNode(index, attributes);
-
-      const data: Record<string, unknown> = { ...attributes };
-      if ("blocks" in attributes && "name" in attributes.blocks) {
-        data.name = attributes.blocks.name[this.props.locale];
-      }
-      this.performUpdate(index, url, { page: data });
-    };
-
-    const updateTree = (tree: Tree<Pages.TreeNode>) => {
-      this.setState({ tree: tree });
-    };
-
-    return (
-      <Draggable
-        tree={this.state.tree}
-        addChild={addChild}
-        movedPage={movedPage}
-        toggleCollapsed={toggleCollapsed}
-        updatePage={updatePage}
-        updateTree={updateTree}
-        locale={this.props.locale}
-        dir={this.props.dir}
-      />
-    );
-  }
-
-  reorderChildren(id: Trees.Id) {
-    const tree = this.state.tree;
-    const index = this.state.tree.getIndex(id);
-    const node = index.node;
-    if (!node.news_page) {
+  const dragStart = (id: Tree.Id, dom: HTMLDivElement, e: React.MouseEvent) => {
+    // Only drag on left click
+    if (e.button !== 0) {
       return;
     }
-    index.children = index.children.sort(function (a, b) {
-      const aNode = tree.getIndex(a).node;
-      const bNode = tree.getIndex(b).node;
-      if (aNode.pinned == bNode.pinned) {
-        return (
-          new Date(bNode.published_at).getTime() -
-          new Date(aNode.published_at).getTime()
-        );
-      } else {
-        return aNode.pinned ? -1 : 1;
-      }
+
+    setDragState({
+      id: id,
+      w: dom.offsetWidth,
+      h: dom.offsetHeight,
+      x: dom.offsetLeft,
+      y: dom.offsetTop,
+      scrollTop: document.body.scrollTop,
+      scrollLeft: document.body.scrollLeft,
+      startX: dom.offsetLeft,
+      startY: dom.offsetTop,
+      offsetX: e.clientX,
+      offsetY: e.clientY,
+      tree: { ...state }
     });
-    tree.updateNodesPosition();
-  }
+  };
 
-  setCollapsed(id: Trees.Id, value: boolean) {
-    const node = this.state.tree.getIndex(id).node;
-    node.collapsed = value;
-    this.storeCollapsed(id, node.collapsed);
-    this.state.tree.updateNodesPosition();
-  }
+  const drag = useCallback(
+    (e: MouseEvent) => {
+      if (!dragState) {
+        return;
+      } else if (!dragging) {
+        const distance =
+          Math.abs(e.clientX - dragState.offsetX) +
+          Math.abs(e.clientY - dragState.offsetY);
+        if (distance >= 15) {
+          setDragging(true);
+        } else {
+          return null;
+        }
+      }
 
-  storeCollapsed(id: Trees.Id, newState: boolean) {
-    const node = this.state.tree.getIndex(id).node;
-    const store = collapsedState();
-    store[node.id] = newState;
-    window.localStorage.collapsedPages = JSON.stringify(store);
-  }
+      let tree = dragState.tree;
+      let node = tree.nodes[dragState.id];
 
-  updateNode(index: Trees.Index<Pages.TreeNode>, attributes: Pages.TreeItem) {
-    index.node = { ...index.node, ...attributes };
-    this.setState({ tree: this.state.tree });
-  }
+      const pos = {
+        x:
+          dragState.startX +
+          e.clientX -
+          dragState.offsetX +
+          (document.body.scrollLeft - dragState.scrollLeft),
+        y:
+          dragState.startY +
+          e.clientY -
+          dragState.offsetY +
+          (document.body.scrollTop - dragState.scrollTop)
+      };
+
+      const move = (target: Tree.Id, placement: Tree.MovePlacement) => {
+        tree = {
+          ...tree,
+          ...Tree.indexPositions(
+            Tree.moveRelative(tree, node.id, target, placement)
+          )
+        };
+        node = tree.nodes[dragState.id];
+      };
+
+      const diffX = pos.x - paddingLeft / 2 - (node.left - 2) * paddingLeft;
+      const diffY =
+        pos.y -
+        dragState.h / 2 -
+        (node.top - 2 + prevAddButtonCount(tree, dragState.id)) * dragState.h;
+
+      if (diffX < 0) {
+        // left
+        if (node.parent && !Tree.nextSibling(tree, node.id)) {
+          move(node.parent, "after");
+        }
+      } else if (diffX > paddingLeft) {
+        // right
+        const prev = Tree.prevSibling(tree, node.id);
+        if (prev && !prev.collapsed) {
+          move(prev.id, "append");
+        }
+      }
+
+      if (diffY < 0 - dragState.h * 0.5) {
+        // up
+        move(Tree.getNodeByTop(tree, node.top - 1).id, "before");
+      } else if (diffY > dragState.h * 1.5) {
+        // down
+        const below =
+          Tree.nextSibling(tree, node.id) ||
+          Tree.getNodeByTop(tree, node.id + node.height);
+
+        if (below && below.parent !== node.id) {
+          if (below.childNodes.length > 0 && !below.collapsed) {
+            move(below.id, "prepend");
+          } else {
+            move(below.id, "after");
+          }
+        }
+      }
+
+      setDragState({ ...dragState, ...pos, tree: tree });
+    },
+    [dragging, dragState]
+  );
+
+  const dragEnd = useCallback(() => {
+    if (dragging) {
+      movePage(dragState.tree, dragState.id, dispatch);
+      setDragState(null);
+      setDragging(false);
+    }
+  }, [dragging, dragState, dispatch]);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", drag);
+    window.addEventListener("mouseup", dragEnd);
+    return () => {
+      window.removeEventListener("mousemove", drag);
+      window.removeEventListener("mouseup", dragEnd);
+    };
+  }, [drag, dragEnd]);
+
+  return (
+    <div className="page-tree">
+      {getDraggingDom()}
+      <Node
+        state={(dragging && dragState.tree) || state}
+        id={state.rootId}
+        dispatch={dispatch}
+        onDragStart={dragStart}
+        dragging={dragging && dragState.id}
+      />
+    </div>
+  );
 }
