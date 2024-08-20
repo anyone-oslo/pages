@@ -16,7 +16,7 @@ export default function useDraggable<T = Drag.DraggableRecord>(
 
   useEffect(() => {
     draggable.ref.current = ref.current;
-  }, []);
+  }, [draggable.ref]);
 
   return { ref: ref, onDragStart: handleDrag, draggable: true };
 }

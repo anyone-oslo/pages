@@ -45,7 +45,7 @@ export default function GridImage(props: Props) {
       reader.onload = () => setSrc(reader.result as string);
       reader.readAsDataURL(record.file);
     }
-  }, []);
+  }, [record]);
 
   const copyEmbed = (evt: MouseEvent) => {
     evt.preventDefault();

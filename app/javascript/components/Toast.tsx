@@ -21,7 +21,7 @@ export default function Toast(props: Props) {
     if (props.notice) {
       notice(props.notice);
     }
-  }, [props.error, props.notice]);
+  }, [props.error, props.notice, error, notice]);
 
   useEffect(() => {
     setFadeout(false);
@@ -38,7 +38,7 @@ export default function Toast(props: Props) {
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, [toast]);
+  }, [toast, next]);
 
   const classNames = ["toast"];
 

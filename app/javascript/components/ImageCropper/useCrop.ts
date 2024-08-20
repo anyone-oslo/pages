@@ -209,19 +209,19 @@ export default function useCrop(
 
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
-  async function updateCroppedImage() {
-    const img: HTMLImageElement = new Image();
-    img.src = state.image.uncropped_url;
-    await img.decode();
-    const [canvas, ctx] = croppedImageCanvas(img, cropSize(state));
-    setCroppedImage(imageDataUrl(canvas, ctx));
-  }
-
   useEffect(() => {
+    async function updateCroppedImage() {
+      const img: HTMLImageElement = new Image();
+      img.src = state.image.uncropped_url;
+      await img.decode();
+      const [canvas, ctx] = croppedImageCanvas(img, cropSize(state));
+      setCroppedImage(imageDataUrl(canvas, ctx));
+    }
+
     if (!state.cropping) {
       void updateCroppedImage();
     }
-  }, [state.cropping]);
+  }, [state]);
 
   return [state, dispatch, croppedImage];
 }

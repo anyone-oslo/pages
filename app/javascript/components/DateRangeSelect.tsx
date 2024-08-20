@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import DateTimeSelect from "./DateTimeSelect";
 
@@ -50,13 +50,16 @@ export default function DateRangeSelect(props: Props) {
   const endsAt = parseDate(props.setEndsAt ? props.endsAt : uncontrolledEndsAt);
   const setEndsAt = props.setEndsAt || setUncontrolledEndsAt;
 
-  const setDates = (start: Date, end: Date) => {
-    if (end < start) {
-      end = start;
-    }
-    setStartsAt(start);
-    setEndsAt(end);
-  };
+  const setDates = useCallback(
+    (start: Date, end: Date) => {
+      if (end < start) {
+        end = start;
+      }
+      setStartsAt(start);
+      setEndsAt(end);
+    },
+    [setStartsAt, setEndsAt]
+  );
 
   const changeStartsAt = (newDate: Date) => {
     setDates(
@@ -73,7 +76,7 @@ export default function DateRangeSelect(props: Props) {
     if (!startsAt || !endsAt) {
       setDates(startsAt || defaultDate(), endsAt || defaultDate(60));
     }
-  }, [startsAt, endsAt]);
+  }, [startsAt, endsAt, setDates]);
 
   return (
     <div className="date-range-select">
