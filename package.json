@@ -30,25 +30,23 @@
     "postcss-mixins": "^10.0.0",
     "postcss-preset-env": "^9.5.0",
     "postcss-url": "^10.1.3",
-    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-image-crop": "^5.0.0",
     "react_ujs": "^3.2.0",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.4",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@types/prop-types": "^15",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
+    "@eslint/compat": "^1.1.1",
     "dependency-cruiser": "^16.2.3",
-    "esbuild": "^0.21.2",
-    "eslint": "^8.57.0",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react": "^7.34.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^3.2.5"
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.3.3",
+    "typescript-eslint": "^8.1.0"
   },
   "scripts": {
     "architecture": "depcruise --include-only \"^app/javascript\" --output-type dot app/javascript | dot -T svg > dependency-graph.svg",
@@ -60,7 +58,7 @@
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
-  "packageManager": "yarn@4.3.0",
+  "packageManager": "yarn@4.4.0",
   "bugs": {
     "url": "https://github.com/anyone_oslo/pages/issues"
   },

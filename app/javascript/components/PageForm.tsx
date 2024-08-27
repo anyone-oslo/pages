@@ -72,7 +72,7 @@ export default function PageForm(props: Props) {
     if (history) {
       history.replaceState(null, "", pageUrl);
     }
-  }, [page.id, locale, tab]);
+  }, [page.id, page.parent_page_id, locale, tab]);
 
   const handlePreview = (evt: React.MouseEvent) => {
     evt.preventDefault();

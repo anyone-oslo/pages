@@ -16,9 +16,13 @@ export default function PageName(props: Props) {
     </span>
   );
 
+  const preventDrag = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+  };
+
   if (editUrl) {
     return (
-      <a href={editUrl} className="name">
+      <a href={editUrl} className="name" onDragStart={preventDrag}>
         {span}
       </a>
     );

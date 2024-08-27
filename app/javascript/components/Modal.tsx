@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect } from "react";
+import React, { useCallback, MouseEvent, useEffect } from "react";
 
 import useModalStore from "../stores/useModalStore";
 
@@ -6,17 +6,14 @@ export default function Modal() {
   const component = useModalStore((state) => state.component);
   const close = useModalStore((state) => state.close);
 
-  const handleClose = (evt: KeyboardEvent | MouseEvent) => {
-    evt.stopPropagation();
-    evt.preventDefault();
-    close();
-  };
-
-  const handleKeypress = (evt: KeyboardEvent) => {
-    if (component && (evt.key == "Escape" || evt.keyCode === 27)) {
-      handleClose(evt);
-    }
-  };
+  const handleClose = useCallback(
+    (evt: KeyboardEvent | MouseEvent) => {
+      evt.stopPropagation();
+      evt.preventDefault();
+      close();
+    },
+    [close]
+  );
 
   useEffect(() => {
     if (component) {
@@ -27,11 +24,17 @@ export default function Modal() {
   }, [component]);
 
   useEffect(() => {
+    const handleKeypress = (evt: KeyboardEvent) => {
+      if (component && (evt.key == "Escape" || evt.keyCode === 27)) {
+        handleClose(evt);
+      }
+    };
+
     window.addEventListener("keypress", handleKeypress);
     return () => {
       window.removeEventListener("keypress", handleKeypress);
     };
-  }, []);
+  }, [component, handleClose]);
 
   if (component) {
     return (
