@@ -50,7 +50,7 @@ module PagesCore
         run("yarn add autoprefixer cssnano normalize.css postcss " \
             "postcss-calc postcss-cli postcss-import " \
             "postcss-import-ext-glob postcss-mixins postcss-preset-env " \
-            "postcss-url")
+            "postcss-image-inliner")
       end
 
       def configure_postcss

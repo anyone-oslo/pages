@@ -31,9 +31,10 @@
   }
 
   --column-width: calc(
-    (100% -
-     ((var(--gutter) * (var(--columns) - 1)) + (var(--outer-padding) * 2))) /
-    var(--columns)
+    (
+        100% -
+          ((var(--gutter) * (var(--columns) - 1)) + (var(--outer-padding) * 2))
+      ) / var(--columns)
   );
 
   /* @mixin grid-limit 1400px; */
@@ -44,8 +45,10 @@
 }
 
 .grid-overlay--active {
-  --grid-overlay-width: var(--grid-limit,
-                            calc(100% - (var(--outer-padding) * 2)));
+  --grid-overlay-width: var(
+    --grid-limit,
+    calc(100% - (var(--outer-padding) * 2))
+  );
   display: block;
   position: fixed;
   z-index: 9000;

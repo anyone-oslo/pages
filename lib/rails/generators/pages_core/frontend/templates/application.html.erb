@@ -1,11 +1,14 @@
 <!doctype html>
 <%= tag.html(lang: locale) do %>
   <%= head_tag do %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <%# default_meta_image "/images/facebook-share.png" %>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "application" %>
     <%= feed_tags %>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <%= tag.link(rel: "manifest", href: pwa_manifest_path(format: :json)) %>
   <% end %>
   <body>
     <% if Rails.env.development? %>

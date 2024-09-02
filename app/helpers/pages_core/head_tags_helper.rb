@@ -77,8 +77,14 @@ module PagesCore
        meta_keywords_tag,
        (tag.link(rel: "image_src", href: meta_image) if meta_image?),
        open_graph_tags,
-       (csrf_meta_tags unless static_cached?),
-       block_output].compact_blank
+       security_meta_tags,
+       block_output].flatten.compact_blank
+    end
+
+    def security_meta_tags
+      return if static_cached?
+
+      [csrf_meta_tags, csp_meta_tags]
     end
 
     def meta_description_tag
