@@ -179,9 +179,9 @@ export default function PageTree({ dir, locale, pages, permissions }: Props) {
   const dragEnd = useCallback(() => {
     if (dragging) {
       movePage(dragState.tree, dragState.id, dispatch);
-      setDragState(null);
       setDragging(false);
     }
+    setDragState(null);
   }, [dragging, dragState, dispatch]);
 
   useEffect(() => {
