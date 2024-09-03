@@ -23,7 +23,11 @@ module PagesCore
     private
 
     def page_param
-      params[:page].is_a?(String) ? params[:page] : 1
+      if params[:page].is_a?(String)
+        [Integer(params[:page], exception: false), 1].compact.max
+      else
+        1
+      end
     end
 
     def set_i18n_locale
