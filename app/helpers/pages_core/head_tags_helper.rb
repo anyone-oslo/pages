@@ -84,7 +84,7 @@ module PagesCore
     def security_meta_tags
       return if static_cached?
 
-      [csrf_meta_tags, csp_meta_tags]
+      [csrf_meta_tags, csp_meta_tag]
     end
 
     def meta_description_tag
