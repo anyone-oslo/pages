@@ -12,24 +12,20 @@
 @define-mixin font-scale-base {
   --font-scale-coeff: calc(
     (var(--font-scale-to) - var(--font-scale-from)) /
-      ((var(--font-scale-end) / 100) - (var(--font-scale-start) / 100))
+      (var(--font-scale-end) - var(--font-scale-start))
   );
 
   font-size: calc(
-    calc(
-        (
-            var(--font-scale-from) - (var(--font-scale-start) / 100) *
-              var(--font-scale-coeff)
-          ) / 16
-      ) * 1rem + var(--font-scale-coeff) * 1vw
+    (var(--font-scale-from) - var(--font-scale-start) * var(--font-scale-coeff)) /
+      16 * 1rem + var(--font-scale-coeff) * 1vw
   );
 }
 
 @define-mixin font-scale $from, $to, $start, $end {
   --font-scale-from: $from;
   --font-scale-to: $to;
-  --font-scale-start: $start;
-  --font-scale-end: $end;
+  --font-scale-start: calc($start / 100);
+  --font-scale-end: calc($end / 100);
 }
 
 /* ---- Definitions -------------------------------------------------------- */
