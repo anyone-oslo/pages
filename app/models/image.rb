@@ -11,21 +11,6 @@ class Image < ApplicationRecord
     attribute :caption
   end
 
-  def byline
-    ActiveSupport::Deprecation.warn "Image#byline is deprecated, use #caption"
-    caption
-  end
-
-  def byline?
-    ActiveSupport::Deprecation.warn "Image#byline? is deprecated, use #caption?"
-    caption?
-  end
-
-  def byline=(new_caption)
-    ActiveSupport::Deprecation.warn "Image#byline= is deprecated, use #caption="
-    self.caption = new_caption
-  end
-
   private
 
   def ensure_max_size

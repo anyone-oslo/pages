@@ -10,16 +10,6 @@ module PagesCore
       super(*attachment_params(args))
     end
 
-    def page_file_path(*args)
-      ActiveSupport::Deprecation.warn(
-        "#page_file_path is deprecated, use #attachment_path"
-      )
-      page_file = args.detect { |a| a.is_a?(PageFile) }
-      return attachment_path(page_file.attachment) if page_file
-
-      super
-    end
-
     private
 
     def attachment_params(args)

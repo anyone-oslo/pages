@@ -13,9 +13,7 @@ module PagesCore
       end
     end
 
-    def page_url(page_or_locale, page = nil, opts = {})
-      locale, page = page_url_locale_and_page(page_or_locale, page, opts)
-
+    def page_url(locale, page, opts = {})
       page.localize(locale) do |p|
         if p.redirects? && html_format?(opts)
           page_redirect_url(locale, p)
@@ -46,15 +44,6 @@ module PagesCore
 
     def escape_page_path(path)
       path.split("/").map { |s| CGI.escape(s) }.join("/")
-    end
-
-    def page_url_locale_and_page(page_or_locale, page, opts)
-      return [page_or_locale, page] if page
-
-      ActiveSupport::Deprecation.warn(
-        "Calling page_url without locale is deprecated"
-      )
-      [opts[:locale] || content_locale, page_or_locale]
     end
 
     def paginated_section(opts)
