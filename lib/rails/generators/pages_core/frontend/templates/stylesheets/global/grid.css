@@ -15,7 +15,7 @@
   --gutter: 2rem;
   --outer-padding: 2rem;
 
-  @media (--tablet) {
+  @media (--medium) {
     //--columns: 9;
     --gutter: 1.5rem;
     --outer-padding: 1.5rem;

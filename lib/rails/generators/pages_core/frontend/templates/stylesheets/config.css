@@ -1,5 +1,4 @@
-$breakpoint-mobile-small: 479;
+$breakpoint-mobile: 767;
 
-@custom-media --tablet screen and (max-width: 991px);
+@custom-media --medium screen and (max-width: 1100px);
 @custom-media --mobile screen and (max-width: 767px);
-@custom-media --mobile-small screen and (max-width: $(breakpoint-mobile-small)px);

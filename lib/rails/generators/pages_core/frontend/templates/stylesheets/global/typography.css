@@ -39,7 +39,7 @@
   --font-normal: normal 1.25rem/1.1 var(--font-sans);
   --font-small: normal 1rem/1.1 var(--font-sans);
 
-  @media (--tablet) {
+  @media (--medium) {
     /*
     --font-larger:   500     1.5rem/1.1 var(--font-sans);
     --font-large:    500     1.5rem/1.1 var(--font-sans);
@@ -54,10 +54,10 @@ html {
   @mixin font-scale-base;
   @mixin font-scale 16, 18, 1440, 1920;
   @media screen and (max-width: 1440px) {
-    @mixin font-scale 14, 16, $breakpoint-mobile-small, 1440;
+    @mixin font-scale 14, 16, $breakpoint-mobile, 1440;
   }
-  @media (--mobile-small) {
-    @mixin font-scale 12, 16, 1, $breakpoint-mobile-small;
+  @media (--mobile) {
+    @mixin font-scale 12, 16, 1, $breakpoint-mobile;
   }
 }
 
