@@ -19,7 +19,6 @@ Rails.application.routes.draw do
       post "search"
       post "preview"
     end
-    resources :files, controller: "page_files"
   end
 
   get "/:locale/pages/:id/:page" => "pages#show",
