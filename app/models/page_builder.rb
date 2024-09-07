@@ -49,11 +49,9 @@ class PageBuilder
   private
 
   def default_options
-    {
-      author: user,
+    { author: user,
       parent:,
       status: 2,
-      locale:
-    }
+      locale: }
   end
 end

@@ -35,8 +35,7 @@ module PagesCore
     def deliver_invite(invite)
       AdminMailer.invite(
         invite,
-        admin_invite_with_token_url(invite, invite.token,
-                                    host:, protocol:)
+        admin_invite_with_token_url(invite, invite.token, host:, protocol:)
       ).deliver_later
     end
   end

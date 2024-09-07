@@ -2,7 +2,7 @@
 
 class Autopublisher
   class << self
-    def run!(_options = {})
+    def run!
       if due_pages.any?
         PagesCore::CacheSweeper.once do
           due_pages.each do |p|

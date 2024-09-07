@@ -26,15 +26,13 @@ class Attachment < ApplicationRecord
     end
 
     def formats
-      {
-        "audio/mpeg" => :mp3,
+      { "audio/mpeg" => :mp3,
         "image/gif" => :gif,
         "image/jpeg" => :jpg,
         "image/jpg" => :jpg,
         "image/pjpeg" => :jpg,
         "image/png" => :png,
-        "application/pdf" => :pdf
-      }
+        "application/pdf" => :pdf }
     end
   end
 
@@ -53,11 +51,9 @@ class Attachment < ApplicationRecord
   end
 
   def filename_extension
-    if filename_extension?
-      filename.match(/\.([^.]+)$/)[1]
-    else
-      ""
-    end
+    return "" unless filename_extension?
+
+    filename.match(/\.([^.]+)$/)[1]
   end
 
   def filename_extension?

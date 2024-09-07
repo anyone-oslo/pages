@@ -7,13 +7,11 @@ module PagesCore
 
       module ClassMethods
         def status_labels
-          {
-            0 => "Draft",
+          { 0 => "Draft",
             1 => "Reviewed",
             2 => "Published",
             3 => "Hidden",
-            4 => "Deleted"
-          }
+            4 => "Deleted" }
         end
       end
 

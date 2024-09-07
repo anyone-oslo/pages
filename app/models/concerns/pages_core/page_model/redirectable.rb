@@ -9,8 +9,7 @@ module PagesCore
 
       included do
         validates(:redirect_to,
-                  format: { with: %r{\A(/|https?://).+\z},
-                            allow_blank: true })
+                  format: { with: %r{\A(/|https?://).+\z}, allow_blank: true })
       end
 
       # Returns boolean true if page has a valid redirect

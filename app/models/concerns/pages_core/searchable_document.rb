@@ -26,10 +26,8 @@ module PagesCore
         SearchDocument.transaction do
           record.search_documents.where.not(locale: locales).destroy_all
           locales.each do |locale|
-            update_index(
-              locale,
-              localized_record(locale).search_document_attributes
-            )
+            update_index(locale,
+                         localized_record(locale).search_document_attributes)
           end
         end
       end
