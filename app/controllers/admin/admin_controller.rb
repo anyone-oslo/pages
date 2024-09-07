@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# All admin controllers inherit Admin::AdminController, which provides layout,
-# authorization and other common code for the Admin set of controllers.
-module PagesCore
+module Admin
   class AdminController < ::ApplicationController
     protect_from_forgery with: :exception
 
