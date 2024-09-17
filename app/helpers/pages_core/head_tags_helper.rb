@@ -75,6 +75,7 @@ module PagesCore
        tag.title(document_title),
        meta_description_tag,
        meta_keywords_tag,
+       meta_robots_tag,
        (tag.link(rel: "image_src", href: meta_image) if meta_image?),
        open_graph_tags,
        security_meta_tags,
@@ -97,6 +98,12 @@ module PagesCore
       return unless meta_keywords?
 
       tag.meta(name: "keywords", content: meta_keywords&.strip)
+    end
+
+    def meta_robots_tag
+      return unless @page&.skip_index?
+
+      tag.meta(name: "robots", content: "noindex")
     end
   end
 end

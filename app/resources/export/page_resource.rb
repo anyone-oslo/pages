@@ -7,7 +7,7 @@ module Export
     attributes :id, :locale
     attributes(*PagesCore::Templates::TemplateConfiguration.all_blocks)
     attributes :created_at, :published_at, :pinned, :template, :redirect_to,
-               :starts_at, :ends_at, :all_day
+               :starts_at, :ends_at, :all_day, :skip_index
 
     has_many :attachments, resource: Export::AttachmentResource
 

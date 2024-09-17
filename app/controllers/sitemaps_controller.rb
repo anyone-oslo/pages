@@ -43,7 +43,7 @@ class SitemapsController < ApplicationController
     ([Page.root.try(:localize, I18n.default_locale)] +
      locales.flat_map do |locale|
        Page.published.localized(locale).includes(:parent)
-     end).compact
+     end).compact.reject(&:skip_index?)
   end
 
   def page_record_url(record)

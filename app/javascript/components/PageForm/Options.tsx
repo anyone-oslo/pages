@@ -44,6 +44,10 @@ export default function Options(props: OptionsProps) {
     setShowAdvanced(!showAdvanced);
   };
 
+  const toggleSkipIndex = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "update", payload: { skip_index: evt.target.checked } });
+  };
+
   return (
     <div className="page-options">
       <LabelledField
@@ -142,6 +146,21 @@ export default function Options(props: OptionsProps) {
                 checked={page.news_page}
               />{" "}
               Show in news
+            </label>
+          </LabelledField>
+          <LabelledField
+            htmlFor="page_skip_index"
+            label="Search"
+            errors={errorsOn(page, "skip_index")}>
+            <label className="check-box">
+              <input
+                id="page_skip_index"
+                name="page[skip_index]"
+                type="checkbox"
+                checked={page.skip_index}
+                onChange={toggleSkipIndex}
+              />{" "}
+              Disable search indexing
             </label>
           </LabelledField>
           <LabelledField

@@ -23,7 +23,7 @@ module PagesCore
     def page_static_attributes
       %i[template user_id status feed_enabled published_at redirect_to
          news_page unique_name pinned parent_page_id serialized_tags
-         meta_image_id starts_at ends_at all_day]
+         meta_image_id starts_at ends_at all_day skip_index]
     end
   end
 end

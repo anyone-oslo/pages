@@ -89,6 +89,7 @@ export default function pageParams(state: PageEditor.State, options: Options) {
     path_segment: page.path_segment,
     meta_image_id: page.meta_image.image && page.meta_image.image.id,
     parent_page_id: page.parent_page_id,
+    skip_index: page.skip_index,
     page_files_attributes: pageFiles(files),
     page_images_attributes: pageImages(images)
   };

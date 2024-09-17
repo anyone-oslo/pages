@@ -51,6 +51,7 @@ export type Resource = BaseResource & {
   page_images: Images.Record[];
   path_segment: MaybeLocalizedValue;
   redirect_to: string;
+  skip_index: boolean;
   starts_at: Date;
   tags_and_suggestions: string[];
   template: string;
