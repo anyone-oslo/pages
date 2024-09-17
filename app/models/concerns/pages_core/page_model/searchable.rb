@@ -7,7 +7,7 @@ module PagesCore
 
       def search_document_attributes
         super.merge(
-          published: published?,
+          published: published? && !skip_index?,
           name:,
           description: try(&:meta_description?) ? meta_description : excerpt,
           # content: "",

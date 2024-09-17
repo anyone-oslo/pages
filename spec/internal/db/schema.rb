@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_08_145300) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_17_142300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -159,6 +159,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_145300) do
     t.datetime "starts_at", precision: nil
     t.datetime "ends_at", precision: nil
     t.boolean "all_day", default: false, null: false
+    t.boolean "skip_index", default: false, null: false
     t.index ["ends_at"], name: "index_pages_on_ends_at"
     t.index ["parent_page_id"], name: "index_pages_on_parent_page_id"
     t.index ["position"], name: "index_pages_on_position"
@@ -226,5 +227,4 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_145300) do
     t.string "session_token", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
-
 end

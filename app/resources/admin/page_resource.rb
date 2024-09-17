@@ -9,7 +9,7 @@ module Admin
 
     attributes :id, :starts_at, :ends_at, :all_day, :status, :published_at,
                :pinned, :template, :unique_name, :feed_enabled, :news_page,
-               :parent_page_id, :user_id, :redirect_to
+               :parent_page_id, :user_id, :redirect_to, :skip_index
 
     has_many :page_images, resource: Admin::PageImageResource
     has_many :page_files, resource: Admin::PageFileResource
