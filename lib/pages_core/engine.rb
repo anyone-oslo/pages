@@ -82,6 +82,10 @@ module PagesCore
       end
     end
 
+    initializer "pages_core.deprecator" do |app|
+      app.deprecators[:pages_core] = PagesCore.deprecator
+    end
+
     # React configuration
     initializer :react do |app|
       app.config.react.jsx_transform_options = {

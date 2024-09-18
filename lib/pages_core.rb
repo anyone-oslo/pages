@@ -68,6 +68,10 @@ module PagesCore
       VERSION
     end
 
+    def deprecator
+      @deprecator ||= ActiveSupport::Deprecation.new("3.17", "PagesCore")
+    end
+
     def plugin_root
       Pathname.new(File.dirname(__FILE__)).join("..").expand_path
     end
