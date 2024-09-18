@@ -6,7 +6,7 @@ module PagesCore
     include ApplicationHelper
 
     before_action :set_i18n_locale
-    helper_method :page_param
+    helper_method :document_title, :page_param
 
     # Loads @root_pages and @rss_feeds. To automatically load these in your
     # own controllers, add the following line to your controller definition:
@@ -21,6 +21,11 @@ module PagesCore
     end
 
     private
+
+    def document_title(*args)
+      @document_title = args.first if args.any?
+      @document_title
+    end
 
     def page_param
       if params[:page].is_a?(String)

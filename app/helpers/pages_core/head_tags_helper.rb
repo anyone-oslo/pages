@@ -2,108 +2,105 @@
 
 module PagesCore
   module HeadTagsHelper
-    # Sets a document title.
-    #
-    #  document_title "Dashboard"
-    #
-    def document_title(*args)
-      if args.any?
-        @document_title = args.first
-      else
-        safe_join([@document_title, PagesCore.config(:site_name)].compact.uniq,
-                  " - ")
-      end
+    def document_title_tag(separator: " - ")
+      parts = [document_title, PagesCore.config.site_name]
+      tag.title(parts.compact_blank.uniq.join(separator))
     end
 
-    # Returns true if document title has been set.
-    def document_title?
-      @document_title ? true : false
-    end
-
-    # Generates links for all RSS feeds. Specify
-    # :include_hidden to also include hidden pages.
-    #
-    #  feed_tags
-    #  feed_tags include_hidden: true
-    #
-    def feed_tags(options = {})
-      feeds = Page.enabled_feeds(content_locale, options)
-      return unless feeds.any?
-
-      feed_tags = [
-        rss_link_tag(PagesCore.config(:site_name),
-                     pages_url(content_locale, format: :rss))
-      ] + feeds.map do |page|
-        rss_link_tag("#{PagesCore.config(:site_name)}: #{page.name}",
-                     page_url(content_locale, page, format: :rss))
-      end
-      safe_join(feed_tags, "\n")
-    end
-
-    # Outputs a HTML5 doctype and head tags, with document title
-    # and relevant meta tags. Takes a block which will be placed
-    # inside <head>.
-    #
-    #  <%= head_tag do %>
-    #    <%= stylesheet_link_tag "application" %>
-    #    <%= javascript_include_tag "application" %>
-    #    <%= feed_tags %>
-    #  <% end %>
-    #
     def head_tag(&)
-      # The block output must be captured first
-      block_output = block_given? ? capture(&) : nil
+      PagesCore.deprecator.warn(
+        "head_tag helper is deprecated and will be removed"
+      )
 
-      tag.head { safe_join(head_tag_contents(block_output), "\n") }
+      tag.head do
+        safe_join([document_title_tag,
+                   pages_meta_tags(instance_variable_get(:@page)),
+                   ([csrf_meta_tags, csp_meta_tag] unless static_cached?),
+                   (block_given? ? capture(&) : nil)].flatten.compact_blank,
+                  "\n")
+      end
     end
 
-    # Generates a link to an RSS feed.
-    #
-    #  rss_link_tag "My feed", "feed.rss"
-    #
-    def rss_link_tag(title, href)
-      tag.link(rel: "alternate",
-               type: "application/rss+xml",
-               title:,
-               href:)
+    def meta_image_url(image, size: "1200x")
+      return if image.blank?
+      return image unless image.is_a?(Image)
+
+      dynamic_image_url(image, size:, only_path: false)
+    end
+
+    def pages_meta_tags(page = nil)
+      safe_join(
+        [(tag.meta(name: "robots", content: "noindex") if page&.skip_index?),
+         meta_description_tag(meta_description(page)),
+         meta_image_tag(meta_image(page)),
+         open_graph_tags(page)].compact_blank, "\n"
+      )
     end
 
     private
 
-    def head_tag_contents(block_output)
-      [tag.meta(charset: "utf-8"),
-       tag.title(document_title),
-       meta_description_tag,
-       meta_keywords_tag,
-       meta_robots_tag,
-       (tag.link(rel: "image_src", href: meta_image) if meta_image?),
-       open_graph_tags,
-       security_meta_tags,
-       block_output].flatten.compact_blank
+    def meta_description(record = nil)
+      description = content_for(:meta_description)
+      description ||= record.meta_description if record.try(&:meta_description?)
+      description ||= record.excerpt if record.try(&:excerpt?)
+      strip_tags(description)&.strip
     end
 
-    def security_meta_tags
-      return if static_cached?
+    def meta_description_tag(content)
+      return if content.blank?
 
-      [csrf_meta_tags, csp_meta_tag]
+      tag.meta(name: "description", content:)
     end
 
-    def meta_description_tag
-      return unless meta_description?
-
-      tag.meta(name: "description", content: meta_description&.strip)
+    def meta_image(record = nil)
+      meta_image_url(
+        content_for(:meta_image) ||
+          record.try(:meta_image) || record.try(:image)
+      )
     end
 
-    def meta_keywords_tag
-      return unless meta_keywords?
+    def meta_image_tag(href)
+      return if href.blank?
 
-      tag.meta(name: "keywords", content: meta_keywords&.strip)
+      tag.link(rel: "image_src", href:)
     end
 
-    def meta_robots_tag
-      return unless @page&.skip_index?
+    def open_graph_description(record = nil)
+      if content_for?(:open_graph_description)
+        content_for(:open_graph_description)
+      elsif record.try(:open_graph_description?)
+        record.open_graph_description
+      else
+        meta_description(record)
+      end
+    end
 
-      tag.meta(name: "robots", content: "noindex")
+    def open_graph_properties(record = nil)
+      { type: "website",
+        site_name: PagesCore.config(:site_name),
+        title: open_graph_title(record),
+        image: meta_image(record),
+        description: open_graph_description(record)&.strip,
+        url: request.url }
+    end
+
+    def open_graph_tags(record = nil)
+      safe_join(
+        open_graph_properties(record)
+          .compact
+          .map { |name, content| tag.meta(property: "og:#{name}", content:) },
+        "\n"
+      )
+    end
+
+    def open_graph_title(record = nil)
+      if content_for?(:open_graph_title)
+        content_for(:open_graph_title)
+      elsif record.try(:open_graph_title?)
+        record.open_graph_title
+      else
+        document_title
+      end
     end
   end
 end

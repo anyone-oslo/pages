@@ -5,7 +5,6 @@ module PagesCore
     class PagesController < ::FrontendController
       include PagesCore::FrontendHelper
       include PagesCore::Templates::ControllerActions
-      include PagesCore::HeadTagsHelper
 
       include PagesCore::PreviewPagesController
       include PagesCore::RssController
@@ -75,7 +74,7 @@ module PagesCore
       def render_page
         return if redirect_page(@page)
 
-        unless document_title?
+        if document_title.blank?
           document_title(@page.meta_title? ? @page.meta_title : @page.name)
         end
 

@@ -5,10 +5,7 @@
 module PagesCore
   module ApplicationHelper
     include PagesCore::AttachmentsHelper
-    include PagesCore::HeadTagsHelper
     include PagesCore::ImagesHelper
-    include PagesCore::MetaTagsHelper
-    include PagesCore::OpenGraphTagsHelper
     include PagesCore::PagePathHelper
 
     def page_link(page, options = {})
