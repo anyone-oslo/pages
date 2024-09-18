@@ -6,7 +6,6 @@ require "fileutils"
 require "find"
 require "open-uri"
 require "pathname"
-require "ostruct"
 
 # Rails
 require "rails"
