@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :pages, path: ":locale/pages" do
     collection do
       get "search"
+      get "sitemap"
       post "search"
       post "preview"
     end

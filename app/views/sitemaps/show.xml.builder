@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 xml.instruct!
-xml.urlset xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" do |urlset|
-  @entries.each do |entry|
-    urlset.url do |url|
-      url.loc entry[:loc]
-      url.lastmod entry[:lastmod]
+xml.sitemapindex xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" do |index|
+  @sitemaps.each do |url|
+    index.sitemap do |sitemap|
+      sitemap.loc(url)
     end
   end
 end
