@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   resources :pages, path: ":locale/pages" do
     collection do
       get "search"
-      get "sitemap"
       post "search"
       post "preview"
     end
@@ -32,7 +31,9 @@ Rails.application.routes.draw do
       locale: /\w\w\w/
 
   # Sitemap
-  resource :sitemap, only: [:show]
+  resource :sitemap, only: [:show] do
+    get :pages, path: ":locale/pages"
+  end
 
   namespace :admin do
     get "users/login" => redirect("/admin/login")

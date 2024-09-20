@@ -86,6 +86,10 @@ module PagesCore
       app.deprecators[:pages_core] = PagesCore.deprecator
     end
 
+    initializer "pages_core.sitemap" do |_app|
+      PagesCore::Sitemap.register { |loc| pages_sitemap_url(loc, format: :xml) }
+    end
+
     # React configuration
     initializer :react do |app|
       app.config.react.jsx_transform_options = {

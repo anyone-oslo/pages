@@ -2,13 +2,33 @@
 
 class SitemapsController < ApplicationController
   include PagesCore::PagePathHelper
-  static_cache :show
+  static_cache :show, :pages
 
   def show
-    @sitemaps = locales.map { |l| sitemap_pages_url(l, format: :xml) }
+    @sitemaps = PagesCore::Sitemap.sitemaps.flat_map do |entry|
+      if entry.is_a?(Proc)
+        locales.map { |l| instance_exec(l, &entry) }
+      else
+        entry
+      end
+    end.compact_blank.uniq
+  end
+
+  def pages
+    respond_to do |format|
+      format.xml { render xml: pages_sitemap.to_xml }
+    end
   end
 
   private
+
+  def pages_sitemap
+    pages = Page.published.where.not(skip_index: true).localized(content_locale)
+
+    PagesCore::Sitemap.new do |map|
+      pages.each { |p| map.add(page_url(p.locale, p), lastmod: p.updated_at) }
+    end
+  end
 
   def locales
     if PagesCore.config.locales

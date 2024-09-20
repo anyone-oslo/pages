@@ -8,14 +8,13 @@ module PagesCore
 
       include PagesCore::Pages::PreviewController
       include PagesCore::Pages::RssController
-      include PagesCore::Pages::SitemapController
 
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
       before_action :find_page, only: %i[show]
       before_action :require_page, only: %i[show]
       before_action :canonicalize_url, only: [:show]
-      static_cache :index, :show, :sitemap
+      static_cache :index, :show
 
       def index
         respond_to do |format|

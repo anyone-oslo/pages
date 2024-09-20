@@ -11,6 +11,17 @@ module PagesCore
       yield(self) if block_given?
     end
 
+    class << self
+      def register(url = nil, &block)
+        sitemaps << url unless url.nil?
+        sitemaps << block unless block.nil?
+      end
+
+      def sitemaps
+        @sitemaps ||= []
+      end
+    end
+
     def add(url, options = {})
       entries[url] = options
     end
