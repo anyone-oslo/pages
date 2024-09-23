@@ -30,10 +30,10 @@ Rails.application.routes.draw do
   get "pages/:locale/*glob" => redirect("/%{locale}/pages/%{glob}"),
       locale: /\w\w\w/
 
-  # Sitemap
-  resource :sitemap, only: [:show] do
-    get :pages, path: ":locale/pages"
-  end
+  # Sitemaps
+  get("sitemap" => "pages_core/sitemaps#index", as: :sitemap_index)
+  get("/sitemap-pages-:locale" => "pages_core/sitemaps#pages",
+      as: :pages_sitemap)
 
   namespace :admin do
     get "users/login" => redirect("/admin/login")
