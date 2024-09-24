@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ErrorsController < ApplicationController
+  include PagesCore::DocumentTitleController
+
   layout "errors"
 
   def show
