@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment } from "react";
 
 interface LabelledFieldProps {
   label: string;
@@ -21,10 +21,10 @@ export default function LabelledField(props: LabelledFieldProps) {
       <label htmlFor={htmlFor}>
         {label}
         {errors && (
-          <React.Fragment>
+          <Fragment>
             {" "}
             <span className="error">{errors[errors.length - 1]}</span>
-          </React.Fragment>
+          </Fragment>
         )}
       </label>
       {description && <p className="description">{description}</p>}

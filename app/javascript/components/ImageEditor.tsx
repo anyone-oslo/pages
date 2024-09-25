@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import useModalStore from "../stores/useModalStore";
 import { putJson } from "../lib/request";

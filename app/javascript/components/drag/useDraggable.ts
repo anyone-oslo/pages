@@ -1,4 +1,4 @@
-import React, { DragEvent, useEffect, useRef } from "react";
+import { DragEvent, useEffect, useRef } from "react";
 
 import * as Drag from "../../types/Drag";
 

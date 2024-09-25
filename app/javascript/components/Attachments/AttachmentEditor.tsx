@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";

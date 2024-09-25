@@ -1,4 +1,3 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import RichTextArea from "../components/RichTextArea";
 import readyHandler from "../lib/readyHandler";

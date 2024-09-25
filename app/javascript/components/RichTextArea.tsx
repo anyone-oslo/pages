@@ -1,4 +1,4 @@
-import React, { useState, useRef, ChangeEvent } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 import RichTextToolbarButton from "./RichTextToolbarButton";
 
 type Props = {

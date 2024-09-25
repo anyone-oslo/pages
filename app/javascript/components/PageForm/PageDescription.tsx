@@ -1,5 +1,4 @@
-import React from "react";
-
+import { Fragment } from "react";
 import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
 
@@ -35,10 +34,10 @@ export default function PageDescription(props: PageDescriptionProps) {
       <LocaleLinks state={state} dispatch={dispatch} />
       <h3>
         {page.ancestors.map((p) => (
-          <React.Fragment key={p.id}>
+          <Fragment key={p.id}>
             {editLink(locale, p)}
             {" » "}
-          </React.Fragment>
+          </Fragment>
         ))}
         {page.id ? editLink(locale, page) : "New Page"}
       </h3>

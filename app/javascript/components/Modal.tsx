@@ -1,4 +1,4 @@
-import React, { useCallback, MouseEvent, useEffect } from "react";
+import { useCallback, MouseEvent, useEffect } from "react";
 
 import useModalStore from "../stores/useModalStore";
 

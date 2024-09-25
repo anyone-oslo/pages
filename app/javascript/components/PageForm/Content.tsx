@@ -1,5 +1,4 @@
-import React from "react";
-
+import { Fragment } from "react";
 import * as PageEditor from "../../types/PageEditor";
 import * as Tags from "../../types/Tags";
 import { MaybeLocalizedValue } from "../../types";
@@ -27,7 +26,7 @@ export default function Content(props: Props) {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       {templateConfig.blocks.map((b) => (
         <Block
           key={b.name}
@@ -49,6 +48,6 @@ export default function Content(props: Props) {
           />
         </LabelledField>
       )}
-    </React.Fragment>
+    </Fragment>
   );
 }

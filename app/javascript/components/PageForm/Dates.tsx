@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as PageEditor from "../../types/PageEditor";
 
 import DateRangeSelect from "../DateRangeSelect";

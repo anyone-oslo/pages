@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import { Fragment, useState, ChangeEvent } from "react";
 
 import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
@@ -127,7 +127,7 @@ export default function Options(props: OptionsProps) {
         </a>
       </p>
       {showAdvanced && (
-        <React.Fragment>
+        <Fragment>
           <LabelledField label="Subpages">
             <label className="check-box">
               <input
@@ -187,7 +187,7 @@ export default function Options(props: OptionsProps) {
               onChange={handleChange("redirect_to")}
             />
           </LabelledField>
-        </React.Fragment>
+        </Fragment>
       )}
       {url && (
         <LabelledField label="Page link">

@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import { MouseEvent } from "react";
 
 import * as Crop from "../../types/Crop";
 import * as Images from "../../types/Images";

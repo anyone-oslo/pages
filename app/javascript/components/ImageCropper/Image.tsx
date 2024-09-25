@@ -1,4 +1,3 @@
-import React from "react";
 import ReactCrop from "react-image-crop";
 
 import * as Crop from "../../types/Crop";

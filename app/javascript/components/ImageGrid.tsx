@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as Images from "../types/Images";
 import useImageGrid from "./ImageGrid/useImageGrid";
 import Grid from "./ImageGrid/Grid";

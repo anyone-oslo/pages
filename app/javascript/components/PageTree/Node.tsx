@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { Fragment, useRef } from "react";
 
 import * as Tree from "./tree";
 
@@ -111,7 +111,7 @@ export default function Node(props: Props) {
             <CollapsedLabel {...props} />
             <span className="actions">
               {!("root" in page) && (
-                <React.Fragment>
+                <Fragment>
                   {permitted("edit") && (
                     <Button
                       label={page.status != 2 ? "Publish" : "Hide"}
@@ -138,7 +138,7 @@ export default function Node(props: Props) {
                       onClick={handleDelete}
                     />
                   )}
-                </React.Fragment>
+                </Fragment>
               )}
               {permitted("create") && (
                 <Button
@@ -156,7 +156,7 @@ export default function Node(props: Props) {
       </div>
 
       {!node.collapsed && visibleChildNodes(state, id).length > 0 && (
-        <React.Fragment>
+        <Fragment>
           <div className="children" style={{ paddingLeft: `${paddingLeft}px` }}>
             {visibleChildNodes(state, id).map((childId) => {
               return <Node {...props} id={childId} key={childId} />;
@@ -170,7 +170,7 @@ export default function Node(props: Props) {
               onClick={handleAddChild}
             />
           )}
-        </React.Fragment>
+        </Fragment>
       )}
     </div>
   );

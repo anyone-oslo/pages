@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent } from "react";
+import { ChangeEvent, MouseEvent } from "react";
 
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";

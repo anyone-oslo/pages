@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as Attachments from "../../types/Attachments";
 import { Locale } from "../../types";
 

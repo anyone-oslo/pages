@@ -1,4 +1,4 @@
-import React, { DragEvent, MouseEvent, useState } from "react";
+import { DragEvent, MouseEvent, useState } from "react";
 
 import useToastStore from "../stores/useToastStore";
 import { post } from "../lib/request";

@@ -1,4 +1,4 @@
-import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
+import { MouseEvent, TouchEvent, useRef, useState } from "react";
 
 import * as Crop from "../../types/Crop";
 

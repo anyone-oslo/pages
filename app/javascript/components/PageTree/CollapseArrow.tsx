@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as Tree from "./tree";
 import { State, Action, visibleChildNodes } from "./usePageTree";
 

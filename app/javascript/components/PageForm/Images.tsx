@@ -1,5 +1,3 @@
-import React from "react";
-
 import { GridState } from "../../types/Images";
 import { Locale } from "../../types";
 

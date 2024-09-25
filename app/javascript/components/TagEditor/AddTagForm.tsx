@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
 
 import * as Tags from "../../types/Tags";
 

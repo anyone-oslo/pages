@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import { MouseEvent } from "react";
 import copyToClipboard from "../../lib/copyToClipboard";
 import AttachmentEditor from "./AttachmentEditor";
 import useModalStore from "../../stores/useModalStore";

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { csrfToken } from "../../lib/request";
 import * as PageEditor from "../../types/PageEditor";
 

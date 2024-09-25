@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import FileUploadButton from "../FileUploadButton";
 import DragElement from "./DragElement";
 import FilePlaceholder from "./FilePlaceholder";

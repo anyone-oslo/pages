@@ -1,5 +1,3 @@
-import React from "react";
-
 interface TabPanelProps {
   active: boolean;
   children: React.ReactNode;

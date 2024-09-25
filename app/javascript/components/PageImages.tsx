@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as Images from "../types/Images";
 import { Locale } from "../types";
 

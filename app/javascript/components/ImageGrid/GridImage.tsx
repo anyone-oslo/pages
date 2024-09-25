@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 import copyToClipboard from "../../lib/copyToClipboard";
 import useToastStore from "../../stores/useToastStore";

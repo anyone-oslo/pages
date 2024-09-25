@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import { RefObject } from "react";
 
 import * as Drag from "../../types/Drag";
 import * as Images from "../../types/Images";

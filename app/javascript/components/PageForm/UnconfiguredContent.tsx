@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment } from "react";
 
 import * as PageEditor from "../../types/PageEditor";
 import { MaybeLocalizedValue } from "../../types";
@@ -21,7 +21,7 @@ export default function UnconfiguredContent(props: Props) {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <p>
         This page has additional content fields not enabled by the selected
         template.
@@ -37,6 +37,6 @@ export default function UnconfiguredContent(props: Props) {
           value={blockValue(state, b)}
         />
       ))}
-    </React.Fragment>
+    </Fragment>
   );
 }

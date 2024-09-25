@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment } from "react";
 
 import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
@@ -29,7 +29,7 @@ export default function Metadata(props: Props) {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <PathSegment state={state} dispatch={dispatch} />
       <LabelledField
         htmlFor="page_meta_image_id"
@@ -62,6 +62,6 @@ export default function Metadata(props: Props) {
           value={blockValue(state, b)}
         />
       ))}
-    </React.Fragment>
+    </Fragment>
   );
 }

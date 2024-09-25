@@ -1,5 +1,3 @@
-import React from "react";
-
 import { allTags, isEnabled } from "./useTags";
 
 import AddTagForm from "./AddTagForm";

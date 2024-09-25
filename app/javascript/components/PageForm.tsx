@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { putJson, postJson } from "../lib/request";
 import useToastStore from "../stores/useToastStore";

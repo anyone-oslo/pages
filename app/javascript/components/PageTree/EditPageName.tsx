@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import * as Tree from "./tree";
 import { State, Action, updatePage } from "./usePageTree";

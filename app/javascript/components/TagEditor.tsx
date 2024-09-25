@@ -1,5 +1,3 @@
-import React from "react";
-
 import useTags from "./TagEditor/useTags";
 import Editor from "./TagEditor/Editor";
 import * as Tags from "../types/Tags";

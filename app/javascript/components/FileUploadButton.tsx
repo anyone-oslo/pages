@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useRef } from "react";
+import { ChangeEvent, MouseEvent, useRef } from "react";
 
 interface Props {
   callback: (files: File[]) => void;

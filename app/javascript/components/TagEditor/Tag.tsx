@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as Tags from "../../types/Tags";
 
 interface Props {
