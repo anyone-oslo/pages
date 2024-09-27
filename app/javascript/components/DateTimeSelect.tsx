@@ -37,11 +37,11 @@ function timeToString(time: Date): string {
   return time.toTimeString().slice(0, 5);
 }
 
-// Returns an array with years from 2000 to 10 years from now.
-function yearOptions(): number[] {
-  const start = 2000;
+function yearOptions(year: number): number[] {
+  const start = Math.min(new Date().getFullYear() - 100, year - 10);
+  const end = Math.max(new Date().getFullYear() + 100, year + 10);
   const years: number[] = [];
-  for (let i = start; i <= new Date().getFullYear() + 11; i++) {
+  for (let i = start; i <= end; i++) {
     years.push(i);
   }
   return years;
@@ -114,7 +114,7 @@ export default function DateTimeSelect(props: DateTimeSelectProps) {
         value={value.getFullYear()}
         onChange={(e) => handleChange({ year: e.target.value })}
         disabled={disabled}>
-        {yearOptions().map((y) => (
+        {yearOptions(value.getFullYear()).map((y) => (
           <option key={y} value={y}>
             {y}
           </option>
