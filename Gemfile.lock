@@ -443,7 +443,7 @@ GEM
     unicode_utils (1.4.0)
     useragent (0.16.10)
     vector2d (2.2.4)
-    webrick (1.8.1)
+    webrick (1.8.2)
     websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
