@@ -1,3 +1,3 @@
-js: yarn build --watch
-tsc: yarn tsc --watch
-css: yarn build:css --watch
+js: pnpm build --watch
+tsc: pnpm tsc --watch
+css: pnpm build:css --watch

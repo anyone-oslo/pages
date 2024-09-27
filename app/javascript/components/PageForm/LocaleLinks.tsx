@@ -15,7 +15,7 @@ export default function LocaleLinks(props: Props) {
   };
 
   if (!locales) {
-    return "";
+    return;
   }
 
   return (

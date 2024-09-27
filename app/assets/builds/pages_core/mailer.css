@@ -26,7 +26,39 @@ p {
   margin: 0 0 1rem 0;
 }
 
-h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:last-child, ul:last-child, ol:last-child, p:last-child {
+h1:last-child {
+    margin-bottom: 0rem;
+  }
+
+h2:last-child {
+    margin-bottom: 0rem;
+  }
+
+h3:last-child {
+    margin-bottom: 0rem;
+  }
+
+h4:last-child {
+    margin-bottom: 0rem;
+  }
+
+h5:last-child {
+    margin-bottom: 0rem;
+  }
+
+h6:last-child {
+    margin-bottom: 0rem;
+  }
+
+ul:last-child {
+    margin-bottom: 0rem;
+  }
+
+ol:last-child {
+    margin-bottom: 0rem;
+  }
+
+p:last-child {
     margin-bottom: 0rem;
   }
 
@@ -66,14 +98,14 @@ a.button {
   text-decoration: none;
 }
 
-button.primary, a.button.primary {
+button.primary:not(.does-not-exist),a.primary.button {
     background: #111;
     border-color: #111;
     color: #fff;
     box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.2);
   }
 
-button.primary:hover, a.button.primary:hover {
+button.primary:not(.does-not-exist):hover,a.primary.button:hover {
       box-shadow: inset 0px 0.75em 0.75em rgba(255, 255, 255, 0.1);
     }
 
@@ -82,7 +114,11 @@ table {
   margin: 1.5rem 0;
 }
 
-.buttons:last-child, table:last-child {
+.buttons:last-child {
+    margin-bottom: 0px;
+  }
+
+table:not(.does-not-exist):last-child {
     margin-bottom: 0px;
   }
 
@@ -91,8 +127,7 @@ table {
   border-top: 1px solid #ddd;
 }
 
-table th,
-  table td {
+table th,table td {
     text-align: left;
     padding: 0.5rem 1rem 0.5rem 0;
     border-bottom: 1px solid #ddd;
