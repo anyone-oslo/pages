@@ -5,7 +5,7 @@ module.exports = {
     require("postcss-mixins"),
     require("postcss-url")(
       {
-        filter: "**/webfonts/fa-*",
+        filter: /webfonts\/fa-/,
         url: "copy",
         basePath: "../../../../node_modules/@fortawesome/fontawesome-free/css",
         assetsPath: "../fonts",
