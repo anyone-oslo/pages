@@ -7699,7 +7699,7 @@ form .page-dates .remove-dates {
   display: table;
   padding: 1px;
   padding-right: 22px;
-  background: transparent url("pages/admin/warning-icon.gif") right 5px
+  background: transparent url('data:image/gif;base64,R0lGODlhEAAPAOZ/AO/iiv/8HOzae9i+dRATQ//+Affy6susVfLq8cKbKfXsIgAALtq+NsaoHOzbY9y9Ye7djerZtufPaQYEFMagLsShI+zbcvjyAfTqD/v4AObVsfnod//1m+TNc+jWkujSbP/0k8qpHv3vgty+Wf3qL//0K/PjUf/vUO7i0ty6VcmrGP/3HPv28v3hZffqOfXqr/r4//7+/9fEAOPHftO8PPDgSevaaO7cavLXKOreDcClKti4VO3fWf/1SMioGaiTJ9/QJUQzACglIu/WcO/iktOxU9S4VIp6IeLOLvv49PDUPd/CXPbpVf3sWsKjENzHk/LnJvXt3PDdW7SsJP/1EtvHAPLqAPLjl/38AVpSKHFmHmNjNvfppvjpofv5+Ond0fz7/c7EKjAzQ//4Od/DDdq6RebPezksCdm7PPnpRurUnv//CezZbO/ebe/hwvv17OvbANbAbPjrsN7BGvntusSgKv/of+viCfz3BN69UevYX9m9hP/8S///////AP///yH5BAEAAH8ALAAAAAAQAA8AAAfCgH+CgyxFFBGDiYoDHi87BoqKbiN0XB8DfZGCMSlddi0iaCiafWpDEkFnDE1GXpFveRw/EwtHfEgakTMSIDoTBD9jUAwwiVFlRBtKQgRAJQpwT4N9DwICNz1ZYisKGAVVCH99EUsAbHonYVMBGBdYGXFgSQ8QAjY8aXNkVBcZBX53vuzpcMWCAyY4aOXwg8WPQxoJ5EAwaIKEli14HGqUMcAMgDZSargIsOafRitxDBxIQKFOhQohVPhQoaKBkwMIAgEAOw==') right 5px
     no-repeat;
 }
 
@@ -7837,7 +7837,7 @@ button.transparent:hover,select.transparent:hover,button.transparent:focus,selec
 
 select {
   padding-right: 2em;
-  background-image: url("pages/admin/angle-down-solid.svg");
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20448%20512%22%3E%3Cpath%20d%3D%22M201.4%20374.6c12.5%2012.5%2032.8%2012.5%2045.3%200l160-160c12.5-12.5%2012.5-32.8%200-45.3s-32.8-12.5-45.3%200L224%20306.7%2086.6%20169.4c-12.5-12.5-32.8-12.5-45.3%200s-12.5%2032.8%200%2045.3l160%20160z%22%2F%3E%3C%2Fsvg%3E');
   background-position: top 50% right 0.5em;
   background-repeat: no-repeat;
   background-size: 1em 1em;
@@ -7912,7 +7912,7 @@ header a,header a:visited {
   }
 
 header .logo {
-    background: url("pages/admin/icon.svg");
+    background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xml%3Aspace%3D%22preserve%22%20style%3D%22fill-rule%3Aevenodd%3Bclip-rule%3Aevenodd%3Bstroke-linejoin%3Around%3Bstroke-miterlimit%3A2%22%20viewBox%3D%220%200%2021%2027%22%3E%3Cpath%20d%3D%22M192.558%2093.535V965.14h704.884V372.968L625.182%2093.5zM829.087%20395%20595.166%20159.719v235.294z%22%20style%3D%22fill%3A%23fff%22%20transform%3D%22translate%28-5.737%20-1.754%29scale%28.0298%29%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
     min-height: 27px;
     padding-left: 38px;
@@ -9563,7 +9563,7 @@ ul.recovery-codes {
   margin-left: 6px;
   width: 13px;
   height: 16px;
-  background-image: url("pages/admin/drag-icon.png");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAYAAADNo/U5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAALFJREFUeNqcUwEOgjAMbBd/sqeQaHgfouJHUKM/2d5S10qXgC0JXAKMddfcXbpARGA9KSXyagEM5JxpfH7ka9WDTXiXFcH4solhSXiUg4go//zmBn9ET/f5MmzzpM08YFc6lhNVkhB+LNkTMte0SVnjWkcPAXbg0F/vYrhKmSSoHN2f1b2Euv62Pb01zILQ8Znyq1LbYwMxRjSD4EJ7aqoXxpLgeuIJZ0/epMOeq/EVYABZhxZkiDt5VQAAAABJRU5ErkJggg==');
 }
 
 td.drag-handle {
