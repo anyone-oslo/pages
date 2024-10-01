@@ -2,11 +2,7 @@
 
 module PagesCore
   class Engine < Rails::Engine
-    # config.autoload_paths += Dir["#{config.root}/lib/"]
-    # config.autoload_paths += Dir["#{config.root}/lib/pages_core/**/"]
-    # config.eager_load_paths += Dir["#{config.root}/lib/pages_core/**/"]
-
-    initializer :factory_bot_definitions do |app|
+    initializer "pages_core.factory_bot" do |app|
       path = File.expand_path("../../spec/factories", __dir__)
 
       if defined?(FactoryBotRails)
@@ -16,7 +12,7 @@ module PagesCore
       end
     end
 
-    initializer :append_migrations do |app|
+    initializer "pages_core.migrations" do |app|
       unless app.root.to_s.match root.to_s
         config.paths["db/migrate"].expanded.each do |expanded_path|
           app.config.paths["db/migrate"] << expanded_path
@@ -24,9 +20,10 @@ module PagesCore
       end
     end
 
-    # Enable asset precompilation
-    initializer :assets do |_config|
-      Rails.application.config.assets.precompile += %w[
+    initializer "pages_core.sprockets" do |app|
+      next unless Object.const_defined?("Sprockets::Railtie")
+
+      app.config.assets.precompile += %w[
         pages_core/admin-dist.js
         pages_core/admin.css
         pages_core/mailer.css
@@ -40,14 +37,14 @@ module PagesCore
       ]
     end
 
-    initializer :handle_exceptions do |app|
+    initializer "pages_core.rescue_response" do |app|
       app.config.exceptions_app = app.routes
       ActionDispatch::ExceptionWrapper.rescue_responses.merge!(
         "PagesCore::NotAuthorized" => :forbidden
       )
     end
 
-    initializer :healthcheck do |_app|
+    initializer "pages_core.healthcheck" do |_app|
       Healthcheck.configure do |config|
         config.success = 200
         config.error = 503
@@ -66,7 +63,7 @@ module PagesCore
       end
     end
 
-    initializer :lograge do |app|
+    initializer "pages_core.lograge" do |app|
       app.config.lograge.enabled = true if ENV["ENABLE_LOGRAGE"]
       app.config.lograge.formatter = Lograge::Formatters::Json.new
       app.config.lograge.ignore_actions =
@@ -88,13 +85,6 @@ module PagesCore
 
     initializer "pages_core.sitemap" do |_app|
       PagesCore::Sitemap.register { |loc| pages_sitemap_url(loc, format: :xml) }
-    end
-
-    # React configuration
-    initializer :react do |app|
-      app.config.react.jsx_transform_options = {
-        harmony: true
-      }
     end
   end
 end

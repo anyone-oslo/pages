@@ -146,7 +146,7 @@ form {
   display: table;
   padding: 1px;
   padding-right: 22px;
-  background: transparent url("pages/admin/warning-icon.gif") right 5px
+  background: transparent url("/pages/admin/warning-icon.gif") right 5px
     no-repeat;
 }
 
@@ -242,7 +242,7 @@ select {
 
 select {
   padding-right: 2em;
-  background-image: url("pages/admin/angle-down-solid.svg");
+  background-image: url("/pages/admin/angle-down-solid.svg");
   background-position: top 50% right 0.5em;
   background-repeat: no-repeat;
   background-size: 1em 1em;

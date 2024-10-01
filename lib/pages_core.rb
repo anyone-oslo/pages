@@ -34,7 +34,6 @@ require "rails_i18n"
 require "RedCloth"
 require "rotp"
 require "rqrcode"
-require "sass-rails"
 require "typhoeus"
 require "will_paginate"
 

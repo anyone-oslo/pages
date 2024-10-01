@@ -11,6 +11,8 @@ group :development, :test do
   gem "pry-rescue"
   gem "pry-stack_explorer"
 
+  gem "propshaft"
+
   gem "capybara"
   gem "factory_bot"
   gem "pg"

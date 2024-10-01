@@ -6,7 +6,7 @@
   margin-left: 6px;
   width: 13px;
   height: 16px;
-  background-image: url("pages/admin/drag-icon.png");
+  background-image: url("/pages/admin/drag-icon.png");
 }
 
 td.drag-handle {

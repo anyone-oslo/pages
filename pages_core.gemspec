@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
 
   # Default asset dependencies
   s.add_dependency "jbuilder", "~> 2.5"
-  s.add_dependency "sass-rails", ">= 5.0"
 
   # Extra asset dependencies
   s.add_dependency "react-rails", "~> 2.4"

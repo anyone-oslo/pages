@@ -2,5 +2,5 @@
 @font-face { font-family: "Example";
              font-style: normal;
              font-weight: 300;
-             src: url("Example-Regular.woff") format("woff"); }
+             src: url("/Example-Regular.woff") format("woff"); }
 */

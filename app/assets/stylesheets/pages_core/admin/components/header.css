@@ -16,7 +16,7 @@ header {
   }
 
   .logo {
-    background: url("pages/admin/icon.svg");
+    background: url("/pages/admin/icon.svg");
     background-repeat: no-repeat;
     min-height: 27px;
     padding-left: 38px;
