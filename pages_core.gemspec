@@ -51,7 +51,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jbuilder", "~> 2.5"
 
   # Extra asset dependencies
-  s.add_dependency "react-rails", "~> 2.4"
+  s.add_dependency "react-rails", "> 2.4"
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list", "~> 0.9"

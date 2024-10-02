@@ -21,7 +21,7 @@ PATH
       rails (>= 6.0)
       rails-healthcheck (~> 1.0.3)
       rails-i18n (>= 5.0.0)
-      react-rails (~> 2.4)
+      react-rails (> 2.4)
       rotp (~> 6.3.0)
       rqrcode
       tty-table
