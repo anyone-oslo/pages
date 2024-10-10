@@ -1,10 +1,6 @@
 import { csrfToken } from "../../lib/request";
 import * as PageEditor from "../../types/PageEditor";
-
-interface FormProps {
-  state: PageEditor.State;
-  children: React.ReactNode;
-}
+import usePageFormContext from "./usePageFormContext";
 
 function pageUrl(state: PageEditor.State): string {
   if (state.page.id) {
@@ -14,8 +10,8 @@ function pageUrl(state: PageEditor.State): string {
   }
 }
 
-export default function Form(props: FormProps) {
-  const { state, children } = props;
+export default function Form({ children }: React.PropsWithChildren) {
+  const { state } = usePageFormContext();
   const { page } = state;
 
   return (

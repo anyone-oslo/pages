@@ -1,9 +1,8 @@
-interface TabPanelProps {
+type Props = {
   active: boolean;
-  children: React.ReactNode;
-}
+};
 
-export default function TabPanel(props: TabPanelProps) {
+export default function TabPanel(props: React.PropsWithChildren<Props>) {
   const { active, children } = props;
 
   const classNames = ["content-tab"];

@@ -1,16 +1,11 @@
 import { ChangeEvent } from "react";
 
-import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
 import { LocalizedValue } from "../../types";
 
 import { errorsOn } from "./usePage";
+import usePageFormContext from "./usePageFormContext";
 import LabelledField from "../LabelledField";
-
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-}
 
 function missingPathSegment(ancestors: Pages.Ancestor[], locale: string) {
   for (let i = 0; i < ancestors.length; i++) {
@@ -21,8 +16,8 @@ function missingPathSegment(ancestors: Pages.Ancestor[], locale: string) {
   return null;
 }
 
-export default function PathSegment(props: Props) {
-  const { state, dispatch } = props;
+export default function PathSegment() {
+  const { state, dispatch } = usePageFormContext();
   const { page, locale } = state;
 
   const value = (page.path_segment as LocalizedValue)[locale];

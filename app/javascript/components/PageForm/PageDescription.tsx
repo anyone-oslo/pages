@@ -1,14 +1,8 @@
 import { Fragment } from "react";
-import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
+import usePageFormContext from "./usePageFormContext";
 
 import LocaleLinks from "./LocaleLinks";
-
-interface PageDescriptionProps {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-  children: React.ReactNode;
-}
 
 function editLink(locale: string, page: Pages.Ancestor | Pages.Resource) {
   return (
@@ -25,13 +19,13 @@ function pageName(locale: string, page: Pages.Ancestor | Pages.Resource) {
   return page.blocks.name[locale] || <i>Untitled</i>;
 }
 
-export default function PageDescription(props: PageDescriptionProps) {
-  const { state, dispatch, children } = props;
+export default function PageDescription({ children }: React.PropsWithChildren) {
+  const { state } = usePageFormContext();
   const { locale, page } = state;
 
   return (
     <div className="page-description with_content_tabs">
-      <LocaleLinks state={state} dispatch={dispatch} />
+      <LocaleLinks />
       <h3>
         {page.ancestors.map((p) => (
           <Fragment key={p.id}>

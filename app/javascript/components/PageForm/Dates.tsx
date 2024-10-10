@@ -1,14 +1,8 @@
-import * as PageEditor from "../../types/PageEditor";
-
 import DateRangeSelect from "../DateRangeSelect";
+import usePageFormContext from "./usePageFormContext";
 
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-}
-
-export default function Dates(props: Props) {
-  const { state, dispatch } = props;
+export default function Dates() {
+  const { state, dispatch } = usePageFormContext();
   const { datesEnabled, page } = state;
 
   const toggleAllDay = () => {

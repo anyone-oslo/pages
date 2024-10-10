@@ -24,3 +24,10 @@ export interface Tab {
   name: string;
   enabled: boolean;
 }
+
+export type Return = [State, React.Dispatch<Action>];
+
+export type Context = {
+  state: State;
+  dispatch: React.Dispatch<Action>;
+};

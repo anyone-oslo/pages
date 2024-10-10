@@ -163,7 +163,7 @@ function updatePage(
 
 export default function usePage(
   initialState: PageEditor.State<Pages.SerializedResource>
-): [PageEditor.State, (action: PageEditor.Action) => void] {
+): PageEditor.Return {
   const [state, dispatch] = useReducer(reducer, prepare(initialState));
   return [derivedState(state), dispatch];
 }

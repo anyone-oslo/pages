@@ -1,22 +1,17 @@
 import { Fragment } from "react";
 
-import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
 import { MaybeLocalizedValue } from "../../types";
 
 import { blockValue, errorsOn } from "./usePage";
+import usePageFormContext from "./usePageFormContext";
 import Block from "./Block";
 import PathSegment from "./PathSegment";
 import LabelledField from "../LabelledField";
 import ImageUploader from "../ImageUploader";
 
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-}
-
-export default function Metadata(props: Props) {
-  const { state, dispatch } = props;
+export default function Metadata() {
+  const { state, dispatch } = usePageFormContext();
 
   const { page, locale, locales, inputDir, templateConfig } = state;
 
@@ -30,7 +25,7 @@ export default function Metadata(props: Props) {
 
   return (
     <Fragment>
-      <PathSegment state={state} dispatch={dispatch} />
+      <PathSegment />
       <LabelledField
         htmlFor="page_meta_image_id"
         label="Image"

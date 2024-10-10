@@ -1,10 +1,10 @@
 import * as PageEditor from "../../types/PageEditor";
 
-interface Props {
+type Props = {
   tab: string;
   tabs: PageEditor.Tab[];
   setTab: (tab: string) => void;
-}
+};
 
 export default function Tabs(props: Props) {
   const { tab, tabs, setTab } = props;

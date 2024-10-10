@@ -11,6 +11,7 @@ import useAttachments from "./Attachments/useAttachments";
 import useImageGrid from "./ImageGrid/useImageGrid";
 import useTags from "./TagEditor/useTags";
 import usePage from "./PageForm/usePage";
+import { PageFormContext } from "./PageForm/usePageFormContext";
 import useTabs from "./PageForm/useTabs";
 import pageParams from "./PageForm/pageParams";
 import Content from "./PageForm/Content";
@@ -123,50 +124,46 @@ export default function PageForm(props: Props) {
   };
 
   return (
-    <Form state={state}>
-      <main>
-        <PageDescription state={state} dispatch={dispatch}>
-          <Tabs tabs={tabs} tab={tab} setTab={setTab} />
-        </PageDescription>
-        <div className="content">
-          <TabPanel active={tab == "content"}>
-            <Content
-              state={state}
-              dispatch={dispatch}
-              tagsState={tagsState}
-              tagsDispatch={tagsDispatch}
-            />
-          </TabPanel>
-          <TabPanel active={tab == "unconfigured-content"}>
-            <UnconfiguredContent state={state} dispatch={dispatch} />
-          </TabPanel>
-          <TabPanel active={tab == "images"}>
-            <Images locale={locale} locales={locales} state={imagesState} />
-          </TabPanel>
-          <TabPanel active={tab == "files"}>
-            <Files locale={locale} locales={locales} state={filesState} />
-          </TabPanel>
-          <TabPanel active={tab == "metadata"}>
-            <Metadata state={state} dispatch={dispatch} />
-          </TabPanel>
-          <div className="buttons">
-            <button type="button" onClick={handlePreview}>
-              Preview
-            </button>
-            <button type="submit" onClick={handleSubmit}>
-              Save
-            </button>
+    <PageFormContext.Provider
+      value={{
+        state: state,
+        dispatch: dispatch
+      }}>
+      <Form>
+        <main>
+          <PageDescription>
+            <Tabs tabs={tabs} tab={tab} setTab={setTab} />
+          </PageDescription>
+          <div className="content">
+            <TabPanel active={tab == "content"}>
+              <Content tagsState={tagsState} tagsDispatch={tagsDispatch} />
+            </TabPanel>
+            <TabPanel active={tab == "unconfigured-content"}>
+              <UnconfiguredContent />
+            </TabPanel>
+            <TabPanel active={tab == "images"}>
+              <Images locale={locale} locales={locales} state={imagesState} />
+            </TabPanel>
+            <TabPanel active={tab == "files"}>
+              <Files locale={locale} locales={locales} state={filesState} />
+            </TabPanel>
+            <TabPanel active={tab == "metadata"}>
+              <Metadata />
+            </TabPanel>
+            <div className="buttons">
+              <button type="button" onClick={handlePreview}>
+                Preview
+              </button>
+              <button type="submit" onClick={handleSubmit}>
+                Save
+              </button>
+            </div>
           </div>
-        </div>
-      </main>
-      <aside className="sidebar">
-        <Options
-          state={state}
-          dispatch={dispatch}
-          authors={props.authors}
-          statuses={props.statuses}
-        />
-      </aside>
-    </Form>
+        </main>
+        <aside className="sidebar">
+          <Options authors={props.authors} statuses={props.statuses} />
+        </aside>
+      </Form>
+    </PageFormContext.Provider>
   );
 }

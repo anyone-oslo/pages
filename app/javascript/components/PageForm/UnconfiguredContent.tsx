@@ -1,18 +1,13 @@
 import { Fragment } from "react";
 
-import * as PageEditor from "../../types/PageEditor";
 import { MaybeLocalizedValue } from "../../types";
 import { blockValue, errorsOn, unconfiguredBlocks } from "./usePage";
+import usePageFormContext from "./usePageFormContext";
 
 import Block from "./Block";
 
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-}
-
-export default function UnconfiguredContent(props: Props) {
-  const { state, dispatch } = props;
+export default function UnconfiguredContent() {
+  const { state, dispatch } = usePageFormContext();
 
   const { page, locale, inputDir } = state;
 

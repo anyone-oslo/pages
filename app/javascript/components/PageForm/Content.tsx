@@ -1,24 +1,21 @@
 import { Fragment } from "react";
-import * as PageEditor from "../../types/PageEditor";
 import * as Tags from "../../types/Tags";
 import { MaybeLocalizedValue } from "../../types";
 
 import { blockValue, errorsOn } from "./usePage";
+import usePageFormContext from "./usePageFormContext";
 import LabelledField from "../LabelledField";
 import { default as TagEditor } from "../TagEditor/Editor";
 import Block from "./Block";
 import Dates from "./Dates";
 
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
+type Props = {
   tagsState: Tags.State;
-  tagsDispatch: (action: Tags.Action) => void;
-}
+  tagsDispatch: React.Dispatch<Tags.Action>;
+};
 
-export default function Content(props: Props) {
-  const { state, dispatch, tagsState, tagsDispatch } = props;
-
+export default function Content({ tagsState, tagsDispatch }: Props) {
+  const { state, dispatch } = usePageFormContext();
   const { page, locale, inputDir, templateConfig } = state;
 
   const handleChange = (attr: string) => (value: MaybeLocalizedValue) => {
@@ -38,7 +35,7 @@ export default function Content(props: Props) {
           value={blockValue(state, b)}
         />
       ))}
-      {templateConfig.dates && <Dates state={state} dispatch={dispatch} />}
+      {templateConfig.dates && <Dates />}
       {templateConfig.tags && (
         <LabelledField label="Tags">
           <TagEditor

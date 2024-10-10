@@ -1,12 +1,7 @@
-import * as PageEditor from "../../types/PageEditor";
+import usePageFormContext from "./usePageFormContext";
 
-interface Props {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
-}
-
-export default function LocaleLinks(props: Props) {
-  const { state, dispatch } = props;
+export default function LocaleLinks() {
+  const { state, dispatch } = usePageFormContext();
   const { locale, locales } = state;
 
   const handleClick = (newLocale: string) => (evt: React.MouseEvent) => {

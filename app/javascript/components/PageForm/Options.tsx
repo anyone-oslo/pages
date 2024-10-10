@@ -1,20 +1,18 @@
 import { Fragment, useState, ChangeEvent } from "react";
 
-import * as PageEditor from "../../types/PageEditor";
 import * as Pages from "../../types/Pages";
 import LabelledField from "../LabelledField";
 import DateTimeSelect from "../DateTimeSelect";
 import { errorsOn } from "./usePage";
+import usePageFormContext from "./usePageFormContext";
 
-interface OptionsProps {
-  state: PageEditor.State;
-  dispatch: (action: PageEditor.Action) => void;
+type Props = {
   authors: Pages.Author[];
   statuses: Pages.StatusLabels;
-}
+};
 
-export default function Options(props: OptionsProps) {
-  const { state, dispatch, authors, statuses } = props;
+export default function Options({ authors, statuses }: Props) {
+  const { state, dispatch } = usePageFormContext();
 
   const { page, locale, templates } = state;
 
