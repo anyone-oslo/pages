@@ -7,11 +7,11 @@ import Toolbar from "./ImageCropper/Toolbar";
 
 export { default as useCrop, cropParams } from "./ImageCropper/useCrop";
 
-interface Props {
+type Props = {
   croppedImage: string;
   cropState: Crop.State;
-  dispatch: (action: Crop.Action) => void;
-}
+  dispatch: React.Dispatch<Crop.Action>;
+};
 
 function focalPoint(state: Crop.State): Crop.Position {
   if (state.crop_gravity_x === null || state.crop_gravity_y === null) {

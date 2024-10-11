@@ -25,14 +25,14 @@ import TabPanel from "./PageForm/TabPanel";
 import Files from "./PageForm/Files";
 import Images from "./PageForm/Images";
 
-interface Props {
+type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   page: Pages.SerializedResource;
   templates: Template.Config[];
   authors: Pages.Author[];
   statuses: Pages.StatusLabels;
-}
+};
 
 export default function PageForm(props: Props) {
   const [state, dispatch] = usePage({

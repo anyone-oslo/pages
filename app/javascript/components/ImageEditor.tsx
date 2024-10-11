@@ -8,7 +8,7 @@ import { Locale } from "../types";
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
 
-interface Props {
+type Props = {
   image: Images.Resource;
   caption: boolean;
   locale: string;
@@ -17,7 +17,7 @@ interface Props {
     data: Partial<Images.Resource>,
     croppedImage: string | null
   ) => void;
-}
+};
 
 export default function ImageEditor(props: Props) {
   const [cropState, dispatch, croppedImage] = useCrop(props.image);

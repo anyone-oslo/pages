@@ -4,11 +4,11 @@ import AddTagForm from "./AddTagForm";
 import Tag from "./Tag";
 import * as Tags from "../../types/Tags";
 
-interface Props {
+type Props = {
   name: string;
   state: Tags.State;
-  dispatch: (action: Tags.Action) => void;
-}
+  dispatch: React.Dispatch<Tags.Action>;
+};
 
 export default function Editor(props: Props) {
   const { name, state, dispatch } = props;

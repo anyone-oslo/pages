@@ -10,9 +10,9 @@ import * as Images from "../../types/Images";
 
 import { createDraggable, collectionOrder, useDragUploader } from "../drag";
 
-interface Props extends Images.GridOptions {
+type Props = Images.GridOptions & {
   state: Images.GridState;
-}
+};
 
 function filterFiles(files: File[]): File[] {
   const validMimeTypes = [

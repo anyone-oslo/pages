@@ -30,11 +30,11 @@ export function collectionOrder<T>(
     return draggables;
   }
 
-  let ordered: Drag.DraggableOrFiles<T>[] = draggables;
+  let ordered = draggables;
   if (typeof dragging !== "string") {
     ordered = draggables
-      .filter((d) => typeof d !== "string")
-      .filter((d: Drag.Draggable<T>) => d.handle !== dragging.handle);
+      .filter((d) => d !== "Files")
+      .filter((d) => d.handle !== dragging.handle);
   }
   if (hovering(dragState, ref)) {
     const hovered = ordered.filter((d) => hovering(dragState, d))[0];

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 
-interface DateTimeSelectProps {
+type Props = {
   name: string;
   onChange: (date: Date) => void;
   value: Date;
   disabled?: boolean;
   disableTime?: boolean;
-}
+};
 
-interface ModifyOptions {
+type ModifyOptions = {
   year?: number;
   month?: number;
   date?: number;
   time?: string;
-}
+};
 
 function modifyDate(original: Date, options: ModifyOptions = {}): Date {
   const newDate = new Date(original);
@@ -72,7 +72,7 @@ function dayOptions(): number[] {
   return numbers;
 }
 
-export default function DateTimeSelect(props: DateTimeSelectProps) {
+export default function DateTimeSelect(props: Props) {
   const { name, disabled, disableTime, onChange, value } = props;
 
   const [timeString, setTimeString] = useState(timeToString(value));

@@ -52,7 +52,7 @@ function reducer(state: Tags.State, action: Tags.Action) {
 export default function useTags(
   initTags: string[],
   initEnabled: string[]
-): [Tags.State, (action: Tags.Action) => void] {
+): [Tags.State, React.Dispatch<Tags.Action>] {
   const [state, dispatch] = useReducer(reducer, {
     tags: initTags,
     enabled: initEnabled

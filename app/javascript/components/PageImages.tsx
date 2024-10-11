@@ -3,7 +3,7 @@ import { Locale } from "../types";
 
 import ImageGrid from "./ImageGrid";
 
-interface Props {
+type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   records: Images.Record[];

@@ -2,9 +2,9 @@ import useTags from "./TagEditor/useTags";
 import Editor from "./TagEditor/Editor";
 import * as Tags from "../types/Tags";
 
-interface Props extends Tags.State {
+type Props = Tags.State & {
   name: string;
-}
+};
 
 export default function TagEditor(props: Props) {
   const [state, dispatch] = useTags(props.tags, props.enabled);

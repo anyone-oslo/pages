@@ -5,7 +5,7 @@ import * as Images from "../../types/Images";
 
 type Ratio = number | null;
 
-interface Props {
+type Props = {
   cropState: Crop.State;
   image: Images.Resource;
   setAspect: (Ratio) => void;

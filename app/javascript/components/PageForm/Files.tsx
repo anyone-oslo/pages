@@ -3,11 +3,11 @@ import { Locale } from "../../types";
 
 import List from "../Attachments/List";
 
-interface Props {
+type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   state: Attachments.State;
-}
+};
 
 export default function Files(props: Props) {
   const { locale, locales, state } = props;

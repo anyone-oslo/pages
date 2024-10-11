@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface ModalState {
+type ModalState = {
   component: JSX.Element | null;
   open: (elem: JSX.Element) => void;
   close: () => void;

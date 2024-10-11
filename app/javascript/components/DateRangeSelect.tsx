@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import DateTimeSelect from "./DateTimeSelect";
 
-interface Props {
+type Props = {
   objectName: string;
   startsAt: Date | string;
   endsAt: Date | string;

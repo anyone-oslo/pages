@@ -8,7 +8,7 @@ import { Locale } from "../types";
 import EditableImage from "./EditableImage";
 import FileUploadButton from "./FileUploadButton";
 
-interface Props {
+type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   image: Images.Resource;
@@ -18,12 +18,12 @@ interface Props {
   attr: string;
   alternative?: string;
   onChange?: (state: State) => void;
-}
+};
 
-interface State {
+type State = {
   image?: Images.Resource;
   src?: string;
-}
+};
 
 function getFiles(dt: DataTransfer): File[] {
   const files: File[] = [];

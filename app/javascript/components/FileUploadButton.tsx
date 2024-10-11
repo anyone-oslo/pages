@@ -1,11 +1,11 @@
 import { ChangeEvent, MouseEvent, useRef } from "react";
 
-interface Props {
+type Props = {
   callback: (files: File[]) => void;
   type?: string;
   multiline?: boolean;
   multiple?: boolean;
-}
+};
 
 export default function FileUploadButton(props: Props) {
   const inputRef = useRef<HTMLInputElement>();

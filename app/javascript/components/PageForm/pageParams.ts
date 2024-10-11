@@ -4,11 +4,11 @@ import * as PageEditor from "../../types/PageEditor";
 import * as Images from "../../types/Images";
 import * as Tags from "../../types/Tags";
 
-interface Options {
+type Options = {
   files: Attachments.State;
   images: Images.GridState;
   tags: Tags.State;
-}
+};
 
 function dates(state: PageEditor.State) {
   if (state.datesEnabled) {

@@ -1,4 +1,4 @@
-interface Props {
+type Props = {
   name: string;
   locale: string;
   dir?: string;

@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-interface Toast {
+type Toast = {
   type: string;
   message: string;
 }
 
-interface ToastState {
+type ToastState = {
   toasts: Toast[];
   error: (msg: string) => void;
   notice: (msg: string) => void;

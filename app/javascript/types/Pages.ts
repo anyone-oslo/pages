@@ -4,15 +4,15 @@ import { LocalizedValue, MaybeLocalizedValue } from "../types";
 
 export type Author = [name: string, id: number];
 
-export interface Ancestor {
+export type Ancestor = {
   id: number;
   name: LocalizedValue;
   path_segment: LocalizedValue;
-}
+};
 
-export interface StatusLabels {
+export type StatusLabels = {
   [index: number]: string;
-}
+};
 
 type BaseResource = {
   id?: number;
@@ -29,15 +29,15 @@ export type TreeResource = BaseResource & {
   editing?: boolean;
 };
 
-export interface Blocks {
+export type Blocks = {
   [index: string]: MaybeLocalizedValue;
   name: LocalizedValue;
-}
+};
 
-export interface MetaImage {
+export type MetaImage = {
   src?: string;
   image?: Images.Resource;
-}
+};
 
 export type Resource = BaseResource & {
   all_day: boolean;
@@ -60,9 +60,11 @@ export type Resource = BaseResource & {
   user_id: number;
 };
 
-export interface SerializedResource
-  extends Omit<Resource, "published_at" | "starts_at" | "ends_at"> {
+export type SerializedResource = Omit<
+  Resource,
+  "published_at" | "starts_at" | "ends_at"
+> & {
   published_at: string;
   starts_at: string;
   ends_at: string;
-}
+};

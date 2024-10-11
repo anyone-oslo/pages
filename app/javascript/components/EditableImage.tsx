@@ -6,7 +6,7 @@ import { Locale } from "../types";
 
 import ImageEditor from "./ImageEditor";
 
-interface Props {
+type Props = {
   image: Images.Resource;
   src: string;
   caption: boolean;
@@ -14,7 +14,7 @@ interface Props {
   locales: Record<string, Locale>;
   width: number;
   onUpdate?: (newImage: Images.Resource, src: string) => void;
-}
+};
 
 export default function EditableImage(props: Props) {
   const [image, setImage] = useState(props.image);

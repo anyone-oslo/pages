@@ -1,6 +1,6 @@
-interface Props {
+type Props = {
   src: string;
-}
+};
 
 export default function Placeholder(props: Props) {
   if (props.src) {

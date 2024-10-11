@@ -7,9 +7,9 @@ import * as Drag from "../../types/Drag";
 
 import { createDraggable, draggedOrder, useDragUploader } from "../drag";
 
-interface Props extends Attachments.Options {
+type Props = Attachments.Options & {
   state: Attachments.State;
-}
+};
 
 function filenameToName(str: string): string {
   return str.replace(/\.[\w\d]+$/, "").replace(/_/g, " ");

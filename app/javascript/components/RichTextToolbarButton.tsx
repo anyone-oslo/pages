@@ -1,6 +1,6 @@
 import { MouseEvent } from "react";
 
-interface Props {
+type Props = {
   className: string;
   name: string;
   onClick: (evt: React.MouseEvent) => void;

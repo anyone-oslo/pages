@@ -9,7 +9,7 @@ import { Locale } from "../../types";
 
 import { useDraggable } from "../drag";
 
-interface Props {
+type Props = {
   attributeName: string;
   placeholder: boolean;
   draggable: Drag.Draggable<Attachments.Record>;
@@ -23,7 +23,7 @@ interface Props {
     evt: MouseEvent,
     draggable: Drag.Draggable<Attachments.Record>
   ) => void;
-}
+};
 
 export default function Attachment(props: Props) {
   const { attributeName, draggable, locales, locale } = props;

@@ -1,11 +1,11 @@
 import * as Tree from "./tree";
 import { State, Action, visibleChildNodes } from "./usePageTree";
 
-interface Props {
+type Props = {
   id: Tree.Id;
   state: State;
-  dispatch: (action: Action) => void;
-}
+  dispatch: React.Dispatch<Action>;
+};
 
 export default function CollapseArrow({ id, state, dispatch }: Props) {
   const node = state.nodes[id];

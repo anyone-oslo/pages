@@ -1,10 +1,10 @@
 import * as Tags from "../../types/Tags";
 
-interface Props {
+type Props = {
   enabled: boolean;
   tag: string;
-  dispatch: (action: Tags.Action) => void;
-}
+  dispatch: React.Dispatch<Tags.Action>;
+};
 
 export default function Tag(props: Props) {
   const handleChange = () => {

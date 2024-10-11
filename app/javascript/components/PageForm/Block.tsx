@@ -5,14 +5,14 @@ import * as Template from "../../types/Template";
 import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 
-interface Props {
+type Props = {
   block: Template.Block;
   errors: string[];
   onChange: (value: string) => void;
   lang: string;
   dir: string;
   value: string;
-}
+};
 
 export default function Block(props: Props) {
   const { block, errors, onChange, lang, dir, value } = props;

@@ -4,7 +4,7 @@ import * as Tree from "./tree";
 import { State, Action, updatePage } from "./usePageTree";
 import Button from "./Button";
 
-interface Props {
+type Props = {
   id: Tree.Id;
   state: State;
   dispatch: (action: Action) => void;

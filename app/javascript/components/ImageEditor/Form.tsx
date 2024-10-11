@@ -6,7 +6,7 @@ import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
 import * as Images from "../../types/Images";
 import { Locale } from "../../types";
 
-interface Props {
+type Props = {
   alternative: Record<string, string>;
   caption: Record<string, string>;
   image: Images.Resource;

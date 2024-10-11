@@ -10,7 +10,7 @@ import { useDraggable } from "../drag";
 import EditableImage from "../EditableImage";
 import Placeholder from "./Placeholder";
 
-interface Props {
+type Props = {
   draggable: Drag.Draggable<Images.Record>;
   attributeName: string;
   locale: string;
@@ -26,7 +26,7 @@ interface Props {
     draggable: Drag.Draggable<Images.Record>
   ) => void;
   onUpdate: (newImage: Images.Resource, src: string) => void;
-}
+};
 
 export default function GridImage(props: Props) {
   const { attributeName, draggable } = props;

@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, KeyboardEvent, useState } from "react";
 
 import * as Tags from "../../types/Tags";
 
-interface Props {
+type Props = {
   dispatch: (action: Tags.Action) => void;
 }
 

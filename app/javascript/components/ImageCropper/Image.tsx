@@ -5,7 +5,7 @@ import * as Crop from "../../types/Crop";
 import { cropSize } from "./useCrop";
 import FocalPoint from "./FocalPoint";
 
-interface Props {
+type Props = {
   containerSize: Crop.Size;
   croppedImage: string;
   cropState: Crop.State;

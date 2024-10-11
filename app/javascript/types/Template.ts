@@ -1,4 +1,4 @@
-export interface Block {
+export type Block = {
   name: string;
   title: string;
   description?: string;
@@ -10,9 +10,9 @@ export interface Block {
   placeholder?: string;
   options?: [string, string][];
   type?: string;
-}
+};
 
-export interface Config {
+export type Config = {
   name: string;
   template_name: string;
   blocks: Block[];
@@ -21,4 +21,4 @@ export interface Config {
   dates: boolean;
   tags: boolean;
   files: boolean;
-}
+};

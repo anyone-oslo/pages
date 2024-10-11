@@ -1,7 +1,7 @@
 import * as Tree from "./tree";
 import { State, visibleChildNodes } from "./usePageTree";
 
-interface Props {
+type Props = {
   id: Tree.Id;
   state: State;
 }

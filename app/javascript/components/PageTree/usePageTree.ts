@@ -41,7 +41,7 @@ const permittedAttributes = [
 export function movePage(
   prevState: State,
   id: Tree.Id,
-  dispatch: (action: Action) => void
+  dispatch: React.Dispatch<Action>
 ) {
   const state = sortNewsPage(prevState, prevState.nodes[id].parent);
   const node = state.nodes[id];
@@ -72,7 +72,7 @@ export function movePage(
 export function updatePage(
   state: State,
   id: Tree.Id,
-  dispatch: (action: Action) => void,
+  dispatch: React.Dispatch<Action>,
   attributes: Partial<PageRecord>
 ) {
   const node = state.nodes[id];
@@ -120,7 +120,7 @@ export function visibleChildNodes(state: State, id: Tree.Id) {
 export function addChild(
   state: State,
   id: Tree.Id,
-  dispatch: (action: Action) => void
+  dispatch: React.Dispatch<Action>
 ) {
   const parentNode = state.nodes[id];
 
@@ -221,7 +221,7 @@ export default function usePageTree(
   locale: string,
   dir: string,
   permissions: string[]
-): [State, (action: Action) => void] {
+): [State, React.Dispatch<Action>] {
   const root: RootRecord = {
     blocks: { name: { [locale]: "All Pages" } },
     permissions: permissions,

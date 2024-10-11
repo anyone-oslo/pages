@@ -2,7 +2,7 @@ import { MouseEvent, TouchEvent, useRef, useState } from "react";
 
 import * as Crop from "../../types/Crop";
 
-interface Props {
+type Props = {
   x: number;
   y: number;
   onChange: (pos: Crop.Position) => void;

@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 
 import useToastStore from "../stores/useToastStore";
 
-interface Props {
+type Props = {
   error: string;
   notice: string;
-}
+};
 
 export default function Toast(props: Props) {
   const [fadeout, setFadeout] = useState(false);

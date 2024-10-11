@@ -1,8 +1,8 @@
 import readyHandler from "../lib/readyHandler";
 
-interface WindowState {
+type WindowState = {
   tabId: string;
-}
+};
 
 function applyTabs() {
   const tabLinks: HTMLAnchorElement[] = Array.from(

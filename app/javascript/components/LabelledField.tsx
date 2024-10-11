@@ -1,14 +1,14 @@
 import { Fragment } from "react";
 
-interface LabelledFieldProps {
+type Props = {
   label: string;
   children: React.ReactNode;
   htmlFor?: string;
   description?: string;
   errors?: string[];
-}
+};
 
-export default function LabelledField(props: LabelledFieldProps) {
+export default function LabelledField(props: Props) {
   const { htmlFor, description, label, errors, children } = props;
 
   const classNames = ["field"];

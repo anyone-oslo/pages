@@ -9,7 +9,7 @@ export type Action =
   | { type: "update"; payload: Partial<Pages.Resource> }
   | { type: "updateBlocks"; payload: Partial<Pages.Blocks> };
 
-export interface State<T = Pages.Resource> {
+export type State<T = Pages.Resource> = {
   locale: string;
   locales: { [index: string]: Locale };
   page: T;
@@ -17,13 +17,13 @@ export interface State<T = Pages.Resource> {
   datesEnabled?: boolean;
   inputDir?: "ltr" | "rtl";
   templateConfig?: Template.Config;
-}
+};
 
-export interface Tab {
+export type Tab = {
   id: string;
   name: string;
   enabled: boolean;
-}
+};
 
 export type Return = [State, React.Dispatch<Action>];
 

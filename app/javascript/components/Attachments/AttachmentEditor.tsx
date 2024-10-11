@@ -6,12 +6,12 @@ import { putJson } from "../../lib/request";
 import * as Attachments from "../../types/Attachments";
 import { Locale } from "../../types";
 
-interface Props {
+type Props = {
   attachment: Attachments.Resource;
   locale: string;
   locales: { [index: string]: Locale };
   onUpdate: (attachment: Partial<Attachments.Resource>) => void;
-}
+};
 
 export default function AttachmentEditor(props: Props) {
   const { attachment, locales } = props;

@@ -3,11 +3,11 @@ import { Locale } from "../../types";
 
 import Grid from "../ImageGrid/Grid";
 
-interface Props {
+type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   state: GridState;
-}
+};
 
 export default function Images(props: Props) {
   return (

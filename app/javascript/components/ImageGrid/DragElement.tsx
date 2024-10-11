@@ -3,11 +3,11 @@ import { RefObject } from "react";
 import * as Drag from "../../types/Drag";
 import * as Images from "../../types/Images";
 
-interface Props {
+type Props = {
   container: RefObject<HTMLDivElement>;
   draggable: Drag.DraggableOrFiles<Images.Record>;
   dragState: Drag.State<Images.Record>;
-}
+};
 
 export default function DragElement(props: Props) {
   const { draggable, dragState, container } = props;
