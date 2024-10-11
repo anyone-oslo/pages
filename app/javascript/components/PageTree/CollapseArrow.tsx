@@ -1,13 +1,13 @@
 import * as Tree from "./tree";
-import { State, Action, visibleChildNodes } from "./usePageTree";
+import { visibleChildNodes } from "./usePageTree";
+import usePageTreeContext from "./usePageTreeContext";
 
 type Props = {
   id: Tree.Id;
-  state: State;
-  dispatch: React.Dispatch<Action>;
 };
 
-export default function CollapseArrow({ id, state, dispatch }: Props) {
+export default function CollapseArrow({ id }: Props) {
+  const { state, dispatch } = usePageTreeContext();
   const node = state.nodes[id];
   const classNames = ["collapse fa-solid fa-caret-right"];
 

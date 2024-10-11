@@ -1,14 +1,9 @@
 import { Fragment, useRef } from "react";
 
+import usePageTreeContext from "./usePageTreeContext";
 import * as Tree from "./tree";
 
-import {
-  State,
-  Action,
-  addChild,
-  updatePage,
-  visibleChildNodes
-} from "./usePageTree";
+import { addChild, updatePage, visibleChildNodes } from "./usePageTree";
 import Button from "./Button";
 import CollapseArrow from "./CollapseArrow";
 import CollapsedLabel from "./CollapsedLabel";
@@ -18,8 +13,6 @@ import EditPageName from "./EditPageName";
 
 type Props = {
   id: Tree.Id;
-  state: State;
-  dispatch: (action: Action) => void;
 
   dragging?: Tree.Id;
   onDragStart?: (
@@ -32,7 +25,8 @@ type Props = {
 export const paddingLeft = 20;
 
 export default function Node(props: Props) {
-  const { id, state, dispatch, dragging, onDragStart } = props;
+  const { state, dispatch } = usePageTreeContext();
+  const { id, dragging, onDragStart } = props;
   const { dir, locale } = state;
   const node = state.nodes[id];
   const page = node.record;
@@ -92,7 +86,7 @@ export default function Node(props: Props) {
   return (
     <div className={classNames.join(" ")}>
       <div className="inner" ref={innerRef} onMouseDown={handleDragStart}>
-        <CollapseArrow {...props} />
+        <CollapseArrow id={id} />
 
         {!page.editing && (
           <div className={pageClassNames.join(" ")}>
@@ -108,7 +102,7 @@ export default function Node(props: Props) {
               }
             />
             {"status" in page && <StatusLabel status={page.status} />}
-            <CollapsedLabel {...props} />
+            <CollapsedLabel id={id} />
             <span className="actions">
               {!("root" in page) && (
                 <Fragment>
@@ -152,7 +146,7 @@ export default function Node(props: Props) {
           </div>
         )}
 
-        {page.editing && <EditPageName {...props} />}
+        {page.editing && <EditPageName id={id} />}
       </div>
 
       {!node.collapsed && visibleChildNodes(state, id).length > 0 && (

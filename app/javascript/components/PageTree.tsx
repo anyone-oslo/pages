@@ -7,6 +7,7 @@ import usePageTree, {
   movePage,
   visibleChildNodes
 } from "./PageTree/usePageTree";
+import { PageTreeContext } from "./PageTree/usePageTreeContext";
 import Node, { paddingLeft } from "./PageTree/Node";
 
 type DragState = {
@@ -65,7 +66,7 @@ export default function PageTree({ dir, locale, pages, permissions }: Props) {
 
       return (
         <div className="draggable" style={dragStateStyles}>
-          <Node state={dragState.tree} id={dragState.id} dispatch={dispatch} />
+          <Node id={dragState.id} />
         </div>
       );
     }
@@ -194,15 +195,19 @@ export default function PageTree({ dir, locale, pages, permissions }: Props) {
   }, [drag, dragEnd]);
 
   return (
-    <div className="page-tree">
-      {getDraggingDom()}
-      <Node
-        state={(dragging && dragState.tree) || state}
-        id={state.rootId}
-        dispatch={dispatch}
-        onDragStart={dragStart}
-        dragging={dragging && dragState.id}
-      />
-    </div>
+    <PageTreeContext.Provider
+      value={{
+        state: (dragging && dragState.tree) || state,
+        dispatch: dispatch
+      }}>
+      <div className="page-tree">
+        {getDraggingDom()}
+        <Node
+          id={state.rootId}
+          onDragStart={dragStart}
+          dragging={dragging && dragState.id}
+        />
+      </div>
+    </PageTreeContext.Provider>
   );
 }

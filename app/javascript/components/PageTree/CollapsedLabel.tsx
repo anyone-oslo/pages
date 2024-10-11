@@ -1,12 +1,13 @@
 import * as Tree from "./tree";
-import { State, visibleChildNodes } from "./usePageTree";
+import { visibleChildNodes } from "./usePageTree";
+import usePageTreeContext from "./usePageTreeContext";
 
 type Props = {
   id: Tree.Id;
-  state: State;
-}
+};
 
-export default function CollapsedLabel({ id, state }: Props) {
+export default function CollapsedLabel({ id }: Props) {
+  const { state } = usePageTreeContext();
   const node = state.nodes[id];
   const count = visibleChildNodes(state, id).length;
 

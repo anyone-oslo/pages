@@ -1,16 +1,16 @@
 import { useState } from "react";
 
 import * as Tree from "./tree";
-import { State, Action, updatePage } from "./usePageTree";
+import { updatePage } from "./usePageTree";
+import usePageTreeContext from "./usePageTreeContext";
 import Button from "./Button";
 
 type Props = {
   id: Tree.Id;
-  state: State;
-  dispatch: (action: Action) => void;
-}
+};
 
-export default function EditPageName({ id, state, dispatch }: Props) {
+export default function EditPageName({ id }: Props) {
+  const { state, dispatch } = usePageTreeContext();
   const { dir, locale } = state;
   const node = state.nodes[id];
   const page = node.record;
