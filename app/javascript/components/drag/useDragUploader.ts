@@ -54,7 +54,7 @@ export default function useDragUploader<T>(
   onDragEnd: (dragState: Drag.State<T>, files: File[]) => void
 ): [
   Drag.State<T>,
-  (evt: AnyTouchEvent, draggable: Drag.Item<T>) => void,
+  (evt: AnyTouchEvent, draggable: Drag.DraggableOrFiles<T>) => void,
   {
     onDragOver: (evt: AnyTouchEvent) => void;
     onDrop: (evt: AnyTouchEvent) => void;
@@ -68,13 +68,16 @@ export default function useDragUploader<T>(
 
   const [dragState, setDragState] = useState(initialState);
 
-  const updatePositions = (dragging?: Drag.Draggable<T> | string) => {
+  const updatePositions = (dragging?: Drag.DraggableOrFiles<T>) => {
     collections.forEach((c) => {
       c.dispatch({ type: "updatePositions", payload: dragging });
     });
   };
 
-  const startDrag = (evt: AnyTouchEvent, draggable: Drag.Item<T>) => {
+  const startDrag = (
+    evt: AnyTouchEvent,
+    draggable: Drag.DraggableOrFiles<T>
+  ) => {
     updatePositions(draggable);
     setDragState({ dragging: draggable, ...mousePosition(evt) });
   };

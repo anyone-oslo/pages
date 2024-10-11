@@ -5,8 +5,8 @@ import * as Images from "../../types/Images";
 
 interface Props {
   container: RefObject<HTMLDivElement>;
-  draggable: Drag.Item<Images.Record>;
-  dragState: Drag.State;
+  draggable: Drag.DraggableOrFiles<Images.Record>;
+  dragState: Drag.State<Images.Record>;
 }
 
 export default function DragElement(props: Props) {

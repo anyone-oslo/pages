@@ -20,7 +20,7 @@ export interface Resource {
   uncropped_url: string;
 }
 
-export interface Record extends Drag.DraggableRecord {
+export interface Record {
   id?: number;
   image: Resource;
   primary?: boolean;

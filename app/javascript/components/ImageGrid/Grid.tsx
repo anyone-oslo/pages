@@ -29,7 +29,10 @@ function draggedImageOrder(
   primaryCollection: Drag.Collection<Images.Record>,
   imagesCollection: Drag.Collection<Images.Record>,
   dragState: Drag.State<Images.Record>
-): [Drag.Item<Images.Record>, Drag.Item<Images.Record>[]] {
+): [
+  Drag.DraggableOrFiles<Images.Record>,
+  Drag.DraggableOrFiles<Images.Record>[]
+] {
   const [primary, ...rest] = collectionOrder(primaryCollection, dragState);
   let images = [...rest, ...collectionOrder(imagesCollection, dragState)];
 
@@ -79,7 +82,7 @@ export default function Grid(props: Props) {
     }
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader<Images.Record>(
+  const [dragState, dragStart, listeners] = useDragUploader(
     [primary, images],
     dragEnd
   );
@@ -116,7 +119,10 @@ export default function Grid(props: Props) {
       } else {
         dispatchAll({
           type: "update",
-          payload: { ...draggable, record: { image: json } } as Drag.Draggable
+          payload: {
+            ...draggable,
+            record: { image: json }
+          } as Drag.Draggable<Images.Record>
         });
       }
     });
@@ -145,7 +151,7 @@ export default function Grid(props: Props) {
   };
 
   const renderImage = (
-    draggable: Drag.Item<Images.Record>,
+    draggable: Drag.DraggableOrFiles<Images.Record>,
     isPrimary: boolean
   ) => {
     const { dragging } = dragState;

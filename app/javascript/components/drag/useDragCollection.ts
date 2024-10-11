@@ -12,8 +12,8 @@ function getPosition<T>(draggable: Drag.Draggable<T>) {
 }
 
 function hideDraggable<T>(
-  draggable: Drag.Item<T> | null,
-  callback: () => Drag.Item<T>[]
+  draggable: Drag.DraggableOrFiles<T> | null,
+  callback: () => Drag.DraggableOrFiles<T>[]
 ) {
   if (
     draggable &&
@@ -32,9 +32,9 @@ function hideDraggable<T>(
 }
 
 function insertFiles<T>(
-  state: Drag.Item<T>[],
-  files: Drag.Item<T>[]
-): Drag.Item<T>[] {
+  state: Drag.DraggableOrFiles<T>[],
+  files: Drag.DraggableOrFiles<T>[]
+): Drag.DraggableOrFiles<T>[] {
   const index = state.indexOf("Files");
   if (index === -1 || !files) {
     return state;
@@ -43,10 +43,10 @@ function insertFiles<T>(
   }
 }
 
-function dragCollectionReducer<T = Drag.DraggableRecord>(
-  state: Drag.Item<T>[],
+function reducer<T>(
+  state: Drag.DraggableOrFiles<T>[],
   action: Drag.CollectionAction<T>
-): Drag.Item<T>[] {
+): Drag.DraggableOrFiles<T>[] {
   switch (action.type) {
     case "append":
       return [...state, ...action.payload];
@@ -56,9 +56,7 @@ function dragCollectionReducer<T = Drag.DraggableRecord>(
       return insertFiles(state, action.payload);
     case "update":
       return state.map((d: Drag.Draggable<T>) => {
-        return d.handle === (action.payload as Drag.Draggable<T>).handle
-          ? action.payload
-          : d;
+        return d.handle === action.payload.handle ? action.payload : d;
       });
     case "updatePositions":
       return hideDraggable(action.payload, () => {
@@ -81,9 +79,7 @@ function dragCollectionReducer<T = Drag.DraggableRecord>(
   }
 }
 
-export function createDraggable<T = Drag.DraggableRecord>(
-  record: T
-): Drag.Draggable<T> {
+export function createDraggable<T>(record: T): Drag.Draggable<T> {
   return {
     record: record,
     rect: null,
@@ -92,11 +88,11 @@ export function createDraggable<T = Drag.DraggableRecord>(
   };
 }
 
-export default function useDragCollection<T = Drag.DraggableRecord>(
+export default function useDragCollection<T>(
   records: Array<T>
 ): Drag.Collection<T> {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [draggables, dispatch] = useReducer(dragCollectionReducer<T>, [], () =>
+  const [draggables, dispatch] = useReducer(reducer<T>, [], () =>
     records.map((r) => createDraggable(r))
   );
 

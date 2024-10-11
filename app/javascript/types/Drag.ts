@@ -1,35 +1,33 @@
-export type DraggableRecord = Record<string, unknown>;
-
-export interface Draggable<T = DraggableRecord> {
+export type Draggable<T> = {
   record: T;
   ref: React.MutableRefObject<HTMLDivElement>;
   rect: DOMRect | null;
   handle: string;
-}
+};
 
-export type Item<T = DraggableRecord> = Draggable<T> | "Files";
+export type DraggableOrFiles<T> = Draggable<T> | "Files";
 
-export type CollectionAction<T = DraggableRecord> =
-  | {
-      type: "append" | "prepend" | "insertFiles" | "replace" | "reorder";
-      payload: Item<T>[];
-    }
-  | { type: "update"; payload: Item<T> }
+export type CollectionAction<T> =
+  | { type: "append" | "insertFiles" | "replace"; payload: Draggable<T>[] }
+  | { type: "prepend" | "reorder"; payload: DraggableOrFiles<T>[] }
+  | { type: "update"; payload: Draggable<T> }
   | { type: "reinitialize"; payload: Array<T> }
   | { type: "remove"; payload: Draggable<T> }
-  | { type: "updatePositions"; payload?: Draggable<T> };
+  | { type: "updatePositions"; payload?: DraggableOrFiles<T> };
 
-export interface Collection<T = DraggableRecord> {
+export type Collection<T> = {
   ref: React.MutableRefObject<HTMLDivElement>;
-  draggables: Item<T>[];
-  dispatch: (CollectionAction) => void;
-}
+  draggables: DraggableOrFiles<T>[];
+  dispatch: React.Dispatch<CollectionAction<T>>;
+};
 
-export interface Position {
-  x: number | null;
-  y: number | null;
-}
+export type Position = {
+  x: number;
+  y: number;
+};
 
-export interface State<T = DraggableRecord> extends Position {
-  dragging: Item<T> | false;
-}
+export type State<T> = {
+  dragging: DraggableOrFiles<T> | false;
+  x?: number;
+  y?: number;
+};

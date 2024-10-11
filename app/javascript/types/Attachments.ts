@@ -2,14 +2,14 @@ import * as Drag from "./Drag";
 import { Locale, LocalizedValue } from "../types";
 
 export interface Resource {
-  id: number | null;
+  id?: number;
   name: LocalizedValue;
-  description: LocalizedValue;
-  url: string;
   filename: string;
+  description?: LocalizedValue;
+  url?: string;
 }
 
-export interface Record extends Drag.DraggableRecord {
+export interface Record {
   id?: number;
   attachment: Resource;
   uploading?: boolean;

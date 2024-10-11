@@ -2,7 +2,7 @@ import * as Drag from "../../types/Drag";
 
 function hovering<T>(
   dragState: Drag.State<T>,
-  target: Drag.Item<T> | React.MutableRefObject<HTMLDivElement>
+  target: Drag.DraggableOrFiles<T> | React.MutableRefObject<HTMLDivElement>
 ) {
   const { x, y } = dragState;
   let rect: DOMRect;
@@ -22,7 +22,7 @@ function hovering<T>(
 export function collectionOrder<T>(
   collection: Drag.Collection<T>,
   dragState: Drag.State<T>
-): Array<Drag.Item<T>> {
+): Array<Drag.DraggableOrFiles<T>> {
   const { draggables, ref } = collection;
   const { dragging } = dragState;
 
@@ -30,7 +30,7 @@ export function collectionOrder<T>(
     return draggables;
   }
 
-  let ordered: Drag.Item<T>[] = draggables;
+  let ordered: Drag.DraggableOrFiles<T>[] = draggables;
   if (typeof dragging !== "string") {
     ordered = draggables
       .filter((d) => typeof d !== "string")

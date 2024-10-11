@@ -23,7 +23,7 @@ export default function List(props: Props) {
     const name = {};
     locales.forEach((l) => (name[l] = file.name));
 
-    const draggable = createDraggable({
+    const draggable = createDraggable<Attachments.Record>({
       attachment: { filename: file.name, name: name },
       uploading: true
     });
@@ -57,7 +57,10 @@ export default function List(props: Props) {
     });
   };
 
-  const dragEnd = (dragState: Drag.State, files: File[]) => {
+  const dragEnd = (
+    dragState: Drag.State<Attachments.Record>,
+    files: File[]
+  ) => {
     collection.dispatch({
       type: "reorder",
       payload: draggedOrder(collection, dragState)
@@ -68,7 +71,7 @@ export default function List(props: Props) {
     });
   };
 
-  const [dragState, dragStart, listeners] = useDragUploader<Attachments.Record>(
+  const [dragState, dragStart, listeners] = useDragUploader(
     [collection],
     dragEnd
   );
@@ -109,7 +112,7 @@ export default function List(props: Props) {
     }
   };
 
-  const attachment = (draggable: Drag.Item<Attachments.Record>) => {
+  const attachment = (draggable: Drag.DraggableOrFiles<Attachments.Record>) => {
     const { dragging } = dragState;
 
     if (draggable === "Files") {
