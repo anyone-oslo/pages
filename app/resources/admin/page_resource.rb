@@ -79,7 +79,7 @@ module Admin
       return { src: nil, image: nil } unless image
 
       { src: dynamic_image_path(image, size: "500x"),
-        image: ::Admin::ImageResource.new(image).to_hash }
+        image: ::Admin::ImageResource.new(image).to_h }
     end
 
     def localized_objects
