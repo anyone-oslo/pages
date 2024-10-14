@@ -1,22 +1,11 @@
-import { MouseEvent } from "react";
-
 import * as Crop from "../../types/Crop";
-import * as Images from "../../types/Images";
+import useImageCropperContext from "./useImageCropperContext";
 
-type Ratio = number | null;
+export default function Toolbar() {
+  const { state, dispatch } = useImageCropperContext();
+  const { cropping, image } = state;
 
-type Props = {
-  cropState: Crop.State;
-  image: Images.Resource;
-  setAspect: (Ratio) => void;
-  toggleCrop: (evt: MouseEvent) => void;
-  toggleFocal: (evt: MouseEvent) => void;
-}
-
-export default function Toolbar(props: Props) {
-  const { cropping } = props.cropState;
-
-  const aspectRatios: Array<[string, Ratio]> = [
+  const aspectRatios: Array<[string, Crop.Ratio]> = [
     ["Free", null],
     ["1:1", 1],
     ["3:2", 3 / 2],
@@ -28,14 +17,26 @@ export default function Toolbar(props: Props) {
     ["16:9", 16 / 9]
   ];
 
-  const updateAspect = (ratio: Ratio) => (evt: MouseEvent) => {
+  const updateAspect = (ratio: Crop.Ratio) => (evt: React.MouseEvent) => {
     evt.preventDefault();
-    props.setAspect(ratio);
+    dispatch({ type: "setAspect", payload: ratio });
   };
 
-  const width = Math.ceil(props.cropState.crop_width);
-  const height = Math.ceil(props.cropState.crop_height);
-  const format = props.image.content_type.split("/")[1].toUpperCase();
+  const toggleCrop = () => {
+    if (state.cropping) {
+      dispatch({ type: "completeCrop" });
+    } else {
+      dispatch({ type: "startCrop" });
+    }
+  };
+
+  const toggleFocal = () => {
+    dispatch({ type: "toggleFocal" });
+  };
+
+  const width = Math.ceil(state.crop_width);
+  const height = Math.ceil(state.crop_height);
+  const format = image.content_type.split("/")[1].toUpperCase();
 
   return (
     <div className="toolbars">
@@ -47,21 +48,21 @@ export default function Toolbar(props: Props) {
         </div>
         <button
           title="Crop image"
-          onClick={props.toggleCrop}
+          onClick={toggleCrop}
           className={cropping ? "active" : ""}>
           <i className="fa-solid fa-crop" />
         </button>
         <button
           disabled={cropping}
           title="Toggle focal point"
-          onClick={props.toggleFocal}>
+          onClick={toggleFocal}>
           <i className="fa-solid fa-bullseye" />
         </button>
         <a
-          href={props.image.original_url}
+          href={image.original_url}
           className="button"
           title="Download original image"
-          download={props.image.filename}
+          download={image.filename}
           onClick={(evt) => cropping && evt.preventDefault()}>
           <i className="fa-solid fa-download" />
         </a>
@@ -72,7 +73,7 @@ export default function Toolbar(props: Props) {
           {aspectRatios.map((ratio) => (
             <button
               key={ratio[0]}
-              className={ratio[1] == props.cropState.aspect ? "active" : ""}
+              className={ratio[1] == state.aspect ? "active" : ""}
               onClick={updateAspect(ratio[1])}>
               {ratio[0]}
             </button>

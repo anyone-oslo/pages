@@ -3,7 +3,7 @@ import { Fragment, useState, ChangeEvent } from "react";
 import * as Pages from "../../types/Pages";
 import LabelledField from "../LabelledField";
 import DateTimeSelect from "../DateTimeSelect";
-import { errorsOn } from "./usePage";
+import { errorsOn } from "./utils";
 import usePageFormContext from "./usePageFormContext";
 
 type Props = {

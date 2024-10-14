@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 import * as Pages from "../../types/Pages";
 import { LocalizedValue } from "../../types";
 
-import { errorsOn } from "./usePage";
+import { errorsOn } from "./utils";
 import usePageFormContext from "./usePageFormContext";
 import LabelledField from "../LabelledField";
 

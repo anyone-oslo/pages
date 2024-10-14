@@ -1,12 +1,10 @@
-import { MouseEvent } from "react";
-
 type Props = {
   className: string;
   name: string;
   onClick: (evt: React.MouseEvent) => void;
-}
+};
 
-export default function RichTextToolbarButton(props: Props) {
+export default function ToolbarButton(props: Props) {
   return (
     <a
       title={props.name}

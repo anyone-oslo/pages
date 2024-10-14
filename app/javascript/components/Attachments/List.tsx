@@ -1,4 +1,5 @@
 import Attachment from "./Attachment";
+import Deleted from "./Deleted";
 import Placeholder from "./Placeholder";
 import FileUploadButton from "../FileUploadButton";
 import { post } from "../../lib/request";
@@ -146,23 +147,7 @@ export default function List(props: Props) {
   return (
     <div className={classes.join(" ")} ref={collection.ref} {...listeners}>
       <div className="files">{dragOrder.map((d) => attachment(d))}</div>
-      <div className="deleted">
-        {deleted.map((r) => (
-          <span className="deleted-attachment" key={r.id}>
-            <input name={`${attrName(r)}[id]`} type="hidden" value={r.id} />
-            <input
-              name={`${attrName(r)}[attachment_id]`}
-              type="hidden"
-              value={(r.attachment && r.attachment.id) || ""}
-            />
-            <input
-              name={`${attrName(r)}[_destroy]`}
-              type="hidden"
-              value="true"
-            />
-          </span>
-        ))}
-      </div>
+      <Deleted attributeName={attrName} deleted={deleted} />
       <div className="drop-target">
         <FileUploadButton
           multiple={true}

@@ -40,13 +40,13 @@ export default function AttachmentEditor(props: Props) {
     notice("Embed code copied to clipboard");
   };
 
-  const save = (evt: MouseEvent) => {
+  const save = async (evt: MouseEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
 
     const data = { ...localizations };
 
-    void putJson(`/admin/attachments/${attachment.id}`, { attachment: data });
+    await putJson(`/admin/attachments/${attachment.id}`, { attachment: data });
 
     if (props.onUpdate) {
       props.onUpdate(data);

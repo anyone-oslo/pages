@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import * as Pages from "../../types/Pages";
 import { MaybeLocalizedValue } from "../../types";
 
-import { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn } from "./utils";
 import usePageFormContext from "./usePageFormContext";
 import Block from "./Block";
 import PathSegment from "./PathSegment";

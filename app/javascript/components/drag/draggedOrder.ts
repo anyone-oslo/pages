@@ -31,7 +31,7 @@ export function collectionOrder<T>(
   }
 
   let ordered = draggables;
-  if (typeof dragging !== "string") {
+  if (dragging !== "Files") {
     ordered = draggables
       .filter((d) => d !== "Files")
       .filter((d) => d.handle !== dragging.handle);

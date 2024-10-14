@@ -5,6 +5,8 @@ export type Position = {
   y: number;
 };
 
+export type Ratio = number | null;
+
 export type Size = {
   width: number;
   height: number;
@@ -33,5 +35,5 @@ export type CropSize = Position &
 export type Action =
   | { type: "completeCrop" | "startCrop" | "toggleFocal" }
   | { type: "setCrop"; payload: CropSize }
-  | { type: "setAspect"; payload: number }
+  | { type: "setAspect"; payload: Ratio }
   | { type: "setFocal"; payload: Position };

@@ -8,6 +8,16 @@ type AnyTouchEvent =
   | React.MouseEvent
   | React.TouchEvent;
 
+type StartDrag<T> = (
+  evt: AnyTouchEvent,
+  draggable: Drag.DraggableOrFiles<T>
+) => void;
+
+type Listeners = {
+  onDragOver: (evt: AnyTouchEvent) => void;
+  onDrop: (evt: AnyTouchEvent) => void;
+};
+
 function containsFiles(evt: AnyTouchEvent) {
   if ("dataTransfer" in evt) {
     const dataTransfer = evt.dataTransfer as DataTransfer;
@@ -52,21 +62,12 @@ function mousePosition(evt: AnyTouchEvent): Drag.Position {
 export default function useDragUploader<T>(
   collections: Drag.Collection<T>[],
   onDragEnd: (dragState: Drag.State<T>, files: File[]) => void
-): [
-  Drag.State<T>,
-  (evt: AnyTouchEvent, draggable: Drag.DraggableOrFiles<T>) => void,
-  {
-    onDragOver: (evt: AnyTouchEvent) => void;
-    onDrop: (evt: AnyTouchEvent) => void;
-  }
-] {
-  const initialState: Drag.State<T> = {
+): [Drag.State<T>, StartDrag<T>, Listeners] {
+  const [dragState, setDragState] = useState<Drag.State<T>>({
     dragging: false,
     x: null,
     y: null
-  };
-
-  const [dragState, setDragState] = useState(initialState);
+  });
 
   const updatePositions = (dragging?: Drag.DraggableOrFiles<T>) => {
     collections.forEach((c) => {
@@ -87,10 +88,8 @@ export default function useDragUploader<T>(
       evt.stopPropagation();
       evt.preventDefault();
       setDragState({ ...dragState, ...mousePosition(evt) });
-    } else {
-      if (containsFiles(evt)) {
-        startDrag(evt, "Files");
-      }
+    } else if (containsFiles(evt)) {
+      startDrag(evt, "Files");
     }
   };
 

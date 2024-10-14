@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import FileUploadButton from "../FileUploadButton";
+import Deleted from "./Deleted";
 import DragElement from "./DragElement";
 import FilePlaceholder from "./FilePlaceholder";
 import GridImage from "./GridImage";
@@ -262,23 +263,7 @@ export default function Grid(props: Props) {
           {draggedImages.map((r) => renderImage(r, false))}
         </div>
       </div>
-      <div className="deleted">
-        {deleted.map((r) => (
-          <span className="deleted-image" key={r.id}>
-            <input name={`${attrName(r)}[id]`} type="hidden" value={r.id} />
-            <input
-              name={`${attrName(r)}[attachment_id]`}
-              type="hidden"
-              value={(r.image && r.image.id) || ""}
-            />
-            <input
-              name={`${attrName(r)}[_destroy]`}
-              type="hidden"
-              value={"true"}
-            />
-          </span>
-        ))}
-      </div>
+      <Deleted attributeName={attrName} deleted={deleted} />
     </div>
   );
 }

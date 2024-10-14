@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import * as Tags from "../../types/Tags";
 import { MaybeLocalizedValue } from "../../types";
 
-import { blockValue, errorsOn } from "./usePage";
+import { blockValue, errorsOn } from "./utils";
 import usePageFormContext from "./usePageFormContext";
 import LabelledField from "../LabelledField";
 import { default as TagEditor } from "../TagEditor/Editor";

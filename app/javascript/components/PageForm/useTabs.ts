@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import * as PageEditor from "../../types/PageEditor";
-import { unconfiguredBlocks } from "./usePage";
+import { unconfiguredBlocks } from "./utils";
 
 function tabsList(state: PageEditor.State): PageEditor.Tab[] {
   const { templates, templateConfig } = state;

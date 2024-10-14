@@ -1,9 +1,8 @@
-import { useCallback, useState } from "react";
-
 import * as Crop from "../types/Crop";
-
 import Image from "./ImageCropper/Image";
 import Toolbar from "./ImageCropper/Toolbar";
+import { ImageCropperContext } from "./ImageCropper/useImageCropperContext";
+import useContainerSize from "./ImageCropper/useContainerSize";
 
 export { default as useCrop, cropParams } from "./ImageCropper/useCrop";
 
@@ -24,73 +23,34 @@ function focalPoint(state: Crop.State): Crop.Position {
   }
 }
 
-function useContainerSize(): [(node?: HTMLDivElement) => void, Crop.Size] {
-  const [containerSize, setContainerSize] = useState<Crop.Size>();
-
-  const ref = useCallback((node?: HTMLDivElement) => {
-    const measure = () => {
-      setContainerSize({
-        width: node.offsetWidth - 2,
-        height: node.offsetHeight - 2
-      });
-    };
-    if (node !== null) {
-      measure();
-      const observer = new ResizeObserver(measure);
-      observer.observe(node);
-    }
-  }, []);
-
-  return [ref, containerSize];
-}
-
-export default function ImageCropper(props: Props) {
+export default function ImageCropper({
+  croppedImage,
+  cropState,
+  dispatch
+}: Props) {
   const [containerRef, containerSize] = useContainerSize();
 
-  const setAspect = (aspect: number) => {
-    props.dispatch({ type: "setAspect", payload: aspect });
-  };
-
-  const setCrop = (crop: Crop.CropSize) => {
-    props.dispatch({ type: "setCrop", payload: crop });
-  };
-
-  const setFocal = (focal: Crop.Position) => {
-    props.dispatch({ type: "setFocal", payload: focal });
-  };
-
-  const toggleCrop = () => {
-    if (props.cropState.cropping) {
-      props.dispatch({ type: "completeCrop" });
-    } else {
-      props.dispatch({ type: "startCrop" });
-    }
-  };
-
   return (
-    <div className="visual">
-      <Toolbar
-        cropState={props.cropState}
-        image={props.cropState.image}
-        setAspect={setAspect}
-        toggleCrop={toggleCrop}
-        toggleFocal={() => props.dispatch({ type: "toggleFocal" })}
-      />
-      <div className="image-container" ref={containerRef}>
-        {!props.croppedImage && (
-          <div className="loading">Loading image&hellip;</div>
-        )}
-        {props.croppedImage && containerSize && (
-          <Image
-            cropState={props.cropState}
-            containerSize={containerSize}
-            croppedImage={props.croppedImage}
-            focalPoint={focalPoint(props.cropState)}
-            setCrop={setCrop}
-            setFocal={setFocal}
-          />
-        )}
+    <ImageCropperContext.Provider
+      value={{
+        state: cropState,
+        dispatch: dispatch
+      }}>
+      <div className="visual">
+        <Toolbar />
+        <div className="image-container" ref={containerRef}>
+          {!croppedImage && (
+            <div className="loading">Loading image&hellip;</div>
+          )}
+          {croppedImage && containerSize && (
+            <Image
+              containerSize={containerSize}
+              croppedImage={croppedImage}
+              focalPoint={focalPoint(cropState)}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </ImageCropperContext.Provider>
   );
 }

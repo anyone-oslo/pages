@@ -1,4 +1,4 @@
-import { MouseEvent, TouchEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import * as Crop from "../../types/Crop";
 
@@ -8,7 +8,7 @@ type Props = {
   onChange: (pos: Crop.Position) => void;
   width: number;
   height: number;
-}
+};
 
 function clamp(val: number, min: number, max: number): number {
   if (val < min) {
@@ -32,7 +32,7 @@ export default function FocalPoint(props: Props) {
   const containerRef = useRef<HTMLDivElement>();
   const pointRef = useRef<HTMLDivElement>();
 
-  const dragStart = (evt: MouseEvent | TouchEvent) => {
+  const dragStart = (evt: React.MouseEvent | React.TouchEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
     if (evt.target == pointRef.current) {
@@ -47,7 +47,7 @@ export default function FocalPoint(props: Props) {
     }
   };
 
-  const drag = (evt: MouseEvent | TouchEvent) => {
+  const drag = (evt: React.MouseEvent | React.TouchEvent) => {
     if (dragging) {
       let x: number, y: number;
       const containerSize = containerRef.current.getBoundingClientRect();

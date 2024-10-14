@@ -1,11 +1,18 @@
-import { useState, useRef, ChangeEvent } from "react";
-import RichTextToolbarButton from "./RichTextToolbarButton";
+import { useRef, ChangeEvent } from "react";
+import ToolbarButton from "./RichTextArea/ToolbarButton";
+import useMaybeControlledValue from "./RichTextArea/useMaybeControlledValue";
+
+import {
+  ActionFn,
+  simpleActions,
+  advancedActions
+} from "./RichTextArea/actions";
 
 type Props = {
   id: string;
   name: string;
   value: string;
-  rows: number;
+  rows?: number;
   className?: string;
   simple?: boolean;
   lang?: string;
@@ -13,125 +20,19 @@ type Props = {
   onChange?: (str: string) => void;
 };
 
-type Replacement = [string, string, string];
-type ActionFn = (str: string) => Replacement;
-
-type Action = {
-  name: string;
-  className: string;
-  fn: ActionFn;
-  hotkey?: string;
-};
-
-function strToList(str: string, prefix: string): string {
-  return str
-    .split("\n")
-    .map((line) => prefix + " " + line)
-    .join("\n");
-}
-
-function relativeUrl(str: string): string {
-  let url: URL = null;
-
-  if (!str.match(/^https:\/\//) || !document || !document.location) {
-    return str;
-  }
-
-  try {
-    url = new URL(str);
-  } catch (error) {
-    console.log("Error parsing URL: ", error);
-  }
-
-  if (
-    url &&
-    url.hostname === document.location.hostname &&
-    (document.location.port || "80") === (url.port || "80")
-  ) {
-    return url.pathname;
-  }
-  return str;
-}
-
-function emailLink(selection: string): Replacement {
-  const address = prompt("Enter email address", "");
-  const name = selection.length > 0 ? selection : address;
-  return ['"', name, `":mailto:${address}`];
-}
-
-function link(selection: string): Replacement {
-  const name = selection.length > 0 ? selection : "Link text";
-  const url = prompt("Enter link URL", "");
-  if (url) {
-    return ['"', name, `":${relativeUrl(url)}`];
-  } else {
-    return ["", name, ""];
-  }
-}
-
-const simpleActions: Action[] = [
-  {
-    name: "bold",
-    className: "bold",
-    hotkey: "b",
-    fn: (str: string) => ["<b>", str, "</b>"]
-  },
-  {
-    name: "italic",
-    className: "italic",
-    hotkey: "i",
-    fn: (str: string) => ["<i>", str, "</i>"]
-  }
-];
-
-const advancedActions: Action[] = [
-  {
-    name: "Heading 2",
-    className: "header h2",
-    fn: (str: string) => ["h2. ", str, ""]
-  },
-  {
-    name: "Heading 3",
-    className: "header h3",
-    fn: (str: string) => ["h3. ", str, ""]
-  },
-  {
-    name: "Heading 4",
-    className: "header h4",
-    fn: (str: string) => ["h4. ", str, ""]
-  },
-  {
-    name: "Blockquote",
-    className: "quote-left",
-    fn: (str: string) => ["bq. ", str, ""]
-  },
-  {
-    name: "List",
-    className: "list-ul",
-    fn: (str: string) => ["", strToList(str, "*"), ""]
-  },
-  {
-    name: "Ordered list",
-    className: "list-ol",
-    fn: (str: string) => ["", strToList(str, "#"), ""]
-  },
-  { name: "Link", className: "link", fn: link },
-  { name: "Email link", className: "envelope", fn: emailLink }
-];
-
 export default function RichTextArea({
   id,
   name,
   value: initialValue,
-  rows: initialRows,
+  rows,
   className,
   simple,
   lang,
   dir,
   onChange
 }: Props) {
-  const [value, setValue] = useState<string>(initialValue || "");
-  const rows = initialRows || 5;
+  const [value, setValue] = useMaybeControlledValue(initialValue, onChange);
+
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const actions = simple
@@ -150,7 +51,7 @@ export default function RichTextArea({
   };
 
   const handleChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    updateValue(evt.target.value);
+    setValue(evt.target.value);
   };
 
   const handleKeyPress = (evt: React.KeyboardEvent) => {
@@ -174,7 +75,7 @@ export default function RichTextArea({
     }
   };
 
-  const localeOptions = (): React.HTMLProps<HTMLTextAreaElement> => {
+  const localeOptions = () => {
     const opts: React.HTMLProps<HTMLTextAreaElement> = {};
 
     if (lang) {
@@ -208,19 +109,7 @@ export default function RichTextArea({
       selectionStart + prefix.length,
       selectionStart + prefix.length + replacement.length
     );
-    updateValue(textarea.value);
-  };
-
-  const getValue = (): string => {
-    return onChange ? initialValue : value;
-  };
-
-  const updateValue = (str: string) => {
-    if (onChange) {
-      onChange(str);
-    } else {
-      setValue(str);
-    }
+    setValue(textarea.value);
   };
 
   const clickHandler = (fn: ActionFn) => (evt: React.MouseEvent) => {
@@ -232,7 +121,7 @@ export default function RichTextArea({
     <div className="rich-text-area">
       <div className="rich-text toolbar">
         {actions.map((action) => (
-          <RichTextToolbarButton
+          <ToolbarButton
             key={action.name}
             name={action.name}
             className={action.className}
@@ -245,8 +134,8 @@ export default function RichTextArea({
         ref={inputRef}
         id={id}
         name={name}
-        value={getValue()}
-        rows={rows}
+        value={value || ""}
+        rows={rows || 5}
         onChange={handleChange}
         onKeyDown={handleKeyPress}
         {...localeOptions()}

@@ -3,20 +3,24 @@ import ReactCrop from "react-image-crop";
 import * as Crop from "../../types/Crop";
 
 import { cropSize } from "./useCrop";
+import useImageCropperContext from "./useImageCropperContext";
 import FocalPoint from "./FocalPoint";
 
 type Props = {
   containerSize: Crop.Size;
   croppedImage: string;
-  cropState: Crop.State;
   focalPoint: Crop.Position;
-  setCrop: (crop: Crop.CropSize) => void;
-  setFocal: (focal: Crop.Position) => void;
-}
+};
 
-export default function Image(props: Props) {
+export default function Image({
+  containerSize,
+  croppedImage,
+  focalPoint
+}: Props) {
+  const { state, dispatch } = useImageCropperContext();
+
   const imageSize = () => {
-    const { image, cropping, crop_width, crop_height } = props.cropState;
+    const { image, cropping, crop_width, crop_height } = state;
     if (cropping) {
       return { width: image.real_width, height: image.real_height };
     } else {
@@ -24,8 +28,16 @@ export default function Image(props: Props) {
     }
   };
 
-  const maxWidth = props.containerSize.width;
-  const maxHeight = props.containerSize.height;
+  const setCrop = (crop: Crop.CropSize) => {
+    dispatch({ type: "setCrop", payload: crop });
+  };
+
+  const setFocal = (focal: Crop.Position) => {
+    dispatch({ type: "setFocal", payload: focal });
+  };
+
+  const maxWidth = containerSize.width;
+  const maxHeight = containerSize.height;
   const aspect = imageSize().width / imageSize().height;
 
   let width = maxWidth;
@@ -38,31 +50,31 @@ export default function Image(props: Props) {
 
   const style = { width: `${width}px`, height: `${height}px` };
 
-  if (props.cropState.cropping) {
+  if (state.cropping) {
     return (
       <div className="image-wrapper" style={style}>
         <ReactCrop
-          src={props.cropState.image.uncropped_url}
-          crop={cropSize(props.cropState)}
+          src={state.image.uncropped_url}
+          crop={cropSize(state)}
           minWidth={10}
           minHeight={10}
-          onChange={props.setCrop}
+          onChange={setCrop}
         />
       </div>
     );
   } else {
     return (
       <div className="image-wrapper" style={style}>
-        {props.focalPoint && (
+        {focalPoint && (
           <FocalPoint
             width={width}
             height={height}
-            x={props.focalPoint.x}
-            y={props.focalPoint.y}
-            onChange={props.setFocal}
+            x={focalPoint.x}
+            y={focalPoint.y}
+            onChange={setFocal}
           />
         )}
-        <img src={props.croppedImage} />
+        <img src={croppedImage} />
       </div>
     );
   }

@@ -11,20 +11,20 @@ function getPosition<T>(draggable: Drag.Draggable<T>) {
   }
 }
 
-function hideDraggable<T>(
-  draggable: Drag.DraggableOrFiles<T> | null,
+function hideDragging<T>(
+  dragging: Drag.DraggableOrFiles<T> | null,
   callback: () => Drag.DraggableOrFiles<T>[]
 ) {
   if (
-    draggable &&
-    draggable !== "Files" &&
-    "ref" in draggable &&
-    draggable.ref.current
+    dragging &&
+    dragging !== "Files" &&
+    "ref" in dragging &&
+    dragging.ref.current
   ) {
-    const prevDisplay = draggable.ref.current.style.display;
-    draggable.ref.current.style.display = "none";
+    const prevDisplay = dragging.ref.current.style.display;
+    dragging.ref.current.style.display = "none";
     const result = callback();
-    draggable.ref.current.style.display = prevDisplay;
+    dragging.ref.current.style.display = prevDisplay;
     return result;
   } else {
     return callback();
@@ -59,7 +59,7 @@ function reducer<T>(
         return d.handle === action.payload.handle ? action.payload : d;
       });
     case "updatePositions":
-      return hideDraggable(action.payload, () => {
+      return hideDragging(action.payload, () => {
         return state.map((d: Drag.Draggable<T>) => {
           return { ...d, rect: getPosition(d) };
         });
