@@ -18,9 +18,9 @@ class PageBuilder
   attr_reader :user, :locale, :parent
 
   class << self
-    def build(user, locale: nil, parent: nil, &block)
+    def build(user, locale: nil, parent: nil, &)
       new(user, locale:, parent:)
-        .run(&block)
+        .run(&)
     end
   end
 

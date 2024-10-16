@@ -80,10 +80,10 @@ module PagesCore
       yield configuration if block_given?
     end
 
-    def configuration(key = nil, *args)
+    def configuration(key = nil, *)
       @configuration ||= PagesCore::Configuration::Pages.new
       if key
-        @configuration.send(key, *args)
+        @configuration.send(key, *)
       else
         @configuration
       end

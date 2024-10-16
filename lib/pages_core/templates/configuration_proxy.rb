@@ -8,15 +8,15 @@ module PagesCore
         @parent = parent
       end
 
-      def method_missing(method_name, *args, &block)
+      def method_missing(method_name, *, &block)
         if @parent && block
           @callback.call(@parent, method_name, block)
         elsif @parent
-          @callback.call(@parent, method_name, *args)
+          @callback.call(@parent, method_name, *)
         elsif block
           @callback.call(method_name, block)
         else
-          @callback.call(method_name, *args)
+          @callback.call(method_name, *)
         end
       end
 
