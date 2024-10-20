@@ -1,5 +1,3 @@
-import { MouseEvent, useState } from "react";
-
 import useModalStore from "../stores/useModalStore";
 import { putJson } from "../lib/request";
 import * as Images from "../types/Images";
@@ -7,6 +5,8 @@ import { Locale } from "../types";
 
 import ImageCropper, { useCrop, cropParams } from "./ImageCropper";
 import Form from "./ImageEditor/Form";
+import useImageEditor from "./ImageEditor/useImageEditor";
+import { ImageEditorContext } from "./ImageEditor/useImageEditorContext";
 
 type Props = {
   image: Images.Resource;
@@ -20,31 +20,22 @@ type Props = {
 };
 
 export default function ImageEditor(props: Props) {
-  const [cropState, dispatch, croppedImage] = useCrop(props.image);
-  const [locale, setLocale] = useState(props.locale);
-  const [localizations, setLocalizations] = useState({
-    caption: props.image.caption || {},
-    alternative: props.image.alternative || {}
-  });
+  const [cropState, cropDispatch, croppedImage] = useCrop(props.image);
+
+  const [state, dispatch, options] = useImageEditor(props);
 
   const closeModal = useModalStore((state) => state.close);
 
-  const updateLocalization = (
-    name: "alternative" | "caption",
-    value: string
-  ) => {
-    setLocalizations({
-      ...localizations,
-      [name]: { ...localizations[name], [locale]: value }
-    });
-  };
-
-  const save = (evt: MouseEvent) => {
+  const handleSave = async (evt: React.MouseEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    const data = { ...localizations, ...cropParams(cropState) };
-    void putJson(`/admin/images/${props.image.id}`, { image: data });
+    const data = {
+      ...cropParams(cropState),
+      alternative: state.alternative,
+      caption: state.caption
+    };
+    await putJson(`/admin/images/${props.image.id}`, { image: data });
 
     if (props.onUpdate) {
       props.onUpdate(data, croppedImage);
@@ -53,25 +44,20 @@ export default function ImageEditor(props: Props) {
   };
 
   return (
-    <div className="image-editor">
-      <ImageCropper
-        croppedImage={croppedImage}
-        cropState={cropState}
-        dispatch={dispatch}
-      />
-      {!cropState.cropping && (
-        <Form
-          alternative={localizations.alternative}
-          caption={localizations.caption}
-          image={props.image}
-          locale={locale}
-          locales={props.locales}
-          setLocale={setLocale}
-          save={save}
-          showCaption={props.caption}
-          updateLocalization={updateLocalization}
+    <ImageEditorContext.Provider
+      value={{
+        state: state,
+        dispatch: dispatch,
+        options: options
+      }}>
+      <div className="image-editor">
+        <ImageCropper
+          croppedImage={croppedImage}
+          cropState={cropState}
+          dispatch={cropDispatch}
         />
-      )}
-    </div>
+        {!cropState.cropping && <Form onSave={handleSave} />}
+      </div>
+    </ImageEditorContext.Provider>
   );
 }

@@ -25,6 +25,7 @@ export type State = Params & {
   aspect: number | null;
   cropping: boolean;
   image: Images.Resource;
+  focalPoint?: Position;
 };
 
 export type CropSize = Position &

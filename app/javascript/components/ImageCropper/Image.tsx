@@ -9,14 +9,9 @@ import FocalPoint from "./FocalPoint";
 type Props = {
   containerSize: Crop.Size;
   croppedImage: string;
-  focalPoint: Crop.Position;
 };
 
-export default function Image({
-  containerSize,
-  croppedImage,
-  focalPoint
-}: Props) {
+export default function Image({ containerSize, croppedImage }: Props) {
   const { state, dispatch } = useImageCropperContext();
 
   const imageSize = () => {
@@ -30,10 +25,6 @@ export default function Image({
 
   const setCrop = (crop: Crop.CropSize) => {
     dispatch({ type: "setCrop", payload: crop });
-  };
-
-  const setFocal = (focal: Crop.Position) => {
-    dispatch({ type: "setFocal", payload: focal });
   };
 
   const maxWidth = containerSize.width;
@@ -65,15 +56,7 @@ export default function Image({
   } else {
     return (
       <div className="image-wrapper" style={style}>
-        {focalPoint && (
-          <FocalPoint
-            width={width}
-            height={height}
-            x={focalPoint.x}
-            y={focalPoint.y}
-            onChange={setFocal}
-          />
-        )}
+        {state.focalPoint && <FocalPoint width={width} height={height} />}
         <img src={croppedImage} />
       </div>
     );

@@ -3,6 +3,17 @@ import { useEffect, useReducer, useState } from "react";
 import * as Crop from "../../types/Crop";
 import * as Images from "../../types/Images";
 
+function focalPoint(state: Crop.State): Crop.Position {
+  if (state.crop_gravity_x === null || state.crop_gravity_y === null) {
+    return null;
+  } else {
+    return {
+      x: ((state.crop_gravity_x - state.crop_start_x) / state.crop_width) * 100,
+      y: ((state.crop_gravity_y - state.crop_start_y) / state.crop_height) * 100
+    };
+  }
+}
+
 function applyAspect(state: Crop.State, aspect: number | null) {
   const crop = cropSize(state);
   const image = state.image;
@@ -56,7 +67,7 @@ function setFocal(state: Crop.State, position: Crop.Position) {
   };
 }
 
-function cropReducer(state: Crop.State, action: Crop.Action): Crop.State {
+function reducer(state: Crop.State, action: Crop.Action): Crop.State {
   const {
     crop_start_x,
     crop_start_y,
@@ -94,7 +105,7 @@ function cropReducer(state: Crop.State, action: Crop.Action): Crop.State {
       return { ...state, cropping: true };
     case "toggleFocal":
       if (crop_gravity_x === null) {
-        return cropReducer(state, {
+        return reducer(state, {
           type: "setFocal",
           payload: { x: 50, y: 50 }
         });
@@ -190,6 +201,10 @@ export function cropSize(state: Crop.State): Crop.CropSize {
   }
 }
 
+function derivedState(state: Crop.State): Crop.State {
+  return { ...state, focalPoint: focalPoint(state) };
+}
+
 export default function useCrop(
   image: Images.Resource
 ): [Crop.State, (action: Crop.Action) => void, string] {
@@ -205,7 +220,7 @@ export default function useCrop(
     image: image
   };
 
-  const [state, dispatch] = useReducer(cropReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
@@ -223,5 +238,5 @@ export default function useCrop(
     }
   }, [state]);
 
-  return [state, dispatch, croppedImage];
+  return [derivedState(state), dispatch, croppedImage];
 }

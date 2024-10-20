@@ -1,37 +1,38 @@
-import { ChangeEvent, MouseEvent } from "react";
-
 import useModalStore from "../../stores/useModalStore";
 import useToastStore from "../../stores/useToastStore";
 import copyToClipboard, { copySupported } from "../../lib/copyToClipboard";
-import * as Images from "../../types/Images";
-import { Locale } from "../../types";
+import useImageEditorContext from "./useImageEditorContext";
 
 type Props = {
-  alternative: Record<string, string>;
-  caption: Record<string, string>;
-  image: Images.Resource;
-  locale: string;
-  locales: Record<string, Locale>;
-  setLocale: (locale: string) => void;
-  save: (evt: MouseEvent) => void;
-  showCaption: boolean;
-  updateLocalization: (name: "alternative" | "caption", value: string) => void;
-}
+  onSave: (evt: React.MouseEvent) => void;
+};
 
-export default function Form(props: Props) {
-  const { alternative, caption, image, locale, locales } = props;
+export default function Form({ onSave }: Props) {
+  const { state, dispatch, options } = useImageEditorContext();
+  const { alternative, caption, locale } = state;
+  const { image, locales } = options;
 
   const closeModal = useModalStore((state) => state.close);
   const notice = useToastStore((state) => state.notice);
 
-  const copyEmbedCode = (evt: MouseEvent) => {
+  const copyEmbedCode = (evt: React.MouseEvent) => {
     evt.preventDefault();
     copyToClipboard(`[image:${image.id}]`);
     notice("Embed code copied to clipboard");
   };
 
-  const handleChangeLocale = (evt: ChangeEvent<HTMLSelectElement>) => {
-    props.setLocale(evt.target.value);
+  const handleChangeLocale = (evt: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({ type: "setLocale", payload: evt.target.value });
+  };
+
+  const handleChangeAlternative = (
+    evt: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    dispatch({ type: "setAlternative", payload: evt.target.value });
+  };
+
+  const handleChangeCaption = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch({ type: "setCaption", payload: evt.target.value });
   };
 
   const inputDir = (locales && locales[locale] && locales[locale].dir) || "ltr";
@@ -68,27 +69,23 @@ export default function Form(props: Props) {
           lang={locale}
           dir={inputDir}
           value={alternative[locale] || ""}
-          onChange={(e) =>
-            props.updateLocalization("alternative", e.target.value)
-          }
+          onChange={handleChangeAlternative}
         />
       </div>
-      {props.showCaption && (
+      {options.caption && (
         <div className="field">
           <label>Caption</label>
           <textarea
             lang={locale}
             dir={inputDir}
-            onChange={(e) =>
-              props.updateLocalization("caption", e.target.value)
-            }
+            onChange={handleChangeCaption}
             value={caption[locale] || ""}
             className="caption"
           />
         </div>
       )}
       <div className="buttons">
-        <button className="primary" onClick={props.save}>
+        <button className="primary" onClick={onSave}>
           Save
         </button>
         <button onClick={closeModal}>Cancel</button>

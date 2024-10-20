@@ -1,11 +1,9 @@
 import { useRef, useState } from "react";
 
+import useImageCropperContext from "./useImageCropperContext";
 import * as Crop from "../../types/Crop";
 
 type Props = {
-  x: number;
-  y: number;
-  onChange: (pos: Crop.Position) => void;
   width: number;
   height: number;
 };
@@ -21,13 +19,11 @@ function clamp(val: number, min: number, max: number): number {
 }
 
 export default function FocalPoint(props: Props) {
-  const { width, height, onChange } = props;
+  const { width, height } = props;
+  const { state, dispatch } = useImageCropperContext();
 
   const [dragging, setDragging] = useState(false);
-  const [position, setPosition] = useState<Crop.Position>({
-    x: props.x,
-    y: props.y
-  });
+  const [position, setPosition] = useState<Crop.Position>(state.focalPoint);
 
   const containerRef = useRef<HTMLDivElement>();
   const pointRef = useRef<HTMLDivElement>();
@@ -43,7 +39,7 @@ export default function FocalPoint(props: Props) {
   const dragEnd = () => {
     if (dragging) {
       setDragging(false);
-      onChange(position);
+      dispatch({ type: "setFocal", payload: position });
     }
   };
 

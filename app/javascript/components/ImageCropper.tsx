@@ -12,17 +12,6 @@ type Props = {
   dispatch: React.Dispatch<Crop.Action>;
 };
 
-function focalPoint(state: Crop.State): Crop.Position {
-  if (state.crop_gravity_x === null || state.crop_gravity_y === null) {
-    return null;
-  } else {
-    return {
-      x: ((state.crop_gravity_x - state.crop_start_x) / state.crop_width) * 100,
-      y: ((state.crop_gravity_y - state.crop_start_y) / state.crop_height) * 100
-    };
-  }
-}
-
 export default function ImageCropper({
   croppedImage,
   cropState,
@@ -43,11 +32,7 @@ export default function ImageCropper({
             <div className="loading">Loading image&hellip;</div>
           )}
           {croppedImage && containerSize && (
-            <Image
-              containerSize={containerSize}
-              croppedImage={croppedImage}
-              focalPoint={focalPoint(cropState)}
-            />
+            <Image containerSize={containerSize} croppedImage={croppedImage} />
           )}
         </div>
       </div>
