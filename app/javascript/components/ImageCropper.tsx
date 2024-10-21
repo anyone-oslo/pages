@@ -8,21 +8,17 @@ export { default as useCrop, cropParams } from "./ImageCropper/useCrop";
 
 type Props = {
   croppedImage: string;
-  cropState: Crop.State;
+  state: Crop.State;
   dispatch: React.Dispatch<Crop.Action>;
 };
 
-export default function ImageCropper({
-  croppedImage,
-  cropState,
-  dispatch
-}: Props) {
+export default function ImageCropper({ croppedImage, state, dispatch }: Props) {
   const [containerRef, containerSize] = useContainerSize();
 
   return (
     <ImageCropperContext.Provider
       value={{
-        state: cropState,
+        state: state,
         dispatch: dispatch
       }}>
       <div className="visual">

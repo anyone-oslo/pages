@@ -53,7 +53,7 @@ export default function ImageEditor(props: Props) {
       <div className="image-editor">
         <ImageCropper
           croppedImage={croppedImage}
-          cropState={cropState}
+          state={cropState}
           dispatch={cropDispatch}
         />
         {!cropState.cropping && <Form onSave={handleSave} />}
