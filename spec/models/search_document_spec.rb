@@ -13,12 +13,14 @@ describe SearchDocument do
 
   describe ".search" do
     def query(str)
-      described_class.search(str, locale:).results
+      described_class.search(str, locale:, trigram:).results
     end
 
     let(:locale) { :en }
+    let(:trigram) { false }
 
-    describe "when searching name" do
+    describe "when searching with trigrams" do
+      let(:trigram) { true }
       let!(:page) { create(:page, locale:, name: "foobar walking") }
 
       it "supports trigram similarity matching" do

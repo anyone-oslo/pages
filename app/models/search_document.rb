@@ -14,9 +14,15 @@ class SearchDocument < ApplicationRecord
 
   pg_search_scope :full_text_search_scope, lambda { |query, dictionary|
     { against: %i[name description content tags],
-      using: { tsearch: { prefix: true,
-                          dictionary:,
-                          tsvector_column: "tsv" },
+      using: { tsearch: { prefix: true, dictionary:, tsvector_column: "tsv" } },
+      ignoring: :accents,
+      order_within_rank: "search_documents.record_updated_at DESC",
+      query: }
+  }
+
+  pg_search_scope :trigram_search_scope, lambda { |query, dictionary|
+    { against: %i[name description content tags],
+      using: { tsearch: { prefix: true, dictionary:, tsvector_column: "tsv" },
                trigram: { only: %i[name] } },
       ignoring: :accents,
       order_within_rank: "search_documents.record_updated_at DESC",
@@ -29,11 +35,14 @@ class SearchDocument < ApplicationRecord
         .map(&:localized_searchable)
     end
 
-    def search(query, locale: nil)
+    def search(query, locale: nil, trigram: false)
       locale ||= I18n.locale
-      where(locale:)
-        .includes(:searchable)
-        .full_text_search_scope(query, search_configuration(locale))
+      scope = where(locale:).includes(:searchable)
+      if trigram
+        scope.trigram_search_scope(query, search_configuration(locale))
+      else
+        scope.full_text_search_scope(query, search_configuration(locale))
+      end
     end
 
     def search_configuration(locale)
