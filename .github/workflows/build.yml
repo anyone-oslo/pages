@@ -1,6 +1,8 @@
+---
 env:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
+  PGHOST: localhost
+  PGUSER: postgres
+  PGPASSWORD: postgres
   POSTGRES_DB: pages_test
 
 name: Build
@@ -62,8 +64,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.PGUSER }}
+          POSTGRES_PASSWORD: ${{ env.PGPASSWORD }}
           POSTGRES_DB: ${{ env.POSTGRES_DB }}
         options: >-
           --health-cmd pg_isready
@@ -85,16 +87,9 @@ jobs:
       - name: Create database
         env:
           RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: ${{ env.POSTGRES_USER }}
-          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
         run: |
           bundle exec rake db:migrate
       - name: Run tests
-        env:
-          PGHOST: localhost
-          PGUSER: ${{ env.POSTGRES_USER }}
-          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v5.0.0

@@ -39,5 +39,8 @@ module Internal
     #   Rails.root.join('my', 'locales', '*.{rb,yml}').to_s
     # ]
     config.i18n.default_locale = :nb
+
+    config.active_record.schema_format = :sql
+    config.active_record.dump_schema_after_migration = false
   end
 end
