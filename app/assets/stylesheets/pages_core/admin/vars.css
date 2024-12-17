@@ -30,4 +30,5 @@
   --button-border-color: #aaa;
   --button-color: #e8e8e8;
   --button-color-hover: #d8d8d8;
+  --outline-color: var(--blue);
 }

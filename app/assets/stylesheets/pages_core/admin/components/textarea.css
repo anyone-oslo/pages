@@ -1,6 +1,4 @@
 textarea.rich {
-  margin-top: -32px;
-  padding-top: calc(8px + 32px);
   width: 100%;
   max-width: none;
 }

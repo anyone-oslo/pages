@@ -283,3 +283,23 @@ form.button-to {
     }
   }
 }
+
+/* Outlines */
+input[type="email"],
+input[type="text"],
+input[type="password"],
+textarea {
+  &:focus-visible {
+    outline: 2px solid var(--outline-color);
+  }
+}
+
+.rich-text-area {
+  textarea:focus-visible {
+    outline: none;
+  }
+}
+
+.rich-text-area:has(textarea:focus-visible) {
+  outline: 2px solid var(--outline-color);
+}
