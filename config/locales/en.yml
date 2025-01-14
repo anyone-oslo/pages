@@ -17,6 +17,9 @@ en:
       user:
         email: Email address
         image: Profile picture
+  errors:
+    messages:
+      image_too_big: is too big (max %{count} megapixels)
   pages_core:
     account_holder_exists: Account holder already exists
     changes_saved: Your changes were saved

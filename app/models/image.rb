@@ -17,6 +17,6 @@ class Image < ApplicationRecord
     return unless real_width? && real_height?
     return if real_width * real_height <= 48_000_000
 
-    errors.add(:data, "is too large")
+    errors.add(:data, :image_too_big, count: 48)
   end
 end

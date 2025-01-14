@@ -1,0 +1,5 @@
+---
+nb:
+  errors:
+    messages:
+      image_too_big: er for stor (maks %{count} megapixel)
