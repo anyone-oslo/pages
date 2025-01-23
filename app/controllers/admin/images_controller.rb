@@ -36,13 +36,13 @@ module Admin
     end
 
     def image_params
-      params.require(:image).permit(
-        :name, :description, :file,
-        :crop_start_x, :crop_start_y, :crop_height, :crop_width, :locale,
-        :crop_gravity_x, :crop_gravity_y,
-        localized_attributes.index_with do |_a|
-          I18n.available_locales
-        end
+      params.expect(
+        image: [
+          :name, :description, :file, :locale,
+          :crop_start_x, :crop_start_y, :crop_height, :crop_width,
+          :crop_gravity_x, :crop_gravity_y,
+          localized_attributes.index_with { |_a| I18n.available_locales }
+        ]
       )
     end
 

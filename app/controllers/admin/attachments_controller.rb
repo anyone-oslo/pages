@@ -27,11 +27,11 @@ module Admin
     protected
 
     def attachment_params
-      params.require(:attachment).permit(
-        :file,
-        localized_attributes.index_with do |_a|
-          I18n.available_locales
-        end
+      params.expect(
+        attachment: [
+          :file,
+          localized_attributes.index_with { |_a| I18n.available_locales }
+        ]
       )
     end
 

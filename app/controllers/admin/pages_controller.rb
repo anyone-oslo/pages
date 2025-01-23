@@ -86,7 +86,7 @@ module Admin
     end
 
     def page_params
-      params.require(:page).permit(page_content_attributes)
+      params.expect(page: page_content_attributes)
     end
 
     def find_page

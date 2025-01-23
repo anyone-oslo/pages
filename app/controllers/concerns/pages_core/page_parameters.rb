@@ -5,8 +5,8 @@ module PagesCore
     extend ActiveSupport::Concern
 
     def page_attachment_attributes
-      { page_images_attributes: %i[id position image_id primary _destroy],
-        page_files_attributes: %i[id position attachment_id _destroy] }
+      { page_images_attributes: [%i[id position image_id primary _destroy]],
+        page_files_attributes: [%i[id position attachment_id _destroy]] }
     end
 
     def page_content_attributes

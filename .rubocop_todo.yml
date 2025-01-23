@@ -6,15 +6,3 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 7
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: Include.
-# Include: app/controllers/**/*.rb
-Rails/StrongParametersExpect:
-  Exclude:
-    - 'app/controllers/admin/account_recoveries_controller.rb'
-    - 'app/controllers/admin/attachments_controller.rb'
-    - 'app/controllers/admin/images_controller.rb'
-    - 'app/controllers/admin/invites_controller.rb'
-    - 'app/controllers/admin/pages_controller.rb'
-    - 'app/controllers/admin/users_controller.rb'

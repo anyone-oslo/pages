@@ -66,12 +66,11 @@ module Admin
     end
 
     def user_params
-      params.require(:user)
-            .permit(:name, :email, :password, :password_confirmation)
+      params.expect(user: %i[name email password password_confirmation])
     end
 
     def invite_params
-      params.require(:invite).permit(:email, role_names: [])
+      params.expect(invite: [:email, { role_names: [] }])
     end
   end
 end
