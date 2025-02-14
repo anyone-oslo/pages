@@ -59,7 +59,8 @@
     width: 100%;
     height: 100%;
     background: #e5e5e5;
-    background-image: linear-gradient(45deg, #fff 25%, transparent 25%),
+    background-image:
+      linear-gradient(45deg, #fff 25%, transparent 25%),
       linear-gradient(135deg, #fff 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, #fff 75%),
       linear-gradient(135deg, transparent 75%, #fff 75%);
@@ -139,6 +140,7 @@
     width: 300px;
     display: block;
     margin-left: 20px;
+    overflow: scroll;
 
     textarea {
       max-width: 100%;
