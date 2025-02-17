@@ -31,6 +31,14 @@ bin/rake db:migrate
 You should now be ready to fire up the server and visit /admin to
 create your first user account.
 
+There's also a couple of optional generators:
+
+```sh
+bin/rails g pages_core:rspec
+bin/rails g pages_core:frontend
+```
+
+
 ## Quick tour
 
 Pages is all about the `Page` model - a site is a tree of Pages. Every
