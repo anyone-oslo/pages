@@ -49,9 +49,7 @@ module PagesCore
       @root ||= find_root_with_subfolder("app")
     end
 
-    def paths
-      self.class.paths
-    end
+    delegate :paths, to: :class
 
     protected
 

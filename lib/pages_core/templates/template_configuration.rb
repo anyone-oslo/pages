@@ -49,9 +49,7 @@ module PagesCore
         @template_name = template_name.to_sym
       end
 
-      def config
-        self.class.config
-      end
+      delegate :config, to: :class
 
       def name
         value(:name) || default_name
