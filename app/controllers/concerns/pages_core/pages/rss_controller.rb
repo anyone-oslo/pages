@@ -36,6 +36,7 @@ module PagesCore
         @title = PagesCore.config.site_name
         @title += ": #{title}" if title
         @items = items
+        @summary = params[:summary].present?
         render template: "feeds/pages", layout: false
       end
     end
