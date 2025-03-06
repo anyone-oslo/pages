@@ -61,7 +61,7 @@ header {
 
   .tabs {
     display: flex;
-    overflow: scroll;
+    overflow: auto;
     width: 100%;
     gap: 8px;
 

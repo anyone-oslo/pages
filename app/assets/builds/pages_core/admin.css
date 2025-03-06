@@ -8020,7 +8020,7 @@ header .user a:first-of-type {
 
 header .tabs {
     display: flex;
-    overflow: scroll;
+    overflow: auto;
     width: 100%;
     gap: 8px;
   }
@@ -8330,7 +8330,7 @@ main .page-description h3 {
     width: 300px;
     display: block;
     margin-left: 20px;
-    overflow: scroll;
+    overflow: auto;
   }
 
 .image-editor form textarea {

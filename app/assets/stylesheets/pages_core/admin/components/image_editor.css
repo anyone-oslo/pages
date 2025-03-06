@@ -140,7 +140,7 @@
     width: 300px;
     display: block;
     margin-left: 20px;
-    overflow: scroll;
+    overflow: auto;
 
     textarea {
       max-width: 100%;
