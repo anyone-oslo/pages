@@ -3,7 +3,7 @@ type Props = {
   locale: string;
   dir?: string;
   editUrl?: string;
-}
+};
 
 export default function PageName(props: Props) {
   const { name, locale, dir, editUrl } = props;

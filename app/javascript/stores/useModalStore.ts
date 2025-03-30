@@ -4,7 +4,7 @@ type ModalState = {
   component: JSX.Element | null;
   open: (elem: JSX.Element) => void;
   close: () => void;
-}
+};
 
 const useModalStore = create<ModalState>((set) => ({
   component: null,

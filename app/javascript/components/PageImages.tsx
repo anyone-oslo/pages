@@ -7,7 +7,7 @@ type Props = {
   locale: string;
   locales: { [index: string]: Locale };
   records: Images.Record[];
-}
+};
 
 export default function PageImages(props: Props) {
   return (

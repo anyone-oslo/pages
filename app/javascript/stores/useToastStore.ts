@@ -3,14 +3,14 @@ import { create } from "zustand";
 type Toast = {
   type: string;
   message: string;
-}
+};
 
 type ToastState = {
   toasts: Toast[];
   error: (msg: string) => void;
   notice: (msg: string) => void;
   next: () => void;
-}
+};
 
 const useToastStore = create<ToastState>((set) => ({
   toasts: [],

@@ -10,7 +10,7 @@ type Props = {
   setEndsAt?: (date: Date) => void;
   disabled?: boolean;
   disableTime?: boolean;
-}
+};
 
 function defaultDate(offset = 0): Date {
   const coeff = 1000 * 60 * 60;

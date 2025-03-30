@@ -4,7 +4,7 @@ import * as Tags from "../../types/Tags";
 
 type Props = {
   dispatch: (action: Tags.Action) => void;
-}
+};
 
 export default function AddTagForm(props: Props) {
   const [tag, setTag] = useState("");

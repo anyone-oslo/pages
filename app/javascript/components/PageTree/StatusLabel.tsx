@@ -1,6 +1,6 @@
 type Props = {
   status: number;
-}
+};
 
 export default function StatusLabel({ status }: Props) {
   const labels = ["Draft", "Reviewed", "Published", "Hidden", "Deleted"];
