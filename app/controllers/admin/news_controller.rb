@@ -12,8 +12,8 @@ module Admin
       @archive_finder = archive_finder(@news_pages, content_locale)
       unless @year
         redirect_to(admin_news_index_path(content_locale,
-                                          (@archive_finder.latest_year ||
-                                           Time.zone.now.year)))
+                                          @archive_finder.latest_year ||
+                                           Time.zone.now.year))
         return
       end
       @pages = @archive_finder.by_year_and_maybe_month(@year, @month)
