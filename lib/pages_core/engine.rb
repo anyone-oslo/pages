@@ -44,21 +44,6 @@ module PagesCore
       )
     end
 
-    initializer "pages_core.lograge" do |app|
-      app.config.lograge.enabled = true if ENV["ENABLE_LOGRAGE"]
-      app.config.lograge.formatter = Lograge::Formatters::Json.new
-      app.config.lograge.ignore_actions = ["Rails::HealthController"]
-
-      app.config.lograge.custom_options = lambda do |event|
-        exclude_params = %w[controller action format id]
-        { remote_ip: event.payload[:remote_ip],
-          user_id: event.payload[:user_id],
-          user_email: event.payload[:user_email],
-          params: event.payload[:params]
-                       .except(*exclude_params) }
-      end
-    end
-
     initializer "pages_core.deprecator" do |app|
       app.deprecators[:pages_core] = PagesCore.deprecator
     end
