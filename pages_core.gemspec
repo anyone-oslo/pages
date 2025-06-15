@@ -36,7 +36,6 @@ Gem::Specification.new do |s|
   s.add_dependency "pg_search"
   s.add_dependency "premailer-rails"
   s.add_dependency "progress_bar"
-  s.add_dependency "rails-healthcheck", "~> 1.0.3"
   s.add_dependency "RedCloth", "~> 4.3.2"
   s.add_dependency "rotp", "~> 6.3.0"
   s.add_dependency "rqrcode"

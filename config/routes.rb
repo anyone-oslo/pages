@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  Healthcheck.routes(self)
-
   image_resources :images, path: "dynamic_images/:digest(/:size)"
 
   # Attachment

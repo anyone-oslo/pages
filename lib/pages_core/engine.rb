@@ -44,30 +44,10 @@ module PagesCore
       )
     end
 
-    initializer "pages_core.healthcheck" do |_app|
-      Healthcheck.configure do |config|
-        config.success = 200
-        config.error = 503
-        config.verbose = true
-        config.route = "/healthcheck"
-        config.method = :get
-
-        # -- Checks --
-        config.add_check :database, lambda {
-          ActiveRecord::Base.connection.execute("select 1")
-        }
-        # config.add_check :migrations, lambda {
-        #   ActiveRecord::Migration.check_pending!
-        # }
-        # config.add_check :cache, -> { Rails.cache.read("some_key") }
-      end
-    end
-
     initializer "pages_core.lograge" do |app|
       app.config.lograge.enabled = true if ENV["ENABLE_LOGRAGE"]
       app.config.lograge.formatter = Lograge::Formatters::Json.new
-      app.config.lograge.ignore_actions =
-        ["Healthcheck::HealthchecksController#check"]
+      app.config.lograge.ignore_actions = ["Rails::HealthController"]
 
       app.config.lograge.custom_options = lambda do |event|
         exclude_params = %w[controller action format id]
