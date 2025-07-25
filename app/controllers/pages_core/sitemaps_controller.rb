@@ -3,6 +3,7 @@
 module PagesCore
   class SitemapsController < ApplicationController
     include PagesCore::PagePathHelper
+
     static_cache :index, :pages
 
     def index

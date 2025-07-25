@@ -48,7 +48,7 @@ module Admin
       end
     end
 
-    def secure_compare(compare, other)
+    def secure_compare?(compare, other)
       return false unless compare && other
       return false unless compare.bytesize == other.bytesize
 

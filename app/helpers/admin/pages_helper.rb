@@ -12,7 +12,7 @@ module Admin
     end
 
     def news_section_name(page, news_pages)
-      if news_pages.count { |p| p.name == page.name } > 1
+      if news_pages.many? { |p| p.name == page.name }
         page_name(page, include_parents: true)
       else
         page_name(page)

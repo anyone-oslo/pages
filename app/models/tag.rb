@@ -2,6 +2,7 @@
 
 class Tag < ApplicationRecord
   include PagesCore::HumanizableParam
+
   has_many :taggings, dependent: :destroy
 
   scope :by_name, -> { order("name ASC") }

@@ -3,6 +3,7 @@
 module PagesCore
   module ErrorRenderer
     extend ActiveSupport::Concern
+
     # Renders a fancy error page from app/views/errors. If the error name
     # is numeric, it will also be set as the response status. Example:
     #
