@@ -24,7 +24,7 @@ class User < ApplicationRecord
 
   before_create :ensure_first_user_has_all_roles
 
-  scope :by_name,     -> { order("name ASC") }
+  scope :by_name,     -> { order(:name) }
   scope :activated,   -> { by_name.includes(:roles).where(activated: true) }
   scope :deactivated, -> { by_name.includes(:roles).where(activated: false) }
 

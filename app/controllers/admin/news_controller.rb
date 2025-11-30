@@ -25,7 +25,7 @@ module Admin
     def archive_finder(parents, locale)
       Page.where(parent_page_id: parents)
           .visible
-          .order("published_at DESC")
+          .order(published_at: :desc)
           .in_locale(locale)
           .archive_finder
     end

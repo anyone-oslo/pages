@@ -8,7 +8,7 @@ namespace :pages do
     task external_content: :environment do
       rows = []
 
-      Page.order("id ASC").includes(:localizations).find_each do |page|
+      Page.order(:id).includes(:localizations).find_each do |page|
         scanner = PagesCore::ExternalContentScanner.new(page)
         next unless scanner.results.any?
 

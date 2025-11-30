@@ -7,7 +7,7 @@ module PagesCore
 
       included do
         has_many :page_files,
-                 -> { order("position ASC") },
+                 -> { order(:position) },
                  class_name: "PageFile",
                  dependent: :destroy,
                  inverse_of: :page

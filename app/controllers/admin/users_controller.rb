@@ -11,7 +11,7 @@ module Admin
 
     def index
       @users = User.activated
-      @invites = Invite.order("created_at DESC")
+      @invites = Invite.order(created_at: :desc)
     end
 
     def deactivated

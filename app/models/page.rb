@@ -35,8 +35,8 @@ class Page < ApplicationRecord
 
   before_validation :published_at
 
-  scope :by_date,       -> { order("published_at DESC") }
-  scope :by_updated_at, -> { order("updated_at DESC") }
+  scope :by_date,       -> { order(published_at: :desc) }
+  scope :by_updated_at, -> { order(updated_at: :desc) }
   scope :published,     -> { where(status: 2, autopublish: false) }
   scope :hidden,        -> { where(status: 3) }
   scope :deleted,       -> { where(status: 4) }

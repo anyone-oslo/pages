@@ -10,7 +10,7 @@ module PagesCore
       def all_feed_items
         feeds = Page.enabled_feeds(locale, include_hidden: true)
         Page.where(parent_page_id: feeds)
-            .order("published_at DESC")
+            .order(published_at: :desc)
             .published
             .localized(locale)
       end

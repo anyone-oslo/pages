@@ -5,9 +5,9 @@ class Tag < ApplicationRecord
 
   has_many :taggings, dependent: :destroy
 
-  scope :by_name, -> { order("name ASC") }
+  scope :by_name, -> { order(:name) }
   scope :pinned, -> { where(pinned: true) }
-  scope :sorted, -> { order("pinned DESC, name ASC") }
+  scope :sorted, -> { order(pinned: :desc, name: :asc) }
 
   class << self
     def tags_and_suggestions_for(taggable, options = {})
@@ -44,7 +44,7 @@ class Tag < ApplicationRecord
       Tag.joins(:taggings)
          .select("tags.*, COUNT(tags.id) AS counter")
          .group("tags.id")
-         .order("counter DESC")
+         .order(counter: :desc)
          .limit(limit)
     end
 

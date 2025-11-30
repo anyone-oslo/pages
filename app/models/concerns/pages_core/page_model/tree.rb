@@ -46,7 +46,7 @@ module PagesCore
 
         # Returns all root pages
         def roots
-          where(parent_page_id: nil).order("position ASC")
+          where(parent_page_id: nil).order(:position)
         end
 
         # Returns the first root page

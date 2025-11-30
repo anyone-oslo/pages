@@ -22,7 +22,7 @@ module Admin
 
     def calendar_items
       Page.with_dates
-          .order("starts_at DESC")
+          .order(starts_at: :desc)
           .in_locale(content_locale)
           .visible
           .paginate(per_page: 50, page: params[:page])

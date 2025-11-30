@@ -58,7 +58,7 @@ class OtpSecret
   end
 
   def validate_otp_or_recovery_code!(code)
-    if /^[\d]{6}$/.match?(code)
+    if /^\d{6}$/.match?(code)
       validate_otp!(code)
     else
       validate_recovery_code!(code)

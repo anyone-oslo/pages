@@ -8,12 +8,12 @@ module PagesCore
       included do
         belongs_to_image :image, optional: true
         belongs_to_image :meta_image, class_name: "Image", optional: true
-        has_many :page_images, -> { order("position") },
+        has_many :page_images, -> { order(:position) },
                  inverse_of: :page,
                  dependent: :destroy
         has_many(
           :images,
-          -> { where(page_images: { primary: false }).order("position") },
+          -> { where(page_images: { primary: false }).order(:position) },
           through: :page_images
         )
 

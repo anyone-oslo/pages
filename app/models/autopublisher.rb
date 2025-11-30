@@ -25,7 +25,7 @@ class Autopublisher
 
     def queued_pages
       Page.where(autopublish: true)
-          .order("published_at ASC")
+          .order(:published_at)
           .in_locale(I18n.default_locale)
     end
 
