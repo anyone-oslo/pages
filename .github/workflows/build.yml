@@ -91,12 +91,6 @@ jobs:
           bundle exec rake db:migrate
       - name: Run tests
         run: bundle exec rspec
-      - name: Send results to Code Climate
-        uses: paambaati/codeclimate-action@v5.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: ls
 
   notify-slack:
     name: Slack notification
