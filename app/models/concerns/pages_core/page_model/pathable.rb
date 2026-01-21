@@ -100,7 +100,6 @@ module PagesCore
            .gsub(/[^[[:alnum:]]-_]+/, "-")
            .gsub(/-{2,}/, "-")
            .gsub(/(^-|-$)/, "")
-           .mb_chars
            .downcase
       end
 
