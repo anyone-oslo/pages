@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "rails", "~> 8.0.0"
+gem "rails", "~> 8.1.0"
 
 # Pin connection_pool to 2.x until react-rails releases a version
 # compatible with connection_pool 3.x

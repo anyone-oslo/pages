@@ -15,13 +15,16 @@ module Admin
     has_many :page_files, resource: Admin::PageFileResource
 
     attribute :blocks do
-      PagesCore::Templates::TemplateConfiguration.all_blocks
-                                                 .index_with do |attr|
-        if object.template_config.block(attr)[:localized]
-          localized_attribute(object, attr)
-        else
-          object.send(attr)
-        end
+      PagesCore::Templates::TemplateConfiguration
+        .all_blocks
+        .index_with do |attr|
+          if object.template_config.block(attr)[:localized]
+            localized_attribute(
+              object, attr
+            )
+          else
+            object.send(attr)
+          end
       end
     end
 
