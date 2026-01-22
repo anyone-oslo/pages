@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.9](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.8...pages_core-v3.15.9) (2026-01-22)
+
+
+### Bug Fixes
+
+* Sync VERSION file and configure release-please to update it ([0b0c4a4](https://github.com/anyone-oslo/pages/commit/0b0c4a4cb5399ec0bbf021445b966c79195a6826))
+
 ## [3.15.8](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.7...pages_core-v3.15.8) (2026-01-22)
 
 
