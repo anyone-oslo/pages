@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.7](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.6...pages_core-v3.15.7) (2026-01-22)
+
+
+### Bug Fixes
+
+* Add libvips to publish-rubygems job ([5e3405f](https://github.com/anyone-oslo/pages/commit/5e3405f58ec0452edd45949a0aa97a9d763bb60d))
+
 ## [3.15.6](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.5...pages_core-v3.15.6) (2026-01-22)
 
 
