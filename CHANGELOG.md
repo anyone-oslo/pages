@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.8](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.7...pages_core-v3.15.8) (2026-01-22)
+
+
+### Bug Fixes
+
+* Correct repository URL in package.json ([515252e](https://github.com/anyone-oslo/pages/commit/515252e209c5b33ebcd239536099cded6cb69be1))
+
 ## [3.15.7](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.6...pages_core-v3.15.7) (2026-01-22)
 
 
