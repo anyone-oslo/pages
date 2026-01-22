@@ -4,6 +4,7 @@
     ".": {
       "release-type": "simple",
       "package-name": "pages_core",
+      "version-file": "VERSION",
       "extra-files": [
         {
           "type": "json",
