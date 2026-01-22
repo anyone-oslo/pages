@@ -4,7 +4,7 @@
   "description": "Frontend for Pages",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anyone_oslo/pages.git"
+    "url": "git+https://github.com/anyone-oslo/pages.git"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
