@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OtpSecret
+  class InvalidUserError < StandardError; end
+
   attr_reader :user, :secret
 
   def initialize(user)
@@ -94,7 +96,7 @@ class OtpSecret
 
   def verify_secret(signed)
     payload = message_verifier.verify(signed).symbolize_keys
-    raise "Wrong user" unless payload[:user_id] == user.id
+    raise InvalidUserError, "Wrong user" unless payload[:user_id] == user.id
 
     payload[:secret]
   end
