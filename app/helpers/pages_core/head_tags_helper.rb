@@ -7,20 +7,6 @@ module PagesCore
       tag.title(parts.compact_blank.uniq.join(separator))
     end
 
-    def head_tag(&)
-      PagesCore.deprecator.warn(
-        "head_tag helper is deprecated and will be removed"
-      )
-
-      tag.head do
-        safe_join([document_title_tag,
-                   pages_meta_tags(instance_variable_get(:@page)),
-                   ([csrf_meta_tags, csp_meta_tag] unless static_cached?),
-                   (block_given? ? capture(&) : nil)].flatten.compact_blank,
-                  "\n")
-      end
-    end
-
     def meta_image_url(image, size: "1200x")
       return if image.blank?
       return image unless image.is_a?(Image)
