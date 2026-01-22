@@ -12,6 +12,11 @@ on:
       - main
       - develop
   pull_request:
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
 jobs:
   rubocop-test:
     name: Rubocop
@@ -113,3 +118,48 @@ jobs:
         if: success()
         run: |
           curl -X POST ${{ secrets.SLACK_WEBHOOK_URL}} -H "Content-type: application/json" --data '${{ steps.message.outputs.message }}'
+
+  release-please:
+    needs: [rubocop-test, eslint-test, typescript-test, rspec-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+  publish-rubygems:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - uses: rubygems/release-gem@v1
+
+  publish-npm:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Build package
+        run: pnpm build-dist
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

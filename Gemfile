@@ -31,7 +31,6 @@ group :development, :test do
   gem "rubocop-rspec", require: false
   gem "rubocop-rspec_rails", require: false
   gem "selenium-webdriver"
-  gem "semantic"
   gem "shoulda-matchers"
   gem "simplecov", "~> 0.17.1"
   gem "timecop"
