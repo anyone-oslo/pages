@@ -7,10 +7,12 @@ module PagesCore
     included do
       validates :email,
                 presence: true,
-                format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i },
+                format: { with: URI::MailTo::EMAIL_REGEXP },
                 uniqueness: { case_sensitive: false }
 
-      normalizes :email, with: ->(email) { email.strip }
+      normalizes :email, with: lambda { |email|
+        email.gsub(/[\u200B-\u200D\uFEFF]/, "").strip
+      }
     end
   end
 end
