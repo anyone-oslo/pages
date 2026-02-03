@@ -50,6 +50,8 @@ Gem::Specification.new do |s|
 
   # Extra asset dependencies
   s.add_dependency "react-rails", "> 2.4"
+  # Pin to 2.x until react-rails supports connection_pool 3.0
+  s.add_dependency "connection_pool", "~> 2.5"
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list", "~> 0.9"
