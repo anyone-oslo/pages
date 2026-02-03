@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rotp", "~> 6.3.0"
   s.add_dependency "rqrcode"
   s.add_dependency "tty-table"
-  s.add_dependency "typhoeus", "~> 1.4.0"
+  s.add_dependency "typhoeus", ">= 1.4", "< 1.6"
   s.add_dependency "will_paginate"
 
   # Locales
@@ -51,10 +51,10 @@ Gem::Specification.new do |s|
   # Extra asset dependencies
   s.add_dependency "react-rails", "> 2.4"
   # Pin to 2.x until react-rails supports connection_pool 3.0
-  s.add_dependency "connection_pool", "~> 2.5"
+  s.add_dependency "connection_pool", ">= 2.5", "< 4.0"
 
   # ActiveRecord extensions
-  s.add_dependency "acts_as_list", "~> 0.9"
+  s.add_dependency "acts_as_list", ">= 0.9", "< 2.0"
   s.add_dependency "localizable_model", ">= 0.5.3"
 
   s.metadata = {

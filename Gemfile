@@ -6,7 +6,7 @@ gem "rails", "~> 8.1.0"
 
 # Pin connection_pool to 2.x until react-rails releases a version
 # compatible with connection_pool 3.x
-gem "connection_pool", "~> 2.4"
+gem "connection_pool", "~> 3.0"
 
 gemspec
 
@@ -32,6 +32,6 @@ group :development, :test do
   gem "rubocop-rspec_rails", require: false
   gem "selenium-webdriver"
   gem "shoulda-matchers"
-  gem "simplecov", "~> 0.17.1"
+  gem "simplecov", "~> 0.22.0"
   gem "timecop"
 end
