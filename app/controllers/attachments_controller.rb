@@ -3,6 +3,8 @@
 class AttachmentsController < ApplicationController
   include PagesCore::RangedResponse
 
+  rescue_from PagesCore::DigestVerifier::InvalidSignatureError, with: :not_found
+
   before_action :verify_signed_params
   before_action :find_attachment, only: %i[show download]
 
