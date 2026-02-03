@@ -5,7 +5,7 @@ class CreateSearchConfigurations < ActiveRecord::Migration[5.2]
     dictionaries.each do |dict|
       stem = dict == "simple" ? "simple" : "#{dict}_stem"
 
-      ActiveRecord::Base.connection.execute <<-SQL.squish
+      ActiveRecord::Base.connection.execute <<~SQL.squish
         DROP TEXT SEARCH CONFIGURATION IF EXISTS #{dict}_unaccent;
         CREATE TEXT SEARCH CONFIGURATION #{dict}_unaccent
           (COPY = pg_catalog.#{dict});
@@ -18,7 +18,7 @@ class CreateSearchConfigurations < ActiveRecord::Migration[5.2]
 
   def down
     dictionaries.each do |dict|
-      ActiveRecord::Base.connection.execute <<-SQL.squish
+      ActiveRecord::Base.connection.execute <<~SQL.squish
         DROP TEXT SEARCH CONFIGURATION IF EXISTS #{dict}_unaccent;
       SQL
     end

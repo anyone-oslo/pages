@@ -32,7 +32,7 @@ class CreateSearchDocuments < ActiveRecord::Migration[6.0]
 
     reversible do |dir|
       dir.up do
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           DROP FUNCTION IF EXISTS tsvector_search_documents_trigger;
           CREATE FUNCTION tsvector_search_documents_trigger()
             RETURNS trigger AS $$
@@ -63,7 +63,7 @@ class CreateSearchDocuments < ActiveRecord::Migration[6.0]
         PagesCore::SearchableDocument::Indexer.index_all!(Page)
       end
       dir.down do
-        ActiveRecord::Base.connection.execute <<-SQL.squish
+        ActiveRecord::Base.connection.execute <<~SQL.squish
           DROP TRIGGER IF EXISTS tsvector_search_documents_update
             ON search_documents;
           DROP FUNCTION IF EXISTS tsvector_search_documents_trigger;

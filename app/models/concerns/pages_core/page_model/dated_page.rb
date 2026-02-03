@@ -36,7 +36,7 @@ module PagesCore
         private
 
         def count_by_month_query
-          <<-SQL.squish
+          <<~SQL.squish
             SELECT extract('year' FROM s.d)::integer AS year,
                    extract('month' FROM s.d)::integer AS month,
                    count(p.id) AS count
