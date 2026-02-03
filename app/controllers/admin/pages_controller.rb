@@ -100,7 +100,7 @@ module Admin
           render json: ::Admin::PageResource.new(
             page,
             params: { user: current_user }
-          ), status: page.valid? ? :ok : :unprocessable_content
+          ).serialize, status: page.valid? ? :ok : :unprocessable_content
         end
       end
     end

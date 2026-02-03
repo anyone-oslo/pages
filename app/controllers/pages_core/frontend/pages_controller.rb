@@ -29,7 +29,7 @@ module PagesCore
       def show
         respond_to do |format|
           format.html { render_published_page(@page) }
-          format.json { render json: PageResource.new(@page) }
+          format.json { render json: PageResource.new(@page).serialize }
           format.rss { render_page_rss(@page, page_param) }
         end
       end
