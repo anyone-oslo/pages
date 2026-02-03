@@ -23,13 +23,7 @@ updates:
       time: "06:00"
       timezone: "Europe/Oslo"
     ignore:
-      - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@types/react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@types/react-dom"
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
       all-dependencies:
