@@ -9,6 +9,10 @@ updates:
       day: "tuesday"
       time: "06:00"
       timezone: "Europe/Oslo"
+    ignore:
+      # Pinned to 2.x in gemspec due to react-rails incompatibility
+      - dependency-name: "connection_pool"
+        update-types: ["version-update:semver-major"]
     groups:
       all-dependencies:
         patterns:
