@@ -18,11 +18,12 @@ module PagesCore
         render_error 403 unless logged_in?
 
         @preview = true
-        @page = Page.find_by(id: params[:page_id]) || Page.new
-        @page.readonly!
-        @page.assign_attributes(preview_page_params)
-
-        render_page
+        Page.transaction do
+          @page = Page.find_by(id: params[:page_id]) || Page.new
+          @page.assign_attributes(preview_page_params)
+          render_page
+          raise ActiveRecord::Rollback
+        end
       end
 
       private
