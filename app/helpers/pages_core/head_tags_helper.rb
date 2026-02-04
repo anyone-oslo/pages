@@ -3,7 +3,8 @@
 module PagesCore
   module HeadTagsHelper
     def document_title_tag(separator: " - ")
-      parts = [document_title, PagesCore.config.site_name]
+      parts = [(document_title if respond_to?(:document_title)),
+               PagesCore.config.site_name]
       tag.title(parts.compact_blank.uniq.join(separator))
     end
 
@@ -84,7 +85,7 @@ module PagesCore
         content_for(:open_graph_title)
       elsif record.try(:open_graph_title?)
         record.open_graph_title
-      else
+      elsif respond_to?(:document_title)
         document_title
       end
     end
