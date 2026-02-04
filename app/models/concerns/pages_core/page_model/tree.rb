@@ -81,7 +81,7 @@ module PagesCore
 
         # Finds the page's next sibling. Returns nil if there isn't one.
         def next_sibling
-          return unless siblings.any?
+          return unless persisted? && siblings.any?
 
           siblings[(siblings.to_a.index(self) + 1)...siblings.length]
             .try(&:first)
@@ -99,7 +99,7 @@ module PagesCore
 
         # Finds the page's next sibling. Returns nil if there isn't one.
         def previous_sibling
-          return unless siblings.any?
+          return unless persisted? && siblings.any?
 
           siblings[0...siblings.to_a.index(self)].try(&:last)
         end
