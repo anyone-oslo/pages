@@ -18,8 +18,7 @@ Gem::Specification.new do |s|
     "{app,config,db,lib,vendor}/**/*",
     "Rakefile",
     "README.md",
-    "template.rb",
-    "VERSION"
+    "template.rb"
   ]
 
   s.add_dependency "rails", ">= 6.0"
