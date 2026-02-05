@@ -39,4 +39,8 @@ class AttachmentsController < ApplicationController
     key = params[:id].to_i.to_s
     Attachment.verifier.verify(key, params[:digest])
   end
+
+  def not_found
+    head :not_found
+  end
 end
