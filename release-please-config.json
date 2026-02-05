@@ -10,6 +10,11 @@
           "type": "json",
           "path": "package.json",
           "jsonpath": "$.version"
+        },
+        {
+          "type": "generic",
+          "path": "Gemfile.lock",
+          "regex": "pages_core \\((?<version>.+?)\\)"
         }
       ]
     }
