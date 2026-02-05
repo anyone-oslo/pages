@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.15.10](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.9...pages_core-v3.15.10) (2026-02-05)
+
+
+### Bug Fixes
+
+* Add missing not_found method to AttachmentsController ([bdd22eb](https://github.com/anyone-oslo/pages/commit/bdd22eb4b637a4198f15bf6a99e4279af598e4db))
+* pin connection_pool to 2.x until react-rails supports 3.0 ([3d2f3d1](https://github.com/anyone-oslo/pages/commit/3d2f3d1cf21801f9aae9e426bc597ef35b0bd8ae))
+
 ## [3.15.9](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.8...pages_core-v3.15.9) (2026-01-22)
 
 
