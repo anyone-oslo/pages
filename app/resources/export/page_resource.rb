@@ -36,7 +36,7 @@ module Export
     def image_resource(image)
       return nil unless image
 
-      Export::PageImageResource.new(image)
+      Export::PageImageResource.new(image).to_h
     end
   end
 end

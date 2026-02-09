@@ -20,7 +20,7 @@ class PageResource
   end
 
   attribute :pages do
-    object.pages.map { |p| PageResource.new(p) }
+    object.pages.map { |p| PageResource.new(p).to_h }
   end
 
   private
@@ -28,6 +28,6 @@ class PageResource
   def image_resource(image)
     return nil unless image
 
-    PageImageResource.new(image)
+    PageImageResource.new(image).to_h
   end
 end
