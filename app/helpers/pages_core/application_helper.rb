@@ -8,6 +8,16 @@ module PagesCore
     include PagesCore::ImagesHelper
     include PagesCore::PagePathHelper
 
+    def safe_url(url)
+      str = url.to_s.strip
+      return str if str.start_with?("/", "#")
+
+      scheme = URI.parse(str).scheme&.downcase
+      %w[data http https mailto tel].include?(scheme) ? str : "#"
+    rescue URI::InvalidURIError
+      "#"
+    end
+
     def page_link(page, options = {})
       link_locale = options[:locale] || locale
       page.localize(link_locale) do |p|
