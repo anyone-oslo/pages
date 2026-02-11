@@ -64,8 +64,15 @@ module PagesCore
                  File.join("config/initializers/page_templates.rb"))
       end
 
-      def create_gitignore
-        template "gitignore.erb", File.join(".gitignore")
+      def add_root_route
+        route 'root "pages#index"'
+      end
+
+      def create_page_templates_spec
+        return unless File.exist?(Rails.root.join("spec/rails_helper.rb"))
+
+        template("page_templates_spec.rb",
+                 File.join("spec/system/page_templates_spec.rb"))
       end
 
       private

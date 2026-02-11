@@ -45,28 +45,6 @@ module PagesCore
           JS
         end
       end
-
-      def install_js_dependencies
-        run("pnpm add autoprefixer cssnano normalize.css postcss " \
-            "postcss-calc postcss-cli postcss-import " \
-            "postcss-import-ext-glob postcss-mixins postcss-preset-env " \
-            "postcss-image-inliner")
-      end
-
-      def configure_postcss
-        copy_file("postcss.config.js",
-                  File.join("postcss.config.js"))
-      end
-
-      def configure_build_script
-        script = "postcss ./app/assets/stylesheets/application.postcss.css " \
-                 "-o ./app/assets/builds/application.css"
-        run %(npm set-script build:css "#{script}")
-      end
-
-      def remove_application_css
-        remove_file("app/assets/stylesheets/application.css")
-      end
     end
   end
 end
