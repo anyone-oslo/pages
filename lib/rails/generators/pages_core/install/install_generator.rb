@@ -69,7 +69,7 @@ module PagesCore
       end
 
       def create_page_templates_spec
-        return unless File.exist?(Rails.root.join("spec/rails_helper.rb"))
+        return unless Rails.root.join("spec/rails_helper.rb").exist?
 
         template("page_templates_spec.rb",
                  File.join("spec/system/page_templates_spec.rb"))
