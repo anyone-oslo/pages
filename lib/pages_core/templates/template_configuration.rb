@@ -82,17 +82,13 @@ module PagesCore
       def enabled_blocks
         blocks = value(:enabled_blocks)
         blocks = [:name] + blocks unless blocks.include?(:name)
-        if block_given?
-          blocks.each { |block_name| yield block_name, block(block_name) }
-        end
+        blocks.each { |block_name| yield block_name, block(block_name) } if block_given?
         blocks
       end
 
       def metadata_blocks
         blocks = PagesCore::Templates.metadata_block_names
-        if block_given?
-          blocks.each { |block_name| yield block_name, block(block_name) }
-        end
+        blocks.each { |block_name| yield block_name, block(block_name) } if block_given?
         blocks
       end
 

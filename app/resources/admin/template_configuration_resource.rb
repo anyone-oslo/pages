@@ -39,9 +39,7 @@ module Admin
 
       opts = block[:options]
       opts = opts.call if opts.is_a?(Proc)
-      unless opts.present? && opts.first.is_a?(Array)
-        opts = opts.map { |v| [v, v] }
-      end
+      opts = opts.map { |v| [v, v] } unless opts.present? && opts.first.is_a?(Array)
       opts = ([["", nil]] + opts).uniq
 
       block.merge(options: opts)

@@ -21,9 +21,7 @@ module PagesCore
         path = redirect_to.dup
         if path.start_with? "/"
           params.each do |key, value|
-            unless value.is_a?(String) || value.is_a?(Symbol)
-              raise InvalidRedirectUrl, "must be a string or a symbol"
-            end
+            raise InvalidRedirectUrl, "must be a string or a symbol" unless value.is_a?(String) || value.is_a?(Symbol)
 
             path.gsub!("/:#{key}", "/#{value}")
           end

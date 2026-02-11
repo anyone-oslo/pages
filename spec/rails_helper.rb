@@ -9,9 +9,7 @@ ENV["DB"] ||= "postgres"
 require File.expand_path("internal/config/environment", __dir__)
 
 # Prevent database truncation if the environment is production
-if Rails.env.production?
-  abort("The Rails environment is running in production mode!")
-end
+abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require "rails-controller-testing"
 require "spec_helper"

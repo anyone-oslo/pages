@@ -114,9 +114,7 @@ module PagesCore
       def configure_template(template_name, setting, value, options = {})
         template_name = template_name.to_sym
         setting = setting.to_sym
-        unless valid_template_options.include?(setting)
-          raise "Invalid template configuration value: #{setting.inspect}"
-        end
+        raise "Invalid template configuration value: #{setting.inspect}" unless valid_template_options.include?(setting)
 
         set(
           template_path(template_name),

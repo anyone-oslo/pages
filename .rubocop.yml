@@ -65,10 +65,6 @@ Style/FormatStringToken:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Layout/LineLength:
-  AutoCorrect: true
-  Max: 80
-
 Layout/MultilineOperationIndentation:
   EnforcedStyle: aligned
 

@@ -25,9 +25,7 @@ class AttachmentsController < ApplicationController
   end
 
   def send_attachment(disposition: "inline")
-    unless stale?(etag: @attachment, last_modified: @attachment.updated_at)
-      return
-    end
+    return unless stale?(etag: @attachment, last_modified: @attachment.updated_at)
 
     send_ranged_data(@attachment.data,
                      filename: @attachment.filename,

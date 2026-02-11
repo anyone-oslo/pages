@@ -62,9 +62,7 @@ module PagesCore
         root_path = parent != root_path && parent
       end
 
-      unless File.exist?("#{root_path}/#{subfolder}")
-        raise "Could not find root path for #{self}"
-      end
+      raise "Could not find root path for #{self}" unless File.exist?("#{root_path}/#{subfolder}")
 
       Pathname.new(root_path).realpath
     end

@@ -78,9 +78,7 @@ module PagesCore
     end
 
     def shorten(string)
-      unless @options[:shorten] && string.length > @options[:shorten]
-        return string
-      end
+      return string unless @options[:shorten] && string.length > @options[:shorten]
 
       "#{string[0..@options[:shorten]]}..."
     end

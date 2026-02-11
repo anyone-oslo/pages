@@ -79,9 +79,7 @@ class PageExporter
 
   def page_path_segment(page)
     prefix = page.deleted? ? "_deleted/" : ""
-    if page&.parent&.news_page?
-      prefix += "[#{page.published_at.to_date.iso8601}] "
-    end
+    prefix += "[#{page.published_at.to_date.iso8601}] " if page&.parent&.news_page?
     prefix + page_file_name(page)
   end
 

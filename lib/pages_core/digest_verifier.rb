@@ -33,9 +33,7 @@ module PagesCore
     # Verifies that <tt>digest</tt> is valid for <tt>data</tt>.
     # Raises a +PagesCore::DigestVerifier::InvalidSignatureError+ error if not.
     def verify(data, digest)
-      unless valid_digest?(data, digest)
-        raise PagesCore::DigestVerifier::InvalidSignatureError
-      end
+      raise PagesCore::DigestVerifier::InvalidSignatureError unless valid_digest?(data, digest)
 
       true
     end
