@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.16.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.15.10...pages_core/v3.16.0) (2026-02-15)
+
+
+### Features
+
+* Add safe_url view helper ([72db398](https://github.com/anyone-oslo/pages/commit/72db3984f3dec3bb6a7889ee5b68d4c66afe4998))
+* Replace react-rails with Tombolo ([e87582d](https://github.com/anyone-oslo/pages/commit/e87582d2fbd978025af932759f24e084ccf0546a))
+
+
+### Bug Fixes
+
+* Serialize nested Alba resources to hashes before JSON encoding ([d9b419e](https://github.com/anyone-oslo/pages/commit/d9b419e664001f4599017f782e9b982504de91d8))
+* Tweak Rubocop line lengths ([842b42d](https://github.com/anyone-oslo/pages/commit/842b42d86fbd79ce1809f25b877038888ffede52))
+
 ## [3.15.10](https://github.com/anyone-oslo/pages/compare/pages_core-v3.15.9...pages_core/v3.15.10) (2026-02-05)
 
 
