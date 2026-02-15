@@ -7,7 +7,7 @@ module PagesCore
       def editable_dynamic_image_tag(image, width: 250,
                                      caption: false, locale: nil)
         react_component("EditableImage",
-                        editable_image_options(
+                        props: editable_image_options(
                           image,
                           width:,
                           caption:,
@@ -18,7 +18,7 @@ module PagesCore
       def image_uploader_tag(name, image, options = {})
         opts = { caption: false, locale: nil }.merge(options)
         react_component("ImageUploader",
-                        editable_image_options(
+                        props: editable_image_options(
                           image,
                           caption: opts[:caption],
                           locale: opts[:locale]

@@ -39,7 +39,7 @@ require "will_paginate"
 require "will_paginate/view_helpers/action_view"
 
 # Assets
-require "react-rails"
+require "tombolo"
 
 # Pages
 require "pages_core/plugin"

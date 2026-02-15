@@ -1,22 +1,18 @@
+import * as Tombolo from "tombolo";
 import Rails from "@rails/ujs";
-import "react_ujs";
-import { FC } from "react";
 
 import * as Components from "./components";
-
 import RichText from "./features/RichText";
 import contentTabs from "./features/contentTabs";
 
-export function registerComponent(name: string, component: FC) {
-  window[name] = component;
+/** @deprecated Import tombolo directly and use Tombolo.start() instead. */
+export function registerComponent(name: string, component: React.ComponentType) {
+  Tombolo.start({ [name]: component });
 }
 
 export default function startPages() {
   Rails.start();
-  for (const name in Components) {
-    registerComponent(name, Components[name] as FC);
-  }
-
+  Tombolo.start(Components);
   RichText.start();
   contentTabs();
 }

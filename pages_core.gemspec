@@ -48,9 +48,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jbuilder", "~> 2.5"
 
   # Extra asset dependencies
-  s.add_dependency "react-rails", "> 2.4"
-  # Pin to 2.x until react-rails supports connection_pool 3.0
-  s.add_dependency "connection_pool", "~> 2.5"
+  s.add_dependency "tombolo"
 
   # ActiveRecord extensions
   s.add_dependency "acts_as_list", ">= 0.9", "< 2.0"

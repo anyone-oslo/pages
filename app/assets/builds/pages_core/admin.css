@@ -7202,7 +7202,7 @@ readers do not read off random characters that represent icons */
   --bold-weight: 600;
 
   --font-os-sans:
-    system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+    system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   --font-sans: "Inter", var(--font-os-sans);
 
@@ -7219,7 +7219,7 @@ html {
 }
 
 body {
-  font: 400 1rem/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 400 1rem/1.5 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-normal);
 }
@@ -7289,7 +7289,7 @@ p:last-child {
   }
 
 h2 {
-  font: 600 1.4rem/1.2 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 600 1.4rem/1.2 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-heading-2);
   margin-top: 3rem;
@@ -7310,7 +7310,7 @@ form h2:first-of-type {
 
 h3,
 .sidebar h2 {
-  font: 600 1.2rem/1.4 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 600 1.2rem/1.4 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-heading-3);
   margin-top: 2rem;
@@ -7339,13 +7339,13 @@ small,
 header,
 .sidebar,
 .pagination {
-  font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 400 0.875rem/1.33 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-small);
 }
 
 .page-tree .date,.page-tree .status-label,.page-tree .collapsed-label,.page-tree button {
-    font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+    font: 400 0.875rem/1.33 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
     font: var(--font-small);
   }
@@ -7356,28 +7356,28 @@ header,
   }
 
 .login-form:not(does-not-exist) label,form .field label,.login-form:not(does-not-exist) .description,form .field .description {
-    font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+    font: 400 0.875rem/1.33 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
     font: var(--font-small);
   }
 
 input,
 textarea {
-  font: 400 1rem/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 400 1rem/1.5 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-normal);
 }
 
 button,
 select {
-  font: 400 0.875rem/1.33 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 400 0.875rem/1.33 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-small);
 }
 
 input[type="text"].large,
 input[type="password"].large {
-  font: 400 1.2rem/1.4 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font: 400 1.2rem/1.4 "Inter",system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font: var(--font-large);
 }
@@ -7792,7 +7792,7 @@ select {
      -moz-appearance: none;
           appearance: none;
   cursor: inherit;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+  font-family: system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
   font-family: var(--font-os-sans);
   font-size: 0.875rem;
@@ -8748,7 +8748,7 @@ body {
   height: 100vh;
 }
 
-.wrapper > div[data-react-class] {
+.wrapper > div[data-react-component] {
     flex-grow: 1;
     display: flex;
     flex-flow: column nowrap;
@@ -9513,7 +9513,7 @@ textarea.rich {
       }
 
 .toolbar .button.header i:after {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+        font-family: system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
         font-family: var(--font-os-sans);
         font-weight: bold;
@@ -9524,7 +9524,7 @@ textarea.rich {
       }
 
 .toolbar button.header:not(.does-not-exist) i:after {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+        font-family: system-ui,Segoe UI,Noto Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
     "Helvetica Neue", Oxygen, Cantarell, sans-serif;
         font-family: var(--font-os-sans);
         font-weight: bold;

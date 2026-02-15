@@ -6,7 +6,7 @@
     "target": "es6",
     "lib": ["es2022", "dom"],
     "module": "esnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "outDir": "dist",
     "allowJs": true,
     "jsx": "react-jsx"
