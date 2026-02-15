@@ -4,10 +4,6 @@ source "https://rubygems.org"
 
 gem "rails", "~> 8.1.0"
 
-# Pin connection_pool to 2.x until react-rails releases a version
-# compatible with connection_pool 3.x
-gem "connection_pool", "~> 2.4"
-
 gemspec
 
 group :development, :test do

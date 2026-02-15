@@ -12,9 +12,9 @@ module PagesCore
 
       def rich_text_area_tag(name, content = nil, options = {})
         react_component("RichTextArea",
-                        options.merge(id: sanitize_to_id(name),
-                                      name:,
-                                      value: content))
+                        props: options.merge(id: sanitize_to_id(name),
+                                             name:,
+                                             value: content))
       end
 
       def locale_links

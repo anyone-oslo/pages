@@ -15,7 +15,8 @@
 <div class="content">
   <% cache Page.visible.roots.to_a + [current_user, content_locale] do %>
     <%= react_component(
-      "PageTree", {
+      "PageTree",
+      props: {
         pages: @pages.map { |p| ::Admin::PageTreeResource.new(p, params: { user: current_user }) },
         locale: content_locale,
         dir: locale_direction(content_locale),
