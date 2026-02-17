@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.2](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.1...pages_core/v3.16.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* Include spec/factories in gem file list ([46a8839](https://github.com/anyone-oslo/pages/commit/46a8839ee2306e7278d7c999911bcd93fe5f7ca8))
+
 ## [3.16.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.0...pages_core/v3.16.1) (2026-02-17)
 
 
