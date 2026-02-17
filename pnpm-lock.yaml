@@ -75,8 +75,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(prop-types@15.8.1)(react@18.3.1)
       tombolo:
-        specifier: ^0.9.0
-        version: 0.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.10.0
+        version: 0.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -2654,8 +2654,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  tombolo@0.9.1:
-    resolution: {integrity: sha512-K9zLCOgOshYqfX1DosQhpLNhYJz6e/mj+0kL3DST15iV5UKq6Sov+uGZxvM5WI/IluZX3j3gt+L87CMHe4pEoQ==}
+  tombolo@0.10.0:
+    resolution: {integrity: sha512-kxdJWXvQvguWHjTnq0LNazrAXBhMat2e3ABdMwjTN83nlNUkkWaIrqkP6r+OJbKWnXojAEzbpbBZJQ7sQ6p53A==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
@@ -5624,7 +5624,7 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  tombolo@0.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  tombolo@0.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
