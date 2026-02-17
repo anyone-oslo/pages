@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.0...pages_core/v3.16.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* Update tombolo ([63619f4](https://github.com/anyone-oslo/pages/commit/63619f46e626612fe787005bd0e09376aa9e2ed5))
+
 ## [3.16.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.15.10...pages_core/v3.16.0) (2026-02-15)
 
 
