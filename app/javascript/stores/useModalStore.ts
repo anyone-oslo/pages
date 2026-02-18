@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
 type ModalState = {
-  component: JSX.Element | null;
-  open: (elem: JSX.Element) => void;
+  component: React.ReactNode;
+  open: (elem: React.ReactNode) => void;
   close: () => void;
 };
 
 const useModalStore = create<ModalState>((set) => ({
   component: null,
-  open: (c: JSX.Element) => set({ component: c }),
+  open: (c: React.ReactNode) => set({ component: c }),
   close: () => set({ component: null })
 }));
 

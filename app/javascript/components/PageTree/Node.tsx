@@ -32,7 +32,7 @@ export default function Node(props: Props) {
   const page = node.record;
   const name = page.blocks.name[locale];
 
-  const innerRef = useRef<HTMLDivElement>();
+  const innerRef = useRef<HTMLDivElement>(null);
 
   const classNames = ["node"];
   if (id === dragging) {

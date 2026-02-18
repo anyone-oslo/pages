@@ -25,8 +25,8 @@ export default function FocalPoint(props: Props) {
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState<Crop.Position>(state.focalPoint);
 
-  const containerRef = useRef<HTMLDivElement>();
-  const pointRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pointRef = useRef<HTMLDivElement>(null);
 
   const dragStart = (evt: React.MouseEvent | React.TouchEvent) => {
     evt.preventDefault();

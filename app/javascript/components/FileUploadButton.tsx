@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function FileUploadButton(props: Props) {
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const fileList = evt.target.files;
