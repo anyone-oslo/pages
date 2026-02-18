@@ -56,7 +56,7 @@ function draggedImageOrder(
 export default function Grid(props: Props) {
   const { primary, images, deleted, setDeleted } = props.state;
 
-  const containerRef = useRef();
+  const containerRef = useRef(null);
   const error = useToastStore((state) => state.error);
 
   const dispatchAll = (action) => {
