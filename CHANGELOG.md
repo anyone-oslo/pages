@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.16.3](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.2...pages_core/v3.16.3) (2026-02-21)
+
+
+### Bug Fixes
+
+* Fix TypeScript errors for React 19 ([0eb6eac](https://github.com/anyone-oslo/pages/commit/0eb6eac01dfd6c018f139c085bbcb58e7dafdb37))
+* Update to React 19 ([f7cda04](https://github.com/anyone-oslo/pages/commit/f7cda049bcf9a2e8a9e656cb052e018edc6653e7))
+
 ## [3.16.2](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.1...pages_core/v3.16.2) (2026-02-17)
 
 
