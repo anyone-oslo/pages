@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.4](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.3...pages_core/v3.16.4) (2026-02-22)
+
+
+### Bug Fixes
+
+* Relax overly restrictive dependencies ([41fbcf9](https://github.com/anyone-oslo/pages/commit/41fbcf908b0e6e217e205ab57d1f471de2485651))
+
 ## [3.16.3](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.2...pages_core/v3.16.3) (2026-02-21)
 
 

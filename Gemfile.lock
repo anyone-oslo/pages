@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pages_core (3.16.3)
+    pages_core (3.16.4)
       RedCloth (~> 4.3)
       actionpack-page_caching (>= 1.1.0)
       acts_as_list (~> 1.0)
