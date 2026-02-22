@@ -28,18 +28,18 @@ Gem::Specification.new do |s|
   s.add_dependency "alba"
   s.add_dependency "bcrypt"
   s.add_dependency "country_select", ">= 9.0.0"
-  s.add_dependency "dis", "~> 1.2.0"
+  s.add_dependency "dis", "~> 1.2"
   s.add_dependency "dynamic_image", ">= 2.0"
   s.add_dependency "nokogiri"
   s.add_dependency "pastel"
   s.add_dependency "pg_search"
   s.add_dependency "premailer-rails"
   s.add_dependency "progress_bar"
-  s.add_dependency "RedCloth", "~> 4.3.2"
-  s.add_dependency "rotp", "~> 6.3.0"
+  s.add_dependency "RedCloth", "~> 4.3"
+  s.add_dependency "rotp", "~> 6.3"
   s.add_dependency "rqrcode"
   s.add_dependency "tty-table"
-  s.add_dependency "typhoeus", ">= 1.4", "< 1.6"
+  s.add_dependency "typhoeus", "~> 1.4"
   s.add_dependency "will_paginate"
 
   # Locales
@@ -52,8 +52,8 @@ Gem::Specification.new do |s|
   s.add_dependency "tombolo"
 
   # ActiveRecord extensions
-  s.add_dependency "acts_as_list", ">= 0.9", "< 2.0"
-  s.add_dependency "localizable_model", ">= 0.5.3"
+  s.add_dependency "acts_as_list", "~> 1.0"
+  s.add_dependency "localizable_model", "~> 0.5"
 
   s.metadata = {
     "rubygems_mfa_required" => "true"
