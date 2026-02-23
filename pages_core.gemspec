@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir[
     "{app,config,db,lib,vendor}/**/*",
     "spec/factories/**/*",
+    "spec/support/fixtures/**/*",
     "Rakefile",
     "README.md",
     "template.rb"
