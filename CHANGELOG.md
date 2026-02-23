@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.5](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.4...pages_core/v3.16.5) (2026-02-23)
+
+
+### Bug Fixes
+
+* Include spec/support/fixtures in gem package ([133552f](https://github.com/anyone-oslo/pages/commit/133552f8f000493439c0759027fb62dd1000f1da))
+
 ## [3.16.4](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.3...pages_core/v3.16.4) (2026-02-22)
 
 
