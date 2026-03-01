@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "country_select"
+
 module PagesCore
   module LabelledFormBuilder
     def field_with_label(attr, str, label = nil, class_name = nil)

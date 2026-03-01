@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rotp"
+
 FactoryBot.define do
   factory :image do
     locale { "en" }

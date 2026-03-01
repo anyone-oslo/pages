@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rotp"
+
 class OtpSecret
   class InvalidUserError < StandardError; end
 

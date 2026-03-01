@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "fileutils"
+require "progress_bar"
 
 class PageExporter
   attr_reader :base_dir, :progress_bar

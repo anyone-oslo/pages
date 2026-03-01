@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "RedCloth"
+
 module PagesCore
   class HtmlFormatter
     class << self

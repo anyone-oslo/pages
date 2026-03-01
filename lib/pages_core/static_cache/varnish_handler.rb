@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "typhoeus"
+
 module PagesCore
   module StaticCache
     class VarnishHandler

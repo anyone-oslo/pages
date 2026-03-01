@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rqrcode"
+
 module PagesCore
   module Admin
     module AdminHelper
