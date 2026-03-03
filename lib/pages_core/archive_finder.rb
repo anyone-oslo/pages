@@ -52,13 +52,21 @@ module PagesCore
     end
 
     def years_with_count
-      years.map { |year| [year, by_year(year).count] }
+      group_by_year(@relation)
+        .count
+        .to_a
+        .map { |year, count| [year.to_i, count] }
+        .sort_by(&:first)
     end
 
     private
 
     def group_by_month(relation)
       relation.reorder("").group(Arel.sql(month_part))
+    end
+
+    def group_by_year(relation)
+      relation.reorder("").group(Arel.sql(year_part))
     end
 
     def filter_by_time(range)

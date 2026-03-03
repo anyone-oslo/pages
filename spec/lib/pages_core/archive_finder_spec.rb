@@ -148,6 +148,20 @@ describe PagesCore::ArchiveFinder do
     end
   end
 
+  describe "#years_with_count" do
+    subject { archive_finder.years_with_count }
+
+    context "without items" do
+      it { is_expected.to eq([]) }
+    end
+
+    context "with items" do
+      before { pages }
+
+      it { is_expected.to eq([[2012, 3], [2013, 1]]) }
+    end
+  end
+
   describe "#years" do
     subject { archive_finder.years }
 
