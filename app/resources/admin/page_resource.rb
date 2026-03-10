@@ -18,13 +18,13 @@ module Admin
       PagesCore::Templates::TemplateConfiguration
         .all_blocks
         .index_with do |attr|
-          if object.template_config.block(attr)[:localized]
-            localized_attribute(
-              object, attr
-            )
-          else
-            object.send(attr)
-          end
+        if object.template_config.block(attr)[:localized]
+          localized_attribute(
+            object, attr
+          )
+        else
+          object.send(attr)
+        end
       end
     end
 
