@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.16.6](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.5...pages_core/v3.16.6) (2026-03-10)
+
+
+### Performance Improvements
+
+* Fix N+1 queries in ArchiveFinder#years_with_count ([8cd045e](https://github.com/anyone-oslo/pages/commit/8cd045e6107fc8f19856e60a058589e2e0413ed2))
+* Lazy-load heavy dependencies at call sites ([205b9aa](https://github.com/anyone-oslo/pages/commit/205b9aa9e12edf95a47414bf569064c0cc85b6d8))
+
 ## [3.16.5](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.4...pages_core/v3.16.5) (2026-02-23)
 
 
