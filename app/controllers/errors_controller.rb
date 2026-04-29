@@ -6,7 +6,9 @@ class ErrorsController < ApplicationController
   layout "errors"
 
   def show
-    render_error params[:id].to_i
+    status = params[:id].to_i
+    status = 404 unless template_exists?("errors/#{status}")
+    render_error status
   end
 
   def forbidden
