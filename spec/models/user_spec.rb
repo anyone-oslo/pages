@@ -19,6 +19,7 @@ describe User do
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.to allow_value("test+foo@example.com").for(:email) }
   it { is_expected.not_to allow_value("foo").for(:email) }
+  it { is_expected.not_to allow_value("test@example").for(:email) }
 
   it { is_expected.to allow_value("long enough").for(:password) }
   it { is_expected.not_to allow_value("eep").for(:password) }

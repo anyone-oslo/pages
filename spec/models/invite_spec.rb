@@ -20,6 +20,7 @@ describe Invite do
     it { is_expected.to allow_value("test@example.com").for(:email) }
     it { is_expected.to allow_value("test+foo@example.com").for(:email) }
     it { is_expected.not_to allow_value("foo").for(:email) }
+    it { is_expected.not_to allow_value("test@example").for(:email) }
   end
 
   describe "#token" do
