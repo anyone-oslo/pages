@@ -44,6 +44,17 @@ module PagesCore
       )
     end
 
+    initializer "pages_core.sentry", after: :load_config_initializers do
+      next unless defined?(Sentry)
+
+      config = Sentry.configuration
+      next unless config
+
+      unless config.excluded_exceptions.include?("PagesCore::NotAuthorized")
+        config.excluded_exceptions << "PagesCore::NotAuthorized"
+      end
+    end
+
     initializer "pages_core.deprecator" do |app|
       app.deprecators[:pages_core] = PagesCore.deprecator
     end
