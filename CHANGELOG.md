@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.16.7](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.6...pages_core/v3.16.7) (2026-05-13)
+
+
+### Bug Fixes
+
+* **meta_tags:** force og:url encoding to UTF-8 ([#164](https://github.com/anyone-oslo/pages/issues/164)) ([e478662](https://github.com/anyone-oslo/pages/commit/e4786621dd8f3e40720d0d7cd79b0938a31941d5))
+* **tree:** guard next_sibling and previous_sibling when self not in siblings ([#166](https://github.com/anyone-oslo/pages/issues/166)) ([55182d3](https://github.com/anyone-oslo/pages/commit/55182d3e2edce94bf56c13eb223f50d5a68e6157))
+
 ## [3.16.6](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.5...pages_core/v3.16.6) (2026-04-29)
 
 
