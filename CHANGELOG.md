@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.16.8](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.7...pages_core/v3.16.8) (2026-05-13)
+
+
+### Bug Fixes
+
+* require TLD in email validation ([#167](https://github.com/anyone-oslo/pages/issues/167)) ([36c78bc](https://github.com/anyone-oslo/pages/commit/36c78bc6e811c72e188bf01611cf84970352df8e))
+* **sentry:** exclude PagesCore::NotAuthorized from reports ([#169](https://github.com/anyone-oslo/pages/issues/169)) ([e53ee98](https://github.com/anyone-oslo/pages/commit/e53ee989ba76c49c32c86a70895f717f22e08ad8))
+
 ## [3.16.7](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.6...pages_core/v3.16.7) (2026-05-13)
 
 
