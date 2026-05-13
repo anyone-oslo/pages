@@ -77,6 +77,18 @@ describe PagesCore::PageModel::Tree do
 
       it { is_expected.to be_nil }
     end
+
+    context "when page is not in siblings (e.g. parent reassigned in memory)" do
+      let(:other_root) { create(:page) }
+      let(:page) { create(:page, parent: root) }
+
+      before do
+        create(:page, parent: other_root)
+        page.parent_page_id = other_root.id
+      end
+
+      it { is_expected.to be_nil }
+    end
   end
 
   describe "#parent" do
@@ -120,6 +132,18 @@ describe PagesCore::PageModel::Tree do
       before do
         page
         last
+      end
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when page is not in siblings (e.g. parent reassigned in memory)" do
+      let(:other_root) { create(:page) }
+      let(:page) { create(:page, parent: root) }
+
+      before do
+        create(:page, parent: other_root)
+        page.parent_page_id = other_root.id
       end
 
       it { is_expected.to be_nil }

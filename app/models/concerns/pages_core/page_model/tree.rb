@@ -83,8 +83,10 @@ module PagesCore
         def next_sibling
           return unless persisted? && siblings.any?
 
-          siblings[(siblings.to_a.index(self) + 1)...siblings.length]
-            .try(&:first)
+          index = siblings.to_a.index(self)
+          return unless index
+
+          siblings[(index + 1)...siblings.length].try(&:first)
         end
 
         # Returns the pages parent
@@ -97,11 +99,14 @@ module PagesCore
           localized_subpages.published
         end
 
-        # Finds the page's next sibling. Returns nil if there isn't one.
+        # Finds the page's previous sibling. Returns nil if there isn't one.
         def previous_sibling
           return unless persisted? && siblings.any?
 
-          siblings[0...siblings.to_a.index(self)].try(&:last)
+          index = siblings.to_a.index(self)
+          return unless index
+
+          siblings[0...index].try(&:last)
         end
 
         # Returns the root node of the tree.
