@@ -68,7 +68,7 @@ module PagesCore
         title: open_graph_title(record),
         image: meta_image(record),
         description: open_graph_description(record)&.strip,
-        url: request.url }
+        url: request.url.dup.force_encoding(Encoding::UTF_8) }
     end
 
     def open_graph_tags(record = nil)
