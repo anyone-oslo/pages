@@ -9,6 +9,11 @@ updates:
       day: "tuesday"
       time: "06:00"
       timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+      semver-minor-days: 5
+      semver-patch-days: 3
     ignore:
       # Pinned to 2.x in gemspec due to react-rails incompatibility
       - dependency-name: "connection_pool"
@@ -26,6 +31,11 @@ updates:
       day: "tuesday"
       time: "06:00"
       timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+      semver-minor-days: 5
+      semver-patch-days: 3
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
@@ -42,6 +52,8 @@ updates:
       day: "tuesday"
       time: "05:30"
       timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
