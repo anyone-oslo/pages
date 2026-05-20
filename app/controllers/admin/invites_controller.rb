@@ -54,7 +54,7 @@ module Admin
     private
 
     def find_invite
-      @invite = Invite.find(params[:id])
+      @invite = Invite.find(params.expect(:id))
     end
 
     def find_and_validate_invite

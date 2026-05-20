@@ -40,7 +40,7 @@ module Admin
     end
 
     def find_attachment
-      @attachment = Attachment.find(params[:id])
+      @attachment = Attachment.find(params.expect(:id))
     end
 
     def render_attachment(attachment)

@@ -21,7 +21,7 @@ class AttachmentsController < ApplicationController
   private
 
   def find_attachment
-    @attachment = Attachment.find(params[:id])
+    @attachment = Attachment.find(params.expect(:id))
   end
 
   def send_attachment(disposition: "inline")

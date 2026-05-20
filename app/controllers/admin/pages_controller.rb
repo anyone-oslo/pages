@@ -62,13 +62,13 @@ module Admin
     end
 
     def move
-      parent = params[:parent_id] ? Page.find(params[:parent_id]) : nil
+      parent = params[:parent_id] ? Page.find(params.expect(:parent_id)) : nil
       @page.update(parent:, position: params[:position])
       respond_with_page(@page) { redirect_to admin_pages_url(content_locale) }
     end
 
     def destroy
-      Page.find(params[:id]).flag_as_deleted!
+      Page.find(params.expect(:id)).flag_as_deleted!
       redirect_to admin_pages_url(content_locale)
     end
 
@@ -90,7 +90,7 @@ module Admin
     end
 
     def find_page
-      @page = Page.find(params[:id]).localize(content_locale)
+      @page = Page.find(params.expect(:id)).localize(content_locale)
     end
 
     def respond_with_page(page, &block)

@@ -47,7 +47,7 @@ module Admin
     end
 
     def find_image
-      @image = Image.find(params[:id])
+      @image = Image.find(params.expect(:id))
     end
 
     def render_image_json(image)

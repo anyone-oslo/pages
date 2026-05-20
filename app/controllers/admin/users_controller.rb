@@ -48,7 +48,7 @@ module Admin
     end
 
     def destroy
-      @user = User.find(params[:id])
+      @user = User.find(params.expect(:id))
       flash[:notice] = "User <strong>#{@user.email}</strong> has been deleted"
       @user.destroy
       redirect_to admin_users_url
@@ -65,7 +65,7 @@ module Admin
     protected
 
     def find_user
-      @user = User.find(params[:id])
+      @user = User.find(params.expect(:id))
     end
 
     def user_params
