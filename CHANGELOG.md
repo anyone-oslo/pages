@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.9](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.8...pages_core/v3.16.9) (2026-05-20)
+
+
+### Bug Fixes
+
+* regenerate lockfile with allowBuilds config ([7b33bbf](https://github.com/anyone-oslo/pages/commit/7b33bbf51f0e5b1f143a6b2544eea36ff16b9d76))
+
 ## [3.16.8](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.7...pages_core/v3.16.8) (2026-05-13)
 
 
