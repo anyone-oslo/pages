@@ -24,8 +24,8 @@ jobs:
     timeout-minutes: 10
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-      - uses: actions/checkout@v6.0.2
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v6.0.3
+      - uses: ruby/setup-ruby@v1.310.0
         with:
           bundler-cache: true
           ruby-version: "4.0"
@@ -36,7 +36,7 @@ jobs:
     name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
           version: latest
@@ -48,7 +48,7 @@ jobs:
     name: Typescript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
           version: latest
@@ -78,14 +78,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - name: Install system dependencies
         run: sudo apt-get install -y libpq-dev libvips42
       - uses: pnpm/action-setup@v6.0.8
         with:
           version: latest
           run_install: true
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.310.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -148,10 +148,10 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - name: Install system dependencies
         run: sudo apt-get install -y libvips42
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1.310.0
         with:
           ruby-version: "4.0"
           bundler-cache: true
@@ -162,7 +162,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
           version: latest
