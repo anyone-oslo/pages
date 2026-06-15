@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.16.9](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.8...pages_core/v3.16.9) (2026-06-15)
+
+
+### Bug Fixes
+
+* regenerate lockfile with allowBuilds config ([7b33bbf](https://github.com/anyone-oslo/pages/commit/7b33bbf51f0e5b1f143a6b2544eea36ff16b9d76))
+* WCAG mandatory baseline for frontend generator ([27fa55d](https://github.com/anyone-oslo/pages/commit/27fa55d8d8be0c10646fd255122daf8a9f57d3c1))
+
 ## [3.16.8](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.7...pages_core/v3.16.8) (2026-05-13)
 
 
