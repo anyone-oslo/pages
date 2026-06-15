@@ -16,9 +16,12 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to Main Content</a>
     <% if Rails.env.development? %>
       <div class="grid-overlay"></div>
     <% end %>
-    <%= yield %>
+    <main id="main-content">
+      <%= yield %>
+    </main>
   </body>
 <% end %>
