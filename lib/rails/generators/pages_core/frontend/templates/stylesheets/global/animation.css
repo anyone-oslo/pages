@@ -1,5 +1,12 @@
+/* Wrap all motion/scroll rules in prefers-reduced-motion: no-preference. */
+
 :root {
   --ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
   --ease-out-back: cubic-bezier(0.35, 1.47, 0.64, 1);
-  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
 }

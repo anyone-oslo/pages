@@ -1,6 +1,15 @@
 /*
 @font-face { font-family: "Example";
              font-style: normal;
-             font-weight: 300;
-             src: url("/Example-Regular.woff") format("woff"); }
+             font-weight: 100 900;
+             font-display: swap;
+             src: url("/fonts/Example-Variable.woff2") format("woff2"); }
+
+@font-face { font-family: "Example-Fallback";
+             src: local("Arial");
+             size-adjust: 107%;
+             ascent-override: 90%; }
+
+When enabling custom fonts, set --font-sans in typography.css to
+"Example", "Example-Fallback", sans-serif. Calibrate size-adjust per family.
 */
