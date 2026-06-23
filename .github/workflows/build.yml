@@ -25,7 +25,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v6.0.3
-      - uses: ruby/setup-ruby@v1.313.0
+      - uses: ruby/setup-ruby@v1.314.0
         with:
           bundler-cache: true
           ruby-version: "4.0"
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.3
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
         with:
           version: latest
           run_install: true
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.3
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
         with:
           version: latest
           run_install: true
@@ -83,11 +83,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libpq-dev libvips42
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
         with:
           version: latest
           run_install: true
-      - uses: ruby/setup-ruby@v1.313.0
+      - uses: ruby/setup-ruby@v1.314.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -155,7 +155,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libvips42
-      - uses: ruby/setup-ruby@v1.313.0
+      - uses: ruby/setup-ruby@v1.314.0
         with:
           ruby-version: "4.0"
           bundler-cache: true
@@ -167,7 +167,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.3
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
         with:
           version: latest
           run_install: true
