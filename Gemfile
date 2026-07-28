@@ -28,6 +28,6 @@ group :development, :test do
   gem "rubocop-rspec_rails", require: false
   gem "selenium-webdriver"
   gem "shoulda-matchers"
-  gem "simplecov", "~> 1.0.0"
+  gem "simplecov", "~> 1.0.2"
   gem "timecop"
 end
