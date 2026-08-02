@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.10](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.9...pages_core/v3.16.10) (2026-08-02)
+
+
+### Bug Fixes
+
+* trust the committed lockfile in pnpm supply-chain checks ([6f7d6b1](https://github.com/anyone-oslo/pages/commit/6f7d6b10f812dbc5a04ebf468d349c9226d80b03))
+
 ## [3.16.9](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.8...pages_core/v3.16.9) (2026-06-15)
 
 
