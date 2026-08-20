@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.17.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.9...pages_core/v3.17.0) (2026-08-20)
+
+
+### Features
+
+* **meta_tags:** add og:image size, type and alt ([#224](https://github.com/anyone-oslo/pages/issues/224)) ([c54e86d](https://github.com/anyone-oslo/pages/commit/c54e86d8897d2cbb5c0ca49ff527e1d84089d8eb)), closes [#223](https://github.com/anyone-oslo/pages/issues/223)
+
+
+### Bug Fixes
+
+* trust the committed lockfile in pnpm supply-chain checks ([6f7d6b1](https://github.com/anyone-oslo/pages/commit/6f7d6b10f812dbc5a04ebf468d349c9226d80b03))
+
 ## [3.16.9](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.8...pages_core/v3.16.9) (2026-06-15)
 
 
