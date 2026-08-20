@@ -2,17 +2,25 @@
 
 module PagesCore
   module HeadTagsHelper
+    META_IMAGE_SIZE = "1200x"
+
     def document_title_tag(separator: " - ")
       parts = [(document_title if respond_to?(:document_title)),
                PagesCore.config.site_name]
       tag.title(parts.compact_blank.uniq.join(separator))
     end
 
-    def meta_image_url(image, size: "1200x")
+    def meta_image_url(image, size: META_IMAGE_SIZE)
       return if image.blank?
       return image unless image.is_a?(Image)
 
       dynamic_image_url(image, size:, only_path: false)
+    end
+
+    def meta_image_size(image, size: META_IMAGE_SIZE)
+      return unless image.is_a?(Image) && image.size?
+
+      DynamicImage::ImageSizing.new(image).fit(size).floor
     end
 
     def pages_meta_tags(page = nil)
@@ -40,10 +48,12 @@ module PagesCore
     end
 
     def meta_image(record = nil)
-      meta_image_url(
-        content_for(:meta_image) ||
-          record.try(:meta_image) || record.try(:image)
-      )
+      meta_image_url(meta_image_source(record))
+    end
+
+    def meta_image_source(record = nil)
+      content_for(:meta_image) ||
+        record.try(:meta_image) || record.try(:image)
     end
 
     def meta_image_tag(href)
@@ -66,9 +76,26 @@ module PagesCore
       { type: "website",
         site_name: PagesCore.config(:site_name),
         title: open_graph_title(record),
-        image: meta_image(record),
+        **open_graph_image_properties(record),
         description: open_graph_description(record)&.strip,
         url: request.url.dup.force_encoding(Encoding::UTF_8) }
+    end
+
+    def open_graph_image_properties(record = nil)
+      image = meta_image_source(record)
+      return { image: meta_image_url(image) } unless image.is_a?(Image)
+
+      { image: meta_image_url(image),
+        "image:type": image.safe_content_type,
+        **open_graph_image_size(image),
+        "image:alt": image.alternative.presence }
+    end
+
+    def open_graph_image_size(image)
+      size = meta_image_size(image)
+      return {} unless size
+
+      { "image:width": size.x, "image:height": size.y }
     end
 
     def open_graph_tags(record = nil)
