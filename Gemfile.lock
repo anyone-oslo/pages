@@ -138,8 +138,9 @@ GEM
     country_select (11.0.0)
       countries (> 6.0, < 9.0)
     crass (1.0.7)
-    css_parser (2.2.0)
+    css_parser (3.0.0)
       addressable
+      ssrf_filter (~> 1.5)
     date (3.5.1)
     debug_inspector (1.2.0)
     diff-lcs (1.6.2)
@@ -415,6 +416,7 @@ GEM
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
     simplecov (1.1.1)
+    ssrf_filter (1.5.0)
     stringio (3.2.0)
     strings (0.2.1)
       strings-ansi (~> 0.2)
