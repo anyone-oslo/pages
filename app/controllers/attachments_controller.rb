@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AttachmentsController < ApplicationController
-  include PagesCore::RangedResponse
+  include Dis::Controller
 
   rescue_from PagesCore::DigestVerifier::InvalidSignatureError, with: :not_found
 
@@ -27,10 +27,7 @@ class AttachmentsController < ApplicationController
   def send_attachment(disposition: "inline")
     return unless stale?(etag: @attachment, last_modified: @attachment.updated_at)
 
-    send_ranged_data(@attachment.data,
-                     filename: @attachment.filename,
-                     type: @attachment.content_type,
-                     disposition:)
+    send_dis_data(@attachment, disposition:)
   end
 
   def verify_signed_params
