@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.17.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.17.0...pages_core/v3.17.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* drop the dead name attribute from image exports ([ca6640c](https://github.com/anyone-oslo/pages/commit/ca6640c98e04d03a756a98ad61c60d330c90f2b5))
+* require dis 2.2 and dynamic_image 3.0.9 ([3d43033](https://github.com/anyone-oslo/pages/commit/3d430336b8f87bee95e5125ad5915d3f9c550eb3))
+* serve attachments with send_dis_data ([95f3fc5](https://github.com/anyone-oslo/pages/commit/95f3fc55b5abc02da3e81c4662bd40f09a3dc89e))
+* serve attachments with send_dis_data ([f7043c9](https://github.com/anyone-oslo/pages/commit/f7043c9badd0b720984748c6ae3dc2c9108eb218))
+* stream attachments and images when exporting ([9bf6ceb](https://github.com/anyone-oslo/pages/commit/9bf6ceb46c8153bd0ea5ae2ebdf1aa21896c2903))
+
 ## [3.17.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.16.9...pages_core/v3.17.0) (2026-08-20)
 
 
