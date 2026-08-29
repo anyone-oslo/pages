@@ -6,7 +6,10 @@ import RichText from "./features/RichText";
 import contentTabs from "./features/contentTabs";
 
 /** @deprecated Import tombolo directly and use Tombolo.start() instead. */
-export function registerComponent(name: string, component: React.ComponentType) {
+export function registerComponent(
+  name: string,
+  component: React.ComponentType
+) {
   Tombolo.start({ [name]: component });
 }
 

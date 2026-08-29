@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import * as Drag from "../../types/Drag";
 
 type AnyTouchEvent =
-  | MouseEvent
-  | TouchEvent
-  | React.MouseEvent
-  | React.TouchEvent;
+  MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent;
 
 type StartDrag<T> = (
   evt: AnyTouchEvent,
