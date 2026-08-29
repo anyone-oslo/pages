@@ -32,19 +32,16 @@ class PageExporter
   def export_files(page)
     path = page_path(page).join("attachments")
     page.attachments.each do |file|
-      write_file(
-        path.join([file.content_hash, file.filename].join("-")),
-        file.data
-      )
+      copy_file(path.join([file.content_hash, file.filename].join("-")), file)
     end
   end
 
   def export_images(page)
     path = page_path(page).join("images")
     page.page_images.each do |pi|
-      write_file(
+      copy_file(
         path.join([pi.image.content_hash, pi.image.filename].join("-")),
-        pi.image.data
+        pi.image
       )
     end
   end
@@ -90,6 +87,13 @@ class PageExporter
       .select { |attr| page.send(:"#{attr}?") }
       .map { |attr| ["-- #{attr}: --", page.send(attr).strip].join("\n\n") }
       .join("\n\n\n")
+  end
+
+  def copy_file(path, record)
+    FileUtils.mkdir_p(File.dirname(path))
+    record.open_data do |data|
+      File.open(path, "wb") { |out| IO.copy_stream(data, out) }
+    end
   end
 
   def write_file(path, data)
