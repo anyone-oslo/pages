@@ -10,10 +10,6 @@ module Export
       object.image.id
     end
 
-    attribute :name do
-      object.image.name
-    end
-
     attribute :alternative do
       object.image.alternative
     end
