@@ -1,5 +1,5 @@
 [![Version](https://img.shields.io/gem/v/pages_core.svg?style=flat)](https://rubygems.org/gems/pages_core)
-[![Build](https://github.com/anyone-oslo/pages/workflows/Build/badge.svg)](https://github.com/anyone-oslo/pages/actions/workflows/build.yml)
+[![Build](https://github.com/anyone-oslo/pages/actions/workflows/build.yml/badge.svg)](https://github.com/anyone-oslo/pages/actions/workflows/build.yml)
 
 # Pages
 
@@ -87,7 +87,14 @@ All the helpers and controllers will automatically set the locale for
 you and it propagates across relations, so you'll rarely end up
 interacting with it directly in this fashion.
 
+## Contributing
+
+Bug reports and pull requests are welcome on
+[GitHub](https://github.com/anyone-oslo/pages). See
+[CONTRIBUTING.md](CONTRIBUTING.md) for how to run the tests and how
+commits are formatted, and note that this project ships with a
+[code of conduct](CODE_OF_CONDUCT.md).
+
 ## License
 
-Pages is licensed under the
-[MIT License](http://www.opensource.org/licenses/MIT).
+Released under the [MIT License](LICENSE).

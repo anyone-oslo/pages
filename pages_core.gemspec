@@ -8,7 +8,8 @@ Gem::Specification.new do |s|
   s.version     = PagesCore::VERSION
   s.authors     = ["Inge Jørgensen"]
   s.email       = ["inge@anyone.no"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/anyone-oslo/pages"
+  s.license     = "MIT"
   s.summary     = "Pages Core"
   s.description = "Pages Core"
 
@@ -57,6 +58,10 @@ Gem::Specification.new do |s|
   s.add_dependency "localizable_model", "~> 0.5"
 
   s.metadata = {
-    "rubygems_mfa_required" => "true"
+    "bug_tracker_uri" => "https://github.com/anyone-oslo/pages/issues",
+    "changelog_uri" => "https://github.com/anyone-oslo/pages/blob/main/CHANGELOG.md",
+    "documentation_uri" => "https://www.rubydoc.info/gems/pages_core",
+    "rubygems_mfa_required" => "true",
+    "source_code_uri" => "https://github.com/anyone-oslo/pages"
   }
 end
