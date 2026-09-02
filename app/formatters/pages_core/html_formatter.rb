@@ -56,7 +56,7 @@ module PagesCore
     end
 
     def fix_markup(str)
-      Nokogiri::HTML.fragment(str).to_html
+      Nokogiri::HTML5.fragment(str).to_html
     end
 
     def parse_attachments(string)

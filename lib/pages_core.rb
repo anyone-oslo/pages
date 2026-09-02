@@ -62,7 +62,7 @@ module PagesCore
     end
 
     def deprecator
-      @deprecator ||= ActiveSupport::Deprecation.new("3.17", "PagesCore")
+      @deprecator ||= ActiveSupport::Deprecation.new("3.19.0", "PagesCore")
     end
 
     def plugin_root
