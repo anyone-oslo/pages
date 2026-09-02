@@ -53,7 +53,48 @@ module PagesCore
       image_figure(image, opts)
     end
 
+    # Deprecated. Build a DynamicImage::Picture instead.
+    def image_size(width, ratio)
+      deprecated_srcset_helper(:image_size)
+      return "#{width}x" unless ratio
+
+      "#{width}x#{(width / ratio).round}"
+    end
+
+    # Deprecated. Build a DynamicImage::Picture instead.
+    def image_widths(image)
+      deprecated_srcset_helper(:image_widths)
+      [233, 350, 700, 1050, 1400, 2100, 2800].select { |w| image.size.x >= w }
+    end
+
+    # Deprecated. Build a DynamicImage::Picture instead.
+    def srcset(image, ratio: nil, format: nil)
+      deprecated_srcset_helper(:srcset)
+      PagesCore.deprecator.silence do
+        image_widths(image).map do |width|
+          options = { size: image_size(width, ratio),
+                      crop: (ratio ? true : false) }
+          options[:format] = format if format
+
+          "#{dynamic_image_path(image, options)} #{width}w"
+        end.join(", ")
+      end
+    end
+
+    # Deprecated. Build a DynamicImage::Picture instead.
+    def webp_compatible?(image)
+      deprecated_srcset_helper(:webp_compatible?)
+      image.content_type != "image/gif"
+    end
+
     private
+
+    def deprecated_srcset_helper(name)
+      PagesCore.deprecator.warn(
+        "PagesCore::ImagesHelper##{name} is deprecated, " \
+        "build a DynamicImage::Picture instead"
+      )
+    end
 
     def fit_ratio(size, ratio)
       v = Vector2d(size)
@@ -62,30 +103,6 @@ module PagesCore
 
     def image_link_to(content, href)
       tag.a(content, href:)
-    end
-
-    def image_size(width, ratio)
-      return "#{width}x" unless ratio
-
-      "#{width}x#{(width / ratio).round}"
-    end
-
-    def image_widths(image)
-      [233, 350, 700, 1050, 1400, 2100, 2800].select { |w| image.size.x >= w }
-    end
-
-    def srcset(image, ratio: nil, format: nil)
-      image_widths(image).map do |width|
-        options = { size: image_size(width, ratio),
-                    crop: (ratio ? true : false) }
-        options[:format] = format if format
-
-        "#{dynamic_image_path(image, options)} #{width}w"
-      end.join(", ")
-    end
-
-    def webp_compatible?(image)
-      image.content_type != "image/gif"
     end
   end
 end

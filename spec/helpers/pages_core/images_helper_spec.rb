@@ -146,9 +146,9 @@ RSpec.describe PagesCore::ImagesHelper do
     end
 
     context "with an animated gif" do
-      let(:image) { create(:image, file: uploaded_file("animated.gif", type)) }
-      let(:type) { "image/gif" }
-
+      let(:image) do
+        create(:image, file: uploaded_file("animated.gif", "image/gif"))
+      end
       let(:img) do
         set = srcset(image, [["320x200", 320]], format: "gif")
         img_tag(image, "320x200", format: "gif",
@@ -204,8 +204,6 @@ RSpec.describe PagesCore::ImagesHelper do
   end
 
   describe "#picture" do
-    before { allow(PagesCore.deprecator).to receive(:warn) }
-
     it "renders the same markup as #image_figure" do
       expect(helper.picture(large_image))
         .to eq(helper.image_figure(large_image))
@@ -216,11 +214,54 @@ RSpec.describe PagesCore::ImagesHelper do
         .to eq(helper.image_figure(image, class_name: "wide",
                                           caption: "Kittens"))
     end
+  end
 
-    it "warns that it is deprecated" do
-      helper.picture(image)
-      expect(PagesCore.deprecator)
-        .to have_received(:warn).with(/#picture is deprecated/)
+  describe "the deprecated srcset helpers" do
+    describe "#image_size" do
+      it "returns a width-only size without a ratio" do
+        expect(helper.image_size(700, nil)).to eq("700x")
+      end
+
+      it "derives the height from a ratio" do
+        expect(helper.image_size(700, 16 / 9r)).to eq("700x394")
+      end
+    end
+
+    describe "#image_widths" do
+      it "omits widths the image cannot supply" do
+        expect(helper.image_widths(image)).to eq([233])
+      end
+
+      it "returns the full ladder for a large image" do
+        expect(helper.image_widths(large_image))
+          .to eq([233, 350, 700, 1050, 1400, 2100, 2800])
+      end
+    end
+
+    describe "#srcset" do
+      it "builds a srcset from the old ladder" do
+        expect(helper.srcset(image))
+          .to eq("#{image_path(image, '233x145')} 233w")
+      end
+
+      it "renders the requested format" do
+        expect(helper.srcset(image, format: :webp))
+          .to eq("#{image_path(image, '233x145', format: 'webp')} 233w")
+      end
+    end
+
+    describe "#webp_compatible?" do
+      let(:gif) do
+        create(:image, file: uploaded_file("image.gif", "image/gif"))
+      end
+
+      it "is true for a png" do
+        expect(helper).to be_webp_compatible(image)
+      end
+
+      it "is false for a gif" do
+        expect(helper).not_to be_webp_compatible(gif)
+      end
     end
   end
 
