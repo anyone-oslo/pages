@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.18.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.17.1...pages_core/v3.18.0) (2026-09-02)
+
+
+### Features
+
+* Adopt dynamic_image picture rendering ([f568d61](https://github.com/anyone-oslo/pages/commit/f568d617402999b7fb2e0fb4a0f5f58429843a60))
+
 ## [3.17.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.17.0...pages_core/v3.17.1) (2026-08-29)
 
 
