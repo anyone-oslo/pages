@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.18.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.0...pages_core/v3.18.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* Fix image content types and backfill ([b9f3691](https://github.com/anyone-oslo/pages/commit/b9f369113b0ce4792e5f7b64d1194d7cedfe0e31))
+
 ## [3.18.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.17.1...pages_core/v3.18.0) (2026-09-02)
 
 
