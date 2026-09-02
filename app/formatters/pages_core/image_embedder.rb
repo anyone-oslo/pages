@@ -20,21 +20,13 @@ module PagesCore
       /\[image:(\d+)([^\]]*)?\]/
     end
 
-    def embed_image(id, size:, class_name:, link:)
+    def embed_image(id, class_name:, link:)
       image_figure(
         Image.find(id).localize(I18n.locale),
-        size:, class_name:, link:
+        class_name:, link:
       )
     rescue ActiveRecord::RecordNotFound
       nil
-    end
-
-    def embed_image_size(str)
-      if str =~ /size="(\d*x\d*)"/
-        Regexp.last_match(1)
-      else
-        default_image_size
-      end
     end
 
     def parse_image(str)
@@ -42,10 +34,7 @@ module PagesCore
       options = str.match(image_expression)[2]
       class_name = (Regexp.last_match(1) if options =~ /class="([\s\-\w]+)"/)
       link = (Regexp.last_match(1) if options =~ /link="([^"]+)"/)
-      embed_image(id,
-                  size: embed_image_size(options),
-                  class_name:,
-                  link:)
+      embed_image(id, class_name:, link:)
     end
 
     def parse_images(string)

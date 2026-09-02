@@ -8,9 +8,9 @@ RSpec.describe PagesCore::ImagesHelper do
     create(:image, file: uploaded_file("large_image.png", "image/png"))
   end
   let(:candidates) do
-    [["232x155", 233], ["350x233", 350], ["700x466", 700],
-     ["1050x700", 1050], ["1400x933", 1400], ["2100x1400", 2100],
-     ["2800x1866", 2800]]
+    [["390x260", 390], ["550x366", 550], ["780x520", 780],
+     ["1090x726", 1090], ["1530x1020", 1530], ["2140x1426", 2140],
+     ["3000x2000", 3000]]
   end
 
   def uploaded_file(name, content_type)
@@ -48,10 +48,31 @@ RSpec.describe PagesCore::ImagesHelper do
     markup.scan(/(\d+)w/).flatten.map(&:to_i).uniq
   end
 
+  def picture_markup(record, candidates, src_size,
+                     sizes: "100vw", fallback: "png")
+    set = srcset(record, candidates, format: "webp")
+    source = %(<source type="image/webp" srcset="#{set}" sizes="#{sizes}">)
+    "<picture>#{source}#{img_tag(record, src_size, format: fallback)}</picture>"
+  end
+
   describe "#image_figure" do
-    it "renders a figure with the image" do
+    it "renders a picture inside a figure" do
+      expect(helper.image_figure(large_image))
+        .to eq(figure(picture_markup(large_image, candidates, "1200x800")))
+    end
+
+    it "renders the full candidate width ladder" do
+      expect(srcset_widths(helper.image_figure(large_image)))
+        .to eq([390, 550, 780, 1090, 1530, 2140, 3000])
+    end
+
+    it "offers a single candidate for an image smaller than the range" do
+      expect(srcset_widths(helper.image_figure(image))).to eq([320])
+    end
+
+    it "does not upscale the fallback past the image" do
       expect(helper.image_figure(image))
-        .to eq(figure(img_tag(image, "320x200")))
+        .to include(image_path(image, "320x200"))
     end
 
     it "omits the caption when the record has none" do
@@ -63,55 +84,81 @@ RSpec.describe PagesCore::ImagesHelper do
 
       it "renders the caption from the record" do
         expect(helper.image_figure(image))
-          .to eq(figure(img_tag(image, "320x200"), caption: "Kittens"))
+          .to end_with("</picture><figcaption>Kittens</figcaption></figure>")
       end
 
       it "overrides the caption with :caption" do
         expect(helper.image_figure(image, caption: "Puppies"))
-          .to eq(figure(img_tag(image, "320x200"), caption: "Puppies"))
+          .to end_with("</picture><figcaption>Puppies</figcaption></figure>")
       end
 
       it "omits the caption when :caption is false" do
         expect(helper.image_figure(image, caption: false))
-          .to eq(figure(img_tag(image, "320x200")))
+          .not_to include("figcaption")
       end
     end
 
     it "appends :class_name to the figure class list" do
       expect(helper.image_figure(image, class_name: "wide"))
-        .to eq(figure(img_tag(image, "320x200"),
-                      class_name: "image landscape wide"))
+        .to start_with(%(<figure class="image landscape wide">))
     end
 
-    it "wraps the image in a link when :link is given" do
-      img = img_tag(image, "320x200")
+    it "wraps the picture in a link when :link is given" do
       expect(helper.image_figure(image, link: "http://example.com"))
-        .to eq(figure(%(<a href="http://example.com">#{img}</a>)))
+        .to start_with(%(<figure class="image landscape">) +
+                       %(<a href="http://example.com"><picture>))
     end
 
-    it "fits the image within 2000x2000 by default" do
-      expect(helper.image_figure(image))
-        .to include(image_path(image, "320x200"))
+    it "sets sizes on the source by default" do
+      expect(helper.image_figure(large_image)).to include(%( sizes="100vw">))
     end
 
-    it "fits the image to :size" do
-      expect(helper.image_figure(image, size: "100x100"))
-        .to eq(figure(img_tag(image, "100x62")))
+    context "with :sizes" do
+      it "sets sizes on the source" do
+        expect(helper.image_figure(large_image, sizes: "50vw"))
+          .to eq(figure(picture_markup(large_image, candidates, "1200x800",
+                                       sizes: "50vw")))
+      end
     end
 
-    it "crops to a float ratio" do
-      expect(helper.image_figure(image, ratio: 16.0 / 9.0))
-        .to eq(figure(img_tag(image, "320x180")))
+    context "with :ratio" do
+      let(:candidates) do
+        [["390x219", 390], ["550x309", 550], ["780x439", 780],
+         ["1090x613", 1090], ["1530x861", 1530], ["2140x1204", 2140],
+         ["3000x1688", 3000]]
+      end
+
+      it "crops every candidate to the ratio" do
+        expect(helper.image_figure(large_image, ratio: 16 / 9r))
+          .to eq(figure(picture_markup(large_image, candidates, "1200x675")))
+      end
     end
 
-    it "crops to a rational ratio" do
-      expect(helper.image_figure(image, ratio: 16 / 9r))
-        .to eq(figure(img_tag(image, "320x180")))
+    context "with a still gif" do
+      let(:image) { create(:image, file: uploaded_file("image.gif", type)) }
+      let(:type) { "image/gif" }
+
+      it "renders a webp source with a gif fallback" do
+        expect(helper.image_figure(image))
+          .to eq(figure(picture_markup(image, [["320x200", 320]], "320x200",
+                                       fallback: "gif")))
+      end
     end
 
-    it "fits :size to the ratio" do
-      expect(helper.image_figure(image, size: "200x200", ratio: 16 / 9r))
-        .to eq(figure(img_tag(image, "200x112")))
+    context "with an animated gif" do
+      let(:image) { create(:image, file: uploaded_file("animated.gif", type)) }
+      let(:type) { "image/gif" }
+
+      let(:img) do
+        set = srcset(image, [["320x200", 320]], format: "gif")
+        img_tag(image, "320x200", format: "gif",
+                                  prefix: %( srcset="#{set}" sizes="100vw"))
+      end
+
+      it "keeps the gif format and moves the srcset onto the img" do
+        expect(helper.image_figure(image))
+          .to eq(figure("<picture>#{img}</picture>"))
+      end
     end
   end
 
@@ -157,103 +204,23 @@ RSpec.describe PagesCore::ImagesHelper do
   end
 
   describe "#picture" do
-    def webp_source(record, candidates, sizes: "100vw")
-      set = srcset(record, candidates, format: "webp")
-      %(<source type="image/webp" srcset="#{set}" sizes="#{sizes}">)
-    end
+    before { allow(PagesCore.deprecator).to receive(:warn) }
 
-    def expected_picture(record, candidates, src_size, img_sizes: "")
-      source = webp_source(record, candidates)
-      prefix = %(#{img_sizes} srcset="#{srcset(record, candidates)}")
-      "<picture>#{source}#{img_tag(record, src_size, prefix:)}</picture>"
-    end
-
-    it "renders a picture inside a figure" do
+    it "renders the same markup as #image_figure" do
       expect(helper.picture(large_image))
-        .to eq(figure(expected_picture(large_image, candidates, "1050x700")))
+        .to eq(helper.image_figure(large_image))
     end
 
-    it "renders the full candidate width ladder" do
-      expect(srcset_widths(helper.picture(large_image)))
-        .to eq([233, 350, 700, 1050, 1400, 2100, 2800])
+    it "passes its options on" do
+      expect(helper.picture(image, class_name: "wide", caption: "Kittens"))
+        .to eq(helper.image_figure(image, class_name: "wide",
+                                          caption: "Kittens"))
     end
 
-    it "omits candidate widths the image cannot supply" do
-      expect(srcset_widths(helper.picture(image))).to eq([233])
-    end
-
-    it "renders the img at 1050 wide, without upscaling" do
-      path = image_path(image, "320x200")
-      expect(helper.picture(image)).to include(%(src="#{path}"))
-    end
-
-    it "does not set sizes on the img tag by default" do
-      expect(helper.picture(large_image)).not_to include("<img sizes=")
-    end
-
-    it "sets sizes on the webp source by default" do
-      expect(helper.picture(large_image)).to include(%(" sizes="100vw">))
-    end
-
-    context "with :sizes" do
-      it "sets sizes on the img tag and the webp source" do
-        expect(helper.picture(large_image, sizes: "50vw"))
-          .to eq(figure(expected_picture_with_sizes))
-      end
-
-      def expected_picture_with_sizes
-        source = webp_source(large_image, candidates, sizes: "50vw")
-        prefix = %( sizes="50vw" srcset="#{srcset(large_image, candidates)}")
-        img = img_tag(large_image, "1050x700", prefix:)
-        "<picture>#{source}#{img}</picture>"
-      end
-    end
-
-    context "with :ratio" do
-      let(:candidates) do
-        [["233x131", 233], ["350x197", 350], ["700x394", 700],
-         ["1050x591", 1050], ["1400x788", 1400], ["2100x1181", 2100],
-         ["2800x1575", 2800]]
-      end
-
-      it "crops every candidate to the ratio" do
-        expect(helper.picture(large_image, ratio: 16 / 9r))
-          .to eq(figure(expected_picture(large_image, candidates, "1050x591")))
-      end
-    end
-
-    it "appends :class_name to the figure class list" do
-      expect(helper.picture(large_image, class_name: "hero"))
-        .to start_with(%(<figure class="image landscape hero">))
-    end
-
-    it "wraps the picture in a link when :link is given" do
-      expect(helper.picture(large_image, link: "/foo"))
-        .to include(%(<figure class="image landscape"><a href="/foo">) \
-                    "<picture>")
-    end
-
-    it "renders the caption after the picture" do
-      expect(helper.picture(large_image, caption: "Kittens"))
-        .to end_with("</picture><figcaption>Kittens</figcaption></figure>")
-    end
-
-    it "omits the caption when :caption is false" do
-      expect(helper.picture(large_image, caption: false))
-        .not_to include("figcaption")
-    end
-
-    context "with a gif" do
-      let(:candidates) { [["233x145", 233]] }
-      let(:image) { create(:image, file: uploaded_file("image.gif", type)) }
-      let(:type) { "image/gif" }
-
-      it "omits the webp source" do
-        set = srcset(image, candidates, format: "gif")
-        img = img_tag(image, "320x200",
-                      format: "gif", prefix: %( srcset="#{set}"))
-        expect(helper.picture(image)).to eq(figure("<picture>#{img}</picture>"))
-      end
+    it "warns that it is deprecated" do
+      helper.picture(image)
+      expect(PagesCore.deprecator)
+        .to have_received(:warn).with(/#picture is deprecated/)
     end
   end
 

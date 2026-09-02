@@ -117,46 +117,55 @@ describe PagesCore::HtmlFormatter do
 
     context "with image without attributes" do
       let(:string) { "[image:#{image.id}]" }
-      let(:pattern) do
-        %r{<figure.class="image.landscape"><img.
-        src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
-        .width="320".height="200"></figure>}x
+
+      it "renders a picture inside a figure" do
+        expect(html)
+          .to start_with(%(<figure class="image landscape"><picture>) +
+                         %(<source type="image/webp" srcset="))
       end
 
-      it { is_expected.to match(pattern) }
+      it "offers a webp candidate" do
+        expect(html).to match(%r{/320x200/#{image.id}-\w+\.webp 320w"})
+      end
+
+      it "falls back to the stored format" do
+        expect(html)
+          .to end_with(
+            %(/320x200/#{image.to_param}.png" width="320" height="200">) \
+            "</picture></figure>"
+          )
+      end
     end
 
-    context "with image with size" do
+    context "with a legacy size attribute" do
       let(:string) { "[image:#{image.id} size=\"100x100\"]" }
-      let(:pattern) do
-        %r{<figure.class="image.landscape"><img.
-        src="/dynamic_images/([\w\d]+)/100x62/#{image.id}-([\w\d]+)\.png"
-        .width="100".height="62"></figure>}x
+
+      it "ignores it and renders the responsive image" do
+        expect(html).to include("<picture>")
       end
 
-      it { is_expected.to match(pattern) }
+      it "does not render at the requested size" do
+        expect(html).not_to include("100x62")
+      end
     end
 
     context "with image with class name" do
       let(:string) { "[image:#{image.id} class=\"float-left\"]" }
-      let(:pattern) do
-        %r{<figure.class="image.landscape.float-left"><img.
-        src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
-        .width="320".height="200"></figure>}x
-      end
 
-      it { is_expected.to match(pattern) }
+      it "adds the class to the figure" do
+        expect(html)
+          .to start_with(%(<figure class="image landscape float-left">))
+      end
     end
 
     context "with image with link" do
       let(:string) { "[image:#{image.id} link=\"http://example.com\"]" }
-      let(:pattern) do
-        %r{<figure.class="image.landscape"><a.href="http://example.com">
-        <img.src="/dynamic_images/([\w\d]+)/320x200/#{image.id}
-        -([\w\d]+)\.png".width="320".height="200"></a></figure>}x
-      end
 
-      it { is_expected.to match(pattern) }
+      it "wraps the picture in a link" do
+        expect(html)
+          .to start_with(%(<figure class="image landscape">) +
+                         %(<a href="http://example.com"><picture>))
+      end
     end
 
     context "with non-existant image" do
@@ -174,14 +183,12 @@ describe PagesCore::HtmlFormatter do
         )
       end
       let(:string) { "[image:#{image.id}]" }
-      let(:pattern) do
-        %r{<figure.class="image.landscape"><img.
-        src="/dynamic_images/([\w\d]+)/320x200/#{image.id}-([\w\d]+)\.png"
-        .width="320".height="200">
-        <figcaption>This.is.a.caption</figcaption></figure>}x
-      end
 
-      it { is_expected.to match(pattern) }
+      it "renders the caption after the picture" do
+        expect(html)
+          .to end_with("</picture><figcaption>This is a caption" \
+                       "</figcaption></figure>")
+      end
     end
   end
 end

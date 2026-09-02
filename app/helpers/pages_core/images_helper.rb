@@ -4,11 +4,6 @@ module PagesCore
   module ImagesHelper
     include DynamicImage::Helper
 
-    def dynamic_image_tag(record_or_array, options = {})
-      super(record_or_array,
-            extract_alt_text(record_or_array).merge(options))
-    end
-
     def image_caption(image, caption: nil)
       return if caption == false
 
@@ -18,85 +13,10 @@ module PagesCore
       tag.figcaption(caption)
     end
 
-    # Renders an image figure tag with caption.
+    # Returns the orientation of an image as a class name.
     #
     # ==== Options
-    # * <tt>:caption</tt>: Override caption with a string, or set to false to
-    #   disable captions.
-    # * <tt>:class_name</tt>: Class name to add to figure tag.
-    # * <tt>:link</tt>: Link target for image.
-    # * <tt>:ratio</tt>: Ratio to constrain image by.
-    # * <tt>:size</tt>: Max size for image.
-    def image_figure(image, opts = {})
-      class_name = ["image", image_class_name(image, ratio: opts[:ratio]),
-                    opts[:class_name]].compact
-      image_tag = image_figure_image_tag(image,
-                                         size: opts[:size],
-                                         ratio: opts[:ratio])
-      content = opts[:link] ? image_link_to(image_tag, opts[:link]) : image_tag
-      tag.figure(content + image_caption(image, caption: opts[:caption]),
-                 class: class_name)
-    end
-
-    # Renders an image figure tag with caption.
-    #
-    # ==== Options
-    # * <tt>:caption</tt>: Override caption with a string, or set to false to
-    #   disable captions.
-    # * <tt>:class_name</tt>: Class name to add to figure tag.
-    # * <tt>:link</tt>: Link target for image.
-    # * <tt>:ratio</tt>: Ratio to constrain image by.
-    # * <tt>:sizes</tt>: Sizes attribute for image tag, default: "100vw".
-    def picture(image, opts = {})
-      class_name = ["image", image_class_name(image, ratio: opts[:ratio]),
-                    opts[:class_name]].compact
-      pict = picture_tag(image, ratio: opts[:ratio], sizes: opts[:sizes])
-      content = opts[:link] ? image_link_to(pict, opts[:link]) : pict
-      tag.figure(content + image_caption(image, caption: opts[:caption]),
-                 class: class_name)
-    end
-
-    def picture_tag(image, ratio: nil, sizes: "100vw")
-      tag.picture do
-        safe_join(
-          [webp_source(image, ratio:, sizes: sizes || "100vw"),
-           dynamic_image_tag(image,
-                             size: image_size(1050, ratio),
-                             crop: (ratio ? true : false),
-                             sizes:,
-                             srcset: srcset(image, ratio:))]
-        )
-      end
-    end
-
-    def original_dynamic_image_tag(record_or_array, options = {})
-      super(record_or_array,
-            extract_alt_text(record_or_array).merge(options))
-    end
-
-    def uncropped_dynamic_image_tag(record_or_array, options = {})
-      super(record_or_array,
-            extract_alt_text(record_or_array).merge(options))
-    end
-
-    private
-
-    def default_image_size
-      "2000x2000"
-    end
-
-    def extract_alt_text(record_or_array)
-      record = extract_dynamic_image_record(record_or_array)
-      return {} unless record.alternative?
-
-      { alt: record.alternative }
-    end
-
-    def fit_ratio(size, ratio)
-      v = Vector2d(size)
-      Vector2d.new(v.y * ratio, v.y).fit(v)
-    end
-
+    # * <tt>:ratio</tt>: Ratio the image is constrained by.
     def image_class_name(image, ratio: nil)
       size = ratio ? fit_ratio(image.size, ratio) : image.size
 
@@ -106,11 +26,38 @@ module PagesCore
       "portrait"
     end
 
-    def image_figure_image_tag(image, size: nil, ratio: nil)
-      size ||= default_image_size
-      size = fit_ratio(size, ratio) if ratio
+    # Renders a responsive image in a figure tag with caption.
+    #
+    # ==== Options
+    # * <tt>:caption</tt>: Override caption with a string, or set to false to
+    #   disable captions.
+    # * <tt>:class_name</tt>: Class name to add to figure tag.
+    # * <tt>:link</tt>: Link target for image.
+    # * <tt>:ratio</tt>: Ratio to constrain image by.
+    # * <tt>:sizes</tt>: Sizes attribute for the image, default: "100vw".
+    def image_figure(image, opts = {})
+      opts = opts.symbolize_keys
+      picture = dynamic_picture_tag(image, opts.slice(:ratio, :sizes))
+      content = opts[:link] ? image_link_to(picture, opts[:link]) : picture
 
-      dynamic_image_tag(image, size:, crop: ratio && true, upscale: false)
+      tag.figure(content + image_caption(image, caption: opts[:caption]),
+                 class: ["image",
+                         image_class_name(image, ratio: opts[:ratio]),
+                         opts[:class_name]].compact)
+    end
+
+    def picture(image, opts = {})
+      PagesCore.deprecator.warn(
+        "PagesCore::ImagesHelper#picture is deprecated, use #image_figure"
+      )
+      image_figure(image, opts)
+    end
+
+    private
+
+    def fit_ratio(size, ratio)
+      v = Vector2d(size)
+      Vector2d.new(v.y * ratio, v.y).fit(v)
     end
 
     def image_link_to(content, href)
@@ -135,14 +82,6 @@ module PagesCore
 
         "#{dynamic_image_path(image, options)} #{width}w"
       end.join(", ")
-    end
-
-    def webp_source(image, ratio: nil, sizes: "100vw")
-      return unless webp_compatible?(image)
-
-      tag.source(type: "image/webp",
-                 srcset: srcset(image, ratio:, format: :webp),
-                 sizes:)
     end
 
     def webp_compatible?(image)
