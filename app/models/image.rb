@@ -11,6 +11,10 @@ class Image < ApplicationRecord
     attribute :caption
   end
 
+  def alt_text
+    alternative.presence
+  end
+
   private
 
   def ensure_max_size

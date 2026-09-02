@@ -99,3 +99,7 @@ Rails/OutputSafety:
 Rails/SkipsModelValidations:
   Exclude:
     - "db/migrate/**/*"
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - "db/migrate/20260902120000_add_frame_count_and_alpha_to_images.rb"
