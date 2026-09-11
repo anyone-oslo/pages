@@ -55,6 +55,9 @@ Rails.application.routes.draw do
     # Attachments
     resources :attachments, only: %i[create update]
 
+    # WYSIWYG spike: Textile -> HTML for the document editor
+    resources :document_conversions, only: %i[create]
+
     # Images
     resources :images
 

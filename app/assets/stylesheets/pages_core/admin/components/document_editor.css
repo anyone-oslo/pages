@@ -1,0 +1,560 @@
+/* Spike: constrained WYSIWYG editor (DocumentEditor.tsx). */
+
+.doc-editor {
+  position: relative;
+  width: 100%;
+
+  &:has(.doc-content:focus-visible) {
+    outline: 2px solid var(--outline-color);
+  }
+}
+
+/* Sticks while the block scrolls; z-index keeps it over node views. */
+.doc-toolbar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.doc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  background-color: #fafafa;
+  box-shadow: 0 1px 0 var(--border-color);
+
+  .button {
+    float: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 34px;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    color: var(--text-color);
+    background-color: transparent;
+    transition: background-color 120ms ease-out;
+
+    &:focus,
+    &:hover {
+      background: #eee;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--outline-color);
+      outline-offset: -2px;
+    }
+
+    &.active {
+      color: var(--blue);
+      background: var(--blue-transparent);
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+
+    &[disabled] {
+      opacity: 0.3;
+    }
+  }
+}
+
+.doc-content {
+  border: 1px solid var(--border-color);
+  border-top: 0;
+  padding: 10px 12px;
+  line-height: 1.5;
+  background: var(--background-color);
+  outline: none;
+
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  h2,
+  h3,
+  h4 {
+    margin: 1em 0 0.25em;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+  }
+
+  h4 {
+    font-size: 1.05em;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+  }
+
+  blockquote {
+    margin: 0.75em 0;
+    padding: 0 0 0 1em;
+    border-left: 3px solid var(--border-color);
+    color: var(--text-light-color);
+  }
+
+  aside {
+    position: relative;
+    margin: 0.75em 0;
+    padding: 1.6em 12px 4px;
+    border: 1px dashed var(--border-color);
+    border-radius: 3px;
+    background: var(--background-disabled-color);
+
+    &::before {
+      content: "Fact box";
+      position: absolute;
+      top: 4px;
+      left: 12px;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-lighter-color);
+    }
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  a {
+    color: var(--link-color);
+    text-decoration: underline;
+  }
+
+  p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--text-lighter-color);
+    pointer-events: none;
+    height: 0;
+  }
+}
+
+.doc-editor__notice {
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  background: var(--background-warning-color);
+  border: 1px solid var(--border-color);
+  border-top: 0;
+
+  p {
+    margin: 0;
+
+    & + p {
+      margin-top: 4px;
+    }
+  }
+}
+
+.doc-editor__notice--error {
+  background: var(--red-invert);
+  color: var(--red);
+}
+
+.doc-editor__footer {
+  font-size: 0.75rem;
+  color: var(--text-lighter-color);
+  margin-top: 4px;
+}
+
+.doc-editor__source-toggle {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--text-lighter-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.doc-editor__source {
+  margin: 6px 0 0;
+  padding: 8px;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  background: var(--background-disabled-color);
+  border: 1px solid var(--border-color-light);
+  max-height: 240px;
+  overflow: auto;
+}
+
+/* Embeds ------------------------------------------------------------ */
+
+.doc-embed__code {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--text-lighter-color);
+  margin-top: 4px;
+}
+
+.doc-image,
+.doc-file,
+.doc-video {
+  position: relative;
+  margin: 0.75em 0;
+  border: 1px dashed var(--border-color);
+  border-radius: 3px;
+  background: var(--background-disabled-color);
+
+  &.is-selected,
+  &.ProseMirror-selectednode {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px var(--blue-transparent);
+  }
+}
+
+/* Raw HTML block: markup kept verbatim, shown as code. */
+.doc-raw {
+  margin: 0.75em 0;
+  border: 1px dashed var(--border-color);
+  border-radius: 3px;
+  background: var(--background-disabled-color);
+
+  &.is-selected,
+  &.ProseMirror-selectednode {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px var(--blue-transparent);
+  }
+}
+
+.doc-raw__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-lighter-color);
+}
+
+.doc-raw__delete {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: var(--red);
+  cursor: pointer;
+}
+
+.doc-raw__code {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-top: 1px dashed var(--border-color);
+  border-radius: 0 0 3px 3px;
+  background: var(--background-color);
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--text-color);
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.doc-image {
+  &.small {
+    max-width: 33%;
+  }
+  &.medium {
+    max-width: 50%;
+  }
+  &.left {
+    float: left;
+    margin-right: 1em;
+    max-width: 40%;
+  }
+  &.right {
+    float: right;
+    margin-left: 1em;
+    max-width: 40%;
+  }
+}
+
+.doc-image__hit,
+.doc-file__hit,
+.doc-video__hit {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: none;
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.doc-image__hit img {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  height: auto;
+}
+
+.doc-image__missing,
+.doc-video__missing {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-light-color);
+}
+
+/* Inline chip: sits in running text like the <a class="file"> it becomes. */
+.doc-file {
+  display: inline-block;
+  margin: 0 0.15em;
+  vertical-align: baseline;
+}
+
+.doc-file__hit {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  gap: 4px;
+  width: auto;
+  padding: 0 6px;
+  line-height: 1.6;
+  text-decoration: underline;
+  color: var(--link-color, inherit);
+
+  .doc-embed__code {
+    display: inline;
+    margin: 0;
+  }
+}
+
+.doc-video__frame {
+  padding: 8px;
+
+  iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    background: #000;
+  }
+}
+
+/* Popovers ---------------------------------------------------------- */
+
+.doc-popover {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  min-width: 320px;
+  max-width: 480px;
+  margin-top: 4px;
+  padding: 12px;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  font-size: 0.875rem;
+
+  label {
+    display: block;
+    font-weight: normal;
+  }
+
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0 0 8px;
+    padding: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0 0 8px;
+  }
+}
+
+.doc-toolbar-wrap > .doc-popover {
+  top: auto;
+  margin-top: 0;
+}
+
+.doc-popover--embed {
+  position: absolute;
+  top: 100%;
+  left: 8px;
+}
+
+.doc-popover__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  button {
+    padding: 3px 8px;
+    font-size: 0.8125rem;
+
+    &.active {
+      background: #666;
+      color: var(--text-invert-color);
+    }
+  }
+}
+
+.doc-popover__actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+
+  button.danger {
+    color: var(--red);
+  }
+}
+
+.doc-popover__error {
+  color: var(--red);
+  margin: 6px 0 0;
+}
+
+/* Asset picker ------------------------------------------------------ */
+
+.doc-picker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-picker {
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: min(720px, 90vw);
+  max-height: 80vh;
+  overflow: auto;
+  padding: 16px;
+}
+
+.doc-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.doc-picker__close {
+  border: 0;
+  background: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-light-color);
+}
+
+.doc-picker__empty {
+  color: var(--text-light-color);
+}
+
+.doc-picker__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.doc-picker__thumb {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  background: var(--background-disabled-color);
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+
+  img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  &:hover {
+    border-color: var(--blue);
+  }
+}
+
+.doc-picker__caption {
+  display: block;
+  padding: 6px;
+  font-size: 0.75rem;
+  color: var(--text-light-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-picker__id {
+  color: var(--text-lighter-color);
+  margin-right: 4px;
+}
+
+.doc-picker__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.doc-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--border-color-light);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+
+  small {
+    display: block;
+    color: var(--text-lighter-color);
+  }
+
+  &:hover {
+    background: var(--background-highlight-color);
+  }
+}

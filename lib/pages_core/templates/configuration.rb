@@ -66,6 +66,10 @@ module PagesCore
     # Valid sizes for text blocks are +:field+ (single line), +:small+
     # and +:large+.
     #
+    # With +text_filter :document+, +format: :inline+ limits a block to
+    # paragraphs with bold, italic, superscript and links (no headings,
+    # lists or embeds). Useful for standfirsts and bylines.
+    #
     # === Select blocks
     #
     # Blocks can also be selects:
