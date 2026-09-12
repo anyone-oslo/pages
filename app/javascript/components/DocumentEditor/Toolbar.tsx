@@ -76,6 +76,7 @@ function useToolbarState(editor: Editor | null) {
     selector: ({ editor: ed }) => {
       if (!ed) return null;
       return {
+        editable: ed.isEditable,
         canUndo: ed.can().undo(),
         canRedo: ed.can().redo(),
         h2: ed.isActive("heading", { level: 2 }),
@@ -113,6 +114,7 @@ export default function Toolbar({
 
   if (!editor || !state) return null;
   const full = format === "document";
+  const locked = !state.editable;
 
   const applyLink = (url: string) => {
     if (!url) {
@@ -134,13 +136,13 @@ export default function Toolbar({
         <Button
           title="Undo"
           icon={Undo2}
-          disabled={!state.canUndo}
+          disabled={locked || !state.canUndo}
           onClick={() => editor.chain().focus().undo().run()}
         />
         <Button
           title="Redo"
           icon={Redo2}
-          disabled={!state.canRedo}
+          disabled={locked || !state.canRedo}
           onClick={() => editor.chain().focus().redo().run()}
         />
         {full ? (
@@ -148,6 +150,7 @@ export default function Toolbar({
             title="Heading 2"
             icon={Heading2}
             active={state.h2}
+            disabled={locked}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
@@ -158,6 +161,7 @@ export default function Toolbar({
             title="Heading 3"
             icon={Heading3}
             active={state.h3}
+            disabled={locked}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
@@ -168,6 +172,7 @@ export default function Toolbar({
             title="Heading 4"
             icon={Heading4}
             active={state.h4}
+            disabled={locked}
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 4 }).run()
             }
@@ -177,12 +182,14 @@ export default function Toolbar({
           title="Bold"
           icon={Bold}
           active={state.bold}
+          disabled={locked}
           onClick={() => editor.chain().focus().toggleBold().run()}
         />
         <Button
           title="Italic"
           icon={Italic}
           active={state.italic}
+          disabled={locked}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         />
         {full ? (
@@ -190,6 +197,7 @@ export default function Toolbar({
             title="Underline"
             icon={Underline}
             active={state.underline}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleUnderline().run()}
           />
         ) : null}
@@ -198,6 +206,7 @@ export default function Toolbar({
             title="Strikethrough"
             icon={Strikethrough}
             active={state.strike}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleStrike().run()}
           />
         ) : null}
@@ -205,6 +214,7 @@ export default function Toolbar({
           title="Superscript"
           icon={Superscript}
           active={state.superscript}
+          disabled={locked}
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
         />
         {full ? (
@@ -212,6 +222,7 @@ export default function Toolbar({
             title="Bullet list"
             icon={List}
             active={state.bulletList}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
           />
         ) : null}
@@ -220,6 +231,7 @@ export default function Toolbar({
             title="Numbered list"
             icon={ListOrdered}
             active={state.orderedList}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           />
         ) : null}
@@ -228,6 +240,7 @@ export default function Toolbar({
             title="Quote"
             icon={Quote}
             active={state.blockquote}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
           />
         ) : null}
@@ -236,6 +249,7 @@ export default function Toolbar({
             title="Fact box"
             icon={SquareDashed}
             active={state.aside}
+            disabled={locked}
             onClick={() => editor.chain().focus().toggleAside().run()}
           />
         ) : null}
@@ -243,6 +257,7 @@ export default function Toolbar({
           <Button
             title="Horizontal rule"
             icon={Minus}
+            disabled={locked}
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
           />
         ) : null}
@@ -250,6 +265,7 @@ export default function Toolbar({
           title="Link"
           icon={LinkIcon}
           active={state.link || linkOpen}
+          disabled={locked}
           onClick={() => onLinkOpenChange(true)}
         />
         {full ? (
@@ -257,6 +273,7 @@ export default function Toolbar({
             title="Insert image"
             icon={ImagePlus}
             active={state.image}
+            disabled={locked}
             onClick={() => setPicker("image")}
           />
         ) : null}
@@ -265,6 +282,7 @@ export default function Toolbar({
             title="Insert file"
             icon={FilePlus}
             active={state.file}
+            disabled={locked}
             onClick={() => setPicker("file")}
           />
         ) : null}
@@ -273,6 +291,7 @@ export default function Toolbar({
             title="Insert video (YouTube/Vimeo)"
             icon={Video}
             active={state.video}
+            disabled={locked}
             onClick={() => setPicker("video")}
           />
         ) : null}
@@ -281,12 +300,14 @@ export default function Toolbar({
             title="HTML block (embed code, script, table)"
             icon={CodeXml}
             active={state.raw}
+            disabled={locked}
             onClick={() => editor.chain().focus().insertRawHtml().run()}
           />
         ) : null}
         <Button
           title="Remove formatting"
           icon={Eraser}
+          disabled={locked}
           onClick={() =>
             editor.chain().focus().unsetAllMarks().clearNodes().run()
           }

@@ -342,14 +342,16 @@
 
 .doc-video__frame {
   padding: 8px;
+}
 
-  iframe {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 0;
-    background: #000;
-  }
+.doc-video__thumb,
+.doc-video__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 0;
+  background: #6b6b6b;
 }
 
 /* Popovers ---------------------------------------------------------- */

@@ -7934,13 +7934,16 @@ li .actions {
   padding: 8px;
 }
 
-.doc-video__frame iframe {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 0;
-    background: #000;
-  }
+.doc-video__thumb,
+.doc-video__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 0;
+  background: #6b6b6b;
+}
 
 /* Popovers ---------------------------------------------------------- */
 
