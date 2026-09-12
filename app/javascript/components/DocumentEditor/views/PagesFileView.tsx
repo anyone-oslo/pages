@@ -34,7 +34,9 @@ export default function PagesFileView({
         }}>
         <FileIcon size={16} strokeWidth={1.75} aria-hidden />
         <span>
-          {asset ? asset.name : `File #${fileId ?? "?"} is not on this page`}
+          {asset
+            ? asset.name
+            : `File #${fileId ?? "?"} (attached to another page)`}
         </span>
         <code className="doc-embed__code">[attachment:{fileId ?? "?"}]</code>
       </button>
