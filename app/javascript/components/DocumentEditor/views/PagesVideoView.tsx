@@ -1,8 +1,7 @@
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
-import { useState } from "react";
 
-import { toEmbedUrl } from "../nodes/PagesVideo";
-import UrlPopover from "../UrlPopover";
+import EmbedHead from "../EmbedHead";
+import { toWatchUrl, VIDEO_REPLACE_EVENT } from "../nodes/PagesVideo";
 
 /** Admin preview only: YouTube thumbnail, no live iframe. */
 function youtubeThumb(src: string): string | null {
@@ -25,21 +24,31 @@ function youtubeThumb(src: string): string | null {
 }
 
 export default function PagesVideoView({
+  editor,
+  getPos,
   node,
   selected,
-  updateAttributes,
   deleteNode
 }: NodeViewProps) {
-  const [open, setOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const src = (node.attrs.src as string) || "";
   const thumb = src ? youtubeThumb(src) : null;
+  const watch = src ? toWatchUrl(src) : "";
 
   return (
     <NodeViewWrapper
       as="div"
-      className={"doc-video" + (selected || open ? " is-selected" : "")}
+      className={"doc-video" + (selected ? " is-selected" : "")}
       contentEditable={false}>
+      <EmbedHead
+        label="Video"
+        onReplace={() => {
+          const pos = getPos();
+          if (typeof pos !== "number") return;
+          editor.chain().focus().setNodeSelection(pos).run();
+          editor.emit(VIDEO_REPLACE_EVENT, {});
+        }}
+        onRemove={() => deleteNode()}
+      />
       <div className="doc-video__frame">
         {thumb ? (
           <img src={thumb} alt="" className="doc-video__thumb" />
@@ -48,39 +57,17 @@ export default function PagesVideoView({
         ) : (
           <div className="doc-video__missing">No video URL</div>
         )}
-        <button
-          type="button"
-          className="doc-video__hit"
-          title="Edit video"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setOpen(!open);
-          }}>
-          <code className="doc-embed__code">{src}</code>
-        </button>
+        {src ? (
+          <a
+            className="doc-video__url"
+            href={watch}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open video in a new tab">
+            <code className="doc-embed__code">{src}</code>
+          </a>
+        ) : null}
       </div>
-
-      {open ? (
-        <UrlPopover
-          title="Video URL (YouTube or Vimeo)"
-          initialUrl={src}
-          placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
-          error={error}
-          onApply={(url) => {
-            const embed = toEmbedUrl(url);
-            if (!embed) {
-              setError("Only YouTube and Vimeo links are supported.");
-              return;
-            }
-            updateAttributes({ src: embed });
-            setError(null);
-            setOpen(false);
-          }}
-          onRemove={() => deleteNode()}
-          onClose={() => setOpen(false)}
-        />
-      ) : null}
     </NodeViewWrapper>
   );
 }

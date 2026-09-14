@@ -1,5 +1,6 @@
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
 
+import EmbedHead from "../EmbedHead";
 import { describeHtml } from "../nodes/RawHtml";
 
 export default function RawHtmlView({
@@ -16,18 +17,10 @@ export default function RawHtmlView({
       as="div"
       className={"doc-raw" + (selected ? " is-selected" : "")}
       contentEditable={false}>
-      <div className="doc-raw__head">
-        <span className="doc-raw__label">HTML · {describeHtml(html)}</span>
-        <button
-          type="button"
-          className="doc-raw__delete"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            deleteNode();
-          }}>
-          Remove
-        </button>
-      </div>
+      <EmbedHead
+        label={`HTML · ${describeHtml(html)}`}
+        onRemove={() => deleteNode()}
+      />
       <textarea
         className="doc-raw__code"
         value={html}

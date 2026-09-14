@@ -32,7 +32,7 @@ export default function PagesFileView({
           e.stopPropagation();
           setOpen(!open);
         }}>
-        <FileIcon size={16} strokeWidth={1.75} aria-hidden />
+        <FileIcon size={16} strokeWidth={2.25} aria-hidden />
         <span>
           {asset
             ? asset.name

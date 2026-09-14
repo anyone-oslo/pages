@@ -1,4 +1,5 @@
 import type { Extensions } from "@tiptap/core";
+import { Extension } from "@tiptap/core";
 import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -24,10 +25,23 @@ const linkExtension = Link.configure({
     href.startsWith("#")
 });
 
+// Underline and hr stay in the schema so existing content survives, but
+// there is no toolbar button for them. This swallows Mod-U before the
+// Underline extension sees it, so new underline cannot be typed either.
+const legacyOnly = Extension.create({
+  name: "legacyOnly",
+  priority: 1000,
+  addKeyboardShortcuts() {
+    return { "Mod-u": () => true };
+  }
+});
+
 /*
  * Constrained schema (SESSION.md decision 6 + the `proposed` profile in
  * .cursor/wysiwyg/schema.rb): headings 2–4, bold, italic, strike,
  * superscript, underline, quote, lists, links, hr, image, file, video.
+ * Underline and hr are read-only legacy: parsed and kept, no toolbar
+ * button, no shortcut.
  * No align, size, color, tables, code. Raw HTML only via the RawHtml block
  * (shown as code, stored verbatim).
  *
@@ -81,6 +95,7 @@ export function documentExtensions(
         }));
       }
     }).configure({ levels: [2, 3, 4] }),
+    legacyOnly,
     Superscript,
     linkExtension,
     Placeholder.configure({ placeholder: placeholder || "" }),

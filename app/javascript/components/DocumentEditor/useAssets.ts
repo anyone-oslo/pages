@@ -7,6 +7,7 @@ export type ImageAsset = {
   thumbnail: string;
   filename: string;
   alternative: string;
+  caption: string;
 };
 
 export type FileAsset = {
@@ -44,7 +45,8 @@ export default function useAssets(): {
             id: r.image.id,
             thumbnail: r.image.thumbnail_url,
             filename: r.image.filename,
-            alternative: localized(r.image.alternative, locale)
+            alternative: localized(r.image.alternative, locale),
+            caption: localized(r.image.caption, locale)
           }
         ]
       : []

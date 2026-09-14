@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import useClickOutside from "./useClickOutside";
+
 type Props = {
   title: string;
   initialUrl: string;
@@ -22,6 +24,8 @@ export default function UrlPopover({
 }: Props) {
   const [url, setUrl] = useState(initialUrl || "");
   const inputRef = useRef<HTMLInputElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useClickOutside(rootRef, true, onClose);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -29,7 +33,12 @@ export default function UrlPopover({
   }, []);
 
   return (
-    <div className="doc-popover" role="dialog" aria-label={title}>
+    <div
+      ref={rootRef}
+      className="doc-popover"
+      role="dialog"
+      aria-label={title}
+      onMouseDown={(e) => e.stopPropagation()}>
       <label>
         {title}
         <input

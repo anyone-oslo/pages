@@ -7569,54 +7569,79 @@ li .actions {
   z-index: 3;
 }
 
+/* Not a legacy .toolbar; buttons share the look of .tag-editor .tag
+   (chip, 2rem, 5px radius). */
 .doc-toolbar {
   display: flex;
   flex-wrap: wrap;
-  padding: 0;
-  background-color: #fafafa;
-  box-shadow: 0 1px 0 #ddd;
-  box-shadow: 0 1px 0 var(--border-color);
+  align-items: center;
+  gap: 0.25rem 0;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  background-color: var(--background-color);
 }
-
+.doc-toolbar .doc-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+.doc-toolbar .doc-toolbar-group + .doc-toolbar-group {
+      margin-left: 0.5rem;
+      padding-left: 0.5rem;
+      border-left: 1px solid #ddd;
+      border-left: 1px solid var(--border-color);
+    }
 .doc-toolbar .button {
     float: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 36px;
-    height: 34px;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
+    gap: 0.375rem;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.4375rem;
+    border: 0;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    line-height: 1;
+    cursor: pointer;
     color: #111;
     color: var(--text-color);
-    background-color: transparent;
-    transition: background-color 120ms ease-out;
+    background: #f8f8f8;
+    background: var(--background-disabled-color);
+    box-shadow: none;
+    transition: all 200ms ease-out;
   }
-
-.doc-toolbar .button:focus,.doc-toolbar .button:hover {
-      background: #eee;
+.doc-toolbar .button .button-label {
+      padding-right: 0.125rem;
     }
-
+.doc-toolbar .button:focus,.doc-toolbar .button:hover {
+      background: #e7f3f9;
+      background: var(--background-highlight-color);
+    }
 .doc-toolbar .button:focus-visible {
       outline: 2px solid #1d7195;
       outline: 2px solid var(--outline-color);
-      outline-offset: -2px;
+      outline-offset: 1px;
     }
-
 .doc-toolbar .button.active {
-      color: #1d7195;
-      color: var(--blue);
-      background: rgba(29,113,149,0.25098);
-      background: var(--blue-transparent);
-      border-left-color: transparent;
-      border-right-color: transparent;
+      color: #fff;
+      background: #114055;
+      background: var(--blue-dark);
     }
-
 .doc-toolbar .button[disabled] {
       opacity: 0.3;
+      cursor: default;
     }
+.doc-toolbar .button[disabled]:hover {
+        background: #f8f8f8;
+        background: var(--background-disabled-color);
+      }
 
 .doc-content {
+  display: flow-root; /* last .left/.right image must grow the field */
   border: 1px solid #ddd;
   border: 1px solid var(--border-color);
   border-top: 0;
@@ -7652,8 +7677,39 @@ li .actions {
     padding-left: 1.5em;
   }
 
+/* Figures and quotes get 30px vs the 20px paragraph gap (admin p has
+     20px margin-bottom). Tiptap wraps node views in
+     .react-renderer.node-<name>. */
+
+.doc-content blockquote,.doc-content .node-pagesImage,.doc-content .node-pagesVideo {
+    margin: 1.875em 0;
+  }
+
+.doc-content blockquote:not(.does-not-exist):first-child {
+      margin-top: 0;
+    }
+
+.doc-content .node-pagesImage:first-child {
+      margin-top: 0;
+    }
+
+.doc-content .node-pagesVideo:first-child {
+      margin-top: 0;
+    }
+
+.doc-content blockquote:not(.does-not-exist):last-child {
+      margin-bottom: 0;
+    }
+
+.doc-content .node-pagesImage:last-child {
+      margin-bottom: 0;
+    }
+
+.doc-content .node-pagesVideo:last-child {
+      margin-bottom: 0;
+    }
+
 .doc-content blockquote {
-    margin: 0.75em 0;
     padding: 0 0 0 1em;
     border-left: 3px solid #ddd;
     border-left: 3px solid var(--border-color);
@@ -7664,7 +7720,7 @@ li .actions {
 .doc-content aside {
     position: relative;
     margin: 0.75em 0;
-    padding: 1.6em 12px 4px;
+    padding: 0;
     border: 1px dashed #ddd;
     border: 1px dashed var(--border-color);
     border-radius: 3px;
@@ -7672,16 +7728,11 @@ li .actions {
     background: var(--background-disabled-color);
   }
 
-.doc-content aside::before {
-      content: "Fact box";
-      position: absolute;
-      top: 4px;
-      left: 12px;
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #999;
-      color: var(--text-lighter-color);
+.doc-content aside.is-selected,.doc-content aside.ProseMirror-selectednode {
+      border-color: #1d7195;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(29,113,149,0.25098);
+      box-shadow: 0 0 0 2px var(--blue-transparent);
     }
 
 .doc-content hr {
@@ -7766,6 +7817,52 @@ li .actions {
 
 /* Embeds ------------------------------------------------------------ */
 
+/* Shared object chrome: label left, Replace… / Remove as text links. */
+.doc-embed__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
+  color: var(--text-lighter-color);
+}
+
+.doc-embed__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.doc-embed__action {
+  border: 0;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  background: none;
+  font: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #666;
+  color: var(--text-light-color);
+  cursor: pointer;
+}
+
+.doc-embed__action:hover,.doc-embed__action:focus {
+    background: #fff;
+    background: var(--background-color);
+  }
+
+.doc-embed__action--danger {
+  color: #c00007;
+  color: var(--red);
+}
+
+.doc-aside__body {
+  padding: 4px 12px 8px;
+}
+
 .doc-embed__code {
   display: block;
   font-size: 0.6875rem;
@@ -7778,7 +7875,6 @@ li .actions {
 .doc-file,
 .doc-video {
   position: relative;
-  margin: 0.75em 0;
   border: 1px dashed #ddd;
   border: 1px dashed var(--border-color);
   border-radius: 3px;
@@ -7809,28 +7905,6 @@ li .actions {
     box-shadow: 0 0 0 2px var(--blue-transparent);
   }
 
-.doc-raw__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 12px;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #999;
-  color: var(--text-lighter-color);
-}
-
-.doc-raw__delete {
-  border: 0;
-  padding: 0;
-  background: none;
-  font: inherit;
-  color: #c00007;
-  color: var(--red);
-  cursor: pointer;
-}
-
 .doc-raw__code {
   display: block;
   width: 100%;
@@ -7855,29 +7929,33 @@ li .actions {
     outline: none;
   }
 
-.doc-image.small {
-    max-width: 33%;
-  }
+/* Float the Tiptap wrapper, not the inner figure: the wrapper is the
+   in-flow child of .doc-content, so flow-root can contain a last image. */
+.node-pagesImage:has(.small) {
+  max-width: 33%;
+}
 
-.doc-image.medium {
-    max-width: 50%;
-  }
+.node-pagesImage:has(.medium) {
+  max-width: 50%;
+}
 
-.doc-image.left {
-    float: left;
-    margin-right: 1em;
-    max-width: 40%;
-  }
+.node-pagesImage:has(.left) {
+  float: left;
+  margin-right: 1em;
+  max-width: 40%;
+}
 
-.doc-image.right {
-    float: right;
-    margin-left: 1em;
-    max-width: 40%;
-  }
+.node-pagesImage:has(.right) {
+  float: right;
+  margin-left: 1em;
+  max-width: 40%;
+}
 
-.doc-image__hit,
-.doc-file__hit,
-.doc-video__hit {
+.doc-image {
+  margin: 0; /* drop the UA figure margin (1em 40px) */
+}
+
+.doc-file__hit {
   display: block;
   width: 100%;
   border: 0;
@@ -7889,11 +7967,83 @@ li .actions {
   color: inherit;
 }
 
-.doc-image__hit img {
-  display: block;
-  max-width: 100%;
-  max-height: 320px;
-  height: auto;
+/* Fills its box like the video thumb; .small/.medium narrow the box. */
+.doc-image__frame {
+  padding: 0 8px;
+}
+.doc-image__frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+/* Caption renders on the site as <figcaption>; alt text does not show
+   but is required, so its absence is flagged. */
+.doc-image__caption {
+  margin: 0;
+  padding: 8px 8px 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.doc-image__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  padding: 6px 8px 8px;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: #999;
+  color: var(--text-lighter-color);
+}
+
+.doc-image__meta .doc-embed__code {
+    margin: 0;
+  }
+
+.doc-image__alt--missing {
+  color: #c00007;
+  color: var(--red);
+}
+
+/* Image size chips sit under the shared head so a size change
+   does not move them. Same chip recipe as the toolbar, one step
+   smaller. */
+.doc-embed__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  padding: 0 8px 8px;
+}
+.doc-embed__controls button {
+    height: 1.625rem;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 5px;
+    font-size: 0.8125rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #111;
+    color: var(--text-color);
+    background: #fff;
+    background: var(--background-color);
+    box-shadow: none;
+    transition: all 200ms ease-out;
+  }
+.doc-embed__controls button:hover,.doc-embed__controls button:focus {
+      background: #e7f3f9;
+      background: var(--background-highlight-color);
+    }
+.doc-embed__controls button.active {
+      color: #fff;
+      background: #114055;
+      background: var(--blue-dark);
+    }
+
+.doc-embed__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .doc-image__missing,
@@ -7915,9 +8065,10 @@ li .actions {
   display: inline-flex;
   white-space: nowrap;
   align-items: center;
-  gap: 4px;
+  gap: 0.375rem;
   width: auto;
   padding: 0 6px;
+  font-size: 0.875rem;
   line-height: 1.6;
   -webkit-text-decoration: underline;
   text-decoration: underline;
@@ -7931,8 +8082,24 @@ li .actions {
   }
 
 .doc-video__frame {
-  padding: 8px;
+  padding: 0 8px 8px;
 }
+
+.doc-video__url {
+  display: block;
+  margin-top: 4px;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.doc-video__url:hover .doc-embed__code {
+    -webkit-text-decoration: underline;
+    text-decoration: underline;
+  }
+
+.doc-video__url .doc-embed__code {
+    margin: 0;
+  }
 
 .doc-video__thumb,
 .doc-video__placeholder {
@@ -7992,6 +8159,10 @@ li .actions {
 
 .doc-toolbar-wrap > .doc-popover {
   top: auto;
+  right: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
   margin-top: 0;
 }
 

@@ -1,5 +1,8 @@
 import { Node } from "@tiptap/core";
 import type { CommandProps } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+
+import AsideView from "../views/AsideView";
 
 /**
  * Fact box. Stored as a bare <aside> so existing site CSS applies
@@ -17,6 +20,10 @@ export const Aside = Node.create({
 
   renderHTML() {
     return ["aside", 0];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(AsideView);
   },
 
   addCommands() {

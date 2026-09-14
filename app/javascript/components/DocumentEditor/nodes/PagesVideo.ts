@@ -36,6 +36,27 @@ export function toEmbedUrl(input: string): string | null {
   return null;
 }
 
+/** Watch/share page for a stored embed URL. Opens in a new tab from admin. */
+export function toWatchUrl(src: string): string {
+  try {
+    const url = new URL(src);
+    const host = url.hostname.replace(/^www\./, "");
+    if (host === "youtube.com" || host === "youtube-nocookie.com") {
+      const id = url.pathname.match(/^\/embed\/([^/?]+)/)?.[1];
+      if (id) return `https://www.youtube.com/watch?v=${id}`;
+    }
+    if (host === "player.vimeo.com") {
+      const id = url.pathname.match(/^\/video\/(\d+)/)?.[1];
+      if (id) return `https://vimeo.com/${id}`;
+    }
+  } catch {
+    return src;
+  }
+  return src;
+}
+
+export const VIDEO_REPLACE_EVENT = "pagesVideoReplace";
+
 export const PagesVideo = Node.create({
   name: "pagesVideo",
   group: "block",
@@ -104,15 +125,24 @@ export const PagesVideo = Node.create({
       insertPagesVideo:
         (attrs: { src: string }) =>
         ({ commands }: CommandProps) =>
-          commands.insertContent({ type: this.name, attrs })
+          commands.insertContent({ type: this.name, attrs }),
+      updatePagesVideo:
+        (attrs: { src: string }) =>
+        ({ commands }: CommandProps) =>
+          commands.updateAttributes("pagesVideo", attrs)
     };
   }
 });
 
 declare module "@tiptap/core" {
+  interface EditorEvents {
+    pagesVideoReplace: Record<string, never>;
+  }
+
   interface Commands<ReturnType> {
     pagesVideo: {
       insertPagesVideo: (attrs: { src: string }) => ReturnType;
+      updatePagesVideo: (attrs: { src: string }) => ReturnType;
     };
   }
 }
