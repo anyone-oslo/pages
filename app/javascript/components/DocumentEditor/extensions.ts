@@ -37,9 +37,9 @@ const legacyOnly = Extension.create({
 });
 
 /*
- * Constrained schema (SESSION.md decision 6 + the `proposed` profile in
- * .cursor/rich-text/harness/schema.rb): headings 2–4, bold, italic, strike,
- * superscript, underline, quote, lists, links, hr, image, file, video.
+ * Constrained schema: headings 2–4, bold, italic, strike, superscript,
+ * underline, quote, lists, links, hr, image, file, video. Keep in sync
+ * with PagesCore::DocumentConverter (KEPT_TAGS, VIDEO_HOSTS).
  * Underline and hr are read-only legacy: parsed and kept, no toolbar
  * button, no shortcut.
  * No align, size, color, tables, code. Raw HTML only via the RawHtml block
@@ -86,7 +86,7 @@ export function documentExtensions(
       gapcursor: false,
       link: false
     }),
-    // Same folding as CANON in schema.rb: h1 -> h2, h5/h6 -> h4.
+    // Same folding as DocumentConverter::RENAMES: h1 -> h2, h5/h6 -> h4.
     Heading.extend({
       parseHTML() {
         return [1, 2, 3, 4, 5, 6].map((level) => ({

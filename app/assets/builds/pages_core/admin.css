@@ -7550,7 +7550,7 @@ li .actions {
   display: inline-table;
 }
 
-/* Spike: constrained WYSIWYG editor (DocumentEditor.tsx). */
+/* Spike: constrained rich text editor (DocumentEditor.tsx). */
 
 .doc-editor {
   position: relative;

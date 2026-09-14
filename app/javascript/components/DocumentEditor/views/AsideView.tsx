@@ -7,11 +7,7 @@ import {
 import EmbedHead from "../EmbedHead";
 
 /** Editor chrome only. Stored HTML stays a bare <aside>. */
-export default function AsideView({
-  editor,
-  getPos,
-  selected
-}: NodeViewProps) {
+export default function AsideView({ editor, getPos, selected }: NodeViewProps) {
   return (
     <NodeViewWrapper
       as="aside"
@@ -21,7 +17,12 @@ export default function AsideView({
         onRemove={() => {
           const pos = getPos();
           if (typeof pos !== "number") return;
-          editor.chain().focus().setTextSelection(pos + 1).toggleAside().run();
+          editor
+            .chain()
+            .focus()
+            .setTextSelection(pos + 1)
+            .toggleAside()
+            .run();
         }}
       />
       <NodeViewContent className="doc-aside__body" />

@@ -22,8 +22,8 @@ export default function Content({ tagsState, tagsDispatch }: Props) {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 
-  // Spike: text_filter :document switches content blocks to the rich text editor
-  // editor. Metadata blocks (rendered by Metadata.tsx) stay plain.
+  // Spike: text_filter :document switches content blocks to the rich text
+  // editor. Metadata blocks (Metadata.tsx) stay on RichTextArea.
   const rich = templateConfig.text_filter == "document";
 
   return (
