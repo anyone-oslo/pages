@@ -49433,7 +49433,7 @@ img.ProseMirror-separator {
     });
   }
 
-  // node_modules/.pnpm/@tiptap+react@3.31.3_@floating-ui+dom@1.8.0_@tiptap+core@3.31.3_@tiptap+pm@3.31.3__@tip_cd93415fd45df446151f2e1716ce1f45/node_modules/@tiptap/react/dist/index.js
+  // node_modules/.pnpm/@tiptap+react@3.31.3_@floating-ui+dom@1.8.0_@tiptap+core@3.31.3_@tiptap+pm@3.31.3__@tip_9131c222e61472e6541194f29cff655c/node_modules/@tiptap/react/dist/index.js
   var import_react29 = __toESM(require_react(), 1);
   var import_react_dom = __toESM(require_react_dom(), 1);
   var import_shim = __toESM(require_shim(), 1);
@@ -49903,7 +49903,7 @@ img.ProseMirror-separator {
     return createIsEqual({ circular, comparator, createState, equals, strict });
   }
 
-  // node_modules/.pnpm/@tiptap+react@3.31.3_@floating-ui+dom@1.8.0_@tiptap+core@3.31.3_@tiptap+pm@3.31.3__@tip_cd93415fd45df446151f2e1716ce1f45/node_modules/@tiptap/react/dist/index.js
+  // node_modules/.pnpm/@tiptap+react@3.31.3_@floating-ui+dom@1.8.0_@tiptap+core@3.31.3_@tiptap+pm@3.31.3__@tip_9131c222e61472e6541194f29cff655c/node_modules/@tiptap/react/dist/index.js
   var import_with_selector = __toESM(require_with_selector(), 1);
   var mergeRefs = (...refs) => {
     return (node) => {
@@ -56267,13 +56267,13 @@ ${prefix}
     }
   });
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
   var import_react34 = __toESM(require_react(), 1);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toKebabCase.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toKebabCase.mjs
   var toKebabCase = (string) => string?.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toLucideIconData.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toLucideIconData.mjs
   function toLucideIconData(iconName, iconNode, aliases = []) {
     if (iconNode == null) {
       throw new Error("[lucide]: iconNode is required when icon name is used");
@@ -56286,7 +56286,7 @@ ${prefix}
     };
   }
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toCamelCase.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toCamelCase.mjs
   var toCamelCase = (string) => {
     let out = "";
     let upperNext = false;
@@ -56305,21 +56305,21 @@ ${prefix}
     return out;
   };
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toPascalCase.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/toPascalCase.mjs
   var toPascalCase = (string) => {
     const camelCase = toCamelCase(string);
     return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
   };
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
   var import_react33 = __toESM(require_react(), 1);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/mergeClasses.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/mergeClasses.mjs
   var mergeClasses = (...classes) => classes.filter((className, index, array) => {
     return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
   }).join(" ").trim();
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/defaultAttributes.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/defaultAttributes.mjs
   var defaultAttributes = {
     xmlns: "http://www.w3.org/2000/svg",
     width: 24,
@@ -56332,7 +56332,7 @@ ${prefix}
     "stroke-linejoin": "round"
   };
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconNode.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconNode.mjs
   function isDefined(value) {
     return value !== null && value !== void 0;
   }
@@ -56385,7 +56385,7 @@ ${prefix}
     ];
   }
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconForReact.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/build/buildLucideIconForReact.mjs
   function buildLucideIconForReact(icon, params = {}) {
     return buildLucideIconNode(icon, {
       ...params,
@@ -56400,7 +56400,7 @@ ${prefix}
     });
   }
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/hasA11yProp.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/hasA11yProp.mjs
   var hasA11yProp = (props) => {
     for (const prop in props) {
       if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
@@ -56410,12 +56410,12 @@ ${prefix}
     return false;
   };
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/context.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/context.mjs
   var import_react32 = __toESM(require_react(), 1);
   var LucideContext = (0, import_react32.createContext)({});
   var useLucideContext = () => (0, import_react32.useContext)(LucideContext);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
   var Icon = (0, import_react33.forwardRef)(
     ({
       color,
@@ -56469,7 +56469,7 @@ ${prefix}
     }
   );
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
   function createLucideIcon(iconDataOrName, iconNode = [], aliases = []) {
     const iconData = typeof iconDataOrName === "string" ? toLucideIconData(iconDataOrName, iconNode, aliases) : iconDataOrName;
     const Component = (0, import_react34.forwardRef)(
@@ -56486,7 +56486,7 @@ ${prefix}
     return Component;
   }
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/bold.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/bold.mjs
   var __iconData = {
     name: "bold",
     size: 24,
@@ -56500,7 +56500,7 @@ ${prefix}
   __iconData.node;
   var Bold2 = createLucideIcon(__iconData);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/code-xml.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/code-xml.mjs
   var __iconData2 = {
     name: "code-xml",
     size: 24,
@@ -56514,7 +56514,7 @@ ${prefix}
   __iconData2.node;
   var CodeXml = createLucideIcon(__iconData2);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/eraser.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/eraser.mjs
   var __iconData3 = {
     name: "eraser",
     size: 24,
@@ -56532,7 +56532,7 @@ ${prefix}
   __iconData3.node;
   var Eraser = createLucideIcon(__iconData3);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file-plus.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file-plus.mjs
   var __iconData4 = {
     name: "file-plus",
     size: 24,
@@ -56552,7 +56552,7 @@ ${prefix}
   __iconData4.node;
   var FilePlus = createLucideIcon(__iconData4);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/file.mjs
   var __iconData5 = {
     name: "file",
     size: 24,
@@ -56570,7 +56570,7 @@ ${prefix}
   __iconData5.node;
   var File = createLucideIcon(__iconData5);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-2.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-2.mjs
   var __iconData6 = {
     name: "heading-2",
     size: 24,
@@ -56584,7 +56584,7 @@ ${prefix}
   __iconData6.node;
   var Heading2 = createLucideIcon(__iconData6);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-3.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-3.mjs
   var __iconData7 = {
     name: "heading-3",
     size: 24,
@@ -56599,7 +56599,7 @@ ${prefix}
   __iconData7.node;
   var Heading3 = createLucideIcon(__iconData7);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-4.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/heading-4.mjs
   var __iconData8 = {
     name: "heading-4",
     size: 24,
@@ -56614,7 +56614,7 @@ ${prefix}
   __iconData8.node;
   var Heading4 = createLucideIcon(__iconData8);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/image-plus.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/image-plus.mjs
   var __iconData9 = {
     name: "image-plus",
     size: 24,
@@ -56629,7 +56629,7 @@ ${prefix}
   __iconData9.node;
   var ImagePlus = createLucideIcon(__iconData9);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/italic.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/italic.mjs
   var __iconData10 = {
     name: "italic",
     size: 24,
@@ -56642,7 +56642,7 @@ ${prefix}
   __iconData10.node;
   var Italic2 = createLucideIcon(__iconData10);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/link.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/link.mjs
   var __iconData11 = {
     name: "link",
     size: 24,
@@ -56654,7 +56654,7 @@ ${prefix}
   __iconData11.node;
   var Link2 = createLucideIcon(__iconData11);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/list-ordered.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/list-ordered.mjs
   var __iconData12 = {
     name: "list-ordered",
     size: 24,
@@ -56670,7 +56670,7 @@ ${prefix}
   __iconData12.node;
   var ListOrdered = createLucideIcon(__iconData12);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/list.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/list.mjs
   var __iconData13 = {
     name: "list",
     size: 24,
@@ -56686,7 +56686,7 @@ ${prefix}
   __iconData13.node;
   var List2 = createLucideIcon(__iconData13);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/mail.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/mail.mjs
   var __iconData14 = {
     name: "mail",
     size: 24,
@@ -56698,7 +56698,7 @@ ${prefix}
   __iconData14.node;
   var Mail = createLucideIcon(__iconData14);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/redo-2.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/redo-2.mjs
   var __iconData15 = {
     name: "redo-2",
     size: 24,
@@ -56710,7 +56710,7 @@ ${prefix}
   __iconData15.node;
   var Redo2 = createLucideIcon(__iconData15);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/square-dashed.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/square-dashed.mjs
   var __iconData16 = {
     name: "square-dashed",
     size: 24,
@@ -56733,7 +56733,7 @@ ${prefix}
   __iconData16.node;
   var SquareDashed = createLucideIcon(__iconData16);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/strikethrough.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/strikethrough.mjs
   var __iconData17 = {
     name: "strikethrough",
     size: 24,
@@ -56746,7 +56746,7 @@ ${prefix}
   __iconData17.node;
   var Strikethrough = createLucideIcon(__iconData17);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/superscript.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/superscript.mjs
   var __iconData18 = {
     name: "superscript",
     size: 24,
@@ -56765,7 +56765,7 @@ ${prefix}
   __iconData18.node;
   var Superscript2 = createLucideIcon(__iconData18);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/text-quote.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/text-quote.mjs
   var __iconData19 = {
     name: "text-quote",
     size: 24,
@@ -56779,7 +56779,7 @@ ${prefix}
   __iconData19.node;
   var TextQuote = createLucideIcon(__iconData19);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/undo-2.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/undo-2.mjs
   var __iconData20 = {
     name: "undo-2",
     size: 24,
@@ -56791,7 +56791,7 @@ ${prefix}
   __iconData20.node;
   var Undo2 = createLucideIcon(__iconData20);
 
-  // node_modules/.pnpm/lucide-react@1.45.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/video.mjs
+  // node_modules/.pnpm/lucide-react@1.46.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/video.mjs
   var __iconData21 = {
     name: "video",
     size: 24,
@@ -57507,7 +57507,7 @@ ${prefix}
         gapcursor: false,
         link: false
       }),
-      // Same folding as CANON in schema.rb: h1 -> h2, h5/h6 -> h4.
+      // Same folding as DocumentConverter::RENAMES: h1 -> h2, h5/h6 -> h4.
       src_default.extend({
         parseHTML() {
           return [1, 2, 3, 4, 5, 6].map((level) => ({
@@ -57713,14 +57713,23 @@ ${WRAPPER_CLOSE}`;
           if (!disabled) onClick();
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Icon2, { size: 16, strokeWidth, "aria-hidden": true }),
+          /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Icon2, { size: 14, strokeWidth, "aria-hidden": true }),
           label ? /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("span", { className: "button-label", children: label }) : null
         ]
       }
     );
   }
-  function Group({ children }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "doc-toolbar-group", children });
+  function Group({
+    children,
+    insert: insert2
+  }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+      "div",
+      {
+        className: "doc-toolbar-group" + (insert2 ? " doc-toolbar-group--insert" : ""),
+        children
+      }
+    );
   }
   function useToolbarState(editor) {
     return useEditorState({
@@ -57889,16 +57898,6 @@ ${WRAPPER_CLOSE}`;
               disabled: locked,
               onClick: () => editor.chain().focus().toggleBlockquote().run()
             }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
-            Button,
-            {
-              title: "Fact box",
-              icon: SquareDashed,
-              active: state.aside,
-              disabled: locked,
-              onClick: () => editor.chain().focus().toggleAside().run()
-            }
           )
         ] }) : null,
         /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Group, { children: [
@@ -57964,7 +57963,16 @@ ${WRAPPER_CLOSE}`;
             }
           )
         ] }),
-        full ? /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Group, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Group, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+          Button,
+          {
+            title: "Remove formatting",
+            icon: Eraser,
+            disabled: locked,
+            onClick: () => editor.chain().focus().unsetAllMarks().clearNodes().run()
+          }
+        ) }),
+        full ? /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Group, { insert: true, children: [
           /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
             Button,
             {
@@ -58008,17 +58016,18 @@ ${WRAPPER_CLOSE}`;
               disabled: locked,
               onClick: () => editor.chain().focus().insertRawHtml().run()
             }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+            Button,
+            {
+              title: "Fact box",
+              icon: SquareDashed,
+              active: state.aside,
+              disabled: locked,
+              onClick: () => editor.chain().focus().toggleAside().run()
+            }
           )
-        ] }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Group, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
-          Button,
-          {
-            title: "Remove formatting",
-            icon: Eraser,
-            disabled: locked,
-            onClick: () => editor.chain().focus().unsetAllMarks().clearNodes().run()
-          }
-        ) })
+        ] }) : null
       ] }),
       linkOpen ? /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
         UrlPopover,
@@ -60301,7 +60310,7 @@ lucide-react/dist/esm/icons/undo-2.mjs:
 lucide-react/dist/esm/icons/video.mjs:
 lucide-react/dist/esm/lucide-react.mjs:
   (**
-   * @license lucide-react v1.45.0 - ISC
+   * @license lucide-react v1.46.0 - ISC
    *
    * This source code is licensed under the ISC license.
    * See the LICENSE file in the root directory of this source tree.

@@ -67,14 +67,27 @@ function Button({
         e.preventDefault();
         if (!disabled) onClick();
       }}>
-      <Icon size={16} strokeWidth={strokeWidth} aria-hidden />
+      <Icon size={14} strokeWidth={strokeWidth} aria-hidden />
       {label ? <span className="button-label">{label}</span> : null}
     </button>
   );
 }
 
-function Group({ children }: { children: ReactNode }) {
-  return <div className="doc-toolbar-group">{children}</div>;
+function Group({
+  children,
+  insert
+}: {
+  children: ReactNode;
+  insert?: boolean;
+}) {
+  return (
+    <div
+      className={
+        "doc-toolbar-group" + (insert ? " doc-toolbar-group--insert" : "")
+      }>
+      {children}
+    </div>
+  );
 }
 
 // Tiptap 3 does not re-render on every transaction; this selector makes
@@ -249,13 +262,6 @@ export default function Toolbar({
               disabled={locked}
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
             />
-            <Button
-              title="Fact box"
-              icon={SquareDashed}
-              active={state.aside}
-              disabled={locked}
-              onClick={() => editor.chain().focus().toggleAside().run()}
-            />
           </Group>
         ) : null}
 
@@ -307,8 +313,19 @@ export default function Toolbar({
           />
         </Group>
 
+        <Group>
+          <Button
+            title="Remove formatting"
+            icon={Eraser}
+            disabled={locked}
+            onClick={() =>
+              editor.chain().focus().unsetAllMarks().clearNodes().run()
+            }
+          />
+        </Group>
+
         {full ? (
-          <Group>
+          <Group insert>
             <Button
               title="Insert image"
               label="Image"
@@ -343,19 +360,15 @@ export default function Toolbar({
               disabled={locked}
               onClick={() => editor.chain().focus().insertRawHtml().run()}
             />
+            <Button
+              title="Fact box"
+              icon={SquareDashed}
+              active={state.aside}
+              disabled={locked}
+              onClick={() => editor.chain().focus().toggleAside().run()}
+            />
           </Group>
         ) : null}
-
-        <Group>
-          <Button
-            title="Remove formatting"
-            icon={Eraser}
-            disabled={locked}
-            onClick={() =>
-              editor.chain().focus().unsetAllMarks().clearNodes().run()
-            }
-          />
-        </Group>
       </div>
 
       {linkOpen ? (
