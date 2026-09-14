@@ -26,7 +26,7 @@ type Props = {
 };
 
 /**
- * Spike: constrained WYSIWYG editor over the existing text column.
+ * Spike: constrained rich text editor over the existing text column.
  * See DocumentEditor/serializer.ts for the stored form.
  */
 export default function DocumentEditor({

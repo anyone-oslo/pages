@@ -3,7 +3,7 @@
 require "RedCloth"
 
 module PagesCore
-  # WYSIWYG spike: converts Textile source to HTML the document editor can
+  # Rich text editor spike: converts Textile source to HTML the editor can
   # load. Embed codes are kept as codes (the editor turns them into nodes)
   # and RedCloth artifacts are normalised. Also reports which parts the
   # editor will keep as raw HTML blocks and which it will flatten.

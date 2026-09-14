@@ -38,7 +38,7 @@ const legacyOnly = Extension.create({
 
 /*
  * Constrained schema (SESSION.md decision 6 + the `proposed` profile in
- * .cursor/wysiwyg/schema.rb): headings 2–4, bold, italic, strike,
+ * .cursor/rich-text/harness/schema.rb): headings 2–4, bold, italic, strike,
  * superscript, underline, quote, lists, links, hr, image, file, video.
  * Underline and hr are read-only legacy: parsed and kept, no toolbar
  * button, no shortcut.
