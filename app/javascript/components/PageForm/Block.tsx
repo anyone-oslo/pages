@@ -2,6 +2,7 @@ import { ChangeEvent } from "react";
 
 import * as Template from "../../types/Template";
 
+import DocumentEditor from "../DocumentEditor";
 import LabelledField from "../LabelledField";
 import RichTextArea from "../RichTextArea";
 
@@ -12,10 +13,12 @@ type Props = {
   lang: string;
   dir: string;
   value: string;
+  rich?: boolean;
+  allowFiles?: boolean;
 };
 
 export default function Block(props: Props) {
-  const { block, errors, onChange, lang, dir, value } = props;
+  const { block, errors, onChange, lang, dir, value, rich, allowFiles } = props;
 
   const handleChange = (
     evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -59,6 +62,20 @@ export default function Block(props: Props) {
     );
   } else if (block.size == "field") {
     field = <input type="text" onChange={handleChange} {...textFieldOptions} />;
+  } else if (rich) {
+    field = (
+      <DocumentEditor
+        id={id}
+        value={value}
+        onChange={onChange}
+        lang={lang}
+        dir={dir}
+        placeholder={block.placeholder}
+        allowFiles={allowFiles}
+        minRows={block.size == "large" ? 15 : 5}
+        format={block.format == "inline" ? "inline" : "document"}
+      />
+    );
   } else {
     field = (
       <RichTextArea

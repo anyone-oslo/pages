@@ -9,6 +9,19 @@ module PagesCore
       after_save :update_search_documents!
     end
 
+    # Textile markers stay (*bold*, bq.); HTML from the document
+    # wrapper and mixed <b>/<i> is dropped so both formats index as words.
+    def self.plain_text(value)
+      html = value.to_s
+      return "" if html.blank?
+
+      Nokogiri::HTML.fragment(html)
+                    .search(".//text()")
+                    .map(&:text)
+                    .join(" ")
+                    .squish
+    end
+
     class Indexer
       attr_reader :record
 
@@ -58,7 +71,9 @@ module PagesCore
     def search_document_attributes
       return {} unless respond_to?(:localized_attributes)
 
-      content = localized_attributes.keys.map { |a| localizer.get(a) }.join(" ")
+      content = localized_attributes.keys.map do |a|
+        PagesCore::SearchableDocument.plain_text(localizer.get(a))
+      end.join(" ")
       { content: }
     end
 
