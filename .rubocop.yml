@@ -16,7 +16,7 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.4
   Exclude:
     - "spec/internal/db/schema.rb"
     - "node_modules/**/*"
