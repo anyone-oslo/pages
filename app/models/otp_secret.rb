@@ -73,7 +73,7 @@ class OtpSecret
     user.use_recovery_code!(code)
   end
 
-  def verify(params)
+  def verify!(params)
     @secret = verify_secret(params[:signed_message])
     valid_otp?(params[:otp])
   end

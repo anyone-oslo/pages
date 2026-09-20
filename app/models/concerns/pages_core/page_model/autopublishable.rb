@@ -14,7 +14,6 @@ module PagesCore
 
       def set_autopublish
         self.autopublish = published_at? && published_at > Time.now.utc
-        true
       end
 
       def queue_autopublisher
