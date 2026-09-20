@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Pages Core"
   s.description = "Pages Core"
 
-  s.required_ruby_version = ">= 3.2.0"
+  s.required_ruby_version = ">= 3.4.0"
 
   s.files = Dir[
     "{app,config,db,lib,vendor}/**/*",
