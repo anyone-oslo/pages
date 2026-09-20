@@ -2,7 +2,7 @@
 
 class Policy
   module DefaultPolicy
-    def index
+    def index?
       false
     end
 

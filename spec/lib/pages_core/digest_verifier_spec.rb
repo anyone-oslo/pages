@@ -18,7 +18,7 @@ describe PagesCore::DigestVerifier do
     subject(:verification) { verifier.verify(data, digest) }
 
     context "with valid data" do
-      it { is_expected.to be true }
+      it { is_expected.to eq(data) }
     end
 
     context "with invalid digest" do
