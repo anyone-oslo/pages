@@ -14,6 +14,10 @@ module Export
       object.image.alternative
     end
 
+    attribute :decorative do
+      object.image.decorative
+    end
+
     attribute :caption do
       object.image.caption
     end
