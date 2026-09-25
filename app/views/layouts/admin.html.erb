@@ -13,6 +13,7 @@
           href="<%= asset_path 'pages/favicon.gif' %>"
           type="image/gif" />
 
+    <% PagesCore::FrontendBuild.require!("pages_core/admin.css") %>
     <%= stylesheet_link_tag "pages_core/admin" %>
 
     <% if Dir.glob(Rails.root.join("app/assets/stylesheets/admin.*")).any? %>
@@ -22,6 +23,7 @@
     <% if File.exist?(Rails.root.join("app/assets/builds/admin.js")) %>
       <%= javascript_include_tag("admin", defer: true) %>
     <% else %>
+      <% PagesCore::FrontendBuild.require!("pages_core/admin-dist.js") %>
       <%= javascript_include_tag("pages_core/admin-dist", defer: true) %>
       <% if Dir.glob(Rails.root.join("app/assets/javascripts/admin.*")).any? %>
         <%= javascript_include_tag("admin", defer: true) %>
