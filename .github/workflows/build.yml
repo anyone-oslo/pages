@@ -91,6 +91,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Build frontend
+        run: pnpm build && pnpm build:css
       - name: Create database
         env:
           RAILS_ENV: test
@@ -162,6 +164,12 @@ jobs:
         with:
           ruby-version: "4.0"
           bundler-cache: true
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          version: latest
+          run_install: true
+      - name: Build frontend
+        run: pnpm build && pnpm build:css
       - uses: rubygems/release-gem@v1
 
   publish-npm:

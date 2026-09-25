@@ -6,10 +6,12 @@ expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Getting started
 
-Install the dependencies and run the test suite:
+Install the dependencies, build the frontend and run the test suite:
 
 ```sh
 bundle install
+pnpm install
+pnpm build-debug && pnpm build:css
 bundle exec rspec
 ```
 
