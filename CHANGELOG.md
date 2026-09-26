@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.19.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.1...pages_core/v3.19.0) (2026-09-26)
+
+
+### Features
+
+* build frontend assets at release time instead of committing them ([dd6e812](https://github.com/anyone-oslo/pages/commit/dd6e812cc211fe5227e2bcb2e3ae0f811721bcda))
+* require Ruby 3.4 ([46ccaf5](https://github.com/anyone-oslo/pages/commit/46ccaf5adb43e2ad7d7bace14a086ce97ca3cbdf))
+
+
+### Bug Fixes
+
+* Define DefaultPolicy#index? instead of #index ([133424e](https://github.com/anyone-oslo/pages/commit/133424e57dae0f74c053a996f2a79321312f3afb))
+* ship a minified, production build of the admin bundle ([0db2aaa](https://github.com/anyone-oslo/pages/commit/0db2aaa67dcec13cac85dd9987f193691327320a))
+
 ## [3.18.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.0...pages_core/v3.18.1) (2026-09-02)
 
 
