@@ -419,7 +419,7 @@ GEM
       websocket (~> 1.0)
     shoulda-matchers (8.0.1)
       activesupport (>= 7.2)
-    simplecov (1.1.1)
+    simplecov (1.3.0)
     ssrf_filter (1.6.0)
     strings (0.2.1)
       strings-ansi (~> 0.2)
@@ -487,7 +487,7 @@ DEPENDENCIES
   rubocop-rspec_rails
   selenium-webdriver
   shoulda-matchers
-  simplecov (~> 1.1.1)
+  simplecov (~> 1.3.0)
   timecop
 
 BUNDLED WITH
