@@ -34,6 +34,10 @@ RSpec.describe PageImageResource do
     expect(serialized["alternative"]).to eq("A blue square")
   end
 
+  it "serializes the decorative flag" do
+    expect(serialized["decorative"]).to be(false)
+  end
+
   it "serializes the localized caption" do
     expect(serialized["caption"]).to eq("Kittens")
   end
@@ -52,7 +56,8 @@ RSpec.describe PageImageResource do
 
   it "emits exactly these keys" do
     expect(serialized.keys)
-      .to eq(%w[id image_id primary alternative caption filename created_at url])
+      .to eq(%w[id image_id primary alternative decorative caption filename
+                created_at url])
   end
 
   describe "#serialize" do

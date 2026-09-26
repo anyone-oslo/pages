@@ -26,7 +26,8 @@ RSpec.describe Admin::ImageResource do
   def expected_keys
     %w[id filename content_type content_hash content_length colorspace
        real_width real_height crop_width crop_height crop_start_x
-       crop_start_y crop_gravity_x crop_gravity_y created_at updated_at
+       crop_start_y crop_gravity_x crop_gravity_y decorative created_at
+       updated_at
        alternative caption original_url thumbnail_url cropped_url
        uncropped_url]
   end
@@ -68,6 +69,10 @@ RSpec.describe Admin::ImageResource do
     expect(serialized.values_at("crop_width", "crop_height", "crop_start_x",
                                 "crop_start_y", "crop_gravity_x",
                                 "crop_gravity_y")).to all(be_nil)
+  end
+
+  it "serializes the decorative flag" do
+    expect(serialized["decorative"]).to be(false)
   end
 
   it "serializes the timestamps" do

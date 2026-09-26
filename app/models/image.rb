@@ -11,7 +11,13 @@ class Image < ApplicationRecord
     attribute :caption
   end
 
+  # Decorative images get an empty alt, which tells assistive technology to
+  # skip them. Otherwise, blank alternative text returns nil and the alt
+  # attribute is left out, so the missing text is flagged by accessibility
+  # checkers rather than passed off as decorative.
   def alt_text
+    return "" if decorative?
+
     alternative.presence
   end
 

@@ -5,6 +5,7 @@ export type Resource = {
   id: number | null;
   alternative: LocalizedValue;
   caption: LocalizedValue;
+  decorative: boolean;
   content_type: string;
   filename: string;
   crop_start_x: number | null;

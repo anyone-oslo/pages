@@ -50,7 +50,7 @@ export default function EditableImage(props: Props) {
     );
   };
 
-  const altWarning = !image.alternative[props.locale];
+  const altWarning = !image.decorative && !image.alternative[props.locale];
 
   return (
     <div className="editable-image">

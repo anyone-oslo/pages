@@ -33,6 +33,7 @@ export default function ImageEditor(props: Props) {
     const data = {
       ...cropParams(cropState),
       alternative: state.alternative,
+      decorative: state.decorative,
       caption: state.caption
     };
     await putJson(`/admin/images/${props.image.id}`, { image: data });
