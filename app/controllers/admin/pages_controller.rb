@@ -93,9 +93,9 @@ module Admin
       @page = Page.find(params.expect(:id)).localize(content_locale)
     end
 
-    def respond_with_page(page, &block)
+    def respond_with_page(page, &)
       respond_to do |format|
-        format.html(&block)
+        format.html(&)
         format.json do
           render json: ::Admin::PageResource.new(
             page,

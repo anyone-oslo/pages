@@ -10,7 +10,7 @@ module Admin
     end
 
     def create
-      if @otp_secret.verify(otp_secret_params)
+      if @otp_secret.verify!(otp_secret_params)
         @recovery_codes = @otp_secret.generate_recovery_codes
         @otp_secret.enable!(@recovery_codes)
       else

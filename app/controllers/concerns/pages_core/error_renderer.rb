@@ -19,7 +19,6 @@ module PagesCore
         end
         format.any { head options[:status] }
       end
-      true
     end
 
     protected

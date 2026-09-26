@@ -10,7 +10,7 @@ module PagesCore
   #   digest = verifier.generate("foo")
   #
   #   digest.verify("foo", digest)
-  #   # => true
+  #   # => "foo"
   #   digest.verify("bar", digest)
   #   # => raises PagesCore::Errors::InvalidSignature
   #
@@ -30,12 +30,13 @@ module PagesCore
       generate_digest(data)
     end
 
-    # Verifies that <tt>digest</tt> is valid for <tt>data</tt>.
-    # Raises a +PagesCore::DigestVerifier::InvalidSignatureError+ error if not.
+    # Verifies that <tt>digest</tt> is valid for <tt>data</tt> and returns
+    # the data. Raises a +PagesCore::DigestVerifier::InvalidSignatureError+
+    # error if not.
     def verify(data, digest)
       raise PagesCore::DigestVerifier::InvalidSignatureError unless valid_digest?(data, digest)
 
-      true
+      data
     end
 
     private

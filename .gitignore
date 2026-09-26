@@ -20,3 +20,7 @@ spec/internal/db/binary-objects
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Frontend build output, built for release by CI
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -25,7 +25,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v6.1.0
-      - uses: ruby/setup-ruby@v1.321.0
+      - uses: ruby/setup-ruby@v1.324.0
         with:
           bundler-cache: true
           ruby-version: "4.0"
@@ -62,7 +62,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     strategy:
       matrix:
-        ruby: ["3.3", "3.4", "4.0"]
+        ruby: ["3.4", "4.0"]
     services:
       postgres:
         image: postgres:latest
@@ -87,10 +87,12 @@ jobs:
         with:
           version: latest
           run_install: true
-      - uses: ruby/setup-ruby@v1.321.0
+      - uses: ruby/setup-ruby@v1.324.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Build frontend
+        run: pnpm build && pnpm build:css
       - name: Create database
         env:
           RAILS_ENV: test
@@ -158,10 +160,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libvips42
-      - uses: ruby/setup-ruby@v1.321.0
+      - uses: ruby/setup-ruby@v1.324.0
         with:
           ruby-version: "4.0"
           bundler-cache: true
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          version: latest
+          run_install: true
+      - name: Build frontend
+        run: pnpm build && pnpm build:css
       - uses: rubygems/release-gem@v1
 
   publish-npm:

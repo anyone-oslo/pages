@@ -7,16 +7,9 @@ plugins:
   - rubocop-rspec
   - rubocop-rspec_rails
 
-inherit_from:
-  - .rubocop_todo.yml
-
-inherit_mode:
-  merge:
-    - Exclude
-
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.4
   Exclude:
     - "spec/internal/db/schema.rb"
     - "node_modules/**/*"
@@ -51,6 +44,9 @@ Metrics/MethodLength:
 Metrics/ParameterLists:
   Exclude:
     - "app/helpers/pages_core/labelled_form_builder.rb"
+
+Naming/PredicateMethod:
+  AllowBangMethods: true
 
 Style/AsciiComments:
   Enabled: false
