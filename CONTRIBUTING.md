@@ -73,7 +73,7 @@ pnpm lint
 pnpm tsc --noEmit
 ```
 
-## Pull requests
+## Before you submit
 
 - Add tests for any behavior you change.
 - Write commit messages using
