@@ -2,15 +2,18 @@ import { useReducer } from "react";
 import * as Images from "../../types/Images";
 import { Locale, LocalizedValue } from "../../types";
 
-export type Action = {
-  type: "setAlternative" | "setCaption" | "setLocale";
-  payload: string;
-};
+export type Action =
+  | {
+      type: "setAlternative" | "setCaption" | "setLocale";
+      payload: string;
+    }
+  | { type: "setDecorative"; payload: boolean };
 
 export type State = {
   locale: string;
   caption: LocalizedValue;
   alternative: LocalizedValue;
+  decorative: boolean;
 };
 
 export type Options = {
@@ -38,6 +41,8 @@ function reducer(state: State, action: Action): State {
         ...state,
         caption: { ...state.caption, [state.locale]: action.payload }
       };
+    case "setDecorative":
+      return { ...state, decorative: action.payload };
     case "setLocale":
       return { ...state, locale: action.payload };
   }
@@ -52,7 +57,8 @@ export default function useImageEditor({
   const [state, dispatch] = useReducer(reducer, {
     locale: locale,
     caption: image.caption || {},
-    alternative: image.alternative || {}
+    alternative: image.alternative || {},
+    decorative: image.decorative || false
   });
   const options = {
     caption: caption,

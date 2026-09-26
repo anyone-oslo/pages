@@ -9,7 +9,7 @@ type Props = {
 
 export default function Form({ onSave }: Props) {
   const { state, dispatch, options } = useImageEditorContext();
-  const { alternative, caption, locale } = state;
+  const { alternative, caption, decorative, locale } = state;
   const { image, locales } = options;
 
   const closeModal = useModalStore((state) => state.close);
@@ -29,6 +29,10 @@ export default function Form({ onSave }: Props) {
     evt: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     dispatch({ type: "setAlternative", payload: evt.target.value });
+  };
+
+  const handleChangeDecorative = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "setDecorative", payload: evt.target.checked });
   };
 
   const handleChangeCaption = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -58,19 +62,30 @@ export default function Form({ onSave }: Props) {
       )}
       <div
         className={
-          "field " + (alternative[locale] ? "" : "field-with-warning")
+          "field " +
+          (decorative || alternative[locale] ? "" : "field-with-warning")
         }>
         <label>Alternative text</label>
         <span className="description">
           For visually impaired users and search engines.
         </span>
-        <textarea
-          className="alternative"
-          lang={locale}
-          dir={inputDir}
-          value={alternative[locale] || ""}
-          onChange={handleChangeAlternative}
-        />
+        <label className="check-box">
+          <input
+            type="checkbox"
+            checked={decorative}
+            onChange={handleChangeDecorative}
+          />{" "}
+          Decorative image, no alternative text needed
+        </label>
+        {!decorative && (
+          <textarea
+            className="alternative"
+            lang={locale}
+            dir={inputDir}
+            value={alternative[locale] || ""}
+            onChange={handleChangeAlternative}
+          />
+        )}
       </div>
       {options.caption && (
         <div className="field">

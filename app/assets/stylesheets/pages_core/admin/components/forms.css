@@ -59,7 +59,7 @@ form {
       border-color: var(--red-light);
     }
 
-    label {
+    label:not(.check-box) {
       color: var(--red);
     }
   }

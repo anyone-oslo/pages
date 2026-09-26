@@ -137,6 +137,35 @@ describe PagesCore::HtmlFormatter do
       end
     end
 
+    context "when image has no alternative text" do
+      let(:string) { "[image:#{image.id}]" }
+
+      it "omits the alt attribute" do
+        expect(html).not_to include("alt=")
+      end
+    end
+
+    context "when image has alternative text" do
+      let(:image) do
+        Image.create(file: uploaded_file, alternative: "A blue square",
+                     locale: I18n.locale)
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders the alternative text as alt" do
+        expect(html).to include(%(<img alt="A blue square" src=))
+      end
+    end
+
+    context "when image is decorative" do
+      let(:image) { Image.create(file: uploaded_file, decorative: true) }
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders an empty alt" do
+        expect(html).to include(%(<img alt="" src=))
+      end
+    end
+
     context "with a legacy size attribute" do
       let(:string) { "[image:#{image.id} size=\"100x100\"]" }
 
