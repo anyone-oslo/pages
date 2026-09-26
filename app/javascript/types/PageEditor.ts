@@ -1,3 +1,5 @@
+import * as Attachments from "./Attachments";
+import * as Images from "./Images";
 import * as Pages from "./Pages";
 import * as Template from "./Template";
 import { Locale } from "../types";
@@ -30,4 +32,6 @@ export type Return = [State, React.Dispatch<Action>];
 export type Context = {
   state: State;
   dispatch: React.Dispatch<Action>;
+  images?: Images.GridState;
+  files?: Attachments.State;
 };

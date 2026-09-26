@@ -8,6 +8,8 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "outDir": "dist",
+    "rootDir": "./app/javascript",
+    "strict": false,
     "allowJs": true,
     "jsx": "react-jsx"
   },
