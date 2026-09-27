@@ -2,8 +2,8 @@ import { Node } from "@tiptap/core";
 import type { CommandProps } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 
+import { toEmbedUrl } from "../urls";
 import RawHtmlView from "../views/RawHtmlView";
-import { toEmbedUrl } from "./PagesVideo";
 
 /*
  * Escape hatch for markup the schema has no node for: consent scripts,

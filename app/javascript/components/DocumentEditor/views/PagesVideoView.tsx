@@ -1,7 +1,8 @@
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
 
 import EmbedHead from "../EmbedHead";
-import { toWatchUrl, VIDEO_REPLACE_EVENT } from "../nodes/PagesVideo";
+import { VIDEO_REPLACE_EVENT } from "../nodes/PagesVideo";
+import { toWatchUrl } from "../urls";
 
 /** Admin preview only: YouTube thumbnail, no live iframe. */
 function youtubeThumb(src: string): string | null {

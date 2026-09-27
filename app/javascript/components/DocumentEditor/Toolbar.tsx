@@ -28,8 +28,9 @@ import { useEffect, useState } from "react";
 
 import AssetPicker from "./AssetPicker";
 import type { DocumentFormat } from "./extensions";
-import { toEmbedUrl, VIDEO_REPLACE_EVENT } from "./nodes/PagesVideo";
+import { VIDEO_REPLACE_EVENT } from "./nodes/PagesVideo";
 import UrlPopover from "./UrlPopover";
+import { toEmbedUrl } from "./urls";
 
 type Props = {
   editor: Editor | null;
