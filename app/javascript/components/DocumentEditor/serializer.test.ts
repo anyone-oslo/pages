@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { toEditorHtml, toStored } from "./serializer.ts";
+import { isDocument, toEditorHtml, toStored } from "./serializer.ts";
 
 const roundTrip = (stored: string) => toStored(toEditorHtml(stored));
 
@@ -34,4 +34,21 @@ test("keeps raw HTML blocks verbatim when < is not escaped", () => {
 test("keeps ampersands in image codes", () => {
   const stored = doc('[image:1 class="a&b" link="/a?b=1&c=2"]');
   assert.equal(roundTrip(roundTrip(stored)), stored);
+});
+
+test("treats stored editor output as a document", () => {
+  assert.equal(isDocument(toStored("<p>a</p>")), true);
+});
+
+test("allows whitespace around a document", () => {
+  assert.equal(isDocument(`\n  ${doc("<p>a</p>")}\n`), true);
+});
+
+test("treats Textile between notextile blocks as Textile", () => {
+  const textile = "<notextile>\n<p>a</p>\n</notextile>\n\nThen *bold*\n\n";
+  assert.equal(isDocument(`${textile}${doc("<p>c</p>")}`), false);
+});
+
+test("treats Textile after a leading notextile block as Textile", () => {
+  assert.equal(isDocument("<notextile><p>a</p></notextile>\n\n*b*"), false);
 });

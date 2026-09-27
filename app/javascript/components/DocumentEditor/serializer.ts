@@ -31,8 +31,16 @@ function unescapeAttr(str: string): string {
     .replace(/&amp;/g, "&");
 }
 
+// RedCloth passes the whole value through only when one notextile block
+// wraps all of it; any Textile between two blocks is still rendered.
 export function isDocument(stored: string | null | undefined): boolean {
-  return !!stored && stored.trimStart().startsWith(WRAPPER_OPEN);
+  const html = (stored || "").trim();
+  if (!html.startsWith(WRAPPER_OPEN) || !html.endsWith(WRAPPER_CLOSE)) {
+    return false;
+  }
+  return !html
+    .slice(WRAPPER_OPEN.length, -WRAPPER_CLOSE.length)
+    .includes(WRAPPER_CLOSE);
 }
 
 /** Stored value → HTML the editor can parse. */
