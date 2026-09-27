@@ -69,6 +69,7 @@
     "build-dist": "tsc",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/*.css --dir ./app/assets/builds/pages_core",
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
+    "test:js": "node --test \"app/javascript/**/*.test.ts\"",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
   "bugs": {

@@ -13,5 +13,6 @@
     "allowJs": true,
     "jsx": "react-jsx"
   },
-  "include": ["./app/javascript/**/*"]
+  "include": ["./app/javascript/**/*"],
+  "exclude": ["./app/javascript/**/*.test.ts"]
 }

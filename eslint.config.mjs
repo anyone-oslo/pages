@@ -40,5 +40,13 @@ export default [
       quotes: ["error", "double", { avoidEscape: true }],
       semi: ["error", "always"]
     }
+  },
+  {
+    files: ["**/*.test.ts"],
+    languageOptions: {
+      parserOptions: {
+        project: false
+      }
+    }
   }
 ];

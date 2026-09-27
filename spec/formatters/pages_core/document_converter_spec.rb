@@ -27,6 +27,38 @@ describe PagesCore::DocumentConverter do
     end
   end
 
+  context "with legacy file codes" do
+    let(:page) { create(:page) }
+    let(:files) do
+      create_list(:attachment, 2)
+      create_list(:page_file, 2, page:)
+    end
+    let(:text) { "Get [file:#{files.first.id}] and [file:#{files.map(&:id).join(',')}]" }
+
+    it "points them at the file's attachment" do
+      expect(result[:html]).to eq(
+        "<p>Get [attachment:#{files.first.attachment_id}] and " \
+        "[attachment:#{files.map(&:attachment_id).join(',')}]</p>"
+      )
+    end
+
+    it "uses different ids than the page files" do
+      expect(files.map(&:attachment_id)).not_to eq(files.map(&:id))
+    end
+  end
+
+  context "with a file code for a missing file" do
+    let(:text) { "Get [file:999999]" }
+
+    it "keeps the code" do
+      expect(result[:html]).to eq("<p>Get [file:999999]</p>")
+    end
+
+    it "reports it" do
+      expect(result[:removed]).to eq(["file code #999999 (file not found)"])
+    end
+  end
+
   context "with RedCloth artifacts" do
     let(:text) { "h1. NASA title\n\n-gone- +new+" }
 

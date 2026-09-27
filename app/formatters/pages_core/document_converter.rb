@@ -9,6 +9,7 @@ module PagesCore
   # editor will keep as raw HTML blocks and which it will flatten.
   class DocumentConverter
     EMBED_CODE = /\[(?:image|attachment|file):[^\]]+\]/
+    FILE_CODE = /\[file:([\d,]+)\]/
     PLACEHOLDER = /EMBEDCODE(\d+)/
 
     # Mirrors the editor schema (DocumentEditor/extensions.ts).
@@ -29,6 +30,7 @@ module PagesCore
 
     def initialize(text)
       @text = text.to_s
+      @missing_files = []
     end
 
     def convert
@@ -42,7 +44,7 @@ module PagesCore
     # embeds; a paragraph holding only image codes is unwrapped.
     def to_html
       codes = []
-      protected_text = @text.gsub(EMBED_CODE) do |code|
+      protected_text = normalize_file_codes(@text).gsub(EMBED_CODE) do |code|
         codes << code
         "<notextile>EMBEDCODE#{codes.length - 1}</notextile>"
       end
@@ -52,6 +54,19 @@ module PagesCore
     end
 
     private
+
+    # [file:ID] points at a PageFile, [attachment:ID] at an Attachment. The
+    # editor only writes attachment codes, so legacy file codes are mapped
+    # here. Codes with an unknown ID stay as they are and are reported.
+    def normalize_file_codes(text)
+      text.gsub(FILE_CODE) do |code|
+        ids = Regexp.last_match(1).split(",").map(&:to_i)
+        attachment_ids = PageFile.where(id: ids).pluck(:id, :attachment_id).to_h
+        missing = ids - attachment_ids.keys
+        @missing_files.concat(missing)
+        missing.any? ? code : "[attachment:#{attachment_ids.values_at(*ids).join(',')}]"
+      end
+    end
 
     def unwrap_image_paragraphs(html, codes)
       html.gsub(%r{<p>((?:\s*EMBEDCODE\d+\s*)+)</p>}) do |match|
@@ -91,7 +106,8 @@ module PagesCore
     def removed_content(doc)
       images = doc.css("img").any? ? ["image from another website"] : []
       tags = top_level(doc, "*").map(&:name).uniq - KEPT_TAGS - RAW_TAGS - ["img"]
-      tally(images + tags.map { |t| "<#{t}>" })
+      files = @missing_files.map { |id| "file code ##{id} (file not found)" }
+      tally(images + tags.map { |t| "<#{t}>" } + files)
     end
 
     # Nodes not nested inside a raw block (those travel with the block).

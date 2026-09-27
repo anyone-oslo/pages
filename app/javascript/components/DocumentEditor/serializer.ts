@@ -10,7 +10,9 @@ const WRAPPER_OPEN = "<notextile>";
 const WRAPPER_CLOSE = "</notextile>";
 
 const IMAGE_CODE = /\[image:(\d+)([^\]]*)\]/g;
-const ATTACHMENT_CODE = /\[(?:attachment|file):(\d+(?:,\d+)*)\]/g;
+// [file:ID] is a PageFile id, not an Attachment id. DocumentConverter maps
+// legacy file codes on conversion; any left over stay as plain text.
+const ATTACHMENT_CODE = /\[attachment:(\d+(?:,\d+)*)\]/g;
 
 function attr(options: string, name: string): string {
   const m = options.match(new RegExp(`${name}="([^"]*)"`));
