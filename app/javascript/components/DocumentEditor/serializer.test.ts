@@ -17,6 +17,20 @@ test("keeps legacy file codes as text", () => {
   assert.equal(roundTrip(stored), stored);
 });
 
+const rawMarkup =
+  "<table><tr><td><ul><li><p>x</p></li></ul><p></p></td></tr></table>";
+
+test("keeps raw HTML blocks verbatim", () => {
+  const escaped = rawMarkup.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const editorHtml = `<p>a</p><div data-raw-html="${escaped}"></div>`;
+  assert.equal(toStored(editorHtml), doc(`<p>a</p>${rawMarkup}`));
+});
+
+test("keeps raw HTML blocks verbatim when < is not escaped", () => {
+  const editorHtml = `<p>a</p><div data-raw-html="${rawMarkup}"></div>`;
+  assert.equal(toStored(editorHtml), doc(`<p>a</p>${rawMarkup}`));
+});
+
 test("keeps ampersands in image codes", () => {
   const stored = doc('[image:1 class="a&b" link="/a?b=1&c=2"]');
   assert.equal(roundTrip(roundTrip(stored)), stored);

@@ -66,9 +66,20 @@ export function toEditorHtml(stored: string | null | undefined): string {
     });
 }
 
+const RAW_BLOCK = /<div data-raw-html="([^"]*)"><\/div>/g;
+// Private-use characters: cannot come from the editor, so no clean-up
+// below can match inside a set-aside raw block.
+const RAW_PLACEHOLDER = /\uE000(\d+)\uE000/g;
+
 /** Editor HTML → stored value. */
 export function toStored(editorHtml: string): string {
+  // RawHtml block: stored as the markup itself, untouched by the clean-ups.
+  const rawBlocks: string[] = [];
   const body = editorHtml
+    .replace(RAW_BLOCK, (_m, html: string) => {
+      rawBlocks.push(unescapeAttr(html).trim());
+      return `\uE000${rawBlocks.length - 1}\uE000`;
+    })
     .replace(
       /<figure[^>]*data-image="(\d+)"[^>]*>(?:<\/figure>)?/g,
       (m, id: string) => {
@@ -86,10 +97,6 @@ export function toStored(editorHtml: string): string {
       /<a[^>]*data-file="(\d+)"[^>]*>.*?<\/a>/g,
       (_m, id: string) => `[attachment:${id}]`
     )
-    // RawHtml block: stored as the markup itself.
-    .replace(/<div data-raw-html="([^"]*)"><\/div>/g, (_m, html: string) =>
-      unescapeAttr(html).trim()
-    )
     // Tiptap wraps list item text in <p>; Textile output is bare <li>.
     // Unwrap single-paragraph items so site CSS renders lists the same.
     .replace(
@@ -98,6 +105,7 @@ export function toStored(editorHtml: string): string {
     )
     // Textile collapsed blank lines, so empty paragraphs never rendered.
     .replace(/<p><\/p>\s*/g, "")
+    .replace(RAW_PLACEHOLDER, (_m, i: string) => rawBlocks[Number(i)])
     .trim();
 
   if (!body || body === "<p></p>") return "";
