@@ -64,8 +64,8 @@ function Button({
       aria-label={title}
       disabled={disabled}
       className={"button" + (active ? " active" : "")}
-      onMouseDown={(e) => {
-        e.preventDefault();
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={() => {
         if (!disabled) onClick();
       }}>
       <Icon size={14} strokeWidth={strokeWidth} aria-hidden />

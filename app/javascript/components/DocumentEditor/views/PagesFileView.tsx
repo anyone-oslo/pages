@@ -30,8 +30,8 @@ export default function PagesFileView({
         onMouseDown={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setOpen(!open);
-        }}>
+        }}
+        onClick={() => setOpen(!open)}>
         <FileIcon size={16} strokeWidth={2.25} aria-hidden />
         <span>
           {asset
