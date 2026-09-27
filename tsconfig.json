@@ -11,8 +11,10 @@
     "rootDir": "./app/javascript",
     "strict": false,
     "allowJs": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["./app/javascript/**/*"],
-  "exclude": ["./app/javascript/**/*.test.ts"]
+  "include": ["./app/javascript/**/*"]
 }

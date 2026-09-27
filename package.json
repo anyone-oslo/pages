@@ -50,6 +50,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.4.1",
     "@eslint/js": "^9.39.4",
+    "@types/node": "^24.19.0",
     "dependency-cruiser": "^16.10.4",
     "esbuild": "^0.28.0",
     "eslint": "^9.39.4",
@@ -66,7 +67,7 @@
     "lint": "eslint 'app/javascript/**/*.+(js|jsx|ts|tsx)'",
     "build": "pnpm run build-debug --minify",
     "build-debug": "esbuild app/javascript/admin-dist.ts --bundle --sourcemap --outdir=app/assets/builds/pages_core --target=es2020",
-    "build-dist": "tsc",
+    "build-dist": "tsc -p tsconfig.build.json",
     "build:css": "postcss ./app/assets/stylesheets/pages_core/*.css --dir ./app/assets/builds/pages_core",
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "test:js": "node --test \"app/javascript/**/*.test.ts\"",

@@ -117,6 +117,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.4
         version: 9.39.5
+      '@types/node':
+        specifier: ^24.19.0
+        version: 24.19.0
       dependency-cruiser:
         specifier: ^16.10.4
         version: 16.10.4
@@ -899,8 +902,8 @@ packages:
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
 
-  '@types/node@25.9.0':
-    resolution: {integrity: sha512-AOQwYUNolgy3VosiRqXrACUXTN8nJUtPl7FJXMqZVyxiiCLhQuG3jXKvCS1ALr+Y2OmZhzzLVlYPEqJaiqkaJQ==}
+  '@types/node@24.19.0':
+    resolution: {integrity: sha512-zY+5tKxXdhGh1PYI0ac+7juvEu4OI6vWtVVoj5i2m42jxAY1U+zHGt6QCyOFwykdP62sM3MJ9stoYYUw5aCWew==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3825,7 +3828,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.2.0
       '@types/keyv': 3.1.4
-      '@types/node': 25.9.0
+      '@types/node': 24.19.0
       '@types/responselike': 1.0.3
 
   '@types/estree@1.0.9': {}
@@ -3836,13 +3839,13 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 24.19.0
 
   '@types/lodash@4.17.25': {}
 
   '@types/minimist@1.2.5': {}
 
-  '@types/node@25.9.0':
+  '@types/node@24.19.0':
     dependencies:
       undici-types: 7.24.6
 
@@ -3860,7 +3863,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 24.19.0
 
   '@types/use-sync-external-store@0.0.6': {}
 
