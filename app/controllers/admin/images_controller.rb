@@ -38,7 +38,7 @@ module Admin
     def image_params
       params.expect(
         image: [
-          :name, :description, :file, :locale,
+          :name, :description, :file, :locale, :decorative,
           :crop_start_x, :crop_start_y, :crop_height, :crop_width,
           :crop_gravity_x, :crop_gravity_y,
           localized_attributes.index_with { |_a| I18n.available_locales }

@@ -98,6 +98,29 @@ RSpec.describe PagesCore::ImagesHelper do
       end
     end
 
+    it "omits the alt attribute when the record has no alternative text" do
+      expect(helper.image_figure(image)).not_to include("alt=")
+    end
+
+    context "when the record has alternative text" do
+      let(:image) do
+        create(:image, alternative: "A blue square", locale: I18n.locale)
+      end
+
+      it "renders the alternative text as alt" do
+        expect(helper.image_figure(image))
+          .to include(%(<img alt="A blue square" src=))
+      end
+    end
+
+    context "when the record is decorative" do
+      let(:image) { create(:image, decorative: true) }
+
+      it "renders an empty alt" do
+        expect(helper.image_figure(image)).to include(%(<img alt="" src=))
+      end
+    end
+
     it "appends :class_name to the figure class list" do
       expect(helper.image_figure(image, class_name: "wide"))
         .to start_with(%(<figure class="image landscape wide">))
@@ -329,6 +352,20 @@ RSpec.describe PagesCore::ImagesHelper do
 
       it "renders no alt attribute" do
         expect(helper.dynamic_image_tag(image)).to eq(img_tag(image, "320x200"))
+      end
+    end
+
+    context "when the record is decorative" do
+      let(:image) { create(:image, decorative: true) }
+
+      it "renders an empty alt" do
+        expect(helper.dynamic_image_tag(image))
+          .to eq(img_tag(image, "320x200", prefix: %( alt="")))
+      end
+
+      it "lets an explicit alt option win" do
+        expect(helper.dynamic_image_tag(image, alt: "Explicit"))
+          .to eq(img_tag(image, "320x200", prefix: %( alt="Explicit")))
       end
     end
   end

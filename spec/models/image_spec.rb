@@ -26,6 +26,27 @@ RSpec.describe Image do
 
       it { is_expected.to be_nil }
     end
+
+    context "when the image is decorative" do
+      let(:image) { create(:image, decorative: true, locale: "en") }
+
+      it { is_expected.to eq("") }
+    end
+
+    context "when a decorative image has alternative text" do
+      let(:image) do
+        create(:image, decorative: true, alternative: "A blue square",
+                       locale: "en")
+      end
+
+      it { is_expected.to eq("") }
+    end
+  end
+
+  describe "#decorative" do
+    it "defaults to false" do
+      expect(create(:image).decorative).to be(false)
+    end
   end
 
   describe "the rendered alt attribute" do
