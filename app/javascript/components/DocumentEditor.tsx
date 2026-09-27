@@ -48,8 +48,7 @@ export default function DocumentEditor({
   } | null>(null);
   const [loadError, setLoadError] = useState(false);
   const lastEmitted = useRef<string>(value || "");
-  const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
+  const loadRequest = useRef(0);
   const legacy = !!value && !isDocument(value);
 
   const editor = useEditor({
@@ -99,12 +98,13 @@ export default function DocumentEditor({
   });
 
   // Load the value into the editor. Legacy Textile goes through the server
-  // (RedCloth + artifact policy) and is emitted as a document right away,
-  // so saving the page keeps the converted version.
+  // (RedCloth + artifact policy) and is only shown converted: the stored
+  // value stays Textile until the first edit emits a document.
   useEffect(() => {
     if (!editor) return;
 
     // Loading is not an edit: no onChange, and not undoable.
+    // setEditable emits an update unless told not to.
     const setSilently = (html: string) =>
       editor
         .chain()
@@ -113,6 +113,7 @@ export default function DocumentEditor({
         .run();
 
     const load = (stored: string) => {
+      const request = ++loadRequest.current;
       if (isDocument(stored) || !stored) {
         setSilently(toEditorHtml(stored));
         return;
@@ -120,25 +121,24 @@ export default function DocumentEditor({
       postJson("/admin/document_conversions.json", { text: stored })
         .then(
           (response: { html: string; raw: string[]; removed: string[] }) => {
+            if (request !== loadRequest.current) return;
             if (typeof response.html !== "string")
               throw new Error("bad response");
             setSilently(toEditorHtml(response.html));
-            editor.setEditable(true);
+            editor.setEditable(true, false);
             setLoadError(false);
-            const doc = toStored(editor.getHTML());
-            lastEmitted.current = doc;
             setConverted({
               raw: response.raw || [],
               removed: response.removed || []
             });
-            onChangeRef.current(doc);
           }
         )
         .catch(() => {
+          if (request !== loadRequest.current) return;
           // Never let Textile source be edited as HTML: saving would
           // flatten it. Lock the block and keep the stored value as-is.
           setSilently("");
-          editor.setEditable(false);
+          editor.setEditable(false, false);
           setLoadError(true);
         });
     };
@@ -172,8 +172,8 @@ export default function DocumentEditor({
       {converted ? (
         <div className="doc-editor__notice">
           <p>
-            Converted from Textile. Check that it looks right; saving the page
-            keeps the converted version.
+            Converted from Textile. Check that it looks right. Nothing is stored
+            until you edit this block.
           </p>
           {converted.raw.length > 0 ? (
             <p>
