@@ -1,7 +1,27 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { toEmbedUrl } from "./urls.ts";
+import { isAllowedHref, toEmbedUrl } from "./urls.ts";
+
+test("allows links regardless of scheme case", () => {
+  assert.equal(isAllowedHref("HTTP://example.com"), true);
+  assert.equal(isAllowedHref("MAILTO:a@example.com"), true);
+});
+
+test("allows tel: links", () => {
+  assert.equal(isAllowedHref("tel:+4712345678"), true);
+});
+
+test("allows paths and anchors", () => {
+  assert.equal(isAllowedHref("/about"), true);
+  assert.equal(isAllowedHref("#top"), true);
+});
+
+test("rejects other schemes", () => {
+  assert.equal(isAllowedHref("javascript:alert(1)"), false);
+  assert.equal(isAllowedHref("JavaScript:alert(1)"), false);
+  assert.equal(isAllowedHref("ftp://example.com"), false);
+});
 
 test("rejects javascript: URLs on a video host", () => {
   assert.equal(

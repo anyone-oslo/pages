@@ -1,3 +1,8 @@
+/** Link targets the editor keeps. Anything else loses its href. */
+export function isAllowedHref(href: string): boolean {
+  return /^(?:https?:\/\/|mailto:|tel:|\/|#)/i.test(href);
+}
+
 const VIDEO_ID = /^[\w-]+$/;
 
 /**

@@ -11,6 +11,7 @@ import { PagesFile } from "./nodes/PagesFile";
 import { PagesImage } from "./nodes/PagesImage";
 import { PagesVideo } from "./nodes/PagesVideo";
 import { RawHtml } from "./nodes/RawHtml";
+import { isAllowedHref } from "./urls";
 
 export type DocumentFormat = "document" | "inline";
 
@@ -18,11 +19,7 @@ const linkExtension = Link.configure({
   openOnClick: false,
   enableClickSelection: true,
   HTMLAttributes: { target: null, rel: null },
-  isAllowedUri: (href) =>
-    /^https?:\/\//.test(href) ||
-    href.startsWith("/") ||
-    href.startsWith("mailto:") ||
-    href.startsWith("#")
+  isAllowedUri: (href) => isAllowedHref(href)
 });
 
 // Underline and hr stay in the schema so existing content survives, but
