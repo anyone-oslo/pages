@@ -114,10 +114,16 @@ export default function DocumentEditor({
 
     const load = (stored: string) => {
       const request = ++loadRequest.current;
+      setLoadError(false);
       if (isDocument(stored) || !stored) {
         setSilently(toEditorHtml(stored));
+        editor.setEditable(true, false);
         return;
       }
+      // Locked until the conversion arrives: a keystroke in the empty
+      // editor would store an empty document over the Textile.
+      setSilently("");
+      editor.setEditable(false, false);
       postJson("/admin/document_conversions.json", { text: stored })
         .then(
           (response: { html: string; raw: string[]; removed: string[] }) => {
@@ -126,7 +132,6 @@ export default function DocumentEditor({
               throw new Error("bad response");
             setSilently(toEditorHtml(response.html));
             editor.setEditable(true, false);
-            setLoadError(false);
             setConverted({
               raw: response.raw || [],
               removed: response.removed || []
@@ -136,9 +141,7 @@ export default function DocumentEditor({
         .catch(() => {
           if (request !== loadRequest.current) return;
           // Never let Textile source be edited as HTML: saving would
-          // flatten it. Lock the block and keep the stored value as-is.
-          setSilently("");
-          editor.setEditable(false, false);
+          // flatten it. Keep the block locked and the stored value as-is.
           setLoadError(true);
         });
     };
