@@ -36,6 +36,18 @@ test("keeps ampersands in image codes", () => {
   assert.equal(roundTrip(roundTrip(stored)), stored);
 });
 
+test("keeps a legacy image size", () => {
+  const stored = doc('[image:1 size="100x100"]');
+  assert.equal(roundTrip(stored), stored);
+});
+
+test("adds no size to a new image", () => {
+  assert.equal(
+    toStored('<figure data-image="1" class="pages-image"></figure>'),
+    doc("[image:1]")
+  );
+});
+
 test("treats stored editor output as a document", () => {
   assert.equal(isDocument(toStored("<p>a</p>")), true);
 });
