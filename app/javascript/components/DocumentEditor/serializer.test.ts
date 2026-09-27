@@ -16,3 +16,8 @@ test("keeps legacy file codes as text", () => {
   const stored = doc("<p>Get [file:5]</p>");
   assert.equal(roundTrip(stored), stored);
 });
+
+test("keeps ampersands in image codes", () => {
+  const stored = doc('[image:1 class="a&b" link="/a?b=1&c=2"]');
+  assert.equal(roundTrip(roundTrip(stored)), stored);
+});

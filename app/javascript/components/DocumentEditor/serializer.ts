@@ -72,9 +72,9 @@ export function toStored(editorHtml: string): string {
     .replace(
       /<figure[^>]*data-image="(\d+)"[^>]*>(?:<\/figure>)?/g,
       (m, id: string) => {
-        const className = attr(m, "data-class");
-        const link = attr(m, "data-link");
-        const size = attr(m, "data-size");
+        const className = unescapeAttr(attr(m, "data-class"));
+        const link = unescapeAttr(attr(m, "data-link"));
+        const size = unescapeAttr(attr(m, "data-size"));
         const parts = [`[image:${id}`];
         if (className) parts.push(` class="${className}"`);
         if (link) parts.push(` link="${link}"`);
