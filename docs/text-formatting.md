@@ -56,3 +56,19 @@ It is also possible to give the embedded image a class, depending on the templat
 ```
 [image:123 class="small"]
 ```
+
+## Rich text editor
+
+Templates with `text_filter :document` (see [Templates](templates.md#rich-text-editor))
+use the rich text editor instead of Textile. The text is stored as HTML
+wrapped in `<notextile>`, so it renders through the same formatter as
+Textile. Images and files are stored as `[image:123]` and `[attachment:123]`
+codes.
+
+Textile is converted when a block is opened in the editor, and stored as
+HTML only when the block is edited. Legacy `[file:123]` codes, which point at
+a page file rather than an attachment, become `[attachment:ID]` codes on
+conversion.
+
+Switching a template back to `:textile` keeps the pages rendering as before,
+but the admin then shows the stored HTML in the Textile field.
