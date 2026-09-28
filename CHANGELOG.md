@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.19.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.1...pages_core/v3.19.0) (2026-09-28)
+
+
+### Features
+
+* allow marking images as decorative ([2fdd16e](https://github.com/anyone-oslo/pages/commit/2fdd16eac5389f4713e2627ac57db6d6fa3a8999)), closes [#249](https://github.com/anyone-oslo/pages/issues/249)
+* build frontend assets at release time instead of committing them ([dd6e812](https://github.com/anyone-oslo/pages/commit/dd6e812cc211fe5227e2bcb2e3ae0f811721bcda))
+* require Ruby 3.4 ([46ccaf5](https://github.com/anyone-oslo/pages/commit/46ccaf5adb43e2ad7d7bace14a086ce97ca3cbdf))
+
+
+### Bug Fixes
+
+* correct repository URLs in package.json ([e06b6f3](https://github.com/anyone-oslo/pages/commit/e06b6f3cf8cca6cca5d3e2abf01a3fd72f2f0af2))
+* correct repository URLs in package.json ([7f1a7e7](https://github.com/anyone-oslo/pages/commit/7f1a7e7df59ac48af08dc8e1474041d9db9e9aaa))
+* Define DefaultPolicy#index? instead of #index ([133424e](https://github.com/anyone-oslo/pages/commit/133424e57dae0f74c053a996f2a79321312f3afb))
+* keep checkbox labels out of the field warning colour ([e817035](https://github.com/anyone-oslo/pages/commit/e81703590af30d36181eb0296d223126bcb52027))
+* ship a minified, production build of the admin bundle ([0db2aaa](https://github.com/anyone-oslo/pages/commit/0db2aaa67dcec13cac85dd9987f193691327320a))
+
 ## [3.18.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.0...pages_core/v3.18.1) (2026-09-02)
 
 
