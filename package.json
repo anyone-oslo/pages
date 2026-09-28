@@ -63,9 +63,9 @@
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
   "bugs": {
-    "url": "https://github.com/anyone_oslo/pages/issues"
+    "url": "https://github.com/anyone-oslo/pages/issues"
   },
-  "homepage": "https://github.com/anyone_oslo/pages#readme",
+  "homepage": "https://github.com/anyone-oslo/pages#readme",
   "author": "Inge Jørgensen",
   "license": "MIT"
 }
