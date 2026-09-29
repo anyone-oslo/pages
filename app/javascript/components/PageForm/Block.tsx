@@ -74,6 +74,7 @@ export default function Block(props: Props) {
         allowFiles={allowFiles}
         minRows={block.size == "large" ? 15 : 5}
         format={block.format == "inline" ? "inline" : "document"}
+        allowHtml={!!block.html}
       />
     );
   } else {

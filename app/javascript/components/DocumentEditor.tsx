@@ -11,6 +11,7 @@ import {
   toEditorHtml,
   toStored
 } from "./DocumentEditor/serializer";
+import { stripPastedHtml } from "./DocumentEditor/paste";
 import Toolbar from "./DocumentEditor/Toolbar";
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
   allowFiles?: boolean;
   minRows?: number;
   format?: DocumentFormat;
+  allowHtml?: boolean;
 };
 
 /**
@@ -38,7 +40,8 @@ export default function DocumentEditor({
   placeholder,
   allowFiles = true,
   minRows = 5,
-  format = "document"
+  format = "document",
+  allowHtml = false
 }: Props) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [showSource, setShowSource] = useState(false);
@@ -58,6 +61,7 @@ export default function DocumentEditor({
     content: legacy ? "" : toEditorHtml(value),
     immediatelyRender: true,
     editorProps: {
+      ...(allowHtml ? {} : { transformPastedHTML: stripPastedHtml }),
       attributes: {
         id,
         class: "rich doc-content doc-content--" + format,
@@ -168,6 +172,7 @@ export default function DocumentEditor({
         onLinkOpenChange={setLinkOpen}
         allowFiles={allowFiles}
         format={format}
+        allowHtml={allowHtml}
       />
       {loadError ? (
         <p className="doc-editor__notice doc-editor__notice--error">
@@ -182,17 +187,24 @@ export default function DocumentEditor({
             {converted.removed.join(", ")}. Nothing is stored until you edit
             this block.
           </p>
+          {allowHtml && converted.raw.length > 0 ? (
+            <p>
+              <strong>Kept as HTML blocks:</strong> {converted.raw.join(", ")}.
+            </p>
+          ) : null}
         </div>
       ) : null}
       <EditorContent editor={editor} />
       <div className="doc-editor__footer">
-        <button
-          type="button"
-          className="doc-editor__source-toggle"
-          onClick={() => setShowSource(!showSource)}>
-          {showSource ? "Hide stored source" : "Show stored source"}
-        </button>
-        {showSource ? (
+        {allowHtml ? (
+          <button
+            type="button"
+            className="doc-editor__source-toggle"
+            onClick={() => setShowSource(!showSource)}>
+            {showSource ? "Hide stored source" : "Show stored source"}
+          </button>
+        ) : null}
+        {allowHtml && showSource ? (
           <pre className="doc-editor__source">{value || "(empty)"}</pre>
         ) : null}
       </div>

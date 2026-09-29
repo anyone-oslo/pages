@@ -38,6 +38,7 @@ type Props = {
   onLinkOpenChange: (open: boolean) => void;
   allowFiles: boolean;
   format: DocumentFormat;
+  allowHtml: boolean;
 };
 
 function Button({
@@ -128,7 +129,8 @@ export default function Toolbar({
   linkOpen,
   onLinkOpenChange,
   allowFiles,
-  format
+  format,
+  allowHtml
 }: Props) {
   const [picker, setPicker] = useState<
     "image" | "file" | "video" | "video-replace" | null
@@ -366,14 +368,16 @@ export default function Toolbar({
               disabled={locked}
               onClick={() => setPicker("video")}
             />
-            <Button
-              title="HTML block (embed code, script, table)"
-              label="HTML"
-              icon={CodeXml}
-              active={state.raw}
-              disabled={locked}
-              onClick={() => editor.chain().focus().insertRawHtml().run()}
-            />
+            {allowHtml ? (
+              <Button
+                title="HTML block (embed code, script, table)"
+                label="HTML"
+                icon={CodeXml}
+                active={state.raw}
+                disabled={locked}
+                onClick={() => editor.chain().focus().insertRawHtml().run()}
+              />
+            ) : null}
             <Button
               title="Fact box"
               icon={SquareDashed}

@@ -11,6 +11,7 @@ export type Block = {
   options?: [string, string][];
   type?: string;
   format?: "document" | "inline";
+  html?: boolean;
 };
 
 export type Config = {
