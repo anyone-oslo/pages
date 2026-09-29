@@ -32,6 +32,32 @@ describe PagesCore::SearchableDocument do
     end
   end
 
+  describe ".plain_text" do
+    it "keeps words together across inline tags" do
+      expect(described_class.plain_text("<strong>B</strong>ergen")).to eq("Bergen")
+    end
+
+    it "keeps superscripts attached" do
+      expect(described_class.plain_text("m<sup>2</sup>")).to eq("m2")
+    end
+
+    it "separates paragraphs" do
+      expect(described_class.plain_text("<p>a</p><p>b</p>")).to eq("a b")
+    end
+
+    it "separates line breaks" do
+      expect(described_class.plain_text("a<br>b")).to eq("a b")
+    end
+
+    it "separates list items" do
+      expect(described_class.plain_text("<ul><li>a</li><li>b</li></ul>")).to eq("a b")
+    end
+
+    it "leaves Textile unchanged" do
+      expect(described_class.plain_text("a *short* lead")).to eq("a *short* lead")
+    end
+  end
+
   describe "indexing stored markup" do
     subject(:doc) { page.search_documents.find_by(locale: :en) }
 
