@@ -9,7 +9,9 @@ module PagesCore
         super.merge(
           published: published? && !skip_index?,
           name:,
-          description: try(&:meta_description?) ? meta_description : excerpt,
+          description: PagesCore::SearchableDocument.plain_text(
+            try(&:meta_description?) ? meta_description : excerpt
+          ),
           # content: "",
           tags: tag_names.join(" ")
         )

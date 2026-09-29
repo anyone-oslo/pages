@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["./app/javascript/**/*"],
+  "exclude": ["./app/javascript/**/*.test.ts"]
+}

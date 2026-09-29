@@ -28,6 +28,10 @@ module Admin
       end
     end
 
+    attribute :text_filter do
+      (object.value(:text_filter) || :textile).to_s
+    end
+
     private
 
     def block(block_name)

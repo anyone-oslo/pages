@@ -10,6 +10,8 @@ export type Block = {
   placeholder?: string;
   options?: [string, string][];
   type?: string;
+  format?: "document" | "inline";
+  html?: boolean;
 };
 
 export type Config = {
@@ -21,4 +23,5 @@ export type Config = {
   dates: boolean;
   tags: boolean;
   files: boolean;
+  text_filter?: "textile" | "document";
 };

@@ -60,6 +60,24 @@ describe SearchDocument do
       end
     end
 
+    describe "when searching document-wrapped body" do
+      let!(:page) do
+        create(
+          :page,
+          locale:,
+          body: "<notextile>\n<p>foobar walking</p>\n</notextile>"
+        )
+      end
+
+      it "returns the result" do
+        expect(query("foobar")).to include(page)
+      end
+
+      it "does not match wrapper tags" do
+        expect(query("notextile")).not_to include(page)
+      end
+    end
+
     describe "when searching body in norwegian" do
       let(:locale) { :nb }
       let!(:page) { create(:page, locale:, body: "løsningen") }

@@ -66,6 +66,12 @@ module PagesCore
     # Valid sizes for text blocks are +:field+ (single line), +:small+
     # and +:large+.
     #
+    # Spike: +text_filter :document+ (site +default+ or per template)
+    # switches text blocks to the rich text editor. Default remains
+    # +:textile+. With +:document+, +format: :inline+ limits a block to
+    # paragraphs with bold, italic, superscript and links (no headings,
+    # lists or embeds). Useful for standfirsts and bylines.
+    #
     # === Select blocks
     #
     # Blocks can also be selects:

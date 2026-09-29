@@ -41,6 +41,9 @@ PagesCore::Templates.configure do |config|
     # Pages can have dates (default: :disabled)
     # default.dates :enabled
 
+    # Edit text blocks in the rich text editor (default: :textile)
+    # default.text_filter :document
+
     # Only use the blocks enabled here by default
     default.enabled_blocks %i[headline excerpt body]
 

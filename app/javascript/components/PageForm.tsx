@@ -127,7 +127,9 @@ export default function PageForm(props: Props) {
     <PageFormContext.Provider
       value={{
         state: state,
-        dispatch: dispatch
+        dispatch: dispatch,
+        images: imagesState,
+        files: filesState
       }}>
       <Form>
         <main>

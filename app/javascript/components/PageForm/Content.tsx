@@ -22,6 +22,10 @@ export default function Content({ tagsState, tagsDispatch }: Props) {
     dispatch({ type: "updateBlocks", payload: { [attr]: value } });
   };
 
+  // Spike: text_filter :document switches content blocks to the rich text
+  // editor. Metadata blocks (Metadata.tsx) stay on RichTextArea.
+  const rich = templateConfig.text_filter == "document";
+
   return (
     <Fragment>
       {templateConfig.blocks.map((b) => (
@@ -33,6 +37,8 @@ export default function Content({ tagsState, tagsDispatch }: Props) {
           lang={locale}
           onChange={handleChange(b.name)}
           value={blockValue(state, b)}
+          rich={rich}
+          allowFiles={templateConfig.files}
         />
       ))}
       {templateConfig.dates && <Dates />}

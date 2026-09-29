@@ -9,6 +9,24 @@ module PagesCore
       after_save :update_search_documents!
     end
 
+    BLOCK_TAGS = %w[p h1 h2 h3 h4 h5 h6 ul ol li blockquote aside figure div
+                    table tr td th].freeze
+
+    # Textile markers stay (*bold*, bq.); HTML from the document
+    # wrapper and mixed <b>/<i> is dropped so both formats index as words.
+    def self.plain_text(value)
+      html = value.to_s
+      return "" if html.blank?
+
+      fragment = Nokogiri::HTML.fragment(html)
+      fragment.css("br").each { |n| n.replace(" ") }
+      fragment.css(BLOCK_TAGS.join(", ")).each do |n|
+        n.add_previous_sibling(" ")
+        n.add_next_sibling(" ")
+      end
+      fragment.search(".//text()").map(&:text).join.squish
+    end
+
     class Indexer
       attr_reader :record
 
@@ -58,7 +76,9 @@ module PagesCore
     def search_document_attributes
       return {} unless respond_to?(:localized_attributes)
 
-      content = localized_attributes.keys.map { |a| localizer.get(a) }.join(" ")
+      content = localized_attributes.keys.map do |a|
+        PagesCore::SearchableDocument.plain_text(localizer.get(a))
+      end.join(" ")
       { content: }
     end
 
