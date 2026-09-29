@@ -32,12 +32,13 @@ superscript and links, which suits standfirsts and bylines:
 block.excerpt("Standfirst", format: :inline)
 ```
 
-The HTML block button, "Show stored source" and pasted tables, scripts and
-embed code are off by default. `html: true` turns them on for a block. The
-first argument is the block title, so repeat the current one:
+The HTML block button and "Show stored source" are on by default.
+`html: false` turns them off for a block, and pasted tables, scripts and
+embed code are then flattened to text or dropped. The first argument is the
+block title, so repeat the current one:
 
 ``` ruby
-block.body("Body", html: true)
+block.excerpt("Standfirst", html: false)
 ```
 
 See [Text formatting](text-formatting.md#rich-text-editor) for how the text

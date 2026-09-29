@@ -41,7 +41,7 @@ export default function DocumentEditor({
   allowFiles = true,
   minRows = 5,
   format = "document",
-  allowHtml = false
+  allowHtml = true
 }: Props) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [showSource, setShowSource] = useState(false);
