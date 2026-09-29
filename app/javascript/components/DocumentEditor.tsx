@@ -124,7 +124,10 @@ export default function DocumentEditor({
       // editor would store an empty document over the Textile.
       setSilently("");
       editor.setEditable(false, false);
-      postJson("/admin/document_conversions.json", { text: stored })
+      postJson("/admin/document_conversions.json", {
+        text: stored,
+        block_format: format
+      })
         .then(
           (response: { html: string; raw: string[]; removed: string[] }) => {
             if (request !== loadRequest.current) return;
@@ -155,7 +158,7 @@ export default function DocumentEditor({
     lastEmitted.current = value || "";
     setConverted(null);
     load(value || "");
-  }, [editor, value]);
+  }, [editor, value, format]);
 
   return (
     <div className="rich-text-area doc-editor">
@@ -172,25 +175,13 @@ export default function DocumentEditor({
           The stored text is unchanged. Reload the page to try again.
         </p>
       ) : null}
-      {converted ? (
+      {converted && converted.removed.length > 0 ? (
         <div className="doc-editor__notice">
           <p>
-            Converted from Textile. Check that it looks right. Nothing is stored
-            until you edit this block.
+            Some formatting was simplified when this text was converted:{" "}
+            {converted.removed.join(", ")}. Nothing is stored until you edit
+            this block.
           </p>
-          {converted.raw.length > 0 ? (
-            <p>
-              <strong>Kept as HTML blocks:</strong> {converted.raw.join(", ")}.
-              They render on the site as before; open the block to see the code.
-            </p>
-          ) : null}
-          {converted.removed.length > 0 ? (
-            <p>
-              <strong>Flattened to plain text:</strong>{" "}
-              {converted.removed.join(", ")}. Ask a developer if this content
-              matters.
-            </p>
-          ) : null}
         </div>
       ) : null}
       <EditorContent editor={editor} />

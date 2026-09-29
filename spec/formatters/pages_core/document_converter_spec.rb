@@ -88,7 +88,48 @@ describe PagesCore::DocumentConverter do
     end
 
     it "reports what is flattened" do
-      expect(result[:removed]).to eq(["image from another website", "<center>"])
+      expect(result[:removed]).to eq(["image from another website", "centred text"])
+    end
+  end
+
+  context "with div and span" do
+    let(:text) { "<div>a</div>\n\n<p>b <span>c</span></p>" }
+
+    it "reports them, since the editor has no node for them" do
+      expect(result[:removed]).to eq(["other formatting (<div>)", "other formatting (<span>)"])
+    end
+  end
+
+  describe "kept tags" do
+    it "lists the tags the document editor keeps" do
+      expect(described_class::KEPT_TAGS[:document]).to eq(
+        %w[p br a strong em s u sup h2 h3 h4 ul ol li blockquote hr
+           aside figure iframe]
+      )
+    end
+
+    it "lists the tags the inline editor keeps" do
+      expect(described_class::KEPT_TAGS[:inline]).to eq(
+        %w[p br a strong em sup]
+      )
+    end
+  end
+
+  context "with an inline block" do
+    subject(:result) { described_class.convert(text, format: "inline") }
+
+    let(:text) do
+      "h2. Title\n\n* item\n\n" \
+        "<table><tr><td>x</td></tr></table>\n\n" \
+        "<iframe src=\"https://www.youtube.com/embed/x\"></iframe>"
+    end
+
+    it "keeps no raw blocks" do
+      expect(result[:raw]).to eq([])
+    end
+
+    it "reports what is flattened" do
+      expect(result[:removed]).to eq(%w[headings lists tables embeds])
     end
   end
 end

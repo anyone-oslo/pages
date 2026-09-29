@@ -13,8 +13,11 @@ module PagesCore
     PLACEHOLDER = /EMBEDCODE(\d+)/
 
     # Mirrors the editor schema (DocumentEditor/extensions.ts).
-    KEPT_TAGS = %w[p br a strong em s u sup h2 h3 h4 ul ol li blockquote hr
-                   aside figure iframe div span notextile].freeze
+    KEPT_TAGS = {
+      document: %w[p br a strong em s u sup h2 h3 h4 ul ol li blockquote hr
+                   aside figure iframe],
+      inline: %w[p br a strong em sup]
+    }.freeze
     RAW_TAGS = %w[script style form table object embed].freeze
     VIDEO_HOSTS = /\A(?:www\.)?(?:youtube\.com|youtube-nocookie\.com|youtu\.be|
                       vimeo\.com|player\.vimeo\.com)\z/x
@@ -23,13 +26,14 @@ module PagesCore
                 "h1" => "h2", "h5" => "h4", "h6" => "h4" }.freeze
 
     class << self
-      def convert(text)
-        new(text).convert
+      def convert(text, format: "document")
+        new(text, format:).convert
       end
     end
 
-    def initialize(text)
+    def initialize(text, format: "document")
       @text = text.to_s
+      @format = format.to_s == "inline" ? :inline : :document
       @missing_files = []
     end
 
@@ -95,6 +99,8 @@ module PagesCore
 
     # What the editor keeps as RawHtml blocks.
     def raw_blocks(doc)
+      return [] if @format == :inline
+
       embeds = doc.css("iframe").filter_map do |n|
         host = iframe_host(n)
         "embed from #{host || 'unknown source'}" unless host&.match?(VIDEO_HOSTS)
@@ -105,9 +111,14 @@ module PagesCore
     # What the editor flattens to text.
     def removed_content(doc)
       images = doc.css("img").any? ? ["image from another website"] : []
-      tags = top_level(doc, "*").map(&:name).uniq - KEPT_TAGS - RAW_TAGS - ["img"]
       files = @missing_files.map { |id| "file code ##{id} (file not found)" }
-      tally(images + tags.map { |t| "<#{t}>" } + files)
+      tally(images + flattened_tags(doc).map { |t| TagLabels.for(t) }.uniq + files)
+    end
+
+    def flattened_tags(doc)
+      kept = KEPT_TAGS.fetch(@format)
+      kept += RAW_TAGS if @format == :document
+      top_level(doc, "*").map(&:name).uniq - kept - ["img"]
     end
 
     # Nodes not nested inside a raw block (those travel with the block).

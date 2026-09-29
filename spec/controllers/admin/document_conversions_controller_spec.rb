@@ -22,6 +22,32 @@ describe Admin::DocumentConversionsController do
       end
     end
 
+    context "with an inline block" do
+      before do
+        login(user)
+        post :create,
+             params: { text: "h2. Title", block_format: "inline" },
+             format: :json
+      end
+
+      it "reports what the inline editor flattens" do
+        expect(response.parsed_body["removed"]).to eq(["headings"])
+      end
+    end
+
+    context "with an unknown block format" do
+      before do
+        login(user)
+        post :create,
+             params: { text: "h2. Title", block_format: "other" },
+             format: :json
+      end
+
+      it "reports as for a document block" do
+        expect(response.parsed_body["removed"]).to eq([])
+      end
+    end
+
     ["", "  "].each do |blank|
       context "with blank text #{blank.inspect}" do
         before do
