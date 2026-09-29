@@ -1,6 +1,6 @@
 {
   "name": "@anyone-oslo/pages",
-  "version": "3.18.1",
+  "version": "3.19.0",
   "description": "Frontend for Pages",
   "repository": {
     "type": "git",
@@ -87,9 +87,9 @@
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
   "bugs": {
-    "url": "https://github.com/anyone_oslo/pages/issues"
+    "url": "https://github.com/anyone-oslo/pages/issues"
   },
-  "homepage": "https://github.com/anyone_oslo/pages#readme",
+  "homepage": "https://github.com/anyone-oslo/pages#readme",
   "author": "Inge Jørgensen",
   "license": "MIT"
 }
