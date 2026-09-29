@@ -83,5 +83,10 @@ Do the same for any site model that includes `PagesCore::SearchableDocument`.
 `to_html(shorten: n)` cuts the stored text by characters, which cuts through
 the HTML. Don't use it on text from the rich text editor.
 
+The page JSON (`PageResource`) and the files from `pages:export:pages`
+(`Export::PageResource`) contain the text blocks as stored: the HTML inside
+`<notextile>`, with `[image:]` and `[attachment:]` codes. Consumers that
+expect Textile or plain text need to handle this.
+
 Switching a template back to `:textile` keeps the pages rendering as before,
 but the admin then shows the stored HTML in the Textile field.
