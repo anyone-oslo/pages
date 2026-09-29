@@ -30,7 +30,7 @@ import AssetPicker from "./AssetPicker";
 import type { DocumentFormat } from "./extensions";
 import { VIDEO_REPLACE_EVENT } from "./nodes/PagesVideo";
 import UrlPopover from "./UrlPopover";
-import { toEmbedUrl } from "./urls";
+import { normalizeHref, toEmbedUrl } from "./urls";
 
 type Props = {
   editor: Editor | null;
@@ -136,7 +136,12 @@ export default function Toolbar({
   const [videoError, setVideoError] = useState<string | null>(null);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [linkError, setLinkError] = useState<string | null>(null);
   const state = useToolbarState(editor);
+
+  useEffect(() => {
+    if (!linkOpen) setLinkError(null);
+  }, [linkOpen]);
 
   useEffect(() => {
     if (!editor) return;
@@ -156,18 +161,26 @@ export default function Toolbar({
   const full = format === "document";
   const locked = !state.editable;
 
-  const applyLink = (url: string) => {
-    if (!url) {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run();
-    } else {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
-    }
+  const closeLink = () => {
+    setLinkError(null);
     onLinkOpenChange(false);
+  };
+
+  const applyLink = (input: string) => {
+    if (!input.trim()) {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      closeLink();
+      return;
+    }
+    const href = normalizeHref(input);
+    if (!href) {
+      setLinkError(
+        "Links must start with https://, mailto: or tel:, or be a path like /about. For an email address, use the Email link button."
+      );
+      return;
+    }
+    editor.chain().focus().extendMarkRange("link").setLink({ href }).run();
+    closeLink();
   };
 
   const applyEmailLink = (input: string) => {
@@ -376,12 +389,13 @@ export default function Toolbar({
         <UrlPopover
           title="Link URL"
           initialUrl={(editor.getAttributes("link").href as string) || ""}
+          error={linkError}
           onApply={applyLink}
           onRemove={() => {
             editor.chain().focus().extendMarkRange("link").unsetLink().run();
-            onLinkOpenChange(false);
+            closeLink();
           }}
-          onClose={() => onLinkOpenChange(false)}
+          onClose={closeLink}
         />
       ) : null}
 

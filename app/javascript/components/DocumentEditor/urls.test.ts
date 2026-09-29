@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { isAllowedHref, toEmbedUrl } from "./urls.ts";
+import { isAllowedHref, normalizeHref, toEmbedUrl } from "./urls.ts";
 
 test("allows links regardless of scheme case", () => {
   assert.equal(isAllowedHref("HTTP://example.com"), true);
@@ -61,4 +61,41 @@ test("rejects a watch URL with an odd id", () => {
 
 test("rejects an embed URL with an odd id", () => {
   assert.equal(toEmbedUrl("https://www.youtube.com/embed/a%22b"), null);
+});
+
+test("adds https:// to a bare domain", () => {
+  assert.equal(normalizeHref("www.foo.no"), "https://www.foo.no");
+  assert.equal(normalizeHref("foo.no/x?y=1"), "https://foo.no/x?y=1");
+});
+
+test("trims the input", () => {
+  assert.equal(normalizeHref("  foo.no "), "https://foo.no");
+});
+
+test("keeps allowed links as they are", () => {
+  for (const href of [
+    "https://foo.no",
+    "HTTP://X.NO",
+    "/about",
+    "#top",
+    "tel:+4712345678",
+    "mailto:a@example.com"
+  ]) {
+    assert.equal(normalizeHref(href), href);
+  }
+});
+
+test("rejects links outside the allowlist", () => {
+  for (const href of [
+    "javascript:alert(1)",
+    "data:text/html,x",
+    "ftp://foo.no",
+    "name@example.com",
+    "two words.no",
+    "localhost:3000",
+    "foo",
+    ""
+  ]) {
+    assert.equal(normalizeHref(href), null, href);
+  }
 });

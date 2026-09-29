@@ -3,6 +3,18 @@ export function isAllowedHref(href: string): boolean {
   return /^(?:https?:\/\/|mailto:|tel:|\/|#)/i.test(href);
 }
 
+const BARE_DOMAIN = /^[^\s@:/#?]+\.[^\s@:/#?]+(?:[/?#]\S*)?$/;
+
+/**
+ * What the link popover applies: allowed links as typed, a bare domain
+ * with https:// added, null for anything else.
+ */
+export function normalizeHref(input: string): string | null {
+  const href = input.trim();
+  if (isAllowedHref(href)) return href;
+  return BARE_DOMAIN.test(href) ? `https://${href}` : null;
+}
+
 const VIDEO_ID = /^[\w-]+$/;
 
 /**
