@@ -4,7 +4,7 @@ module Admin
   # Spike: Textile → HTML for the editor. Does not persist; page save does.
   class DocumentConversionsController < Admin::AdminController
     def create
-      render json: PagesCore::DocumentConverter.convert(params.expect(:text))
+      render json: PagesCore::DocumentConverter.convert(params.fetch(:text, ""))
     end
   end
 end

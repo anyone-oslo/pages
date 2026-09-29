@@ -115,7 +115,7 @@ export default function DocumentEditor({
     const load = (stored: string) => {
       const request = ++loadRequest.current;
       setLoadError(false);
-      if (isDocument(stored) || !stored) {
+      if (isDocument(stored) || !stored.trim()) {
         setSilently(toEditorHtml(stored));
         editor.setEditable(true, false);
         return;

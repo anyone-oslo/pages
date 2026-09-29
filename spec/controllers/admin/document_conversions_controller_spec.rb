@@ -22,6 +22,19 @@ describe Admin::DocumentConversionsController do
       end
     end
 
+    ["", "  "].each do |blank|
+      context "with blank text #{blank.inspect}" do
+        before do
+          login(user)
+          post :create, params: { text: blank }, format: :json
+        end
+
+        it "renders an empty document" do
+          expect(response.parsed_body["html"]).to eq("")
+        end
+      end
+    end
+
     context "when not logged in" do
       before do
         user
