@@ -1,11 +1,26 @@
 import type { Extensions } from "@tiptap/core";
 import { Extension, InputRule } from "@tiptap/core";
+import { Blockquote } from "@tiptap/extension-blockquote";
+import { Bold } from "@tiptap/extension-bold";
+import { Document } from "@tiptap/extension-document";
+import { HardBreak } from "@tiptap/extension-hard-break";
 import Heading from "@tiptap/extension-heading";
+import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
+import { Italic } from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
+import {
+  BulletList,
+  ListItem,
+  ListKeymap,
+  OrderedList
+} from "@tiptap/extension-list";
+import { Paragraph } from "@tiptap/extension-paragraph";
+import { Strike } from "@tiptap/extension-strike";
 import Superscript from "@tiptap/extension-superscript";
-import StarterKit from "@tiptap/starter-kit";
+import { Text } from "@tiptap/extension-text";
 import Typography from "@tiptap/extension-typography";
+import { Underline } from "@tiptap/extension-underline";
+import { Placeholder, TrailingNode, UndoRedo } from "@tiptap/extensions";
 
 import { Aside } from "./nodes/Aside";
 import { PagesFile } from "./nodes/PagesFile";
@@ -117,24 +132,13 @@ export function documentExtensions(
   placeholder?: string,
   format: DocumentFormat = "document"
 ): Extensions {
+  const base = [Document, Paragraph, Text, HardBreak, UndoRedo, TrailingNode];
+
   if (format === "inline") {
     return [
-      StarterKit.configure({
-        heading: false,
-        code: false,
-        codeBlock: false,
-        blockquote: false,
-        bulletList: false,
-        orderedList: false,
-        listItem: false,
-        listKeymap: false,
-        horizontalRule: false,
-        strike: false,
-        underline: false,
-        dropcursor: false,
-        gapcursor: false,
-        link: false
-      }),
+      ...base,
+      Bold,
+      Italic,
       Superscript,
       linkExtension,
       Placeholder.configure({ placeholder: placeholder || "" }),
@@ -144,14 +148,17 @@ export function documentExtensions(
   }
 
   return [
-    StarterKit.configure({
-      heading: false,
-      code: false,
-      codeBlock: false,
-      dropcursor: false,
-      gapcursor: false,
-      link: false
-    }),
+    ...base,
+    Bold,
+    Italic,
+    Strike,
+    Underline,
+    Blockquote,
+    HorizontalRule,
+    BulletList,
+    OrderedList,
+    ListItem,
+    ListKeymap,
     // Same folding as DocumentConverter::RENAMES: h1 -> h2, h5/h6 -> h4.
     Heading.extend({
       parseHTML() {

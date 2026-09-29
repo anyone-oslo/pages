@@ -1,4 +1,4 @@
-import { getMarkRange } from "@tiptap/core";
+import { createDocument, getMarkRange } from "@tiptap/core";
 import { TextSelection } from "@tiptap/pm/state";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
@@ -27,6 +27,14 @@ type Props = {
   allowHtml?: boolean;
 };
 
+/** Names the first element the schema would drop, e.g. "<div>". */
+function droppedElement(error: unknown): string {
+  const cause = error instanceof Error ? error.cause : null;
+  const message = cause instanceof Error ? cause.message : "";
+  const tag = message.match(/Invalid element found: <([a-z0-9-]+)/i);
+  return tag ? `<${tag[1].toLowerCase()}>` : "unknown markup";
+}
+
 /**
  * Spike: constrained rich text editor over the existing text column.
  * See DocumentEditor/serializer.ts for the stored form.
@@ -50,6 +58,7 @@ export default function DocumentEditor({
     removed: string[];
   } | null>(null);
   const [loadError, setLoadError] = useState(false);
+  const [dropped, setDropped] = useState<string[]>([]);
   const lastEmitted = useRef<string>(value || "");
   const loadRequest = useRef(0);
   const legacy = !!value && !isDocument(value);
@@ -60,6 +69,14 @@ export default function DocumentEditor({
     // parsing Textile source as HTML would flatten it.
     content: legacy ? "" : toEditorHtml(value),
     immediatelyRender: true,
+    // Report content the schema drops instead of losing it silently. The
+    // editor still loads the sanitised document; the default handler
+    // would throw.
+    enableContentCheck: true,
+    onContentError: ({ error }) => {
+      const name = droppedElement(error);
+      setDropped((prev) => (prev.includes(name) ? prev : [...prev, name]));
+    },
     editorProps: {
       ...(allowHtml ? {} : { transformPastedHTML: stripPastedHtml }),
       attributes: {
@@ -109,16 +126,31 @@ export default function DocumentEditor({
 
     // Loading is not an edit: no onChange, and not undoable.
     // setEditable emits an update unless told not to.
-    const setSilently = (html: string) =>
-      editor
+    // With enableContentCheck, setContent throws on markup the schema
+    // drops, so check first, report, and load leniently.
+    const setSilently = (html: string) => {
+      try {
+        createDocument(
+          html,
+          editor.schema,
+          {},
+          { errorOnInvalidContent: true }
+        );
+      } catch (error) {
+        const name = droppedElement(error);
+        setDropped((prev) => (prev.includes(name) ? prev : [...prev, name]));
+      }
+      return editor
         .chain()
         .setMeta("addToHistory", false)
-        .setContent(html, { emitUpdate: false })
+        .setContent(html, { emitUpdate: false, errorOnInvalidContent: false })
         .run();
+    };
 
     const load = (stored: string) => {
       const request = ++loadRequest.current;
       setLoadError(false);
+      setDropped([]);
       if (isDocument(stored) || !stored.trim()) {
         setSilently(toEditorHtml(stored));
         editor.setEditable(true, false);
@@ -178,6 +210,12 @@ export default function DocumentEditor({
         <p className="doc-editor__notice doc-editor__notice--error">
           This text could not be converted from Textile, so editing is disabled.
           The stored text is unchanged. Reload the page to try again.
+        </p>
+      ) : null}
+      {dropped.length > 0 ? (
+        <p className="doc-editor__notice">
+          The editor does not support {dropped.join(", ")} and will remove it
+          from this block on the next edit.
         </p>
       ) : null}
       {converted && converted.removed.length > 0 ? (
