@@ -4,43 +4,34 @@
  * embeds are stored as the existing [image:ID …] / [attachment:ID] codes,
  * which HtmlFormatter expands before RedCloth runs. On load the codes are
  * turned into placeholder elements Tiptap's parseHTML understands.
+ *
+ * Both directions parse with <template>, so nothing here runs in Node;
+ * the string-only parts are in codes.ts.
  */
+import {
+  CODE_MARK,
+  RAW_MARK,
+  WRAPPER_CLOSE,
+  WRAPPER_OPEN,
+  attachmentCode,
+  codeToPlaceholder,
+  escapeAttr,
+  escapeText,
+  extractCodes,
+  imageCode,
+  isDocument
+} from "./codes";
 
-const WRAPPER_OPEN = "<notextile>";
-const WRAPPER_CLOSE = "</notextile>";
+export { isDocument };
 
-const IMAGE_CODE = /\[image:(\d+)([^\]]*)\]/g;
-// [file:ID] is a PageFile id, not an Attachment id. DocumentConverter maps
-// legacy file codes on conversion; any left over stay as plain text.
-const ATTACHMENT_CODE = /\[attachment:(\d+(?:,\d+)*)\]/g;
+// Markup RawHtml.ts keeps verbatim; codes inside it are not embeds.
+const RAW_SELECTOR =
+  "script, style, form, table, object, embed, iframe, div.video-embed";
 
-function attr(options: string, name: string): string {
-  const m = options.match(new RegExp(`${name}="([^"]*)"`));
-  return m ? m[1] : "";
-}
-
-function escapeAttr(str: string): string {
-  return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
-}
-
-function unescapeAttr(str: string): string {
-  return str
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&");
-}
-
-// RedCloth passes the whole value through only when one notextile block
-// wraps all of it; any Textile between two blocks is still rendered.
-export function isDocument(stored: string | null | undefined): boolean {
-  const html = (stored || "").trim();
-  if (!html.startsWith(WRAPPER_OPEN) || !html.endsWith(WRAPPER_CLOSE)) {
-    return false;
-  }
-  return !html
-    .slice(WRAPPER_OPEN.length, -WRAPPER_CLOSE.length)
-    .includes(WRAPPER_CLOSE);
+function parse(html: string): HTMLTemplateElement {
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html;
+  return tpl;
 }
 
 /** Stored value → HTML the editor can parse. */
@@ -53,67 +44,87 @@ export function toEditorHtml(stored: string | null | undefined): string {
       html = html.slice(0, -WRAPPER_CLOSE.length);
     }
   }
-  return html
-    .replace(IMAGE_CODE, (_m, id: string, options: string) => {
-      const className = attr(options, "class");
-      const link = attr(options, "link");
-      const size = attr(options, "size");
-      return (
-        `<figure data-image="${id}"` +
-        (className ? ` data-class="${escapeAttr(className)}"` : "") +
-        (link ? ` data-link="${escapeAttr(link)}"` : "") +
-        (size ? ` data-size="${escapeAttr(size)}"` : "") +
-        "></figure>"
-      );
-    })
-    .replace(ATTACHMENT_CODE, (_m, ids: string) => {
-      return ids
-        .split(",")
-        .map((id) => `<a class="file" data-file="${id}"></a>`)
-        .join(", "); // AttachmentEmbedder joins multi-id codes with ", "
-    });
-}
 
-const RAW_BLOCK = /<div data-raw-html="([^"]*)"><\/div>/g;
-// Private-use characters: cannot come from the editor, so no clean-up
-// below can match inside a set-aside raw block.
-const RAW_PLACEHOLDER = /\uE000(\d+)\uE000/g;
+  // Codes are set aside before parsing so the HTML parser cannot decode
+  // an ampersand inside them (`&reg` in a link, say).
+  const { html: marked, codes } = extractCodes(html);
+  const tpl = parse(marked);
+
+  const walker = document.createTreeWalker(tpl.content, NodeFilter.SHOW_TEXT);
+  const texts: Text[] = [];
+  while (walker.nextNode()) texts.push(walker.currentNode as Text);
+
+  texts.forEach((node) => {
+    if (!node.data.includes("\uE001")) return;
+    const inRaw = !!node.parentElement?.closest(RAW_SELECTOR);
+    const holder = parse(
+      escapeText(node.data).replace(CODE_MARK, (_m, i: string) =>
+        inRaw
+          ? escapeText(codes[Number(i)])
+          : codeToPlaceholder(codes[Number(i)])
+      )
+    );
+    node.replaceWith(holder.content);
+  });
+
+  // Codes inside attributes stay as written.
+  return tpl.innerHTML.replace(CODE_MARK, (_m, i: string) =>
+    escapeAttr(codes[Number(i)])
+  );
+}
 
 /** Editor HTML → stored value. */
 export function toStored(editorHtml: string): string {
-  // RawHtml block: stored as the markup itself, untouched by the clean-ups.
-  const rawBlocks: string[] = [];
-  const body = editorHtml
-    .replace(RAW_BLOCK, (_m, html: string) => {
-      rawBlocks.push(unescapeAttr(html).trim());
-      return `\uE000${rawBlocks.length - 1}\uE000`;
-    })
-    .replace(
-      /<figure[^>]*data-image="(\d+)"[^>]*>(?:<\/figure>)?/g,
-      (m, id: string) => {
-        const className = unescapeAttr(attr(m, "data-class"));
-        const link = unescapeAttr(attr(m, "data-link"));
-        const size = unescapeAttr(attr(m, "data-size"));
-        const parts = [`[image:${id}`];
-        if (className) parts.push(` class="${className}"`);
-        if (link) parts.push(` link="${link}"`);
-        if (size) parts.push(` size="${size}"`);
-        return parts.join("") + "]";
-      }
-    )
-    .replace(
-      /<a[^>]*data-file="(\d+)"[^>]*>.*?<\/a>/g,
-      (_m, id: string) => `[attachment:${id}]`
-    )
-    // Tiptap wraps list item text in <p>; Textile output is bare <li>.
-    // Unwrap single-paragraph items so site CSS renders lists the same.
-    .replace(
-      /<li>\s*<p>((?:(?!<\/?p>)[\s\S])*)<\/p>\s*(?=<\/li>|<ul>|<ol>)/g,
-      "<li>$1"
-    )
-    // Textile collapsed blank lines, so empty paragraphs never rendered.
-    .replace(/<p><\/p>\s*/g, "")
-    .replace(RAW_PLACEHOLDER, (_m, i: string) => rawBlocks[Number(i)])
+  const tpl = parse(editorHtml);
+  const root = tpl.content;
+
+  // Raw blocks and codes are put back after serializing, so nothing
+  // below can rewrite them and `&` stays as the embedder expects it.
+  const raw: string[] = [];
+  const stash = (el: Element, text: string) => {
+    raw.push(text);
+    el.replaceWith(`\uE000${raw.length - 1}\uE000`);
+  };
+
+  root.querySelectorAll("div[data-raw-html]").forEach((el) => {
+    stash(el, (el.getAttribute("data-raw-html") || "").trim());
+  });
+
+  root.querySelectorAll("figure[data-image]").forEach((el) => {
+    const id = el.getAttribute("data-image") || "";
+    if (!/^\d+$/.test(id)) return;
+    stash(
+      el,
+      imageCode(id, {
+        className: el.getAttribute("data-class") || "",
+        link: el.getAttribute("data-link") || "",
+        size: el.getAttribute("data-size") || ""
+      })
+    );
+  });
+
+  root.querySelectorAll("a[data-file]").forEach((el) => {
+    const id = el.getAttribute("data-file") || "";
+    if (/^\d+$/.test(id)) stash(el, attachmentCode(id));
+  });
+
+  // Tiptap wraps list item text in <p>; Textile output is bare <li>.
+  // Unwrap single-paragraph items so site CSS renders lists the same.
+  root.querySelectorAll("li").forEach((li) => {
+    const [first, ...rest] = Array.from(li.children);
+    const onlyNested = rest.every((el) => ["UL", "OL"].includes(el.tagName));
+    if (first?.tagName === "P" && onlyNested) {
+      first.replaceWith(...Array.from(first.childNodes));
+    }
+  });
+
+  // Textile collapsed blank lines, so empty paragraphs never rendered.
+  root.querySelectorAll("p").forEach((p) => {
+    if (p.innerHTML === "") p.remove();
+  });
+
+  const body = tpl.innerHTML
+    .replace(RAW_MARK, (_m, i: string) => raw[Number(i)])
     .trim();
 
   if (!body || body === "<p></p>") return "";
