@@ -70,5 +70,18 @@ HTML only when the block is edited. Legacy `[file:123]` codes, which point at
 a page file rather than an attachment, become `[attachment:ID]` codes on
 conversion.
 
+Search indexes the words of the text, without tags. Pages that were indexed
+before the update keep their old search entry until they are saved. To
+reindex all pages:
+
+``` sh
+bin/rails runner 'PagesCore::SearchableDocument::Indexer.index_all!(Page.all)'
+```
+
+Do the same for any site model that includes `PagesCore::SearchableDocument`.
+
+`to_html(shorten: n)` cuts the stored text by characters, which cuts through
+the HTML. Don't use it on text from the rich text editor.
+
 Switching a template back to `:textile` keeps the pages rendering as before,
 but the admin then shows the stored HTML in the Textile field.
