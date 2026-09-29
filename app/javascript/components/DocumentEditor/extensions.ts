@@ -1,10 +1,11 @@
 import type { Extensions } from "@tiptap/core";
-import { Extension } from "@tiptap/core";
+import { Extension, InputRule } from "@tiptap/core";
 import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Superscript from "@tiptap/extension-superscript";
 import StarterKit from "@tiptap/starter-kit";
+import Typography from "@tiptap/extension-typography";
 
 import { Aside } from "./nodes/Aside";
 import { PagesFile } from "./nodes/PagesFile";
@@ -31,6 +32,72 @@ const legacyOnly = Extension.create({
   addKeyboardShortcuts() {
     return { "Mod-u": () => true };
   }
+});
+
+const NO_RULES = {
+  leftArrow: false,
+  rightArrow: false,
+  copyright: false,
+  trademark: false,
+  servicemark: false,
+  registeredTrademark: false,
+  oneHalf: false,
+  plusMinus: false,
+  notEqual: false,
+  laquo: false,
+  raquo: false,
+  multiplication: false,
+  superscriptTwo: false,
+  superscriptThree: false,
+  oneQuarter: false,
+  threeQuarters: false
+} as const;
+
+const OPEN_DOUBLE = /(?:^|[\s{[(<'"\u2018\u201C])(")$/;
+const CLOSE_DOUBLE = /"$/;
+
+const isNorwegian = (lang: string) => /^(nb|nn|no)\b/i.test(lang);
+
+/**
+ * Double quotes follow the editor's current `lang` (« » for Norwegian),
+ * which changes on a locale switch without rebuilding the editor.
+ */
+const DoubleQuotes = Extension.create({
+  name: "doubleQuotes",
+  addInputRules() {
+    const rule = (find: RegExp, open: boolean) =>
+      new InputRule({
+        find,
+        handler: ({ state, range, match }) => {
+          const norwegian = isNorwegian(this.editor.view.dom.lang || "");
+          let insert = open ? (norwegian ? "«" : "“") : norwegian ? "»" : "”";
+          let start = range.from;
+          const end = range.to;
+          if (match[1]) {
+            const offset = match[0].lastIndexOf(match[1]);
+            insert += match[0].slice(offset + match[1].length);
+            start += offset;
+            const cutOff = start - end;
+            if (cutOff > 0) {
+              insert = match[0].slice(offset - cutOff, offset) + insert;
+              start = end;
+            }
+          }
+          state.tr.insertText(insert, start, end);
+        }
+      });
+    return [rule(OPEN_DOUBLE, true), rule(CLOSE_DOUBLE, false)];
+  }
+});
+
+/**
+ * Typed dashes, ellipses and quotes, as RedCloth did for Textile. The
+ * other rules (arrows, fractions, (c)) stay off.
+ */
+const typography = Typography.configure({
+  ...NO_RULES,
+  openDoubleQuote: false,
+  closeDoubleQuote: false
 });
 
 /*
@@ -70,7 +137,9 @@ export function documentExtensions(
       }),
       Superscript,
       linkExtension,
-      Placeholder.configure({ placeholder: placeholder || "" })
+      Placeholder.configure({ placeholder: placeholder || "" }),
+      typography,
+      DoubleQuotes
     ];
   }
 
@@ -100,6 +169,8 @@ export function documentExtensions(
     PagesFile,
     PagesVideo,
     Aside,
-    RawHtml
+    RawHtml,
+    typography,
+    DoubleQuotes
   ];
 }
