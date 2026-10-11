@@ -81,6 +81,28 @@ describe SearchDocument do
       end
     end
 
+    describe "when searching with apostrophe-like characters" do
+      let!(:page) { create(:page, locale:, body: "today's news") }
+
+      it "matches typographic apostrophes" do
+        expect(query("today’s")).to include(page)
+      end
+
+      it "does not raise on fullwidth punctuation" do
+        expect { query("＇＞＜asdf alt=＂＂＞-f3f3") }.not_to raise_error
+      end
+
+      it "does not raise on any character unaccent maps to an apostrophe" do
+        expect { query("ŉ ʹ ʻ ʼ ʽ ˈ ‘ ’ ‛ ′ ＇") }.not_to raise_error
+      end
+
+      it "does not raise when searching with trigrams" do
+        expect do
+          described_class.search("＇＞＜asdf", locale:, trigram: true).results
+        end.not_to raise_error
+      end
+    end
+
     describe "searching without locale" do
       subject(:results) { described_class.search("example").results }
 
