@@ -14,10 +14,10 @@ PATH
       localizable_model (~> 0.5)
       nokogiri
       pastel
-      pg_search
+      pg_search (>= 2.4.0)
       premailer-rails
       progress_bar
-      rails (>= 6.0)
+      rails (>= 8.0)
       rails-i18n (>= 5.0.0)
       rotp (~> 6.3)
       rqrcode

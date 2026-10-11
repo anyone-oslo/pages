@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     "template.rb"
   ]
 
-  s.add_dependency "rails", ">= 6.0"
+  s.add_dependency "rails", ">= 8.0"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "alba"
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency "dynamic_image", ">= 3.1.1"
   s.add_dependency "nokogiri"
   s.add_dependency "pastel"
-  s.add_dependency "pg_search"
+  s.add_dependency "pg_search", ">= 2.4.0"
   s.add_dependency "premailer-rails"
   s.add_dependency "progress_bar"
   s.add_dependency "RedCloth", "~> 4.3"
