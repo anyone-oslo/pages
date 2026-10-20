@@ -26,9 +26,8 @@ describe PagesCore::CacheSweeper do
 
   describe ".once" do
     it "performs the sweep" do
-      allow(PagesCore::SweepCacheJob).to receive(:perform_later)
-      singleton.once
-      expect(PagesCore::SweepCacheJob).to have_received(:perform_later).once
+      expect { singleton.once }
+        .to have_enqueued_job(PagesCore::SweepCacheJob).once
     end
   end
 end
