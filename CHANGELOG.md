@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.19.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.19.0...pages_core/v3.19.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **deps:** require pg_search 2.4 and Rails 8.0 ([#266](https://github.com/anyone-oslo/pages/issues/266)) ([76221e2](https://github.com/anyone-oslo/pages/commit/76221e28017f412b0fb5c6bb8c41343c579b5d21))
+
 ## [3.19.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.1...pages_core/v3.19.0) (2026-09-28)
 
 
