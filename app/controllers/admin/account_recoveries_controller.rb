@@ -32,7 +32,9 @@ module Admin
     def deliver_account_recovery(user)
       AdminMailer.account_recovery(
         user,
-        admin_account_recovery_with_token_url(recovery_token(user))
+        admin_account_recovery_with_token_url(
+          user.password_reset_token, **trusted_url_options
+        )
       ).deliver_later
     end
 
@@ -43,18 +45,10 @@ module Admin
 
     def find_by_token
       @token = params[:token]
-      @user = User.find(message_verifier.verify(@token).symbolize_keys[:id])
+      @user = User.find_by_token_for(:password_reset, @token)
+      return fail_recovery(t("pages_core.account_recovery.invalid_request")) unless @user
+
       raise PagesCore::Authentication::LoginRefused unless @user.can_login?
-    rescue ActiveSupport::MessageVerifier::InvalidSignature
-      fail_recovery(t("pages_core.account_recovery.invalid_request"))
-    end
-
-    def message_verifier
-      Rails.application.message_verifier(:account_recovery)
-    end
-
-    def recovery_token(user)
-      message_verifier.generate({ id: user.id }, expires_in: 24.hours)
     end
 
     def user_params

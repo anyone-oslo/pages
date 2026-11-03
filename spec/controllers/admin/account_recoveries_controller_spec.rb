@@ -4,10 +4,7 @@ require "rails_helper"
 
 describe Admin::AccountRecoveriesController do
   let(:user) { create(:user, :deactivated) }
-  let(:token) do
-    Rails.application.message_verifier(:account_recovery)
-         .generate({ id: user.id }, expires_in: 24.hours)
-  end
+  let(:token) { user.password_reset_token }
 
   describe "PUT update" do
     context "when user is deactivated" do

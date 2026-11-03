@@ -32,6 +32,26 @@ module Admin
       params[:q] || ""
     end
 
+    def trusted_url_options
+      if Rails.application.config.hosts.any?
+        { host: request.host,
+          port: request.optional_port,
+          protocol: request.protocol }
+      else
+        mailer_url_options
+      end
+    end
+
+    def mailer_url_options
+      options = AdminMailer.default_url_options.symbolize_keys
+      if options[:host].blank?
+        raise "Can't build links in emails: set config.hosts or " \
+              "config.action_mailer.default_url_options"
+      end
+
+      { port: nil, protocol: "https" }.merge(options.slice(:host, :port, :protocol))
+    end
+
     def set_i18n_locale
       I18n.locale = :en
     end

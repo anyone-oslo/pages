@@ -4,18 +4,19 @@ module PagesCore
   class InviteService
     include Rails.application.routes.url_helpers
 
-    attr_reader :attributes, :user, :host, :protocol
+    attr_reader :attributes, :user, :host, :port, :protocol
 
-    def initialize(attributes, user:, host:, protocol: "http")
+    def initialize(attributes, user:, host:, port: nil, protocol: "http")
       @attributes = attributes
       @user = user
       @host = host
+      @port = port
       @protocol = protocol
     end
 
     class << self
-      def call(attrs, user:, host:, protocol: "http")
-        new(attrs, user:, host:, protocol:).call
+      def call(attrs, user:, host:, port: nil, protocol: "http")
+        new(attrs, user:, host:, port:, protocol:).call
       end
     end
 
@@ -35,7 +36,8 @@ module PagesCore
     def deliver_invite(invite)
       AdminMailer.invite(
         invite,
-        admin_invite_with_token_url(invite, invite.token, host:, protocol:)
+        admin_invite_with_token_url(invite, invite.token,
+                                    host:, port:, protocol:)
       ).deliver_later
     end
   end

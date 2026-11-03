@@ -36,8 +36,7 @@ module Admin
     def create
       @invite = PagesCore::InviteService.call(invite_params,
                                               user: current_user,
-                                              host: request.host,
-                                              protocol: request.protocol)
+                                              **trusted_url_options)
       if @invite.valid?
         redirect_to admin_invites_url
       else
