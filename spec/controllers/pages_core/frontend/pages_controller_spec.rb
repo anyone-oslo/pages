@@ -90,6 +90,30 @@ describe PagesCore::Frontend::PagesController do
       it { is_expected.to redirect_to("/home") }
     end
 
+    context "when requested by ID with a suffix and an extension" do
+      let(:params) { { id: "#{page.id}-junk", locale:, format: :html } }
+
+      it { is_expected.to redirect_to("/home") }
+    end
+
+    context "when requested by ID with a suffix as JSON" do
+      let(:params) { { id: "#{page.id}-junk", locale:, format: :json } }
+
+      it { is_expected.to redirect_to("/home.json") }
+    end
+
+    context "when requested by ID with a suffix as RSS" do
+      let(:params) { { id: "#{page.id}-junk", locale:, format: :rss } }
+
+      it { is_expected.to redirect_to("/home.rss") }
+    end
+
+    context "when the path has an HTML extension" do
+      let(:params) { { path: page.path_segment, format: :html } }
+
+      it { is_expected.to redirect_to("/home") }
+    end
+
     context "when path is outdated" do
       let(:params) do
         PagePath.associate(page, locale:, path: "foo")

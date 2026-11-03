@@ -30,6 +30,20 @@ RSpec.describe PagesCore::PagePathHelper do
     end
   end
 
+  describe "#page_path with pagination and a format" do
+    subject { helper.page_path("nb", page, page: 2, format: :json) }
+
+    before { PagesCore.config.localizations = :enabled }
+
+    it { is_expected.to eq("/nb/category/product/page/2.json") }
+
+    context "when page doesn't have a page path" do
+      before { page.path_segment = "" }
+
+      it { is_expected.to eq("/nb/pages/#{page.id}-product/2.json") }
+    end
+  end
+
   describe "#page_url" do
     subject { helper.page_url("nb", page) }
 

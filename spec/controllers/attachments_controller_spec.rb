@@ -9,10 +9,10 @@ describe AttachmentsController do
     Rails.root.join("../support/fixtures/image.png").binread
   end
 
-  def get_attachment(action = :show, range: nil, format: "png")
+  def get_attachment(action = :show, range: nil, format: "png",
+                     id: attachment.to_param)
     request.headers["Range"] = range if range
-    get action, params: { id: attachment.id, digest: attachment.digest,
-                          format: }
+    get action, params: { id:, digest: attachment.digest, format: }
   end
 
   describe "GET show" do
@@ -84,6 +84,62 @@ describe AttachmentsController do
     end
   end
 
+  describe "with the bare ID" do
+    before { get_attachment(id: attachment.id) }
+
+    it "redirects to the canonical URL" do
+      expect(response).to redirect_to(
+        "/attachments/#{attachment.digest}/#{attachment.to_param}.png"
+      )
+    end
+
+    it "redirects permanently" do
+      expect(response).to have_http_status(:moved_permanently)
+    end
+  end
+
+  describe "with a suffix after the ID" do
+    before { get_attachment(id: "#{attachment.to_param}-x") }
+
+    it "redirects to the canonical URL" do
+      expect(response).to redirect_to(
+        "/attachments/#{attachment.digest}/#{attachment.to_param}.png"
+      )
+    end
+  end
+
+  describe "with an outdated timestamp" do
+    before do
+      id = attachment.to_param
+      attachment.update(updated_at: 1.day.from_now)
+      get_attachment(id:)
+    end
+
+    it "redirects to the canonical URL" do
+      expect(response).to redirect_to(
+        "/attachments/#{attachment.digest}/#{attachment.to_param}.png"
+      )
+    end
+  end
+
+  describe "GET download with a suffix after the ID" do
+    before { get_attachment(:download, id: "#{attachment.to_param}-x") }
+
+    it "redirects to the canonical URL" do
+      expect(response).to redirect_to(
+        "/attachments/#{attachment.digest}/#{attachment.to_param}/download.png"
+      )
+    end
+  end
+
+  describe "with a suffix after the ID and another extension" do
+    before { get_attachment(id: "#{attachment.to_param}-x", format: "html") }
+
+    it "responds with not found" do
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "without an extension" do
     before { get_attachment(format: nil) }
 
@@ -116,6 +172,11 @@ describe AttachmentsController do
         get_attachment(format: "html")
         expect(handler).not_to have_received(:cache_page_permanently)
       end
+    end
+
+    it "doesn't cache a non-canonical URL" do
+      get_attachment(id: "#{attachment.to_param}-x")
+      expect(handler).not_to have_received(:cache_page_permanently)
     end
 
     context "with a PNG uploaded as x.html" do
@@ -180,7 +241,8 @@ describe AttachmentsController do
 
   describe "with an invalid digest" do
     it "responds with not found" do
-      get :show, params: { id: attachment.id, digest: "bogus", format: "png" }
+      get :show,
+          params: { id: attachment.to_param, digest: "bogus", format: "png" }
       expect(response).to have_http_status(:not_found)
     end
   end

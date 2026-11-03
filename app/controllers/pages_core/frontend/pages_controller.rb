@@ -8,6 +8,7 @@ module PagesCore
 
       include PagesCore::Pages::PreviewController
       include PagesCore::Pages::RssController
+      include PagesCore::Pages::CanonicalUrl
 
       before_action :load_root_pages
       before_action :find_page_by_path, only: [:show]
@@ -35,23 +36,6 @@ module PagesCore
       end
 
       private
-
-      def canonical_path(page)
-        if page.redirects?
-          page.redirect_path(locale: page.locale)
-        else
-          page_path(page.locale, page)
-        end
-      end
-
-      def canonicalize_url
-        return if @page.redirects?
-        return if request.path == canonical_path(@page)
-        # Don't canonicalize if any unknown params are present
-        return if (params.keys - %w[controller action path locale id]).any?
-
-        redirect_to(canonical_path(@page), status: :moved_permanently)
-      end
 
       def render(*args)
         @already_rendered = true

@@ -3,12 +3,16 @@
 module PagesCore
   module StaticCache
     class PageCacheHandler
-      def cache_page(controller, _request, _response)
+      def cache_page(controller, request, _response)
+        return unless cacheable_query?(request)
+
         controller.class.page_cache_directory = page_cache_directory
         controller.cache_page
       end
 
-      def cache_page_permanently(controller, _request, _response)
+      def cache_page_permanently(controller, request, _response)
+        return unless cacheable_query?(request)
+
         controller.class.page_cache_directory = permanent_page_cache_directory
         controller.cache_page
       end
@@ -33,6 +37,12 @@ module PagesCore
       end
 
       private
+
+      def cacheable_query?(request)
+        request.query_parameters.keys.all? do |key|
+          PagesCore::StaticCache.tracking_parameter?(key)
+        end
+      end
 
       def cache_root
         Rails.public_path

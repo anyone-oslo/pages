@@ -14,6 +14,60 @@ describe PagesCore::StaticCache::PageCacheHandler do
     FileUtils.mkdir_p(cache_path)
   end
 
+  describe "#cache_page" do
+    let(:controller) { instance_spy(ApplicationController) }
+    let(:request) { instance_double(ActionDispatch::Request, query_parameters:) }
+
+    before do
+      allow(controller).to receive(:class)
+        .and_return(class_spy(ApplicationController))
+      handler.cache_page(controller, request, nil)
+    end
+
+    context "without a query string" do
+      let(:query_parameters) { {} }
+
+      it { expect(controller).to have_received(:cache_page) }
+    end
+
+    context "with tracking parameters" do
+      let(:query_parameters) do
+        { "utm_source" => "x", "gclid" => "y", "fbclid" => "z" }
+      end
+
+      it { expect(controller).to have_received(:cache_page) }
+    end
+
+    context "with other parameters" do
+      let(:query_parameters) { { "utm_source" => "x", "per_page" => "1" } }
+
+      it { expect(controller).not_to have_received(:cache_page) }
+    end
+  end
+
+  describe "#cache_page_permanently" do
+    let(:controller) { instance_spy(ApplicationController) }
+    let(:request) { instance_double(ActionDispatch::Request, query_parameters:) }
+
+    before do
+      allow(controller).to receive(:class)
+        .and_return(class_spy(ApplicationController))
+      handler.cache_page_permanently(controller, request, nil)
+    end
+
+    context "without a query string" do
+      let(:query_parameters) { {} }
+
+      it { expect(controller).to have_received(:cache_page) }
+    end
+
+    context "with other parameters" do
+      let(:query_parameters) { { "size" => "1" } }
+
+      it { expect(controller).not_to have_received(:cache_page) }
+    end
+  end
+
   describe ".purge!" do
     let(:test_file) { cache_path.join("file.txt") }
 

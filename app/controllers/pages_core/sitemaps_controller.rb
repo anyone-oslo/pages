@@ -6,6 +6,8 @@ module PagesCore
 
     static_cache :index, :pages
 
+    before_action :require_locale, only: :pages
+
     def index
       @sitemaps = PagesCore::Sitemap.sitemaps.flat_map do |entry|
         if entry.is_a?(Proc)
@@ -35,6 +37,10 @@ module PagesCore
       else
         [I18n.default_locale]
       end
+    end
+
+    def require_locale
+      render_error 404 unless locales.map(&:to_s).include?(params[:locale])
     end
 
     def render_sitemap(&)
