@@ -17,6 +17,7 @@ class Attachment < ApplicationRecord
   end
 
   before_validation :set_name_from_filename
+  before_validation :detect_content_type, if: :data_changed?
 
   class << self
     def verifier
@@ -50,6 +51,15 @@ class Attachment < ApplicationRecord
     self.class.formats[content_type]
   end
 
+  def inline?
+    return false if content_type.blank?
+    return false unless Marcel::MimeType.for(name: filename) == content_type
+
+    content_type.start_with?("audio/", "video/") ||
+      %w[application/pdf image/avif image/gif image/jpeg image/png
+         image/webp].include?(content_type)
+  end
+
   def filename_extension
     return "" unless filename_extension?
 
@@ -67,6 +77,14 @@ class Attachment < ApplicationRecord
   end
 
   private
+
+  def detect_content_type
+    return unless data?
+
+    self.content_type = with_data_file do |path|
+      Marcel::MimeType.for(path, name: filename)
+    end
+  end
 
   def set_name_from_filename
     self.name ||= File.basename(filename, ".*") if filename? && locale

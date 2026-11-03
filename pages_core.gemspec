@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency "country_select", ">= 9.0.0"
   s.add_dependency "dis", "~> 2.2"
   s.add_dependency "dynamic_image", ">= 3.1.1"
+  s.add_dependency "marcel", "~> 1.0"
   s.add_dependency "nokogiri"
   s.add_dependency "pastel"
   s.add_dependency "pg_search", ">= 2.4.0"

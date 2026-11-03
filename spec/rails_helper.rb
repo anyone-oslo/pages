@@ -82,6 +82,7 @@ RSpec.configure do |config|
   config.include SystemHelpers, type: :system
   config.include LoginMacros
   config.include MailerMacros
+  config.include UploadMacros
 
   config.before do
     PagesCore.reset_configuration!

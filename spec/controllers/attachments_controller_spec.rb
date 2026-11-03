@@ -5,10 +5,14 @@ require "rails_helper"
 describe AttachmentsController do
   let(:attachment) { create(:attachment) }
   let(:content) { attachment.data }
+  let(:attachment_png) do
+    Rails.root.join("../support/fixtures/image.png").binread
+  end
 
-  def get_attachment(action = :show, range: nil)
+  def get_attachment(action = :show, range: nil, format: "png")
     request.headers["Range"] = range if range
-    get action, params: { id: attachment.id, digest: attachment.digest }
+    get action, params: { id: attachment.id, digest: attachment.digest,
+                          format: }
   end
 
   describe "GET show" do
@@ -47,6 +51,103 @@ describe AttachmentsController do
     end
   end
 
+  describe "GET show with a type that isn't shown inline" do
+    let(:attachment) do
+      create(:attachment, file: uploaded_file("<!DOCTYPE html><html></html>",
+                                              "page.html", "text/html"))
+    end
+
+    before { get_attachment(format: "html") }
+
+    it "sends as an attachment" do
+      expect(response.headers["Content-Disposition"]).to match("attachment")
+    end
+
+    it "sends the detected content type" do
+      expect(response.media_type).to eq("text/html")
+    end
+  end
+
+  describe "with a mismatched extension" do
+    before { get_attachment(format: "html") }
+
+    it "responds with not found" do
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "GET download with a mismatched extension" do
+    before { get_attachment(:download, format: "svg") }
+
+    it "responds with not found" do
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "without an extension" do
+    before { get_attachment(format: nil) }
+
+    it "responds with not found" do
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "static caching" do
+    let(:handler) { instance_spy(PagesCore::StaticCache::PageCacheHandler) }
+
+    before do
+      allow(PagesCore::StaticCache).to receive(:handler).and_return(handler)
+      allow(controller).to receive(:perform_caching).and_return(true)
+    end
+
+    it "caches inline types" do
+      get_attachment
+      expect(handler).to have_received(:cache_page_permanently)
+    end
+
+    context "with a type that isn't shown inline" do
+      let(:attachment) do
+        create(:attachment,
+               file: uploaded_file("<!DOCTYPE html><html></html>",
+                                   "page.html", "text/html"))
+      end
+
+      it "doesn't cache the response" do
+        get_attachment(format: "html")
+        expect(handler).not_to have_received(:cache_page_permanently)
+      end
+    end
+
+    context "with a PNG uploaded as x.html" do
+      let(:attachment) do
+        create(:attachment,
+               file: uploaded_file(attachment_png, "x.html", "text/html"))
+      end
+
+      it "doesn't cache the response" do
+        get_attachment(format: "html")
+        expect(handler).not_to have_received(:cache_page_permanently)
+      end
+    end
+  end
+
+  describe "GET show with a PNG uploaded as x.html" do
+    let(:attachment) do
+      create(:attachment,
+             file: uploaded_file(attachment_png, "x.html", "text/html"))
+    end
+
+    before { get_attachment(format: "html") }
+
+    it "sends as an attachment" do
+      expect(response.headers["Content-Disposition"]).to match("attachment")
+    end
+
+    it "sends the detected content type" do
+      expect(response.media_type).to eq("image/png")
+    end
+  end
+
   describe "a range request" do
     before { get_attachment(range: "bytes=10-29") }
 
@@ -79,7 +180,7 @@ describe AttachmentsController do
 
   describe "with an invalid digest" do
     it "responds with not found" do
-      get :show, params: { id: attachment.id, digest: "bogus" }
+      get :show, params: { id: attachment.id, digest: "bogus", format: "png" }
       expect(response).to have_http_status(:not_found)
     end
   end
