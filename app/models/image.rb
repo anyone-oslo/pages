@@ -4,7 +4,7 @@ class Image < ApplicationRecord
   include DynamicImage::Model
   include PagesCore::Sweepable
 
-  validate :ensure_max_size, on: :create
+  validate :ensure_max_size, if: :data_changed?
 
   localizable do
     attribute :alternative

@@ -23,7 +23,7 @@ module Admin
     end
 
     def update
-      @image.update(image_params)
+      @image.update(image_params.except(:file))
       respond_to do |format|
         format.json { render_image_json(@image) }
       end

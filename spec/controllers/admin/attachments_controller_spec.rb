@@ -63,5 +63,30 @@ describe Admin::AttachmentsController do
         expect(attachment.reload.localize(:en).name).to eq("Renamed")
       end
     end
+
+    context "when a file is uploaded" do
+      let(:file) do
+        Rack::Test::UploadedFile.new(
+          File.expand_path("../../support/fixtures/image.gif", __dir__),
+          "image/gif"
+        )
+      end
+
+      before do
+        login(create(:user))
+        put :update,
+            params: { id: attachment.id,
+                      attachment: { file:, name: { en: "Renamed" } } },
+            format: :json
+      end
+
+      it "keeps the existing file" do
+        expect(attachment.reload.filename).to eq("image.png")
+      end
+
+      it "updates the name" do
+        expect(attachment.reload.localize(:en).name).to eq("Renamed")
+      end
+    end
   end
 end

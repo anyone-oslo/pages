@@ -101,4 +101,27 @@ describe Admin::ImagesController do
       end
     end
   end
+
+  describe "PUT update with a file" do
+    let(:file) do
+      Rack::Test::UploadedFile.new(
+        File.expand_path("../../support/fixtures/large_image.png", __dir__),
+        "image/png"
+      )
+    end
+
+    before do
+      login(user)
+      put :update, params: { id: image.id, image: { file:, decorative: true } },
+                   format: :json
+    end
+
+    it "keeps the existing file" do
+      expect(image.reload.real_width).to eq(320)
+    end
+
+    it "updates the other attributes" do
+      expect(image.reload.decorative).to be(true)
+    end
+  end
 end

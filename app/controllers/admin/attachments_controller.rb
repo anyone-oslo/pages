@@ -20,7 +20,7 @@ module Admin
     end
 
     def update
-      @attachment.update(attachment_params)
+      @attachment.update(attachment_params.except(:file))
       respond_to do |format|
         format.json { render_attachment(@attachment) }
       end
