@@ -13,7 +13,7 @@ module PagesCore
     def configure_sentry_scope
       return if Rails.env.test? || !Object.const_defined?(:Sentry)
 
-      Sentry.set_context("params", params.to_unsafe_h)
+      Sentry.set_context("params", request.filtered_parameters)
       Sentry.set_tags(locale: params[:locale] || I18n.default_locale.to_s)
       Sentry.set_user(current_user_context)
     end
