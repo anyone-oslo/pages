@@ -1,5 +1,47 @@
 # Changelog
 
+## [3.20.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.19.0...pages_core/v3.20.0) (2026-11-03)
+
+
+### Upgrading
+
+* Requires Rails 8.1 and dynamic_image 3.4.0 (which brings vector2d 3.0).
+* Account recovery and invite emails build links from the request host only when `config.hosts` is set, and otherwise from `config.action_mailer.default_url_options`. Sending raises if neither has a host. Links use https unless a protocol is configured.
+* Account recovery links sent before upgrading stop working.
+* Rate limits are stored in `PagesCore.config.rate_limit_store`, which defaults to an in-process memory store. To share counters between processes, set it to a shared cache store in an initializer.
+* Attachments other than images, PDF, audio and video are now downloaded instead of displayed in the browser. After deploying, purge cached attachments (`cache/attachments` with the file cache handler, `/attachments/` in Varnish).
+* Custom static cache handlers must implement `purge_record!` and `tag_permanently`, and accept `tags:` in `cache_page_permanently`.
+
+
+### Features
+
+* add a button to log out all sessions ([ec42828](https://github.com/anyone-oslo/pages/commit/ec428280d3a8386231dfd6c7c8665d0957b884d6))
+* rate limit login, 2FA, account recovery and invite acceptance ([0696b5a](https://github.com/anyone-oslo/pages/commit/0696b5a5540935e412bd0c41074cf60b08e81e40))
+
+
+### Bug Fixes
+
+* block data URLs in safe_url and JS-escape host on error pages ([2dd3ffc](https://github.com/anyone-oslo/pages/commit/2dd3ffca0487e8c37722df8e288ad0641ec5d9d8))
+* build account links from a trusted host, single-use recovery links ([a52b172](https://github.com/anyone-oslo/pages/commit/a52b172c74c5b6792c916bf96389a9c8c310b171))
+* cache only canonical URLs ([19383bf](https://github.com/anyone-oslo/pages/commit/19383bfef17fc00fcd8675e78fc31001b0f7592f))
+* check image size whenever the file changes ([57fc433](https://github.com/anyone-oslo/pages/commit/57fc4331a604b847825424d78cebcaa9d548d22b))
+* confirm account changes with the current password or 2FA code ([128d1bc](https://github.com/anyone-oslo/pages/commit/128d1bcce0125fa18cb02d9296aeeeb38ba90a54))
+* **deps:** require pg_search 2.4 ([#266](https://github.com/anyone-oslo/pages/issues/266)) ([76221e2](https://github.com/anyone-oslo/pages/commit/76221e28017f412b0fb5c6bb8c41343c579b5d21))
+* expire invites after 14 days and use the invited email ([ae2be57](https://github.com/anyone-oslo/pages/commit/ae2be57d5a9df2b02338f541142b41b3389c714c))
+* keep the pending two-factor login in the session ([d45332f](https://github.com/anyone-oslo/pages/commit/d45332f40b2893e2fba6e0342d79244490858ea3))
+* limit formatting in embedded captions and attachment names ([8f31efd](https://github.com/anyone-oslo/pages/commit/8f31efd39f62abed824e2668b20a5fdcf81bacc2))
+* limit pagination params, prevent parent cycles and ignore unknown image params ([92ca8a6](https://github.com/anyone-oslo/pages/commit/92ca8a6ad2a8a47148172d37dddbd9365b6efc79))
+* only show published pages in every format ([f69175a](https://github.com/anyone-oslo/pages/commit/f69175a19569b82ab2f5f7cb32a4a8ddcf71631f))
+* refuse login for deactivated users ([2383fd6](https://github.com/anyone-oslo/pages/commit/2383fd60e2aa7edf4f702a9c079c46cec4aeda83))
+* remove cached copies of deleted or replaced files ([1074a13](https://github.com/anyone-oslo/pages/commit/1074a136f77eec26a47b128c2f1b707a6eca5035))
+* require a role to upload and edit images and attachments ([ac53abc](https://github.com/anyone-oslo/pages/commit/ac53abc6d8b130c621b72843cb798d48086136c8))
+* require authorization for user admin ([097ca77](https://github.com/anyone-oslo/pages/commit/097ca779242fd34b2c2f07059e470ffe659a4b68))
+* send filtered params to Sentry ([ba69939](https://github.com/anyone-oslo/pages/commit/ba6993951937abeb0169d1d54be26a7f7d6be628))
+* serve only images, PDF, audio and video attachments inline ([b6ea55f](https://github.com/anyone-oslo/pages/commit/b6ea55f7578c98654c0bdb17ccc4ad597c63e47d))
+* show the same account recovery message for every email ([8b3b36b](https://github.com/anyone-oslo/pages/commit/8b3b36b9e8a666c36c1ed48e5ef78a797b7ba619))
+* stop preview before rendering when not logged in ([cd52fcc](https://github.com/anyone-oslo/pages/commit/cd52fcc2962704e35d310515c9599c0a63c5f29a))
+* use secure_compare for token checks ([37146ec](https://github.com/anyone-oslo/pages/commit/37146ecee618d13d7dc208034041c26d370edc59))
+
 ## [3.19.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.18.1...pages_core/v3.19.0) (2026-09-28)
 
 
