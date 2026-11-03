@@ -8,6 +8,7 @@ module Admin
       :find_user,
       only: %i[edit update show destroy delete_image]
     )
+    require_authorization
 
     def index
       @users = User.activated

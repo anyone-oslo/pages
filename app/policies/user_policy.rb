@@ -30,7 +30,7 @@ class UserPolicy < Policy
   end
 
   def show?
-    edit?
+    true
   end
 
   def delete_image?
