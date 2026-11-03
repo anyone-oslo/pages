@@ -19,6 +19,8 @@ module PagesCore
                  inverse_of: :parent,
                  dependent: :destroy
 
+        validate :parent_is_not_self_or_descendant, prepend: true
+
         # This must be included after the belongs_to call in order
         # to override the .parent method.
         include PagesCore::PageModel::Tree::InstanceMethods
@@ -132,6 +134,20 @@ module PagesCore
 
         def subpages
           children.order(content_order)
+        end
+
+        private
+
+        def parent_is_not_self_or_descendant
+          return unless persisted? && parent_page_id_changed?
+
+          node_id = parent_page_id
+          seen = Set.new
+          while node_id && seen.add?(node_id)
+            return errors.add(:parent, :invalid) if node_id == id
+
+            node_id = Page.where(id: node_id).pick(:parent_page_id)
+          end
         end
       end
     end

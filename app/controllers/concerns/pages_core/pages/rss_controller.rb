@@ -15,7 +15,7 @@ module PagesCore
             .localized(locale)
       end
 
-      def per_page_rss_param(default = 20, max = 1000)
+      def per_page_rss_param(default = 20, max = 100)
         return default unless params[:per_page].is_a?(String)
 
         params[:per_page].to_i.clamp(1, max)

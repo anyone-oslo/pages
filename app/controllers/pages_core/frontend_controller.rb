@@ -7,6 +7,7 @@ module PagesCore
     include ApplicationHelper
 
     before_action :set_i18n_locale
+    before_action :disable_static_cache_for_invalid_page_param
     helper_method :page_param
 
     # Loads @root_pages and @rss_feeds. To automatically load these in your
@@ -23,9 +24,15 @@ module PagesCore
 
     private
 
+    def disable_static_cache_for_invalid_page_param
+      return if params[:page].nil? || params[:page] == page_param.to_s
+
+      disable_static_cache!
+    end
+
     def page_param
       if params[:page].is_a?(String)
-        [Integer(params[:page], exception: false), 1].compact.max
+        (Integer(params[:page], exception: false) || 1).clamp(1, 10_000)
       else
         1
       end

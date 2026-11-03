@@ -124,6 +124,49 @@ describe Page do
     end
   end
 
+  describe "parent validation" do
+    let(:root) { create(:page) }
+    let(:child) { create(:page, parent: root) }
+    let(:grandchild) { create(:page, parent: child) }
+
+    it "is valid with another page as parent" do
+      expect(child.update(parent: create(:page))).to be(true)
+    end
+
+    it "can't be its own parent" do
+      expect(root.update(parent: root)).to be(false)
+    end
+
+    it "can't be moved under its child" do
+      expect(root.update(parent: child)).to be(false)
+    end
+
+    it "can't be moved under a descendant" do
+      expect(root.update(parent: grandchild)).to be(false)
+    end
+
+    it "adds an error to the parent" do
+      root.update(parent: grandchild)
+      expect(root.errors).to be_added(:parent, :invalid)
+    end
+
+    context "with an existing cycle" do
+      let(:first) { create(:blank_page) }
+      let(:second) { create(:blank_page, parent: first) }
+
+      before do
+        described_class.connection.execute(
+          "UPDATE pages SET parent_page_id = #{second.id} WHERE id = #{first.id}"
+        )
+      end
+
+      it "can be moved into the cycle" do
+        root.parent_page_id = second.id
+        expect(root.valid?).to be(true)
+      end
+    end
+  end
+
   describe "setting multiple locales" do
     let(:page) do
       described_class.create(
