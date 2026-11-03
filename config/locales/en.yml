@@ -27,6 +27,7 @@ en:
       The provided email address and password combination was not valid
     invite_expired: This invite is no longer valid.
     logged_out: You have been logged out
+    logged_out_all_sessions: Sessions have been logged out
     otp:
       already_enabled: 2FA has already been enabled
       disabled: 2FA has been disabled

@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       end
       member do
         delete "delete_image"
+        delete "sessions", action: :destroy_sessions
       end
     end
 

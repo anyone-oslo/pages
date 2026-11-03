@@ -6,7 +6,7 @@ module Admin
     before_action :require_no_users, only: %i[new create]
     before_action(
       :find_user,
-      only: %i[edit update show destroy delete_image]
+      only: %i[edit update show destroy delete_image destroy_sessions]
     )
     require_authorization
 
@@ -54,6 +54,13 @@ module Admin
       flash[:notice] = "User <strong>#{@user.email}</strong> has been deleted"
       @user.destroy
       redirect_to admin_users_url
+    end
+
+    def destroy_sessions
+      @user.reset_session_token!
+      authenticated(@user) if @user == current_user
+      flash[:notice] = t("pages_core.logged_out_all_sessions")
+      redirect_to edit_admin_user_url(@user)
     end
 
     def delete_image

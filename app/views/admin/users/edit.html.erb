@@ -7,6 +7,18 @@
 <% end %>
 
 <% content_for :sidebar do %>
+  <h2>Sessions</h2>
+  <p>
+    Log out of Pages on every device and browser.
+    <% if @user == current_user %>
+      You will stay logged in here.
+    <% end %>
+  </p>
+  <%= button_to("Log out all sessions",
+                sessions_admin_user_path(@user),
+                method: :delete,
+                data: { confirm: "Are you sure?" }) %>
+
   <% if @user != current_user %>
     <h2>Preventing access</h2>
     <p>

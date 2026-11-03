@@ -37,6 +37,11 @@ module PagesCore
       activated?
     end
 
+    def reset_session_token!
+      self.session_token = self.class.random_session_token
+      save!(validate: false)
+    end
+
     def recovery_codes=(codes)
       self.hashed_recovery_codes = codes.map do |c|
         BCrypt::Password.create(c, cost: 8)

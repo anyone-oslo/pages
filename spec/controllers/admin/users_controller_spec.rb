@@ -311,6 +311,60 @@ describe Admin::UsersController do
     end
   end
 
+  describe "DELETE destroy_sessions" do
+    let(:target) { user }
+
+    before do
+      login(user)
+      delete :destroy_sessions, params: { id: target.id }
+    end
+
+    it { is_expected.to redirect_to(edit_admin_user_url(target)) }
+
+    it "changes the session token" do
+      expect { target.reload }.to change(target, :session_token)
+    end
+
+    it "keeps the current session" do
+      expect(session[:current_user][:token]).to eq(target.reload.session_token)
+    end
+
+    context "when the user has the users role" do
+      let(:user) { create(:user, :admin) }
+      let(:target) { create(:user) }
+
+      it "changes the target's session token" do
+        expect { target.reload }.to change(target, :session_token)
+      end
+    end
+
+    context "when the target has invalid data" do
+      let(:user) { create(:user, :admin) }
+      let(:target) do
+        create(:user).tap do |u|
+          u.name = ""
+          u.save(validate: false)
+        end
+      end
+
+      it "changes the target's session token" do
+        expect { target.reload }.to change(target, :session_token)
+      end
+    end
+  end
+
+  describe "DELETE destroy_sessions for another user" do
+    let!(:target) { create(:user) }
+
+    before { login(create(:user, role_names: %w[pages])) }
+
+    it "is not authorized" do
+      expect do
+        delete :destroy_sessions, params: { id: target.id }
+      end.to raise_error(PagesCore::NotAuthorized)
+    end
+  end
+
   describe "DELETE delete_image" do
     before do
       user.update(image: create(:image))

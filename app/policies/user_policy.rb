@@ -37,6 +37,10 @@ class UserPolicy < Policy
     edit?
   end
 
+  def destroy_sessions?
+    edit?
+  end
+
   def policies?
     user.role?(:users)
   end
