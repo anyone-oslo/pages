@@ -33,5 +33,18 @@ describe ErrorsController do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context "when rendering the search script" do
+      render_views
+
+      before do
+        request.host = "example.com\\"
+        get :show, params: { id: 404 }
+      end
+
+      it "escapes the host as a JavaScript string" do
+        expect(response.body).to include('var domainroot = "example.com\\\\";')
+      end
+    end
   end
 end

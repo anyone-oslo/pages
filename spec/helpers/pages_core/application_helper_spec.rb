@@ -20,9 +20,12 @@ RSpec.describe PagesCore::ApplicationHelper do
       expect(helper.safe_url("tel:+1234567890")).to eq("tel:+1234567890")
     end
 
-    it "allows data URLs" do
-      url = "data:text/html,Hello"
-      expect(helper.safe_url(url)).to eq(url)
+    it "blocks data URLs" do
+      expect(helper.safe_url("data:text/html,Hello")).to eq("#")
+    end
+
+    it "blocks uppercase data URLs" do
+      expect(helper.safe_url("DATA:text/html,Hello")).to eq("#")
     end
 
     it "blocks javascript URLs" do
@@ -35,6 +38,22 @@ RSpec.describe PagesCore::ApplicationHelper do
 
     it "allows relative paths" do
       expect(helper.safe_url("/about")).to eq("/about")
+    end
+
+    it "blocks protocol-relative URLs" do
+      expect(helper.safe_url("//example.com/x")).to eq("#")
+    end
+
+    it "blocks paths starting with a slash and a backslash" do
+      expect(helper.safe_url("/\\example.com/x")).to eq("#")
+    end
+
+    it "blocks protocol-relative URLs split by a tab" do
+      expect(helper.safe_url("/\t/example.com")).to eq("#")
+    end
+
+    it "blocks protocol-relative URLs split by a newline" do
+      expect(helper.safe_url("/\n/example.com")).to eq("#")
     end
 
     it "allows anchor links" do
