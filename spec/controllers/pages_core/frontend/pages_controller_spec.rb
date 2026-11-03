@@ -49,7 +49,7 @@ describe PagesCore::Frontend::PagesController do
     end
   end
 
-  describe "GET show" do
+  shared_context "when requesting a page" do
     before do
       routes.draw do
         resources :pages, path: ":locale/pages"
@@ -58,6 +58,10 @@ describe PagesCore::Frontend::PagesController do
       end
       get :show, params:
     end
+  end
+
+  describe "GET show" do
+    include_context "when requesting a page"
 
     let(:params) { { path: page.path_segment } }
 
@@ -105,6 +109,13 @@ describe PagesCore::Frontend::PagesController do
       it { is_expected.to render_template("errors/404") }
     end
 
+    context "when hidden page is requested by ID" do
+      let(:page) { create(:page, name: "Home", status: 3) }
+      let(:params) { { id: page.id, locale: } }
+
+      it { is_expected.to render_template("errors/404") }
+    end
+
     context "when page has a meta title" do
       let(:page) { create(:page, name: "Home", meta_title: "Meta") }
 
@@ -118,27 +129,68 @@ describe PagesCore::Frontend::PagesController do
 
       it { is_expected.to render_template("pages/templates/index") }
     end
+  end
 
-    describe "RSS rendering when page is feed enabled" do
+  describe "RSS rendering" do
+    include_context "when requesting a page"
+
+    let(:params) { { path: page.path_segment, format: :rss } }
+
+    context "when page is feed enabled" do
       let(:page) { create(:page, name: "Home", feed_enabled: true) }
-      let(:params) { { path: page.path_segment, format: :rss } }
 
       it { is_expected.to render_template("feeds/pages") }
     end
 
-    describe "RSS rendering when page isn't feed enabled" do
-      let(:params) { { path: page.path_segment, format: :rss } }
+    context "when page isn't feed enabled" do
+      specify { expect(response).to have_http_status(:not_found) }
+    end
+
+    context "when page is hidden" do
+      let(:page) do
+        create(:page, name: "Home", feed_enabled: true, status: 3)
+      end
+
+      specify { expect(response).to have_http_status(:not_found) }
+    end
+  end
+
+  describe "JSON rendering" do
+    include_context "when requesting a page"
+
+    let(:params) { { path: page.path_segment, format: :json } }
+    let(:json) { response.parsed_body }
+
+    it "renders the page as json" do
+      expect(json["name"]).to eq("Home")
+    end
+
+    context "when page is a draft" do
+      let(:page) { create(:page, name: "Home", status: 0) }
 
       specify { expect(response).to have_http_status(:not_found) }
     end
 
-    describe "JSON rendering" do
-      let(:params) { { path: page.path_segment, format: :json } }
-      let(:json) { response.parsed_body }
+    context "when page is hidden" do
+      let(:page) { create(:page, name: "Home", status: 3) }
 
-      it "renders the page as json" do
-        expect(json["name"]).to eq("Home")
+      specify { expect(response).to have_http_status(:not_found) }
+    end
+
+    context "when page is deleted" do
+      let(:page) { create(:page, name: "Home", status: 4) }
+      let(:params) { { id: page.id, locale:, format: :json } }
+
+      specify { expect(response).to have_http_status(:not_found) }
+    end
+
+    context "when page is scheduled for autopublish" do
+      let(:page) do
+        create(:page, name: "Home", autopublish: true,
+                      published_at: 1.day.from_now)
       end
+
+      specify { expect(response).to have_http_status(:not_found) }
     end
   end
 end

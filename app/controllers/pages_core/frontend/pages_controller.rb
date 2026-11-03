@@ -28,7 +28,7 @@ module PagesCore
 
       def show
         respond_to do |format|
-          format.html { render_published_page(@page) }
+          format.html { render_page }
           format.json { render json: PageResource.new(@page).serialize }
           format.rss { render_page_rss(@page, page_param) }
         end
@@ -120,7 +120,7 @@ module PagesCore
       end
 
       def require_page
-        return if @page
+        return if @page&.published?
 
         render_error 404
       end
