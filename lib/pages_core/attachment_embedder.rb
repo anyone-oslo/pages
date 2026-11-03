@@ -19,8 +19,8 @@ module PagesCore
     end
 
     def embed_attachment(attachment)
-      tag.a(attachment.name, class: "file",
-                             href: attachment_path(attachment))
+      tag.a(PagesCore::InlineFormatter.to_html(attachment.name),
+            class: "file", href: attachment_path(attachment))
     end
 
     private

@@ -21,10 +21,13 @@ module PagesCore
     end
 
     def embed_image(id, class_name:, link:)
-      image_figure(
-        Image.find(id).localize(I18n.locale),
+      image = Image.find(id).localize(I18n.locale)
+      figure = image_figure(
+        image,
+        caption: PagesCore::InlineFormatter.to_html(image.caption),
         class_name:, link:
       )
+      "<notextile>#{figure}</notextile>"
     rescue ActiveRecord::RecordNotFound
       nil
     end
