@@ -87,6 +87,45 @@ describe PagesCore::HtmlFormatter do
       end
     end
 
+    context "when attachment name has inline formatting" do
+      let(:attachment) do
+        create(:attachment, name: "_Report_ 2019 - 2020")
+      end
+      let(:string) { "Download [attachment:#{attachment.id}]" }
+
+      it "formats the name" do
+        expect(html).to include("><em>Report</em> 2019 – 2020</a>")
+      end
+    end
+
+    context "when attachment name has a linked image" do
+      let(:attachment) do
+        create(:attachment,
+               name: "!{position:fixed}x.png!:https://example.com Report")
+      end
+      let(:string) { "Download [attachment:#{attachment.id}]" }
+
+      it "renders a single link to the file" do
+        expect(html).to eq(
+          "<p>Download <a class=\"file\" " \
+          "href=\"#{attachment_path(attachment)}\"> Report</a></p>"
+        )
+      end
+    end
+
+    context "when attachment name has textile link syntax" do
+      let(:attachment) { create(:attachment, name: '"x":https://example.com') }
+      let(:string) { "Download [attachment:#{attachment.id}]" }
+
+      it "renders the name as text" do
+        expect(html).to eq(
+          "<p>Download <a class=\"file\" " \
+          "href=\"#{attachment_path(attachment)}\">" \
+          "\"x\":https://example.com</a></p>"
+        )
+      end
+    end
+
     context "with several files" do
       let(:second_file) { create(:page_file, page: page_file.page) }
       let(:string) { "Download [file:#{page_file.id},#{second_file.id}]" }
@@ -217,6 +256,74 @@ describe PagesCore::HtmlFormatter do
         expect(html)
           .to end_with("</picture><figcaption>This is a caption" \
                        "</figcaption></figure>")
+      end
+    end
+
+    context "when caption has italics" do
+      let(:image) do
+        Image.create(file: uploaded_file, caption: "_Fra havet_, 2019",
+                     locale: I18n.locale)
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders the italics" do
+        expect(html).to end_with("<figcaption><em>Fra havet</em>, 2019" \
+                                 "</figcaption></figure>")
+      end
+    end
+
+    context "when caption has line breaks" do
+      let(:image) do
+        Image.create(file: uploaded_file, caption: "Line one\nLine two",
+                     locale: I18n.locale)
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders the line breaks" do
+        expect(html).to end_with("<figcaption>Line one<br>\nLine two" \
+                                 "</figcaption></figure>")
+      end
+    end
+
+    context "when caption has a linked image" do
+      let(:image) do
+        Image.create(
+          file: uploaded_file,
+          caption: "!{position:fixed}x.png!:https://example.com Caption",
+          locale: I18n.locale
+        )
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders only the text" do
+        expect(html).to end_with("<figcaption> Caption</figcaption></figure>")
+      end
+    end
+
+    context "when caption has textile link syntax" do
+      let(:image) do
+        Image.create(file: uploaded_file, caption: '"x":https://example.com',
+                     locale: I18n.locale)
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders the caption as text" do
+        expect(html).to end_with(
+          "<figcaption>\"x\":https://example.com</figcaption></figure>"
+        )
+      end
+    end
+
+    context "when caption contains textile block markup" do
+      let(:image) do
+        Image.create(file: uploaded_file, caption: "h1. Caption",
+                     locale: I18n.locale)
+      end
+      let(:string) { "[image:#{image.id}]" }
+
+      it "renders it as text" do
+        expect(html).to end_with("<figcaption>h1. Caption" \
+                                 "</figcaption></figure>")
       end
     end
   end

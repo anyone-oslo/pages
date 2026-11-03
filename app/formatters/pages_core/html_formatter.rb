@@ -59,19 +59,25 @@ module PagesCore
       Nokogiri::HTML5.fragment(str).to_html
     end
 
+    def notextile(html)
+      return html if html.blank?
+
+      "<notextile>#{html}</notextile>"
+    end
+
     def parse_attachments(string)
       string.gsub(attachment_expression).each do |str|
-        PagesCore.config.attachment_embedder.new(
+        notextile(PagesCore.config.attachment_embedder.new(
           find_attachments(str)
-        ).to_html
+        ).to_html)
       end
     end
 
     def parse_files(string)
       string.gsub(file_expression).each do |str|
-        PagesCore.config.attachment_embedder.new(
+        notextile(PagesCore.config.attachment_embedder.new(
           find_files(str).map(&:attachment)
-        ).to_html
+        ).to_html)
       end
     end
 
