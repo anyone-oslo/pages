@@ -4,6 +4,8 @@ module Admin
   class ImagesController < Admin::AdminController
     before_action :find_image, only: %i[show edit update destroy]
 
+    require_authorization
+
     def index; end
 
     def show; end
