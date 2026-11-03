@@ -12,12 +12,8 @@ module Admin
 
     def create
       @user = User.find_by(email: params[:email])
-      if @user&.can_login?
-        deliver_account_recovery(@user)
-        flash[:notice] = t("pages_core.account_recovery.sent")
-      else
-        flash[:notice] = t("pages_core.account_recovery.not_found")
-      end
+      deliver_account_recovery(@user) if @user&.can_login?
+      flash[:notice] = t("pages_core.account_recovery.sent")
       redirect_to admin_login_url
     end
 

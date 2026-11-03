@@ -52,6 +52,34 @@ describe User do
     end
   end
 
+  describe ".authenticate" do
+    subject { described_class.authenticate(email, password:) }
+
+    let!(:user) { create(:user, email: "test@example.com") }
+    let(:email) { "test@example.com" }
+    let(:password) { user.password }
+
+    it { is_expected.to eq(user) }
+
+    context "with the wrong password" do
+      let(:password) { "wrong password" }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "with an unknown email" do
+      let(:email) { "none@example.com" }
+
+      it { is_expected.to be_nil }
+
+      it "hashes the password" do
+        allow(BCrypt::Password).to receive(:create).and_call_original
+        described_class.authenticate(email, password:)
+        expect(BCrypt::Password).to have_received(:create)
+      end
+    end
+  end
+
   describe "password validation" do
     subject { user.valid? }
 

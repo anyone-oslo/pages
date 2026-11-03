@@ -23,7 +23,7 @@ RSpec.describe "Account recovery" do
 
     specify do
       expect(page).to(
-        have_text("An email with further instructions has been sent")
+        have_text(I18n.t("pages_core.account_recovery.sent").strip)
       )
     end
 
@@ -32,9 +32,11 @@ RSpec.describe "Account recovery" do
     context "when user does not exist" do
       let(:email) { "none@example.com" }
 
+      specify { expect(last_email).to be_nil }
+
       specify do
         expect(page).to(
-          have_text("Couldn't find a user with that email address")
+          have_text(I18n.t("pages_core.account_recovery.sent").strip)
         )
       end
     end
@@ -44,7 +46,7 @@ RSpec.describe "Account recovery" do
 
       specify do
         expect(page).to(
-          have_text("Couldn't find a user with that email address")
+          have_text(I18n.t("pages_core.account_recovery.sent").strip)
         )
       end
 

@@ -23,7 +23,7 @@ module PagesCore
 
     module ClassMethods
       def authenticate(email, password:)
-        User.find_by(email:).try(:authenticate, password)
+        User.authenticate_by(email:, password:)
       end
 
       def random_session_token

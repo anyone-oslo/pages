@@ -6,6 +6,21 @@ describe Admin::SessionsController do
   let(:user) { create(:user, :otp) }
   let(:otp) { ROTP::TOTP.new(user.otp_secret).now }
 
+  describe "POST create" do
+    context "with an unknown email" do
+      before do
+        allow(BCrypt::Password).to receive(:create).and_call_original
+        post :create, params: { email: "none@example.com", password: "password" }
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "hashes the password" do
+        expect(BCrypt::Password).to have_received(:create)
+      end
+    end
+  end
+
   describe "POST verify_otp" do
     context "without a pending login" do
       before { post :verify_otp, params: { otp: } }

@@ -35,8 +35,9 @@ en:
     account_recovery:
       changed: Your password has been changed
       invalid_request: This link is no longer valid
-      not_found: Couldn't find a user with that email address
-      sent: An email with further instructions has been sent
+      sent: >
+        If an account exists for that email address, an email with further
+        instructions has been sent
       problems_saving: There were problems saving your changes
     recovery_codes:
       zero: "no recovery codes"

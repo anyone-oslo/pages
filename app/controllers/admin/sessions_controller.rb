@@ -51,7 +51,8 @@ module Admin
     end
 
     def find_user
-      @user = User.authenticate(params[:email], password: params[:password])
+      @user = User.authenticate_by(email: params[:email],
+                                   password: params[:password])
       @user = nil unless @user&.can_login?
     end
 
