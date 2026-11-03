@@ -15,7 +15,7 @@ module PagesCore
       end
 
       def preview
-        render_error 403 unless logged_in?
+        return render_error(403) unless logged_in?
 
         @preview = true
         Page.transaction do

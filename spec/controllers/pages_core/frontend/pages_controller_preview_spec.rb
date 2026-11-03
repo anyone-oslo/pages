@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe PagesCore::Frontend::PagesController do
   controller(PagesController) do
-    template(:home) { |_page| nil }
+    template(:home) { |_page| @template_action_ran = true }
   end
 
   let(:user) { create(:user) }
@@ -28,12 +28,27 @@ describe PagesCore::Frontend::PagesController do
         request
         expect(response).to have_http_status(:forbidden)
       end
+
+      it "does not assign the page" do
+        request
+        expect(assigns(:page)).to be_nil
+      end
+
+      it "does not run template actions" do
+        request
+        expect(assigns(:template_action_ran)).to be_nil
+      end
     end
 
     context "when authenticated" do
       before { login(user) }
 
       it { is_expected.to render_template("pages/templates/home") }
+
+      it "runs template actions" do
+        request
+        expect(assigns(:template_action_ran)).to be(true)
+      end
 
       it "assigns the page with preview attributes" do
         request
