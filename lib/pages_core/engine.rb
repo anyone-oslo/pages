@@ -44,6 +44,10 @@ module PagesCore
       )
     end
 
+    initializer "pages_core.filter_parameters" do |app|
+      app.config.filter_parameters += %i[password otp token signed_message signed_user_id]
+    end
+
     initializer "pages_core.sentry", after: :load_config_initializers do
       next unless defined?(Sentry)
 
