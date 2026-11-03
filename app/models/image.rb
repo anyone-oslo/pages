@@ -2,6 +2,7 @@
 
 class Image < ApplicationRecord
   include DynamicImage::Model
+  include PagesCore::PermanentlyCached
   include PagesCore::Sweepable
 
   validate :ensure_max_size, on: :create

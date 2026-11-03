@@ -7,11 +7,16 @@ class AttachmentsController < ApplicationController
 
   before_action :verify_signed_params
   before_action :find_attachment, only: %i[show download]
+  before_action :verify_extension, only: %i[show download]
+  before_action :canonicalize_url, only: %i[show download]
 
   static_cache :show, permanent: true
 
   def show
-    send_attachment
+    return send_attachment if @attachment.inline?
+
+    disable_static_cache!
+    send_attachment disposition: "attachment"
   end
 
   def download
@@ -28,6 +33,24 @@ class AttachmentsController < ApplicationController
     return unless stale?(etag: @attachment, last_modified: @attachment.updated_at)
 
     send_dis_data(@attachment, disposition:)
+  end
+
+  def canonicalize_url
+    return if params[:id] == @attachment.to_param
+
+    redirect_to({ id: @attachment.to_param, digest: @attachment.digest,
+                  format: params[:format] },
+                status: :moved_permanently)
+  end
+
+  def verify_extension
+    return if params[:format].to_s == @attachment.filename_extension
+
+    not_found
+  end
+
+  def static_cache_tags
+    [@attachment.cache_tag]
   end
 
   def verify_signed_params

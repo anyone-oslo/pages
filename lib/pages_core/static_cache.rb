@@ -11,6 +11,10 @@ module PagesCore
         PagesCore.config.static_cache_handler || default_handler
       end
 
+      def tracking_parameter?(key)
+        key.start_with?("utm_") || %w[gclid fbclid].include?(key)
+      end
+
       private
 
       def default_handler

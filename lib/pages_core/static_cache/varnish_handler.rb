@@ -17,8 +17,8 @@ module PagesCore
         # controller.expires_in 1.hour, public: true
       end
 
-      def cache_page_permanently(controller, request, response)
-        response.set_header("X-Cache-Tags", "permanent")
+      def cache_page_permanently(controller, request, response, tags: [])
+        tag_permanently(response, tags)
         request.session_options[:skip] = true
         controller.expires_in 1.year, public: true
       end
@@ -30,6 +30,18 @@ module PagesCore
         hydra.queue(ban_request("static"))
         hydra.queue(ban_request("permanent"))
         hydra.run
+      end
+
+      def purge_record!(record)
+        return unless PagesCore::CacheSweeper.enabled
+
+        ban_request(
+          "(^|[[:space:]])#{record.cache_tag}([[:space:]]|$)"
+        ).run
+      end
+
+      def tag_permanently(response, tags)
+        response.set_header("X-Cache-Tags", ["permanent", *tags].join(" "))
       end
 
       def sweep!

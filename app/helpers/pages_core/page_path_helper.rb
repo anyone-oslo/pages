@@ -4,12 +4,15 @@ module PagesCore
   module PagePathHelper
     def page_path(locale, page, options = {})
       page.localize(locale) do |p|
-        return super(locale, p, options) unless p.full_path?
+        unless p.full_path?
+          return super(locale, p, options) unless options[:page]
+
+          return paginated_page_path(locale, p, options[:page],
+                                     options.except(:page))
+        end
 
         (PagesCore.config.localizations? ? "/#{locale}/" : "/") +
-          escape_page_path(p.full_path) +
-          (html_format?(options) ? "" : ".#{options[:format]}") +
-          paginated_section(options)
+          escape_page_path(p.full_path) + path_suffix(options)
       end
     end
 
@@ -44,6 +47,10 @@ module PagesCore
 
     def escape_page_path(path)
       path.split("/").map { |s| CGI.escape(s) }.join("/")
+    end
+
+    def path_suffix(opts)
+      paginated_section(opts) + (html_format?(opts) ? "" : ".#{opts[:format]}")
     end
 
     def paginated_section(opts)
