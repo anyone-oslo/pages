@@ -47,4 +47,41 @@ describe "Images" do
       expect(cached_files).not_to be_empty
     end
   end
+
+  context "with the Varnish handler" do
+    let(:handler) do
+      PagesCore::StaticCache::VarnishHandler.new("http://varnish")
+    end
+
+    before do
+      allow(PagesCore::StaticCache).to receive(:handler).and_return(handler)
+    end
+
+    describe "GET show" do
+      before { get dynamic_image_path(image, size: "10x10") }
+
+      it "tags the response with the image's cache tag" do
+        expect(response.headers["X-Cache-Tags"])
+          .to eq("permanent image-#{image.id}")
+      end
+    end
+
+    describe "GET download" do
+      before { get download_dynamic_image_path(image) }
+
+      it "tags the response with the image's cache tag" do
+        expect(response.headers["X-Cache-Tags"])
+          .to eq("permanent image-#{image.id}")
+      end
+    end
+
+    describe "GET original" do
+      before { get original_dynamic_image_path(image) }
+
+      it "tags the response with the image's cache tag" do
+        expect(response.headers["X-Cache-Tags"])
+          .to eq("permanent image-#{image.id}")
+      end
+    end
+  end
 end

@@ -10,7 +10,7 @@ module PagesCore
         controller.cache_page
       end
 
-      def cache_page_permanently(controller, request, _response)
+      def cache_page_permanently(controller, request, _response, **)
         return unless cacheable_query?(request)
 
         controller.class.page_cache_directory = permanent_page_cache_directory
@@ -23,6 +23,14 @@ module PagesCore
         clear_directory(page_cache_directory)
         clear_directory(permanent_page_cache_directory)
       end
+
+      def purge_record!(record)
+        return unless PagesCore::CacheSweeper.enabled
+
+        FileUtils.rm_rf(record_cache_paths(record))
+      end
+
+      def tag_permanently(_response, _tags); end
 
       def sweep!
         return unless PagesCore::CacheSweeper.enabled
@@ -52,6 +60,19 @@ module PagesCore
         return unless File.exist?(path)
 
         FileUtils.rm_rf(Dir.glob("#{path}/*"))
+      end
+
+      def record_cache_paths(record)
+        case record
+        when Attachment
+          [permanent_page_cache_directory.join("attachments", record.digest)]
+        when Image
+          dir = permanent_page_cache_directory.join("dynamic_images")
+          Dir.glob([dir.join("*", "#{record.id}-*"),
+                    dir.join("*", "*", "#{record.id}-*")])
+        else
+          []
+        end
       end
 
       def page_cache_directory

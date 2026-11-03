@@ -49,6 +49,10 @@ class AttachmentsController < ApplicationController
     not_found
   end
 
+  def static_cache_tags
+    [@attachment.cache_tag]
+  end
+
   def verify_signed_params
     key = params[:id].to_i.to_s
     Attachment.verifier.verify(key, params[:digest])

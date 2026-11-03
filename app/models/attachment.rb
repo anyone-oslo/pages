@@ -2,6 +2,7 @@
 
 class Attachment < ApplicationRecord
   include Dis::Model
+  include PagesCore::PermanentlyCached
   include PagesCore::Sweepable
 
   belongs_to :user, optional: true

@@ -156,9 +156,10 @@ describe AttachmentsController do
       allow(controller).to receive(:perform_caching).and_return(true)
     end
 
-    it "caches inline types" do
+    it "caches inline types with the attachment's cache tag" do
       get_attachment
       expect(handler).to have_received(:cache_page_permanently)
+        .with(anything, anything, anything, tags: [attachment.cache_tag])
     end
 
     context "with a type that isn't shown inline" do

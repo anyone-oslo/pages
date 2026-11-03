@@ -43,12 +43,16 @@ module PagesCore
       return unless static_cache_allowed?
 
       PagesCore::StaticCache.handler.cache_page_permanently(
-        self, request, response
+        self, request, response, tags: static_cache_tags
       )
     end
 
     def prepare_static_cache
       @static_cached = true
+    end
+
+    def static_cache_tags
+      []
     end
 
     def static_cache_allowed?

@@ -5,9 +5,13 @@ module PagesCore
     class NullHandler
       def cache_page(_controller, _request, _response); end
 
-      def cache_page_permanently(_controller, _request, _response); end
+      def cache_page_permanently(_controller, _request, _response, **); end
 
       def purge!; end
+
+      def purge_record!(_record); end
+
+      def tag_permanently(_response, _tags); end
 
       def sweep!; end
 
