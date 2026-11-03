@@ -4,6 +4,8 @@ module Admin
   class ImagesController < Admin::AdminController
     before_action :find_image, only: %i[show edit update destroy]
 
+    require_authorization
+
     def index; end
 
     def show; end
@@ -21,7 +23,7 @@ module Admin
     end
 
     def update
-      @image.update(image_params)
+      @image.update(image_params.except(:file))
       respond_to do |format|
         format.json { render_image_json(@image) }
       end

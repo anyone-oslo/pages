@@ -4,6 +4,8 @@ module Admin
   class AttachmentsController < Admin::AdminController
     before_action :find_attachment, only: %i[update]
 
+    require_authorization
+
     def create
       @attachment = Attachment.create(
         attachment_params.merge(user: current_user)
@@ -18,7 +20,7 @@ module Admin
     end
 
     def update
-      @attachment.update(attachment_params)
+      @attachment.update(attachment_params.except(:file))
       respond_to do |format|
         format.json { render_attachment(@attachment) }
       end

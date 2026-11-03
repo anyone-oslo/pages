@@ -3,6 +3,33 @@
 require "rails_helper"
 
 RSpec.describe Image do
+  def uploaded_file(name)
+    Rack::Test::UploadedFile.new(
+      File.expand_path("../support/fixtures/#{name}", __dir__),
+      "image/png"
+    )
+  end
+
+  describe "size validation" do
+    it "rejects an oversized image on create" do
+      image = build(:image, file: uploaded_file("oversized_image.png"))
+      expect(image).not_to be_valid
+    end
+
+    it "rejects an oversized image replacing an existing file" do
+      image = create(:image)
+      image.file = uploaded_file("oversized_image.png")
+      expect(image).not_to be_valid
+    end
+
+    it "allows editing an existing oversized image" do
+      image = create(:image)
+      image.update!(real_width: 8000, real_height: 7000)
+      image.reload.alternative = "A blue square"
+      expect(image).to be_valid
+    end
+  end
+
   describe "#alt_text" do
     subject { image.alt_text }
 
