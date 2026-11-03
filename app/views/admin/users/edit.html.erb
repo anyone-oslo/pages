@@ -35,6 +35,12 @@
     <p>
       Leave the password blank if you do not wish to change the password.
     </p>
+    <%= f.labelled_password_field(:current_password,
+                                  autocomplete: "current-password") %>
+    <p>
+      Your current password is required to change your email address or
+      password.
+    </p>
   <% end %>
 
   <% if policy(@user).otp? %>
@@ -42,11 +48,7 @@
     <% if @user.otp_enabled? %>
       <p>
         Two-factor authentication has been enabled.
-        <%= link_to("Disable",
-                    admin_otp_secret_path,
-                    class: :delete,
-                    method: :delete,
-                    data: { confirm: "Are you sure you want to disable 2FA?" }) %>
+        <%= link_to("Disable", disable_admin_otp_secret_path) %>
       </p>
       <p>
 

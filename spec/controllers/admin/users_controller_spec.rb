@@ -169,27 +169,91 @@ describe Admin::UsersController do
   end
 
   describe "PUT update" do
-    before { login(user) }
+    let(:target) { user }
+    let(:params) do
+      { email: "new@example.com", current_password: user.password }
+    end
 
-    let(:params) { { email: "new@example.com" } }
+    before do
+      login(user)
+      put :update, params: { id: target.id, user: params }
+    end
 
     context "with valid params" do
-      before { put :update, params: { id: user.id, user: params } }
+      it { is_expected.to redirect_to(admin_users_url) }
+
+      it "changes the email" do
+        expect(target.reload.email).to eq("new@example.com")
+      end
+    end
+
+    context "with invalid params" do
+      let(:params) { { email: "invalid", current_password: user.password } }
+
+      it { is_expected.to render_template("admin/users/edit") }
+    end
+
+    context "when changing the email without the current password" do
+      let(:params) { { email: "new@example.com" } }
+
+      it { is_expected.to render_template("admin/users/edit") }
+
+      it "does not change the email" do
+        expect(user.reload.email).not_to eq("new@example.com")
+      end
+    end
+
+    context "when changing the email with the wrong password" do
+      let(:params) { { email: "new@example.com", current_password: "wrong" } }
+
+      it { is_expected.to render_template("admin/users/edit") }
+
+      it "adds an error" do
+        expect(assigns(:user).errors[:current_password]).to be_present
+      end
+    end
+
+    context "when changing the password without the current password" do
+      let(:params) { { password: "new password", password_confirmation: "new password" } }
+
+      it { is_expected.to render_template("admin/users/edit") }
+
+      it "does not change the password" do
+        expect(user.reload.authenticate("new password")).to be_falsey
+      end
+    end
+
+    context "when changing the password with the current password" do
+      let(:params) do
+        { password: "new password",
+          password_confirmation: "new password",
+          current_password: user.password }
+      end
+
+      it "changes the password" do
+        expect(user.reload.authenticate("new password")).to eq(user)
+      end
+    end
+
+    context "when changing the name without the current password" do
+      let(:params) { { name: "New name" } }
 
       it { is_expected.to redirect_to(admin_users_url) }
     end
 
-    context "with invalid params" do
-      let(:params) { { email: "invalid" } }
+    context "when an admin changes another user's email" do
+      let(:user) { create(:user, :admin) }
+      let(:target) { create(:user) }
+      let(:params) { { email: "new@example.com" } }
 
-      before { put :update, params: { id: user.id, user: params } }
-
-      it { is_expected.to render_template("admin/users/edit") }
+      it "changes the email" do
+        expect(target.reload.email).to eq("new@example.com")
+      end
     end
   end
 
   describe "PUT update without the users role" do
-    let(:params) { { email: "new@example.com" } }
+    let(:params) { { email: "new@example.com", current_password: editor.password } }
 
     before { login(editor) }
 

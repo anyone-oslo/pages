@@ -39,7 +39,8 @@ module Admin
     end
 
     def update
-      if @user.update(user_params_with_roles)
+      @user.assign_attributes(user_params_with_roles)
+      if current_password_valid? && @user.save
         flash[:notice] = "Your changed to #{@user.name} were saved."
         redirect_to admin_users_url
       else
@@ -67,6 +68,15 @@ module Admin
 
     def find_user
       @user = User.find(params.expect(:id))
+    end
+
+    def current_password_valid?
+      return true unless @user == current_user &&
+                         (@user.email_changed? || @user.password_digest_changed?)
+      return true if current_user.authenticate(params.dig(:user, :current_password).to_s)
+
+      @user.errors.add(:current_password, :invalid)
+      false
     end
 
     def user_params

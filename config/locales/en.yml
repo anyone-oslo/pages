@@ -31,6 +31,7 @@ en:
       already_enabled: 2FA has already been enabled
       disabled: 2FA has been disabled
       invalid_code: Invalid 2FA code
+      not_enabled: 2FA is not enabled
       required: 2FA is required for this
     account_recovery:
       changed: Your password has been changed

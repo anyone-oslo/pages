@@ -5,6 +5,8 @@ module PagesCore
     extend ActiveSupport::Concern
 
     included do
+      attr_accessor :current_password
+
       has_secure_password reset_token: { expires_in: 24.hours }
 
       validates(:otp_secret, presence: true, if: :otp_enabled?)
