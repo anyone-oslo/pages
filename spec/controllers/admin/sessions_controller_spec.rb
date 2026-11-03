@@ -64,4 +64,107 @@ describe Admin::SessionsController do
       end
     end
   end
+
+  describe "POST create rate limit" do
+    let(:user) { create(:user) }
+    let(:params) { { email: user.email, password: user.password } }
+
+    context "when the limit is reached" do
+      before do
+        10.times do
+          post :create, params: { email: " #{user.email.upcase} ",
+                                  password: "wrong" }
+        end
+        post :create, params:
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "does not log in" do
+        expect(session[:current_user]).to be_nil
+      end
+
+      it "sets the flash" do
+        expect(flash[:notice]).to eq(I18n.t("pages_core.rate_limited"))
+      end
+    end
+
+    context "when the window has passed" do
+      before do
+        10.times do
+          post :create, params: { email: user.email, password: "wrong" }
+        end
+        travel_to(6.minutes.from_now) { post :create, params: }
+      end
+
+      it "logs in" do
+        expect(session[:current_user]).to include(id: user.id)
+      end
+    end
+
+    context "when email is an array" do
+      before do
+        post :create, params: { email: [user.email, "x1@example.com"],
+                                password: user.password }
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "does not log in" do
+        expect(session[:current_user]).to be_nil
+      end
+
+      it "sets the flash" do
+        expect(flash[:notice]).to eq(I18n.t("pages_core.invalid_login"))
+      end
+    end
+
+    context "when the limit is reached for another email" do
+      before do
+        10.times do
+          post :create, params: { email: "other@example.com",
+                                  password: "wrong" }
+        end
+        post :create, params:
+      end
+
+      it "logs in" do
+        expect(session[:current_user]).to include(id: user.id)
+      end
+    end
+  end
+
+  describe "POST verify_otp rate limit" do
+    before do
+      post :create, params: { email: user.email, password: user.password }
+    end
+
+    context "when the limit is reached" do
+      before do
+        5.times { post :verify_otp, params: { otp: "000000" } }
+        post :verify_otp, params: { otp: }
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "does not log in" do
+        expect(session[:current_user]).to be_nil
+      end
+
+      it "sets the flash" do
+        expect(flash[:notice]).to eq(I18n.t("pages_core.rate_limited"))
+      end
+    end
+
+    context "when below the limit" do
+      before do
+        4.times { post :verify_otp, params: { otp: "000000" } }
+        post :verify_otp, params: { otp: }
+      end
+
+      it "logs in" do
+        expect(session[:current_user]).to include(id: user.id)
+      end
+    end
+  end
 end

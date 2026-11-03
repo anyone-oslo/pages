@@ -78,6 +78,7 @@ RSpec.configure do |config|
 
   # config.include JsonSpec::Helpers
   config.include ActiveJob::TestHelper
+  config.include ActiveSupport::Testing::TimeHelpers
   config.include ErrorResponses
   config.include SystemHelpers, type: :system
   config.include LoginMacros
@@ -85,6 +86,7 @@ RSpec.configure do |config|
 
   config.before do
     PagesCore.reset_configuration!
+    PagesCore.config.rate_limit_store.clear
     reset_email
   end
 

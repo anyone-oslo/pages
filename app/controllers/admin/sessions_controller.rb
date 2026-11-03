@@ -3,9 +3,15 @@
 module Admin
   class SessionsController < Admin::AdminController
     before_action :require_authentication, only: %i[destroy]
+    rate_limit to: 10, within: 5.minutes, only: :create,
+               by: :normalized_email, with: :rate_limited,
+               store: PagesCore.config.rate_limit_store
     before_action :find_user, only: %i[create]
     before_action :find_pending_otp_user, only: %i[verify_otp]
     before_action :require_user, only: %i[create verify_otp]
+    rate_limit to: 5, within: 5.minutes, only: :verify_otp,
+               by: -> { @user.id }, with: :rate_limited, scope: "otp",
+               store: PagesCore.config.rate_limit_store
 
     def new
       redirect_to admin_default_url if logged_in?
@@ -51,6 +57,8 @@ module Admin
     end
 
     def find_user
+      return unless params[:email].is_a?(String)
+
       @user = User.authenticate_by(email: params[:email],
                                    password: params[:password])
       @user = nil unless @user&.can_login?

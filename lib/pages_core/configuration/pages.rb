@@ -16,6 +16,8 @@ module PagesCore
       setting :error_404_layout,      :string
       setting :attachment_embedder,   :object, PagesCore::AttachmentEmbedder
       setting :static_cache_handler,  :object
+      setting :rate_limit_store,      :object,
+              ActiveSupport::Cache::MemoryStore.new(size: 16.megabytes)
     end
   end
 end

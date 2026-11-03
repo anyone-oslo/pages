@@ -4,6 +4,9 @@ module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: %i[accept show]
     before_action :find_invite, only: %i[destroy]
+    rate_limit to: 10, within: 10.minutes, only: :accept,
+               by: -> { params[:id].to_i }, with: :rate_limited,
+               store: PagesCore.config.rate_limit_store
     before_action :find_and_validate_invite, only: %i[show accept]
 
     require_authorization

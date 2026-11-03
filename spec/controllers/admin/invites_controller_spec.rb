@@ -132,4 +132,58 @@ describe Admin::InvitesController do
       end
     end
   end
+
+  describe "POST accept rate limit" do
+    let!(:invite) { create(:invite) }
+    let(:user_params) do
+      { name: "New User", email: invite.email,
+        password: "Correct Horse Battery Staple",
+        password_confirmation: "Correct Horse Battery Staple" }
+    end
+
+    context "when the limit is reached" do
+      before do
+        10.times do
+          post :accept, params: { id: invite.id, token: invite.token,
+                                  user: { name: "" } }
+        end
+      end
+
+      it "does not create a user" do
+        expect do
+          post :accept, params: { id: invite.id, token: invite.token,
+                                  user: user_params }
+        end.not_to change(User, :count)
+      end
+
+      it "redirects to the login page" do
+        post :accept, params: { id: invite.id, token: invite.token,
+                                user: user_params }
+        expect(response).to redirect_to(admin_login_url)
+      end
+
+      it "sets the flash" do
+        post :accept, params: { id: invite.id, token: invite.token,
+                                user: user_params }
+        expect(flash[:notice]).to eq(I18n.t("pages_core.rate_limited"))
+      end
+    end
+
+    context "when the limit is reached for another invite" do
+      before do
+        other = create(:invite)
+        10.times do
+          post :accept, params: { id: other.id, token: other.token,
+                                  user: { name: "" } }
+        end
+      end
+
+      it "creates a user" do
+        expect do
+          post :accept, params: { id: invite.id, token: invite.token,
+                                  user: user_params }
+        end.to change(User, :count).by(1)
+      end
+    end
+  end
 end

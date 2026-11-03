@@ -56,6 +56,16 @@ module Admin
       I18n.locale = :en
     end
 
+    def normalized_email
+      email = params[:email]
+      email.strip.downcase if email.is_a?(String)
+    end
+
+    def rate_limited
+      flash[:notice] = t("pages_core.rate_limited")
+      redirect_to admin_login_url
+    end
+
     # Verifies the login. Redirects to users/new if the users table is empty.
     # If not, renders the login screen.
     def require_authentication
