@@ -12,7 +12,7 @@ module Admin
 
     def create
       @user = User.find_by(email: params[:email])
-      if @user
+      if @user&.can_login?
         deliver_account_recovery(@user)
         flash[:notice] = t("pages_core.account_recovery.sent")
       else
@@ -48,9 +48,7 @@ module Admin
     def find_by_token
       @token = params[:token]
       @user = User.find(message_verifier.verify(@token).symbolize_keys[:id])
-      return if @user
-
-      fail_recovery(t("pages_core.account_recovery.invalid_request"))
+      raise PagesCore::Authentication::LoginRefused unless @user.can_login?
     rescue ActiveSupport::MessageVerifier::InvalidSignature
       fail_recovery(t("pages_core.account_recovery.invalid_request"))
     end

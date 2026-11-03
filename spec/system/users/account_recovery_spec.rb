@@ -38,6 +38,18 @@ RSpec.describe "Account recovery" do
         )
       end
     end
+
+    context "when user is deactivated" do
+      let(:user) { create(:user, :deactivated) }
+
+      specify do
+        expect(page).to(
+          have_text("Couldn't find a user with that email address")
+        )
+      end
+
+      specify { expect(last_email).to be_nil }
+    end
   end
 
   describe "Completing a recovery" do
@@ -69,6 +81,16 @@ RSpec.describe "Account recovery" do
       end
 
       specify { expect(page).to have_text("Your password has been changed") }
+    end
+
+    context "when user is deactivated" do
+      let(:user) { create(:user, :deactivated) }
+
+      specify do
+        expect(page).to have_text(I18n.t("pages_core.invalid_login").strip)
+      end
+
+      specify { expect(page).to have_no_button("Change password") }
     end
 
     context "with mismatched password" do

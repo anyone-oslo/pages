@@ -49,6 +49,7 @@ module Admin
 
     def find_user
       @user = User.authenticate(params[:email], password: params[:password])
+      @user = nil unless @user&.can_login?
     end
 
     def message_verifier

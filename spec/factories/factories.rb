@@ -86,6 +86,10 @@ FactoryBot.define do
       role_names { %w[pages users] }
     end
 
+    trait :deactivated do
+      after(:create) { |user| user.update(activated: false) }
+    end
+
     trait :otp do
       otp_enabled { true }
       otp_secret { ROTP::Base32.random }
