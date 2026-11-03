@@ -9,11 +9,12 @@ module PagesCore
     include PagesCore::PagePathHelper
 
     def safe_url(url)
-      str = url.to_s.strip
-      return str if str.start_with?("/", "#")
+      str = url.to_s.delete("\t\r\n").strip
+      return str if str.start_with?("#")
+      return str if str.start_with?("/") && !str.start_with?("//", "/\\")
 
       scheme = URI.parse(str).scheme&.downcase
-      %w[data http https mailto tel].include?(scheme) ? str : "#"
+      %w[http https mailto tel].include?(scheme) ? str : "#"
     rescue URI::InvalidURIError
       "#"
     end

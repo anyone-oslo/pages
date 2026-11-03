@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
   function googleSearch( form ) {
-    var domainroot = "<%= request.env['HTTP_HOST'] %>";
+    var domainroot = "<%= j request.host %>";
     var query = "site:" + domainroot + " " + form.qinput.value
     form.q.value = query;
   }
