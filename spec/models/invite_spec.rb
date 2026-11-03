@@ -32,4 +32,51 @@ describe Invite do
       expect(token.length).to eq(64)
     end
   end
+
+  describe "#expired?" do
+    subject { invite.expired? }
+
+    it { is_expected.to be(false) }
+
+    context "when sent more than 14 days ago" do
+      let(:invite) { build(:invite, sent_at: 15.days.ago) }
+
+      it { is_expected.to be(true) }
+    end
+
+    context "when never sent" do
+      let(:invite) { build(:invite, sent_at: nil) }
+
+      it { is_expected.to be(true) }
+    end
+  end
+
+  describe "#acceptable?" do
+    subject { invite.acceptable? }
+
+    let(:inviter) { create(:user, :admin) }
+    let(:invite) { build(:invite, user: inviter) }
+
+    before { create(:user) }
+
+    it { is_expected.to be(true) }
+
+    context "when expired" do
+      let(:invite) { build(:invite, user: inviter, sent_at: 15.days.ago) }
+
+      it { is_expected.to be(false) }
+    end
+
+    context "when the inviter is deactivated" do
+      let(:inviter) { create(:user, :admin, activated: false) }
+
+      it { is_expected.to be(false) }
+    end
+
+    context "when the inviter no longer has the users role" do
+      let(:inviter) { create(:user, role_names: %w[pages]) }
+
+      it { is_expected.to be(false) }
+    end
+  end
 end

@@ -4,7 +4,6 @@ require "rails_helper"
 
 describe Admin::InvitesController do
   let(:user) { create(:user, :admin) }
-  let(:invite) { create(:invite) }
 
   describe "POST create" do
     let(:hosts) { [] }
@@ -38,13 +37,16 @@ describe Admin::InvitesController do
   end
 
   describe "GET show" do
-    before { get :show, params: { id: invite.id, token: } }
+    let(:invite) { create(:invite) }
 
-    context "with a valid token" do
-      let(:token) { invite.token }
+    let(:token) { invite.token }
 
-      it { is_expected.to render_template("admin/invites/show") }
+    before do
+      create(:user)
+      get :show, params: { id: invite.id, token: }
     end
+
+    it { is_expected.to render_template("admin/invites/show") }
 
     context "with an invalid token" do
       let(:token) { "invalid" }
@@ -55,21 +57,49 @@ describe Admin::InvitesController do
         expect(flash[:notice]).to eq(I18n.t("pages_core.invite_expired"))
       end
     end
+
+    context "when the invite has expired" do
+      let(:invite) { create(:invite, sent_at: 15.days.ago) }
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "sets the flash" do
+        expect(flash[:notice]).to eq(I18n.t("pages_core.invite_expired"))
+      end
+    end
+
+    context "when the inviter no longer has the users role" do
+      let(:invite) do
+        create(:invite, user: create(:user, role_names: %w[pages]))
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+    end
   end
 
   describe "POST accept" do
-    let(:user_params) do
-      { name: "Invited User", email: invite.email,
-        password: "Correct Horse Battery Staple",
-        password_confirmation: "Correct Horse Battery Staple" }
+    let(:invite) do
+      create(:invite, email: "invited@example.com", role_names: %w[users])
+    end
+    let(:token) { invite.token }
+    let(:params) do
+      { id: invite.id,
+        token:,
+        user: { name: "Invited",
+                email: "other@example.com",
+                password: "Correct Horse Battery Staple",
+                password_confirmation: "Correct Horse Battery Staple" } }
     end
 
-    before { post :accept, params: { id: invite.id, token:, user: user_params } }
+    before do
+      create(:user)
+      post :accept, params:
+    end
 
-    context "with a valid token" do
-      let(:token) { invite.token }
+    it { is_expected.to redirect_to(admin_default_url) }
 
-      it { is_expected.to redirect_to(admin_default_url) }
+    it "uses the email from the invite" do
+      expect(User.last.email).to eq("invited@example.com")
     end
 
     context "with a non-string token" do
@@ -79,6 +109,26 @@ describe Admin::InvitesController do
 
       it "sets the flash" do
         expect(flash[:notice]).to eq(I18n.t("pages_core.invite_expired"))
+      end
+    end
+
+    context "when the inviter is deactivated" do
+      let(:invite) do
+        create(:invite, user: create(:user, :admin, activated: false))
+      end
+
+      it { is_expected.to redirect_to(admin_login_url) }
+
+      it "does not create a user" do
+        expect(User.find_by(email: invite.email)).to be_nil
+      end
+    end
+
+    context "when the invite has expired" do
+      let(:invite) { create(:invite, sent_at: 15.days.ago) }
+
+      it "does not create a user" do
+        expect(User.find_by(email: invite.email)).to be_nil
       end
     end
   end

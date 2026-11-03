@@ -13,7 +13,9 @@ module Admin
     end
 
     def accept
-      @user = PagesCore::CreateUserService.call(user_params, invite: @invite)
+      @user = PagesCore::CreateUserService.call(
+        user_params.merge(email: @invite.email), invite: @invite
+      )
       if @user.valid?
         authenticate!(@user)
         redirect_to admin_default_url
@@ -58,7 +60,9 @@ module Admin
 
     def find_and_validate_invite
       @invite = Invite.find_by(id: params[:id])
-      return if @invite && valid_token?(@invite, params[:token])
+      return if @invite &&
+                valid_token?(@invite, params[:token]) &&
+                @invite.acceptable?
 
       flash[:notice] = t("pages_core.invite_expired")
       redirect_to(admin_login_url)
@@ -70,7 +74,7 @@ module Admin
     end
 
     def user_params
-      params.expect(user: %i[name email password password_confirmation])
+      params.expect(user: %i[name password password_confirmation])
     end
 
     def invite_params

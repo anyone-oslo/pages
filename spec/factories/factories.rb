@@ -15,7 +15,8 @@ FactoryBot.define do
 
   factory :invite do
     email
-    user
+    user factory: %i[user admin]
+    sent_at { Time.now.utc }
   end
 
   factory :localization do
