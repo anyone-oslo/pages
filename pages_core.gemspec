@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     "template.rb"
   ]
 
-  s.add_dependency "rails", ">= 8.0"
+  s.add_dependency "rails", ">= 8.1"
 
   s.add_dependency "actionpack-page_caching", ">= 1.1.0"
   s.add_dependency "alba"
