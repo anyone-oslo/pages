@@ -13,10 +13,7 @@ on:
       - develop
   pull_request:
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-  id-token: write
+  contents: read
 jobs:
   rubocop-test:
     name: Rubocop
@@ -106,6 +103,9 @@ jobs:
     needs: [rubocop-test, eslint-test, typescript-test, rspec-test]
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Enable auto-merge
         run: gh pr merge --auto --squash "$PR_URL"
@@ -122,18 +122,24 @@ jobs:
       - typescript-test
       - rspec-test
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     steps:
       - name: Prepare message
         id: message
-        uses: anyone-oslo/github-action-notify-slack@main
+        uses: anyone-oslo/github-action-notify-slack@980e9cd793ee14fba56065a55a7235d6dac91df8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.run_id }}
           run-number: ${{ github.run_number }}
       - name: Send to Slack
         if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          MESSAGE: ${{ steps.message.outputs.message }}
         run: |
-          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL}} -H "Content-type: application/json" --data '${{ steps.message.outputs.message }}'
+          curl -X POST "$SLACK_WEBHOOK_URL" -H "Content-type: application/json" --data "$MESSAGE"
 
   release-please:
     needs: [rubocop-test, eslint-test, typescript-test, rspec-test]
@@ -152,6 +158,9 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v6.1.0
         with:
@@ -176,6 +185,9 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v6.1.0
         with:
