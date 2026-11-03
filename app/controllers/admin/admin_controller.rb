@@ -32,8 +32,38 @@ module Admin
       params[:q] || ""
     end
 
+    def trusted_url_options
+      if Rails.application.config.hosts.any?
+        { host: request.host,
+          port: request.optional_port,
+          protocol: request.protocol }
+      else
+        mailer_url_options
+      end
+    end
+
+    def mailer_url_options
+      options = AdminMailer.default_url_options.symbolize_keys
+      if options[:host].blank?
+        raise "Can't build links in emails: set config.hosts or " \
+              "config.action_mailer.default_url_options"
+      end
+
+      { port: nil, protocol: "https" }.merge(options.slice(:host, :port, :protocol))
+    end
+
     def set_i18n_locale
       I18n.locale = :en
+    end
+
+    def normalized_email
+      email = params[:email]
+      email.strip.downcase if email.is_a?(String)
+    end
+
+    def rate_limited
+      flash[:notice] = t("pages_core.rate_limited")
+      redirect_to admin_login_url
     end
 
     # Verifies the login. Redirects to users/new if the users table is empty.
@@ -46,17 +76,6 @@ module Admin
       else
         redirect_to(admin_login_url)
       end
-    end
-
-    def secure_compare?(compare, other)
-      return false unless compare && other
-      return false unless compare.bytesize == other.bytesize
-
-      l = compare.unpack "C#{compare.bytesize}"
-
-      res = 0
-      other.each_byte { |byte| res |= byte ^ l.shift }
-      res.zero?
     end
   end
 end

@@ -22,6 +22,9 @@
         Invited
         <%= time_ago_in_words(invite.sent_at) %> ago
       <% end %>
+      <% if invite.expired? %>
+        <strong>Expired</strong>
+      <% end %>
     </td>
     <td colspan="2">
       <% if current_user.role?(:users) %>

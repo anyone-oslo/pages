@@ -247,4 +247,11 @@ describe AttachmentsController do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "with a non-string digest" do
+    it "responds with not found" do
+      get :show, params: { id: attachment.id, digest: ["a"] }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

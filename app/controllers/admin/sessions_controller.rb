@@ -3,9 +3,15 @@
 module Admin
   class SessionsController < Admin::AdminController
     before_action :require_authentication, only: %i[destroy]
+    rate_limit to: 10, within: 5.minutes, only: :create,
+               by: :normalized_email, with: :rate_limited,
+               store: PagesCore.config.rate_limit_store
     before_action :find_user, only: %i[create]
-    before_action :find_signed_user, only: %i[verify_otp]
+    before_action :find_pending_otp_user, only: %i[verify_otp]
     before_action :require_user, only: %i[create verify_otp]
+    rate_limit to: 5, within: 5.minutes, only: :verify_otp,
+               by: -> { @user.id }, with: :rate_limited, scope: "otp",
+               store: PagesCore.config.rate_limit_store
 
     def new
       redirect_to admin_default_url if logged_in?
@@ -13,9 +19,7 @@ module Admin
 
     def create
       if @user.otp_enabled?
-        @signed_user_id = message_verifier.generate(
-          @user.id, expires_in: 1.hour
-        )
+        start_pending_otp(@user)
         render template: "admin/sessions/verify_otp"
       else
         authenticate!(@user)
@@ -42,22 +46,40 @@ module Admin
 
     private
 
-    def find_signed_user
-      @signed_user_id = params[:signed_user_id]
-      @user = User.find(message_verifier.verify(@signed_user_id))
+    def find_pending_otp_user
+      pending = session[:pending_otp]&.symbolize_keys
+      return unless pending && pending[:at].to_i > 10.minutes.ago.to_i
+
+      user = User.find_by(id: pending[:user_id])
+      return unless user && password_fingerprint(user) == pending[:password_fingerprint]
+
+      @user = user
     end
 
     def find_user
-      @user = User.authenticate(params[:email], password: params[:password])
+      return unless params[:email].is_a?(String)
+
+      @user = User.authenticate_by(email: params[:email],
+                                   password: params[:password])
+      @user = nil unless @user&.can_login?
     end
 
-    def message_verifier
-      Rails.application.message_verifier(:session)
+    def password_fingerprint(user)
+      user.password_salt
+    end
+
+    def start_pending_otp(user)
+      session[:pending_otp] = {
+        user_id: user.id,
+        at: Time.current.to_i,
+        password_fingerprint: password_fingerprint(user)
+      }
     end
 
     def require_user
       return if @user
 
+      session.delete(:pending_otp)
       flash[:notice] = t("pages_core.invalid_login")
       redirect_to admin_login_url
     end

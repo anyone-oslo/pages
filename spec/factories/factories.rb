@@ -15,7 +15,8 @@ FactoryBot.define do
 
   factory :invite do
     email
-    user
+    user factory: %i[user admin]
+    sent_at { Time.now.utc }
   end
 
   factory :localization do
@@ -84,6 +85,10 @@ FactoryBot.define do
 
     trait :admin do
       role_names { %w[pages users] }
+    end
+
+    trait :deactivated do
+      after(:create) { |user| user.update(activated: false) }
     end
 
     trait :otp do

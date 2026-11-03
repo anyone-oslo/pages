@@ -6,8 +6,9 @@ module Admin
     before_action :require_no_users, only: %i[new create]
     before_action(
       :find_user,
-      only: %i[edit update show destroy delete_image]
+      only: %i[edit update show destroy delete_image destroy_sessions]
     )
+    require_authorization
 
     def index
       @users = User.activated
@@ -38,7 +39,8 @@ module Admin
     end
 
     def update
-      if @user.update(user_params_with_roles)
+      @user.assign_attributes(user_params_with_roles)
+      if current_password_valid? && @user.save
         flash[:notice] = "Your changed to #{@user.name} were saved."
         redirect_to admin_users_url
       else
@@ -54,6 +56,13 @@ module Admin
       redirect_to admin_users_url
     end
 
+    def destroy_sessions
+      @user.reset_session_token!
+      authenticated(@user) if @user == current_user
+      flash[:notice] = t("pages_core.logged_out_all_sessions")
+      redirect_to edit_admin_user_url(@user)
+    end
+
     def delete_image
       @user.image.destroy
       respond_to do |format|
@@ -66,6 +75,15 @@ module Admin
 
     def find_user
       @user = User.find(params.expect(:id))
+    end
+
+    def current_password_valid?
+      return true unless @user == current_user &&
+                         (@user.email_changed? || @user.password_digest_changed?)
+      return true if current_user.authenticate(params.dig(:user, :current_password).to_s)
+
+      @user.errors.add(:current_password, :invalid)
+      false
     end
 
     def user_params

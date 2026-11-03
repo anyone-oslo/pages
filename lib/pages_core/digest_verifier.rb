@@ -41,16 +41,6 @@ module PagesCore
 
     private
 
-    def secure_compare?(value, other)
-      return false unless value.bytesize == other.bytesize
-
-      l = value.unpack "C#{value.bytesize}"
-
-      res = 0
-      other.each_byte { |byte| res |= byte ^ l.shift }
-      res.zero?
-    end
-
     def generate_digest(data)
       require "openssl" unless defined?(OpenSSL)
       OpenSSL::HMAC.hexdigest(
@@ -62,8 +52,9 @@ module PagesCore
 
     def valid_digest?(data, digest)
       data.present? &&
+        digest.is_a?(String) &&
         digest.present? &&
-        secure_compare?(digest, generate_digest(data))
+        ActiveSupport::SecurityUtils.secure_compare(digest, generate_digest(data))
     end
   end
 end

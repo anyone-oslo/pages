@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       end
       member do
         delete "delete_image"
+        delete "sessions", action: :destroy_sessions
       end
     end
 
@@ -72,7 +73,9 @@ Rails.application.routes.draw do
     resource :session, only: %i[create destroy] do
       member { post :verify_otp }
     end
-    resource :otp_secret, only: %i[new create destroy]
+    resource :otp_secret, only: %i[new create destroy] do
+      get :disable
+    end
     resource :recovery_codes, only: %i[new create]
     get "login" => "sessions#new", as: "login"
 

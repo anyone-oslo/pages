@@ -4,6 +4,9 @@ module Admin
   class InvitesController < Admin::AdminController
     before_action :require_authentication, except: %i[accept show]
     before_action :find_invite, only: %i[destroy]
+    rate_limit to: 10, within: 10.minutes, only: :accept,
+               by: -> { params[:id].to_i }, with: :rate_limited,
+               store: PagesCore.config.rate_limit_store
     before_action :find_and_validate_invite, only: %i[show accept]
 
     require_authorization
@@ -13,7 +16,9 @@ module Admin
     end
 
     def accept
-      @user = PagesCore::CreateUserService.call(user_params, invite: @invite)
+      @user = PagesCore::CreateUserService.call(
+        user_params.merge(email: @invite.email), invite: @invite
+      )
       if @user.valid?
         authenticate!(@user)
         redirect_to admin_default_url
@@ -36,8 +41,7 @@ module Admin
     def create
       @invite = PagesCore::InviteService.call(invite_params,
                                               user: current_user,
-                                              host: request.host,
-                                              protocol: request.protocol)
+                                              **trusted_url_options)
       if @invite.valid?
         redirect_to admin_invites_url
       else
@@ -59,14 +63,21 @@ module Admin
 
     def find_and_validate_invite
       @invite = Invite.find_by(id: params[:id])
-      return if @invite && secure_compare?(@invite.token, params[:token])
+      return if @invite &&
+                valid_token?(@invite, params[:token]) &&
+                @invite.acceptable?
 
       flash[:notice] = t("pages_core.invite_expired")
       redirect_to(admin_login_url)
     end
 
+    def valid_token?(invite, token)
+      token.is_a?(String) &&
+        ActiveSupport::SecurityUtils.secure_compare(invite.token, token)
+    end
+
     def user_params
-      params.expect(user: %i[name email password password_confirmation])
+      params.expect(user: %i[name password password_confirmation])
     end
 
     def invite_params

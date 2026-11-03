@@ -4,6 +4,12 @@ module Admin
   class AccountRecoveriesController < Admin::AdminController
     before_action :require_authentication, except: %i[new create show update]
     before_action :find_by_token, only: %i[show update]
+    rate_limit to: 3, within: 1.hour, only: :create,
+               by: :normalized_email, with: :rate_limited_recovery,
+               store: PagesCore.config.rate_limit_store
+    rate_limit to: 5, within: 5.minutes, only: :update,
+               by: -> { @user.id }, with: :rate_limited_recovery,
+               scope: "otp", store: PagesCore.config.rate_limit_store
     around_action :validate_otp, only: %i[update]
 
     def show; end
@@ -11,13 +17,9 @@ module Admin
     def new; end
 
     def create
-      @user = User.find_by(email: params[:email])
-      if @user
-        deliver_account_recovery(@user)
-        flash[:notice] = t("pages_core.account_recovery.sent")
-      else
-        flash[:notice] = t("pages_core.account_recovery.not_found")
-      end
+      @user = User.find_by(email: params[:email]) if params[:email].is_a?(String)
+      deliver_account_recovery(@user) if @user&.can_login?
+      flash[:notice] = t("pages_core.account_recovery.sent")
       redirect_to admin_login_url
     end
 
@@ -36,7 +38,9 @@ module Admin
     def deliver_account_recovery(user)
       AdminMailer.account_recovery(
         user,
-        admin_account_recovery_with_token_url(recovery_token(user))
+        admin_account_recovery_with_token_url(
+          user.password_reset_token, **trusted_url_options
+        )
       ).deliver_later
     end
 
@@ -47,20 +51,14 @@ module Admin
 
     def find_by_token
       @token = params[:token]
-      @user = User.find(message_verifier.verify(@token).symbolize_keys[:id])
-      return if @user
+      @user = User.find_by_token_for(:password_reset, @token)
+      return fail_recovery(t("pages_core.account_recovery.invalid_request")) unless @user
 
-      fail_recovery(t("pages_core.account_recovery.invalid_request"))
-    rescue ActiveSupport::MessageVerifier::InvalidSignature
-      fail_recovery(t("pages_core.account_recovery.invalid_request"))
+      raise PagesCore::Authentication::LoginRefused unless @user.can_login?
     end
 
-    def message_verifier
-      Rails.application.message_verifier(:account_recovery)
-    end
-
-    def recovery_token(user)
-      message_verifier.generate({ id: user.id }, expires_in: 24.hours)
+    def rate_limited_recovery
+      fail_recovery(t("pages_core.rate_limited"))
     end
 
     def user_params

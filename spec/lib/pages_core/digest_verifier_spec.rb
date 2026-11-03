@@ -41,6 +41,26 @@ describe PagesCore::DigestVerifier do
       end
     end
 
+    context "with a digest of the wrong length" do
+      let(:digest) { "1639a467" }
+
+      it "raises an error" do
+        expect { verification }.to(
+          raise_error(PagesCore::DigestVerifier::InvalidSignatureError)
+        )
+      end
+    end
+
+    context "with a non-string digest" do
+      let(:digest) { ["a"] }
+
+      it "raises an error" do
+        expect { verification }.to(
+          raise_error(PagesCore::DigestVerifier::InvalidSignatureError)
+        )
+      end
+    end
+
     context "with no digest" do
       let(:digest) { nil }
 

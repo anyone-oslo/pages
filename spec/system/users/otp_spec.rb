@@ -39,10 +39,31 @@ RSpec.describe "Two-factor authentication" do
 
   context "when disabling 2FA" do
     let(:user) { create(:user, :otp) }
+    let(:code) { ROTP::TOTP.new(user.otp_secret).now }
 
-    before { click_on "Disable" }
+    before do
+      click_on "Disable"
+      Timecop.travel(30.seconds.from_now)
+      fill_in "6 digit code or recovery code", with: code
+      click_on "Disable 2FA"
+    end
+
+    after { Timecop.return }
 
     specify { expect(page).to(have_text("2FA has been disabled")) }
     specify { expect(page).to(have_text("Enable 2FA")) }
+
+    context "with a recovery code" do
+      let(:code) { "recovery-code-1" }
+
+      specify { expect(page).to(have_text("2FA has been disabled")) }
+    end
+
+    context "with an invalid code" do
+      let(:code) { "invalid" }
+
+      specify { expect(page).to(have_text("Invalid 2FA code")) }
+      specify { expect(user.reload.otp_enabled?).to be(true) }
+    end
   end
 end

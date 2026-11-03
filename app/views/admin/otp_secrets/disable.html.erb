@@ -1,0 +1,23 @@
+<% content_for :page_title, "Disable 2FA" %>
+<% content_for :page_description, "Disable two-factor authentication" %>
+
+<%= form_tag(admin_otp_secret_path, method: :delete) do %>
+  <h2>
+    Two-factor authentication
+  </h2>
+  <p>
+    Enter a one-time code from your authenticator app or a recovery code
+    to disable two-factor authentication.
+  </p>
+  <div class="field">
+    <label for="otp">6 digit code or recovery code</label>
+    <%= text_field_tag(:otp, "",
+                       autofocus: true,
+                       autocomplete: "one-time-code") %>
+  </div>
+  <p>
+    <button type="submit">
+      Disable 2FA
+    </button>
+  </p>
+<% end %>

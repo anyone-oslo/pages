@@ -13,6 +13,14 @@ class Invite < ApplicationRecord
 
   validate :user_already_exists
 
+  def expired?
+    sent_at.nil? || sent_at < 14.days.ago
+  end
+
+  def acceptable?
+    !expired? && user.can_login? && user.role?(:users)
+  end
+
   private
 
   def ensure_token

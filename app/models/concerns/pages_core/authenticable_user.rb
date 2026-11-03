@@ -5,7 +5,9 @@ module PagesCore
     extend ActiveSupport::Concern
 
     included do
-      has_secure_password
+      attr_accessor :current_password
+
+      has_secure_password reset_token: { expires_in: 24.hours }
 
       validates(:otp_secret, presence: true, if: :otp_enabled?)
       validates(
@@ -23,7 +25,7 @@ module PagesCore
 
     module ClassMethods
       def authenticate(email, password:)
-        User.find_by(email:).try(:authenticate, password)
+        User.authenticate_by(email:, password:)
       end
 
       def random_session_token
@@ -33,6 +35,11 @@ module PagesCore
 
     def can_login?
       activated?
+    end
+
+    def reset_session_token!
+      self.session_token = self.class.random_session_token
+      save!(validate: false)
     end
 
     def recovery_codes=(codes)

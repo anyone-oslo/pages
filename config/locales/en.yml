@@ -27,16 +27,20 @@ en:
       The provided email address and password combination was not valid
     invite_expired: This invite is no longer valid.
     logged_out: You have been logged out
+    logged_out_all_sessions: Sessions have been logged out
+    rate_limited: Too many attempts. Please try again later.
     otp:
       already_enabled: 2FA has already been enabled
       disabled: 2FA has been disabled
       invalid_code: Invalid 2FA code
+      not_enabled: 2FA is not enabled
       required: 2FA is required for this
     account_recovery:
       changed: Your password has been changed
       invalid_request: This link is no longer valid
-      not_found: Couldn't find a user with that email address
-      sent: An email with further instructions has been sent
+      sent: >
+        If an account exists for that email address, an email with further
+        instructions has been sent
       problems_saving: There were problems saving your changes
     recovery_codes:
       zero: "no recovery codes"
