@@ -47,16 +47,5 @@ module Admin
         redirect_to(admin_login_url)
       end
     end
-
-    def secure_compare?(compare, other)
-      return false unless compare && other
-      return false unless compare.bytesize == other.bytesize
-
-      l = compare.unpack "C#{compare.bytesize}"
-
-      res = 0
-      other.each_byte { |byte| res |= byte ^ l.shift }
-      res.zero?
-    end
   end
 end

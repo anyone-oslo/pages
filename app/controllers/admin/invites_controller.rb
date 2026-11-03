@@ -59,10 +59,15 @@ module Admin
 
     def find_and_validate_invite
       @invite = Invite.find_by(id: params[:id])
-      return if @invite && secure_compare?(@invite.token, params[:token])
+      return if @invite && valid_token?(@invite, params[:token])
 
       flash[:notice] = t("pages_core.invite_expired")
       redirect_to(admin_login_url)
+    end
+
+    def valid_token?(invite, token)
+      token.is_a?(String) &&
+        ActiveSupport::SecurityUtils.secure_compare(invite.token, token)
     end
 
     def user_params
