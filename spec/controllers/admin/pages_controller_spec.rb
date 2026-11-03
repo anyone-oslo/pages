@@ -107,4 +107,22 @@ describe Admin::PagesController do
       expect([page.position, other.position]).to eq([1, 2])
     end
   end
+
+  describe "PUT move under a child" do
+    let(:child) { create(:page, parent: page) }
+
+    before do
+      put(:move, params: { id: page.id,
+                           locale:,
+                           parent_id: child.id,
+                           position: 1,
+                           format: :json })
+    end
+
+    specify { expect(response).to have_http_status(:unprocessable_content) }
+
+    it "doesn't change the parent" do
+      expect(page.reload.parent).to be_nil
+    end
+  end
 end

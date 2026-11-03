@@ -82,7 +82,7 @@ module PagesCore
       end
 
       def path_segment_cannot_be_routable
-        return unless full_path?
+        return if errors.include?(:parent) || !full_path?
         return unless page_path_matches_routes?(full_path)
 
         errors.add(:path_segment, "can't match an existing URL")

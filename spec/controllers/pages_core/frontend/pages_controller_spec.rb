@@ -142,6 +142,29 @@ describe PagesCore::Frontend::PagesController do
       it { is_expected.to render_template("feeds/pages") }
     end
 
+    context "with a large per_page" do
+      let(:page) { create(:page, name: "Home", feed_enabled: true) }
+      let(:params) { { path: page.path_segment, format: :rss, per_page: "1000" } }
+
+      it "limits the number of items to 100" do
+        expect(assigns(:items).per_page).to eq(100)
+      end
+    end
+
+    context "with a page number out of range" do
+      let(:page) { create(:page, name: "Home", feed_enabled: true) }
+      let(:params) do
+        { path: page.path_segment, format: :rss,
+          page: "10000000000000000000000000" }
+      end
+
+      specify { expect(response).to have_http_status(:ok) }
+
+      it "limits the page number to 10000" do
+        expect(assigns(:items).current_page).to eq(10_000)
+      end
+    end
+
     context "when page isn't feed enabled" do
       specify { expect(response).to have_http_status(:not_found) }
     end
@@ -163,6 +186,32 @@ describe PagesCore::Frontend::PagesController do
 
     it "renders the page as json" do
       expect(json["name"]).to eq("Home")
+    end
+
+    context "with a page number" do
+      let(:params) { { path: page.path_segment, format: :json, page: "2" } }
+
+      it "is static cached" do
+        expect(controller.static_cached?).to be(true)
+      end
+    end
+
+    context "with a page number out of range" do
+      let(:params) do
+        { path: page.path_segment, format: :json, page: "999999" }
+      end
+
+      it "isn't static cached" do
+        expect(controller.static_cached?).to be(false)
+      end
+    end
+
+    context "with an invalid page number" do
+      let(:params) { { path: page.path_segment, format: :json, page: "foo" } }
+
+      it "isn't static cached" do
+        expect(controller.static_cached?).to be(false)
+      end
     end
 
     context "when page is a draft" do

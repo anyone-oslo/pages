@@ -21,4 +21,17 @@ describe Admin::ImagesController do
       expect(response.parsed_body["decorative"]).to be(true)
     end
   end
+
+  describe "PUT update with unknown attributes" do
+    before do
+      login(user)
+      put :update,
+          params: { id: image.id,
+                    image: { decorative: true, name: "Name",
+                             description: "Description" } },
+          format: :json
+    end
+
+    specify { expect(response).to have_http_status(:ok) }
+  end
 end
