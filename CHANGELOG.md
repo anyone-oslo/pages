@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.20.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.20.0...pages_core/v3.20.1) (2026-11-07)
+
+
+### Upgrading
+
+* `PagesCore.config.rate_limit_store` now defaults to `Rails.cache`, unless that is a `FileStore` or `NullStore`, which keep the in-process memory store. Apps with a shared cache store, such as memcached, share rate limit counters between processes without further configuration.
+
+
+### Bug Fixes
+
+* use Rails.cache for rate limits when it can share counters ([696a0cb](https://github.com/anyone-oslo/pages/commit/696a0cb1b3fa91494b625e799cd2df52ba8f8280))
+
 ## [3.20.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.19.0...pages_core/v3.20.0) (2026-11-03)
 
 
