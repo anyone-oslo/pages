@@ -115,7 +115,7 @@ jobs:
 
   notify-slack:
     name: Slack notification
-    if: "always() && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[ci skip]')"
+    if: "always() && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[ci skip]') && contains(needs.*.result, 'failure')"
     needs:
       - rubocop-test
       - eslint-test
