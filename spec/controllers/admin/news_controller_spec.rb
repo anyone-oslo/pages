@@ -35,5 +35,18 @@ describe Admin::NewsController do
         expect(assigns(:pages)).to eq([article1])
       end
     end
+
+    context "with a draft" do
+      let!(:root) { create(:page, news_page: true) }
+      let!(:draft) do
+        create(:page, parent: root, status: 0, created_at: Time.zone.local(2024, 3, 1))
+      end
+
+      before { get :index, params: { locale:, year: 2024 } }
+
+      it "finds the draft by its creation date" do
+        expect(assigns(:pages)).to eq([draft])
+      end
+    end
   end
 end

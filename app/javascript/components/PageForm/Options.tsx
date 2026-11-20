@@ -1,4 +1,4 @@
-import { Fragment, useState, ChangeEvent } from "react";
+import { Fragment, useRef, useState, ChangeEvent } from "react";
 
 import * as Pages from "../../types/Pages";
 import LabelledField from "../LabelledField";
@@ -17,9 +17,11 @@ export default function Options({ authors, statuses }: Props) {
   const { page, locale, templates } = state;
 
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const filledDate = useRef<Date | null>(null);
 
   const published = page.status == 2;
-  const autopublish = published && page.published_at > new Date();
+  const autopublish =
+    published && page.published_at && page.published_at > new Date();
   const url = page.urls[locale];
 
   const handleChange =
@@ -27,6 +29,18 @@ export default function Options({ authors, statuses }: Props) {
     (evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
       dispatch({ type: "update", payload: { [attr]: evt.target.value } });
     };
+
+  const handleStatusChange = (evt: ChangeEvent<HTMLSelectElement>) => {
+    const status = parseInt(evt.target.value, 10);
+    let published_at = page.published_at;
+    if (status == 2 && !published_at) {
+      published_at = new Date();
+      filledDate.current = published_at;
+    } else if (status != 2 && published_at === filledDate.current) {
+      published_at = null;
+    }
+    dispatch({ type: "update", payload: { status: status, published_at } });
+  };
 
   const handleChecked =
     (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +69,7 @@ export default function Options({ authors, statuses }: Props) {
         <select
           id="page_status"
           name="page[status]"
-          onChange={handleChange("status")}
+          onChange={handleStatusChange}
           value={page.status}>
           {Object.keys(statuses).map((id) => (
             <option key={id} value={id}>

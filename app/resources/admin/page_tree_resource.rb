@@ -5,7 +5,7 @@ module Admin
     include Alba::Resource
 
     attributes :id, :parent_page_id, :status, :news_page, :pinned,
-               :published_at
+               :published_at, :display_date
 
     attribute :blocks do
       { name: localized_attribute(object, :name) }

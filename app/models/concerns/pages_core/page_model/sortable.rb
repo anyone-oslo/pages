@@ -33,7 +33,7 @@ module PagesCore
 
       def content_order
         if news_page?
-          "pages.pinned DESC, published_at DESC"
+          [Page.arel_table[:pinned].desc, Page.date_order.desc]
         else
           "position ASC"
         end

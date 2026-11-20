@@ -31,11 +31,10 @@ class Page < ApplicationRecord
             uniqueness: { allow_blank: true })
 
   validates :template, presence: true
-  validates :published_at, presence: true
 
-  before_validation :published_at
+  before_save :set_published_at
 
-  scope :by_date,       -> { order(published_at: :desc) }
+  scope :by_date,       -> { order(date_order.desc) }
   scope :by_updated_at, -> { order(updated_at: :desc) }
   scope :published,     -> { where(status: 2, autopublish: false) }
   scope :hidden,        -> { where(status: 3) }
@@ -46,7 +45,17 @@ class Page < ApplicationRecord
 
   class << self
     def archive_finder
-      PagesCore::ArchiveFinder.new(all, timestamp: :published_at)
+      PagesCore::ArchiveFinder.new(all, timestamp: date_sql)
+    end
+
+    def date_order
+      Arel::Nodes::NamedFunction.new(
+        "COALESCE", [arel_table[:published_at], arel_table[:created_at]]
+      )
+    end
+
+    def date_sql
+      "COALESCE(pages.published_at, pages.created_at)"
     end
 
     # Find all published and feed enabled pages
@@ -80,16 +89,17 @@ class Page < ApplicationRecord
     end
   end
 
-  # Get publication date, which defaults to the creation date
-  def published_at
-    self[:published_at] ||= if created_at?
-                              created_at
-                            else
-                              Time.now.utc
-                            end
+  def display_date
+    published_at || created_at
   end
 
   def to_param
     humanized_param(transliterated_name)
+  end
+
+  private
+
+  def set_published_at
+    self.published_at ||= Time.now.utc if status == 2
   end
 end
