@@ -6,7 +6,7 @@ xml.rss("version" => "2.0", "xmlns:media" => "http://search.yahoo.com/mrss/") do
     xml.title(@title || PagesCore.config(:site_name))
     xml.link(root_url)
     xml.description "Recent items"
-    xml.language locale
+    xml.language locale.to_s
     xml.generator "Pages"
     xml.ttl "40"
     @items.each do |item|
