@@ -30,13 +30,7 @@ export type Action =
   | { type: "setCollapsed"; id: Tree.Id; payload: boolean }
   | { type: "update"; id: Tree.Id; payload: Partial<TreeRecord> };
 
-const permittedAttributes = [
-  "status",
-  "news_page",
-  "published_at",
-  "pinned",
-  "parent_page_id"
-];
+const permittedAttributes = ["status", "news_page", "pinned", "parent_page_id"];
 
 export function movePage(
   prevState: State,
@@ -129,7 +123,7 @@ export function addChild(
     status: 0,
     editing: true,
     news_page: false,
-    published_at: new Date(),
+    published_at: null,
     pinned: false,
     parent_page_id: "id" in parentNode.record && parentNode.record.id,
     permissions: parentNode.record.permissions
@@ -201,12 +195,13 @@ function storeCollapsed(id: number, value: boolean) {
   window.localStorage.setItem("collapsedPages", JSON.stringify(state));
 }
 
+function sortDate(record: PageRecord) {
+  return record.display_date ? new Date(record.display_date) : new Date();
+}
+
 function sortChildren(a: Tree.Node<PageRecord>, b: Tree.Node<PageRecord>) {
   if (a.record.pinned == b.record.pinned) {
-    return (
-      new Date(b.record.published_at).getTime() -
-      new Date(a.record.published_at).getTime()
-    );
+    return sortDate(b.record).getTime() - sortDate(a.record).getTime();
   } else {
     return a.record.pinned ? -1 : 1;
   }

@@ -7,7 +7,13 @@ describe Page do
     subject(:finder) { described_class.archive_finder }
 
     it { is_expected.to be_a(PagesCore::ArchiveFinder) }
-    specify { expect(finder.timestamp_attribute).to eq(:published_at) }
+    specify { expect(finder.timestamp_attribute).to eq(described_class.date_sql) }
+
+    context "when the latest page is a draft" do
+      before { create(:page, status: 0, created_at: Time.zone.local(2024, 3, 1)) }
+
+      specify { expect(finder.latest_year_and_month).to eq([2024, 3]) }
+    end
   end
 
   describe ".enabled_feeds" do
@@ -51,6 +57,132 @@ describe Page do
     it { is_expected.to include(published_page) }
     it { is_expected.not_to include(hidden_page) }
     it { is_expected.not_to include(autopublish_page) }
+  end
+
+  describe "#published_at" do
+    subject { page.published_at }
+
+    let(:now) { Time.zone.local(2026, 11, 20, 12, 0) }
+    let(:old_date) { Time.zone.local(2025, 1, 1, 12, 0) }
+
+    around { |example| Timecop.freeze(now) { example.run } }
+
+    context "when a draft is created" do
+      let(:page) { create(:page, status: 0) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "when a page is created as published" do
+      let(:page) { create(:page) }
+
+      it { is_expected.to eq(now) }
+    end
+
+    context "when a draft is published" do
+      let(:page) do
+        Timecop.freeze(old_date) { create(:page, status: 0) }.tap do |p|
+          p.update(status: 2)
+        end
+      end
+
+      it { is_expected.to eq(now) }
+    end
+
+    context "when a draft is published with a date" do
+      let(:page) do
+        create(:page, status: 0).tap do |p|
+          p.update(status: 2, published_at: old_date)
+        end
+      end
+
+      it { is_expected.to eq(old_date) }
+    end
+
+    context "when a draft is published with a future date" do
+      let(:future_date) { Time.zone.local(2027, 1, 1, 12, 0) }
+      let(:page) do
+        create(:page, status: 0).tap do |p|
+          p.update(status: 2, published_at: future_date)
+        end
+      end
+
+      it { is_expected.to eq(future_date) }
+      specify { expect(page.autopublish?).to be(true) }
+    end
+
+    context "when a page is published, set back to draft and published again" do
+      let(:page) do
+        Timecop.freeze(old_date) { create(:page) }.tap do |p|
+          p.update(status: 0)
+          p.update(status: 2)
+        end
+      end
+
+      it { is_expected.to eq(old_date) }
+    end
+
+    context "when a draft is published without validations" do
+      let(:page) do
+        create(:page, status: 0).tap do |p|
+          p.status = 2
+          p.save(validate: false)
+        end
+      end
+
+      it { is_expected.to eq(now) }
+    end
+
+    context "when a hidden page is published again" do
+      let(:page) do
+        create(:hidden_page, published_at: old_date).tap do |p|
+          p.update(status: 2)
+        end
+      end
+
+      it { is_expected.to eq(old_date) }
+    end
+  end
+
+  describe "#display_date" do
+    subject { page.display_date }
+
+    context "when the page has a published date" do
+      let(:page) { create(:page) }
+
+      it { is_expected.to eq(page.published_at) }
+    end
+
+    context "when the page has not been published" do
+      let(:page) { create(:page, status: 0) }
+
+      it { is_expected.to eq(page.created_at) }
+    end
+  end
+
+  describe "published date constraint" do
+    subject(:publish) do
+      described_class.connection.execute(
+        "UPDATE pages SET status = 2 WHERE id = #{page.id}"
+      )
+    end
+
+    let(:page) { create(:page, status: 0) }
+
+    it { expect { publish }.to raise_error(ActiveRecord::StatementInvalid) }
+  end
+
+  describe ".by_date" do
+    subject { described_class.by_date.last }
+
+    let!(:oldest) { create(:page, published_at: 2.days.ago) }
+
+    before do
+      create(:page, published_at: 1.day.ago)
+      create(:page, status: 0)
+    end
+
+    it { is_expected.to eq(oldest) }
   end
 
   describe ".order_by_tags" do
@@ -347,6 +479,14 @@ describe Page do
       let(:page) { create(:page, news_page: true) }
 
       it { is_expected.to eq([pinned_page.id, newest_page.id, last_page.id]) }
+      specify { expect(page.subpages.last).to eq(last_page) }
+    end
+
+    context "when a news page has a draft" do
+      let(:page) { create(:page, news_page: true) }
+      let!(:draft) { create(:page, parent: page, status: 0) }
+
+      it { is_expected.to eq([pinned_page, draft, newest_page, last_page].map(&:id)) }
     end
   end
 

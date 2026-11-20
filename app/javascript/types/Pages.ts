@@ -21,7 +21,8 @@ type BaseResource = {
   parent_page_id: number;
   permissions: string[];
   pinned: boolean;
-  published_at: Date;
+  published_at: Date | null;
+  display_date?: string;
   status: number;
 };
 
@@ -64,7 +65,7 @@ export type SerializedResource = Omit<
   Resource,
   "published_at" | "starts_at" | "ends_at"
 > & {
-  published_at: string;
+  published_at: string | null;
   starts_at: string;
   ends_at: string;
 };

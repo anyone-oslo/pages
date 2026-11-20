@@ -40,7 +40,7 @@ module PagesCore
             case when parents_pages.news_page
               then pages.pinned end desc,
             case when parents_pages.news_page
-              then pages.published_at end desc,
+              then #{Page.date_sql} end desc,
             position asc
             QUERY
           )

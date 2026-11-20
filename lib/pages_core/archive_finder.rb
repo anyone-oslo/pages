@@ -26,10 +26,9 @@ module PagesCore
     end
 
     def latest_year_and_month
-      ordered_relation.first.try do |record|
-        [record[timestamp_attribute].year,
-         record[timestamp_attribute].month]
-      end
+      ordered_relation.pick(Arel.sql(timestamp_attribute.to_s))
+                      &.in_time_zone
+                      &.then { |time| [time.year, time.month] }
     end
 
     def months_in_year(year)
@@ -102,7 +101,7 @@ module PagesCore
     end
 
     def ordered_relation
-      @relation.reorder("#{timestamp_attribute} DESC")
+      @relation.reorder(Arel.sql("#{timestamp_attribute} DESC"))
     end
 
     def year_part

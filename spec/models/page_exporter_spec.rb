@@ -16,6 +16,20 @@ describe PageExporter do
     Dir.glob(base_dir.join("**", dir, "*")).map { |path| Pathname.new(path) }
   end
 
+  describe "news pages" do
+    let(:news_page) { create(:page, news_page: true) }
+
+    before do
+      create(:page, parent: news_page, status: 0, created_at: Time.zone.local(2024, 3, 1))
+      export
+    end
+
+    it "prefixes a draft with its creation date" do
+      expect(base_dir.glob("*/pages/*").map { |path| path.basename.to_s })
+        .to include(start_with("[2024-03-01] "))
+    end
+  end
+
   describe "attachments" do
     let!(:attachment) { create(:page_file, page:).attachment }
 
