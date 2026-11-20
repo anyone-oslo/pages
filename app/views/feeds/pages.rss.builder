@@ -31,7 +31,7 @@ xml.rss("version" => "2.0", "xmlns:media" => "http://search.yahoo.com/mrss/") do
                    width: item.image.size.x,
                    height: item.image.size.y) do
             xml.tag!("media:title", item.image.caption) if item.image.caption?
-            xml.tag!("media:description", item.image.alternative) if item.image.alternative?
+            xml.tag!("media:description", item.image.alt_text) unless item.image.alt_text.nil?
           end
           xml.enclosure(
             url: dynamic_image_url(item.image),
