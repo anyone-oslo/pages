@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.21.0](https://github.com/anyone-oslo/pages/compare/pages_core/v3.20.1...pages_core/v3.21.0) (2026-11-20)
+
+
+### Features
+
+* Set a page's date when it is first published ([5832e55](https://github.com/anyone-oslo/pages/commit/5832e5539d328772c9284db0e93761101bf80c17))
+* Set page date when first published ([9a904ff](https://github.com/anyone-oslo/pages/commit/9a904ff52ab76fe7d3066708aa75425d2f174428)), closes [#317](https://github.com/anyone-oslo/pages/issues/317)
+
+
+### Bug Fixes
+
+* Render og:image in a compatible format ([fcc052a](https://github.com/anyone-oslo/pages/commit/fcc052aee98e9b37d9203f202a446686d85580c8))
+* Render RSS feed language as a valid element ([1cd7992](https://github.com/anyone-oslo/pages/commit/1cd799280410e996319994d1b0a73288002e5224))
+* Render RSS feed language as a valid element ([91b7026](https://github.com/anyone-oslo/pages/commit/91b70268bf0c9575964a16cb209d757039cf811b))
+* Serve feed images resized in a compatible format ([9b865fc](https://github.com/anyone-oslo/pages/commit/9b865fc91f5673eca6ef3ca3ba524353e12fbc01))
+* Serve feed images resized in a compatible format ([069a79d](https://github.com/anyone-oslo/pages/commit/069a79d7cf740c9fc5b9c8be1f14a98e7f2b103f))
+* Write empty media:description for decorative images in RSS feed ([5bc5bc5](https://github.com/anyone-oslo/pages/commit/5bc5bc54f154b7a5e64ed300a76f1f81764106dd))
+* Write empty media:description for decorative images in RSS feed ([505d93c](https://github.com/anyone-oslo/pages/commit/505d93cc3bca4e0f6f2a49ba289fa45b1cbbfda0))
+
 ## [3.20.1](https://github.com/anyone-oslo/pages/compare/pages_core/v3.20.0...pages_core/v3.20.1) (2026-11-07)
 
 
