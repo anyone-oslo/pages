@@ -14,7 +14,16 @@ module PagesCore
       return if image.blank?
       return image unless image.is_a?(Image)
 
-      dynamic_image_url(image, size:, only_path: false)
+      dynamic_image_url(image, size:, format: DynamicImage::COMPATIBLE_FORMATS,
+                               only_path: false)
+    end
+
+    def meta_image_type(image)
+      return unless image.is_a?(Image)
+
+      DynamicImage::FormatNegotiator.new(image)
+                                    .negotiate(DynamicImage::COMPATIBLE_FORMATS)
+                                    .content_type
     end
 
     def meta_image_size(image, size: META_IMAGE_SIZE)
@@ -86,7 +95,7 @@ module PagesCore
       return { image: meta_image_url(image) } unless image.is_a?(Image)
 
       { image: meta_image_url(image),
-        "image:type": image.safe_content_type,
+        "image:type": meta_image_type(image),
         **open_graph_image_size(image),
         "image:alt": image.alternative.presence }
     end

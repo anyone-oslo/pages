@@ -3,6 +3,20 @@
 require "rails_helper"
 
 RSpec.describe PagesCore::HeadTagsHelper do
+  def uploaded_file(name, content_type)
+    Rack::Test::UploadedFile.new(
+      File.expand_path("../../support/fixtures/#{name}", __dir__),
+      content_type
+    )
+  end
+
+  let(:webp_image) do
+    create(:image, file: uploaded_file("image.webp", "image/webp"))
+  end
+  let(:transparent_image) do
+    create(:image, file: uploaded_file("transparent.webp", "image/webp"))
+  end
+
   describe "#pages_meta_tags" do
     before { PagesCore.configure { |c| c.site_name = "Test Site" } }
 
@@ -57,6 +71,15 @@ RSpec.describe PagesCore::HeadTagsHelper do
       end
     end
 
+    context "with a WebP image" do
+      let(:page) { create(:page, meta_image: webp_image) }
+
+      it "renders the JPEG type" do
+        expect(helper.pages_meta_tags(page))
+          .to include('<meta property="og:image:type" content="image/jpeg">')
+      end
+    end
+
     context "without an image" do
       let(:page) { create(:page) }
 
@@ -81,6 +104,43 @@ RSpec.describe PagesCore::HeadTagsHelper do
       it "does not render the image type" do
         expect(helper.pages_meta_tags).not_to include("og:image:type")
       end
+    end
+  end
+
+  describe "#meta_image_url" do
+    it "returns a string as is" do
+      expect(helper.meta_image_url("http://example.com/foo.png"))
+        .to eq("http://example.com/foo.png")
+    end
+
+    it "keeps a PNG image as PNG" do
+      expect(helper.meta_image_url(create(:image))).to end_with(".png")
+    end
+
+    it "serves a WebP image as JPEG" do
+      expect(helper.meta_image_url(webp_image)).to end_with(".jpeg")
+    end
+
+    it "serves a transparent WebP image as PNG" do
+      expect(helper.meta_image_url(transparent_image)).to end_with(".png")
+    end
+  end
+
+  describe "#meta_image_type" do
+    it "returns nil for a string" do
+      expect(helper.meta_image_type("http://example.com/foo.png")).to be_nil
+    end
+
+    it "returns the content type of a PNG image" do
+      expect(helper.meta_image_type(create(:image))).to eq("image/png")
+    end
+
+    it "returns JPEG for a WebP image" do
+      expect(helper.meta_image_type(webp_image)).to eq("image/jpeg")
+    end
+
+    it "returns PNG for a transparent WebP image" do
+      expect(helper.meta_image_type(transparent_image)).to eq("image/png")
     end
   end
 
